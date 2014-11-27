@@ -86,3 +86,6 @@ try {
     e.printStackTrace();
 }
 ```
+
+### Test project
+Omise-android_Testプロジェクトをインポート、ビルドを行いプロジェクトをデバイスまたはAndoroidエミュレーターで起動します。
