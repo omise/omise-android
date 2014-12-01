@@ -88,6 +88,11 @@ try {
 }
 ```
 
+<<<<<<< HEAD
 ## Test project
 テストアプリプロジェクトを使用し、実装方法を見る事が可能です。
  `omise-android_Test` をインポートしてみましょう
+=======
+### Test project
+Omise-android_Testプロジェクトをインポート、ビルドを行いプロジェクトをデバイスまたはAndoroidエミュレーターで起動します。
+>>>>>>> FETCH_HEAD
