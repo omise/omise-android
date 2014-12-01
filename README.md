@@ -81,3 +81,6 @@ try {
     e.printStackTrace();
 }
 ```
+## Test project
+We are offering test project app.
+Please import `omise-android_Test` for learning use case.
