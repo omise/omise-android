@@ -1,7 +1,7 @@
 package co.omise;
 
 /**
- * カードを表すクラスです。
+ * Card class
  */
 public class Card {
 

@@ -8,14 +8,14 @@ public interface RequestTokenCallback {
 	public static final int ERRCODE_UNKNOWN = 0x10;
 	
 	/**
-	 * tokenの取得に成功した場合にコールされます。
+	 * Its call if token succeeded to get.
 	 * @param token
 	 */
 	public void onRequestSucceeded(final Token token);
 	
 	/**
-	 * tokenの取得に失敗した場合にコールされます。
-	 * @param errorCode co.omise.RequestTokenCallbackに定義されています。
+	 * Its call if token failed to get.
+	 * @param errorCode is define in co.omise.RequestTokenCallback
 	 */
 	public void onRequestFailed(final int errorCode);
 }

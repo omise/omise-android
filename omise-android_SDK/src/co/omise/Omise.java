@@ -16,16 +16,16 @@ import co.omise.activity.MainActivity;
 import android.util.Base64;
 
 /**
- * tokenを取得するクラスです。
+ * Class for get token
  */
 public class Omise {
 	
 	/**
- 	 * tokenをOmiseから取得します。
+ 	 * Get token from omise
 	 * @param tokenRequest
 	 * @param callback
-	 * @param connectTimeoutMillis コネクションが確立されるまでのタイムアウト(ms)
-	 * @param readTimeoutMillis コネクションが確立されてから通信が完了するまでのタイムアウト(ms)
+	 * @param connectTimeoutMillis Connection timeout(ms)
+	 * @param readTimeoutMillis Timeout for after communicate with server(ms)
 	 * @throws OmiseException
 	 */
 	public void requestToken(final TokenRequest tokenRequest, final RequestTokenCallback callback, final int connectTimeoutMillis, final int readTimeoutMillis) throws OmiseException{
@@ -126,8 +126,8 @@ public class Omise {
 	}
 	
 	/**
-	 * tokenをOmiseから取得します。
-	 * タイムアウトは接続確立までが10秒、確立されてから通信完了までが10秒です。
+	 * Get token from Omise 
+	 * Timeout set 10 seccond until connection has completed、After 10 seccond connected API server will Timeout.
 	 * @param tokenRequest
 	 * @param callback
 	 * @throws OmiseException

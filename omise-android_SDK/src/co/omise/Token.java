@@ -1,7 +1,7 @@
 package co.omise;
 
 /**
- * Omiseから返されるtokenを表すクラスです。
+ * Token class return from Omise API
  */
 public class Token {
 	

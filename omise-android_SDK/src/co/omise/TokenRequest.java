@@ -1,7 +1,7 @@
 package co.omise;
 
 /**
- * tokenを取得する際に必要なパラメータを格納するコンテナクラスです。
+ * Parameter container class
  */
 public class TokenRequest {
 	private String publicKey = null;
