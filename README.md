@@ -22,7 +22,10 @@ A class representing parameters for requesting token. You will need to instantia
 A class representing a token returned from Omise. If the request was successful, an instance object of this class will be passed as a callback.
 
 ### co.omise.RequestTokenCallback
-An interface presenting the request callback. When making a token request, an instance of a class that implements this interface must be passed to it. Error codes of this interface are as follows:
+An interface presenting the request callback. When making a token request, an instance of a class that implements this interface must be passed to it. 
+
+### co.omise.OmiseCallback
+Error codes of this interface are as follows:
 
 ```java
 public static final int ERRCODE_TIMEOUT = 0x00;
