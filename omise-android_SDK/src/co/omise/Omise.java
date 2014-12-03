@@ -24,6 +24,17 @@ public class Omise {
 	private static final String OMISE_URL_CHARGE = "https://api.omise.co/charge";
 	
 	/**
+	 * Get token from Omise 
+	 * Timeout set 10 seccond until connection has completed、After 10 seccond connected API server will Timeout.
+	 * @param tokenRequest
+	 * @param callback
+	 * @throws OmiseException
+	 */
+	public void requestToken(final TokenRequest tokenRequest, final RequestTokenCallback callback) throws OmiseException{
+		requestToken(tokenRequest, callback, 10000, 10000);
+	}
+	
+	/**
  	 * Get token from omise
 	 * @param tokenRequest
 	 * @param callback
@@ -106,11 +117,13 @@ public class Omise {
 							e.printStackTrace();
 						}
 					}
-					
 				}
 			}
 		}){}.start();
 	}
+	
+	
+	
 	
 	/**
 	 * Charge request to omise
@@ -122,7 +135,6 @@ public class Omise {
 	public void requestToken(final ChargeRequest chargeRequest, final RequestChargeCallback callback) throws OmiseException{
 		requestCharge(chargeRequest, callback, 10000, 10000);
 	}
-	
 	
 	/**
  	 * Charge request to omise
@@ -168,23 +180,8 @@ public class Omise {
 			            	sb.append(buffer);
 			            }
 
-			            Token token = new JsonParser().parseTokenJson(sb.toString());
-						callback.onRequestSucceeded(token);
-						
-						//test code 
-						if (MainActivity.tvResponse != null) {
-							final String json = sb.toString();
-							MainActivity.HANDLER.post(new Runnable() {
-								public void run() {
-									try {
-										MainActivity.tvResponse.setText(new JSONObject(json).toString(4));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
-								}
-							});
-						}
-						
+			            Charge charge = new JsonParser().parseChargeJson(sb.toString());
+						callback.onRequestSucceeded(charge);
 					}else{
 						callback.onRequestFailed(RequestTokenCallback.ERRCODE_BAD_REQUEST);
 					}
@@ -209,24 +206,11 @@ public class Omise {
 							e.printStackTrace();
 						}
 					}
-					
 				}
 			}
 		}){}.start();
 	}
 	
-	/**
-	 * Get token from Omise 
-	 * Timeout set 10 seccond until connection has completed、After 10 seccond connected API server will Timeout.
-	 * @param tokenRequest
-	 * @param callback
-	 * @throws OmiseException
-	 */
-	public void requestToken(final TokenRequest tokenRequest, final RequestTokenCallback callback) throws OmiseException{
-		requestToken(tokenRequest, callback, 10000, 10000);
-	}
-	
-
 	
 	
 	private HttpsURLConnection createHttpsURLConnection(

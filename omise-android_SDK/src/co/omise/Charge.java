@@ -1,7 +1,7 @@
 package co.omise;
 
 public class Charge {
-	private String chargeId = null;
+	private String id = null;
 	private boolean livemode = false;
 	private String location = null;
 	private int amount = 0;
@@ -19,11 +19,11 @@ public class Charge {
 	private String ip = null;
 	private String created = null;
 	
-	public String getChargeId() {
-		return chargeId;
+	public String getId() {
+		return id;
 	}
-	public void setChargeId(String chargeId) {
-		this.chargeId = chargeId;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public boolean isLivemode() {
 		return livemode;
