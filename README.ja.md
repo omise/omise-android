@@ -27,7 +27,10 @@ tokenをリクエストする時に必要なパラメータを取りまとめる
 tokenを表現します。リクエストに成功した時、コールバックで渡されてくるのはこのクラスのインスタンスです。
 
 ### co.omise.RequestTokenCallback
-リクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。エラーコードはここに定義されています。
+リクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。
+
+### co.omise.OmiseCallback
+エラーコードはここに定義されています。
 
 ```java
 public static final int ERRCODE_TIMEOUT = 0x00;
