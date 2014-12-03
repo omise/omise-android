@@ -20,6 +20,9 @@ import co.omise.activity.MainActivity;
  */
 public class Omise {
 	
+	private static final String OMISE_URL_TOKEN = "https://vault.omise.co/tokens";
+	private static final String OMISE_URL_CHARGE = "https://api.omise.co/charge";
+	
 	/**
  	 * Get token from omise
 	 * @param tokenRequest
@@ -37,7 +40,7 @@ public class Omise {
 				BufferedReader br = null;
 				
 				try {
-					URL url = new URL("https://vault.omise.co/tokens");
+					URL url = new URL(OMISE_URL_TOKEN);
 					
 					//create HttpsURLConnection
 					sslconnection = createHttpsURLConnection(url, tokenRequest.getPublicKey(), "", connectTimeoutMillis, readTimeoutMillis);
