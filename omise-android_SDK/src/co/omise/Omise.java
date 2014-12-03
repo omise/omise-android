@@ -12,8 +12,8 @@ import javax.net.ssl.HttpsURLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import co.omise.activity.MainActivity;
 import android.util.Base64;
+import co.omise.activity.MainActivity;
 
 /**
  * Class for get token
@@ -39,23 +39,8 @@ public class Omise {
 				try {
 					URL url = new URL("https://vault.omise.co/tokens");
 					
-					sslconnection = (HttpsURLConnection)url.openConnection();
-					sslconnection.setRequestMethod("POST");
-					sslconnection.setUseCaches(false);
-
-					//curl -u
-					String userpass = tokenRequest.getPublicKey() + ":";
-					String auth = Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
-					sslconnection.setRequestProperty  ("Authorization", "Basic " + auth);
-					
-					
-					//timeout
-					sslconnection.setConnectTimeout(connectTimeoutMillis);
-					sslconnection.setReadTimeout(readTimeoutMillis);
-					
-					sslconnection.setDoInput(true);
-					sslconnection.setDoOutput(true);
-					
+					//create HttpsURLConnection
+					sslconnection = createHttpsURLConnection(url, tokenRequest.getPublicKey(), "", connectTimeoutMillis, readTimeoutMillis);
 					
 					//put params
 					StringBuilder paramSb = new StringBuilder();
@@ -79,7 +64,6 @@ public class Omise {
 
 			            Token token = new JsonParser().parseTokenJson(sb.toString());
 						callback.onRequestSucceeded(token);
-						
 						
 						//test code 
 						if (MainActivity.tvResponse != null) {
@@ -134,6 +118,35 @@ public class Omise {
 	 */
 	public void requestToken(final TokenRequest tokenRequest, final RequestTokenCallback callback) throws OmiseException{
 		requestToken(tokenRequest, callback, 10000, 10000);
+	}
+	
+	private HttpsURLConnection createHttpsURLConnection(
+			final URL url, 
+			final String userName, 
+			final String password, 
+			final int connectTimeoutMillis, 
+			final int readTimeoutMillis) throws IOException{
+		
+		HttpsURLConnection sslconnection = null;
+
+		sslconnection = (HttpsURLConnection)url.openConnection();
+		sslconnection.setRequestMethod("POST");
+		sslconnection.setUseCaches(false);
+
+		//curl -u
+		String userpass = userName + ":" + password;
+		String auth = Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+		sslconnection.setRequestProperty  ("Authorization", "Basic " + auth);
+		
+		
+		//timeout
+		sslconnection.setConnectTimeout(connectTimeoutMillis);
+		sslconnection.setReadTimeout(readTimeoutMillis);
+		
+		sslconnection.setDoInput(true);
+		sslconnection.setDoOutput(true);
+
+		return sslconnection;
 	}
 	
 	private void checkValidation(final TokenRequest tokenRequest) throws OmiseException{
