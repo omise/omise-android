@@ -6,6 +6,11 @@ package co.omise;
 public class TokenRequest {
 	private String publicKey = null;
 	private Card card = null;
+
+	public TokenRequest(){}
+	public TokenRequest(String publicKey) {
+		this.publicKey = publicKey;
+	}
 	
 	public String getPublicKey() {
 		return publicKey;
