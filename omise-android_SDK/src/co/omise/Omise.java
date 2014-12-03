@@ -113,6 +113,109 @@ public class Omise {
 	}
 	
 	/**
+	 * Charge request to omise
+	 * Timeout set 10 seccond until connection has completed、After 10 seccond connected API server will Timeout.
+	 * @param tokenRequest
+	 * @param callback
+	 * @throws OmiseException
+	 */
+	public void requestToken(final ChargeRequest chargeRequest, final RequestChargeCallback callback) throws OmiseException{
+		requestCharge(chargeRequest, callback, 10000, 10000);
+	}
+	
+	
+	/**
+ 	 * Charge request to omise
+	 * @param tokenRequest
+	 * @param callback
+	 * @param connectTimeoutMillis Connection timeout(ms)
+	 * @param readTimeoutMillis Timeout for after communicate with server(ms)
+	 * @throws OmiseException
+	 */
+	public void requestCharge(final ChargeRequest chargeRequest, final RequestChargeCallback callback, final int connectTimeoutMillis, final int readTimeoutMillis) throws OmiseException{
+		checkValidation(chargeRequest);
+
+		new Thread(new Runnable() {
+			public void run() {
+				HttpsURLConnection sslconnection = null;
+				BufferedReader br = null;
+				
+				try {
+					URL url = new URL(OMISE_URL_CHARGE);
+					
+					//create HttpsURLConnection
+					sslconnection = createHttpsURLConnection(url, chargeRequest.getSecretKey(), "", connectTimeoutMillis, readTimeoutMillis);
+					
+					//put params
+					StringBuilder paramSb = new StringBuilder();
+					paramSb.append("customer="+ chargeRequest.getCustomer() + "&");
+					paramSb.append("card="+ chargeRequest.getCard() + "&");
+					paramSb.append("return_uri="+ chargeRequest.getReturnUri() + "&");
+					paramSb.append("amount="+ chargeRequest.getAmount() + "&");
+					paramSb.append("currency="+ chargeRequest.getCurrency() + "&");
+					paramSb.append("capture="+ chargeRequest.getCapture() + "&");
+					paramSb.append("description="+ chargeRequest.getDescription() + "&");
+					paramSb.append("ip="+ chargeRequest.getIp());
+					
+					PrintWriter printWriter = new PrintWriter(sslconnection.getOutputStream());
+					printWriter.print(paramSb.toString());
+					printWriter.close();
+					if (sslconnection.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+						String buffer = null;
+						StringBuffer sb = new StringBuffer();
+				        br = new BufferedReader(new InputStreamReader(sslconnection.getInputStream()));
+			            while((buffer = br.readLine()) != null){
+			            	sb.append(buffer);
+			            }
+
+			            Token token = new JsonParser().parseTokenJson(sb.toString());
+						callback.onRequestSucceeded(token);
+						
+						//test code 
+						if (MainActivity.tvResponse != null) {
+							final String json = sb.toString();
+							MainActivity.HANDLER.post(new Runnable() {
+								public void run() {
+									try {
+										MainActivity.tvResponse.setText(new JSONObject(json).toString(4));
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+						}
+						
+					}else{
+						callback.onRequestFailed(RequestTokenCallback.ERRCODE_BAD_REQUEST);
+					}
+				} catch (SocketTimeoutException e){
+					e.printStackTrace();
+					callback.onRequestFailed(RequestTokenCallback.ERRCODE_TIMEOUT);
+				} catch (IOException e) {
+					e.printStackTrace();
+					callback.onRequestFailed(RequestTokenCallback.ERRCODE_CONNECTION_FAILED);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					callback.onRequestFailed(RequestTokenCallback.ERRCODE_INVALID_JSON);
+				} catch (Exception e) {
+					e.printStackTrace();
+					callback.onRequestFailed(RequestTokenCallback.ERRCODE_UNKNOWN);
+				} finally {
+					if (sslconnection != null) sslconnection.disconnect();
+					if (br != null){
+						try {
+							br.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			}
+		}){}.start();
+	}
+	
+	/**
 	 * Get token from Omise 
 	 * Timeout set 10 seccond until connection has completed、After 10 seccond connected API server will Timeout.
 	 * @param tokenRequest
@@ -122,6 +225,9 @@ public class Omise {
 	public void requestToken(final TokenRequest tokenRequest, final RequestTokenCallback callback) throws OmiseException{
 		requestToken(tokenRequest, callback, 10000, 10000);
 	}
+	
+
+	
 	
 	private HttpsURLConnection createHttpsURLConnection(
 			final URL url, 
@@ -153,11 +259,22 @@ public class Omise {
 	}
 	
 	private void checkValidation(final TokenRequest tokenRequest) throws OmiseException{
-		if(tokenRequest.getPublicKey() == null){
-			throw new OmiseException("public key is null.");
+		if(isSet(tokenRequest.getPublicKey())){
+			throw new OmiseException("public key is required.");
 		}
 		if(tokenRequest.getCard() == null) {
 			throw new OmiseException("card is null.");
 		}
+	}
+	private void checkValidation(final ChargeRequest chargeRequest) throws OmiseException{
+		if (isSet(chargeRequest.getSecretKey())) {
+			throw new OmiseException("public key is required.");
+		}
+		if (isSet(chargeRequest.getReturnUri())) {
+			throw new OmiseException("returnUri is required.");
+		}
+	}
+	private boolean isSet(String str){
+		return str != null && str.length() > 0;
 	}
 }

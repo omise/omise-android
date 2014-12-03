@@ -38,4 +38,8 @@ public class JsonParser {
 		return token;
 	}
 	
+	public Charge parseChargeJson(String json) throws JSONException{
+		return null;
+	}
+	
 }

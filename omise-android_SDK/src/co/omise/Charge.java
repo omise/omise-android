@@ -6,7 +6,7 @@ public class Charge {
 	private String location = null;
 	private int amount = 0;
 	private String currency = null;
-	private String descriptionOfCharge = null;
+	private String description = null;
 	private boolean capture = false;
 	private boolean authorized = false;
 	private boolean captured = false;
@@ -49,11 +49,11 @@ public class Charge {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-	public String getDescriptionOfCharge() {
-		return descriptionOfCharge;
+	public String getDescription() {
+		return description;
 	}
-	public void setDescriptionOfCharge(String descriptionOfCharge) {
-		this.descriptionOfCharge = descriptionOfCharge;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public boolean isCapture() {
 		return capture;
