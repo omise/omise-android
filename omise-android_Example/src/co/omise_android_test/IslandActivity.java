@@ -2,35 +2,48 @@ package co.omise_android_test;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
 
 
 public class IslandActivity extends Activity {
+	
+	private TextView tvPrice = null;
+	private TextView tvIslandNum = null;
+
+	private int islandNum = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_island);
+        tvPrice = (TextView)findViewById(R.id.tvPrice);
+        tvIslandNum = (TextView)findViewById(R.id.tvIslandNum);
+        checkAndTvSetIslandNum();
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.island, menu);
-        return true;
+    
+	public void onPlusClick(View view){
+	    islandNum--;
+	    checkAndTvSetIslandNum();
     }
+	public void onMinusClick(View view){
+		islandNum++;
+		checkAndTvSetIslandNum();
+	}
+	
+	public void onCheckoutClick(View view){
+		
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	private void checkAndTvSetIslandNum(){
+		if (islandNum > 99)islandNum = 99;
+		if (islandNum < 1)islandNum = 1;
+		tvIslandNum.setText(String.valueOf(islandNum));
+		tvPrice.setText("$ " + islandNum*2 + " m");
+	}
+    
+	
+
 }
