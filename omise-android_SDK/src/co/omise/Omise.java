@@ -21,7 +21,7 @@ import co.omise.activity.MainActivity;
 public class Omise {
 	
 	private static final String OMISE_URL_TOKEN = "https://vault.omise.co/tokens";
-	private static final String OMISE_URL_CHARGE = "https://api.omise.co/charge";
+	private static final String OMISE_URL_CHARGE = "https://api.omise.co/charges";
 	
 	/**
 	 * Get token from Omise 
@@ -138,7 +138,7 @@ public class Omise {
 	
 	/**
  	 * Charge request to omise
-	 * @param tokenRequest
+	 * @param chargeRequest
 	 * @param callback
 	 * @param connectTimeoutMillis Connection timeout(ms)
 	 * @param readTimeoutMillis Timeout for after communicate with server(ms)
@@ -160,14 +160,18 @@ public class Omise {
 					
 					//put params
 					StringBuilder paramSb = new StringBuilder();
-					paramSb.append("customer="+ chargeRequest.getCustomer() + "&");
+					if (isSet(chargeRequest.getCustomer())) {
+						paramSb.append("customer="+ chargeRequest.getCustomer() + "&");
+					}
 					paramSb.append("card="+ chargeRequest.getCard() + "&");
 					paramSb.append("return_uri="+ chargeRequest.getReturnUri() + "&");
 					paramSb.append("amount="+ chargeRequest.getAmount() + "&");
 					paramSb.append("currency="+ chargeRequest.getCurrency() + "&");
 					paramSb.append("capture="+ chargeRequest.getCapture() + "&");
-					paramSb.append("description="+ chargeRequest.getDescription() + "&");
-					paramSb.append("ip="+ chargeRequest.getIp());
+					if (isSet(chargeRequest.getIp())) {
+						paramSb.append("ip="+ chargeRequest.getIp() + "&");
+					}
+					paramSb.append("description="+ chargeRequest.getDescription() + "");
 					
 					PrintWriter printWriter = new PrintWriter(sslconnection.getOutputStream());
 					printWriter.print(paramSb.toString());
