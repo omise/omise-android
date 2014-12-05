@@ -19,7 +19,7 @@
         android:id="@+id/view1"
         android:layout_width="fill_parent"
         android:layout_height="200dp"
-        android:background="#AFFF"
+        android:background="#8FFF"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
@@ -28,7 +28,7 @@
     <Button
         android:id="@+id/btnCheckout"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_alignLeft="@+id/view1"
         android:layout_alignRight="@+id/view1"
         android:layout_below="@+id/view1"

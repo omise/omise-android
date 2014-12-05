@@ -23,12 +23,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#AFFF"/>
+        android:background="#8FFF"/>
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:background="#AFFF"
         android:layout_margin="15dp"
         android:onClick="onCheckoutClick"
@@ -49,6 +49,7 @@
         android:layout_marginTop="15dp" >
 
         <LinearLayout
+            android:layout_marginTop="@dimen/checkout_ll_margin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
@@ -76,10 +77,126 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="**** **** **** 1111"
-                    android:textColor="@color/tv_textcolor_2" />
+                    android:textColor="@color/tv_textcolor_1" />
                 
             </LinearLayout>
+            
+            <LinearLayout
+	            android:layout_marginTop="@dimen/checkout_ll_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BILLING ADDRESS"
+                    android:textColor="@color/tv_textcolor_2" />
+                <TextView
+                    android:layout_marginTop="@dimen/checkout_tv_margin"
+                    android:textSize="@dimen/checkout_tv_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tv_textcolor_1"
+                    android:text="Omise HQ" />
+
+                <TextView
+                    android:id="@+id/BillingAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 Infinite Loop"
+                    android:textColor="@color/tv_textcolor_1" />
+                
+            </LinearLayout>
+            
+            <LinearLayout
+	            android:layout_marginTop="@dimen/checkout_ll_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SHIPPING ADDRESS"
+                    android:textColor="@color/tv_textcolor_2" />
+                <TextView
+                    android:layout_marginTop="@dimen/checkout_tv_margin"
+                    android:textSize="@dimen/checkout_tv_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tv_textcolor_1"
+                    android:text="Omise HQ" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 Infinite Loop"
+                    android:textColor="@color/tv_textcolor_1" />
+                
+            </LinearLayout>
+                        
+            <LinearLayout
+	            android:layout_marginTop="@dimen/checkout_ll_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SHIPPING METHOD"
+                    android:textColor="@color/tv_textcolor_2" />
+                <TextView
+                    android:layout_marginTop="@dimen/checkout_tv_margin"
+                    android:textSize="@dimen/checkout_tv_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tv_textcolor_1"
+                    android:text="Thailand Shipping" />
+
+                <TextView
+                    android:id="@+id/tvShippingMethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textColor="@color/tv_textcolor_1" />
+                
+            </LinearLayout>
+                                    
+            <LinearLayout
+	            android:layout_marginTop="@dimen/checkout_ll_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PAYMENT"
+                    android:textColor="@color/tv_textcolor_2" />
+                
+           		<LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:orientation="horizontal" >
+               
+	                <TextView
+	                    android:id="@+id/tvIslandNum"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:text="10"
+	                    android:textColor="@color/tv_textcolor_1" />
+	                <TextView
+	                    android:id="@+id/tvPrice"
+	                    android:layout_width="fill_parent"
+	                    android:gravity="right"
+	                    android:layout_height="wrap_content"
+	                    android:text="2m USD"
+	                    android:textColor="@color/tv_textcolor_1" />
+	                	            
+	            </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

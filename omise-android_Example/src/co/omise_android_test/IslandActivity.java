@@ -45,6 +45,4 @@ public class IslandActivity extends Activity {
 		tvPrice.setText("$ " + islandNum*2 + " m");
 	}
     
-	
-
 }

@@ -1,6 +1,7 @@
 package co.omise;
 
 public class Charge {
+	
 	private String id = null;
 	private boolean livemode = false;
 	private String location = null;
