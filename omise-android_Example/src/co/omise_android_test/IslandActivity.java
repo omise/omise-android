@@ -1,6 +1,7 @@
 package co.omise_android_test;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -34,7 +35,7 @@ public class IslandActivity extends Activity {
 	}
 	
 	public void onCheckoutClick(View view){
-		
+		startActivity(new Intent(getApplicationContext(), CheckoutActivity.class));
 	}
 
 	private void checkAndTvSetIslandNum(){

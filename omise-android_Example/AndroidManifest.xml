@@ -13,6 +13,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
             android:name=".IslandActivity"
             android:label="@string/app_name" >
@@ -21,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".CheckoutActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+            </intent-filter>
+        </activity>
+        
     </application>
 
 </manifest>
