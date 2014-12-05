@@ -132,7 +132,7 @@ public class Omise {
 	 * @param callback
 	 * @throws OmiseException
 	 */
-	public void requestToken(final ChargeRequest chargeRequest, final RequestChargeCallback callback) throws OmiseException{
+	public void requestCharge(final ChargeRequest chargeRequest, final RequestChargeCallback callback) throws OmiseException{
 		requestCharge(chargeRequest, callback, 10000, 10000);
 	}
 	
@@ -243,7 +243,7 @@ public class Omise {
 	}
 	
 	private void checkValidation(final TokenRequest tokenRequest) throws OmiseException{
-		if(isSet(tokenRequest.getPublicKey())){
+		if(!isSet(tokenRequest.getPublicKey())){
 			throw new OmiseException("public key is required.");
 		}
 		if(tokenRequest.getCard() == null) {
@@ -251,10 +251,10 @@ public class Omise {
 		}
 	}
 	private void checkValidation(final ChargeRequest chargeRequest) throws OmiseException{
-		if (isSet(chargeRequest.getSecretKey())) {
+		if (!isSet(chargeRequest.getSecretKey())) {
 			throw new OmiseException("public key is required.");
 		}
-		if (isSet(chargeRequest.getReturnUri())) {
+		if (!isSet(chargeRequest.getReturnUri())) {
 			throw new OmiseException("returnUri is required.");
 		}
 	}

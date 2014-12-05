@@ -35,7 +35,10 @@ public class IslandActivity extends Activity {
 	}
 	
 	public void onCheckoutClick(View view){
-		startActivity(new Intent(getApplicationContext(), CheckoutActivity.class));
+		Intent intent = new Intent(getApplicationContext(), CheckoutActivity.class);
+		intent.putExtra("island", islandNum);
+		
+		startActivity(intent);
 	}
 
 	private void checkAndTvSetIslandNum(){
