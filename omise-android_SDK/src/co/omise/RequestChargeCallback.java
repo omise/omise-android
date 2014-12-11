@@ -1,14 +1,14 @@
 package co.omise;
-public interface RequestTokenCallback extends OmiseCallback{
+public interface RequestChargeCallback {
 	
 	/**
 	 * Its call if token succeeded to get.
 	 * @param token
 	 */
-	public void onRequestSucceeded(final Token token);
+	public void onRequestSucceeded(final Charge charge);
 	
 	/**
-	 * Its call if token failed to get.
+	 * Its call if charge failed to get.
 	 * @param errorCode is define in co.omise.OmiseCallback
 	 */
 	public void onRequestFailed(final int errorCode);

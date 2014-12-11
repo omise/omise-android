@@ -21,13 +21,25 @@ Android2.2 (API Level 8)以上で使用できます。
 クレジットカードを表現します。
 
 ### co.omise.TokenRequest
-tokenをリクエストする時に必要なパラメータを取りまとめるクラスです。このクラスのインスタンスに必要なパラメータをセットしてください。
+Tokenをリクエストする時に必要なパラメータを取りまとめるクラスです。このクラスのインスタンスに必要なパラメータをセットしてください。
 
 ### co.omise.Token
-tokenを表現します。リクエストに成功した時、コールバックで渡されてくるのはこのクラスのインスタンスです。
+Tokenを表現します。リクエストに成功した時、コールバックで渡されてくるのはこのクラスのインスタンスです。
+
+### co.omise.ChargeRequest
+Chargeをリクエストする時に必要なパラメータを取りまとめるクラスです。このクラスのインスタンスに必要なパラメータをセットしてください。
+
+### co.omise.Charge
+Chargeを表現します。リクエストに成功した時、コールバックで渡されてくるのはこのクラスのインスタンスです。
 
 ### co.omise.RequestTokenCallback
-リクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。エラーコードはここに定義されています。
+Tokenリクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。
+
+### co.omise.RequestChargeCallback
+Chargeリクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。
+
+### co.omise.OmiseCallback
+エラーコードはここに定義されています。
 
 ```java
 public static final int ERRCODE_TIMEOUT = 0x00;
@@ -38,10 +50,10 @@ public static final int ERRCODE_UNKNOWN = 0x10;
 ```
 
 ### co.omise.Omise
-tokenをリクエストするクラスです。使い方は下記のサンプルコードをご覧ください。
+Token, Chargeをリクエストするクラスです。使い方は下記のサンプルコードをご覧ください。
 
 
-## Request a token
+## Request a token and charge
 
 ```java
 import co.omise.Card;
@@ -68,13 +80,39 @@ try {
     tokenRequest.setCard(card);
 
     // Requesting token.	
-    Omise omise = new Omise();
+    final Omise omise = new Omise();
     omise.requestToken(tokenRequest, new RequestTokenCallback() {
         @Override
         public void onRequestSucceeded(Token token) {
             // Your application code here, for example:
             // String brand = token.getCard().getBrand();
             // String location = token.getLocation();
+            
+            		//Requesting charge.
+			ChargeRequest chargeRequest = new ChargeRequest("skey_test_4ya4w8z87btooqkue6p");
+			chargeRequest.setDescription("order9999");
+			chargeRequest.setAmount(12345);
+			chargeRequest.setCurrency("thb");
+			chargeRequest.setReturnUri("http://www.example.com/orders/9999/complete");
+			chargeRequest.setCard(token.getId());
+			
+			try {
+				omise.requestCharge(chargeRequest, new RequestChargeCallback() {
+					
+					@Override
+					public void onRequestSucceeded(Charge charge) {
+						// Your application code here, for example:
+						//String created = charge.getCreated();
+					}
+						
+					@Override
+					public void onRequestFailed(final int errorCode) {
+					}
+				});
+			} catch (OmiseException e) {
+				e.printStackTrace();
+			}
+
         }
 
         @Override
