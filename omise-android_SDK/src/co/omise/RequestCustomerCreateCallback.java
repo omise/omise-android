@@ -1,11 +1,11 @@
 package co.omise;
-public interface RequestCustomerCallback extends OmiseCallback{
+public interface RequestCustomerCreateCallback extends OmiseCallback{
 	
 	/**
-	 * Its call if token succeeded to get.
-	 * @param token
+	 * Its call if create customer succeeded to get.
+	 * @param customer
 	 */
-	public void onRequestSucceeded(final Token token);
+	public void onRequestSucceeded(final Customer customer);
 	
 	/**
 	 * Its call if token failed to get.

@@ -1,26 +1,37 @@
 package co.omise;
 
+
 /**
- * Card class
+ * Customer class
  */
 public class Customer {
 
 	private String id = null;
 	private boolean livemode = false;
 	private String location = null;
-	private String default_card = null;
+	private String defaultCard = null;
 	private String email = null;
 	private String description = null;
 	private String created = null;
-	private Card card = null;
+	private Cards cards = null;
 	
+	@Override
+	public String toString(){
+		return "Customer[id=" + id +
+				",livemode=" + livemode +
+				",defaultCard=" + defaultCard +
+				",email=" + email +
+				",description=" + description +
+				",created=" + created +
+				",cards=" + cards + "]";
+	}
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public boolean isLivemode() {
+	public boolean getLivemode() {
 		return livemode;
 	}
 	public void setLivemode(boolean livemode) {
@@ -32,11 +43,11 @@ public class Customer {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public String getDefault_card() {
-		return default_card;
+	public String getDefaultCard() {
+		return defaultCard;
 	}
-	public void setDefault_card(String default_card) {
-		this.default_card = default_card;
+	public void setDefaultCard(String defaultCard) {
+		this.defaultCard = defaultCard;
 	}
 	public String getEmail() {
 		return email;
@@ -56,11 +67,10 @@ public class Customer {
 	public void setCreated(String created) {
 		this.created = created;
 	}
-	public Card getCard() {
-		return card;
+	public Cards getCards() {
+		return cards;
 	}
-	public void setCard(Card card) {
-		this.card = card;
+	public void setCards(Cards cards) {
+		this.cards = cards;
 	}
-	
 }

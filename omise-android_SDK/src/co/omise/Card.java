@@ -19,6 +19,28 @@ public class Card {
 	private String fingerprint = null;
 	private String name = null;
 	private String created = null;
+	private String location = null;
+	private boolean securityCodeCheck = false;
+	
+	@Override
+	public String toString(){
+		return "Card[id=" + id +
+				",livemode=" + livemode +
+				",country=" + country +
+				",number=" + number +
+				",city=" + city +
+				",postalCode=" + postalCode +
+				",financing=" + financing +
+				",lastDigits=" + lastDigits +
+				",brand=" + brand +
+				",expirationMonth=" + expirationMonth +
+				",expirationYear=" + expirationYear +
+				",fingerprint=" + fingerprint +
+				",name=" + name +
+				",created=" + created +
+				",location=" + location +
+				",securityCodeCheck=" + securityCodeCheck + "]";
+	}
 	
 	public String getId() {
 		return id;
@@ -104,6 +126,16 @@ public class Card {
 	public void setFingerprint(String fingerprint) {
 		this.fingerprint = fingerprint;
 	}
-	
-	
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public boolean getSecurityCodeCheck() {
+		return securityCodeCheck;
+	}
+	public void setSecurityCodeCheck(boolean securityCodeCheck) {
+		this.securityCodeCheck = securityCodeCheck;
+	}
 }

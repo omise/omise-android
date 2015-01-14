@@ -1,5 +1,8 @@
 package co.omise;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,6 +85,58 @@ public class JsonParser {
 		charge.setCreated(rootObject.getString("created"));
 		
 		return charge;
+	}
+	
+	public Customer parseCreateCustomerJson(final String json) throws JSONException{
+		Customer customer = new Customer();
+		Cards cards = new Cards();
+
+		//customer obj
+		JSONObject rootObject = new JSONObject(json);
+		customer.setId(rootObject.getString("id"));
+		customer.setLivemode(rootObject.getBoolean("livemode"));
+		customer.setLocation(rootObject.getString("location"));
+		customer.setDefaultCard(rootObject.getString("default_card"));
+		customer.setEmail(rootObject.getString("email"));
+		customer.setDescription(rootObject.getString("description"));
+		customer.setCreated(rootObject.getString("created"));
+		
+		JSONObject cardsObject = rootObject.getJSONObject("cards");
+		cards.setFrom(cardsObject.getString("from"));
+		cards.setTo(cardsObject.getString("to"));
+		cards.setOffset(cardsObject.getInt("offset"));
+		cards.setLimit(cardsObject.getInt("limit"));
+		cards.setTotal(cardsObject.getInt("total"));
+		cards.setOffset(cardsObject.getInt("offset"));
+		cards.setLocation(cardsObject.getString("location"));
+
+		ArrayList<Card> cardList = new ArrayList<Card>();
+		JSONArray cardsData = cardsObject.getJSONArray("data");
+		for (int i = 0; i < cardsData.length(); i++) {
+			JSONObject cardObject = cardsData.getJSONObject(i);
+			Card card = new Card();
+			card.setId(cardObject.getString("id"));
+			card.setLivemode(cardObject.getBoolean("livemode"));
+			card.setLocation(cardObject.getString("location"));
+			card.setCountry(cardObject.getString("country"));
+			card.setCity(cardObject.getString("city"));
+			card.setPostalCode(cardObject.getString("postal_code"));
+			card.setFinancing(cardObject.getString("financing"));
+			card.setLastDigits(cardObject.getString("last_digits"));
+			card.setBrand(cardObject.getString("brand"));
+			card.setExpirationMonth(cardObject.getString("expiration_month"));
+			card.setExpirationYear(cardObject.getString("expiration_year"));
+			card.setFingerprint(cardObject.getString("fingerprint"));
+			card.setName(cardObject.getString("name"));
+			card.setCreated(cardObject.getString("created"));
+			card.setSecurityCodeCheck(cardObject.getBoolean("security_code_check"));
+			cardList.add(card);
+		}
+		
+		cards.setCards(cardList);
+		customer.setCards(cards);
+		
+		return customer;
 	}
 	
 }
