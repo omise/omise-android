@@ -63,5 +63,4 @@ public class Customer {
 		this.card = card;
 	}
 	
-	
 }
