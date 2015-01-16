@@ -1,5 +1,7 @@
 package co.omise_android_test;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +9,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import co.omise.Card;
+import co.omise.Cards;
 import co.omise.Charge;
 import co.omise.ChargeRequest;
+import co.omise.Customer;
+import co.omise.CustomerRequest;
 import co.omise.Omise;
 import co.omise.OmiseException;
 import co.omise.RequestChargeCallback;
+import co.omise.RequestCustomerCreateCallback;
 import co.omise.RequestTokenCallback;
 import co.omise.Token;
 import co.omise.TokenRequest;
@@ -62,10 +68,9 @@ public class IslandActivity extends Activity {
 	
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 
-		Omise omise = new Omise();
+		final Omise omise = new Omise();
 		try {
 			Card card = new Card();
 		    card.setName("JOHN DOE"); // Required
@@ -77,17 +82,68 @@ public class IslandActivity extends Activity {
 
 		    // Instantiate new TokenRequest with public key and card.
 		    TokenRequest tokenRequest = new TokenRequest();
-		    tokenRequest.setPublicKey("pkey_test_4ya4w8z88182bq420wc"); // Required
+		    tokenRequest.setPublicKey("pkey_test_4ypsy7bkjqct74ov8y7"); // Required
 		    tokenRequest.setCard(card);
 
+		    
+		    /*
+		     * Requesting create Customer with Card.
+		     * 1, request token
+		     * 2, request charge
+		     */
 		    // Requesting token.    
 		    omise.requestToken(tokenRequest, new RequestTokenCallback() {
 		        @Override
 		        public void onRequestSucceeded(Token token) {
-		        	System.out.println(token.getCreated());
-		        	System.out.println(token.getId());
 		        	
-		    		ChargeRequest chargeRequest = new ChargeRequest("skey_test_4ya4w8z87btooqkue6p");
+		        	// Requesting create Customer.
+					CustomerRequest customerRequest = new CustomerRequest("skey_test_4ypsy7bkk40kirezg28");
+					customerRequest.setDescription("description foo!");
+					customerRequest.setEmail("foobar@foobar.com");
+					customerRequest.setCard(token.getId());
+					
+					try {
+						omise.requestCreateCustomer(customerRequest, new RequestCustomerCreateCallback() {
+							
+							@Override
+							public void onRequestSucceeded(Customer customer) {
+								// Your application code here, for example:
+								Cards cards = customer.getCards();
+								ArrayList<Card> cardList = cards.getCards();
+								for (Card card : cardList) {
+									System.out.println(card.getBrand());
+								}
+							}
+							
+							@Override
+							public void onRequestFailed(final int errorCode) {
+								System.out.println("err" + errorCode);
+							}
+						});
+					} catch (OmiseException e) {
+						e.printStackTrace();
+					}
+		        }
+		        @Override
+		        public void onRequestFailed(final int errorCode) {
+		        }
+		        
+		    });
+
+		    
+
+		    /*
+		     * Requesting charge.
+		     * 1, request token
+		     * 2, request charge
+		     */
+		    // Requesting token.    
+		    omise.requestToken(tokenRequest, new RequestTokenCallback() {
+		        @Override
+		        public void onRequestSucceeded(Token token) {
+		        	
+					//Requesting charge.
+		    		ChargeRequest chargeRequest = new ChargeRequest("skey_test_4ypsy7bkk40kirezg28");
 		    		chargeRequest.setCustomer("");
 		    		chargeRequest.setDescription("order9999");
 		    		chargeRequest.setAmount(123456);
@@ -95,11 +151,12 @@ public class IslandActivity extends Activity {
 		    		chargeRequest.setReturnUri("http://www.example.com/orders/9999/complete");
 		    		chargeRequest.setCard(token.getId());
 					try {
-						new Omise().requestCharge(chargeRequest, new RequestChargeCallback() {
+						omise.requestCharge(chargeRequest, new RequestChargeCallback() {
 							
 							@Override
 							public void onRequestSucceeded(Charge charge) {
-								System.out.println(charge.getCard().getCity());
+								// Your application code here, for example:
+								String city = charge.getCard().getCity();
 							}
 							
 							@Override
@@ -114,8 +171,10 @@ public class IslandActivity extends Activity {
 		        @Override
 		        public void onRequestFailed(final int errorCode) {
 		        }
+		        
 		    });
-			    
+		    
+					
 
 			
 		} catch (OmiseException e) {

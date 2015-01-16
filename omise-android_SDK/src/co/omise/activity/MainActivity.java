@@ -7,9 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import co.omise.Card;
+import co.omise.Customer;
+import co.omise.CustomerRequest;
 import co.omise.Omise;
 import co.omise.OmiseException;
 import co.omise.R;
+import co.omise.RequestCustomerCreateCallback;
 import co.omise.RequestTokenCallback;
 import co.omise.Token;
 import co.omise.TokenRequest;
@@ -28,7 +31,7 @@ public class MainActivity extends Activity {
 		
 		tvResponse = (TextView)findViewById(R.id.tvResponse);
 		etPublicKey = (EditText)findViewById(R.id.etPublicKey);
-		etPublicKey.setText("pkey_test_4xz5wsv5q8auf40jjh0");
+		etPublicKey.setText("pkey_test_4ypsy7bkjqct74ov8y7");
 		
 		setTitle("omise-android sample");
 
@@ -43,6 +46,7 @@ public class MainActivity extends Activity {
 	private void example(){
 		tvResponse.setText("connecting...");
 		try {
+			
 			Card card = new Card();
 			card.setName("JOHN DOE");
 			card.setCity("Bangkok");
@@ -59,6 +63,34 @@ public class MainActivity extends Activity {
 			omise.requestToken(tokenRequest, new RequestTokenCallback() {
 				@Override
 				public void onRequestSucceeded(Token token) {
+					
+					CustomerRequest customerRequest = new CustomerRequest("skey_test_4ypsy7bkk40kirezg28");
+					customerRequest.setDescription("test_test_hoge_hoge");
+					customerRequest.setEmail("hogehoge@fugafuga.com");
+					customerRequest.setCard(token.getId());
+					
+					Omise omise = new Omise();
+					try {
+						omise.requestCreateCustomer(customerRequest, new RequestCustomerCreateCallback() {
+							
+							@Override
+							public void onRequestSucceeded(Customer customer) {
+								System.out.println(customer);
+							}
+							
+							@Override
+							public void onRequestFailed(final int errorCode) {
+								runOnUiThread(new Runnable() {
+									public void run() {
+										tvResponse.setText("onRequestFailed:error code = " + errorCode);
+									}
+								});
+							}
+						});
+					} catch (OmiseException e) {
+						e.printStackTrace();
+					}
+
 				}
 				@Override
 				public void onRequestFailed(final int errorCode) {
@@ -69,6 +101,7 @@ public class MainActivity extends Activity {
 					});
 				}
 			});
+			
 		} catch (OmiseException e) {
 			e.printStackTrace();
 		}
