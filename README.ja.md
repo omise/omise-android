@@ -51,15 +51,8 @@ Token, Chargeをリクエストするクラスです。使い方は下記のサ�
 
 ```java
 import co.omise.Card;
-import co.omise.Cards;
-import co.omise.Charge;
-import co.omise.ChargeRequest;
-import co.omise.Customer;
-import co.omise.CustomerRequest;
 import co.omise.Omise;
 import co.omise.OmiseException;
-import co.omise.RequestChargeCallback;
-import co.omise.RequestCustomerCreateCallback;
 import co.omise.RequestTokenCallback;
 import co.omise.Token;
 import co.omise.TokenRequest;
