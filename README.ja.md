@@ -20,23 +20,17 @@ Android2.2 (API Level 8)以上で使用できます。
 ### co.omise.Card
 クレジットカードを表現します。
 
+### co.omise.Cards
+クレジットカードのリストを表現します。
+
 ### co.omise.TokenRequest
 Tokenをリクエストする時に必要なパラメータを取りまとめるクラスです。このクラスのインスタンスに必要なパラメータをセットしてください。
 
 ### co.omise.Token
 Tokenを表現します。リクエストに成功した時、コールバックで渡されてくるのはこのクラスのインスタンスです。
 
-### co.omise.ChargeRequest
-Chargeをリクエストする時に必要なパラメータを取りまとめるクラスです。このクラスのインスタンスに必要なパラメータをセットしてください。
-
-### co.omise.Charge
-Chargeを表現します。リクエストに成功した時、コールバックで渡されてくるのはこのクラスのインスタンスです。
-
 ### co.omise.RequestTokenCallback
 Tokenリクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。
-
-### co.omise.RequestChargeCallback
-Chargeリクエストのコールバックを定義したinterfaceです。リクエストするときはこのinterfaceを実装したインスタンスが引数として必要です。
 
 ### co.omise.OmiseCallback
 エラーコードはここに定義されています。
@@ -57,72 +51,51 @@ Token, Chargeをリクエストするクラスです。使い方は下記のサ�
 
 ```java
 import co.omise.Card;
+import co.omise.Cards;
+import co.omise.Charge;
+import co.omise.ChargeRequest;
+import co.omise.Customer;
+import co.omise.CustomerRequest;
 import co.omise.Omise;
 import co.omise.OmiseException;
+import co.omise.RequestChargeCallback;
+import co.omise.RequestCustomerCreateCallback;
 import co.omise.RequestTokenCallback;
 import co.omise.Token;
 import co.omise.TokenRequest;
 
+final Omise omise = new Omise();
 try {
+	// Instantiate new TokenRequest with public key and card.
+	Card card = new Card();
+	card.setName("JOHN DOE"); // Required
+	card.setCity("Bangkok"); // Required
+	card.setPostalCode("10320"); // Required
+	card.setNumber("4242424242424242"); // Required
+	card.setExpirationMonth("11"); // Required
+	card.setExpirationYear("2016"); // Required
 
-    // Instantiate new Card with necessary informations:
-    Card card = new Card();
-    card.setName("JOHN DOE"); // Required
-    card.setCity("Bangkok"); // Required
-    card.setPostalCode("10320"); // Required
-    card.setNumber("4242424242424242"); // Required
-    card.setExpirationMonth("11"); // Required
-    card.setExpirationYear("2016"); // Required
-	
-    // Instantiate new TokenRequest with public key and card.
-    TokenRequest tokenRequest = new TokenRequest();
-    tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
-    tokenRequest.setCard(card);
+	TokenRequest tokenRequest = new TokenRequest();
+	tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
+	tokenRequest.setCard(card);
 
-    // Requesting token.	
-    final Omise omise = new Omise();
-    omise.requestToken(tokenRequest, new RequestTokenCallback() {
-        @Override
-        public void onRequestSucceeded(Token token) {
-            // Your application code here, for example:
-            // String brand = token.getCard().getBrand();
-            // String location = token.getLocation();
-            
-            		//Requesting charge.
-			ChargeRequest chargeRequest = new ChargeRequest("skey_test_4ya4w8z87btooqkue6p");
-			chargeRequest.setDescription("order9999");
-			chargeRequest.setAmount(12345);
-			chargeRequest.setCurrency("thb");
-			chargeRequest.setReturnUri("http://www.example.com/orders/9999/complete");
-			chargeRequest.setCard(token.getId());
-			
-			try {
-				omise.requestCharge(chargeRequest, new RequestChargeCallback() {
-					
-					@Override
-					public void onRequestSucceeded(Charge charge) {
-						// Your application code here, for example:
-						//String created = charge.getCreated();
-					}
-						
-					@Override
-					public void onRequestFailed(final int errorCode) {
-					}
-				});
-			} catch (OmiseException e) {
-				e.printStackTrace();
-			}
-
-        }
-
-        @Override
-        public void onRequestFailed(final int errorCode) {
-            // Error handling on API failure.
-        }
-    });
+	// Requesting token.    
+	omise.requestToken(tokenRequest, new RequestTokenCallback() {
+		@Override
+		public void onRequestSucceeded(Token token) {
+			//Your code here        	
+			//Ex.
+			String strToken = token.getId();
+			boolean livemode = token.isLivemode();
+	        }
+        
+        	@Override
+	        public void onRequestFailed(final int errorCode) {
+        	}
+	});
 
 } catch (OmiseException e) {
-    e.printStackTrace();
+	e.printStackTrace();
 }
 ```
 
