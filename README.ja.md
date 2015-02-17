@@ -46,7 +46,6 @@ public static final int ERRCODE_UNKNOWN = 0x10;
 ### co.omise.Omise
 Token, Chargeをリクエストするクラスです。使い方は下記のサンプルコードをご覧ください。
 
-
 ## Request a token and charge
 
 ```java
@@ -59,36 +58,35 @@ import co.omise.TokenRequest;
 
 final Omise omise = new Omise();
 try {
-	// Instantiate new TokenRequest with public key and card.
-	Card card = new Card();
-	card.setName("JOHN DOE"); // Required
-	card.setCity("Bangkok"); // Required
-	card.setPostalCode("10320"); // Required
-	card.setNumber("4242424242424242"); // Required
-	card.setExpirationMonth("11"); // Required
-	card.setExpirationYear("2016"); // Required
+    // Instantiate new TokenRequest with public key and card.
+    Card card = new Card();
+    card.setName("JOHN DOE"); // Required
+    card.setCity("Bangkok"); // Required
+    card.setPostalCode("10320"); // Required
+    card.setNumber("4242424242424242"); // Required
+    card.setExpirationMonth("11"); // Required
+    card.setExpirationYear("2016"); // Required
 
-	TokenRequest tokenRequest = new TokenRequest();
-	tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
-	tokenRequest.setCard(card);
+    TokenRequest tokenRequest = new TokenRequest();
+    tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
+    tokenRequest.setCard(card);
 
-	// Requesting token.
-	omise.requestToken(tokenRequest, new RequestTokenCallback() {
-		@Override
-		public void onRequestSucceeded(Token token) {
-			//Your code here
-			//Ex.
-			String strToken = token.getId();
-			boolean livemode = token.isLivemode();
-	        }
+    // Requesting token.
+    omise.requestToken(tokenRequest, new RequestTokenCallback() {
+        @Override
+        public void onRequestSucceeded(Token token) {
+            //Your code here
+            //Ex.
+            String strToken = token.getId();
+            boolean livemode = token.isLivemode();
+        }
 
-        	@Override
-	        public void onRequestFailed(final int errorCode) {
-        	}
-	});
-
+        @Override
+        public void onRequestFailed(final int errorCode) {
+        }
+    });
 } catch (OmiseException e) {
-	e.printStackTrace();
+    e.printStackTrace();
 }
 ```
 
