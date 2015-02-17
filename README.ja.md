@@ -91,4 +91,4 @@ try {
 ```
 
 ### Test project
-Omise-android_Testプロジェクトをインポート、ビルドを行いプロジェクトをデバイスまたはAndroidエミュレーターで起動します。
+`Omise-android_Test`プロジェクトをインポート、ビルドを行いプロジェクトをデバイスまたはAndroidエミュレーターで起動します。
