@@ -13,7 +13,7 @@ Android2.2 (API Level 8)以上で使用できます。
 
 プロジェクトのインポート（eclipseの場合）　　
 
-[File]->[Import]->Existing Projects into Workspace  
+[File]->[Import]->Existing Projects into Workspace
 'Select root directory'でこのプロジェクトを選択
 
 ## Primary classes
@@ -72,16 +72,16 @@ try {
 	tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
 	tokenRequest.setCard(card);
 
-	// Requesting token.    
+	// Requesting token.
 	omise.requestToken(tokenRequest, new RequestTokenCallback() {
 		@Override
 		public void onRequestSucceeded(Token token) {
-			//Your code here        	
+			//Your code here
 			//Ex.
 			String strToken = token.getId();
 			boolean livemode = token.isLivemode();
 	        }
-        
+
         	@Override
 	        public void onRequestFailed(final int errorCode) {
         	}
@@ -92,11 +92,5 @@ try {
 }
 ```
 
-<<<<<<< HEAD
-## Test project
-テストアプリプロジェクトを使用し、実装方法を見る事が可能です。
- `omise-android_Test` をインポートしてみましょう
-=======
 ### Test project
-Omise-android_Testプロジェクトをインポート、ビルドを行いプロジェクトをデバイスまたはAndoroidエミュレーターで起動します。
->>>>>>> FETCH_HEAD
+Omise-android_Testプロジェクトをインポート、ビルドを行いプロジェクトをデバイスまたはAndroidエミュレーターで起動します。
