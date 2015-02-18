@@ -25,6 +25,7 @@ public class ConnectOmiseActivity extends Activity {
 			runOnUiThread(new Runnable() {
 				public void run() {
 					btnConnect.setText(token.getId());
+					System.out.println(token.getCreated());
 				}
 			});
 		}
