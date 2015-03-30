@@ -61,6 +61,7 @@ try {
     card.setNumber("4242424242424242"); // Required
     card.setExpirationMonth("11"); // Required
     card.setExpirationYear("2016"); // Required
+    card.setSecurityCode("123"); // Required
 
     TokenRequest tokenRequest = new TokenRequest();
     tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
