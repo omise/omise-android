@@ -62,7 +62,7 @@ public class Omise {
 					paramSb.append("card[postal_code]="+tokenRequest.getCard().getPostalCode() + "&");
 					paramSb.append("card[number]="+tokenRequest.getCard().getNumber() + "&");
 					paramSb.append("card[expiration_month]="+tokenRequest.getCard().getExpirationMonth() + "&");
-					paramSb.append("card[expiration_year]="+tokenRequest.getCard().getExpirationYear());
+					paramSb.append("card[expiration_year]="+tokenRequest.getCard().getExpirationYear() + "&");
 					paramSb.append("card[security_code]="+tokenRequest.getCard().getSecurityCode());
 
 					PrintWriter printWriter = new PrintWriter(sslconnection.getOutputStream());
