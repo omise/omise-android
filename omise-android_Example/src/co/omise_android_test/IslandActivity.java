@@ -15,7 +15,7 @@ import co.omise.TokenRequest;
 
 
 public class IslandActivity extends Activity {
-	
+
 	private TextView tvPrice = null;
 	private TextView tvIslandNum = null;
 
@@ -30,7 +30,7 @@ public class IslandActivity extends Activity {
         tvIslandNum = (TextView)findViewById(R.id.tvIslandNum);
         checkAndTvSetIslandNum();
     }
-    
+
 	public void onPlusClick(View view){
 	    islandNum--;
 	    checkAndTvSetIslandNum();
@@ -39,11 +39,11 @@ public class IslandActivity extends Activity {
 		islandNum++;
 		checkAndTvSetIslandNum();
 	}
-	
+
 	public void onCheckoutClick(View view){
 		Intent intent = new Intent(getApplicationContext(), CheckoutActivity.class);
 		intent.putExtra("island", islandNum);
-		
+
 		startActivity(intent);
 	}
 
@@ -53,10 +53,10 @@ public class IslandActivity extends Activity {
 		tvIslandNum.setText(String.valueOf(islandNum));
 		tvPrice.setText("$ " + islandNum*2 + " m");
 	}
-	
-	
-	
-	
+
+
+
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -70,6 +70,7 @@ public class IslandActivity extends Activity {
 		    card.setNumber("4242424242424242"); // Required
 		    card.setExpirationMonth("11"); // Required
 		    card.setExpirationYear("2016"); // Required
+		    card.setSecurityCode("123"); // Required
 
 		    // Instantiate new TokenRequest with public key and card.
 		    TokenRequest tokenRequest = new TokenRequest();
@@ -83,7 +84,7 @@ public class IslandActivity extends Activity {
 		        @Override
 		        public void onRequestFailed(final int errorCode) {
 		        }
-		        
+
 		    });
 		} catch (OmiseException e) {
 			e.printStackTrace();

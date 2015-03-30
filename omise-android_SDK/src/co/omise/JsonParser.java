@@ -33,6 +33,7 @@ public class JsonParser {
 		card.setFingerprint(cardObject.getString("fingerprint"));
 		card.setName(cardObject.getString("name"));
 		card.setCreated(cardObject.getString("created"));
+		card.setSecurityCodeCheck(cardObject.getBoolean("security_code_check"));
 		token.setCard(card);
 		
 		return token;

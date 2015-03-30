@@ -20,6 +20,7 @@ public class Card {
 	private String name = null;
 	private String created = null;
 	private String location = null;
+    private String securityCode = null;
 	private boolean securityCodeCheck = false;
 	
 	@Override
@@ -131,6 +132,12 @@ public class Card {
 	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public String getSecurityCode() {
+		return securityCode;
+	}
+	public void setSecurityCode(String securityCode) {
+		this.securityCode = securityCode;
 	}
 	public boolean getSecurityCodeCheck() {
 		return securityCodeCheck;

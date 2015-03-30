@@ -15,7 +15,7 @@ import co.omise.TokenRequest;
 
 
 public class ConnectOmiseActivity extends Activity {
-	
+
 	public static CheckoutActivity activity = null;
 
 	private Button btnConnect = null;
@@ -46,43 +46,44 @@ public class ConnectOmiseActivity extends Activity {
         setContentView(R.layout.activity_connect_omise);
         btnConnect = (Button)findViewById(R.id.btnConnect);
     }
-    
+
     @Override
     protected void onResume() {
     	super.onResume();
     	requestToken();
     }
-    
+
 
     public void onConnectButtonClick(View view) {
     	if (btnConnect.getText().toString().startsWith("tokn_")) {
 		    android.text.ClipboardManager cm = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
 		    cm.setText(btnConnect.getText().toString());
-		    
+
 		    Toast.makeText(this, "copied to clipboard", Toast.LENGTH_SHORT).show();
     		return;
 		}
-    	
+
     	requestToken();
 	}
-    
+
     public void onResetClick(View view){
     	if (activity != null)activity.finish();
     	finish();
     }
-    
+
     private void requestToken(){
     	TokenRequest tokenRequest = new TokenRequest();
     	tokenRequest.setPublicKey("pkey_test_4ya4jkfg5s13s2lz6i8");
     	Card card = new Card();
     	card.setName("JOHN DOE");
-        card.setCity("Bangkok"); 
+        card.setCity("Bangkok");
         card.setPostalCode("10320");
         card.setNumber("4242424242424242");
         card.setExpirationMonth("11");
         card.setExpirationYear("2016");
+        card.setSecurityCode("123");
         tokenRequest.setCard(card);
-    	
+
     	Omise omise = new Omise();
     	try {
 			omise.requestToken(tokenRequest, requestTokenCallback);
