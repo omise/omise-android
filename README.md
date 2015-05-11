@@ -1,5 +1,5 @@
 # omise-android
-omise-ios is an Android library for managing token with Omise API.
+omise-android is an Android library for managing token with Omise API.
 
 By using the token produced by this library, you will be able to securely process credit card without letting sensitive information pass through your server. This token can also be used to create customer card data which will allow re-using of card data for the next payment without entering it again.
 
