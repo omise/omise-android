@@ -27,8 +27,8 @@ All data are transmitted via HTTPS to our PCI-DSS certified server.
     compile 'co.omise:omise-android:1.0.2'
   }
   ```
-You can download `OmiseApp` and import to your Android SDK studio.                                                  
-** Remark : example application have to run on JDK 1.8 or above
+You can download <a href="https://github.com/omise/omise-android/blob/featurenewLibrary/OmiseApp/README.md">`OmiseApp`</a> and import to your Android SDK studio.                                                  
+** Remark : example application have to run on JDK 1.8 or above.
 
 ####Others :
 
@@ -115,3 +115,4 @@ try {
 
 ### Test project
 Please import `omise-android_Test` project, build and run the application inside the device or an Android emulator.
+For `OmiseApp` <a href="https://github.com/omise/omise-android/blob/featurenewLibrary/OmiseApp/README.md">Click</a> 
