@@ -1,0 +1,24 @@
+
+<resources>
+
+    <string name="app_name">Omise Payment</string>
+    <string name="page_title">Omise Payment</string>
+    <string name="card_no_title">Card No.</string>
+    <string name="pkey_title">Public Key</string>
+    <string name="card_name_title">Card Owner </string>
+    <string name="city_title">Card City </string>
+    <string name="postcode_title">Card Post Code </string>
+    <string name="security_title">Security Code </string>
+    <string name="password_confirm_title">Confirm Password</string>
+    <string name="button_submit">Submit</string>
+    <string name="button_save">Save Key</string>
+    <string name="add_public">Add your public key ?</string>
+    <string name="get_pub_error">Can not find public key.</string>
+    <string name="get_token_error">Can not create token key.</string>
+    <string name="save_error_message">Register failed, Try again!</string>
+    <string name="save_key_password_error">Please fill in Public Key.</string>
+    <string name="save_success">Add public success.</string>
+    <string name="welcome_message">Welcome to Omise Payment Gateway</string>
+    <string name="action_settings">Setting</string>
+
+</resources>

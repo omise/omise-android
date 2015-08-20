@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#ff3eaff9"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:background="#ffffffff">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/page_title"
+                android:textSize="24sp"
+                android:textColor="#ff3eaff9"
+                android:layout_marginBottom="16dp"/>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/card_no"
+                android:numeric="integer"
+                android:textSize="8sp"
+                android:textColor="#E8E8E8"
+                android:hint="@string/card_no_title"/>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/card_name"
+                android:textSize="8sp"
+                android:textColor="#E8E8E8"
+                android:hint="@string/card_name_title"/>
+         <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:id="@+id/city"
+                    android:textSize="8sp"
+                    android:textColor="#E8E8E8"
+                    android:hint="@string/city_title"/>
+
+         <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:id="@+id/postcode"
+                    android:textSize="8sp"
+                    android:textColor="#E8E8E8"
+                    android:hint="@string/postcode_title"/>
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:id="@+id/security"
+                    android:textSize="8sp"
+                    android:textColor="#E8E8E8"
+                    android:hint="@string/security_title"/>
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_submit"
+                android:background="#ff3eaff9"
+                android:textColor="#ffffff"
+                android:text="@string/button_submit"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_key"
+            android:text="@string/add_public"
+            android:textColor="#ffffff"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="16dp"/>
+
+</RelativeLayout>
