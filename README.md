@@ -7,9 +7,36 @@ All data are transmitted via HTTPS to our PCI-DSS certified server.
 
 ## Requirements
 * Android SDK 2.2 (API Level 8) or above.
+* Android:Gradle SDK 2.2 (API Level 9) or above.
 
 ## Setup
-You can import the library in Eclipse by cloning this repository and selecting File -> Import -> Existing Projects into Workspace and choose this project in 'Select root directory.'
+####Android Gradle :
+   Edit file `build.gradle` like below :
+```   
+   buildscript {
+        repositories {
+            jcenter()
+        }
+       dependencies {
+            classpath 'com.android.tools.build:gradle:1.2.3' // or above
+        }
+   }
+   
+   dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'co.omise:omise-android:1.0.2'
+  }
+  ```
+You can download `OmiseApp` and import to your Android SDK studio.                                                  
+** Remark : example application have to run on JDK 1.8 or above
+
+####Others :
+
+Download or cloning `omise-android-library` and Import to repository by using Right click -> New -> Create Module -> Android Library and copy or import to Android application porject.
+
+Or
+
+You can import the library in Eclipse by cloning (`omise-android-SDK`) this repository and selecting File -> Import -> Existing Projects into Workspace and choose this project in 'Select root directory.'
 
 ## Primary classes
 ### co.omise.Card
