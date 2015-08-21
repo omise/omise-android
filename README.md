@@ -113,5 +113,4 @@ try {
 ```
 
 ### Test project
-Please import `omise-android_Test` project, build and run the application inside the device or an Android emulator.
-For example application <a href="https://github.com/omise/omise-android-example">Click</a> 
+Download example application <a href="https://github.com/omise/omise-android-example">Click.</a>
