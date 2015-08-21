@@ -27,8 +27,7 @@ All data are transmitted via HTTPS to our PCI-DSS certified server.
     compile 'co.omise:omise-android:1.0.2'
   }
   ```
-You can download <a href="https://github.com/omise/omise-android/blob/featurenewLibrary/OmiseApp/README.md">`OmiseApp`</a> and import to your Android SDK studio.                                                  
-** Remark : example application have to run on JDK 1.8 or above.
+You can download example application <a href="https://github.com/omise/omise-android-example">`OmiseApp`</a> and import to your Android studio.                                                  
 
 ####Others :
 
@@ -36,7 +35,7 @@ Download or cloning `omise-android-library` and Import to repository by using Ri
 
 Or
 
-You can import the library in Eclipse by cloning (`omise-android-SDK`) this repository and selecting File -> Import -> Existing Projects into Workspace and choose this project in 'Select root directory.'
+You can import the library in Eclipse by cloning this repository and selecting File -> Import -> Existing Projects into Workspace and choose this project in 'Select root directory.'
 
 ## Primary classes
 ### co.omise.Card
@@ -115,4 +114,4 @@ try {
 
 ### Test project
 Please import `omise-android_Test` project, build and run the application inside the device or an Android emulator.
-For `OmiseApp` <a href="https://github.com/omise/omise-android/blob/featurenewLibrary/OmiseApp/README.md">Click</a> 
+For example application <a href="https://github.com/omise/omise-android-example">Click</a> 
