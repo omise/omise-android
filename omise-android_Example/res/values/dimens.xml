@@ -1,9 +1,0 @@
-<resources>
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="checkout_tv_margin">7dp</dimen>
-    <dimen name="checkout_tv_size">19sp</dimen>
-    <dimen name="checkout_ll_margin">22dp</dimen>
-    
-
-</resources>
