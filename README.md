@@ -15,7 +15,7 @@ All data are transmitted via HTTPS to our PCI-DSS certified server.
 ```   
    buildscript {
         repositories {
-            jcenter()
+            jcenter() // We support all of mavencenter and jcenter.
         }
        dependencies {
             classpath 'com.android.tools.build:gradle:1.2.3' // or above
@@ -31,7 +31,7 @@ You can download example application <a href="https://github.com/omise/omise-and
 
 ####Others :
 
-Download or cloning `omise-android-library` and Import to repository by using Right click -> New -> Create Module -> Android Library and copy or import to Android application porject.
+Download or cloning `omise-android-library` and Import to repository by using Right click -> New -> Create Module -> Android Library and copy or import to Android application project.
 
 Or
 
