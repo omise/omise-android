@@ -1,24 +1,24 @@
 # omise-android
 omise-android คือ Library สำหรับใช้ในการ สร้าง Token Key เพื่อใช้ในการติต่อกับ  Omise API.
 
-By using the token produced by this library, you will be able to securely process credit card without letting sensitive information pass through your server. This token can also be used to create customer card data which will allow re-using of card data for the next payment without entering it again.
+ด้วยการใช้งาน Token Key ผ่าน Omise Library, คุณจะมั่นใจได้ถึง process การทำงานที่มีความปลอดภัยและไม่จำเป็นที่จะต้องเก็บข้อมูลสำคัญของ บัตรเครดิต ลูกค้าไว้ที่ server ของคุณ. Token Key นี้ใช้ในการ สร้างข้อมูลลูกค้าใหม่ และยังนำกลับมาใช้ใหม่ในครั้งต่อไปได้โดยไม่ต้องกรอกข้อมูลต่างๆ อีกครั้ง.
 
-All data are transmitted via HTTPS to our PCI-DSS certified server.
+การส่งข้อมูลต่างๆ จะถูกส่งในรูปแบบ HTTPS  ไปยัง server ที่มี PCI-DSS certified ของ Omise.
 
-## Requirements
-* Android SDK 2.2 (API Level 8) or above.
-* Android:Gradle SDK 2.2 (API Level 9) or above.
+## ความต้องการขั้นต่ำ
+* Android SDK 2.2 (API Level 8) หรือ สูงกว่า.
+* Android:Gradle SDK 2.2 (API Level 9) หรือ สูงกว่า.
 
-## Setup
-####Android Gradle :
+## ติดตั้ง
+####ใช้ Android Gradle :
    แก้ไข ไฟล์ `build.gradle` ตัวอย่าง ด้านล่าง :
 ```   
    buildscript {
         repositories {
-            jcenter() // We support all of mavencenter and jcenter.
+            jcenter() // รองรับทั้ง  mavencenter และ jcenter.
         }
        dependencies {
-            classpath 'com.android.tools.build:gradle:1.2.3' // or above
+            classpath 'com.android.tools.build:gradle:1.2.3' // หรือ สูงกว่า
         }
    }
    
@@ -27,34 +27,30 @@ All data are transmitted via HTTPS to our PCI-DSS certified server.
     compile 'co.omise:omise-android:1.0.2'
   }
   ```
-สามารถ ดาวน์โหลด app ตัวอย่างได้จาก <a href="https://github.com/omise/omise-android-example">`OmiseApp`</a> หลังจาก ดาวน์โหลด ตัวอย่าง สามารถทำการ Import เข้า Android development tool. และทำการ Run application บน Android emulator เพื่อทำการทดสอบ ได้ตามเอกสาร ที่ได้แสดงไว้ใน README ของ `OmiseApp`
+สามารถ ดาวน์โหลด app ตัวอย่างได้จาก <a href="https://github.com/omise/omise-android-example">`OmiseApp`</a> หลังจาก ดาวน์โหลด ตัวอย่าง สามารถทำการ Import เข้า Android development tool. และทำการ Run application บน Android emulator เพื่อทำการทดสอบ ได้ตามเอกสาร ที่ได้แสดงไว้ใน README ของ `OmiseApp`.
 
-####Others :
+####วิธีอื่นๆ :
 
-Download or cloning `omise-android-library` and Import to repository by using Right click -> New -> Create Module -> Android Library and copy or import to Android application project.
+ดาวน์โหลด หรือ โคลน `omise-android-library`  หลังจากนั้นทำการ Import เข้า android application project โดยการ คลิก ขวา > New -> Create Module -> Android Library สามารถทำได้ทั้งการ copy code หรือ Import เข้าไปที่ module โดยตรง.
 
-Or
-
-You can import the library in Eclipse by cloning this repository and selecting File -> Import -> Existing Projects into Workspace and choose this project in 'Select root directory.'
-
-## Primary classes
+## Class การทำงานหลัก
 ### co.omise.Card
-A class representing a credit card information.
+Class สำหรับแสดงข้อมูลของ Credit card.
 
 ### co.omise.Cards
-A class representing a list of a credit card information.
+Class สำหรับแสดง lists ข้อมูลของ Credit card.
 
 ### co.omise.TokenRequest
-A class representing parameters for requesting token. You will need to instantiate this class with necessary parameters such as public key or card object.
+Class สำหรับแสดงข้อมูลที่จำเป็น ในการสร้าง Token.  คุณ จะต้องทำการส่งค่าข้อมูลที่จำเป็นทั้งหมดในการ ขอสร้าง Token Key เช่น public key และ class object.
 
 ### co.omise.Token
-A class representing a token returned from Omise. If the request was successful, an instance object of this class will be passed as a callback.
+Class สำหรับ แสดงข้อมูล Token Key ที่ได้มาจาก Omise. ถ้าในกรณี สร้าง Token Key สำเร็จ, Omise Server จะทำการ return Token Key มาใน Object Token.
 
 ### co.omise.RequestTokenCallback
-An interface presenting the request callback. When making a token request, an instance of a class that implements this interface must be passed to it.
+Class สำหรับ request callback. เมื่อมีการเรียกใช้งานการสร้าง Token จะต้องมีการทำงานผ่าน Class นี้.
 
 ### co.omise.OmiseCallback
-Error codes of this interface are as follows:
+ตัวอย่าง Error codes ของ interface:
 
 ```java
 public static final int ERRCODE_TIMEOUT = 0x00;
@@ -65,7 +61,7 @@ public static final int ERRCODE_UNKNOWN = 0x10;
 ```
 
 ### co.omise.Omise
-A class for requesting token. See also a sample code below.
+Class หลักในการ สร้าง Token กับ Omise server ตัวอย่าง code ด้านล่าง:
 
 ## Request a token
 
@@ -112,5 +108,5 @@ try {
 }
 ```
 
-### Test project
-Download example application <a href="https://github.com/omise/omise-android-example">Click.</a>
+### ทำสอบ Library
+สามารถดาวน์โหลด Application ตัวอย่างได้ <a href="https://github.com/omise/omise-android-example">คลิก</a>
