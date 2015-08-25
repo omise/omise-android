@@ -10,7 +10,7 @@ We support Android back to version 4, and the library has no external dependenci
 
 ###Installation
 
-Omise Android library can installing whether using <a href="http://developer.android.com/tools/studio/index.html">Android Studio</a>, <a href="https://www.jetbrains.com/idea/help/importing-an-existing-android-project.html">IntelliJ</a> or <a href="http://developer.android.com/tools/projects/projects-eclipse.html">Eclipse</a>. For New Android Studio, If you create new Android Application using gradle don't need to clone or download any files.
+Omise Android library can installing either using <a href="http://developer.android.com/tools/studio/index.html">Android Studio</a>, <a href="https://www.jetbrains.com/idea/help/importing-an-existing-android-project.html">IntelliJ</a> or <a href="http://developer.android.com/tools/projects/projects-eclipse.html">Eclipse</a>. For New Android Studio, If you create new Android Application using gradle don't need to clone or download any files.
 
 Use gradle project, just add the following code (example below) to your dependencies section `build.gradle` file.
 ```
