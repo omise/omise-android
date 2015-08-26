@@ -1,100 +1,114 @@
-# omise-android
+##Omise Android Integration
+
 omise-android คือ Library สำหรับใช้ในการ สร้าง Token Key เพื่อใช้ในการติดต่อกับ  Omise API.
 
-ด้วยการใช้งาน Token Key ผ่าน Omise Library, คุณจะมั่นใจได้ถึง process การทำงานที่มีความปลอดภัยและไม่จำเป็นที่จะต้องเก็บข้อมูลสำคัญของ บัตรเครดิต ลูกค้าไว้ที่ server ของคุณ. Token Key นี้ใช้ในการ สร้างข้อมูลลูกค้าใหม่ และยังนำกลับมาใช้ใหม่ในครั้งต่อไปได้โดยไม่ต้องกรอกข้อมูลต่างๆ อีกครั้ง.
+ด้วยการใช้งาน <a href="https://docs.omise.co/api/tokens/">tokens</a> ผ่าน Omise Library, คุณจะมั่นใจได้ถึง process การทำงานที่มีความปลอดภัยและไม่จำเป็นที่จะต้องเก็บข้อมูลสำคัญของ บัตรเครดิต ลูกค้าไว้ที่ server ของคุณ. Token Key นี้ใช้ในการ สร้างข้อมูลลูกค้าใหม่ และยังนำกลับมาใช้ใหม่ในครั้งต่อไปได้โดยไม่ต้องกรอกข้อมูลต่างๆ อีกครั้ง.
 
 การส่งข้อมูลต่างๆ จะถูกส่งในรูปแบบ HTTPS  ไปยัง server ที่มี PCI-DSS certified ของ Omise.
 
-## ความต้องการขั้นต่ำ
-* Android SDK 2.2 (API Level 8) หรือ สูงกว่า.
-* Android:Gradle SDK 2.2 (API Level 9) หรือ สูงกว่า.
+เรารองรับ Android version 4,และแบบ no external dependencies.
 
-## ติดตั้ง
-####ใช้ Android Gradle :
-   แก้ไข ไฟล์ `build.gradle` ตัวอย่าง ด้านล่าง :
-```   
-   buildscript {
+###การติดตั้ง
+
+Omise Android library สามารถติดตั้งได้หลายวิธีดังนี้ : <a href="http://developer.android.com/tools/studio/index.html">Android Studio</a>, <a href="https://www.jetbrains.com/idea/help/importing-an-existing-android-project.html">IntelliJ</a> หรือ <a href="http://developer.android.com/tools/projects/projects-eclipse.html">Eclipse</a>. สำหรับ Android Development version ใหม่ไม่จำเป็นที่จะต้อง Download files โดยสามารถใช้งานผ่านการ config ดังแสดงด้านล่าง.
+
+ใช้งาน gradle project, แค่ทำการเพิ่ม config เข้าไปในไฟล์ `build.gradle` ดังตัวอย่างด้านล่าง.
+```
+buildscript {
         repositories {
-            jcenter() // รองรับทั้ง  mavencenter และ jcenter.
+            jcenter()  
         }
        dependencies {
-            classpath 'com.android.tools.build:gradle:1.2.3' // หรือ สูงกว่า
+            classpath 'com.android.tools.build:gradle:1.2.3'
         }
    }
-   
-   dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  dependencies {
     compile 'co.omise:omise-android:1.0.2'
   }
-  ```
-สามารถ ดาวน์โหลด app ตัวอย่างได้จาก <a href="https://github.com/omise/omise-android-example">`OmiseApp`</a> หลังจาก ดาวน์โหลด ตัวอย่าง สามารถทำการ Import เข้า Android development tool. และทำการ Run application บน Android emulator เพื่อทำการทดสอบ ได้ตามเอกสาร ที่ได้แสดงไว้ใน README ของ `OmiseApp`.
+```
+สำหรับ install Omise Android library บน Eclipse:
 
-####วิธีอื่นๆ :
+1. เริ่มต้น download the <a href="https://codeload.github.com/omise/omise-android/zip/master">`omise-android`</a> libraries.
+2. ตรวจสอบให้แน่ใจว่าเครื่องของท่าน ติดตั้ง Android SDK ขั้นต่ำ API Level 17 และ android-support-v4.
+3. ทำการ <a href="http://developer.android.com/tools/projects/projects-eclipse.html">Import</a>  omise-android folder ไปยัง Eclipse.
+4. ใน project settings, เพิ่ม omise-android project ภายใต้ “Libraries” Module ของ “Android”.
 
-ดาวน์โหลด หรือ โคลน `omise-android-library`  หลังจากนั้นทำการ Import เข้า android application project โดยการ คลิก ขวา > New -> Create Module -> Android Library สามารถทำได้ทั้งการ copy code หรือ Import เข้าไปที่ module โดยตรง.
 
-## Class การทำงานหลัก
-### co.omise.Card
-Class สำหรับแสดงข้อมูลของ Credit card.
+###การสร้าง token.
 
-### co.omise.Cards
-Class สำหรับแสดง lists ข้อมูลของ Credit card.
+คุณจำเป็นต้องทำการ import class ของ Omise ตามตัวอย่างด้านล่างเพื่อเรียกใช้งาน.
+```
+ import co.omise.*;
+```
+Class หลัก ประกอบไปด้วย: `Card`, `TokenRequest` and `Omise`. 
 
-### co.omise.TokenRequest
-Class สำหรับแสดงข้อมูลที่จำเป็น ในการสร้าง Token.  คุณ จะต้องทำการส่งค่าข้อมูลที่จำเป็นทั้งหมดในการ ขอสร้าง Token Key เช่น public key และ class object.
+<b>`Card` class.</b> Class สำหรับแสดงข้อมูลของ Credit card. ตัวอย่างด้านล่างจะแสดงให้เห็นถึงวิธีการสร้าง object Card เพื่อใช้ในการสร้าง tokens.
 
-### co.omise.Token
-Class สำหรับ แสดงข้อมูล Token Key ที่ได้มาจาก Omise. ถ้าในกรณี สร้าง Token Key สำเร็จ, Omise Server จะทำการ return Token Key มาใน Object Token.
-
-### co.omise.RequestTokenCallback
-Class สำหรับ request callback. เมื่อมีการเรียกใช้งานการสร้าง Token จะต้องมีการทำงานผ่าน Class นี้.
-
-### co.omise.OmiseCallback
-ตัวอย่าง Error codes ของ interface:
-
-```java
-public static final int ERRCODE_TIMEOUT = 0x00;
-public static final int ERRCODE_CONNECTION_FAILED = 0x01;
-public static final int ERRCODE_BAD_REQUEST = 0x02;
-public static final int ERRCODE_INVALID_JSON = 0x03;
-public static final int ERRCODE_UNKNOWN = 0x10;
+```
+    Card card = new Card();
+    card.setName("JOHN DOE"); 
+    card.setCity("Bangkok"); 
+    card.setPostalCode("10320"); 
+    card.setNumber("4242424242424242"); 
+    card.setExpirationMonth("11"); 
+    card.setExpirationYear("2016"); 
+    card.setSecurityCode("123"); 
 ```
 
-### co.omise.Omise
-Class หลักในการ สร้าง Token กับ Omise server ตัวอย่าง code ด้านล่าง:
+<b>`TokenRequest` class.</b> Class สำหรับแสดงข้อมูลที่จำเป็น ในการสร้าง Token.  คุณ จะต้องทำการส่งค่าข้อมูลที่จำเป็นทั้งหมดในการ ขอสร้าง Token Key เช่น public key และ class object.
 
-## Request a token
+```
+TokenRequest tokenRequest = new TokenRequest();
+tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); 
+tokenRequest.setCard(card); 
+```
 
-```java
-import co.omise.Card;
-import co.omise.Omise;
-import co.omise.OmiseException;
-import co.omise.RequestTokenCallback;
-import co.omise.Token;
-import co.omise.TokenRequest;
+Public Key คืออะไร, สำหรับ user ที่ต้องการทดสอบ application กับ Omise API. ท่านจะต้องทำการสมัครสมาชิกที่ <a href="https://dashboard.omise.co/signup">Omise dashboard</a> website ก่อนจึงจะสามารถใช้งานได้, ถ้าเป็นสมาชิกอยู่แล้ว สามารถ <a href="https://dashboard.omise.co/signin">Sign in</a> เข้าสู่ระบบ และ ไปที่ เมนู key.
 
+
+<b>`Omise` class.</b> Class หลักในการ สร้าง Token กับ Omise API ตัวอย่าง code ด้านล่าง:
+
+```
 final Omise omise = new Omise();
 try {
-    // Instantiate new TokenRequest with public key and card.
-    Card card = new Card();
-    card.setName("JOHN DOE"); // Required
-    card.setCity("Bangkok"); // Required
-    card.setPostalCode("10320"); // Required
-    card.setNumber("4242424242424242"); // Required
-    card.setExpirationMonth("11"); // Required
-    card.setExpirationYear("2016"); // Required
-    card.setSecurityCode("123"); // Required
-
-    TokenRequest tokenRequest = new TokenRequest();
-    tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); // Required
-    tokenRequest.setCard(card);
-
-    // Requesting token.
     omise.requestToken(tokenRequest, new RequestTokenCallback() {
         @Override
         public void onRequestSucceeded(Token token) {
-            //Your code here
-            //Ex.
+        }
+
+        @Override
+        public void onRequestFailed(final int errorCode) {
+        }
+    });
+} catch (OmiseException e) {
+    e.printStackTrace();
+}
+```
+
+###สร้าง tokens จากข้อมูล.
+
+หัวข้อนี้จะแสดงให้เห็นวิธีการสร้าง tokens กับ Omise API.
+
+```
+final Omise omise = new Omise();
+try {
+    Card card = new Card();
+    card.setName("JOHN DOE"); 
+    card.setCity("Bangkok"); 
+    card.setPostalCode("10320"); 
+    card.setNumber("4242424242424242"); 
+    card.setExpirationMonth("11"); 
+    card.setExpirationYear("2016"); 
+    card.setSecurityCode("123"); 
+
+    TokenRequest tokenRequest = new TokenRequest();
+    tokenRequest.setPublicKey("pkey_test_xxxxxxxxxxxxxxxxxx"); 
+    tokenRequest.setCard(card);
+
+    omise.requestToken(tokenRequest, new RequestTokenCallback() {
+        @Override
+        public void onRequestSucceeded(Token token) {
             String strToken = token.getId();
             boolean livemode = token.isLivemode();
         }
@@ -108,5 +122,21 @@ try {
 }
 ```
 
-### ทำสอบ Library
-สามารถดาวน์โหลด Application ตัวอย่างได้ <a href="https://github.com/omise/omise-android-example">คลิก</a>
+ถ้าการสร้าง tokens สำหรับ Omise API จะ return tokens มาใน Token object, และ ถ้าการสร้าง tokens ไม่สำเร็จ Omise API จะ return error code มาดังที่แสดงด้านล่าง :
+
+```
+ERRCODE_TIMEOUT = 0x00;
+ERRCODE_CONNECTION_FAILED = 0x01;
+ERRCODE_BAD_REQUEST = 0x02;
+ERRCODE_INVALID_JSON = 0x03;
+ERRCODE_UNKNOWN = 0x16;
+```
+
+###การใช้งาน Tokens.
+
+Tokens จะถูกใช้งานเพื่อใช้แทนการส่งข้อมูลบัตร และเป็นการแสดงหรือยืนยันตัวตนแทนข้อมูลของบัตร credit เมื่อ token มีการใช้งานไปแล้วจะถูกทำลายและจะไม่สามารถนำกลับมาใช้งานได้อีกครั้ง.
+
+การส่งข้อมูลต่างๆไปยัง Server จะต้องผ่านการ valid แบบ PCI-DSS certification. ท่านสามารถเรียนรู้ข้อมูลเพิ่มเติมเกี่ยกับ PCI-DSS certion ได้ที่ <a href="https://docs.omise.co/security-best-practices/">Security Best Practices.</a> 
+
+
+สามารถ download <a href="https://github.com/omise/omise-android-example">application ตัวอย่าง</a> เพื่อดูว่า สามารถติดต่อเรียกใช้งานและสร้าง tokens กับ Omise API ได้อย่างไร.
