@@ -22,6 +22,7 @@ public class Card {
 	private String location = null;
     private String securityCode = null;
 	private boolean securityCodeCheck = false;
+	private String bank = null;
 	
 	@Override
 	public String toString(){
@@ -40,6 +41,7 @@ public class Card {
 				",name=" + name +
 				",created=" + created +
 				",location=" + location +
+				",bank=" + bank +
 				",securityCodeCheck=" + securityCodeCheck + "]";
 	}
 	
@@ -145,4 +147,6 @@ public class Card {
 	public void setSecurityCodeCheck(boolean securityCodeCheck) {
 		this.securityCodeCheck = securityCodeCheck;
 	}
+	public String getBank() {return bank;}
+	public void setBank(String bank) {this.bank = bank;}
 }
