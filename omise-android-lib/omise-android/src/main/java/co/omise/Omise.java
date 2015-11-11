@@ -18,8 +18,6 @@ public class Omise {
 	
 	private static final String OMISE_URL_TOKEN = "https://vault.omise.co/tokens";
 	private static final String CHARSET = "UTF-8";
-	private static final String _OMISE_API_VERSION = "2014-07-02";
-	private static final String _OMISE_ANDROID_VERSION = "1.0.2";
 	
 	/**
 	 * Get token from Omise 
@@ -125,8 +123,6 @@ public class Omise {
 		String userpass = userName.trim() + ":" + password;
 		String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
 		sslconnection.setRequestProperty ("Authorization", basicAuth);
-		sslconnection.setRequestProperty ("User-Agent", "OmiseAndroid/" + _OMISE_ANDROID_VERSION + " OmiseAPI/" + _OMISE_API_VERSION);
-
 
 
 		//timeout
