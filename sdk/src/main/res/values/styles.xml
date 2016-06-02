@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="OmiseSDKTheme" parent="android:Theme.DeviceDefault">
+        <item name="android:textViewStyle">@style/FormLabel</item>
+        <item name="android:editTextStyle">@style/FormField</item>
+        <item name="android:spinnerStyle">@style/FormSpinner</item>
+        <item name="android:buttonStyle">@style/FormButton</item>
+    </style>
+
+    <style name="FormLabel" parent="android:Widget.DeviceDefault.TextView"></style>
+
+    <style name="FormField" parent="android:Widget.DeviceDefault.EditText"></style>
+
+    <style name="FormSpinner" parent="android:Widget.DeviceDefault.Spinner"></style>
+
+    <style name="FormButton" parent="android:Widget.DeviceDefault.Button">
+        <item name="android:padding">16dp</item>
+    </style>
+
+</resources>

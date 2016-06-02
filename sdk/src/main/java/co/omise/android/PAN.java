@@ -6,6 +6,23 @@ public final class PAN {
         return pan.replaceAll("[^0-9]", "");
     }
 
+    public static String format(String pan) {
+        if (pan == null) return "";
+
+        StringBuilder builder = new StringBuilder();
+        char[] chars = pan.toCharArray();
+        for (char ch : chars) {
+            if ('0' <= ch && ch <= '9') {
+                if ((builder.length() - 4) % 5 == 0) {
+                    builder.append(' ');
+                }
+                builder.append(ch);
+            }
+        }
+
+        return builder.toString();
+    }
+
     public static CardBrand brand(String pan) {
         pan = normalize(pan);
         for (CardBrand brand : CardBrand.ALL) {
@@ -21,7 +38,7 @@ public final class PAN {
         char[] chars = pan.toCharArray();
         int[] digits = new int[chars.length];
         for (int i = 0; i < chars.length; i++) {
-            digits[i] = (int)(chars[i] - '0');
+            digits[i] = (int) (chars[i] - '0');
         }
 
         int oddSum = 0, evenSum = 0;

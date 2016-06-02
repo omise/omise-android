@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Omise Android SDK</string>
+    <string name="default_form_title">Add Credit Card</string>
+    <string name="label_card_number">Card Number</string>
+    <string name="label_card_name">Name on card</string>
+    <string name="label_expiry_date">Expiry date</string>
+    <string name="label_security_code">Security code</string>
+    <string name="label_month">Month</string>
+    <string name="label_year">Year</string>
+    <string name="button_submit">Submit</string>
 </resources>

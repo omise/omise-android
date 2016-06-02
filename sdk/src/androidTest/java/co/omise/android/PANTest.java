@@ -7,6 +7,14 @@ public class PANTest extends SDKTest {
         assertEquals("42424242", PAN.normalize("the42quick42brown42fox42jumps"));
     }
 
+    public void testFormat() {
+        assertEquals("", PAN.format(null));
+        assertEquals("", PAN.format(" "));
+        assertEquals("4242 4", PAN.format("4242--4"));
+        assertEquals("4242 4242 4242 4242", PAN.format("\r\r4242-4242-4242-4242  "));
+        assertEquals("4242 4242", PAN.format("the42quick42brown42fox42jumps"));
+    }
+
     public void testBrand() {
         assertEquals(CardBrand.VISA, PAN.brand("4242424242424242"));
         assertEquals(CardBrand.VISA, PAN.brand("4242-4242-4242-4242"));
