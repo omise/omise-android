@@ -5,6 +5,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import co.omise.android.models.APIError;
+import co.omise.android.models.Token;
 import okhttp3.Call;
 import okhttp3.CertificatePinner;
 import okhttp3.Credentials;
@@ -63,7 +65,7 @@ public class Client {
                     if (200 <= response.code() && response.code() < 300) {
                         listener.onTokenRequestSucceed(tokenRequest, new Token(rawJson));
                     } else {
-                        listener.onTokenRequestFailed(tokenRequest, new OmiseError(rawJson));
+                        listener.onTokenRequestFailed(tokenRequest, new APIError(rawJson));
                     }
 
                 } catch (IOException | JSONException e) {

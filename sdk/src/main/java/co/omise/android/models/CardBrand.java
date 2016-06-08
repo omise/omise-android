@@ -1,6 +1,8 @@
-package co.omise.android;
+package co.omise.android.models;
 
 import java.util.regex.Pattern;
+
+import co.omise.android.R;
 
 public final class CardBrand {
     public static final CardBrand AMEX = new CardBrand("amex", "^3[47]", 15, 15, R.drawable.brand_amex);

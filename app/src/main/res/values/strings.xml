@@ -2,4 +2,5 @@
     <string name="app_name">Omise Android SDK</string>
     <string name="activity_main">Omise Co., Ltd.</string>
     <string name="activity_checkout">Checkout</string>
+    <string name="activity_receipt">Receipt</string>
 </resources>

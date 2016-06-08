@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <co.omise.android.CreditCardEditText
+        <co.omise.android.ui.CreditCardEditText
             android:id="@+id/edit_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,6 +111,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"

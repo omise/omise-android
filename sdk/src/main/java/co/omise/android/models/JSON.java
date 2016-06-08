@@ -1,4 +1,4 @@
-package co.omise.android;
+package co.omise.android.models;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;

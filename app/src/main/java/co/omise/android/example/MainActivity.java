@@ -7,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
-    private final ProductRepository repository = new ProductRepository();
     private ProductListAdapter listAdapter = null;
 
     @Override
@@ -15,7 +14,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listAdapter = new ProductListAdapter(repository.all());
+        listAdapter = new ProductListAdapter(repository().all());
 
         ListView productList = (ListView) findViewById(R.id.list_products);
         productList.setAdapter(listAdapter);
@@ -26,7 +25,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Product product = (Product) listAdapter.getItem(position);
         Intent intent = new Intent(this, CheckoutActivity.class);
-        intent.putExtra(CheckoutActivity.PRODUCT_ID, product.getId());
+        intent.putExtra(CheckoutActivity.EXTRA_PRODUCT_ID, product.getId());
         startActivity(intent);
     }
 }

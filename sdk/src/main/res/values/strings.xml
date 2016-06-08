@@ -8,4 +8,6 @@
     <string name="label_month">Month</string>
     <string name="label_year">Year</string>
     <string name="button_submit">Submit</string>
+    <string name="error_required">%s is required</string>
+    <string name="error_luhn">%s is invalid</string>
 </resources>

@@ -1,4 +1,4 @@
-package co.omise.android;
+package co.omise.android.ui;
 
 import org.joda.time.YearMonth;
 

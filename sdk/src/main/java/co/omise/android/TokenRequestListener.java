@@ -1,5 +1,7 @@
 package co.omise.android;
 
+import co.omise.android.models.Token;
+
 /**
  * Listener for {@link TokenRequest} results.
  */

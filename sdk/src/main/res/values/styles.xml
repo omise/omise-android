@@ -8,11 +8,17 @@
         <item name="android:buttonStyle">@style/FormButton</item>
     </style>
 
-    <style name="FormLabel" parent="android:Widget.DeviceDefault.TextView"></style>
+    <style name="FormLabel" parent="android:Widget.DeviceDefault.TextView">
 
-    <style name="FormField" parent="android:Widget.DeviceDefault.EditText"></style>
+    </style>
 
-    <style name="FormSpinner" parent="android:Widget.DeviceDefault.Spinner"></style>
+    <style name="FormField" parent="android:Widget.DeviceDefault.EditText">
+
+    </style>
+
+    <style name="FormSpinner" parent="android:Widget.DeviceDefault.Spinner">
+
+    </style>
 
     <style name="FormButton" parent="android:Widget.DeviceDefault.Button">
         <item name="android:padding">16dp</item>

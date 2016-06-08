@@ -1,9 +1,30 @@
-package co.omise.android;
+package co.omise.android.models;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Card extends Model {
+    public static final Parcelable.Creator<Card> CREATOR = new Creator<Card>() {
+        @Override
+        public Card createFromParcel(Parcel source) {
+            try {
+                return new Card(source.readString());
+            } catch (JSONException e) {
+                Log.wtf("failed to deparcelize Card object", e);
+                return null;
+            }
+        }
+
+        @Override
+        public Card[] newArray(int size) {
+            return new Card[0];
+        }
+    };
+
     public final String country;
     public final String city;
     public final String postalCode;

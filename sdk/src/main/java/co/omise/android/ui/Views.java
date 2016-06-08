@@ -1,10 +1,12 @@
-package co.omise.android;
+package co.omise.android.ui;
 
 import android.app.Activity;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 final class Views {
     private final Activity activity;
@@ -24,8 +26,16 @@ final class Views {
         return this.<Spinner>find(id);
     }
 
+    public TextView textView(int id) {
+        return this.<TextView>find(id);
+    }
+
     public EditText editText(int id) {
         return this.<EditText>find(id);
+    }
+
+    public Button button(int id) {
+        return this.<Button>find(id);
     }
 
     public ImageView image(int id) {

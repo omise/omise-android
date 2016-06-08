@@ -1,5 +1,7 @@
 package co.omise.android;
 
+import co.omise.android.models.CardBrand;
+
 public class PANTest extends SDKTest {
     public void testNormalize() {
         assertEquals("", PAN.normalize(null));
@@ -26,6 +28,8 @@ public class PANTest extends SDKTest {
         assertTrue(PAN.luhn("4242424242424242"));
         assertTrue(PAN.luhn("4242-4242-4242-4242"));
         assertFalse(PAN.luhn("4242424242424243"));
+
+        assertTrue(PAN.luhn("344242343442423442"));
     }
 
     public void testIsValid() {

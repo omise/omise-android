@@ -1,4 +1,4 @@
-package co.omise.android;
+package co.omise.android.ui;
 
 import android.content.Context;
 import android.database.DataSetObserver;

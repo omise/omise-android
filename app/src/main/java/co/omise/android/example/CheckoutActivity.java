@@ -10,22 +10,29 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import co.omise.android.CreditCardActivity;
+import co.omise.android.models.Token;
+import co.omise.android.ui.CreditCardActivity;
 
 public class CheckoutActivity extends BaseActivity implements View.OnClickListener {
-    public static final String OMISE_PKEY = "";
-    public static final String PRODUCT_ID = "Product.id";
-    public static final int CC_REQUEST = 100;
+    public static final String OMISE_PKEY = "pkey_test_52d6po3fvio2w6tefpb";
 
-    private final ProductRepository repository = new ProductRepository();
-    private Product product;
+    public static final String EXTRA_PRODUCT_ID = "CheckoutActivity.productId";
+    public static final int REQUEST_CC = 100;
+
+    private String productId() {
+        return getIntent().getExtras().getString(EXTRA_PRODUCT_ID);
+    }
+
+    private Product product() {
+        return repository().byId(productId());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
-        product = repository.byId(getIntent().getExtras().getString(PRODUCT_ID));
+        Product product = product();
 
         ImageView productImageView = (ImageView) findViewById(R.id.image_product);
         TextView productNameText = (TextView) findViewById(R.id.text_product_name);
@@ -41,18 +48,26 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, CreditCardActivity.class);
-        startActivityForResult(intent, CC_REQUEST);
+        intent.putExtra(CreditCardActivity.EXTRA_PKEY, OMISE_PKEY);
+        startActivityForResult(intent, REQUEST_CC);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case CC_REQUEST:
-                if (resultCode == CreditCardActivity.OK) {
-                    Toast.makeText(this, "done", Toast.LENGTH_LONG).show();
-                } else if (resultCode == CreditCardActivity.CANCEL) {
-                    Toast.makeText(this, "cancel", Toast.LENGTH_LONG).show();
+            case REQUEST_CC:
+                if (resultCode == CreditCardActivity.RESULT_CANCEL) {
+                    Toast.makeText(this, "cancelled", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                Token token = data.getParcelableExtra(CreditCardActivity.EXTRA_TOKEN_OBJECT);
+
+                Intent intent = new Intent(this, ReceiptActivity.class);
+                intent.putExtra(ReceiptActivity.EXTRA_PRODUCT_ID, productId());
+                intent.putExtra(ReceiptActivity.EXTRA_TOKEN, token);
+                startActivity(intent);
+                finish();
                 break;
 
             default:

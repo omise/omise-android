@@ -1,5 +1,7 @@
 package co.omise.android;
 
+import co.omise.android.models.CardBrand;
+
 public final class PAN {
     public static String normalize(String pan) {
         if (pan == null) return "";
