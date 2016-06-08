@@ -31,10 +31,4 @@ public class PANTest extends SDKTest {
 
         assertTrue(PAN.luhn("344242343442423442"));
     }
-
-    public void testIsValid() {
-        assertTrue(PAN.isValid("4 2 4 2 4 2 4 2 4 2 4 2 4 2 4 2"));
-        assertFalse(PAN.isValid("4242424242424243"));
-        assertFalse(PAN.isValid("1234567812345687"));
-    }
 }

@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.json.JSONException;
 
-import co.omise.android.Log;
+import co.omise.android.SDKLog;
 import co.omise.android.SDKTest;
 
 public class ModelTest extends SDKTest {
@@ -21,7 +21,7 @@ public class ModelTest extends SDKTest {
                 try {
                     return new Dummy(source.readString());
                 } catch (JSONException e) {
-                    Log.wtf("failed to deparcelize a Dummy object.", e);
+                    SDKLog.wtf("failed to deparcelize a Dummy object.", e);
                     return null;
                 }
             }

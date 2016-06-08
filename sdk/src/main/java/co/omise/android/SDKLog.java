@@ -1,6 +1,6 @@
 package co.omise.android;
 
-public final class Log {
+public final class SDKLog {
     public static String TAG = "co.omise.android";
 
     public static void d(String message) {

@@ -2,10 +2,11 @@ package co.omise.android.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import co.omise.android.SDKLog;
 
 public class Card extends Model {
     public static final Parcelable.Creator<Card> CREATOR = new Creator<Card>() {
@@ -14,7 +15,7 @@ public class Card extends Model {
             try {
                 return new Card(source.readString());
             } catch (JSONException e) {
-                Log.wtf("failed to deparcelize Card object", e);
+                SDKLog.wtf("failed to deparcelize Card object", e);
                 return null;
             }
         }

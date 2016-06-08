@@ -17,7 +17,7 @@ import co.omise.android.TokenRequestListener;
 import co.omise.android.models.CardBrand;
 import co.omise.android.models.Token;
 
-public class CreditCardActivity extends Activity implements TextWatcher, View.OnClickListener, TokenRequestListener {
+public class CreditCardActivity extends Activity {
     // input
     public static final String EXTRA_PKEY = "CreditCardActivity.publicKey";
 
@@ -40,8 +40,8 @@ public class CreditCardActivity extends Activity implements TextWatcher, View.On
 
         views.spinner(R.id.spinner_expiry_month).setAdapter(new ExpiryMonthSpinnerAdapter());
         views.spinner(R.id.spinner_expiry_year).setAdapter(new ExpiryYearSpinnerAdapter());
-        views.editText(R.id.edit_card_number).addTextChangedListener(this);
-        views.button(R.id.button_submit).setOnClickListener(this);
+        views.editText(R.id.edit_card_number).addTextChangedListener(new ActivityTextWatcher());
+        views.button(R.id.button_submit).setOnClickListener(new ActivityOnClickListener());
     }
 
     @Override
@@ -50,32 +50,56 @@ public class CreditCardActivity extends Activity implements TextWatcher, View.On
         super.onBackPressed();
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        String pan = s.toString();
-        if (pan.length() > 6) {
-            CardBrand brand = PAN.brand(pan);
-            if (brand != null && brand.getLogoResourceId() > -1) {
-                views.image(R.id.image_card_brand).setImageResource(brand.getLogoResourceId());
-                return;
-            }
+    private class ActivityTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
 
-        views.image(R.id.image_card_brand).setImageDrawable(null);
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String pan = s.toString();
+            if (pan.length() > 6) {
+                CardBrand brand = PAN.brand(pan);
+                if (brand != null && brand.getLogoResourceId() > -1) {
+                    views.image(R.id.image_card_brand).setImageResource(brand.getLogoResourceId());
+                    return;
+                }
+            }
+
+            views.image(R.id.image_card_brand).setImageDrawable(null);
+        }
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.button_submit) {
-            submit();
+    private class ActivityOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.button_submit) {
+                submit();
+            }
+        }
+    }
+
+    private class ActivityTokenRequestListener implements TokenRequestListener {
+        @Override
+        public void onTokenRequestSucceed(TokenRequest request, Token token) {
+            Intent data = new Intent();
+            data.putExtra(EXTRA_TOKEN, token.id);
+            data.putExtra(EXTRA_TOKEN_OBJECT, token);
+            data.putExtra(EXTRA_CARD_OBJECT, token.card);
+
+            setResult(RESULT_OK, data);
+            finish();
+        }
+
+        @Override
+        public void onTokenRequestFailed(TokenRequest request, Throwable throwable) {
+            enableForm();
+            // TODO: Show error above the button.
+            Toast.makeText(CreditCardActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -122,7 +146,7 @@ public class CreditCardActivity extends Activity implements TextWatcher, View.On
         disableForm();
 
         String pkey = getIntent().getStringExtra(EXTRA_PKEY);
-        new Client(pkey).send(tokenRequest, this);
+        new Client(pkey).send(tokenRequest, new ActivityTokenRequestListener());
     }
 
     private boolean validateNonEmpty(EditText field) {
@@ -143,22 +167,5 @@ public class CreditCardActivity extends Activity implements TextWatcher, View.On
         }
 
         return true;
-    }
-
-    @Override
-    public void onTokenRequestSucceed(TokenRequest request, Token token) {
-        Intent data = new Intent();
-        data.putExtra(EXTRA_TOKEN, token.id);
-        data.putExtra(EXTRA_TOKEN_OBJECT, token);
-        data.putExtra(EXTRA_CARD_OBJECT, token.card);
-
-        setResult(RESULT_OK, data);
-        finish();
-    }
-
-    @Override
-    public void onTokenRequestFailed(TokenRequest request, Throwable throwable) {
-        enableForm();
-        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 }
