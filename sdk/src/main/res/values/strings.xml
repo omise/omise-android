@@ -5,9 +5,8 @@
     <string name="label_card_name">Name on card</string>
     <string name="label_expiry_date">Expiry date</string>
     <string name="label_security_code">Security code</string>
-    <string name="label_month">Month</string>
-    <string name="label_year">Year</string>
     <string name="button_submit">Submit</string>
     <string name="error_required">%s is required</string>
     <string name="error_luhn">%s is invalid</string>
+    <string name="description_brand_logo">Card brand logo</string>
 </resources>

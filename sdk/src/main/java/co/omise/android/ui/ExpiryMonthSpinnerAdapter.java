@@ -1,6 +1,6 @@
 package co.omise.android.ui;
 
-import org.joda.time.YearMonth;
+import java.util.Locale;
 
 public class ExpiryMonthSpinnerAdapter extends NumberRangeSpinnerAdapter {
     protected ExpiryMonthSpinnerAdapter() {
@@ -9,13 +9,12 @@ public class ExpiryMonthSpinnerAdapter extends NumberRangeSpinnerAdapter {
 
     @Override
     protected String getItemDropDownLabel(int number) {
-        String monthName = new YearMonth(2099, number).monthOfYear().getAsShortText();
-        return String.format("%02d - %s", number, monthName);
+        return String.format(Locale.getDefault(), "%02d", number);
     }
 
     @Override
     protected String getItemLabel(int number) {
-        return String.format("%02d", number);
+        return String.format(Locale.getDefault(), "%02d", number);
     }
 
 }

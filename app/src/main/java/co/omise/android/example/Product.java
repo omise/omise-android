@@ -1,5 +1,7 @@
 package co.omise.android.example;
 
+import android.content.Context;
+
 public class Product {
     private final String id;
     private final String name;
@@ -25,8 +27,8 @@ public class Product {
         return price;
     }
 
-    public String getPriceString() {
-        return String.format("THB %.2f", price / 100.0);
+    public String formatPrice(Context context) {
+        return String.format(context.getString(R.string.format_price), price);
     }
 
     public String getImageUrl() {

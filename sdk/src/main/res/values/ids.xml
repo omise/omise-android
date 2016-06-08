@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="button_submit" type="id" />
+    <item name="edit_card_name" type="id" />
+    <item name="edit_card_number" type="id" />
+    <item name="edit_security_code" type="id" />
+    <item name="image_card_brand" type="id" />
+    <item name="spinner_expiry_month" type="id" />
+    <item name="spinner_expiry_year" type="id" />
+    <item name="text_card_name" type="id" />
+    <item name="text_card_number" type="id" />
+    <item name="text_expiry_date" type="id" />
+    <item name="text_security_code" type="id" />
+</resources>

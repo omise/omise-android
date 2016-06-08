@@ -41,7 +41,7 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
 
         Picasso.with(this).load(product.getImageUrl()).into(productImageView);
         productNameText.setText(product.getName());
-        productPriceText.setText(product.getPriceString());
+        productPriceText.setText(product.formatPrice(this));
         checkoutButton.setOnClickListener(this);
     }
 

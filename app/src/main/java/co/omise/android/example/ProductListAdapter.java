@@ -38,7 +38,7 @@ public class ProductListAdapter implements ListAdapter {
 
         Picasso.with(context).load(product.getImageUrl()).into(imageView);
         productNameText.setText(product.getName());
-        productPriceText.setText(product.getPriceString());
+        productPriceText.setText(product.formatPrice(convertView.getContext()));
         return convertView;
     }
 

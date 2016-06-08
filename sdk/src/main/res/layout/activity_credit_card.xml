@@ -6,7 +6,7 @@
     android:padding="@dimen/form_padding">
 
     <TextView
-        android:id="@+id/text_card_number"
+        android:id="@id/text_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/label_card_number" />
@@ -16,40 +16,44 @@
         android:layout_height="wrap_content">
 
         <co.omise.android.ui.CreditCardEditText
-            android:id="@+id/edit_card_number"
+            android:id="@id/edit_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:hint="@string/label_card_number" />
+            android:hint="@string/label_card_number"
+            android:nextFocusForward="@id/edit_card_name" />
 
         <ImageView
-            android:id="@+id/image_card_brand"
+            android:id="@id/image_card_brand"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/description_brand_logo" />
 
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/text_card_name"
+        android:id="@id/text_card_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
         android:text="@string/label_card_name" />
 
     <EditText
-        android:id="@+id/edit_card_name"
+        android:id="@id/edit_card_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_card_name"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:nextFocusForward="@id/spinner_expiry_month" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -59,7 +63,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_expiry_date"
+                android:id="@id/text_expiry_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_expiry_date" />
@@ -70,17 +74,19 @@
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/spinner_expiry_month"
+                    android:id="@id/spinner_expiry_month"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:nextFocusForward="@id/spinner_expiry_year"
                     android:spinnerMode="dialog" />
 
                 <Spinner
-                    android:id="@+id/spinner_expiry_year"
+                    android:id="@id/spinner_expiry_year"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:nextFocusForward="@id/edit_security_code"
                     android:spinnerMode="dialog" />
 
             </LinearLayout>
@@ -94,13 +100,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_security_code"
+                android:id="@id/text_security_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_security_code" />
 
             <EditText
-                android:id="@+id/edit_security_code"
+                android:id="@id/edit_security_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/label_security_code"
@@ -111,7 +117,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button_submit"
+        android:id="@id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
