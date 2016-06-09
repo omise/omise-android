@@ -1,5 +1,7 @@
 package co.omise.android;
 
+import android.os.Handler;
+
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -43,7 +45,7 @@ public class Client {
      * Sends the given request and invoke the callback on the listener.
      *
      * @param tokenRequest The request to send.
-     * @param listener The listener to listen for request result.
+     * @param listener     The listener to listen for request result.
      */
     public void send(final TokenRequest tokenRequest, final TokenRequestListener listener) {
         final Call call = httpClient.newCall(new Request.Builder()
@@ -51,6 +53,7 @@ public class Client {
                 .post(tokenRequest.buildFormBody())
                 .build());
 
+        final Handler handler = new Handler();
         background.post(new Runnable() {
             @Override
             public void run() {
@@ -63,13 +66,31 @@ public class Client {
 
                     String rawJson = response.body().string();
                     if (200 <= response.code() && response.code() < 300) {
-                        listener.onTokenRequestSucceed(tokenRequest, new Token(rawJson));
+                        final Token token = new Token(rawJson);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                listener.onTokenRequestSucceed(tokenRequest, token);
+                            }
+                        });
+
                     } else {
-                        listener.onTokenRequestFailed(tokenRequest, new APIError(rawJson));
+                        final APIError error = new APIError(rawJson);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                listener.onTokenRequestFailed(tokenRequest, error);
+                            }
+                        });
                     }
 
                 } catch (IOException | JSONException e) {
-                    listener.onTokenRequestFailed(tokenRequest, e);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onTokenRequestFailed(tokenRequest, e);
+                        }
+                    });
                 }
             }
         });

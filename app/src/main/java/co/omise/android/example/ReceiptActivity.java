@@ -39,7 +39,7 @@ public class ReceiptActivity extends BaseActivity {
         Picasso.with(this).load(product.getImageUrl()).into(productImageView);
         productNameText.setText(product.getName());
         acknowledgeText.setText(String.format(getString(R.string.format_paid_with_card),
-                product.getPrice(),
+                product.formatPrice(this),
                 token.card.lastDigits));
     }
 }

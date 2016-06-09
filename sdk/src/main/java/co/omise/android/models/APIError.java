@@ -15,6 +15,7 @@ public class APIError extends Error {
     }
 
     public APIError(JSONObject json) throws JSONException {
+        super(JSON.string(json, "message"));
         location = JSON.string(json, "location");
         code = JSON.string(json, "code");
         message = JSON.string(json, "message");

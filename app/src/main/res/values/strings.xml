@@ -5,6 +5,6 @@
     <string name="app_name">Omise Android SDK</string>
     <string name="button_checkout">Checkout</string>
     <string name="description_product_image">Product Image</string>
-    <string name="format_paid_with_card" formatted="false">You have paid THB %.2f with card %s.</string>
+    <string name="format_paid_with_card" formatted="false">You have paid %s with card %s.</string>
     <string name="format_price" formatted="false">THB %.2f</string>
 </resources>
