@@ -116,6 +116,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/text_error_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/field_separator_margin"
+        android:gravity="center"
+        android:text="Error messages"
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_light" />
+
     <Button
         android:id="@id/button_submit"
         android:layout_width="match_parent"

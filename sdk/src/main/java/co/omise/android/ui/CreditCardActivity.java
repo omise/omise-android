@@ -7,13 +7,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import java.io.IOError;
 
 import co.omise.android.Client;
 import co.omise.android.PAN;
 import co.omise.android.R;
 import co.omise.android.TokenRequest;
 import co.omise.android.TokenRequestListener;
+import co.omise.android.models.APIError;
 import co.omise.android.models.CardBrand;
 import co.omise.android.models.Token;
 
@@ -99,7 +102,19 @@ public class CreditCardActivity extends Activity {
         public void onTokenRequestFailed(TokenRequest request, Throwable throwable) {
             enableForm();
             // TODO: Show error above the button.
-            Toast.makeText(CreditCardActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+            TextView textView = views.textView(R.id.text_error_message);
+            textView.setVisibility(View.VISIBLE);
+
+            String message = null;
+            if (throwable instanceof IOError) {
+                message = String.format(getString(R.string.error_api), throwable.getMessage());
+            } else if (throwable instanceof APIError) {
+                message = String.format(getString(R.string.error_api), ((APIError) throwable).message);
+            } else {
+                message = String.format(getString(R.string.error_unknown), throwable.getMessage());
+            }
+
+            textView.setText(message);
         }
     }
 
