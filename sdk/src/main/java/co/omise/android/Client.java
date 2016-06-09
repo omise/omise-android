@@ -2,19 +2,15 @@ package co.omise.android;
 
 import android.os.Handler;
 
-import org.json.JSONException;
-
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import co.omise.android.models.APIError;
-import co.omise.android.models.Token;
-import okhttp3.Call;
 import okhttp3.CertificatePinner;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -25,8 +21,7 @@ import okhttp3.Response;
 public class Client {
     private final String publicKey;
     private final OkHttpClient httpClient;
-
-    private BackgroundThread background;
+    private final Executor background;
 
     /**
      * Creates a Client with the given public Key.
@@ -34,64 +29,23 @@ public class Client {
      * @param publicKey The key with the {@code pkey_} prefix.
      */
     public Client(String publicKey) {
-        this.background = new BackgroundThread();
         this.publicKey = publicKey;
         this.httpClient = buildHttpClient(publicKey);
-
-        this.background.start();
+        this.background = Executors.newSingleThreadExecutor();
     }
 
     /**
      * Sends the given request and invoke the callback on the listener.
      *
-     * @param tokenRequest The request to send.
-     * @param listener     The listener to listen for request result.
+     * @param request  The request to send.
+     * @param listener The listener to listen for request result.
      */
-    public void send(final TokenRequest tokenRequest, final TokenRequestListener listener) {
-        final Call call = httpClient.newCall(new Request.Builder()
-                .url("https://vault.omise.co/tokens")
-                .post(tokenRequest.buildFormBody())
-                .build());
-
+    public void send(final TokenRequest request, final TokenRequestListener listener) {
         final Handler handler = new Handler();
-        background.post(new Runnable() {
+        background.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Response response = call.execute();
-                    if (response.body() == null) {
-                        listener.onTokenRequestFailed(tokenRequest, new IOException("HTTP response have no body."));
-                        return;
-                    }
-
-                    String rawJson = response.body().string();
-                    if (200 <= response.code() && response.code() < 300) {
-                        final Token token = new Token(rawJson);
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onTokenRequestSucceed(tokenRequest, token);
-                            }
-                        });
-
-                    } else {
-                        final APIError error = new APIError(rawJson);
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.onTokenRequestFailed(tokenRequest, error);
-                            }
-                        });
-                    }
-
-                } catch (IOException | JSONException e) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.onTokenRequestFailed(tokenRequest, e);
-                        }
-                    });
-                }
+                new Invocation(handler, httpClient, request, listener).invoke();
             }
         });
     }

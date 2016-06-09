@@ -33,7 +33,6 @@ public class CreditCardActivity extends Activity {
     public static final String EXTRA_CARD_OBJECT = "CreditCardActivity.cardObject";
 
     private Views views = new Views(this);
-    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
