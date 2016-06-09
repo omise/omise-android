@@ -176,7 +176,7 @@ public class CreditCardActivity extends Activity {
     private boolean validateLuhn(EditText field) {
         String value = field.getText().toString().trim();
         if (!PAN.luhn(value)) {
-            field.setError(String.format(getString(R.string.error_luhn), field.getHint()));
+            field.setError(String.format(getString(R.string.error_invalid), field.getHint()));
             return false;
         }
 
