@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import java.io.IOError;
 
+import co.omise.android.CardNumber;
 import co.omise.android.Client;
-import co.omise.android.PAN;
 import co.omise.android.R;
 import co.omise.android.TokenRequest;
 import co.omise.android.TokenRequestListener;
@@ -65,7 +65,7 @@ public class CreditCardActivity extends Activity {
         public void afterTextChanged(Editable s) {
             String pan = s.toString();
             if (pan.length() > 6) {
-                CardBrand brand = PAN.brand(pan);
+                CardBrand brand = CardNumber.brand(pan);
                 if (brand != null && brand.getLogoResourceId() > -1) {
                     views.image(R.id.image_card_brand).setImageResource(brand.getLogoResourceId());
                     return;
@@ -100,7 +100,7 @@ public class CreditCardActivity extends Activity {
         @Override
         public void onTokenRequestFailed(TokenRequest request, Throwable throwable) {
             enableForm();
-            // TODO: Show error above the button.
+
             TextView textView = views.textView(R.id.text_error_message);
             textView.setVisibility(View.VISIBLE);
 
@@ -175,7 +175,7 @@ public class CreditCardActivity extends Activity {
 
     private boolean validateLuhn(EditText field) {
         String value = field.getText().toString().trim();
-        if (!PAN.luhn(value)) {
+        if (!CardNumber.luhn(value)) {
             field.setError(String.format(getString(R.string.error_invalid), field.getHint()));
             return false;
         }
