@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 android {
     compileSdkVersion 23
@@ -7,18 +9,71 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lintOptions {
         abortOnError false
         disable 'InvalidPackage' // okio
+    }
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        if (project.properties.containsKey('ossrhUsername') && project.properties.containsKey('ossrhPassword')) {
+            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+        }
+
+        pom.project {
+            name 'Omise Android SDK'
+            description 'Android SDK for Omise API'
+            packaging 'aar'
+            groupId 'co.omise'
+            artifactId 'omise-android'
+            version '2.0.0'
+            url 'https://www.omise.co'
+
+            scm {
+                connection 'scm:git:git://git.github.com/omise/omise-android'
+                developerConnection 'scm:git:git://git.github.com/omise/omise-android'
+                url 'https://github.com/omise/omise-android'
+            }
+
+            licenses {
+                license {
+                    name 'The MIT License (MIT)'
+                    url 'https://opensource.org/licenses/MIT'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'chakrit'
+                    name 'Chakrit Wichian'
+                    email 'chakrit@omise.co'
+                }
+            }
+        }
     }
 }
 
