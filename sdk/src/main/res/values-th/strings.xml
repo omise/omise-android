@@ -4,11 +4,11 @@
     <string name="button_submit">จ่ายเงิน</string>
     <string name="default_form_title">เพิ่มบัตรเครดิต</string>
     <string name="description_brand_logo">โลโก้บัตรเครดิต</string>
-    <string name="error_api" formatted="false">พบข้อผิดพลาด: %s</string>
-    <string name="error_io">ไม่สามารถเชื่อมต่ออินเตอร์เน็ทได้ กรุณาตรวจสอบและลองใหม่อีกครั้ง (%s)</string>
-    <string name="error_invalid" formatted="false">%sไม่ถูกต้อง</string>
-    <string name="error_required" formatted="false">กรุณากรอก%s</string>
-    <string name="error_unknown">เกิดข้อผิดพลาด (%s)</string>
+    <string name="error_api" formatted="false">พบข้อผิดพลาด: %1$s</string>
+    <string name="error_io">ไม่สามารถเชื่อมต่ออินเตอร์เน็ทได้ กรุณาตรวจสอบและลองใหม่อีกครั้ง (%1$s)</string>
+    <string name="error_invalid" formatted="false">%1$sไม่ถูกต้อง</string>
+    <string name="error_required" formatted="false">กรุณากรอก%1$s</string>
+    <string name="error_unknown">เกิดข้อผิดพลาด (%1$s)</string>
     <string name="label_card_name">ชื่อผู้ถือบัตร</string>
     <string name="label_card_number">หมายเลขบัตร</string>
     <string name="label_expiry_date">วันหมดอายุ</string>

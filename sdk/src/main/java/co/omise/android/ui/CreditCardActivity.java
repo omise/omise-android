@@ -106,11 +106,11 @@ public class CreditCardActivity extends Activity {
 
             String message = null;
             if (throwable instanceof IOError) {
-                message = String.format(getString(R.string.error_api), throwable.getMessage());
+                message = getString(R.string.error_api, throwable.getMessage());
             } else if (throwable instanceof APIError) {
-                message = String.format(getString(R.string.error_api), ((APIError) throwable).message);
+                message = getString(R.string.error_api, ((APIError) throwable).message);
             } else {
-                message = String.format(getString(R.string.error_unknown), throwable.getMessage());
+                message = getString(R.string.error_unknown, throwable.getMessage());
             }
 
             textView.setText(message);
