@@ -1,7 +1,7 @@
-# OMISE-ANDROID-SDK
+# Omise Android SDK
 
-[![](https://img.shields.io/maven-central/v/co.omise/omise-android.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22omise-android%22)
-[![](https://img.shields.io/gitter/room/omise/omise-ios.svg?style=flat-square)](https://gitter.im/omise/omise-ios)
+[![](https://img.shields.io/maven-central/v/co.omise/omise-android.svg?style=flat-square)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22co.omise%22%20AND%20a%3A%22omise-android%22)
+[![](https://img.shields.io/gitter/room/omise/omise-android.svg?style=flat-square)](https://gitter.im/omise/omise-android)
 [![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@omise.co)
 
 Omise is a payment service provider currently operating in Thailand. Omise provides a set
