@@ -106,7 +106,7 @@ public class CreditCardActivity extends Activity {
 
             String message = null;
             if (throwable instanceof IOError) {
-                message = getString(R.string.error_api, throwable.getMessage());
+                message = getString(R.string.error_io, throwable.getMessage());
             } else if (throwable instanceof APIError) {
                 message = getString(R.string.error_api, ((APIError) throwable).message);
             } else {

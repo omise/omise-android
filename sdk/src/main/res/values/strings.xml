@@ -1,12 +1,13 @@
 <resources>
+    <string name="not_available">(n/a)</string>
     <string name="app_name">Omise Android SDK</string>
     <string name="button_submit">Submit</string>
     <string name="default_form_title">Add Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
-    <string name="error_api" formatted="false">Error: %1$s</string>
+    <string name="error_api">Error: %1$s</string>
     <string name="error_io">Network communication error, please make sure you have a stable internet connection. (%1$s)</string>
-    <string name="error_invalid" formatted="false">%1$s is invalid</string>
-    <string name="error_required" formatted="false">%1$s is required</string>
+    <string name="error_invalid">%1$s is invalid</string>
+    <string name="error_required">%1$s is required</string>
     <string name="error_unknown">Unknown error occurred. (%1$s)</string>
     <string name="label_card_name">Name on card</string>
     <string name="label_card_number">Card Number</string>

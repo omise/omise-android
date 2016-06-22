@@ -28,7 +28,7 @@ public class Product {
     }
 
     public String formatPrice(Context context) {
-        return String.format(context.getString(R.string.format_price), price / 100.0);
+        return context.getString(R.string.format_price, price / 100.0);
     }
 
     public String getImageUrl() {
