@@ -177,4 +177,4 @@ chatroom to discuss first.
 
 ## LICENSE
 
-MIT
+MIT (See the (full license text)[https://github.com/omise/omise-android/blob/master/LICENSE])
