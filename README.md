@@ -172,7 +172,7 @@ method.
 ## Contributing
 
 Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our
-[![](https://img.shields.io/gitter/room/omise/omise-ios.svg?style=flat-square)](https://gitter.im/omise/omise-ios)
+[![](https://img.shields.io/gitter/room/omise/omise-android.svg?style=flat-square)](https://gitter.im/omise/omise-android)
 chatroom to discuss first.
 
 ## LICENSE
