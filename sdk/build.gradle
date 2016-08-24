@@ -10,7 +10,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 2
-        versionName "2.0.1"
+        versionName "2.1.0"
     }
 
     buildTypes {
@@ -50,7 +50,7 @@ uploadArchives {
             packaging 'aar'
             groupId 'co.omise'
             artifactId 'omise-android'
-            version '2.0.1'
+            version '2.1.0'
             url 'https://www.omise.co'
 
             scm {
