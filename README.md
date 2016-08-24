@@ -38,7 +38,7 @@ Adds the following line to your project's build.gradle file inside the `dependen
 block:
 
 ```groovy
-compile 'co.omise:omise-android:2.0.0'
+compile 'co.omise:omise-android:2.0.+'
 ```
 
 ## Usage
