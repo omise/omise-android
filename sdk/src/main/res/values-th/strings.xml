@@ -14,4 +14,5 @@
     <string name="label_card_number">หมายเลขบัตร</string>
     <string name="label_expiry_date">วันหมดอายุ</string>
     <string name="label_security_code">รหัสหลังบัตร</string>
+    <string name="menu_card_io">ถ่ายรูปบัตร</string>
 </resources>

@@ -31,5 +31,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.guava:guava:19.0'
     compile project(':sdk')
+    compile 'io.card:android-sdk:5.4.0'
     // compile 'co.omise:omise-android:2.0.+'
 }

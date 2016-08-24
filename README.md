@@ -169,6 +169,35 @@ The `Client` class will automatically dispatch the network call on an internal b
 thread and will call listener methods on the thread that initially calls the `send`
 method.
 
+## Card.io support
+
+This library supports integration with
+[Card.IO Android SDK](https://github.com/card-io/card.io-Android-SDK) which enables credit
+card scanning with phone camera. To enable this integration, simply include the library
+with your project and the SDK will pick it up automatically. A camera button will be added
+when `CreditCardActivity` is shown.
+
+Check [Card.io SDK setup](https://github.com/card-io/card.io-Android-SDK#setup) as the
+canonical source of information. For convenience, the steps are summarized here:
+
+1. Adds `compile 'io.card:android-sdk:5.4.0'` to your `build.gradle` dependencies list.
+2. Adds the following `uses-permission` and `uses-feature` to your `AndroidManifest.xml`
+   file:
+   ```xml
+   <uses-permission android:name="android.permission.VIBRATE" />
+   <uses-permission android:name="android.permission.CAMERA" />
+
+   <uses-feature android:name="android.hardware.camera" android:required="false" />
+   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+   <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+   ```
+3. In the same file, adds Card.io Activity declarations:
+   ```xml
+   <activity android:name="io.card.payment.CardIOActivity" />
+   ```
+
+That's it! The SDK should now picks up card.io and shows a camera button automatically.
+
 ## Contributing
 
 Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our

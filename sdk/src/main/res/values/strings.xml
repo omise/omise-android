@@ -13,4 +13,5 @@
     <string name="label_card_number">Card Number</string>
     <string name="label_expiry_date">Expiry date</string>
     <string name="label_security_code">Security code</string>
+    <string name="menu_card_io">Scan from Camera</string>
 </resources>

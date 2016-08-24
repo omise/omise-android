@@ -30,6 +30,10 @@ public abstract class NumberRangeSpinnerAdapter implements SpinnerAdapter {
         return Integer.toString(number);
     }
 
+    public int getPosition(int number) {
+        return number - min;
+    }
+
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         Context context = parent.getContext();

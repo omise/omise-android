@@ -1,16 +1,22 @@
 package co.omise.android.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOError;
 
+import co.omise.android.CardIO;
 import co.omise.android.CardNumber;
 import co.omise.android.Client;
 import co.omise.android.R;
@@ -19,10 +25,13 @@ import co.omise.android.TokenRequestListener;
 import co.omise.android.models.APIError;
 import co.omise.android.models.CardBrand;
 import co.omise.android.models.Token;
+import io.card.payment.CardIOActivity;
+import io.card.payment.CreditCard;
 
 public class CreditCardActivity extends Activity {
     // input
     public static final String EXTRA_PKEY = "CreditCardActivity.publicKey";
+    public static final int REQUEST_CODE_CARD_IO = 1000;
 
     // output
     public static final int RESULT_OK = 100;
@@ -50,6 +59,45 @@ public class CreditCardActivity extends Activity {
     public void onBackPressed() {
         setResult(RESULT_CANCEL);
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_credit_card, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setVisible(CardIO.isAvailable() && views.button(R.id.button_submit).isEnabled());
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_card_io) {
+            if (CardIO.isAvailable()) {
+                Intent intent = CardIO.buildIntent(this);
+                startActivityForResult(intent, REQUEST_CODE_CARD_IO);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CARD_IO) {
+            if (data == null || !data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
+                return;
+            }
+
+            CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
+            applyCardIOResult(scanResult);
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private class ActivityTextWatcher implements TextWatcher {
@@ -132,6 +180,47 @@ public class CreditCardActivity extends Activity {
         views.spinner(R.id.spinner_expiry_month).setEnabled(enabled);
         views.spinner(R.id.spinner_expiry_year).setEnabled(enabled);
         views.button(R.id.button_submit).setEnabled(enabled);
+        invalidateOptionsMenu();
+    }
+
+    private void applyCardIOResult(CreditCard data) {
+        EditText numberField = views.editText(R.id.edit_card_number);
+        EditText nameField = views.editText(R.id.edit_card_name);
+        EditText securityCodeField = views.editText(R.id.edit_security_code);
+
+        if (data.cardNumber != null && !data.cardNumber.isEmpty()) {
+            numberField.setText(CardNumber.format(data.cardNumber));
+        }
+
+        if (data.cardholderName != null && !data.cardholderName.isEmpty()) {
+            nameField.setText(data.cardholderName);
+        }
+
+        if (data.isExpiryValid()) {
+            Spinner spinner = views.spinner(R.id.spinner_expiry_month);
+            ExpiryMonthSpinnerAdapter monthAdapter = (ExpiryMonthSpinnerAdapter) spinner.getAdapter();
+            spinner.setSelection(monthAdapter.getPosition(data.expiryMonth));
+
+            spinner = views.spinner(R.id.spinner_expiry_year);
+            ExpiryYearSpinnerAdapter yearAdapter = (ExpiryYearSpinnerAdapter) spinner.getAdapter() ;
+            spinner.setSelection(yearAdapter.getPosition(data.expiryYear));
+        }
+
+        if (data.cvv != null && !data.cvv.isEmpty()) {
+            securityCodeField.setText(data.cvv);
+        }
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (numberField.getText() == null || numberField.getText().toString().isEmpty()) {
+            numberField.requestFocus();
+            imm.showSoftInput(numberField, InputMethodManager.SHOW_IMPLICIT);
+        } else if (nameField.getText() == null || nameField.getText().toString().isEmpty()) {
+            nameField.requestFocus();
+            imm.showSoftInput(nameField, InputMethodManager.SHOW_IMPLICIT);
+        } else if (securityCodeField.getText() == null || securityCodeField.getText().toString().isEmpty()) {
+            securityCodeField.requestFocus();
+            imm.showSoftInput(securityCodeField, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     private void submit() {
