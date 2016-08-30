@@ -17,7 +17,7 @@ question regarding this SDK and the functionality it provides.
 ## Requirements
 
 * Public key. [Register for an Omise account](https://dashboard.omise.co/signup) to obtain your API keys.
-* Android 4.4+ (KitKat) target or higher.
+* Android 4.0.3+ (API 15) target or higher.
 * Android Studio and Gradle build system.
 
 ## Merchant Compliance
