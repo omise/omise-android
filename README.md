@@ -62,7 +62,7 @@ file as follows:
 Then in your activity, declare the method that will start this activity as follows:
 
 ```java
-private static final String OMISE_PKEY = "pkey_test_123”;
+private static final String OMISE_PKEY = "pkey_test_123";
 private static final int REQUEST_CC = 100;
 
 private void showCreditCardForm() {
@@ -197,6 +197,45 @@ canonical source of information. For convenience, the steps are summarized here:
    ```
 
 That's it! The SDK should now picks up card.io and shows a camera button automatically.
+
+## 3DS Verification support
+Some merchant require their customers to verify themselves with [3-D Secure verification process](https://www.omise.co/fraud-protection#3-d-secure). Omise iOS SDK provide a built in class to do the verification.
+
+#### Verify 3DS Activity
+
+To use it, first declare the availability of the activity in your `AndroidManifest.xml`
+file as follows:
+
+```xml
+<activity
+  android:name="co.omise.android.ui.Verify3DSActivity"
+  android:theme="@style/OmiseSDKTheme" />
+```
+
+Then in your activity, declare the method that will start this activity as follows:
+
+```java
+private void showVerify3DSForm() {
+    Intent intent = new Intent(this, Verify3DSActivity.class);
+    intent.putExtra(Verify3DSActivity.EXTRA_AUTHORIZED_URL, AUTHORIZED_URL);
+    startActivityForResult(intent, REQUEST_CODE);
+}
+```
+
+Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge.
+
+After the end-user completes 3DS verification process, the activity result
+callback will be called, handle it like so:
+
+```java
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == 0x3d5 && resultCode == RESULT_OK) {
+        String url = data.getStringExtra(Verify3DSActivity.EXTRA_REDIRECTED_URL);
+    }
+}
+```
+
 
 ## Contributing
 
