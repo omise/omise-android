@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "co.omise.android.example"
-        minSdkVersion 19
+        minSdkVersion 18
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
