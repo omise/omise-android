@@ -21,8 +21,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
-import static org.apache.http.conn.ssl.SSLSocketFactory.SSL;
-
 /**
  * Client is the main entrypoint to the SDK. You can use the Client to send {@link TokenRequest}s.
  *
@@ -38,7 +36,7 @@ public class Client {
      *
      * @param publicKey The key with the {@code pkey_} prefix.
      */
-    public Client(String publicKey) {
+    public Client(String publicKey) throws GeneralSecurityException {
         this.publicKey = publicKey;
         this.httpClient = buildHttpClient(publicKey);
         this.background = Executors.newSingleThreadExecutor();
@@ -60,32 +58,24 @@ public class Client {
         });
     }
 
-    private X509TrustManager systemDefaultTrustManager() {
-        try {
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-                    TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init((KeyStore) null);
-            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-                throw new IllegalStateException("Unexpected default trust managers:"
-                        + Arrays.toString(trustManagers));
-            }
-            return (X509TrustManager) trustManagers[0];
-        } catch (GeneralSecurityException e) {
-            throw new AssertionError(); // The system has no TLS. Just give up.
+    private X509TrustManager systemDefaultTrustManager() throws GeneralSecurityException {
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init((KeyStore) null);
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+        if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+            throw new IllegalStateException("Unexpected default trust managers:"
+                    + Arrays.toString(trustManagers));
         }
+        return (X509TrustManager) trustManagers[0];
     }
 
 
-    private OkHttpClient buildHttpClient(final String publicKey) {
+    private OkHttpClient buildHttpClient(final String publicKey) throws GeneralSecurityException {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        X509TrustManager trustManager = systemDefaultTrustManager();
         if (Build.VERSION.SDK_INT < 21) {
-            try {
-                builder.sslSocketFactory(new TLSSocketFactory(), trustManager);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            X509TrustManager trustManager = systemDefaultTrustManager();
+            builder.sslSocketFactory(new TLSSocketFactory(), trustManager);
         }
 
         return builder
