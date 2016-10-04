@@ -15,4 +15,5 @@
     <string name="label_expiry_date">วันหมดอายุ</string>
     <string name="label_security_code">รหัสหลังบัตร</string>
     <string name="menu_card_io">ถ่ายรูปบัตร</string>
+    <string name="title_verify_3ds">ตรวจสอบกับธนาคารผู้ออกบัตร</string>
 </resources>
