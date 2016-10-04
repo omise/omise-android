@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_3ds_verify_action"
+        android:showAsAction="never"
+        android:title="@string/verify_3ds"/>
+</menu>
