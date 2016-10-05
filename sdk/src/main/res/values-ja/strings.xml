@@ -10,8 +10,11 @@
     <string name="error_invalid">%1$s 無効です。</string>
     <string name="error_required">%1$s は必須です。</string>
     <string name="error_unknown">原因不明のエラーです。. (%1$s)</string>
-    <string name="label_card_name">カード名義人</string>
-    <string name="label_card_number">カードナンバー</string>
+    <string name="label_card_name">カード名義</string>
+    <string name="label_card_number">カード番号</string>
     <string name="label_expiry_date">有効期限</string>
     <string name="label_security_code">セキュリティコード</string>
+    <string name="title_verify_3ds">カード発行会社にご確認下さい</string>
+    <string name="menu_card_io">カードを読み取る</string>
+    <string name="placeholder_security_code" translatable="false">CVV</string>
 </resources>
