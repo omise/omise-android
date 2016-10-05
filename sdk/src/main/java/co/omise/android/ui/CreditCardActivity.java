@@ -249,7 +249,13 @@ public class CreditCardActivity extends Activity {
         disableForm();
 
         String pkey = getIntent().getStringExtra(EXTRA_PKEY);
-        new Client(pkey).send(tokenRequest, new ActivityTokenRequestListener());
+        ActivityTokenRequestListener listener = new ActivityTokenRequestListener();
+        try {
+            new Client(pkey).send(tokenRequest, listener);
+        } catch (Exception ex) {
+            listener.onTokenRequestFailed(tokenRequest, ex);
+        }
+
     }
 
     private boolean validateNonEmpty(EditText field) {

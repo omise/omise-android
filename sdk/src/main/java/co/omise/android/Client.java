@@ -1,11 +1,19 @@
 package co.omise.android;
 
+import android.os.Build;
 import android.os.Handler;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.CertificatePinner;
 import okhttp3.Credentials;
@@ -28,7 +36,7 @@ public class Client {
      *
      * @param publicKey The key with the {@code pkey_} prefix.
      */
-    public Client(String publicKey) {
+    public Client(String publicKey) throws GeneralSecurityException {
         this.publicKey = publicKey;
         this.httpClient = buildHttpClient(publicKey);
         this.background = Executors.newSingleThreadExecutor();
@@ -50,8 +58,27 @@ public class Client {
         });
     }
 
-    private OkHttpClient buildHttpClient(final String publicKey) {
-        return new OkHttpClient.Builder()
+    private X509TrustManager systemDefaultTrustManager() throws GeneralSecurityException {
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init((KeyStore) null);
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+        if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+            throw new IllegalStateException("Unexpected default trust managers:"
+                    + Arrays.toString(trustManagers));
+        }
+        return (X509TrustManager) trustManagers[0];
+    }
+
+
+    private OkHttpClient buildHttpClient(final String publicKey) throws GeneralSecurityException {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        if (Build.VERSION.SDK_INT < 21) {
+            X509TrustManager trustManager = systemDefaultTrustManager();
+            builder.sslSocketFactory(new TLSSocketFactory(), trustManager);
+        }
+
+        return builder
                 .certificatePinner(buildCertificatePinner())
                 .addInterceptor(buildInterceptor())
                 .readTimeout(60, TimeUnit.SECONDS)
