@@ -1,6 +1,5 @@
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="app_name">Omise Android SDK</string>
     <string name="button_submit">Submit</string>
     <string name="default_form_title">Add Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
