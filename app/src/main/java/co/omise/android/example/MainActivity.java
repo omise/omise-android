@@ -9,12 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import co.omise.android.ui.Verify3DSActivity;
+import co.omise.android.ui.AuthorizingPaymentActivity;
 
 public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private ProductListAdapter listAdapter = null;
 
-    private static int VERIFY_3DS_REQUEST_CODE = 0x3D5;
+    private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +44,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_3ds_verify_action) {
-            Intent intent = new Intent(this, Verify3DSActivity.class);
-            intent.putExtra(Verify3DSActivity.EXTRA_AUTHORIZED_URL, "https://api.omise.co/payments/paym_12345/authorize");
-            startActivityForResult(intent, MainActivity.VERIFY_3DS_REQUEST_CODE);
+        if (item.getItemId() == R.id.menu_authorizing_payment_action) {
+            Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
+            intent.putExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZED_URL, "https://pay.omise.co/offsites/ofsp_test_58ict2lab9fux0l9uuk/pay");
+            startActivityForResult(intent, MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -55,8 +55,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.VERIFY_3DS_REQUEST_CODE && resultCode == RESULT_OK) {
-            String url = data.getStringExtra(Verify3DSActivity.EXTRA_REDIRECTED_URL);
+        if (requestCode == MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+            String url = data.getStringExtra(AuthorizingPaymentActivity.EXTRA_REDIRECTED_URL);
             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT);
         }
         super.onActivityResult(requestCode, resultCode, data);

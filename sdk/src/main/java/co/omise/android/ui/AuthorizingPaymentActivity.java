@@ -13,9 +13,9 @@ import co.omise.android.R;
 
 
 // This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
-public class Verify3DSActivity extends Activity {
-    public static final String EXTRA_AUTHORIZED_URL = "Verify3DSActivity.authorizedURL";
-    public static final String EXTRA_REDIRECTED_URL = "Verify3DSActivity.redirectedURL";
+public class AuthorizingPaymentActivity extends Activity {
+    public static final String EXTRA_AUTHORIZED_URL = "AuthorizingPaymentActivity.authorizedURL";
+    public static final String EXTRA_REDIRECTED_URL = "AuthorizingPaymentActivity.redirectedURL";
 
 
     private WebView webView;
@@ -24,11 +24,11 @@ public class Verify3DSActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_verfiy_3ds);
-        webView = (WebView) findViewById(R.id.verify_3ds_webview);
+        setContentView(R.layout.activity_authorizing_payment);
+        webView = (WebView) findViewById(R.id.authorizing_payment_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
-        setTitle(R.string.title_verify_3ds);
+        setTitle(R.string.title_authorizing_payment);
 
         Intent intent = getIntent();
         try {
@@ -58,6 +58,20 @@ public class Verify3DSActivity extends Activity {
     }
 
     private Boolean verifyURL(String url) {
+        return  verify3DSURL(url) || verifyOffsiteURL(url);
+    }
+
+    private Boolean verifyOffsiteURL(String url) {
+        try {
+            URL currentURL = new URL(url);
+            String[] paths = currentURL.getPath().split("/");
+            return currentURL.getHost().startsWith("pay") && currentURL.getHost().endsWith("omise.co") && paths.length >= 2 && (paths[0].equalsIgnoreCase("offsites") || paths[1].equalsIgnoreCase("offsites")) && paths[paths.length - 1].equalsIgnoreCase("redirect");
+        } catch (MalformedURLException exception) {
+            return false;
+        }
+    }
+
+    private Boolean verify3DSURL(String url) {
         try {
             URL currentURL = new URL(url);
             String[] paths = currentURL.getPath().split("/");

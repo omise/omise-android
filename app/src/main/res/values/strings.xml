@@ -7,5 +7,5 @@
     <string name="description_product_image">Product Image</string>
     <string name="format_paid_with_card" formatted="false">You have paid %s with card %s.</string>
     <string name="format_price" formatted="false">THB %.2f</string>
-    <string name="verify_3ds">3DS Verify</string>
+    <string name="authorize_payment">Authorize Payment</string>
 </resources>

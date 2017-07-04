@@ -208,7 +208,7 @@ file as follows:
 
 ```xml
 <activity
-  android:name="co.omise.android.ui.Verify3DSActivity"
+  android:name="co.omise.android.ui.AuthorizingPaymentActivity"
   android:theme="@style/OmiseSDKTheme" />
 ```
 
