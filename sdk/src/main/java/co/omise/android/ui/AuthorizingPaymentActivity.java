@@ -72,7 +72,6 @@ public class AuthorizingPaymentActivity extends Activity {
                     return false;
                 }
             }
-
         });
     }
 }
