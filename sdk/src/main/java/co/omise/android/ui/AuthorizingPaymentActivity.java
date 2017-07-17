@@ -19,8 +19,65 @@ public class AuthorizingPaymentActivity extends Activity {
     public static final String EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentActivity.returnedURL";
 
     private WebView webView;
-    private Uri authorizedURL;
-    private Uri[] expectedReturnURLPatterns;
+    private AuthorizingPaymentURLVerifier verifier;
+
+    private class AuthorizingPaymentURLVerifier {
+        private Uri authorizedURL;
+        private Uri[] expectedReturnURLPatterns;
+
+        private AuthorizingPaymentURLVerifier(Uri authorizedURL, Uri[] expectedReturnURLPatterns) {
+            this.authorizedURL = authorizedURL;
+            this.expectedReturnURLPatterns = expectedReturnURLPatterns;
+        }
+
+        private AuthorizingPaymentURLVerifier(Intent intent) {
+            authorizedURL = Uri.parse(intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING));
+            String[] returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS);
+            ArrayList<Uri> returnURLPatternList = new ArrayList<>(returnURLStringPatterns.length);
+            for (String returnURLStringPattern : returnURLStringPatterns) {
+                returnURLPatternList.add(Uri.parse(returnURLStringPattern));
+            }
+
+            expectedReturnURLPatterns = new Uri[returnURLPatternList.size()];
+            expectedReturnURLPatterns = returnURLPatternList.toArray(expectedReturnURLPatterns);
+        }
+
+        public boolean isReady() {
+            return getAuthorizedURL() != null
+                    && getExpectedReturnURLPatterns() != null
+                    && getExpectedReturnURLPatterns().length > 0;
+        }
+
+        public Uri getAuthorizedURL() {
+            return authorizedURL;
+        }
+
+        public String getAuthorizedURLString() {
+            if (authorizedURL == null) {
+                return  null;
+            }
+            return authorizedURL.toString();
+        }
+
+        public Uri[] getExpectedReturnURLPatterns() {
+            if (expectedReturnURLPatterns == null) {
+                return  null;
+            }
+            return expectedReturnURLPatterns;
+        }
+
+        boolean verifyURL(Uri uri) {
+            for (Uri expectedReturnURLPattern : getExpectedReturnURLPatterns()) {
+                if (expectedReturnURLPattern.getScheme().equalsIgnoreCase(uri.getScheme()) &&
+                        expectedReturnURLPattern.getHost().equalsIgnoreCase(uri.getHost()) &&
+                        uri.getPath().startsWith(expectedReturnURLPattern.getPath())) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,38 +88,16 @@ public class AuthorizingPaymentActivity extends Activity {
 
         setTitle(R.string.title_authorizing_payment);
 
-        Intent intent = getIntent();
-        authorizedURL = Uri.parse(intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING));
-        String[] returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS);
-        ArrayList<Uri> returnURLPatternList = new ArrayList<>(returnURLStringPatterns.length);
-        for (String returnURLStringPattern : returnURLStringPatterns) {
-            returnURLPatternList.add(Uri.parse(returnURLStringPattern));
-        }
-
-        expectedReturnURLPatterns = new Uri[returnURLPatternList.size()];
-        expectedReturnURLPatterns = returnURLPatternList.toArray(expectedReturnURLPatterns);
-
-        if (authorizedURL != null && authorizedURL.toString() != null) {
-            webView.loadUrl(authorizedURL.toString());
+        verifier = new AuthorizingPaymentURLVerifier(getIntent());
+        if (verifier.isReady()) {
+            webView.loadUrl(verifier.getAuthorizedURLString());
         }
 
         webView.setWebViewClient(new WebViewClient() {
-            boolean verifyURL(Uri uri) {
-                for (Uri expectedReturnURLPattern : expectedReturnURLPatterns) {
-                    if (expectedReturnURLPattern.getScheme().equalsIgnoreCase(uri.getScheme()) &&
-                            expectedReturnURLPattern.getHost().equalsIgnoreCase(uri.getHost()) &&
-                            uri.getPath().startsWith(expectedReturnURLPattern.getPath())) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Uri uri = Uri.parse(url);
-                if (verifyURL(uri)) {
+                if (verifier.verifyURL(uri)) {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra(EXTRA_RETURNED_URLSTRING, url);
                     setResult(RESULT_OK, resultIntent);
