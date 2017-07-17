@@ -2,24 +2,25 @@ package co.omise.android.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 
 import co.omise.android.R;
 
 
 // This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
 public class AuthorizingPaymentActivity extends Activity {
-    public static final String EXTRA_AUTHORIZED_URL = "AuthorizingPaymentActivity.authorizedURL";
-    public static final String EXTRA_REDIRECTED_URL = "AuthorizingPaymentActivity.redirectedURL";
-
+    public static final String EXTRA_AUTHORIZED_URLSTRING = "AuthorizingPaymentActivity.authorizedURL";
+    public static final String EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentActivity.expectedReturnURLPatterns";
+    public static final String EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentActivity.returnedURL";
 
     private WebView webView;
-    private URL authorizedURL;
+    private Uri authorizedURL;
+    private Uri[] expectedReturnURLPatterns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +32,39 @@ public class AuthorizingPaymentActivity extends Activity {
         setTitle(R.string.title_authorizing_payment);
 
         Intent intent = getIntent();
-        try {
-            authorizedURL = new URL(intent.getStringExtra(EXTRA_AUTHORIZED_URL));
-        } catch (MalformedURLException exception) {
-            authorizedURL = null;
+        authorizedURL = Uri.parse(intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING));
+        String[] returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS);
+        ArrayList<Uri> returnURLPatternList = new ArrayList<>(returnURLStringPatterns.length);
+        for (String returnURLStringPattern : returnURLStringPatterns) {
+            returnURLPatternList.add(Uri.parse(returnURLStringPattern));
         }
+
+        expectedReturnURLPatterns = new Uri[returnURLPatternList.size()];
+        expectedReturnURLPatterns = returnURLPatternList.toArray(expectedReturnURLPatterns);
 
         if (authorizedURL != null && authorizedURL.toString() != null) {
             webView.loadUrl(authorizedURL.toString());
         }
 
         webView.setWebViewClient(new WebViewClient() {
+            boolean verifyURL(Uri uri) {
+                for (Uri expectedReturnURLPattern : expectedReturnURLPatterns) {
+                    if (expectedReturnURLPattern.getScheme().equalsIgnoreCase(uri.getScheme()) &&
+                            expectedReturnURLPattern.getHost().equalsIgnoreCase(uri.getHost()) &&
+                            uri.getPath().startsWith(expectedReturnURLPattern.getPath())) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (verifyURL(view.getUrl()) && !url.equalsIgnoreCase(view.getUrl())) {
+                Uri uri = Uri.parse(url);
+                if (verifyURL(uri)) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra(EXTRA_REDIRECTED_URL, url);
+                    resultIntent.putExtra(EXTRA_RETURNED_URLSTRING, url);
                     setResult(RESULT_OK, resultIntent);
                     finish();
                     return true;
@@ -54,31 +72,8 @@ public class AuthorizingPaymentActivity extends Activity {
                     return false;
                 }
             }
+
         });
-    }
-
-    private Boolean verifyURL(String url) {
-        return  verify3DSURL(url) || verifyOffsiteURL(url);
-    }
-
-    private Boolean verifyOffsiteURL(String url) {
-        try {
-            URL currentURL = new URL(url);
-            String[] paths = currentURL.getPath().split("/");
-            return currentURL.getHost().startsWith("pay") && currentURL.getHost().endsWith("omise.co") && paths.length >= 2 && (paths[0].equalsIgnoreCase("offsites") || paths[1].equalsIgnoreCase("offsites")) && paths[paths.length - 1].equalsIgnoreCase("redirect");
-        } catch (MalformedURLException exception) {
-            return false;
-        }
-    }
-
-    private Boolean verify3DSURL(String url) {
-        try {
-            URL currentURL = new URL(url);
-            String[] paths = currentURL.getPath().split("/");
-            return currentURL.getHost().startsWith("api") && currentURL.getHost().endsWith("omise.co") && paths.length >= 2 && (paths[0].equalsIgnoreCase("payments") || paths[1].equalsIgnoreCase("payments")) && paths[paths.length - 1].equalsIgnoreCase("complete");
-        } catch (MalformedURLException exception) {
-            return false;
-        }
     }
 }
 
