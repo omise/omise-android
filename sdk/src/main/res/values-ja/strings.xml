@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="app_name">Omise Android SDK</string>
     <string name="button_submit">支払う</string>
     <string name="default_form_title">クレジットカードを追加</string>
     <string name="description_brand_logo">カードブランドロゴ</string>
