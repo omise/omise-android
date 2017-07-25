@@ -4,7 +4,7 @@
     android:id="@+id/activity_verfiy_3ds"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="co.omise.android.ui.Verify3DSActivity">
+    tools:context="co.omise.android.ui.AuthorizingPaymentActivity">
 
     <WebView
         android:layout_width="match_parent"
@@ -12,5 +12,5 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/verify_3ds_webview" />
+        android:id="@+id/authorizing_payment_webview" />
 </RelativeLayout>

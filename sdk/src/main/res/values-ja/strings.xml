@@ -14,6 +14,6 @@
     <string name="label_card_number">カード番号</string>
     <string name="label_expiry_date">有効期限</string>
     <string name="label_security_code">セキュリティコード</string>
-    <string name="title_verify_3ds">カード発行会社にご確認下さい</string>
+    <string name="title_authorizing_payment">決済を認証中</string>
     <string name="menu_card_io">カードを読み取る</string>
 </resources>
