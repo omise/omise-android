@@ -12,13 +12,13 @@ Omise Android SDK provides Android bindings for the Omise
 [Tokenization](https://www.omise.co/tokens-api) API so you do not need to pass credit card
 data to your server as well as components for entering credit card information.
 
-Hop into the Gitter chat (click the badge above) or email our support team if you have any
+Hop into our forum (click the badge above) or email our support team if you have any
 question regarding this SDK and the functionality it provides.
 
 ## Requirements
 
 * Public key. [Register for an Omise account](https://dashboard.omise.co/signup) to obtain your API keys.
-* Android 4.0.3+ (API 15) target or higher.
+* Android 4.1+ (API 16) target or higher.
 * Android Studio and Gradle build system.
 
 ## Merchant Compliance
@@ -199,10 +199,11 @@ canonical source of information. For convenience, the steps are summarized here:
 
 That's it! The SDK should now picks up card.io and shows a camera button automatically.
 
-## 3DS Verification support
-Some merchant require their customers to verify themselves with [3-D Secure verification process](https://www.omise.co/fraud-protection#3-d-secure). Omise iOS SDK provide a built in class to do the verification.
+## Authorizing Payment
+Some payment method require the customers to authorize the payment via an authorized URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay) and etc. Omise Android SDK provide a built in class to do the authorization.
 
-#### Verify 3DS Activity
+
+#### Authorizing Payment Activity
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -216,23 +217,25 @@ file as follows:
 Then in your activity, declare the method that will start this activity as follows:
 
 ```java
-private void showVerify3DSForm() {
-    Intent intent = new Intent(this, Verify3DSActivity.class);
-    intent.putExtra(Verify3DSActivity.EXTRA_AUTHORIZED_URL, AUTHORIZED_URL);
-    startActivityForResult(intent, REQUEST_CODE);
+private void showAuthorizingPaymentForm() {
+    Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
+    intent.putExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZED_URLSTRING, `AUTHORIZED_URL`);
+    intent.putExtra(AuthorizingPaymentActivity.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, `EXPECTED_URL_PATTERNS` );
+    startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE);
 }
 ```
 
-Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge.
+Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge and the array of string `EXPECTED_URL_PATTERNS` with the expected pattern of redirected URLs array.
 
-After the end-user completes 3DS verification process, the activity result
+After the end-user completes the authorizing payment process, the activity result
 callback will be called, handle it like so:
 
 ```java
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == 0x3d5 && resultCode == RESULT_OK) {
-        String url = data.getStringExtra(Verify3DSActivity.EXTRA_REDIRECTED_URL);
+    if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+        String url = data.getStringExtra(AuthorizingPaymentActivity.EXTRA_RETURNED_URLSTRING);
+        // Use the redirected URL here.
     }
 }
 ```
@@ -240,10 +243,8 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 ## Contributing
 
-Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our
-[![](https://img.shields.io/gitter/room/omise/omise-android.svg?style=flat-square)](https://gitter.im/omise/omise-android)
-chatroom to discuss first.
+Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
 
 ## LICENSE
 
-MIT (See the (full license text)[https://github.com/omise/omise-android/blob/master/LICENSE])
+MIT [See the full license text](https://github.com/omise/omise-android/blob/master/LICENSE)
