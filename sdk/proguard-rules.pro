@@ -64,5 +64,3 @@
 -keep public class co.omise.android.** { *; }
 -keep public interface co.omise.android.** { *; }
 -keep public class * implements co.omise.android.** { *; }
-
--dontwarn okio.**
