@@ -241,6 +241,12 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ```
 
 
+## ProGuard Rules
+
+
+
+
+
 ## Contributing
 
 Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
