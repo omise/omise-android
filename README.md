@@ -241,6 +241,18 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ```
 
 
+## ProGuard Rules
+
+When enable ProGuard, then add this rules in your ProGuard file.
+
+```ProGuard
+# Omise
+-dontwarn okio.**
+-dontwarn com.google.common.**
+-dontwarn org.joda.time.**
+```
+
+
 ## Contributing
 
 Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
