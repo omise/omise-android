@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName "2.6.0"
+        versionCode 4
+        versionName "2.6.1"
     }
 
     buildTypes {
@@ -50,7 +50,7 @@ uploadArchives {
             packaging 'aar'
             groupId 'co.omise'
             artifactId 'omise-android'
-            version '2.6.0'
+            version '2.6.1'
             url 'https://www.omise.co'
 
             scm {
