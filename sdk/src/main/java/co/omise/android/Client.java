@@ -70,7 +70,6 @@ public class Client {
         }
 
         return builder
-                .certificatePinner(buildCertificatePinner())
                 .addInterceptor(buildInterceptor())
                 .connectionSpecs(Collections.singletonList(spec))
                 .readTimeout(60, TimeUnit.SECONDS)
