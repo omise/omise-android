@@ -11,6 +11,7 @@ android {
         targetSdkVersion 26
         versionCode 4
         versionName "2.6.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -80,6 +81,13 @@ uploadArchives {
 dependencies {
     compile 'joda-time:joda-time:2.9.2'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support:support-annotations:26.1.0"
+    androidTestCompile("com.android.support.test.espresso:espresso-core:3.0.1", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    })
     androidTestCompile 'com.google.guava:guava:19.0'
     provided 'io.card:android-sdk:5.4.0'
 }
