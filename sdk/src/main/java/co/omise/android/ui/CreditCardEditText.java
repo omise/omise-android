@@ -61,7 +61,6 @@ public class CreditCardEditText extends EditText {
                     e.delete(e.length() - 1, e.length());
                 }
             }
-
         });
     }
 
