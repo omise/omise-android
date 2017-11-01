@@ -3,14 +3,14 @@ package co.omise.android.ui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.widget.EditText;
 
 public class CreditCardEditText extends EditText {
-    private boolean suppressEvent = false;
 
     public CreditCardEditText(Context context) {
         super(context);
@@ -36,49 +36,32 @@ public class CreditCardEditText extends EditText {
     private void init() {
         setFilters(new InputFilter[]{new InputFilter.LengthFilter(19)});
         setInputType(InputType.TYPE_CLASS_PHONE);
+
+        addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable e) {
+                if (e.length() <= 0 || (e.length() % 5) != 0) {
+                    return;
+                }
+
+                char c = e.charAt(e.length() - 1);
+                if (Character.isDigit(c)) {
+                    // Insert space bar
+                    e.insert(e.length() - 1, " ");
+                } else if (c == ' ') {
+                    // Delete space bar
+                    e.delete(e.length() - 1, e.length());
+                }
+            }
+        });
     }
 
-    /* inject SPC and DEL keys as the user types to make sure the textbox always show numbers in
-     * groups of 4.
-     *
-     * For example:
-     * [1234]   -> input [5]  output [1234 5] (space + 5)
-     * [1234 5] -> input [^H] output [1234]   (del + del)
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (suppressEvent) {
-            return super.onKeyDown(keyCode, event);
-        }
-
-        int length = getText().length();
-        boolean beforeSeparator = (length - 4) % 5 == 0;
-        boolean afterSeparator = length % 5 == 0;
-        if (isDeletion(keyCode) && afterSeparator) {
-            sendKey(KeyEvent.KEYCODE_DEL);
-        } else if (isDigit(keyCode) && beforeSeparator) {
-            sendKey(KeyEvent.KEYCODE_SPACE);
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private boolean isDigit(int keyCode) {
-        return (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) ||
-                (KeyEvent.KEYCODE_NUMPAD_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_NUMPAD_9);
-    }
-
-    private boolean isDeletion(int keyCode) {
-        return keyCode == KeyEvent.KEYCODE_DEL;
-    }
-
-    private void sendKey(int keyCode) {
-        suppressEvent = true;
-        try {
-            dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
-            dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyCode));
-        } finally {
-            suppressEvent = false;
-        }
-    }
 }
