@@ -96,7 +96,8 @@ public class Client {
     }
 
     private String buildUserAgent() {
-        return "OmiseAndroid/" + Client.class.getPackage().getImplementationVersion() +
-                " Java/" + System.getProperty("java.version");
+        return "OmiseAndroid/" + BuildConfig.VERSION_NAME +
+                " Android/" + Build.VERSION.SDK_INT +
+                " Model/" + Build.MODEL;
     }
 }
