@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -17,6 +18,8 @@ public class AuthorizingPaymentActivity extends Activity {
     public static final String EXTRA_AUTHORIZED_URLSTRING = "AuthorizingPaymentActivity.authorizedURL";
     public static final String EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentActivity.expectedReturnURLPatterns";
     public static final String EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentActivity.returnedURL";
+
+    private static final int REQUEST_EXTERNAL_CODE = 300;
 
     private WebView webView;
     private AuthorizingPaymentURLVerifier verifier;
@@ -54,14 +57,14 @@ public class AuthorizingPaymentActivity extends Activity {
 
         public String getAuthorizedURLString() {
             if (authorizedURL == null) {
-                return  null;
+                return null;
             }
             return authorizedURL.toString();
         }
 
         public Uri[] getExpectedReturnURLPatterns() {
             if (expectedReturnURLPatterns == null) {
-                return  null;
+                return null;
             }
             return expectedReturnURLPatterns;
         }
@@ -76,6 +79,12 @@ public class AuthorizingPaymentActivity extends Activity {
             }
 
             return false;
+        }
+
+        boolean verifyExternalURL(Uri uri) {
+            return !uri.getScheme().equals("http") &&
+                    !uri.getScheme().equals("https") &&
+                    !uri.getScheme().equals("about");
         }
     }
 
@@ -96,6 +105,7 @@ public class AuthorizingPaymentActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("webview_url", url);
                 Uri uri = Uri.parse(url);
                 if (verifier.verifyURL(uri)) {
                     Intent resultIntent = new Intent();
@@ -103,12 +113,24 @@ public class AuthorizingPaymentActivity extends Activity {
                     setResult(RESULT_OK, resultIntent);
                     finish();
                     return true;
+                } else if (verifier.verifyExternalURL(uri)) {
+                    Intent externalIntent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE);
+                    return true;
                 } else {
                     return false;
                 }
             }
         });
     }
-}
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
+            setResult(RESULT_OK, data);
+            finish();
+        }
+    }
+}
 
