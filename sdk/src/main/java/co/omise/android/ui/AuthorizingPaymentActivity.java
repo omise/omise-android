@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import java.util.ArrayList;
-
 import co.omise.android.R;
 
 
-// This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
+/**
+ * This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
+ * In case authorize with external app. By default open those external app when completed verification then sent result back our SDK.
+ */
 public class AuthorizingPaymentActivity extends Activity {
     public static final String EXTRA_AUTHORIZED_URLSTRING = "AuthorizingPaymentActivity.authorizedURL";
     public static final String EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentActivity.expectedReturnURLPatterns";
@@ -105,7 +105,6 @@ public class AuthorizingPaymentActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("webview_url", url);
                 Uri uri = Uri.parse(url);
                 if (verifier.verifyURL(uri)) {
                     Intent resultIntent = new Intent();
