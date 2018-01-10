@@ -15,3 +15,10 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Ignore warning in OmiseSDK
+-dontwarn okio.**
+-dontwarn com.google.common.**
+-dontwarn org.joda.time.**
+-dontwarn javax.annotation.**
+-dontwarn com.squareup.**

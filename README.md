@@ -243,13 +243,14 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 ## ProGuard Rules
 
-When enable ProGuard, then add this rules in your ProGuard file.
+If you enable ProGuard, then add this rules in your ProGuard file.
 
 ```ProGuard
-# Omise
 -dontwarn okio.**
 -dontwarn com.google.common.**
 -dontwarn org.joda.time.**
+-dontwarn javax.annotation.**
+-dontwarn com.squareup.**
 ```
 
 

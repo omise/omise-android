@@ -1,11 +1,11 @@
 <resources>
-    <string name="activity_checkout">Checkout</string>
-    <string name="activity_main">Omise Co., Ltd.</string>
-    <string name="activity_receipt">Receipt</string>
-    <string name="app_name">Omise Android SDK</string>
-    <string name="button_checkout">Checkout</string>
-    <string name="description_product_image">Product Image</string>
-    <string name="format_paid_with_card" formatted="false">You have paid %s with card %s.</string>
-    <string name="format_price" formatted="false">THB %.2f</string>
-    <string name="authorize_payment">Authorize Payment</string>
+    <string name="activity_checkout" translatable="false">Checkout</string>
+    <string name="activity_main" translatable="false">Omise Co., Ltd.</string>
+    <string name="activity_receipt" translatable="false">Receipt</string>
+    <string name="app_name" translatable="false">Omise Android SDK</string>
+    <string name="button_checkout" translatable="false">Checkout</string>
+    <string name="description_product_image" translatable="false">Product Image</string>
+    <string name="format_paid_with_card" formatted="false" translatable="false">You have paid %s with card %s.</string>
+    <string name="format_price" formatted="false" translatable="false">THB %.2f</string>
+    <string name="authorize_payment" translatable="false">Authorize Payment</string>
 </resources>
