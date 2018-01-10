@@ -45,7 +45,7 @@ public class Card extends Model {
 
     public Card(JSONObject json) throws JSONException {
         super(json);
-        country = JSON.string(json, "json");
+        country = JSON.string(json, "country");
         city = JSON.string(json, "city");
         postalCode = JSON.string(json, "postal_code");
         financing = JSON.string(json, "financing");

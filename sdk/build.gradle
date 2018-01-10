@@ -93,4 +93,5 @@ dependencies {
     androidTestCompile 'com.google.guava:guava:19.0'
     provided 'io.card:android-sdk:5.4.0'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.json:json:20171018'
 }
