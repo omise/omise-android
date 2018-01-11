@@ -37,6 +37,7 @@ public class Card extends Model {
     public final String fingerprint;
     public final String name;
     public final boolean securityCodeCheck;
+    public final String bank;
 
     public Card(String rawJson) throws JSONException {
         this(new JSONObject(rawJson));
@@ -44,7 +45,7 @@ public class Card extends Model {
 
     public Card(JSONObject json) throws JSONException {
         super(json);
-        country = JSON.string(json, "json");
+        country = JSON.string(json, "country");
         city = JSON.string(json, "city");
         postalCode = JSON.string(json, "postal_code");
         financing = JSON.string(json, "financing");
@@ -55,5 +56,6 @@ public class Card extends Model {
         fingerprint = JSON.string(json, "fingerprint");
         name = JSON.string(json, "name");
         securityCodeCheck = JSON.bool(json, "security_code_check");
+        bank = JSON.string(json, "bank");
     }
 }
