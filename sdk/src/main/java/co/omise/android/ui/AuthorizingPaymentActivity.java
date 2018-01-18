@@ -1,6 +1,7 @@
 package co.omise.android.ui;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -113,9 +114,14 @@ public class AuthorizingPaymentActivity extends Activity {
                     finish();
                     return true;
                 } else if (verifier.verifyExternalURL(uri)) {
-                    Intent externalIntent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE);
-                    return true;
+                    try {
+                        Intent externalIntent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE);
+                        return true;
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                 } else {
                     return false;
                 }
