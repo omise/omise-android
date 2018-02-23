@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 5
-        versionName "2.6.2"
+        versionCode 6
+        versionName "2.6.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,7 +55,7 @@ uploadArchives {
             packaging 'aar'
             groupId 'co.omise'
             artifactId 'omise-android'
-            version '2.6.2'
+            version '2.6.3'
             url 'https://www.omise.co'
 
             scm {
