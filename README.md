@@ -242,7 +242,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 #### Authorizing Payment via an external app
 
-Some request method allow user to authorize with external app, for sample Alipay. When user would like to authorize their payment with external app, `AuthorizingPaymentActivity` will automatically open external app by default. However merchant developers handle the `Intent` callback by themselves.
+Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user would like to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app by default. However merchant developers must handle the `Intent` callback by themselves.
 
 ## ProGuard Rules
 
