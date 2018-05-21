@@ -61,7 +61,7 @@ public class Client {
     private OkHttpClient buildHttpClient(final String publicKey) throws GeneralSecurityException {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_1)
+                .tlsVersions(TlsVersion.TLS_1_2)
                 .build();
 
         if (Build.VERSION.SDK_INT < 21) {
@@ -72,6 +72,7 @@ public class Client {
         return builder
                 .addInterceptor(buildInterceptor())
                 .connectionSpecs(Collections.singletonList(spec))
+                .certificatePinner(buildCertificatePinner())
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build();
     }
