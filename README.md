@@ -257,6 +257,34 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 ```
 
 
+## Support TLS 1.2 for older Android 5.0
+
+To follow PCI compliance will support TLS 1.2 or newer version on our vault. The applications are using Omise Android SDK and running older Android 5.0 will stop working with regardless. Because Android API older version 20 disabled TLS 1.2 by default for openssl security reason. To keep Omise Android SDK working on older Android 5.0 developers need to use Google Play Services to install a new patch of SSL Security Provider.
+ 
+If use already use one of Google Play Services e.g. **GCM**, **Analytics** you already to use `ProviderInstaller` from them. But if not developers need to add one of Google Play Services to project. 
+
+```gradle
+compile 'com.google.android.gms:play-services-analytics:16.0.3'
+```
+
+After already add Google Play Services to the project. Developers need to install Google Play Services to the Application class or in the Activity before start calling Omise Android SDK. Developers can install by follow this snippet code.
+
+```java
+
+if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+    try {
+        ProviderInstaller.installIfNeeded(this);
+    } catch (GooglePlayServicesRepairableException e) {
+        e.printStackTrace();
+    } catch (GooglePlayServicesNotAvailableException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+> **Note:** This will support only the devices that have Google Play Services installed on the device.
+
+
 ## Contributing
 
 Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
