@@ -257,9 +257,45 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 ```
 
 
+## Note on TLS 1.2
+PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suite. This means that every clients must connect to Omise service with those valid suites. However TLS 1.2 support in Android is vary depends on the Android OS. Please follow the following instruction to add support for TLS 1.2 in your app.
+
+#### Android API 20 or higher
+You can use our SDK without any change. The SDK already fully supports communication to the Omise Service using TLS 1.2 with the properly encryption suite.
+
+#### Android API 16 to API 19 with Google Play Services
+These Android API versions don't support the proper encryption suites out of the box. However `Google Play Service` has the `ProviderInstaller` API to add support for the proper encryption suite. You may already use the Google Play Service in your app already; Google Play Service includes many common libraries used in many Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Service by doing the following steps
+
+1. Add Google Play Service Analytics to your app grade setting
+
+```gradle
+ compile 'com.google.android.gms:play-services-analytics:16.0.3'
+ ```
+ 
+2. Asks the ProviderInstaller to install the encryption suites with the follow code
+
+```java
+ if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+     try {
+         ProviderInstaller.installIfNeeded(this);
+     } catch (GooglePlayServicesRepairableException e) {
+         e.printStackTrace();
+     } catch (GooglePlayServicesNotAvailableException e) {
+         e.printStackTrace();
+     }
+ }
+ ```
+ 
+> **Note:** Google Play Service may not available on every brands or models. Please be concerned about the Google Play Service compatibility
+
+#### API 15 or lower
+These Android API levels could not support for the proper encryption suites easily which means that the Android devices running those OS versions may not be able to use to connect to many services on the internet. We recommend you to drop support for those API levels
+
+
 ## Contributing
 
 Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
+
 
 ## LICENSE
 
