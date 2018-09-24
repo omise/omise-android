@@ -258,7 +258,7 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 
 
 ## Note on TLS 1.2
-PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suite. This means that every clients must connect to Omise service with those valid suites. However TLS 1.2 support in Android is vary depends on the Android OS.
+PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suite. This means that every clients must connect to Omise service with those valid suites. However TLS 1.2 support in Android is vary depends on the Android OS. Please follow the following instruction to add support for TLS 1.2 in your app.
 
 #### Android API 20 or higher
 You can use our SDK without any change. The SDK already fully supports communication to the Omise Service using TLS 1.2 with the properly encryption suite.
