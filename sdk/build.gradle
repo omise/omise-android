@@ -55,7 +55,7 @@ uploadArchives {
             packaging 'aar'
             groupId 'co.omise'
             artifactId 'omise-android'
-            version '2.6.4'
+            version '2.6.5'
             url 'https://www.omise.co'
 
             scm {

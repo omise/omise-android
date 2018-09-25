@@ -31,7 +31,7 @@ class TLSPatch {
     }
 
     /**
-     * SSLSocketFactory implementation that enforces TLSv1.1 or TLSv1.2 usage.
+     * SSLSocketFactory implementation that enforces TLSv1.2 usage.
      *
      * credit: https://gist.github.com/fkrauthan/ac8624466a4dee4fd02f
      */
