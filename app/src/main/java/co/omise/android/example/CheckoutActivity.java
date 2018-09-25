@@ -56,7 +56,7 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CC:
-                if (resultCode == CreditCardActivity.RESULT_CANCEL) {
+                if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(this, "cancelled", Toast.LENGTH_SHORT).show();
                     return;
                 }
