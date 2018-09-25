@@ -4,6 +4,7 @@
 
 * **REMOVED:** Drop support TLS 1.1.
 * **ADDED:** Add pin certification.
+* **CHANGED:** Change result callback code to use default RESULT_OK/RESULT_CANCELED from Activity in CreditCardActivity. 
 
 # v2.6.4
 
