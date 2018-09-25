@@ -83,7 +83,7 @@ callback will be called, handle it like so:
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
   switch (requestCode) {
     case REQUEST_CC:
-      if (resultCode == CreditCardActivity.RESULT_CANCEL) {
+      if (resultCode == RESULT_CANCELED) {
         return;
       }
 

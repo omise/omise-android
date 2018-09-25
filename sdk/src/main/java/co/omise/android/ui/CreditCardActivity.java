@@ -33,10 +33,6 @@ public class CreditCardActivity extends Activity {
     public static final String EXTRA_PKEY = "CreditCardActivity.publicKey";
     public static final int REQUEST_CODE_CARD_IO = 1000;
 
-    // output
-    public static final int RESULT_OK = 100;
-    public static final int RESULT_CANCEL = 200;
-
     public static final String EXTRA_TOKEN = "CreditCardActivity.token";
     public static final String EXTRA_TOKEN_OBJECT = "CreditCardActivity.tokenObject";
     public static final String EXTRA_CARD_OBJECT = "CreditCardActivity.cardObject";
@@ -57,7 +53,7 @@ public class CreditCardActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_CANCEL);
+        setResult(RESULT_CANCELED);
         super.onBackPressed();
     }
 
@@ -152,7 +148,7 @@ public class CreditCardActivity extends Activity {
             TextView textView = views.textView(R.id.text_error_message);
             textView.setVisibility(View.VISIBLE);
 
-            String message = null;
+            String message;
             if (throwable instanceof IOError) {
                 message = getString(R.string.error_io, throwable.getMessage());
             } else if (throwable instanceof APIError) {
@@ -202,7 +198,7 @@ public class CreditCardActivity extends Activity {
             spinner.setSelection(monthAdapter.getPosition(data.expiryMonth));
 
             spinner = views.spinner(R.id.spinner_expiry_year);
-            ExpiryYearSpinnerAdapter yearAdapter = (ExpiryYearSpinnerAdapter) spinner.getAdapter() ;
+            ExpiryYearSpinnerAdapter yearAdapter = (ExpiryYearSpinnerAdapter) spinner.getAdapter();
             spinner.setSelection(yearAdapter.getPosition(data.expiryYear));
         }
 
