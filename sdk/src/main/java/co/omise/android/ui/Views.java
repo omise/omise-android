@@ -23,23 +23,23 @@ final class Views {
     }
 
     public Spinner spinner(int id) {
-        return this.<Spinner>find(id);
+        return this.find(id);
     }
 
     public TextView textView(int id) {
-        return this.<TextView>find(id);
+        return this.find(id);
     }
 
     public EditText editText(int id) {
-        return this.<EditText>find(id);
+        return this.find(id);
     }
 
     public Button button(int id) {
-        return this.<Button>find(id);
+        return this.find(id);
     }
 
     public ImageView image(int id) {
-        return this.<ImageView>find(id);
+        return this.find(id);
     }
 
     public <T> T find(int id) {

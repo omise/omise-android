@@ -34,12 +34,12 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
 
         Product product = product();
 
-        ImageView productImageView = (ImageView) findViewById(R.id.image_product);
-        TextView productNameText = (TextView) findViewById(R.id.text_product_name);
-        TextView productPriceText = (TextView) findViewById(R.id.text_product_price);
-        Button checkoutButton = (Button) findViewById(R.id.button_checkout);
+        ImageView productImageView = findViewById(R.id.image_product);
+        TextView productNameText = findViewById(R.id.text_product_name);
+        TextView productPriceText = findViewById(R.id.text_product_price);
+        Button checkoutButton = findViewById(R.id.button_checkout);
 
-        Picasso.with(this).load(product.getImageUrl()).into(productImageView);
+        Picasso.get().load(product.getImageUrl()).into(productImageView);
         productNameText.setText(product.getName());
         productPriceText.setText(product.formatPrice(this));
         checkoutButton.setOnClickListener(this);

@@ -23,7 +23,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
         listAdapter = new ProductListAdapter(repository().all());
 
-        ListView productList = (ListView) findViewById(R.id.list_products);
+        ListView productList = findViewById(R.id.list_products);
         productList.setAdapter(listAdapter);
         productList.setOnItemClickListener(this);
     }

@@ -32,9 +32,9 @@ public class ReceiptActivity extends BaseActivity {
         Product product = product();
         Token token = token();
 
-        ImageView productImageView = (ImageView) findViewById(R.id.image_product);
-        TextView productNameText = (TextView) findViewById(R.id.text_product_name);
-        TextView acknowledgeText = (TextView) findViewById(R.id.text_acknowledge);
+        ImageView productImageView = findViewById(R.id.image_product);
+        TextView productNameText = findViewById(R.id.text_product_name);
+        TextView acknowledgeText = findViewById(R.id.text_acknowledge);
 
         Picasso.get().load(product.getImageUrl()).into(productImageView);
         productNameText.setText(product.getName());

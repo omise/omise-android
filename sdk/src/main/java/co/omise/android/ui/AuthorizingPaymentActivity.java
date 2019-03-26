@@ -93,7 +93,7 @@ public class AuthorizingPaymentActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorizing_payment);
-        webView = (WebView) findViewById(R.id.authorizing_payment_webview);
+        webView = findViewById(R.id.authorizing_payment_webview);
         webView.getSettings().setJavaScriptEnabled(true);
 
         setTitle(R.string.title_authorizing_payment);

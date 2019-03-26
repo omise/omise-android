@@ -14,7 +14,7 @@ final class JSON {
     }
 
     public static boolean bool(JSONObject json, String key) throws JSONException {
-        return json.has(key) ? json.getBoolean(key) : false;
+        return json.has(key) && json.getBoolean(key);
     }
 
     public static int integer(JSONObject json, String key) throws JSONException {

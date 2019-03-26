@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ProductListAdapter implements ListAdapter {
     private List<DataSetObserver> observers = Lists.newArrayList();
-    private List<Product> products = ImmutableList.of();
+    private List<Product> products;
 
     public ProductListAdapter(List<Product> products) {
         this.products = ImmutableList.copyOf(products);
@@ -32,9 +32,9 @@ public class ProductListAdapter implements ListAdapter {
         }
 
         Product product = (Product) getItem(position);
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.image_product);
-        TextView productNameText = (TextView) convertView.findViewById(R.id.text_product_name);
-        TextView productPriceText = (TextView) convertView.findViewById(R.id.text_product_price);
+        ImageView imageView = convertView.findViewById(R.id.image_product);
+        TextView productNameText = convertView.findViewById(R.id.text_product_name);
+        TextView productPriceText = convertView.findViewById(R.id.text_product_price);
 
         Picasso.get().load(product.getImageUrl()).into(imageView);
         productNameText.setText(product.getName());
