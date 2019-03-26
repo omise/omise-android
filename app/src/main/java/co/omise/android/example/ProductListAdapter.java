@@ -36,7 +36,7 @@ public class ProductListAdapter implements ListAdapter {
         TextView productNameText = (TextView) convertView.findViewById(R.id.text_product_name);
         TextView productPriceText = (TextView) convertView.findViewById(R.id.text_product_price);
 
-        Picasso.with(context).load(product.getImageUrl()).into(imageView);
+        Picasso.get().load(product.getImageUrl()).into(imageView);
         productNameText.setText(product.getName());
         productPriceText.setText(product.formatPrice(convertView.getContext()));
         return convertView;

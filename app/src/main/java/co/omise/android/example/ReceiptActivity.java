@@ -36,7 +36,7 @@ public class ReceiptActivity extends BaseActivity {
         TextView productNameText = (TextView) findViewById(R.id.text_product_name);
         TextView acknowledgeText = (TextView) findViewById(R.id.text_acknowledge);
 
-        Picasso.with(this).load(product.getImageUrl()).into(productImageView);
+        Picasso.get().load(product.getImageUrl()).into(productImageView);
         productNameText.setText(product.getName());
         acknowledgeText.setText(String.format(getString(R.string.format_paid_with_card),
                 product.formatPrice(this),
