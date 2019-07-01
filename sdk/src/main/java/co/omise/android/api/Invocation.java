@@ -1,4 +1,4 @@
-package co.omise.android;
+package co.omise.android.api;
 
 import android.os.Handler;
 
@@ -6,6 +6,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
+import co.omise.android.TokenRequest;
+import co.omise.android.TokenRequestListener;
 import co.omise.android.models.APIError;
 import co.omise.android.models.Token;
 import okhttp3.Call;
