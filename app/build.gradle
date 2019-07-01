@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 29
@@ -23,6 +25,10 @@ android {
                 'AllowBackup',
                 'GoogleAppIndexingWarning'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -32,5 +38,9 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile project(':sdk')
     compile 'io.card:android-sdk:5.4.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // compile 'co.omise:omise-android:2.3.+'
+}
+repositories {
+    mavenCentral()
 }
