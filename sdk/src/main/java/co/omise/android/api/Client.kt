@@ -1,7 +1,10 @@
-package co.omise.android
+package co.omise.android.api
 
 import android.os.Build
 import android.os.Handler
+import co.omise.android.BuildConfig
+import co.omise.android.TokenRequest
+import co.omise.android.TokenRequestListener
 import okhttp3.*
 import java.security.GeneralSecurityException
 import java.util.concurrent.Executor

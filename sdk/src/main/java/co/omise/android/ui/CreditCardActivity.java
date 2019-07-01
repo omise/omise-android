@@ -18,7 +18,7 @@ import java.io.IOError;
 
 import co.omise.android.CardIO;
 import co.omise.android.CardNumber;
-import co.omise.android.Client;
+import co.omise.android.api.Client;
 import co.omise.android.R;
 import co.omise.android.TokenRequest;
 import co.omise.android.TokenRequestListener;

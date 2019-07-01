@@ -1,5 +1,6 @@
 package co.omise.android;
 
+import co.omise.android.api.Client;
 import okhttp3.FormBody;
 
 /**
