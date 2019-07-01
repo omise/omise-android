@@ -32,12 +32,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.guava:guava:19.0'
-    compile project(':sdk')
-    compile 'io.card:android-sdk:5.4.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.google.guava:guava:19.0'
+    implementation project(':sdk')
+    implementation 'io.card:android-sdk:5.4.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // compile 'co.omise:omise-android:2.3.+'
 }
