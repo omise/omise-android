@@ -20,18 +20,18 @@ class AuthorizingPaymentURLVerifierTest {
         val verifier = AuthorizingPaymentURLVerifier(intent)
 
         assertEquals(Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"), verifier.authorizedURL)
-        assertArrayEquals(arrayOf(Uri.parse("http://www.example.com")), verifier.expectedReturnURLPatterns)
+        assertEquals(listOf(Uri.parse("http://www.example.com")), verifier.expectedReturnURLPatterns)
     }
 
     @Test
     fun createInstance_createInstanceWithAuthorizedUrlAndExpectedUrlPatterns() {
         val verifier = AuthorizingPaymentURLVerifier(
                 Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"),
-                arrayOf(Uri.parse("http://www.example.com"))
+                listOf(Uri.parse("http://www.example.com"))
         )
 
         assertEquals(Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"), verifier.authorizedURL)
-        assertArrayEquals(arrayOf(Uri.parse("http://www.example.com")), verifier.expectedReturnURLPatterns)
+        assertEquals(listOf(Uri.parse("http://www.example.com")), verifier.expectedReturnURLPatterns)
     }
 
     @Test(expected = NullPointerException::class)
@@ -46,7 +46,7 @@ class AuthorizingPaymentURLVerifierTest {
     fun verifyURL_urlWasVerified() {
         val verifier = AuthorizingPaymentURLVerifier(
                 Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"),
-                arrayOf(Uri.parse("http://www.example.com"))
+                listOf(Uri.parse("http://www.example.com"))
         )
 
         val wasVerified = verifier.verifyURL(Uri.parse("http://www.example.com"))
@@ -58,7 +58,7 @@ class AuthorizingPaymentURLVerifierTest {
     fun verifyURL_urlNotMatchWithReturnUrl() {
         val verifier = AuthorizingPaymentURLVerifier(
                 Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"),
-                arrayOf(Uri.parse("http://www.example.com"))
+                listOf(Uri.parse("http://www.example.com"))
         )
 
         val wasVerified = verifier.verifyURL(Uri.parse("http://www.test.com"))
@@ -70,7 +70,7 @@ class AuthorizingPaymentURLVerifierTest {
     fun verifyExternalURL_urlHasCustomScheme() {
         val verifier = AuthorizingPaymentURLVerifier(
                 Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"),
-                arrayOf(Uri.parse("app://test"))
+                listOf(Uri.parse("app://test"))
         )
 
         val wasVerified = verifier.verifyExternalURL(Uri.parse("app://test"))
@@ -82,7 +82,7 @@ class AuthorizingPaymentURLVerifierTest {
     fun verifyExternalURL_urlHasWebappScheme() {
         val verifier = AuthorizingPaymentURLVerifier(
                 Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"),
-                arrayOf(Uri.parse("http://www.example.com"))
+                listOf(Uri.parse("http://www.example.com"))
         )
 
         val wasVerified = verifier.verifyExternalURL(Uri.parse("http://www.example.com"))
@@ -94,7 +94,7 @@ class AuthorizingPaymentURLVerifierTest {
     fun isReady_urlWasReady() {
         val verifier = AuthorizingPaymentURLVerifier(
                 Uri.parse("https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"),
-                arrayOf(Uri.parse("http://www.example.com"))
+                listOf(Uri.parse("http://www.example.com"))
         )
 
         val isReady = verifier.isReady
