@@ -25,16 +25,16 @@ public class AuthorizingPaymentActivity extends Activity {
     private WebView webView;
     private AuthorizingPaymentURLVerifier verifier;
 
-    private class AuthorizingPaymentURLVerifier {
-        private Uri authorizedURL;
-        private Uri[] expectedReturnURLPatterns;
+    static class AuthorizingPaymentURLVerifier {
+        Uri authorizedURL;
+        Uri[] expectedReturnURLPatterns;
 
-        private AuthorizingPaymentURLVerifier(Uri authorizedURL, Uri[] expectedReturnURLPatterns) {
+        AuthorizingPaymentURLVerifier(Uri authorizedURL, Uri[] expectedReturnURLPatterns) {
             this.authorizedURL = authorizedURL;
             this.expectedReturnURLPatterns = expectedReturnURLPatterns;
         }
 
-        private AuthorizingPaymentURLVerifier(Intent intent) {
+        AuthorizingPaymentURLVerifier(Intent intent) {
             authorizedURL = Uri.parse(intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING));
             String[] returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS);
             ArrayList<Uri> returnURLPatternList = new ArrayList<>(returnURLStringPatterns.length);
