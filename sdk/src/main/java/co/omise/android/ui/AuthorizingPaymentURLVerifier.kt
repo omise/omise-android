@@ -4,20 +4,20 @@ import android.content.Intent
 import android.net.Uri
 import co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
+import java.lang.IllegalArgumentException
 
 
 class AuthorizingPaymentURLVerifier {
-    var authorizedURL: Uri? = null
-    var expectedReturnURLPatterns: List<Uri>? = null
+    val authorizedURL: Uri
+    val expectedReturnURLPatterns: List<Uri>
 
     val isReady: Boolean
-        get() = (authorizedURL != null
-                && expectedReturnURLPatterns != null
-                && expectedReturnURLPatterns!!.size > 0)
+        get() = (authorizedURL.toString().isNotEmpty()
+                && expectedReturnURLPatterns.isNotEmpty())
 
-    val authorizedURLString: String?
+    val authorizedURLString: String
         get() =
-            authorizedURL?.toString()
+            authorizedURL.toString()
 
     constructor(authorizedURL: Uri, expectedReturnURLPatterns: List<Uri>) {
         this.authorizedURL = authorizedURL
@@ -25,18 +25,21 @@ class AuthorizingPaymentURLVerifier {
     }
 
     constructor(intent: Intent) {
-        authorizedURL = Uri.parse(intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING))
+        val authorizedURLString = intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING)
         val returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS)
-        val returnURLPatternList = ArrayList<Uri>(returnURLStringPatterns.size)
-        for (returnURLStringPattern in returnURLStringPatterns) {
-            returnURLPatternList.add(Uri.parse(returnURLStringPattern))
-        }
 
-        expectedReturnURLPatterns = returnURLPatternList
+        if (authorizedURLString.isNullOrEmpty()) {
+            throw IllegalArgumentException("Couldn't find argument: ${::EXTRA_AUTHORIZED_URLSTRING.name}.")
+        }
+        if (returnURLStringPatterns.isNullOrEmpty()) {
+            throw IllegalArgumentException("Couldn't find argument: ${::EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS.name}.")
+        }
+        authorizedURL = Uri.parse(authorizedURLString)
+        expectedReturnURLPatterns = returnURLStringPatterns.map { Uri.parse(it) }
     }
 
     fun verifyURL(uri: Uri): Boolean {
-        for (expectedReturnURLPattern in expectedReturnURLPatterns!!) {
+        for (expectedReturnURLPattern in expectedReturnURLPatterns) {
             if (expectedReturnURLPattern.scheme!!.equals(uri.scheme!!, ignoreCase = true) &&
                     expectedReturnURLPattern.host!!.equals(uri.host!!, ignoreCase = true) &&
                     uri.path!!.startsWith(expectedReturnURLPattern.path!!)) {

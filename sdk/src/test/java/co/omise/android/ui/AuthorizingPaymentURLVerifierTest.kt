@@ -7,6 +7,7 @@ import co.omise.android.ui.AuthorizingPaymentActivity.*
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.IllegalArgumentException
 
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentURLVerifierTest {
@@ -34,8 +35,16 @@ class AuthorizingPaymentURLVerifierTest {
         assertEquals(listOf(Uri.parse("http://www.example.com")), verifier.expectedReturnURLPatterns)
     }
 
-    @Test(expected = NullPointerException::class)
-    fun createInstance_createInstanceWithoutReturnUrl() {
+    @Test(expected = IllegalArgumentException::class)
+    fun createInstance_createInstanceWithoutAuthorizedUrl() {
+        val intent = Intent().apply {
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
+        }
+        val verifier = AuthorizingPaymentURLVerifier(intent)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun createInstance_createInstanceWithoutReturnUrls() {
         val intent = Intent().apply {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay")
         }
