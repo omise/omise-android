@@ -2,14 +2,17 @@ package co.omise.android
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [Build.VERSION_CODES.JELLY_BEAN, Build.VERSION_CODES.P])
 class AuthorizingPaymentURLVerifierTest {
 
     @Test
