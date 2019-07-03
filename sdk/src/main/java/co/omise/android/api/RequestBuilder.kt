@@ -10,13 +10,13 @@ abstract class RequestBuilder<T : Model> {
         return Request(method(), path(), payload(), type())
     }
 
-    private fun method(): String {
+    open fun method(): String {
         return GET
     }
 
     protected abstract fun path(): HttpUrl
 
-    private fun payload(): RequestBody? {
+    open fun payload(): RequestBody? {
         //Has to be null as it would fail for GET requests
         return null
     }
@@ -24,9 +24,9 @@ abstract class RequestBuilder<T : Model> {
     protected abstract fun type(): Class<T>
 
     companion object {
-        val POST = "POST"
-        val GET = "GET"
-        val PATCH = "PATCH"
-        val DELETE = "DELETE"
+        const val POST = "POST"
+        const val GET = "GET"
+        const val PATCH = "PATCH"
+        const val DELETE = "DELETE"
     }
 }
