@@ -44,9 +44,9 @@ class AuthorizingPaymentURLVerifier {
 
     fun verifyURL(uri: Uri): Boolean {
         for (expectedReturnURLPattern in expectedReturnURLPatterns) {
-            if (expectedReturnURLPattern.scheme!!.equals(uri.scheme!!, ignoreCase = true) &&
-                    expectedReturnURLPattern.host!!.equals(uri.host!!, ignoreCase = true) &&
-                    uri.path!!.startsWith(expectedReturnURLPattern.path!!)) {
+            if (expectedReturnURLPattern.scheme.equals(uri.scheme, true) &&
+                    expectedReturnURLPattern.host.equals(uri.host, true) &&
+                    uri.path.startsWith(expectedReturnURLPattern.path)) {
                 return true
             }
         }
