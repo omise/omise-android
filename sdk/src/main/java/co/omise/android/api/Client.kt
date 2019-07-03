@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
  * Client is the main entrypoint to the SDK and it needs to be supplied with a public Key. You can use the Client to send a [Request].
  *
  * @param publicKey The key with the `pkey_` prefix.
- * @see TokenRequest
+ * @see Request
  */
 class Client(private val publicKey: String) {
 
@@ -31,7 +31,7 @@ class Client(private val publicKey: String) {
      * @param request  The request to send.
      * @param listener The listener to listen for request result.
      */
-    fun <T : Model> send(request: Request<T>, listener: TokenRequestListener) {
+    fun <T : Model> send(request: Request<T>, listener: RequestListener<T>) {
         val handler = Handler()
         background.execute { Invocation(handler, httpClient, request, listener).invoke() }
     }

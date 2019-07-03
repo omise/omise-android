@@ -14,14 +14,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOError;
 
 import co.omise.android.CardIO;
 import co.omise.android.CardNumber;
-import co.omise.android.api.Client;
 import co.omise.android.R;
-import co.omise.android.api.TokenRequest;
-import co.omise.android.api.TokenRequestListener;
+import co.omise.android.api.Client;
+import co.omise.android.api.Request;
+import co.omise.android.api.RequestListener;
 import co.omise.android.models.APIError;
 import co.omise.android.models.CardBrand;
 import co.omise.android.models.Token;
@@ -129,20 +131,21 @@ public class CreditCardActivity extends Activity {
         }
     }
 
-    private class ActivityTokenRequestListener implements TokenRequestListener {
+    private class ActivityRequestListener implements RequestListener<Token> {
+
         @Override
-        public void onTokenRequestSucceed(TokenRequest request, Token token) {
+        public void onRequestSucceed(@NotNull Token model) {
             Intent data = new Intent();
-            data.putExtra(EXTRA_TOKEN, token.id);
-            data.putExtra(EXTRA_TOKEN_OBJECT, token);
-            data.putExtra(EXTRA_CARD_OBJECT, token.card);
+            data.putExtra(EXTRA_TOKEN, model.id);
+            data.putExtra(EXTRA_TOKEN_OBJECT, model);
+            data.putExtra(EXTRA_CARD_OBJECT, model.card);
 
             setResult(RESULT_OK, data);
             finish();
         }
 
         @Override
-        public void onTokenRequestFailed(TokenRequest request, Throwable throwable) {
+        public void onRequestFailed(@NotNull Throwable throwable) {
             enableForm();
 
             TextView textView = views.textView(R.id.text_error_message);
@@ -235,21 +238,26 @@ public class CreditCardActivity extends Activity {
         int expiryMonth = (int) views.spinner(R.id.spinner_expiry_month).getSelectedItem();
         int expiryYear = (int) views.spinner(R.id.spinner_expiry_year).getSelectedItem();
 
-        TokenRequest tokenRequest = new TokenRequest();
-        tokenRequest.number = numberField.getText().toString();
-        tokenRequest.name = nameField.getText().toString();
-        tokenRequest.securityCode = securityCodeField.getText().toString();
-        tokenRequest.expirationMonth = expiryMonth;
-        tokenRequest.expirationYear = expiryYear;
+        String number = numberField.getText().toString();
+        String name = nameField.getText().toString();
+        String securityCode = securityCodeField.getText().toString();
+
+        Request<Token> request = new Token.CreateTokenRequestBuilder(
+                name,
+                number,
+                expiryMonth,
+                expiryYear,
+                securityCode
+        ).build();
 
         disableForm();
 
         String pkey = getIntent().getStringExtra(EXTRA_PKEY);
-        ActivityTokenRequestListener listener = new ActivityTokenRequestListener();
+        ActivityRequestListener listener = new ActivityRequestListener();
         try {
-            new Client(pkey).send(tokenRequest, listener);
+            new Client(pkey).send(request, listener);
         } catch (Exception ex) {
-            listener.onTokenRequestFailed(tokenRequest, ex);
+            listener.onRequestFailed(ex);
         }
 
     }

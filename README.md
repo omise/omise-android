@@ -153,14 +153,14 @@ request.securityCode = "123";
 And then send the request using the `client` we've constructed earlier:
 
 ```java
-client.send(request, new TokenRequestListener() {
+client.send(request, new RequestListener<Token>() {
   @Override
-  public void onTokenRequestSucceed(TokenRequest request, Token token) {
+  public void onRequestSucceed(Token model) {
       // you've got Token!
   }
 
   @Override
-  public void onTokenRequestFailed(TokenRequest request, Throwable throwable) {
+  public void onRequestFailed(Throwable throwable) {
       // something bad happened
   }
 });
