@@ -3,11 +3,11 @@ package co.omise.android.ui
 import android.content.Intent
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import co.omise.android.ui.AuthorizingPaymentActivity.*
+import co.omise.android.ui.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
+import co.omise.android.ui.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.lang.IllegalArgumentException
 
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentURLVerifierTest {

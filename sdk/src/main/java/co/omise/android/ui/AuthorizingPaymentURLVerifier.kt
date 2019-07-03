@@ -2,9 +2,6 @@ package co.omise.android.ui
 
 import android.content.Intent
 import android.net.Uri
-import co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_AUTHORIZED_URLSTRING
-import co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
-import java.lang.IllegalArgumentException
 
 
 class AuthorizingPaymentURLVerifier {
@@ -18,6 +15,13 @@ class AuthorizingPaymentURLVerifier {
     val authorizedURLString: String
         get() =
             authorizedURL.toString()
+
+    companion object {
+        const val EXTRA_AUTHORIZED_URLSTRING = "AuthorizingPaymentURLVerifier.authorizedURL"
+        const val EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentURLVerifier.expectedReturnURLPatterns"
+        const val EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentURLVerifier.returnedURL"
+        const val REQUEST_EXTERNAL_CODE = 300
+    }
 
     constructor(authorizedURL: Uri, expectedReturnURLPatterns: List<Uri>) {
         this.authorizedURL = authorizedURL

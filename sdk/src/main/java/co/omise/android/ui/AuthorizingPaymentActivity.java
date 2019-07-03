@@ -7,8 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import java.util.ArrayList;
+
 import co.omise.android.R;
+
+import static co.omise.android.ui.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
+import static co.omise.android.ui.AuthorizingPaymentURLVerifier.REQUEST_EXTERNAL_CODE;
 
 
 /**
@@ -16,11 +19,6 @@ import co.omise.android.R;
  * In case authorize with external app. By default open those external app when completed verification then sent result back our SDK.
  */
 public class AuthorizingPaymentActivity extends Activity {
-    public static final String EXTRA_AUTHORIZED_URLSTRING = "AuthorizingPaymentActivity.authorizedURL";
-    public static final String EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentActivity.expectedReturnURLPatterns";
-    public static final String EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentActivity.returnedURL";
-
-    private static final int REQUEST_EXTERNAL_CODE = 300;
 
     private WebView webView;
     private AuthorizingPaymentURLVerifier verifier;
