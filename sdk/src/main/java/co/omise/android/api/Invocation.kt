@@ -3,7 +3,7 @@ package co.omise.android.api
 import android.os.Handler
 import co.omise.android.models.APIError
 import co.omise.android.models.Model
-import co.omise.android.models.Token
+import co.omise.android.models.ModelParserUtil.parseModelFromJson
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -45,8 +45,9 @@ internal class Invocation<T : Model>(
         }
 
         val rawJson = response.body().string()
-        if (response.code() in 200..299) {
-            didSucceed(Token(rawJson))
+        val model = parseModelFromJson(rawJson, call)
+        if (response.code() in 200..299 && model != null) {
+            didSucceed(model)
         } else {
             didFail(APIError(rawJson))
         }
