@@ -8,10 +8,11 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import co.omise.android.AuthorizingPaymentURLVerifier;
 import co.omise.android.R;
 
-import static co.omise.android.ui.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
-import static co.omise.android.ui.AuthorizingPaymentURLVerifier.REQUEST_EXTERNAL_CODE;
+import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
+import static co.omise.android.AuthorizingPaymentURLVerifier.REQUEST_EXTERNAL_CODE;
 
 
 /**

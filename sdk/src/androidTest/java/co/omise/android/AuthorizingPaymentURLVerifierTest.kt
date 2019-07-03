@@ -1,10 +1,10 @@
-package co.omise.android.ui
+package co.omise.android
 
 import android.content.Intent
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import co.omise.android.ui.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
-import co.omise.android.ui.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
+import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
+import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith

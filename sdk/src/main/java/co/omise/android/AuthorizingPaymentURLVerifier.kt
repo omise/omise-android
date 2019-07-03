@@ -1,4 +1,4 @@
-package co.omise.android.ui
+package co.omise.android
 
 import android.content.Intent
 import android.net.Uri
@@ -33,10 +33,10 @@ class AuthorizingPaymentURLVerifier {
         val returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS)
 
         if (authorizedURLString.isNullOrEmpty()) {
-            throw IllegalArgumentException("Couldn't find argument: ${::EXTRA_AUTHORIZED_URLSTRING.name}.")
+            throw IllegalArgumentException("Couldn't find argument: ${Companion::EXTRA_AUTHORIZED_URLSTRING.name}.")
         }
         if (returnURLStringPatterns.isNullOrEmpty()) {
-            throw IllegalArgumentException("Couldn't find argument: ${::EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS.name}.")
+            throw IllegalArgumentException("Couldn't find argument: ${Companion::EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS.name}.")
         }
         authorizedURL = Uri.parse(authorizedURLString)
         expectedReturnURLPatterns = returnURLStringPatterns.map { Uri.parse(it) }
