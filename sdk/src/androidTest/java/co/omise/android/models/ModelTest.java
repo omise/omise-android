@@ -4,13 +4,18 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.json.JSONException;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import co.omise.android.SDKLog;
 import co.omise.android.SDKTest;
 
+@RunWith(AndroidJUnit4.class)
 public class ModelTest extends SDKTest {
     public static final String MODEL_JSON = "{\"object\":\"account\",\"id\":\"acct_4x7d2wtqnj2f4klrfsc\",\"email\":\"gedeon@gedeon.be\",\"created\":\"2015-05-20T04:57:36Z\"}";
 
@@ -37,10 +42,12 @@ public class ModelTest extends SDKTest {
         }
     }
 
+    @Test
     public void testJsonCtor() throws JSONException {
         assertCorrectFields(new Dummy(MODEL_JSON));
     }
 
+    @Test
     public void testParcelable() throws JSONException {
         Dummy dummy = new Dummy(MODEL_JSON);
         Bundle bundle = new Bundle();
