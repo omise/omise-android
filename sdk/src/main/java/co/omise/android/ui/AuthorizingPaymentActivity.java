@@ -7,8 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import java.util.ArrayList;
+
+import co.omise.android.AuthorizingPaymentURLVerifier;
 import co.omise.android.R;
+
+import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
+import static co.omise.android.AuthorizingPaymentURLVerifier.REQUEST_EXTERNAL_CODE;
 
 
 /**
@@ -16,78 +20,9 @@ import co.omise.android.R;
  * In case authorize with external app. By default open those external app when completed verification then sent result back our SDK.
  */
 public class AuthorizingPaymentActivity extends Activity {
-    public static final String EXTRA_AUTHORIZED_URLSTRING = "AuthorizingPaymentActivity.authorizedURL";
-    public static final String EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentActivity.expectedReturnURLPatterns";
-    public static final String EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentActivity.returnedURL";
-
-    private static final int REQUEST_EXTERNAL_CODE = 300;
 
     private WebView webView;
     private AuthorizingPaymentURLVerifier verifier;
-
-    private class AuthorizingPaymentURLVerifier {
-        private Uri authorizedURL;
-        private Uri[] expectedReturnURLPatterns;
-
-        private AuthorizingPaymentURLVerifier(Uri authorizedURL, Uri[] expectedReturnURLPatterns) {
-            this.authorizedURL = authorizedURL;
-            this.expectedReturnURLPatterns = expectedReturnURLPatterns;
-        }
-
-        private AuthorizingPaymentURLVerifier(Intent intent) {
-            authorizedURL = Uri.parse(intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING));
-            String[] returnURLStringPatterns = intent.getStringArrayExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS);
-            ArrayList<Uri> returnURLPatternList = new ArrayList<>(returnURLStringPatterns.length);
-            for (String returnURLStringPattern : returnURLStringPatterns) {
-                returnURLPatternList.add(Uri.parse(returnURLStringPattern));
-            }
-
-            expectedReturnURLPatterns = new Uri[returnURLPatternList.size()];
-            expectedReturnURLPatterns = returnURLPatternList.toArray(expectedReturnURLPatterns);
-        }
-
-        public boolean isReady() {
-            return getAuthorizedURL() != null
-                    && getExpectedReturnURLPatterns() != null
-                    && getExpectedReturnURLPatterns().length > 0;
-        }
-
-        public Uri getAuthorizedURL() {
-            return authorizedURL;
-        }
-
-        public String getAuthorizedURLString() {
-            if (authorizedURL == null) {
-                return null;
-            }
-            return authorizedURL.toString();
-        }
-
-        public Uri[] getExpectedReturnURLPatterns() {
-            if (expectedReturnURLPatterns == null) {
-                return null;
-            }
-            return expectedReturnURLPatterns;
-        }
-
-        boolean verifyURL(Uri uri) {
-            for (Uri expectedReturnURLPattern : getExpectedReturnURLPatterns()) {
-                if (expectedReturnURLPattern.getScheme().equalsIgnoreCase(uri.getScheme()) &&
-                        expectedReturnURLPattern.getHost().equalsIgnoreCase(uri.getHost()) &&
-                        uri.getPath().startsWith(expectedReturnURLPattern.getPath())) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        boolean verifyExternalURL(Uri uri) {
-            return !uri.getScheme().equals("http") &&
-                    !uri.getScheme().equals("https") &&
-                    !uri.getScheme().equals("about");
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
