@@ -5,9 +5,10 @@ import co.omise.android.api.TypedCall
 object ModelParserUtil {
 
     fun parseModelFromJson(json: String, call: TypedCall): Model? {
-        return when(call.clazz){
-            is Token -> Token(json)
-            else -> null
+        return if (call.clazz.isAssignableFrom(Token::class.java)) {
+            Token(json)
+        } else {
+            null
         }
     }
 }
