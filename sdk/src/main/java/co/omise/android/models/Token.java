@@ -14,6 +14,11 @@ import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.RequestBody;
 
+/**
+ * Represents Token object and contains its {@link RequestBuilder}.
+ *
+ * @see <a href="https://www.omise.co/tokens-api">Token API</a>
+ */
 public class Token extends Model {
     public final boolean used;
     public final Card card;
@@ -28,6 +33,9 @@ public class Token extends Model {
         used = JSON.bool(json, "used");
     }
 
+    /**
+     * The {@link RequestBuilder} class for creating a Token.
+     */
     public static class CreateTokenRequestBuilder extends RequestBuilder<Token> {
         String name;
         String number;
