@@ -1,6 +1,8 @@
 package co.omise.android.api
 
 import android.os.Handler
+import co.omise.android.api.exceptions.IllegalModelException
+import co.omise.android.api.exceptions.RedirectionException
 import co.omise.android.models.APIError
 import co.omise.android.models.Model
 import co.omise.android.models.ModelParserUtil.parseModelFromJson
@@ -21,8 +23,7 @@ internal class Invocation<T : Model>(
     fun invoke() {
         val call = httpClient.newTypedCall(
                 Request.Builder()
-                        .method(request.method,
-                                request.payload)
+                        .method(request.method, request.payload)
                         .url(request.url)
                         .build(),
                 request.responseType)
@@ -46,10 +47,12 @@ internal class Invocation<T : Model>(
 
         val rawJson = response.body().string()
         val model = parseModelFromJson(rawJson, call)
-        if (response.code() in 200..299 && model != null) {
-            didSucceed(model)
-        } else {
-            didFail(APIError(rawJson))
+
+        when {
+            model == null -> didFail(IllegalModelException())
+            response.code() in 200..299 -> didSucceed(model)
+            response.code() in 300..399 -> didFail(RedirectionException())
+            else -> didFail(APIError(rawJson))
         }
     }
 
