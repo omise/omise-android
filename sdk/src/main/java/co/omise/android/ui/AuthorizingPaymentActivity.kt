@@ -56,7 +56,6 @@ class AuthorizingPaymentActivity : Activity() {
                         e.printStackTrace()
                         false
                     }
-
                 } else {
                     false
                 }
