@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_p
  * This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
  * In case authorize with external app. By default open those external app when completed verification then sent result back our SDK.
  */
-class AuthorizingPaymentAppCompatActivity : AppCompatActivity() {
+class AuthorizingPaymentSupportActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var verifier: AuthorizingPaymentURLVerifier
@@ -29,7 +29,7 @@ class AuthorizingPaymentAppCompatActivity : AppCompatActivity() {
         webView = authorizing_payment_webview
         webView.settings.javaScriptEnabled = true
 
-        setTitle(R.string.title_authorizing_payment)
+        supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
         verifier = AuthorizingPaymentURLVerifier(intent)
         if (verifier.isReady) {
