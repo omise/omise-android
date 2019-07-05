@@ -1,4 +1,4 @@
-package co.omise.android;
+package co.omise.android.api;
 
 import java.io.IOException;
 import java.net.InetAddress;
