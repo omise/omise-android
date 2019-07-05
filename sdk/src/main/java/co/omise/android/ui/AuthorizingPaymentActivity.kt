@@ -1,6 +1,5 @@
 package co.omise.android.ui
 
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -8,19 +7,18 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-
+import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
-import co.omise.android.R
-
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
+import co.omise.android.R
 
 
 /**
  * This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
  * In case authorize with external app. By default open those external app when completed verification then sent result back our SDK.
  */
-class AuthorizingPaymentActivity : Activity() {
+class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var verifier: AuthorizingPaymentURLVerifier
@@ -31,7 +29,7 @@ class AuthorizingPaymentActivity : Activity() {
         webView = findViewById<View>(R.id.authorizing_payment_webview) as WebView
         webView.settings.javaScriptEnabled = true
 
-        setTitle(R.string.title_authorizing_payment)
+        supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
         verifier = AuthorizingPaymentURLVerifier(intent)
         if (verifier.isReady) {
@@ -63,7 +61,7 @@ class AuthorizingPaymentActivity : Activity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
             setResult(RESULT_OK, data)

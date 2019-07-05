@@ -2,6 +2,6 @@
     package="co.omise.android">
 
     <application>
-        <activity android:name=".TestCreditCardEditTextActivity"/>
+        <activity android:name=".TestCreditCardEditTextActivity" />
     </application>
 </manifest>

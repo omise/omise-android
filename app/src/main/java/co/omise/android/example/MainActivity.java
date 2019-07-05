@@ -50,8 +50,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_authorizing_payment_action) {
             Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
-            intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
-            intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[] {"http://www.example.com/orders"} );
+            intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay");
+            intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[] {"http://www.example.com"} );
             startActivityForResult(intent, MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
             return true;
         }
