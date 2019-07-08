@@ -2,12 +2,18 @@ package co.omise.android.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import co.omise.android.api.Endpoint
+import co.omise.android.api.RequestBuilder
+import okhttp3.HttpUrl
 import org.json.JSONObject
 
 class Capability : Model {
-    private var banks: List<String>? = null
-    private var paymentMethods: List<PaymentMethod>? = null
-    private var zeroInterestInstallments: Boolean = false
+    @JvmField
+    var banks: List<String>? = null
+    @JvmField
+    var paymentMethods: List<PaymentMethod>? = null
+    @JvmField
+    var zeroInterestInstallments: Boolean = false
 
 
     constructor(rawJson: String) : this(JSONObject(rawJson))
@@ -16,6 +22,13 @@ class Capability : Model {
         banks = JSON.stringList(json, "banks")
         paymentMethods = JSON.modelList(json, "payment_methods", PaymentMethod::class.java)
         zeroInterestInstallments = JSON.bool(json, "zero_interest_installments")
+    }
+
+    class GetCapabilitiesRequestBuilder : RequestBuilder<Capability>() {
+
+        override fun path(): HttpUrl = buildUrl(Endpoint.API, "capability")
+
+        override fun type(): Class<Capability> = Capability::class.java
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -38,5 +51,4 @@ class Capability : Model {
             return arrayOfNulls(size)
         }
     }
-
 }
