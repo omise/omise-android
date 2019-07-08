@@ -15,6 +15,7 @@ object ModelParserUtil {
     fun parseModelFromJson(json: String, clazz: Class<*>): Model? {
         return when {
             clazz.isAssignableFrom(Token::class.java) -> Token(json)
+            clazz.isAssignableFrom(Capability::class.java) -> Capability(json)
             clazz.isAssignableFrom(PaymentMethod::class.java) -> PaymentMethod(json)
             else -> null
         }

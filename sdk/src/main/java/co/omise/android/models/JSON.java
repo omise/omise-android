@@ -38,10 +38,12 @@ final class JSON {
     public static List<String> stringList(JSONObject json, String key) throws JSONException {
         List<String> list = new ArrayList<>();
 
-        JSONArray jArray = json.getJSONArray(key);
-        for (int i = 0; i < jArray.length(); i++) {
-            String str = jArray.getString(i);
-            list.add(str);
+        if (!json.isNull(key)) {
+            JSONArray jArray = json.getJSONArray(key);
+            for (int i = 0; i < jArray.length(); i++) {
+                String str = jArray.getString(i);
+                list.add(str);
+            }
         }
         return list;
     }
@@ -49,10 +51,12 @@ final class JSON {
     public static List<Integer> integerList(JSONObject json, String key) throws JSONException {
         List<Integer> list = new ArrayList<>();
 
-        JSONArray jArray = json.getJSONArray(key);
-        for (int i = 0; i < jArray.length(); i++) {
-            int integer = jArray.getInt(i);
-            list.add(integer);
+        if (!json.isNull(key)) {
+            JSONArray jArray = json.getJSONArray(key);
+            for (int i = 0; i < jArray.length(); i++) {
+                int integer = jArray.getInt(i);
+                list.add(integer);
+            }
         }
 
         return list;
@@ -62,12 +66,13 @@ final class JSON {
     public static <T extends Model> List<T> modelList(JSONObject json, String key, Class<T> clazz) throws JSONException {
         List<T> list = new ArrayList<>();
 
-
-        JSONArray jArray = json.getJSONArray(key);
-        for (int i = 0; i < jArray.length(); i++) {
-            JSONObject object = jArray.getJSONObject(i);
-            Model model = ModelParserUtil.parseModelFromJson(object.toString(), clazz);
-            list.add((T) model);
+        if (!json.isNull(key)) {
+            JSONArray jArray = json.getJSONArray(key);
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject object = jArray.getJSONObject(i);
+                Model model = ModelParserUtil.parseModelFromJson(object.toString(), clazz);
+                list.add((T) model);
+            }
         }
 
         return list;
