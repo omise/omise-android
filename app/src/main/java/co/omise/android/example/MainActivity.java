@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         if (requestCode == MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
             String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
+        } else if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
