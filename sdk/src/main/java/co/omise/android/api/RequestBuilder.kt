@@ -3,6 +3,8 @@ package co.omise.android.api
 import co.omise.android.models.Model
 import okhttp3.HttpUrl
 import okhttp3.RequestBody
+import java.util.Objects.requireNonNull
+
 
 /**
  * Request Builder is a base class, any classes that extends from it would be
@@ -54,6 +56,29 @@ abstract class RequestBuilder<T : Model> {
      * @return Class type of response
      */
     protected abstract fun type(): Class<T>
+
+
+    /**
+     * Builds and returns a valid [HttpUrl] pointing to the given [Endpoint]'s host
+     * and with all the supplied segments concatenated.
+     *
+     * @param endpoint The Omise API [Endpoint] to point to.
+     * @param path     The base API path.
+     * @return An [HttpUrl] instance.
+     */
+    protected fun buildUrl(endpoint: Endpoint, path: String): HttpUrl {
+        return HttpUrlBuilder(endpoint, path).build()
+    }
+
+    inner class HttpUrlBuilder(private val endpoint: Endpoint, private val path: String) {
+
+        fun build(): HttpUrl {
+            requireNonNull(endpoint)
+            requireNonNull(path)
+            val builder: HttpUrl.Builder = endpoint.buildUrl().addPathSegment(path)
+            return builder.build()
+        }
+    }
 
     companion object {
         const val POST = "POST"
