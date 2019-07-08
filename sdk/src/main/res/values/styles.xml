@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="OmiseSDKTheme" parent="android:Theme.DeviceDefault">
+    <style name="OmiseSDKTheme" parent="@style/Theme.AppCompat">
         <item name="android:textViewStyle">@style/FormLabel</item>
         <item name="android:editTextStyle">@style/FormField</item>
         <item name="android:spinnerStyle">@style/FormSpinner</item>
