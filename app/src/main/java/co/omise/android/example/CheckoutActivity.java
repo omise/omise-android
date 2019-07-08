@@ -14,7 +14,8 @@ import co.omise.android.models.Token;
 import co.omise.android.ui.CreditCardActivity;
 
 public class CheckoutActivity extends BaseActivity implements View.OnClickListener {
-    public static final String OMISE_PKEY = "pkey_test_52d6po3fvio2w6tefpb";
+    public static final String OMISE_PKEY = "pkey_test_5cotumuix3r6g414148";
+    public static final String OMISE_SKEY = null;
 
     public static final String EXTRA_PRODUCT_ID = "CheckoutActivity.productId";
     public static final int REQUEST_CC = 100;
@@ -49,6 +50,7 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         Intent intent = new Intent(this, CreditCardActivity.class);
         intent.putExtra(CreditCardActivity.EXTRA_PKEY, OMISE_PKEY);
+        intent.putExtra(CreditCardActivity.EXTRA_SKEY, OMISE_SKEY);
         startActivityForResult(intent, REQUEST_CC);
     }
 
