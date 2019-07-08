@@ -50,7 +50,9 @@
             android:name="io.card.payment.CardIOActivity"
             android:configChanges="keyboardHidden|orientation" />
 
-        <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
+        <activity
+            android:name="co.omise.android.ui.AuthorizingPaymentActivity"
+            android:theme="@style/OmiseSDKTheme" />
 
     </application>
 

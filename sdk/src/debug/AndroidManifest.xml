@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="co.omise.android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application>
-        <activity android:name=".TestCreditCardEditTextActivity"/>
+        <activity android:name=".TestCreditCardEditTextActivity" />
+        <activity
+            android:name=".ui.AuthorizingPaymentActivity"
+            android:theme="@style/OmiseSDKTheme" />
     </application>
 </manifest>
