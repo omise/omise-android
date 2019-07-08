@@ -4,13 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.view.View
 import android.webkit.WebView
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.AuthorizingPaymentURLVerifier
@@ -53,6 +57,16 @@ class AuthorizingPaymentActivityTest {
         val result = scenario.result
         assertEquals(Activity.RESULT_OK, result.resultCode)
         assertEquals(TEST_RETURN_URL, result.resultData.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING))
+    }
+
+    @Test
+    fun activityDestroy_returnCanceledResult() {
+        val scenario = launch<AuthorizingPaymentActivity>(intent)
+
+        pressBackUnconditionally()
+
+        val result = scenario.result
+        assertEquals(Activity.RESULT_CANCELED, result.resultCode)
     }
 
     private fun withUrl(url: String): Matcher<View> = object : TypeSafeMatcher<View>() {

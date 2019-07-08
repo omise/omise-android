@@ -1,5 +1,7 @@
 package co.omise.android.ui
 
+import android.app.Activity
+import android.app.Activity.RESULT_CANCELED
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -67,6 +69,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             setResult(RESULT_OK, data)
             finish()
         }
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        super.onBackPressed()
     }
 }
 
