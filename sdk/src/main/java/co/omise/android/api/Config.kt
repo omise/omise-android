@@ -8,14 +8,12 @@ import co.omise.android.BuildConfig
  *
  * @param apiVersion The API version to use.
  * @param publicKey  The key with the `pkey_` prefix.
- * @param secretKey  The key with the `skey_` prefix.
  *
  * @see Client
  */
 class Config(
         private val apiVersion: String?,
-        private val publicKey: String?,
-        private val secretKey: String?
+        private val publicKey: String?
 ) {
 
     private val userAgent: String
@@ -47,15 +45,6 @@ class Config(
      */
     fun publicKey(): String? {
         return publicKey
-    }
-
-    /**
-     * Returns the configured secret key. Secret keys always have the `skey_` prefix.
-     *
-     * @return A [String] containing the secret key.
-     */
-    fun secretKey(): String? {
-        return secretKey
     }
 
     /**

@@ -33,7 +33,6 @@ import io.card.payment.CreditCard;
 public class CreditCardActivity extends Activity {
     // input
     public static final String EXTRA_PKEY = "CreditCardActivity.publicKey";
-    public static final String EXTRA_SKEY = "CreditCardActivity.secretKey";
     public static final int REQUEST_CODE_CARD_IO = 1000;
 
     public static final String EXTRA_TOKEN = "CreditCardActivity.token";
@@ -254,14 +253,10 @@ public class CreditCardActivity extends Activity {
         disableForm();
 
         String pkey = getIntent().getStringExtra(EXTRA_PKEY);
-        String skey = getIntent().getStringExtra(EXTRA_SKEY);
         ActivityRequestListener listener = new ActivityRequestListener();
         try {
-            Client client = new Client.Builder()
-                    .publicKey(pkey)
-                    .secretKey(skey)
-                    .build();
-        client.send(request, listener);
+            Client client = new Client(pkey);
+            client.send(request, listener);
         } catch (Exception ex) {
             listener.onRequestFailed(ex);
         }

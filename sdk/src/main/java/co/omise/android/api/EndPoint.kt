@@ -80,7 +80,7 @@ abstract class Endpoint {
             }
 
             override fun authenticationKey(config: Config): String? {
-                return config.secretKey()
+                return config.publicKey()
             }
         }
 
