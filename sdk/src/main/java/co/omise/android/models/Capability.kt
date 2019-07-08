@@ -7,6 +7,11 @@ import co.omise.android.api.RequestBuilder
 import okhttp3.HttpUrl
 import org.json.JSONObject
 
+/**
+ * Represents Capabilities object and contains its {@link RequestBuilder}.
+ *
+ * @see <a href="https://www.omise.co/capability-api">Capabilities API</a>
+ */
 class Capability : Model {
     @JvmField
     var banks: List<String>? = null
@@ -24,6 +29,9 @@ class Capability : Model {
         zeroInterestInstallments = JSON.bool(json, "zero_interest_installments")
     }
 
+    /**
+     * The {@link RequestBuilder} class for retrieving account Capabilities.
+     */
     class GetCapabilitiesRequestBuilder : RequestBuilder<Capability>() {
 
         override fun path(): HttpUrl = buildUrl(Endpoint.API, "capability")
