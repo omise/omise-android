@@ -2,12 +2,16 @@ package co.omise.android.api
 
 import android.os.Build
 import android.os.Handler
-import co.omise.android.BuildConfig
+import co.omise.android.api.exceptions.ClientException
 import co.omise.android.models.Model
-import okhttp3.*
+import okhttp3.CertificatePinner
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
+import okhttp3.TlsVersion
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Client is the main entry point to the SDK and it needs to be supplied with a public Key. You can use the Client to send a [Request].
@@ -15,14 +19,40 @@ import java.util.concurrent.TimeUnit
  * @param publicKey The key with the `pkey_` prefix.
  * @see Request
  */
-class Client(private val publicKey: String) {
+class Client
 
-    private val httpClient: OkHttpClient
+/**
+ * Creates a Client that sends the specified API version string in the header to access the latest version
+ * of the Omise API.
+ *
+ *
+ *
+ * Note: Please ensure to have at least one of the keys supplied to have the client function correctly.
+ *
+ *
+ * @param publicKey The key with `pkey_` prefix.
+ * @param secretKey The key with `skey_` prefix.
+ *
+ * @see [Security Best Practices](https://www.omise.co/security-best-practices)
+ *
+ * @see Versioning(https://www.omise.co/api-versioning)
+ */ private constructor(publicKey: String?, secretKey: String?) {
+
+    private var httpClient: OkHttpClient
     private val background: Executor
 
     init {
-        this.httpClient = buildHttpClient()
         this.background = Executors.newSingleThreadExecutor()
+    }
+
+    init {
+        if (publicKey == null && secretKey == null) {
+            throw ClientException(IllegalArgumentException("The key must have at least one key."))
+        }
+
+        val config = Config(Endpoint.API_VERSION, publicKey, secretKey)
+        httpClient = buildHttpClient(config)
+        this.httpClient = buildHttpClient(config)
     }
 
     /**
@@ -36,7 +66,12 @@ class Client(private val publicKey: String) {
         background.execute { Invocation(handler, httpClient, request, listener).invoke() }
     }
 
-    private fun buildHttpClient(): OkHttpClient {
+    private fun buildHttpClient(config: Config): OkHttpClient {
+        val pinner = CertificatePinner.Builder()
+        for (endpoint in Endpoint.allEndpoints) {
+            pinner.add(endpoint.host(), endpoint.certificateHash())
+        }
+
         val builder = OkHttpClient.Builder()
         val spec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
@@ -48,32 +83,54 @@ class Client(private val publicKey: String) {
         }
 
         return builder
-                .addInterceptor(buildInterceptor())
+                .addInterceptor(Configurer(config))
                 .connectionSpecs(listOf(spec))
-                .certificatePinner(buildCertificatePinner())
+                .certificatePinner(pinner.build())
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()
     }
 
-    private fun buildCertificatePinner(): CertificatePinner {
-        return CertificatePinner.Builder()
-                .add("vault.omise.co", "sha256/maqNsxEnwszR+xCmoGUiV636PvSM5zvBIBuupBn9AB8=")
-                .build()
-    }
+    /**
+     * Builds and returns a [Client]
+     *
+     * Note: Please ensure to have at least one of the keys supplied to have the client function correctly.
+     *
+     *
+     * @see [Security Best Practices](https://www.omise.co/security-best-practices)
+     *
+     * @see [Versioning](https://www.omise.co/api-versioning)
+     */
+    class Builder {
+        private var publicKey: String? = null
+        private var secretKey: String? = null
 
-    private fun buildInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            chain.proceed(chain.request()
-                    .newBuilder()
-                    .addHeader("User-Agent", buildUserAgent())
-                    .addHeader("Authorization", Credentials.basic(publicKey, "x"))
-                    .build())
+        /**
+         * Set public key.
+         *
+         * @param publicKey The key with the `pkey_` prefix.
+         */
+        fun publicKey(publicKey: String?): Builder {
+            this.publicKey = publicKey
+            return this
         }
-    }
 
-    private fun buildUserAgent(): String {
-        return "OmiseAndroid/" + BuildConfig.VERSION_NAME +
-                " Android/" + Build.VERSION.SDK_INT +
-                " Model/" + Build.MODEL
+        /**
+         * Set secret key.
+         *
+         * @param secretKey The key with the `skey_` prefix.
+         */
+        fun secretKey(secretKey: String?): Builder {
+            this.secretKey = secretKey
+            return this
+        }
+
+        /**
+         * Creates a new [Client] instance.
+         *
+         * @return the [Client]
+         */
+        fun build(): Client {
+            return Client(publicKey, secretKey)
+        }
     }
 }
