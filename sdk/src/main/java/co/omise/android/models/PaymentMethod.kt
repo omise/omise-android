@@ -5,10 +5,10 @@ import android.os.Parcelable
 import org.json.JSONObject
 
 class PaymentMethod : Model {
-    private var name: String? = null
-    private var currencies: List<String>? = null
-    private var cardBrands: List<String>? = null
-    private var installmentTerms: List<Int>? = null
+    var name: String? = null
+    var currencies: List<String>? = null
+    var cardBrands: List<String>? = null
+    var installmentTerms: List<Int>? = null
 
 
     constructor(rawJson: String) : this(JSONObject(rawJson))
