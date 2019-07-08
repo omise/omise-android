@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
  * @param publicKey The key with the `pkey_` prefix.
  * @see Request
  */
-class Client
+class Client(publicKey: String?)
 
 /**
  * Creates a Client that sends the specified API version string in the header to access the latest version
@@ -31,29 +31,15 @@ class Client
  *
  *
  * @param publicKey The key with `pkey_` prefix.
- * @param secretKey The key with `skey_` prefix.
  *
  * @see [Security Best Practices](https://www.omise.co/security-best-practices)
  *
  * @see Versioning(https://www.omise.co/api-versioning)
- */ private constructor(publicKey: String?, secretKey: String?) {
+ */
+{
 
     private var httpClient: OkHttpClient
     private val background: Executor
-
-    init {
-        this.background = Executors.newSingleThreadExecutor()
-    }
-
-    init {
-        if (publicKey == null && secretKey == null) {
-            throw ClientException(IllegalArgumentException("The key must have at least one key."))
-        }
-
-        val config = Config(Endpoint.API_VERSION, publicKey, secretKey)
-        httpClient = buildHttpClient(config)
-        this.httpClient = buildHttpClient(config)
-    }
 
     /**
      * Sends the given request and invoke the callback on the listener.
@@ -90,47 +76,13 @@ class Client
                 .build()
     }
 
-    /**
-     * Builds and returns a [Client]
-     *
-     * Note: Please ensure to have at least one of the keys supplied to have the client function correctly.
-     *
-     *
-     * @see [Security Best Practices](https://www.omise.co/security-best-practices)
-     *
-     * @see [Versioning](https://www.omise.co/api-versioning)
-     */
-    class Builder {
-        private var publicKey: String? = null
-        private var secretKey: String? = null
-
-        /**
-         * Set public key.
-         *
-         * @param publicKey The key with the `pkey_` prefix.
-         */
-        fun publicKey(publicKey: String?): Builder {
-            this.publicKey = publicKey
-            return this
+    init {
+        this.background = Executors.newSingleThreadExecutor()
+        if (publicKey == null) {
+            throw ClientException(IllegalArgumentException("The key must have at least one key."))
         }
-
-        /**
-         * Set secret key.
-         *
-         * @param secretKey The key with the `skey_` prefix.
-         */
-        fun secretKey(secretKey: String?): Builder {
-            this.secretKey = secretKey
-            return this
-        }
-
-        /**
-         * Creates a new [Client] instance.
-         *
-         * @return the [Client]
-         */
-        fun build(): Client {
-            return Client(publicKey, secretKey)
-        }
+        val config = Config(Endpoint.API_VERSION, publicKey)
+        httpClient = buildHttpClient(config)
+        this.httpClient = buildHttpClient(config)
     }
 }
