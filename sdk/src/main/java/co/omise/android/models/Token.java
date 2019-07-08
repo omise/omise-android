@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.omise.android.SDKLog;
+import co.omise.android.api.Endpoint;
 import co.omise.android.api.RequestBuilder;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -56,7 +57,7 @@ public class Token extends Model {
         @NotNull
         @Override
         protected HttpUrl path() {
-            return HttpUrl.parse("https://vault.omise.co/tokens");
+            return buildUrl(Endpoint.VAULT, "tokens");
         }
 
         @Nullable
