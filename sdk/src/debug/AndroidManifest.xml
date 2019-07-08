@@ -7,6 +7,6 @@
         <activity android:name=".TestCreditCardEditTextActivity" />
         <activity
             android:name=".ui.AuthorizingPaymentActivity"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/OmiseSDKTheme" />
     </application>
 </manifest>

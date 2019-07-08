@@ -51,8 +51,8 @@
             android:configChanges="keyboardHidden|orientation" />
 
         <activity
-            android:theme="@style/Theme.AppCompat"
-            android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
+            android:name="co.omise.android.ui.AuthorizingPaymentActivity"
+            android:theme="@style/OmiseSDKTheme" />
 
     </application>
 
