@@ -39,7 +39,6 @@ dependencies {
     implementation project(':sdk')
     implementation 'io.card:android-sdk:5.4.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:1.0.2"
     // compile 'co.omise:omise-android:2.3.+'
 }
 repositories {
