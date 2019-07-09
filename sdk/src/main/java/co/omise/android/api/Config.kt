@@ -34,7 +34,7 @@ internal class Config(
      *
      * @return A [String] containing the configured API version.
      */
-    fun apiVersion(): String? {
+    fun apiVersion(): String {
         return apiVersion
     }
 
