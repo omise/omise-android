@@ -13,7 +13,7 @@ import co.omise.android.BuildConfig
  */
 class Config(
         private val apiVersion: String?,
-        private val publicKey: String?
+        private val publicKey: String
 ) {
 
     private val userAgent: String
@@ -43,7 +43,7 @@ class Config(
      *
      * @return A [String] containing the public key.
      */
-    fun publicKey(): String? {
+    fun publicKey(): String {
         return publicKey
     }
 
