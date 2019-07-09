@@ -39,7 +39,7 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
                     .addHeader("User-Agent", config.userAgent())
                     .addHeader("Authorization", Credentials.basic(key, "x"))
 
-            if (apiVersion != null && !apiVersion.isEmpty()) {
+            if (!apiVersion.isEmpty()) {
                 builder = builder.addHeader("Omise-Version", apiVersion)
             }
 
