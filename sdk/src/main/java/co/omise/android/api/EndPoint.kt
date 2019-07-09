@@ -14,7 +14,6 @@ import java.util.*
  *
  *  * Host and network scheme (defaults to HTTPS.)
  *  * The certificate hash to pin against.
- *  * Whether to use the public key or the secret key.
  *
  */
 abstract class Endpoint {
@@ -48,7 +47,7 @@ abstract class Endpoint {
 
     /**
      * The authentication key to use. The key should be taken from the given [Config] object.
-     * Either [Config.publicKey] or [Config.secretKey] should be returned.
+     * [Config.publicKey] should be returned.
      *
      * @param config A [Config] instance.
      * @return A [String] containing the authentication key.
