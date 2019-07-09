@@ -2,7 +2,6 @@ package co.omise.android.api
 
 import android.os.Build
 import android.os.Handler
-import co.omise.android.api.exceptions.ClientException
 import co.omise.android.models.Model
 import okhttp3.CertificatePinner
 import okhttp3.ConnectionSpec
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit
  * @param publicKey The key with the `pkey_` prefix.
  * @see Request
  */
-class Client(publicKey: String?)
+class Client(publicKey: String)
 
 /**
  * Creates a Client that sends the specified API version string in the header to access the latest version
@@ -77,12 +76,8 @@ class Client(publicKey: String?)
     }
 
     init {
-        this.background = Executors.newSingleThreadExecutor()
-        if (publicKey == null) {
-            throw ClientException(IllegalArgumentException("The key must have at least one key."))
-        }
+        background = Executors.newSingleThreadExecutor()
         val config = Config(Endpoint.API_VERSION, publicKey)
         httpClient = buildHttpClient(config)
-        this.httpClient = buildHttpClient(config)
     }
 }
