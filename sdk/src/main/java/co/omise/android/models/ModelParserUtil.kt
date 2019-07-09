@@ -8,10 +8,16 @@ import co.omise.android.api.TypedCall
 object ModelParserUtil {
 
     fun parseModelFromJson(json: String, call: TypedCall): Model? {
-        return if (call.clazz.isAssignableFrom(Token::class.java)) {
-            Token(json)
-        } else {
-            null
+        return ModelParserUtil.parseModelFromJson(json, call.clazz)
+    }
+
+    @JvmStatic
+    fun parseModelFromJson(json: String, clazz: Class<*>): Model? {
+        return when {
+            clazz.isAssignableFrom(Token::class.java) -> Token(json)
+            clazz.isAssignableFrom(Capability::class.java) -> Capability(json)
+            clazz.isAssignableFrom(PaymentMethod::class.java) -> PaymentMethod(json)
+            else -> null
         }
     }
 }

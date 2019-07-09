@@ -2,12 +2,15 @@ package co.omise.android.api
 
 import android.os.Build
 import android.os.Handler
-import co.omise.android.BuildConfig
 import co.omise.android.models.Model
-import okhttp3.*
+import okhttp3.CertificatePinner
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
+import okhttp3.TlsVersion
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Client is the main entry point to the SDK and it needs to be supplied with a public Key. You can use the Client to send a [Request].
@@ -15,15 +18,26 @@ import java.util.concurrent.TimeUnit
  * @param publicKey The key with the `pkey_` prefix.
  * @see Request
  */
-class Client(private val publicKey: String) {
+class Client(publicKey: String)
 
-    private val httpClient: OkHttpClient
+/**
+ * Creates a Client that sends the specified API version string in the header to access the latest version
+ * of the Omise API.
+ *
+ *
+ *
+ * Note: Please ensure to have at least one of the keys supplied to have the client function correctly.
+ *
+ *
+ * @param publicKey The key with `pkey_` prefix.
+ *
+ * @see [Security Best Practices](https://www.omise.co/security-best-practices)
+ *
+ */
+{
+
+    private var httpClient: OkHttpClient
     private val background: Executor
-
-    init {
-        this.httpClient = buildHttpClient()
-        this.background = Executors.newSingleThreadExecutor()
-    }
 
     /**
      * Sends the given request and invoke the callback on the listener.
@@ -36,7 +50,12 @@ class Client(private val publicKey: String) {
         background.execute { Invocation(handler, httpClient, request, listener).invoke() }
     }
 
-    private fun buildHttpClient(): OkHttpClient {
+    private fun buildHttpClient(config: Config): OkHttpClient {
+        val pinner = CertificatePinner.Builder()
+        for (endpoint in Endpoint.allEndpoints) {
+            pinner.add(endpoint.host(), endpoint.certificateHash())
+        }
+
         val builder = OkHttpClient.Builder()
         val spec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
@@ -48,32 +67,16 @@ class Client(private val publicKey: String) {
         }
 
         return builder
-                .addInterceptor(buildInterceptor())
+                .addInterceptor(Configurer(config))
                 .connectionSpecs(listOf(spec))
-                .certificatePinner(buildCertificatePinner())
+                .certificatePinner(pinner.build())
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()
     }
 
-    private fun buildCertificatePinner(): CertificatePinner {
-        return CertificatePinner.Builder()
-                .add("vault.omise.co", "sha256/maqNsxEnwszR+xCmoGUiV636PvSM5zvBIBuupBn9AB8=")
-                .build()
-    }
-
-    private fun buildInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            chain.proceed(chain.request()
-                    .newBuilder()
-                    .addHeader("User-Agent", buildUserAgent())
-                    .addHeader("Authorization", Credentials.basic(publicKey, "x"))
-                    .build())
-        }
-    }
-
-    private fun buildUserAgent(): String {
-        return "OmiseAndroid/" + BuildConfig.VERSION_NAME +
-                " Android/" + Build.VERSION.SDK_INT +
-                " Model/" + Build.MODEL
+    init {
+        background = Executors.newSingleThreadExecutor()
+        val config = Config(publicKey = publicKey)
+        httpClient = buildHttpClient(config)
     }
 }

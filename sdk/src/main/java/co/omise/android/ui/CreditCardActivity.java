@@ -255,7 +255,8 @@ public class CreditCardActivity extends Activity {
         String pkey = getIntent().getStringExtra(EXTRA_PKEY);
         ActivityRequestListener listener = new ActivityRequestListener();
         try {
-            new Client(pkey).send(request, listener);
+            Client client = new Client(pkey);
+            client.send(request, listener);
         } catch (Exception ex) {
             listener.onRequestFailed(ex);
         }
