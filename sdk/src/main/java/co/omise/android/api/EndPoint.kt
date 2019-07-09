@@ -52,7 +52,7 @@ abstract class Endpoint {
      * @param config A [Config] instance.
      * @return A [String] containing the authentication key.
      */
-    abstract fun authenticationKey(config: Config): String?
+    abstract fun authenticationKey(config: Config): String
 
     fun buildUrl(): HttpUrl.Builder {
         return HttpUrl.Builder()
@@ -67,7 +67,7 @@ abstract class Endpoint {
                 return "vault.omise.co"
             }
 
-            override fun authenticationKey(config: Config): String? {
+            override fun authenticationKey(config: Config): String {
                 return config.publicKey()
             }
         }
@@ -78,7 +78,7 @@ abstract class Endpoint {
                 return "api.omise.co"
             }
 
-            override fun authenticationKey(config: Config): String? {
+            override fun authenticationKey(config: Config): String {
                 return config.publicKey()
             }
         }
