@@ -33,7 +33,6 @@ class Client(publicKey: String)
  *
  * @see [Security Best Practices](https://www.omise.co/security-best-practices)
  *
- * @see Versioning(https://www.omise.co/api-versioning)
  */
 {
 
@@ -77,7 +76,7 @@ class Client(publicKey: String)
 
     init {
         background = Executors.newSingleThreadExecutor()
-        val config = Config(Endpoint.API_VERSION, publicKey)
+        val config = Config(publicKey = publicKey)
         httpClient = buildHttpClient(config)
     }
 }

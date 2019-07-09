@@ -52,7 +52,7 @@ abstract class Endpoint {
      * @param config A [Config] instance.
      * @return A [String] containing the authentication key.
      */
-    abstract fun authenticationKey(config: Config): String
+    internal abstract fun authenticationKey(config: Config): String
 
     fun buildUrl(): HttpUrl.Builder {
         return HttpUrl.Builder()
@@ -99,6 +99,5 @@ abstract class Endpoint {
                 return Collections.unmodifiableMap(endpoints)
             }
 
-        internal const val API_VERSION = "2019-05-29"
     }
 }

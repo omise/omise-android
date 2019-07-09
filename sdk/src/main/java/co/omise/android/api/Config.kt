@@ -11,8 +11,8 @@ import co.omise.android.BuildConfig
  *
  * @see Client
  */
-class Config(
-        private val apiVersion: String?,
+internal class Config(
+        private val apiVersion: String = API_VERSION,
         private val publicKey: String
 ) {
 
@@ -54,5 +54,9 @@ class Config(
      */
     fun userAgent(): String {
         return userAgent
+    }
+
+    companion object {
+        internal const val API_VERSION = "2019-05-29"
     }
 }
