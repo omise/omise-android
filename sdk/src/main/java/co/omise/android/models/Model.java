@@ -3,29 +3,30 @@ package co.omise.android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+
 import org.joda.time.DateTime;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.CUSTOM,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "object",
+        visible = true
+)
+
+@JsonTypeIdResolver(ModelTypeResolver.class)
 public abstract class Model implements Parcelable {
-    private final JSONObject jsonObject;
 
-    public final String id;
+    public String id;
+    @JsonProperty("livemode")
     public boolean livemode;
-    public final String location;
-    public final DateTime created;
-
-    public Model(String rawJson) throws JSONException {
-        this(new JSONObject(rawJson));
-    }
-
-    public Model(JSONObject json) throws JSONException {
-        jsonObject = json;
-        id = JSON.string(json, "id");
-        livemode = JSON.bool(json, "livemode");
-        location = JSON.string(json, "location");
-        created = JSON.dateTime(json, "created");
-    }
+    private String location;
+    @JsonProperty("created_at")
+    private DateTime created;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private boolean deleted;
 
     @Override
     public int describeContents() {
@@ -34,6 +35,10 @@ public abstract class Model implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(jsonObject.toString());
+        dest.writeString(id);
+        dest.writeInt(livemode ? 1 : 0);
+        dest.writeString(location);
+        dest.writeLong(created.getMillis());
+        dest.writeInt(deleted ? 1 : 0);
     }
 }
