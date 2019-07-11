@@ -57,8 +57,8 @@ public class ModelTest extends SDKTest {
     }
 
     private void assertCorrectFields(Dummy dummy) {
-        assertEquals("acct_4x7d2wtqnj2f4klrfsc", dummy.id);
-        assertFalse(dummy.livemode);
+        assertEquals("acct_4x7d2wtqnj2f4klrfsc", dummy.getId());
+        assertFalse(dummy.getLivemode());
         assertNull(dummy.location);
 
         DateTime created = dummy.created.withZone(DateTimeZone.UTC);

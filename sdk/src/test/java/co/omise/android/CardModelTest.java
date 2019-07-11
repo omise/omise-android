@@ -1,7 +1,6 @@
 package co.omise.android;
 
 import org.joda.time.DateTime;
-import org.json.JSONException;
 import org.junit.Test;
 
 import co.omise.android.models.Card;
@@ -31,8 +30,8 @@ public class CardModelTest {
             "}";
 
     @Test
-    public void cardConstructor_canSerializeByString() throws JSONException {
-        Card card = new Card(CARD_JSON);
+    public void cardConstructor_canSerializeByString() {
+        Card card = new Card();
         assertEquals("card_test_5086xl7amxfysl0ac5l", card.id);
         assertEquals(true, card.livemode);
         assertEquals("th", card.country);
@@ -41,11 +40,12 @@ public class CardModelTest {
         assertEquals("", card.financing);
         assertEquals("4242", card.lastDigits);
         assertEquals("Visa", card.brand);
-        assertEquals(10, card.expirationMonth);
+        assertEquals(10, card.brand);
         assertEquals(2018, card.expirationYear);
         assertEquals("mKleiBfwp+PoJWB/ipngANuECUmRKjyxROwFW5IO7TM=", card.fingerprint);
         assertEquals("Somchai Prasert", card.name);
         assertEquals(true, card.securityCodeCheck);
+        assert card.created != null;
         assertEquals(new DateTime("2015-06-02T05:41:46Z").getMillis(), card.created.getMillis());
         assertEquals("BBL", card.bank);
     }
