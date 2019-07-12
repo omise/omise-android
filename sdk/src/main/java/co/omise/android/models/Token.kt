@@ -1,5 +1,7 @@
 package co.omise.android.models
 
+import android.os.Parcel
+import android.os.Parcelable
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import okhttp3.FormBody
@@ -13,10 +15,10 @@ import okhttp3.RequestBody
  */
 data class Token(
         @JvmField
-        val used: Boolean = false,
+        var used: Boolean = false,
         @JvmField
-        val card: Card? = null
-) : Model() {
+        var card: Card? = null
+) : Model(), Parcelable {
 
     /**
      * The [RequestBuilder] class for creating a Token.
@@ -69,6 +71,30 @@ data class Token(
         fun postalCode(postalCode: String): CreateTokenRequestBuilder {
             this.postalCode = postalCode
             return this
+        }
+    }
+
+    constructor(parcel: Parcel) : this() {
+        used = parcel.readInt() == 1
+        card = parcel.readParcelable(Card::class.java.classLoader)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(if (used) 1 else 0)
+        dest.writeParcelable(card, 0)
+    }
+
+    companion object CREATOR : Parcelable.Creator<Token> {
+        override fun createFromParcel(parcel: Parcel): Token {
+            return Token(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Token?> {
+            return arrayOfNulls(size)
         }
     }
 }
