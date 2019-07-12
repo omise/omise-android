@@ -29,6 +29,11 @@ class ModelTypeResolver : TypeIdResolverBase() {
         return reverse(getKnownTypes())[suggestedType] ?: ""
     }
 
+    override fun typeFromId(context: DatabindContext, id: String): JavaType? {
+        val klass = getKnownTypes()[id] ?: return null
+        return context.typeFactory.constructSimpleType(klass, arrayOf())
+    }
+
     override fun getMechanism(): JsonTypeInfo.Id {
         return JsonTypeInfo.Id.CUSTOM
     }
