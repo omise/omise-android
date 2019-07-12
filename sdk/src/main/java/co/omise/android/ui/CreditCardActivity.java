@@ -1,6 +1,5 @@
 package co.omise.android.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +12,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +31,7 @@ import co.omise.android.models.Token;
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
 
-public class CreditCardActivity extends Activity {
+public class CreditCardActivity extends AppCompatActivity {
     // input
     public static final String EXTRA_PKEY = "CreditCardActivity.publicKey";
     public static final int REQUEST_CODE_CARD_IO = 1000;
