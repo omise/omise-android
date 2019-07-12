@@ -1,16 +1,13 @@
 package co.omise.android.ui;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
-public class CreditCardEditText extends EditText {
+public class CreditCardEditText extends OmiseEditText {
 
     public CreditCardEditText(Context context) {
         super(context);
@@ -24,12 +21,6 @@ public class CreditCardEditText extends EditText {
 
     public CreditCardEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CreditCardEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
