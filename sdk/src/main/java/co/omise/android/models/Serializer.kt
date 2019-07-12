@@ -1,5 +1,6 @@
 package co.omise.android.models
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -38,7 +39,6 @@ class Serializer {
     var localDateFormatter: DateTimeFormatter = ISODateTimeFormat.date()
 
     init {
-
         objectMapper = ObjectMapper()
                 .registerModule(JodaModule()
                         .addSerializer(DateTime::class.java, DateTimeSerializer()
@@ -48,11 +48,12 @@ class Serializer {
                                 .withFormat(JacksonJodaDateFormat(localDateFormatter), 0)
                         )
                 )
-
+                .setDefaultPropertyInclusion(JsonInclude.Value.construct(
+                        JsonInclude.Include.ALWAYS, JsonInclude.Include.NON_NULL)
+                )
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-                .configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false) // TODO: Deprecate in vNext
     }
 
     /**
