@@ -1,7 +1,6 @@
 package co.omise.android.api
 
 import android.os.Handler
-import co.omise.android.api.exceptions.IllegalModelException
 import co.omise.android.api.exceptions.RedirectionException
 import co.omise.android.models.APIError
 import co.omise.android.models.Model
@@ -74,9 +73,6 @@ class TypedCall(
 }
 
 @Suppress("UNCHECKED_CAST")
-@Throws(IllegalModelException::class)
 fun OkHttpClient.newTypedCall(okRequest: Request, clazz: Class<*>): TypedCall {
-    if (!clazz.isInstance(Model)) throw IllegalModelException()
-
     return TypedCall(newCall(okRequest), clazz as Class<Model>)
 }
