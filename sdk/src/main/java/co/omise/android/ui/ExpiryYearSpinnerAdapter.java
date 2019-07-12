@@ -2,6 +2,7 @@ package co.omise.android.ui;
 
 import org.joda.time.YearMonth;
 
+@Deprecated
 public class ExpiryYearSpinnerAdapter extends NumberRangeSpinnerAdapter {
     protected ExpiryYearSpinnerAdapter() {
         super(YearMonth.now().getYear(), YearMonth.now().getYear() + 12);

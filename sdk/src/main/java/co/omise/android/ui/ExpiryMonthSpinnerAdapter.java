@@ -2,6 +2,7 @@ package co.omise.android.ui;
 
 import java.util.Locale;
 
+@Deprecated
 public class ExpiryMonthSpinnerAdapter extends NumberRangeSpinnerAdapter {
     protected ExpiryMonthSpinnerAdapter() {
         super(1, 12);
