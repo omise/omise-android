@@ -36,6 +36,7 @@ open class OmiseEditText : AppCompatEditText {
 
         errorText = TextPaint().apply {
             color = Color.RED
+            textSize = 14f
             flags = Paint.ANTI_ALIAS_FLAG
             textAlign = Paint.Align.LEFT
         }
@@ -51,4 +52,5 @@ open class OmiseEditText : AppCompatEditText {
                     errorText
             )
     }
+
 }
