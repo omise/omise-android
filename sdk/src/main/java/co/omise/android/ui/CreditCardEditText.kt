@@ -1,17 +1,24 @@
 package co.omise.android.ui
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.text.Editable
 import android.text.InputFilter
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
+import co.omise.android.CardNumber
 
 class CreditCardEditText : OmiseEditText {
 
     companion object {
         private const val CARD_NUMBER_WITH_GUTTER_CHARS_LENGTH = 19
     }
+
+    private var cardBrandImage: Bitmap? = null
+    private var cardBrandImagePaint: Paint? = null
 
     constructor(context: Context) : super(context)
 
@@ -41,7 +48,33 @@ class CreditCardEditText : OmiseEditText {
                     // Delete space bar
                     e.delete(e.length - 1, e.length)
                 }
+
+                updateCardBrandImage()
             }
         })
+
+        cardBrandImagePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        cardBrandImage?.let {
+            val imageLeftPosition = width.toFloat() - it.width
+            val imageTopPosition = (height - it.height) / 2f
+            canvas?.drawBitmap(it, imageLeftPosition, imageTopPosition, cardBrandImagePaint)
+        }
+    }
+
+    private fun updateCardBrandImage() {
+        val number = text.toString()
+        if (number.length > 6) {
+            val brand = CardNumber.brand(number)
+            if (brand != null && brand.logoResourceId > -1) {
+                cardBrandImage = BitmapFactory.decodeResource(resources, brand.logoResourceId)
+                return
+            }
+        }
+        cardBrandImage = null
+        invalidate()
     }
 }
