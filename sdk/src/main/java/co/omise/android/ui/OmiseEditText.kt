@@ -6,10 +6,14 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 
-open class OmiseEditText : AppCompatEditText {
+open abstract class OmiseEditText : AppCompatEditText {
 
     private var errorText: TextPaint? = null
 
@@ -33,7 +37,6 @@ open class OmiseEditText : AppCompatEditText {
         }
 
     private fun init() {
-
         errorText = TextPaint().apply {
             color = Color.RED
             textSize = 14f
@@ -44,13 +47,30 @@ open class OmiseEditText : AppCompatEditText {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
-            canvas?.drawText(
-                    errorMessage ?: "",
-                    0f,
-                    y + height,
-                    errorText
-            )
+        canvas?.drawText(
+                errorMessage ?: "",
+                0f,
+                y + height,
+                errorText
+        )
     }
 
+}
+
+fun AppCompatEditText.disableOptions() {
+    this.customSelectionActionModeCallback = object : ActionMode.Callback {
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            return false
+        }
+
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            return false
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            return false
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode?) {}
+    }
 }

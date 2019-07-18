@@ -9,21 +9,19 @@ import android.util.AttributeSet
 
 class CreditCardEditText : OmiseEditText {
 
-    constructor(context: Context) : super(context) {
-        init()
+    companion object {
+        private const val CARD_NUMBER_WITH_GUTTER_CHARS_LENGTH = 19
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    private fun init() {
-        filters = arrayOf<InputFilter>(InputFilter.LengthFilter(19))
-        inputType = InputType.TYPE_CLASS_PHONE
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+    init {
+        filters = arrayOf(InputFilter.LengthFilter(CARD_NUMBER_WITH_GUTTER_CHARS_LENGTH))
+//        inputType = InputType.TYPE_CLASS_NUMBER
 
         addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -46,5 +44,4 @@ class CreditCardEditText : OmiseEditText {
             }
         })
     }
-
 }

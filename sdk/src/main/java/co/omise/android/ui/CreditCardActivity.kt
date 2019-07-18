@@ -4,13 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.CardIO
 import co.omise.android.CardNumber
@@ -21,21 +19,27 @@ import co.omise.android.models.APIError
 import co.omise.android.models.Token
 import io.card.payment.CardIOActivity
 import io.card.payment.CreditCard
+import kotlinx.android.synthetic.main.activity_credit_card.button_submit
+import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
+import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
+import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
+import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
+import kotlinx.android.synthetic.main.activity_credit_card.text_error_message
 import java.io.IOError
 
 class CreditCardActivity : AppCompatActivity() {
-
-    private val views = Views(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credit_card)
         setTitle(R.string.default_form_title)
 
-        views.spinner(R.id.spinner_expiry_month).adapter = ExpiryMonthSpinnerAdapter()
-        views.spinner(R.id.spinner_expiry_year).adapter = ExpiryYearSpinnerAdapter()
-        views.editText(R.id.edit_card_number).addTextChangedListener(ActivityTextWatcher())
-        views.button(R.id.button_submit).setOnClickListener(ActivityOnClickListener())
+        edit_card_name.errorMessage = "error"
+        edit_card_number.errorMessage = "error"
+        edit_security_code.errorMessage = "error"
+        edit_expiry_date.errorMessage = "error"
+
+        button_submit.setOnClickListener { this.submit() }
     }
 
     override fun onBackPressed() {
@@ -78,33 +82,6 @@ class CreditCardActivity : AppCompatActivity() {
         }
     }
 
-    private inner class ActivityTextWatcher : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-
-        override fun afterTextChanged(s: Editable) {
-            val pan = s.toString()
-            if (pan.length > 6) {
-                val brand = CardNumber.brand(pan)
-                if (brand != null && brand.logoResourceId > -1) {
-                    views.image(R.id.image_card_brand).setImageResource(brand.logoResourceId)
-                    return
-                }
-            }
-
-            views.image(R.id.image_card_brand).setImageDrawable(null)
-        }
-    }
-
-    private inner class ActivityOnClickListener : View.OnClickListener {
-        override fun onClick(v: View) {
-            if (v.id == R.id.button_submit) {
-                submit()
-            }
-        }
-    }
-
     private inner class ActivityRequestListener : RequestListener<Token> {
 
         override fun onRequestSucceed(model: Token) {
@@ -120,8 +97,7 @@ class CreditCardActivity : AppCompatActivity() {
         override fun onRequestFailed(throwable: Throwable) {
             enableForm()
 
-            val textView = views.textView(R.id.text_error_message)
-            textView.visibility = View.VISIBLE
+            text_error_message.visibility = View.VISIBLE
 
             val message = when (throwable) {
                 is IOError -> getString(R.string.error_io, throwable.message)
@@ -129,7 +105,7 @@ class CreditCardActivity : AppCompatActivity() {
                 else -> getString(R.string.error_unknown, throwable.message)
             }
 
-            textView.text = message
+            text_error_message.text = message
         }
     }
 
@@ -142,74 +118,66 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun setFormEnabled(enabled: Boolean) {
-        views.editText(R.id.edit_card_number).isEnabled = enabled
-        views.editText(R.id.edit_card_name).isEnabled = enabled
-        views.editText(R.id.edit_security_code).isEnabled = enabled
-        views.spinner(R.id.spinner_expiry_month).isEnabled = enabled
-        views.spinner(R.id.spinner_expiry_year).isEnabled = enabled
-        views.button(R.id.button_submit).isEnabled = enabled
+        edit_card_number.isEnabled = enabled
+        edit_card_name.isEnabled = enabled
+        edit_security_code.isEnabled = enabled
+        button_submit.isEnabled = enabled
+
+
         invalidateOptionsMenu()
     }
 
     private fun applyCardIOResult(data: CreditCard) {
-        val numberField = views.editText(R.id.edit_card_number)
-        val nameField = views.editText(R.id.edit_card_name)
-        val securityCodeField = views.editText(R.id.edit_security_code)
-
         if (data.cardNumber != null && data.cardNumber.isNotEmpty()) {
-            numberField.setText(CardNumber.format(data.cardNumber))
+            edit_card_number.setText(CardNumber.format(data.cardNumber))
         }
 
         if (data.cardholderName != null && data.cardholderName.isNotEmpty()) {
-            nameField.setText(data.cardholderName)
+            edit_card_name.setText(data.cardholderName)
         }
 
         if (data.isExpiryValid) {
-            var spinner = views.spinner(R.id.spinner_expiry_month)
-            val monthAdapter = spinner.adapter as ExpiryMonthSpinnerAdapter
-            spinner.setSelection(monthAdapter.getPosition(data.expiryMonth))
-
-            spinner = views.spinner(R.id.spinner_expiry_year)
-            val yearAdapter = spinner.adapter as ExpiryYearSpinnerAdapter
-            spinner.setSelection(yearAdapter.getPosition(data.expiryYear))
+            edit_expiry_date.setExpiryDate(data.expiryMonth, data.expiryYear)
         }
 
         if (data.cvv != null && data.cvv.isNotEmpty()) {
-            securityCodeField.setText(data.cvv)
+            edit_security_code.setText(data.cvv)
         }
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (numberField.text == null || numberField.text.toString().isEmpty()) {
-            numberField.requestFocus()
-            imm.showSoftInput(numberField, InputMethodManager.SHOW_IMPLICIT)
-        } else if (nameField.text == null || nameField.text.toString().isEmpty()) {
-            nameField.requestFocus()
-            imm.showSoftInput(nameField, InputMethodManager.SHOW_IMPLICIT)
-        } else if (securityCodeField.text == null || securityCodeField.text.toString().isEmpty()) {
-            securityCodeField.requestFocus()
-            imm.showSoftInput(securityCodeField, InputMethodManager.SHOW_IMPLICIT)
+        if (edit_card_number.text == null || edit_card_number.text.toString().isEmpty()) {
+            edit_card_number.requestFocus()
+            imm.showSoftInput(edit_card_number, InputMethodManager.SHOW_IMPLICIT)
+        } else if (edit_card_name.text == null || edit_card_name.text.toString().isEmpty()) {
+            edit_card_name.requestFocus()
+            imm.showSoftInput(edit_card_name, InputMethodManager.SHOW_IMPLICIT)
+        } else if (edit_security_code.text == null || edit_security_code.text.toString().isEmpty()) {
+            edit_security_code.requestFocus()
+            imm.showSoftInput(edit_security_code, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
     private fun submit() {
-        val numberField = views.editText(R.id.edit_card_number)
-        val nameField = views.editText(R.id.edit_card_name)
-        val securityCodeField = views.editText(R.id.edit_security_code)
-
-        val valid = validateNonEmpty(numberField) and
-                validateNonEmpty(nameField) and
-                validateNonEmpty(securityCodeField) and
-                validateLuhn(numberField)
+        val valid = validateNonEmpty(edit_card_number) &&
+                validateNonEmpty(edit_card_name) &&
+                validateNonEmpty(edit_security_code) &&
+                validateLuhn(edit_card_number)
         if (!valid) {
             return
         }
 
-        val expiryMonth = views.spinner(R.id.spinner_expiry_month).selectedItem as Int
-        val expiryYear = views.spinner(R.id.spinner_expiry_year).selectedItem as Int
+        val number = edit_card_number.text.toString()
+        val name = edit_card_name.text.toString()
+        val expiryMonth = edit_expiry_date.expiryMonth
+        val expiryYear = edit_expiry_date.expiryYear
+        val securityCode = edit_security_code.text.toString()
 
-        val number = numberField.text.toString()
-        val name = nameField.text.toString()
-        val securityCode = securityCodeField.text.toString()
+        Log.d("inputs", """
+            $number
+            $name
+            $expiryMonth/$expiryYear
+            $securityCode
+        """.trimIndent())
 
         val request = Token.CreateTokenRequestBuilder(
                 name,
@@ -231,20 +199,20 @@ class CreditCardActivity : AppCompatActivity() {
 
     }
 
-    private fun validateNonEmpty(field: EditText): Boolean {
+    private fun validateNonEmpty(field: OmiseEditText): Boolean {
         val value = field.text.toString().trim { it <= ' ' }
         if (value.isEmpty()) {
-            field.error = String.format(getString(R.string.error_required), field.hint)
+            field.errorMessage = getString(R.string.error_required, field.hint)
             return false
         }
 
         return true
     }
 
-    private fun validateLuhn(field: EditText): Boolean {
+    private fun validateLuhn(field: OmiseEditText): Boolean {
         val value = field.text.toString().trim { it <= ' ' }
         if (!CardNumber.luhn(value)) {
-            field.error = String.format(getString(R.string.error_invalid), field.hint)
+            field.errorMessage = getString(R.string.error_invalid, field.hint)
             return false
         }
 
