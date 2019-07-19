@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CreditCardTheme" parent="OmiseTheme">
+        <item name="toolbarStyle">@style/AppActionBar</item>
+        <item name="editTextStyle">@style/AppEditText</item>
+    </style>
+
+    <style name="AppActionBar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@android:color/white</item>
+        <item name="titleTextColor">@android:color/black</item>
+    </style>
+
+    <style name="AppEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">?attr/editTextBackground</item>
+    </style>
+</resources>

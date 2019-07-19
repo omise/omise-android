@@ -6,9 +6,9 @@
     <application>
         <activity
             android:name=".ui.AuthorizingPaymentActivity"
-            android:theme="@style/OmiseSDKTheme" />
+            android:theme="@style/OmiseTheme" />
         <activity
             android:name=".ui.CreditCardActivity"
-            android:theme="@style/OmiseSDKTheme" />
+            android:theme="@style/OmiseTheme" />
     </application>
 </manifest>
