@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.Editable
 import android.text.InputFilter
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import co.omise.android.CardNumber
@@ -14,7 +15,7 @@ import co.omise.android.CardNumber
 class CreditCardEditText : OmiseEditText {
 
     companion object {
-        private const val CARD_NUMBER_WITH_GUTTER_CHARS_LENGTH = 19
+        private const val CARD_NUMBER_WITH_SPACE_LENGTH = 19
     }
 
     private var cardBrandImage: Bitmap? = null
@@ -27,8 +28,8 @@ class CreditCardEditText : OmiseEditText {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
-        filters = arrayOf(InputFilter.LengthFilter(CARD_NUMBER_WITH_GUTTER_CHARS_LENGTH))
-//        inputType = InputType.TYPE_CLASS_NUMBER
+        filters = arrayOf(InputFilter.LengthFilter(CARD_NUMBER_WITH_SPACE_LENGTH))
+        inputType = InputType.TYPE_CLASS_PHONE
 
         addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -75,6 +76,5 @@ class CreditCardEditText : OmiseEditText {
             }
         }
         cardBrandImage = null
-        invalidate()
     }
 }

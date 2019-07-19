@@ -15,4 +15,5 @@
     <string name="menu_card_io">Scan from Camera</string>
     <string name="title_authorizing_payment">Authorizing Payment</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
+    <string name="hint_expiry_date">MM/YY</string>
 </resources>

@@ -75,9 +75,12 @@
                 android:orientation="horizontal">
 
                 <co.omise.android.ui.ExpiryDateEditText
-                    android:id="@+id/edit_expiry_date"
+                    android:id="@id/edit_expiry_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_expiry_date"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/edit_security_code" />
 
             </LinearLayout>
 

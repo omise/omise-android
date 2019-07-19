@@ -35,11 +35,10 @@ class ExpiryDateEditText : OmiseEditText {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
-        hint = "MM/YY"
         addTextChangedListener(textWatcher)
         disableOptions()
         filters = arrayOf(InputFilter.LengthFilter(MAX_CHARS))
-        inputType = InputType.TYPE_CLASS_NUMBER
+        inputType = InputType.TYPE_CLASS_PHONE
     }
 
     override fun onSelectionChanged(selStart: Int, selEnd: Int) {

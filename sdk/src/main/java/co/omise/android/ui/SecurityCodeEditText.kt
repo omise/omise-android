@@ -25,6 +25,6 @@ class SecurityCodeEditText : OmiseEditText {
 
     private fun init() {
         filters = arrayOf(InputFilter.LengthFilter(CVV_LENGTH))
-        inputType = InputType.TYPE_CLASS_NUMBER
+        inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
     }
 }
