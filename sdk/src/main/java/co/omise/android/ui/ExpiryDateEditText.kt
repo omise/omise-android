@@ -98,9 +98,9 @@ class ExpiryDateEditText : OmiseEditText {
         val (month, year) = formattedString.separateDates()
 
         expiryMonth = month ?: 0
-        expiryYear = year ?: 0
+        expiryYear = year?.plus(startedYear) ?: 0
 
-        textListener?.textFormatted(month, year?.plus(startedYear))
+        textListener?.textFormatted(expiryMonth, expiryYear)
     }
 
     // Have to add this internal listener because if we add an external TextWatcher to this custom EditText

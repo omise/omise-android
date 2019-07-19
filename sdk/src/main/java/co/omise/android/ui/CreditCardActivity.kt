@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -33,11 +32,6 @@ class CreditCardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credit_card)
         setTitle(R.string.default_form_title)
-
-        edit_card_name.errorMessage = "error"
-        edit_card_number.errorMessage = "error"
-        edit_security_code.errorMessage = "error"
-        edit_expiry_date.errorMessage = "error"
 
         button_submit.setOnClickListener { this.submit() }
     }
@@ -160,6 +154,7 @@ class CreditCardActivity : AppCompatActivity() {
     private fun submit() {
         val valid = validateNonEmpty(edit_card_number) &&
                 validateNonEmpty(edit_card_name) &&
+                validateNonEmpty(edit_expiry_date) &&
                 validateNonEmpty(edit_security_code) &&
                 validateLuhn(edit_card_number)
         if (!valid) {
@@ -171,13 +166,6 @@ class CreditCardActivity : AppCompatActivity() {
         val expiryMonth = edit_expiry_date.expiryMonth
         val expiryYear = edit_expiry_date.expiryYear
         val securityCode = edit_security_code.text.toString()
-
-        Log.d("inputs", """
-            $number
-            $name
-            $expiryMonth/$expiryYear
-            $securityCode
-        """.trimIndent())
 
         val request = Token.CreateTokenRequestBuilder(
                 name,
@@ -205,7 +193,7 @@ class CreditCardActivity : AppCompatActivity() {
             field.errorMessage = getString(R.string.error_required, field.hint)
             return false
         }
-
+        field.errorMessage = null
         return true
     }
 

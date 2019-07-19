@@ -13,21 +13,15 @@ import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 
-open abstract class OmiseEditText : AppCompatEditText {
+abstract class OmiseEditText : AppCompatEditText {
 
     private var errorText: TextPaint? = null
 
-    constructor(context: Context?) : super(context) {
-        init()
-    }
+    constructor(context: Context?) : super(context)
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 
     var errorMessage: String? = null
@@ -36,7 +30,7 @@ open abstract class OmiseEditText : AppCompatEditText {
             invalidate()
         }
 
-    private fun init() {
+    init {
         errorText = TextPaint().apply {
             color = Color.RED
             textSize = 14f
@@ -47,10 +41,14 @@ open abstract class OmiseEditText : AppCompatEditText {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawText(
+
+        val canvas = canvas?: return
+
+        canvas.clipBounds
+        canvas.drawText(
                 errorMessage ?: "",
                 0f,
-                y + height,
+                10f,
                 errorText
         )
     }
