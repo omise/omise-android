@@ -3,6 +3,8 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
@@ -39,6 +41,18 @@ class CreditCardActivity : AppCompatActivity() {
                     it.errorMessage = null
                 }
             }
+
+            it.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {
+                    updateSubmitButton()
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+            })
         }
     }
 
@@ -87,12 +101,6 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun submit() {
-        editTexts.forEach {
-            if (it.validate().isNotEmpty()) {
-                return@submit
-            }
-        }
-
         val number = edit_card_number.text.toString()
         val name = edit_card_name.text.toString()
         val expiryMonth = edit_expiry_date.expiryMonth
@@ -116,7 +124,12 @@ class CreditCardActivity : AppCompatActivity() {
         } catch (ex: Exception) {
             listener.onRequestFailed(ex)
         }
+    }
 
+    private fun updateSubmitButton() {
+        val isFormValid = editTexts.map { it.validate().isEmpty() }
+                .reduce { acc, b -> acc && b }
+        button_submit.isEnabled = isFormValid
     }
 
     companion object {

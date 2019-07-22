@@ -6,7 +6,6 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
-import co.omise.android.R
 import java.util.Calendar
 import java.util.GregorianCalendar
 

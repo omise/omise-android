@@ -124,6 +124,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
+        android:enabled="false"
         android:text="@string/button_submit" />
 
 </LinearLayout>

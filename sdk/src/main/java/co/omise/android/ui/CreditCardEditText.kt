@@ -17,6 +17,7 @@ class CreditCardEditText : OmiseEditText {
     companion object {
         private const val CARD_NUMBER_LENGTH = 16
         private const val CARD_NUMBER_WITH_SPACE_LENGTH = 19
+        private const val SEPARATOR = " "
     }
 
     private var cardBrandImage: Bitmap? = null
@@ -45,7 +46,7 @@ class CreditCardEditText : OmiseEditText {
                 val c = e[e.length - 1]
                 if (Character.isDigit(c)) {
                     // Insert space bar
-                    e.insert(e.length - 1, " ")
+                    e.insert(e.length - 1, SEPARATOR)
                 } else if (c == ' ') {
                     // Delete space bar
                     e.delete(e.length - 1, e.length)
@@ -68,13 +69,13 @@ class CreditCardEditText : OmiseEditText {
     }
 
     override fun validate(): List<InvalidationType> {
-        val value = text.toString().trim { it <= ' ' }
+        val value = text.toString().trim { it <= ' ' }.replace(SEPARATOR, "")
         val empty = if (value.isEmpty()) {
             InvalidationType.Empty
         } else {
             null
         }
-        val invalid = if (value.length == CARD_NUMBER_LENGTH && !CardNumber.luhn(value)) {
+        val invalid = if (value.length < CARD_NUMBER_LENGTH || !CardNumber.luhn(value)) {
             InvalidationType.Invalid
         } else {
             null
