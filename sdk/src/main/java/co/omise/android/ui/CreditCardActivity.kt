@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
 import kotlinx.android.synthetic.main.activity_credit_card.text_error_message
 import java.io.IOError
+import java.util.Calendar
 
 class CreditCardActivity : AppCompatActivity() {
 
@@ -34,6 +35,30 @@ class CreditCardActivity : AppCompatActivity() {
         setTitle(R.string.default_form_title)
 
         button_submit.setOnClickListener { this.submit() }
+
+        edit_card_number.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateLuhn(edit_card_number)
+            } else {
+                edit_card_number.errorMessage = null
+            }
+        }
+
+        edit_expiry_date.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateExpiryDate(edit_expiry_date)
+            } else {
+                edit_expiry_date.errorMessage = null
+            }
+        }
+
+        edit_security_code.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validateSecurityCode(edit_security_code)
+            } else {
+                edit_security_code.errorMessage = null
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -203,7 +228,37 @@ class CreditCardActivity : AppCompatActivity() {
             field.errorMessage = getString(R.string.error_invalid, field.hint)
             return false
         }
+        field.errorMessage = null
+        return true
+    }
 
+    private fun validateSecurityCode(field: OmiseEditText): Boolean {
+        val value = field.text.toString().trim { it <= ' ' }
+        val cvvReg = "[0-9]{3}".toRegex()
+        if (!cvvReg.matches(value) && value.isNotEmpty()) {
+            field.errorMessage = getString(R.string.error_invalid, field.hint)
+            return false
+        }
+        field.errorMessage = null
+        return true
+    }
+
+    private fun validateExpiryDate(field: ExpiryDateEditText): Boolean {
+        val value = field.text.toString().trim { it <= ' ' }
+        if (value.isEmpty()) {
+            field.errorMessage = null
+            return true
+        }
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val expiryMonth = field.expiryMonth
+        val expiryYear = field.expiryYear
+        if (expiryYear < currentYear || (expiryMonth == currentMonth && expiryYear <= currentYear)) {
+            field.errorMessage = getString(R.string.error_invalid, field.hint)
+            return false
+        }
+        field.errorMessage = null
         return true
     }
 

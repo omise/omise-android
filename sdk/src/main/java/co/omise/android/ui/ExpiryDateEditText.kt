@@ -22,13 +22,7 @@ class ExpiryDateEditText : OmiseEditText {
     }
 
     var expiryMonth: Int = 0
-        private set(value) {
-            field = value
-        }
     var expiryYear: Int = 0
-        private set(value) {
-            field = value
-        }
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
