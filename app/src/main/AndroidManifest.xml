@@ -47,11 +47,6 @@
             android:name=".ReceiptActivity"
             android:label="@string/activity_receipt" />
 
-        <!-- imported card.io activities -->
-        <activity
-            android:name="io.card.payment.CardIOActivity"
-            android:configChanges="keyboardHidden|orientation" />
-
         <activity
             android:name="co.omise.android.ui.AuthorizingPaymentActivity"
             android:theme="@style/OmiseTheme" />

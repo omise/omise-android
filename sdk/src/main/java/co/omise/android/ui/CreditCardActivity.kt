@@ -1,23 +1,15 @@
 package co.omise.android.ui
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import co.omise.android.CardIO
-import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
 import co.omise.android.models.APIError
 import co.omise.android.models.Token
-import io.card.payment.CardIOActivity
-import io.card.payment.CreditCard
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
@@ -53,41 +45,6 @@ class CreditCardActivity : AppCompatActivity() {
     override fun onBackPressed() {
         setResult(RESULT_CANCELED)
         super.onBackPressed()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_credit_card, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        //        menu.getItem(0).setVisible(CardIO.isAvailable() && views.button(R.id.button_submit).isEnabled());
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_item_card_io) {
-            if (CardIO.isAvailable()) {
-                val intent = CardIO.buildIntent(this)
-                startActivityForResult(intent, REQUEST_CODE_CARD_IO)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_CARD_IO) {
-            if (data == null || !data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
-                return
-            }
-
-            val scanResult = data.getParcelableExtra<CreditCard>(CardIOActivity.EXTRA_SCAN_RESULT)
-            applyCardIOResult(scanResult)
-
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 
     private inner class ActivityRequestListener : RequestListener<Token> {
@@ -127,37 +84,6 @@ class CreditCardActivity : AppCompatActivity() {
 
     private fun setFormEnabled(enabled: Boolean) {
         editTexts.forEach { it.isEnabled = enabled }
-        invalidateOptionsMenu()
-    }
-
-    private fun applyCardIOResult(data: CreditCard) {
-        if (data.cardNumber != null && data.cardNumber.isNotEmpty()) {
-            edit_card_number.setText(CardNumber.format(data.cardNumber))
-        }
-
-        if (data.cardholderName != null && data.cardholderName.isNotEmpty()) {
-            edit_card_name.setText(data.cardholderName)
-        }
-
-        if (data.isExpiryValid) {
-            edit_expiry_date.setExpiryDate(data.expiryMonth, data.expiryYear)
-        }
-
-        if (data.cvv != null && data.cvv.isNotEmpty()) {
-            edit_security_code.setText(data.cvv)
-        }
-
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (edit_card_number.text == null || edit_card_number.text.toString().isEmpty()) {
-            edit_card_number.requestFocus()
-            imm.showSoftInput(edit_card_number, InputMethodManager.SHOW_IMPLICIT)
-        } else if (edit_card_name.text == null || edit_card_name.text.toString().isEmpty()) {
-            edit_card_name.requestFocus()
-            imm.showSoftInput(edit_card_name, InputMethodManager.SHOW_IMPLICIT)
-        } else if (edit_security_code.text == null || edit_security_code.text.toString().isEmpty()) {
-            edit_security_code.requestFocus()
-            imm.showSoftInput(edit_security_code, InputMethodManager.SHOW_IMPLICIT)
-        }
     }
 
     private fun submit() {
@@ -196,7 +122,6 @@ class CreditCardActivity : AppCompatActivity() {
     companion object {
         // input
         const val EXTRA_PKEY = "CreditCardActivity.publicKey"
-        const val REQUEST_CODE_CARD_IO = 1000
 
         const val EXTRA_TOKEN = "CreditCardActivity.token"
         const val EXTRA_TOKEN_OBJECT = "CreditCardActivity.tokenObject"
