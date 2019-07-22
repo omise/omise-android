@@ -28,6 +28,10 @@ import java.io.IOError
 
 class CreditCardActivity : AppCompatActivity() {
 
+    private val editTexts: List<OmiseEditText> by lazy {
+        listOf(edit_card_number, edit_card_name, edit_expiry_date, edit_security_code)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credit_card)
@@ -35,27 +39,13 @@ class CreditCardActivity : AppCompatActivity() {
 
         button_submit.setOnClickListener(::submit)
 
-        edit_card_number.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && edit_card_number.validate().contains(InvalidationType.Invalid)) {
-                edit_card_number.errorMessage = getString(R.string.error_invalid, edit_card_number.hint)
-            } else {
-                edit_card_number.errorMessage = null
-            }
-        }
-
-        edit_expiry_date.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && edit_expiry_date.validate().contains(InvalidationType.Invalid)) {
-                edit_expiry_date.errorMessage = getString(R.string.error_invalid, edit_expiry_date.hint)
-            } else {
-                edit_expiry_date.errorMessage = null
-            }
-        }
-
-        edit_security_code.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus && edit_security_code.validate().contains(InvalidationType.Invalid)) {
-                edit_security_code.errorMessage = getString(R.string.error_invalid, edit_security_code.hint)
-            } else {
-                edit_security_code.errorMessage = null
+        editTexts.forEach {
+            it.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus && it.validate().contains(InvalidationType.Invalid)) {
+                    it.errorMessage = getString(R.string.error_invalid, it.hint)
+                } else {
+                    it.errorMessage = null
+                }
             }
         }
     }
@@ -136,12 +126,7 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun setFormEnabled(enabled: Boolean) {
-        edit_card_number.isEnabled = enabled
-        edit_card_name.isEnabled = enabled
-        edit_security_code.isEnabled = enabled
-        button_submit.isEnabled = enabled
-
-
+        editTexts.forEach { it.isEnabled = enabled }
         invalidateOptionsMenu()
     }
 
@@ -176,12 +161,10 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun submit() {
-        val valid = edit_card_number.validate().isEmpty() &&
-                edit_card_name.validate().isEmpty() &&
-                edit_expiry_date.validate().isEmpty() &&
-                edit_security_code.validate().isEmpty()
-        if (!valid) {
-            return
+        editTexts.forEach {
+            if (it.validate().isNotEmpty()) {
+                return@submit
+            }
         }
 
         val number = edit_card_number.text.toString()
