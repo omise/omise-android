@@ -43,4 +43,25 @@ class CreditCardEditTextTest {
 
         assertEquals("4242 4242 4242 4242", editText.text.toString())
     }
+
+    @Test
+    fun validate_validValue() {
+        "4242424242424242".forEach { editText.append(it.toString()) }
+
+        assertEquals(emptyList<InvalidationType>(), editText.validate())
+    }
+
+    @Test
+    fun validate_emptyValue() {
+        "".forEach { editText.append(it.toString()) }
+
+        assertEquals(listOf(InvalidationType.Empty, InvalidationType.Invalid), editText.validate())
+    }
+
+    @Test
+    fun validate_invalidNumber() {
+        "1234567890123456".forEach { editText.append(it.toString()) }
+
+        assertEquals(listOf(InvalidationType.Invalid), editText.validate())
+    }
 }
