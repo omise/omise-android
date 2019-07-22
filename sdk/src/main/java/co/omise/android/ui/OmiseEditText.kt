@@ -17,6 +17,8 @@ abstract class OmiseEditText : AppCompatEditText {
 
     private var errorText: TextPaint? = null
 
+    abstract fun validate(): List<InvalidationType>
+
     constructor(context: Context?) : super(context)
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -55,7 +57,7 @@ abstract class OmiseEditText : AppCompatEditText {
 
 }
 
-fun AppCompatEditText.disableOptions() {
+fun OmiseEditText.disableOptions() {
     this.customSelectionActionModeCallback = object : ActionMode.Callback {
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             return false
@@ -71,4 +73,9 @@ fun AppCompatEditText.disableOptions() {
 
         override fun onDestroyActionMode(mode: ActionMode?) {}
     }
+}
+
+sealed class InvalidationType {
+    object Empty: InvalidationType()
+    object Invalid: InvalidationType()
 }

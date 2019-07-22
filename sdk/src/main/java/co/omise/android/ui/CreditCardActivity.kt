@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
 import kotlinx.android.synthetic.main.activity_credit_card.text_error_message
 import java.io.IOError
-import java.util.Calendar
 
 class CreditCardActivity : AppCompatActivity() {
 
@@ -34,27 +33,27 @@ class CreditCardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_credit_card)
         setTitle(R.string.default_form_title)
 
-        button_submit.setOnClickListener { this.submit() }
+        button_submit.setOnClickListener(::submit)
 
         edit_card_number.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                validateLuhn(edit_card_number)
+            if (!hasFocus && edit_card_number.validate().contains(InvalidationType.Invalid)) {
+                edit_card_number.errorMessage = getString(R.string.error_invalid, edit_card_number.hint)
             } else {
                 edit_card_number.errorMessage = null
             }
         }
 
         edit_expiry_date.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                validateExpiryDate(edit_expiry_date)
+            if (!hasFocus && edit_expiry_date.validate().contains(InvalidationType.Invalid)) {
+                edit_expiry_date.errorMessage = getString(R.string.error_invalid, edit_expiry_date.hint)
             } else {
                 edit_expiry_date.errorMessage = null
             }
         }
 
         edit_security_code.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                validateSecurityCode(edit_security_code)
+            if (!hasFocus && edit_security_code.validate().contains(InvalidationType.Invalid)) {
+                edit_security_code.errorMessage = getString(R.string.error_invalid, edit_security_code.hint)
             } else {
                 edit_security_code.errorMessage = null
             }
@@ -177,11 +176,10 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun submit() {
-        val valid = validateNonEmpty(edit_card_number) &&
-                validateNonEmpty(edit_card_name) &&
-                validateNonEmpty(edit_expiry_date) &&
-                validateNonEmpty(edit_security_code) &&
-                validateLuhn(edit_card_number)
+        val valid = edit_card_number.validate().isEmpty() &&
+                edit_card_name.validate().isEmpty() &&
+                edit_expiry_date.validate().isEmpty() &&
+                edit_security_code.validate().isEmpty()
         if (!valid) {
             return
         }
@@ -212,56 +210,6 @@ class CreditCardActivity : AppCompatActivity() {
 
     }
 
-    private fun validateNonEmpty(field: OmiseEditText): Boolean {
-        val value = field.text.toString().trim { it <= ' ' }
-        if (value.isEmpty()) {
-            field.errorMessage = getString(R.string.error_required, field.hint)
-            return false
-        }
-        field.errorMessage = null
-        return true
-    }
-
-    private fun validateLuhn(field: OmiseEditText): Boolean {
-        val value = field.text.toString().trim { it <= ' ' }
-        if (!CardNumber.luhn(value)) {
-            field.errorMessage = getString(R.string.error_invalid, field.hint)
-            return false
-        }
-        field.errorMessage = null
-        return true
-    }
-
-    private fun validateSecurityCode(field: OmiseEditText): Boolean {
-        val value = field.text.toString().trim { it <= ' ' }
-        val cvvReg = "[0-9]{3}".toRegex()
-        if (!cvvReg.matches(value) && value.isNotEmpty()) {
-            field.errorMessage = getString(R.string.error_invalid, field.hint)
-            return false
-        }
-        field.errorMessage = null
-        return true
-    }
-
-    private fun validateExpiryDate(field: ExpiryDateEditText): Boolean {
-        val value = field.text.toString().trim { it <= ' ' }
-        if (value.isEmpty()) {
-            field.errorMessage = null
-            return true
-        }
-        val calendar = Calendar.getInstance()
-        val currentYear = calendar.get(Calendar.YEAR)
-        val currentMonth = calendar.get(Calendar.MONTH)
-        val expiryMonth = field.expiryMonth
-        val expiryYear = field.expiryYear
-        if (expiryYear < currentYear || (expiryMonth == currentMonth && expiryYear <= currentYear)) {
-            field.errorMessage = getString(R.string.error_invalid, field.hint)
-            return false
-        }
-        field.errorMessage = null
-        return true
-    }
-
     companion object {
         // input
         const val EXTRA_PKEY = "CreditCardActivity.publicKey"
@@ -271,4 +219,8 @@ class CreditCardActivity : AppCompatActivity() {
         const val EXTRA_TOKEN_OBJECT = "CreditCardActivity.tokenObject"
         const val EXTRA_CARD_OBJECT = "CreditCardActivity.cardObject"
     }
+}
+
+fun View.setOnClickListener(action: () -> Unit) {
+    this.setOnClickListener { action() }
 }

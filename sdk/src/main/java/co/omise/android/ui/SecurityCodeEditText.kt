@@ -4,11 +4,14 @@ import android.content.Context
 import android.text.InputFilter
 import android.text.InputType
 import android.util.AttributeSet
+import co.omise.android.CardNumber
+import co.omise.android.R
 
 
 class SecurityCodeEditText : OmiseEditText {
     companion object {
         private const val CVV_LENGTH = 3
+        private const val CVV_REGEX = "[0-9]{3}"
     }
 
     constructor(context: Context?) : super(context) {
@@ -26,5 +29,20 @@ class SecurityCodeEditText : OmiseEditText {
     private fun init() {
         filters = arrayOf(InputFilter.LengthFilter(CVV_LENGTH))
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+    }
+
+    override fun validate(): List<InvalidationType> {
+        val value = text.toString().trim { it <= ' ' }
+        val empty = if (value.isEmpty()) {
+            InvalidationType.Empty
+        } else {
+            null
+        }
+        val invalid = if (value.isNotEmpty() && !CVV_REGEX.toRegex().matches(value)) {
+            InvalidationType.Invalid
+        } else {
+            null
+        }
+        return listOfNotNull(empty, invalid)
     }
 }

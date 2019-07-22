@@ -13,4 +13,14 @@ class CardNameEditText : OmiseEditText {
     init {
         inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
     }
+
+    override fun validate(): List<InvalidationType> {
+        val value = text.toString().trim { it <= ' ' }
+        val empty = if (value.isEmpty()) {
+            InvalidationType.Empty
+        } else {
+            null
+        }
+        return listOfNotNull(empty)
+    }
 }

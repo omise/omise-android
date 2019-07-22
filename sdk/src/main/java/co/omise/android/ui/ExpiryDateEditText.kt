@@ -6,6 +6,7 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
+import co.omise.android.R
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -39,6 +40,27 @@ class ExpiryDateEditText : OmiseEditText {
         super.onSelectionChanged(selStart, selEnd)
 
         text?.let { setSelection(it.length) }
+    }
+
+    override fun validate(): List<InvalidationType> {
+        val value = text.toString().trim { it <= ' ' }
+        val empty = if (value.isEmpty()) {
+            InvalidationType.Empty
+        } else {
+            null
+        }
+
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val expiryMonth = expiryMonth
+        val expiryYear = expiryYear
+        val invalid = if (value.isNotEmpty() && (expiryYear < currentYear || (expiryMonth == currentMonth && expiryYear <= currentYear))) {
+            InvalidationType.Invalid
+        } else {
+            null
+        }
+        return listOfNotNull(empty, invalid)
     }
 
     private inner class ExpiryDateTextWatcher : TextWatcher {

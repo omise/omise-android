@@ -11,6 +11,7 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import co.omise.android.CardNumber
+import co.omise.android.R
 
 class CreditCardEditText : OmiseEditText {
 
@@ -64,6 +65,21 @@ class CreditCardEditText : OmiseEditText {
             val imageTopPosition = (height - it.height) / 2f
             canvas?.drawBitmap(it, imageLeftPosition, imageTopPosition, cardBrandImagePaint)
         }
+    }
+
+    override fun validate(): List<InvalidationType> {
+        val value = text.toString().trim { it <= ' ' }
+        val empty = if (value.isEmpty()) {
+            InvalidationType.Empty
+        } else {
+            null
+        }
+        val invalid = if (!CardNumber.luhn(value)) {
+            InvalidationType.Invalid
+        } else {
+            null
+        }
+        return listOfNotNull(empty, invalid)
     }
 
     private fun updateCardBrandImage() {
