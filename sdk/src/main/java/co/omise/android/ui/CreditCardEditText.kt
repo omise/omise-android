@@ -11,11 +11,11 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import co.omise.android.CardNumber
-import co.omise.android.R
 
 class CreditCardEditText : OmiseEditText {
 
     companion object {
+        private const val CARD_NUMBER_LENGTH = 16
         private const val CARD_NUMBER_WITH_SPACE_LENGTH = 19
     }
 
@@ -74,7 +74,7 @@ class CreditCardEditText : OmiseEditText {
         } else {
             null
         }
-        val invalid = if (!CardNumber.luhn(value)) {
+        val invalid = if (value.length == CARD_NUMBER_LENGTH && !CardNumber.luhn(value)) {
             InvalidationType.Invalid
         } else {
             null
