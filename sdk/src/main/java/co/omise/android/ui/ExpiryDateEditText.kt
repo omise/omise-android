@@ -6,6 +6,7 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
+import java.lang.IllegalArgumentException
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -115,8 +116,13 @@ class ExpiryDateEditText : OmiseEditText {
         this.textListener = textListener
     }
 
+    @Throws(IllegalArgumentException::class)
     fun setExpiryDate(month: Int, year: Int) {
-        TODO("Set expiry date.")
+        if (month < 1 || month > 12 || year < 1 || year > 99) {
+            throw IllegalArgumentException("Invalid month or year.")
+        }
+        text?.append(month.toString())
+        text?.append(year.toString())
     }
 
     companion object {

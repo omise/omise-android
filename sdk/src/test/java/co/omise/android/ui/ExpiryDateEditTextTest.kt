@@ -57,8 +57,22 @@ class ExpiryDateEditTextTest {
 
     @Test(expected = InputValidationException.InvalidInputException::class)
     fun validate_invalidateWithIncompleteYearValue() {
-        "123".forEach { editText.append(it.toString()) } // 12/09
+        "123".forEach { editText.append(it.toString()) } // 12/03
 
         editText.validate()
+    }
+
+    @Test
+    fun setExpiryDate_validArgument() {
+        editText.setExpiryDate(12, 20)
+
+        assertEquals("12/20", editText.text.toString())
+        assertEquals(12, editText.expiryMonth)
+        assertEquals(2020, editText.expiryYear)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun setExpiryDate_invalidArgument() {
+        editText.setExpiryDate(0, 100)
     }
 }
