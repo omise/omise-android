@@ -48,20 +48,20 @@ class CreditCardEditTextTest {
     fun validate_validValue() {
         "4242424242424242".forEach { editText.append(it.toString()) }
 
-        assertEquals(emptyList<InvalidationType>(), editText.validate())
+        assertEquals(Unit, editText.validate())
     }
 
-    @Test
+    @Test(expected = InputValidationException.EmptyInputException::class)
     fun validate_emptyValue() {
         "".forEach { editText.append(it.toString()) }
 
-        assertEquals(listOf(InvalidationType.Empty, InvalidationType.Invalid), editText.validate())
+        editText.validate()
     }
 
-    @Test
+    @Test(expected = InputValidationException.InvalidInputException::class)
     fun validate_invalidNumber() {
         "1234567890123456".forEach { editText.append(it.toString()) }
 
-        assertEquals(listOf(InvalidationType.Invalid), editText.validate())
+        editText.validate()
     }
 }

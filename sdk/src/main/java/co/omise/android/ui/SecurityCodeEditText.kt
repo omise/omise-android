@@ -31,18 +31,12 @@ class SecurityCodeEditText : OmiseEditText {
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
     }
 
-    override fun validate(): List<InvalidationType> {
+    override fun validate() {
+        super.validate()
+
         val value = text.toString().trim { it <= ' ' }
-        val empty = if (value.isEmpty()) {
-            InvalidationType.Empty
-        } else {
-            null
+        if (!CVV_REGEX.toRegex().matches(value)) {
+            throw InputValidationException.InvalidInputException
         }
-        val invalid = if (value.isNotEmpty() && !CVV_REGEX.toRegex().matches(value)) {
-            InvalidationType.Invalid
-        } else {
-            null
-        }
-        return listOfNotNull(empty, invalid)
     }
 }

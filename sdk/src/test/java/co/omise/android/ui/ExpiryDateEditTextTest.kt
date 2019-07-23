@@ -45,20 +45,20 @@ class ExpiryDateEditTextTest {
     fun validate_validateValue() {
         "1234".forEach { editText.append(it.toString()) } // 12/34
 
-        assertEquals(emptyList<InvalidationType>(), editText.validate())
+        assertEquals(Unit, editText.validate())
     }
 
-    @Test
+    @Test(expected = InputValidationException.EmptyInputException::class)
     fun validate_emptyValue() {
         "".forEach { editText.append(it.toString()) }
 
-        assertEquals(listOf(InvalidationType.Empty), editText.validate())
+        editText.validate()
     }
 
-    @Test
+    @Test(expected = InputValidationException.InvalidInputException::class)
     fun validate_invalidateWithIncompleteYearValue() {
         "123".forEach { editText.append(it.toString()) } // 12/09
 
-        assertEquals(listOf(InvalidationType.Invalid), editText.validate())
+        editText.validate()
     }
 }

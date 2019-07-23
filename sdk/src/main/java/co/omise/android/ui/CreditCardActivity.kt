@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -35,24 +36,20 @@ class CreditCardActivity : AppCompatActivity() {
 
         editTexts.forEach {
             it.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus && it.validate().contains(InvalidationType.Invalid)) {
-                    it.errorMessage = getString(R.string.error_invalid, it.hint)
+                if (!hasFocus) {
+                    try {
+                        it.validate()
+                    } catch (e: InputValidationException.InvalidInputException) {
+                        it.errorMessage = getString(R.string.error_invalid, it.hint)
+                    } catch (e: InputValidationException.EmptyInputException) {
+                        it.errorMessage = null
+                    }
                 } else {
                     it.errorMessage = null
                 }
             }
 
-            it.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {
-                    updateSubmitButton()
-                }
-
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-            })
+            it.setOnAfterTextChangeListener(::updateSubmitButton)
         }
     }
 
@@ -98,6 +95,7 @@ class CreditCardActivity : AppCompatActivity() {
 
     private fun setFormEnabled(enabled: Boolean) {
         editTexts.forEach { it.isEnabled = enabled }
+        button_submit.isEnabled = enabled
     }
 
     private fun submit() {
@@ -127,7 +125,7 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun updateSubmitButton() {
-        val isFormValid = editTexts.map { it.validate().isEmpty() }
+        val isFormValid = editTexts.map { it.isValid }
                 .reduce { acc, b -> acc && b }
         button_submit.isEnabled = isFormValid
     }
@@ -144,4 +142,18 @@ class CreditCardActivity : AppCompatActivity() {
 
 fun View.setOnClickListener(action: () -> Unit) {
     this.setOnClickListener { action() }
+}
+
+fun EditText.setOnAfterTextChangeListener(action: () -> Unit) {
+    this.addTextChangedListener(object: TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {
+            action()
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+    })
 }

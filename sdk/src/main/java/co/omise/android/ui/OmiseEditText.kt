@@ -13,11 +13,26 @@ import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 
-abstract class OmiseEditText : AppCompatEditText {
+open class OmiseEditText : AppCompatEditText {
 
     private var errorText: TextPaint? = null
 
-    abstract fun validate(): List<InvalidationType>
+    val isValid: Boolean
+        get() =
+            try {
+                validate()
+                true
+            } catch (e: InputValidationException) {
+                false
+            }
+
+    @Throws(InputValidationException::class)
+    open fun validate() {
+        val value = text.toString().trim { it <= ' ' }
+        if (value.isEmpty()) {
+            throw InputValidationException.EmptyInputException
+        }
+    }
 
     constructor(context: Context?) : super(context)
 
@@ -44,7 +59,7 @@ abstract class OmiseEditText : AppCompatEditText {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        val canvas = canvas?: return
+        val canvas = canvas ?: return
 
         canvas.clipBounds
         canvas.drawText(
@@ -76,6 +91,11 @@ fun OmiseEditText.disableOptions() {
 }
 
 sealed class InvalidationType {
-    object Empty: InvalidationType()
-    object Invalid: InvalidationType()
+    object Empty : InvalidationType()
+    object Invalid : InvalidationType()
+}
+
+sealed class InputValidationException : Exception() {
+    object EmptyInputException : InputValidationException()
+    object InvalidInputException : InputValidationException()
 }

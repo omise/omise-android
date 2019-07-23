@@ -41,25 +41,17 @@ class ExpiryDateEditText : OmiseEditText {
         text?.let { setSelection(it.length) }
     }
 
-    override fun validate(): List<InvalidationType> {
-        val value = text.toString().trim { it <= ' ' }
-        val empty = if (value.isEmpty()) {
-            InvalidationType.Empty
-        } else {
-            null
-        }
+    override fun validate() {
+        super.validate()
 
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH)
         val expiryMonth = expiryMonth
         val expiryYear = expiryYear
-        val invalid = if (value.isNotEmpty() && (expiryYear < currentYear || (expiryMonth == currentMonth && expiryYear <= currentYear))) {
-            InvalidationType.Invalid
-        } else {
-            null
+        if (expiryYear < currentYear || (expiryMonth == currentMonth && expiryYear <= currentYear)) {
+            throw InputValidationException.InvalidInputException
         }
-        return listOfNotNull(empty, invalid)
     }
 
     private inner class ExpiryDateTextWatcher : TextWatcher {
@@ -102,7 +94,7 @@ class ExpiryDateEditText : OmiseEditText {
     }
 
     private fun notifyExpiryDateChanged(formattedString: String = "") {
-        if (formattedString.isNullOrEmpty()) {
+        if (formattedString.isEmpty()) {
             expiryMonth = 0
             expiryYear = 0
             textListener?.textFormatted(null, null)
@@ -160,7 +152,7 @@ class ExpiryDateEditText : OmiseEditText {
     }
 
     private fun String.separateDates(): Pair<Int?, Int?> {
-        if (!this.isNullOrEmpty() && !this.contains(DATE_SEPARATOR)) return Pair(this.toIntOrNull(), null)
+        if (this.isNotEmpty() && !this.contains(DATE_SEPARATOR)) return Pair(this.toIntOrNull(), null)
 
         val dates = this.split(DATE_SEPARATOR.toRegex())
 

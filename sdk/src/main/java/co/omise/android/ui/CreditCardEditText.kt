@@ -68,19 +68,13 @@ class CreditCardEditText : OmiseEditText {
         }
     }
 
-    override fun validate(): List<InvalidationType> {
+    override fun validate() {
+        super.validate()
+
         val value = text.toString().trim { it <= ' ' }.replace(SEPARATOR, "")
-        val empty = if (value.isEmpty()) {
-            InvalidationType.Empty
-        } else {
-            null
+        if (value.length < CARD_NUMBER_LENGTH || !CardNumber.luhn(value)) {
+            throw InputValidationException.InvalidInputException
         }
-        val invalid = if (value.length < CARD_NUMBER_LENGTH || !CardNumber.luhn(value)) {
-            InvalidationType.Invalid
-        } else {
-            null
-        }
-        return listOfNotNull(empty, invalid)
     }
 
     private fun updateCardBrandImage() {
