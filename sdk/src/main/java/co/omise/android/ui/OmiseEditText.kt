@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 
@@ -59,17 +58,13 @@ open class OmiseEditText : AppCompatEditText {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        val canvas = canvas ?: return
-
-        canvas.clipBounds
-        canvas.drawText(
+        canvas?.drawText(
                 errorMessage ?: "",
                 0f,
                 10f,
-                errorText
+                errorText as Paint
         )
     }
-
 }
 
 fun OmiseEditText.disableOptions() {
@@ -88,11 +83,6 @@ fun OmiseEditText.disableOptions() {
 
         override fun onDestroyActionMode(mode: ActionMode?) {}
     }
-}
-
-sealed class InvalidationType {
-    object Empty : InvalidationType()
-    object Invalid : InvalidationType()
 }
 
 sealed class InputValidationException : Exception() {
