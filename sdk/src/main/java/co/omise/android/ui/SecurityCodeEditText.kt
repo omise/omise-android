@@ -14,6 +14,9 @@ class SecurityCodeEditText : OmiseEditText {
         private const val CVV_REGEX = "[0-9]{3}"
     }
 
+    val securityCode: String
+        get() = text.toString().trim()
+
     constructor(context: Context?) : super(context) {
         init()
     }

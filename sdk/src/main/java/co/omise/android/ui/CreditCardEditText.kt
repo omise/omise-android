@@ -23,6 +23,9 @@ class CreditCardEditText : OmiseEditText {
     private var cardBrandImage: Bitmap? = null
     private var cardBrandImagePaint: Paint? = null
 
+    val cardNumber: String
+        get() = text.toString().replace(SEPARATOR, "")
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

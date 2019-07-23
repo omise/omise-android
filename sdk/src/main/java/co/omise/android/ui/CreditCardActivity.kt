@@ -99,11 +99,11 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun submit() {
-        val number = edit_card_number.text.toString()
-        val name = edit_card_name.text.toString()
+        val number = edit_card_number.cardNumber
+        val name = edit_card_name.cardName
         val expiryMonth = edit_expiry_date.expiryMonth
         val expiryYear = edit_expiry_date.expiryYear
-        val securityCode = edit_security_code.text.toString()
+        val securityCode = edit_security_code.securityCode
 
         val request = Token.CreateTokenRequestBuilder(
                 name,

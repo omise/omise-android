@@ -64,4 +64,11 @@ class CreditCardEditTextTest {
 
         editText.validate()
     }
+
+    @Test
+    fun cardNumber_returnCardNumberWithoutSeparatorChars() {
+        "4242424242424242".forEach { editText.append(it.toString()) }
+
+        assertEquals("4242424242424242", editText.cardNumber)
+    }
 }

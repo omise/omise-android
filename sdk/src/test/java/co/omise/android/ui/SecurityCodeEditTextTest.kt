@@ -24,4 +24,11 @@ class SecurityCodeEditTextTest {
 
         editText.validate()
     }
+
+    @Test
+    fun securityCode_returnSecurityCode() {
+        editText.setText("123")
+
+        assertEquals("123", editText.securityCode)
+    }
 }
