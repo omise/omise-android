@@ -62,7 +62,7 @@ class CreditCardEditText : OmiseEditText {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         cardBrandImage?.let {
-            val imageLeftPosition = width.toFloat() - it.width
+            val imageLeftPosition = width.toFloat() - it.width - paddingRight
             val imageTopPosition = (height - it.height) / 2f
             canvas?.drawBitmap(it, imageLeftPosition, imageTopPosition, cardBrandImagePaint)
         }

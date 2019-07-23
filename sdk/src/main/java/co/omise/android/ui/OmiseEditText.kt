@@ -58,7 +58,7 @@ open class OmiseEditText : AppCompatEditText {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        val xPos = 6f
+        val xPos = paddingLeft.toFloat()
         val yPos = height - (errorText?.fontMetrics?.bottom ?: 0f)
         canvas?.drawText(
                 errorMessage ?: "",
