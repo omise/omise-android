@@ -37,6 +37,11 @@ class CreditCardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!intent.hasExtra(EXTRA_PKEY)) {
+            throw IllegalAccessException("Can not found ${::EXTRA_PKEY.name}.")
+        }
+
         setContentView(R.layout.activity_credit_card)
         setTitle(R.string.default_form_title)
 
