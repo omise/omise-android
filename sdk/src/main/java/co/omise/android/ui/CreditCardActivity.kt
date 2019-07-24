@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -23,8 +25,15 @@ import java.io.IOError
 
 class CreditCardActivity : AppCompatActivity() {
 
+    private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
+    private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
+    private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
+    private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
+    private val submitButton: Button by lazy { button_submit }
+    private val errorMessageText: TextView by lazy { text_error_message }
+
     private val editTexts: List<OmiseEditText> by lazy {
-        listOf(edit_card_number, edit_card_name, edit_expiry_date, edit_security_code)
+        listOf(cardNumberEdit, cardNameEdit, expiryDateEdit, securityCodeEdit)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +41,7 @@ class CreditCardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_credit_card)
         setTitle(R.string.default_form_title)
 
-        button_submit.setOnClickListener(::submit)
+        submitButton.setOnClickListener(::submit)
 
         editTexts.forEach {
             it.setOnFocusChangeListener { _, hasFocus ->
@@ -73,7 +82,7 @@ class CreditCardActivity : AppCompatActivity() {
         override fun onRequestFailed(throwable: Throwable) {
             enableForm()
 
-            text_error_message.visibility = View.VISIBLE
+            errorMessageText.visibility = View.VISIBLE
 
             val message = when (throwable) {
                 is IOError -> getString(R.string.error_io, throwable.message)
@@ -81,7 +90,7 @@ class CreditCardActivity : AppCompatActivity() {
                 else -> getString(R.string.error_unknown, throwable.message)
             }
 
-            text_error_message.text = message
+            errorMessageText.text = message
         }
     }
 
@@ -95,15 +104,15 @@ class CreditCardActivity : AppCompatActivity() {
 
     private fun setFormEnabled(enabled: Boolean) {
         editTexts.forEach { it.isEnabled = enabled }
-        button_submit.isEnabled = enabled
+        submitButton.isEnabled = enabled
     }
 
     private fun submit() {
-        val number = edit_card_number.cardNumber
-        val name = edit_card_name.cardName
-        val expiryMonth = edit_expiry_date.expiryMonth
-        val expiryYear = edit_expiry_date.expiryYear
-        val securityCode = edit_security_code.securityCode
+        val number = cardNumberEdit.cardNumber
+        val name = cardNameEdit.cardName
+        val expiryMonth = expiryDateEdit.expiryMonth
+        val expiryYear = expiryDateEdit.expiryYear
+        val securityCode = securityCodeEdit.securityCode
 
         val request = Token.CreateTokenRequestBuilder(
                 name,
@@ -127,7 +136,7 @@ class CreditCardActivity : AppCompatActivity() {
     private fun updateSubmitButton() {
         val isFormValid = editTexts.map { it.isValid }
                 .reduce { acc, b -> acc && b }
-        button_submit.isEnabled = isFormValid
+        submitButton.isEnabled = isFormValid
     }
 
     companion object {
@@ -145,7 +154,7 @@ fun View.setOnClickListener(action: () -> Unit) {
 }
 
 fun EditText.setOnAfterTextChangeListener(action: () -> Unit) {
-    this.addTextChangedListener(object: TextWatcher {
+    this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
             action()
         }
