@@ -11,6 +11,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @deprecated replaced by {@link ExpiryDateEditText}
+ */
 @Deprecated
 public abstract class NumberRangeSpinnerAdapter implements SpinnerAdapter {
     private List<DataSetObserver> observers = new ArrayList<>();
