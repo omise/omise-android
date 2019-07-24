@@ -3,16 +3,15 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
+import co.omise.android.extensions.setOnAfterTextChangeListener
+import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
 import co.omise.android.models.Token
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
@@ -147,22 +146,4 @@ class CreditCardActivity : AppCompatActivity() {
         const val EXTRA_TOKEN_OBJECT = "CreditCardActivity.tokenObject"
         const val EXTRA_CARD_OBJECT = "CreditCardActivity.cardObject"
     }
-}
-
-fun View.setOnClickListener(action: () -> Unit) {
-    this.setOnClickListener { action() }
-}
-
-fun EditText.setOnAfterTextChangeListener(action: () -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(p0: Editable?) {
-            action()
-        }
-
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
-    })
 }

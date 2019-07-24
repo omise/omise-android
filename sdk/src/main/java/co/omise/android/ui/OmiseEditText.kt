@@ -6,9 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.widget.AppCompatEditText
 
 
@@ -66,24 +63,6 @@ open class OmiseEditText : AppCompatEditText {
                 yPos,
                 errorText as Paint
         )
-    }
-}
-
-fun OmiseEditText.disableOptions() {
-    this.customSelectionActionModeCallback = object : ActionMode.Callback {
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            return false
-        }
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            return false
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            return false
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode?) {}
     }
 }
 

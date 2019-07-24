@@ -6,7 +6,7 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
-import java.lang.IllegalArgumentException
+import co.omise.android.extensions.disableOptions
 import java.util.Calendar
 import java.util.GregorianCalendar
 
