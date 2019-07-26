@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+# v2.6.6
+
+* **FIXED:** Fix expiry date spinner.
+
 # v2.6.5
 
 * **REMOVED:** Drop support TLS 1.1.
