@@ -53,7 +53,7 @@ public abstract class NumberRangeSpinnerAdapter implements SpinnerAdapter {
         Context context = parent.getContext();
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
         }
 
         TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
