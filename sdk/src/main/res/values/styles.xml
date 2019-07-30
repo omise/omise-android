@@ -17,4 +17,10 @@
     <style name="OmiseButton" parent="Widget.AppCompat.Button">
     </style>
 
+    <style name="OmiseErrorMessage" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@android:color/holo_red_light</item>
+        <item name="android:layout_marginLeft">@dimen/error_message_start_margin</item>
+        <item name="android:layout_marginStart">@dimen/error_message_start_margin</item>
+    </style>
+
 </resources>
