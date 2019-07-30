@@ -12,7 +12,6 @@
     </style>
 
     <style name="OmiseFloatingTitle" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="OmiseButton" parent="Widget.AppCompat.Button">

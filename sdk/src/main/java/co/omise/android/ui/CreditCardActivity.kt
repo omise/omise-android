@@ -3,9 +3,8 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -14,12 +13,13 @@ import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
 import co.omise.android.models.Token
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
-import kotlinx.android.synthetic.main.activity_credit_card.text_error_message
+import kotlinx.android.synthetic.main.activity_credit_card.layout_credit_card_form
 import java.io.IOError
 
 class CreditCardActivity : AppCompatActivity() {
@@ -29,7 +29,7 @@ class CreditCardActivity : AppCompatActivity() {
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
     private val submitButton: Button by lazy { button_submit }
-    private val errorMessageText: TextView by lazy { text_error_message }
+    private val containerLayout: LinearLayout by lazy { layout_credit_card_form }
 
     private val editTexts: List<OmiseEditText> by lazy {
         listOf(cardNumberEdit, cardNameEdit, expiryDateEdit, securityCodeEdit)
@@ -86,15 +86,13 @@ class CreditCardActivity : AppCompatActivity() {
         override fun onRequestFailed(throwable: Throwable) {
             enableForm()
 
-            errorMessageText.visibility = View.VISIBLE
-
             val message = when (throwable) {
                 is IOError -> getString(R.string.error_io, throwable.message)
                 is APIError -> getString(R.string.error_api, throwable.message)
                 else -> getString(R.string.error_unknown, throwable.message)
             }
 
-            errorMessageText.text = message
+            Snackbar.make(containerLayout, message, Snackbar.LENGTH_LONG).show()
         }
     }
 

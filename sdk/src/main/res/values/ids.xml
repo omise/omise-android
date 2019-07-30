@@ -12,4 +12,5 @@
     <item name="text_card_number" type="id" />
     <item name="text_expiry_date" type="id" />
     <item name="text_security_code" type="id" />
+    <item name="layout_credit_card_form" type="id" />
 </resources>
