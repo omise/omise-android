@@ -3,7 +3,11 @@ package co.omise.android;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import co.omise.android.models.Card;
+import co.omise.android.models.Serializer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,13 +29,15 @@ public class CardModelTest {
             "   \"fingerprint\":\"mKleiBfwp+PoJWB/ipngANuECUmRKjyxROwFW5IO7TM=\",\n" +
             "   \"name\":\"Somchai Prasert\",\n" +
             "   \"security_code_check\":true,\n" +
-            "   \"created\":\"2015-06-02T05:41:46Z\",\n" +
+            "   \"created_at\":\"2015-06-02T05:41:46Z\",\n" +
             "   \"bank\":\"BBL\"\n" +
             "}";
 
     @Test
-    public void cardConstructor_canSerializeByString() {
-        Card card = new Card();
+    public void cardConstructor_canSerializeByString() throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(CARD_JSON.getBytes());
+        Card card = serializer().deserialize(inputStream, Card.class);
+
         assertEquals("card_test_5086xl7amxfysl0ac5l", card.id);
         assertEquals(true, card.livemode);
         assertEquals("th", card.country);
@@ -40,13 +46,16 @@ public class CardModelTest {
         assertEquals("", card.financing);
         assertEquals("4242", card.lastDigits);
         assertEquals("Visa", card.brand);
-        assertEquals(10, card.brand);
+        assertEquals(10, card.expirationMonth);
         assertEquals(2018, card.expirationYear);
         assertEquals("mKleiBfwp+PoJWB/ipngANuECUmRKjyxROwFW5IO7TM=", card.fingerprint);
         assertEquals("Somchai Prasert", card.name);
         assertEquals(true, card.securityCodeCheck);
-        assert card.created != null;
         assertEquals(new DateTime("2015-06-02T05:41:46Z").getMillis(), card.created.getMillis());
         assertEquals("BBL", card.bank);
+    }
+
+    private Serializer serializer() {
+        return new Serializer();
     }
 }
