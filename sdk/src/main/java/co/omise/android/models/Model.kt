@@ -13,6 +13,9 @@ import org.joda.time.DateTime
 @JsonTypeIdResolver(ModelTypeResolver::class)
 open class Model() : Parcelable {
     @JvmField
+    @field:JsonProperty("object")
+    var modelObject: String? = null
+    @JvmField
     var id: String? = null
     @JvmField
     @field:JsonProperty("livemode")

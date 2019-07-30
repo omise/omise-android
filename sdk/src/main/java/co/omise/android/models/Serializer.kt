@@ -1,6 +1,7 @@
 package co.omise.android.models
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -66,7 +67,7 @@ class Serializer {
      * @throws IOException on general I/O error.
     </T> */
     @Throws(IOException::class)
-    fun <T : Model> deserialize(input: InputStream, klass: Class<T>): T {
+    fun <T : Model> deserialize(input: InputStream, klass: Class<*>): T {
         return objectMapper.readerFor(klass).readValue(input)
     }
 
@@ -82,5 +83,20 @@ class Serializer {
     @Throws(IOException::class)
     fun <T : Error> deserialize(input: InputStream, klass: Class<T>): T {
         return objectMapper.readerFor(klass).readValue(input)
+    }
+
+    /**
+     * Serialize the given model to a map with JSON-like structure.
+     *
+     * @param model The [Model] to serialize.
+     * @param <T>   The type of the model to serialize.
+     * @return The map containing the model's data.
+    </T> */
+    fun <T : Model> serializeToMap(model: T): Map<String, Any> {
+        return objectMapper.convertValue(model, object : TypeReference<Map<String, Any>>() {})
+    }
+
+    fun objectMapper(): ObjectMapper {
+        return objectMapper
     }
 }

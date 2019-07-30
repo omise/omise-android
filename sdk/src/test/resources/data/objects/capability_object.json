@@ -1,0 +1,49 @@
+{
+  "object": "capability",
+  "location": "/capability",
+  "livemode": false,
+  "banks": [
+    "test",
+    "bbl",
+    "kbank",
+    "rbs",
+    "ktb",
+    "jpm",
+    "mufg",
+    "tmb",
+    "scb",
+    "citi",
+    "smbc"
+  ],
+  "payment_methods": [
+    {
+      "object": "payment_method",
+      "id": "id",
+      "location": "/capability",
+      "livemode": false,
+      "created_at": "2015-06-02T05:41:50Z",
+      "name": "card",
+      "currencies": [
+        "THB",
+        "JPY",
+        "USD"
+      ],
+      "card_brands": [
+        "JCB",
+        "Visa",
+        "MasterCard"
+      ],
+      "installment_terms": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    }
+  ],
+  "zero_interest_installments": false
+}
