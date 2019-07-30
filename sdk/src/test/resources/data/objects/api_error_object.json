@@ -1,6 +1,0 @@
-{
-  "object": "error",
-  "location": "https://www.omise.co/api-errors#brand-not-supported",
-  "code": "brand_not_supported",
-  "message": "brand not supported"
-}
