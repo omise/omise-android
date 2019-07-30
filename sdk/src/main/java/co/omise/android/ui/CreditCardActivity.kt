@@ -67,7 +67,13 @@ class CreditCardActivity : AppCompatActivity() {
                     try {
                         it.first.validate()
                     } catch (e: InputValidationException.InvalidInputException) {
-                        it.second.text = getString(R.string.error_invalid, it.first.hint)
+                        it.second.text = when (it.first) {
+                            cardNumberEdit -> getString(R.string.error_invalid_card_number)
+                            cardNameEdit -> getString(R.string.error_invalid_card_name)
+                            expiryDateEdit -> getString(R.string.error_invalid_expiry_date)
+                            securityCodeEdit -> getString(R.string.error_invalid_security_code)
+                            else -> null
+                        }
                     } catch (e: InputValidationException.EmptyInputException) {
                         it.second.text = null
                     }

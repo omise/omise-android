@@ -120,18 +120,18 @@ class CreditCardActivityTest {
     fun errorMessages_showErrorMessage() {
         onView(withId(R.id.edit_card_number)).perform(typeText("42424242"), pressImeActionButton())
 
-        onView(withId(R.id.text_card_number_error)).check(matches(allOf(withText("Card Number is invalid"))))
+        onView(withId(R.id.text_card_number_error)).check(matches(allOf(withText(R.string.error_invalid_card_number))))
 
 
         onView(withId(R.id.edit_expiry_date)).perform(typeText("123"), pressImeActionButton())
 
-        onView(withId(R.id.text_expiry_date_error)).check(matches(allOf(withText("MM/YY is invalid"))))
+        onView(withId(R.id.text_expiry_date_error)).check(matches(allOf(withText(R.string.error_invalid_expiry_date))))
 
 
         onView(withId(R.id.edit_security_code)).perform(typeText("12"), pressImeActionButton())
         onView(withId(R.id.edit_card_number)).perform(click())
 
-        onView(withId(R.id.text_security_code_error)).check(matches(allOf(withText("CVV is invalid"))))
+        onView(withId(R.id.text_security_code_error)).check(matches(allOf(withText(R.string.error_invalid_security_code))))
     }
 }
 
