@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -20,6 +21,10 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
 import kotlinx.android.synthetic.main.activity_credit_card.layout_credit_card_form
+import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
 import java.io.IOError
 
 class CreditCardActivity : AppCompatActivity() {
@@ -30,9 +35,18 @@ class CreditCardActivity : AppCompatActivity() {
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
     private val submitButton: Button by lazy { button_submit }
     private val containerLayout: LinearLayout by lazy { layout_credit_card_form }
+    private val cardNumberErrorText: TextView by lazy { text_card_number_error }
+    private val cardNameErrorText: TextView by lazy { text_card_name_error }
+    private val expiryDateErrorText: TextView by lazy { text_expiry_date_error }
+    private val securityCodeErrorText: TextView by lazy { text_security_code_error }
 
-    private val editTexts: List<OmiseEditText> by lazy {
-        listOf(cardNumberEdit, cardNameEdit, expiryDateEdit, securityCodeEdit)
+    private val editTexts: List<Pair<OmiseEditText, TextView>> by lazy {
+        listOf(
+                Pair(cardNumberEdit, cardNumberErrorText),
+                Pair(cardNameEdit, cardNameErrorText),
+                Pair(expiryDateEdit, expiryDateErrorText),
+                Pair(securityCodeEdit, securityCodeErrorText)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,21 +62,20 @@ class CreditCardActivity : AppCompatActivity() {
         submitButton.setOnClickListener(::submit)
 
         editTexts.forEach {
-            it.setOnFocusChangeListener { _, hasFocus ->
+            it.first.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     try {
-                        it.validate()
+                        it.first.validate()
                     } catch (e: InputValidationException.InvalidInputException) {
-                        it.errorMessage = getString(R.string.error_invalid, it.hint)
+                        it.second.text = getString(R.string.error_invalid, it.first.hint)
                     } catch (e: InputValidationException.EmptyInputException) {
-                        it.errorMessage = null
+                        it.second.text = null
                     }
                 } else {
-                    it.errorMessage = null
+                    it.second.text = null
                 }
             }
-
-            it.setOnAfterTextChangeListener(::updateSubmitButton)
+            it.first.setOnAfterTextChangeListener(::updateSubmitButton)
         }
     }
 
@@ -105,7 +118,7 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun setFormEnabled(enabled: Boolean) {
-        editTexts.forEach { it.isEnabled = enabled }
+        editTexts.forEach { it.first.isEnabled = enabled }
         submitButton.isEnabled = enabled
     }
 
@@ -136,7 +149,7 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun updateSubmitButton() {
-        val isFormValid = editTexts.map { it.isValid }
+        val isFormValid = editTexts.map { it.first.isValid }
                 .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }

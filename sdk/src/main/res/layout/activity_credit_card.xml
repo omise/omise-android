@@ -40,8 +40,7 @@
             style="@style/OmiseErrorMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edit_card_number"
-            android:text="Invalid input" />
+            android:layout_below="@id/edit_card_number" />
 
     </RelativeLayout>
 
@@ -63,8 +62,7 @@
         android:id="@id/text_card_name_error"
         style="@style/OmiseErrorMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Invalid input" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,8 +101,7 @@
                     android:id="@id/text_expiry_date_error"
                     style="@style/OmiseErrorMessage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Invalid input" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -132,8 +129,7 @@
                 android:id="@id/text_security_code_error"
                 style="@style/OmiseErrorMessage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Invalid input" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>
