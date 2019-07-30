@@ -4,6 +4,11 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/**
+ * Represents Card object.
+ *
+ * @see <a href="https://www.omise.co/cards-api">Card API</a>
+ */
 data class Card(
         @JvmField
         var country: String? = null,

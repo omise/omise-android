@@ -2,6 +2,11 @@ package co.omise.android.models
 
 import org.joda.time.DateTime
 
+/**
+ * Represents Error object.
+ *
+ * @see <a href="https://www.omise.co/errors-api">Errors API</a>
+ */
 class APIError(
         @JvmField
         val location: String? = null,
