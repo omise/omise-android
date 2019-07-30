@@ -11,7 +11,7 @@ import co.omise.android.BuildConfig
  *
  * @see Client
  */
-internal class Config(
+class Config(
         private val apiVersion: String = API_VERSION,
         private val publicKey: String
 ) {
