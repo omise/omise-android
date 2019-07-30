@@ -1,66 +1,44 @@
 package co.omise.android.models;
 
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import co.omise.android.SDKLog;
+import java.util.Objects;
+
 import co.omise.android.SDKTest;
 
 @RunWith(AndroidJUnit4.class)
 public class ModelTest extends SDKTest {
-    public static final String MODEL_JSON = "{\"object\":\"account\",\"id\":\"acct_4x7d2wtqnj2f4klrfsc\",\"email\":\"gedeon@gedeon.be\",\"created\":\"2015-05-20T04:57:36Z\"}";
 
     public static class Dummy extends Model {
-        public static final Parcelable.Creator<Dummy> CREATOR = new Creator<Dummy>() {
-            @Override
-            public Dummy createFromParcel(Parcel source) {
-                try {
-                    return new Dummy(source.readString());
-                } catch (JSONException e) {
-                    SDKLog.wtf("failed to deparcelize a Dummy object.", e);
-                    return null;
-                }
-            }
-
-            @Override
-            public Dummy[] newArray(int size) {
-                return new Dummy[size];
-            }
-        };
-
-        public Dummy(String rawJson) throws JSONException {
-            super(rawJson);
+        public Dummy() {
+            id = "acct_4x7d2wtqnj2f4klrfsc";
+            location = "account";
+            livemode = false;
+            created = DateTime.parse("2015-05-20T04:57:36Z");
         }
     }
 
     @Test
-    public void testJsonCtor() throws JSONException {
-        assertCorrectFields(new Dummy(MODEL_JSON));
-    }
-
-    @Test
-    public void testParcelable() throws JSONException {
-        Dummy dummy = new Dummy(MODEL_JSON);
+    public void testParcelable() {
+        Dummy dummy = new Dummy();
         Bundle bundle = new Bundle();
         bundle.putParcelable("test", dummy);
 
-        assertCorrectFields(bundle.<Dummy>getParcelable("test"));
+        assertCorrectFields(Objects.requireNonNull(bundle.getParcelable("test")));
     }
 
     private void assertCorrectFields(Dummy dummy) {
-        assertEquals("acct_4x7d2wtqnj2f4klrfsc", dummy.getId());
-        assertFalse(dummy.getLivemode());
-        assertNull(dummy.location);
+        assertEquals("acct_4x7d2wtqnj2f4klrfsc", dummy.id);
+        assertFalse(dummy.livemode);
 
+        assert dummy.created != null;
         DateTime created = dummy.created.withZone(DateTimeZone.UTC);
         assertEquals(2015, created.getYear());
         assertEquals(5, created.getMonthOfYear());
