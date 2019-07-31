@@ -74,7 +74,7 @@ class CreditCardEditText : OmiseEditText {
     override fun validate() {
         super.validate()
 
-        val value = text.toString().trim { it <= ' ' }.replace(SEPARATOR, "")
+        val value = text.toString().trim().replace(SEPARATOR, "")
         if (value.length < CARD_NUMBER_LENGTH || !CardNumber.luhn(value)) {
             throw InputValidationException.InvalidInputException
         }

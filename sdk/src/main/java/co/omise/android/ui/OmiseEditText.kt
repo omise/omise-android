@@ -24,7 +24,7 @@ open class OmiseEditText : AppCompatEditText {
 
     @Throws(InputValidationException::class)
     open fun validate() {
-        val value = text.toString().trim { it <= ' ' }
+        val value = text.toString().trim()
         if (value.isEmpty()) {
             throw InputValidationException.EmptyInputException
         }

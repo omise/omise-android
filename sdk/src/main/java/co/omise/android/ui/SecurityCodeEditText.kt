@@ -4,8 +4,6 @@ import android.content.Context
 import android.text.InputFilter
 import android.text.InputType
 import android.util.AttributeSet
-import co.omise.android.CardNumber
-import co.omise.android.R
 
 
 class SecurityCodeEditText : OmiseEditText {
@@ -37,7 +35,7 @@ class SecurityCodeEditText : OmiseEditText {
     override fun validate() {
         super.validate()
 
-        val value = text.toString().trim { it <= ' ' }
+        val value = text.toString().trim()
         if (!CVV_REGEX.toRegex().matches(value)) {
             throw InputValidationException.InvalidInputException
         }
