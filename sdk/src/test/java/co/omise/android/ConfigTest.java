@@ -16,14 +16,14 @@ public class ConfigTest {
     static final String PKEY = "pkey_test_123";
 
     @Test
-    public void testConfig() {
+    public void setupConfig_success() {
         Config config = config();
         assertEquals(API_VERSION, config.apiVersion());
         assertEquals(PKEY, config.publicKey());
     }
 
     @Test
-    public void testUserAgent() {
+    public void setupUserAgent_success() {
         String builder = "OmiseAndroid/" +
                 PKG_VERSION +
                 " Android/" +
