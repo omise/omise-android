@@ -4,7 +4,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.DatabindContext
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase
-import java.util.*
+import java.util.Collections
+import kotlin.collections.HashMap
+import kotlin.collections.Map
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.iterator
+import kotlin.collections.set
 
 class ModelTypeResolver : TypeIdResolverBase() {
     private var types: Map<String, Class<*>>? = null
