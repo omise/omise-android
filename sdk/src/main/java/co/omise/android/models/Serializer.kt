@@ -24,6 +24,7 @@ class Serializer {
      * @return An [ObjectMapper] instance.
      */
     var objectMapper: ObjectMapper
+
     /**
      * Returns the pre-configured {@link DateTimeFormatter} used for
      * serializing and deserializing date and times for Omise API objects.
@@ -31,6 +32,7 @@ class Serializer {
      * @return A {@link DateTimeFormatter} instance.
      */
     var dateTimeFormatter: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
+
     /**
      * Returns the pre-configured {@link DateTimeFormatter} used for
      * serializing and deserializing date for Omise API objects.
