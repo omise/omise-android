@@ -28,7 +28,7 @@ class APIErrorExtensionsTest {
 
         val actualError = error.getErrorMessage(resources)
 
-        assertEquals(resources.getString(R.string.error_required_invalid_card_invalid_card_number), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_card_number), actualError)
     }
 
     @Test
@@ -44,7 +44,7 @@ class APIErrorExtensionsTest {
 
         val actualError = error.getErrorMessage(resources)
 
-        assertEquals(resources.getString(R.string.error_required_invalid_card_invalid_expiry_date), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_expiry_date), actualError)
     }
 
     @Test
@@ -60,7 +60,7 @@ class APIErrorExtensionsTest {
 
         val actualError = error.getErrorMessage(resources)
 
-        assertEquals(resources.getString(R.string.error_required_invalid_card_empty_card_holder_name), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_empty_card_holder_name), actualError)
     }
 
     @Test
@@ -76,7 +76,7 @@ class APIErrorExtensionsTest {
 
         val actualError = error.getErrorMessage(resources)
 
-        assertEquals(resources.getString(R.string.error_required_invalid_card_unsopported_brand), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_unsopported_brand), actualError)
     }
 
     @Test
@@ -93,5 +93,21 @@ class APIErrorExtensionsTest {
         val actualError = error.getErrorMessage(resources)
 
         assertEquals(resources.getString(R.string.error_required, "something when wrong"), actualError)
+    }
+
+    @Test
+    fun getErrorMessage_authenticationFailure() {
+        val error = APIError("""
+            {
+              "object": "error",
+              "location": "https://www.omise.co/api-errors#authentication-failure",
+              "code": "authentication_failure",
+              "message": "authentication failed"
+            }
+        """.trimIndent())
+
+        val actualError = error.getErrorMessage(resources)
+
+        assertEquals(resources.getString(R.string.error_api_authentication_failure), actualError)
     }
 }

@@ -12,10 +12,11 @@
     <string name="error_invalid">%1$s is invalid</string>
     <string name="error_required">%1$s is required</string>
 
-    <string name="error_required_invalid_card_invalid_card_number">Invalid card number</string>
-    <string name="error_required_invalid_card_invalid_expiry_date">Invalid card expiration date</string>
-    <string name="error_required_invalid_card_empty_card_holder_name">Invalid card holder name</string>
-    <string name="error_required_invalid_card_unsopported_brand">Unsupported card brand</string>
+    <string name="error_api_authentication_failure">Authentication failure</string>
+    <string name="error_api_invalid_card_invalid_card_number">Invalid card number</string>
+    <string name="error_api_invalid_card_invalid_expiry_date">Invalid card expiration date</string>
+    <string name="error_api_invalid_card_empty_card_holder_name">Invalid card holder name</string>
+    <string name="error_api_invalid_card_unsopported_brand">Unsupported card brand</string>
 
     <string name="error_unknown">Unknown error occurred. (%1$s)</string>
     <string name="label_card_name">Name on card</string>
