@@ -19,10 +19,10 @@
 
     <style name="OmiseErrorMessage" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/error</item>
-        <item name="android:layout_marginLeft">@dimen/error_message_start_margin</item>
-        <item name="android:layout_marginStart">@dimen/error_message_start_margin</item>
-        <item name="android:layout_marginRight">@dimen/error_message_start_margin</item>
-        <item name="android:layout_marginEnd">@dimen/error_message_start_margin</item>
+        <item name="android:layout_marginLeft">@dimen/error_message_side_margin</item>
+        <item name="android:layout_marginStart">@dimen/error_message_side_margin</item>
+        <item name="android:layout_marginRight">@dimen/error_message_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/error_message_side_margin</item>
     </style>
 
 </resources>
