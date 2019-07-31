@@ -5,9 +5,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.APIError
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
