@@ -5,7 +5,7 @@ import co.omise.android.R
 import co.omise.android.models.APIError
 
 
-fun APIError.getErrorMessage(res: Resources): String = when (code) {
+fun APIError.getMessageFromResources(res: Resources): String = when (code) {
     "invalid_card" -> {
         when {
             message.contains("number") -> res.getString(R.string.error_api_invalid_card_invalid_card_number)

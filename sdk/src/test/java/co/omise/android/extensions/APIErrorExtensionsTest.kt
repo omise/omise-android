@@ -15,7 +15,7 @@ class APIErrorExtensionsTest {
     private val resources = ApplicationProvider.getApplicationContext<Application>().resources
 
     @Test
-    fun getErrorMessage_invalidCardNumber() {
+    fun getMessageFromResources_invalidCardNumber() {
         val error = APIError("""
            {
               "object": "error",
@@ -25,13 +25,13 @@ class APIErrorExtensionsTest {
             }
         """.trimIndent())
 
-        val actualError = error.getErrorMessage(resources)
+        val actualError = error.getMessageFromResources(resources)
 
         assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_card_number), actualError)
     }
 
     @Test
-    fun getErrorMessage_invalidExpiryDate() {
+    fun getMessageFromResources_invalidExpiryDate() {
         val error = APIError("""
            {
               "object": "error",
@@ -41,13 +41,13 @@ class APIErrorExtensionsTest {
             }
         """.trimIndent())
 
-        val actualError = error.getErrorMessage(resources)
+        val actualError = error.getMessageFromResources(resources)
 
         assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_expiry_date), actualError)
     }
 
     @Test
-    fun getErrorMessage_emptyCardHolderName() {
+    fun getMessageFromResources_emptyCardHolderName() {
         val error = APIError("""
             {
               "object": "error",
@@ -57,13 +57,13 @@ class APIErrorExtensionsTest {
             }
         """.trimIndent())
 
-        val actualError = error.getErrorMessage(resources)
+        val actualError = error.getMessageFromResources(resources)
 
         assertEquals(resources.getString(R.string.error_api_invalid_card_empty_card_holder_name), actualError)
     }
 
     @Test
-    fun getErrorMessage_unsupportedBrand() {
+    fun getMessageFromResources_unsupportedBrand() {
         val error = APIError("""
             {
               "object": "error",
@@ -73,13 +73,13 @@ class APIErrorExtensionsTest {
             }
         """.trimIndent())
 
-        val actualError = error.getErrorMessage(resources)
+        val actualError = error.getMessageFromResources(resources)
 
         assertEquals(resources.getString(R.string.error_api_invalid_card_unsopported_brand), actualError)
     }
 
     @Test
-    fun getErrorMessage_otherError() {
+    fun getMessageFromResources_otherError() {
         val error = APIError("""
             {
               "object": "error",
@@ -89,13 +89,13 @@ class APIErrorExtensionsTest {
             }
         """.trimIndent())
 
-        val actualError = error.getErrorMessage(resources)
+        val actualError = error.getMessageFromResources(resources)
 
         assertEquals(resources.getString(R.string.error_required, "something when wrong"), actualError)
     }
 
     @Test
-    fun getErrorMessage_authenticationFailure() {
+    fun getMessageFromResources_authenticationFailure() {
         val error = APIError("""
             {
               "object": "error",
@@ -105,7 +105,7 @@ class APIErrorExtensionsTest {
             }
         """.trimIndent())
 
-        val actualError = error.getErrorMessage(resources)
+        val actualError = error.getMessageFromResources(resources)
 
         assertEquals(resources.getString(R.string.error_api_authentication_failure), actualError)
     }

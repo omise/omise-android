@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
-import co.omise.android.extensions.getErrorMessage
+import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
@@ -108,7 +108,7 @@ class CreditCardActivity : AppCompatActivity() {
 
             val message = when (throwable) {
                 is IOError -> getString(R.string.error_io, throwable.message)
-                is APIError -> throwable.getErrorMessage(resources)
+                is APIError -> throwable.getMessageFromResources(resources)
                 else -> getString(R.string.error_unknown, throwable.message)
             }
 
