@@ -13,12 +13,9 @@ import okhttp3.HttpUrl
  * @see <a href="https://www.omise.co/capability-api">Capabilities API</a>
  */
 data class Capability(
-        @JvmField
         var banks: List<String>? = null,
-        @JvmField
         @field:JsonProperty("payment_methods")
         var paymentMethods: List<PaymentMethod>? = null,
-        @JvmField
         @field:JsonProperty("zero_interest_installments")
         var zeroInterestInstallments: Boolean = false
 ) : Model(), Parcelable {

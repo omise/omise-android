@@ -12,20 +12,14 @@ import org.joda.time.DateTime
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "object", visible = true)
 @JsonTypeIdResolver(ModelTypeResolver::class)
 open class Model() : Parcelable {
-    @JvmField
     @field:JsonProperty("object")
     var modelObject: String? = null
-    @JvmField
     var id: String? = null
-    @JvmField
     @field:JsonProperty("livemode")
     var livemode: Boolean = false
-    @JvmField
     var location: String? = null
-    @JvmField
     @field:JsonProperty("created_at")
     var created: DateTime? = null
-    @JvmField
     @field:JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     var deleted: Boolean = false
 

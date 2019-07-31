@@ -8,11 +8,8 @@ import org.joda.time.DateTime
  * @see <a href="https://www.omise.co/errors-api">Errors API</a>
  */
 data class APIError(
-        @JvmField
         val location: String? = null,
-        @JvmField
         val code: String? = null,
-        override
-        val message: String? = null,
-        @JvmField val created: DateTime? = null
+        override val message: String? = null,
+        val created: DateTime? = null
 ) : Error()

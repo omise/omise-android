@@ -10,34 +10,22 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @see <a href="https://www.omise.co/cards-api">Card API</a>
  */
 data class Card(
-        @JvmField
         var country: String? = null,
-        @JvmField
         var city: String? = null,
-        @JvmField
         @field:JsonProperty("postal_code")
         var postalCode: String? = null,
-        @JvmField
         var financing: String? = null,
-        @JvmField
         @field:JsonProperty("last_digits")
         var lastDigits: String? = null,
-        @JvmField
         var brand: String? = null,
-        @JvmField
         @field:JsonProperty("expiration_month")
         var expirationMonth: Int = 0,
-        @JvmField
         @field:JsonProperty("expiration_year")
         var expirationYear: Int = 0,
-        @JvmField
         var fingerprint: String? = null,
-        @JvmField
         var name: String? = null,
-        @JvmField
         @field:JsonProperty("security_code_check")
         var securityCodeCheck: Boolean = false,
-        @JvmField
         var bank: String? = null
 ) : Model(), Parcelable {
 
