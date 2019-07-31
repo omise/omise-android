@@ -23,7 +23,7 @@ abstract class Endpoint {
      *
      * @return A [String] containing the network scheme to use.
      */
-    private fun scheme(): String {
+    fun scheme(): String {
         return "https"
     }
 
@@ -52,7 +52,7 @@ abstract class Endpoint {
      * @param config A [Config] instance.
      * @return A [String] containing the authentication key.
      */
-    internal abstract fun authenticationKey(config: Config): String
+    abstract fun authenticationKey(config: Config): String
 
     fun buildUrl(): HttpUrl.Builder {
         return HttpUrl.Builder()
@@ -83,6 +83,7 @@ abstract class Endpoint {
             }
         }
 
+        @JvmStatic
         val allEndpoints: List<Endpoint>
             get() {
                 val endpoints = ArrayList<Endpoint>()
@@ -91,6 +92,7 @@ abstract class Endpoint {
                 return Collections.unmodifiableList(endpoints)
             }
 
+        @JvmStatic
         val allEndpointsByHost: Map<String, Endpoint>
             get() {
                 val endpoints = HashMap<String, Endpoint>()

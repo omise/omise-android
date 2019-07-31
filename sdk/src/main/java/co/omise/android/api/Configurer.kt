@@ -29,10 +29,11 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
          * @param request An HTTP [Request] to configure.
          * @return A new [Request] instance with configurations from [Config] applied.
          */
-        internal fun configure(config: Config, request: Request): Request? {
+        @JvmStatic
+        internal fun configure(config: Config, request: Request): Request {
             val apiVersion = config.apiVersion()
-            val endpoint = Endpoint.allEndpointsByHost[request.url().host()]
-                    ?: throw UnsupportedOperationException("unknown endpoint: " + request.url().host())
+            val endpoint = Endpoint.allEndpointsByHost[request.url.host]
+                    ?: throw UnsupportedOperationException("unknown endpoint: " + request.url.host)
 
             val key = endpoint.authenticationKey(config)
             var builder = request.newBuilder()

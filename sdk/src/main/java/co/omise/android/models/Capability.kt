@@ -4,29 +4,46 @@ import android.os.Parcel
 import android.os.Parcelable
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
+import com.fasterxml.jackson.annotation.JsonProperty
 import okhttp3.HttpUrl
-import org.json.JSONObject
 
 /**
  * Represents Capabilities object and contains its {@link RequestBuilder}.
  *
  * @see <a href="https://www.omise.co/capability-api">Capabilities API</a>
  */
-class Capability : Model {
-    @JvmField
-    var banks: List<String>? = null
-    @JvmField
-    var paymentMethods: List<PaymentMethod>? = null
-    @JvmField
-    var zeroInterestInstallments: Boolean = false
+data class Capability(
+        var banks: List<String>? = null,
+        @field:JsonProperty("payment_methods")
+        var paymentMethods: List<PaymentMethod>? = null,
+        @field:JsonProperty("zero_interest_installments")
+        var zeroInterestInstallments: Boolean = false
+) : Model(), Parcelable {
 
+    constructor(parcel: Parcel) : this() {
+        banks = parcel.createStringArrayList()
+        paymentMethods = parcel.createTypedArrayList(PaymentMethod.CREATOR)
+        zeroInterestInstallments = parcel.readInt() == 1
+    }
 
-    constructor(rawJson: String) : this(JSONObject(rawJson))
+    override fun describeContents(): Int {
+        return 0
+    }
 
-    private constructor(json: JSONObject) : super(json) {
-        banks = JSON.stringList(json, "banks")
-        paymentMethods = JSON.modelList(json, "payment_methods", PaymentMethod::class.java)
-        zeroInterestInstallments = JSON.bool(json, "zero_interest_installments")
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeStringArray(banks?.toTypedArray())
+        dest.writeParcelableArray(paymentMethods?.toTypedArray(), 0)
+        dest.writeInt(if (zeroInterestInstallments) 1 else 0)
+    }
+
+    companion object CREATOR : Parcelable.Creator<Capability> {
+        override fun createFromParcel(parcel: Parcel): Capability {
+            return Capability(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Capability?> {
+            return arrayOfNulls(size)
+        }
     }
 
     /**
@@ -37,26 +54,5 @@ class Capability : Model {
         override fun path(): HttpUrl = buildUrl(Endpoint.API, "capability")
 
         override fun type(): Class<Capability> = Capability::class.java
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        super.writeToParcel(parcel, flags)
-        parcel.writeStringList(banks)
-        parcel.writeTypedList(paymentMethods)
-        parcel.writeByte(if (zeroInterestInstallments) 1 else 0)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Capability> {
-        override fun createFromParcel(parcel: Parcel): Capability {
-            return Capability(parcel.readString())
-        }
-
-        override fun newArray(size: Int): Array<Capability?> {
-            return arrayOfNulls(size)
-        }
     }
 }

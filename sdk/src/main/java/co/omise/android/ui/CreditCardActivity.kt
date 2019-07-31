@@ -90,7 +90,7 @@ class CreditCardActivity : AppCompatActivity() {
 
             val message = when (throwable) {
                 is IOError -> getString(R.string.error_io, throwable.message)
-                is APIError -> getString(R.string.error_api, throwable.errorMessage)
+                is APIError -> getString(R.string.error_api, throwable.message)
                 else -> getString(R.string.error_unknown, throwable.message)
             }
 

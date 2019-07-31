@@ -1,11 +1,10 @@
 package co.omise.android.api
 
 import android.os.Handler
-import co.omise.android.api.exceptions.IllegalModelException
 import co.omise.android.api.exceptions.RedirectionException
 import co.omise.android.models.APIError
 import co.omise.android.models.Model
-import co.omise.android.models.ModelParserUtil.parseModelFromJson
+import co.omise.android.models.Serializer
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,42 +16,39 @@ internal class Invocation<T : Model>(
         private val replyHandler: Handler,
         private val httpClient: OkHttpClient,
         private val request: co.omise.android.api.Request<T>,
-        private val listener: RequestListener<T>
+        private val listener: RequestListener<T>,
+        private val serializer: Serializer = Serializer()
 ) {
 
     fun invoke() {
-        val call = httpClient.newTypedCall(
-                Request.Builder()
-                        .method(request.method, request.payload)
-                        .url(request.url)
-                        .build(),
-                request.responseType)
-
         try {
+            val call = httpClient.newTypedCall(
+                    Request.Builder()
+                            .method(request.method, request.payload)
+                            .url(request.url)
+                            .build(),
+                    request.responseType)
+
             processCall(call)
         } catch (e: IOException) {
             didFail(e)
         } catch (e: JSONException) {
             didFail(e)
         }
-
     }
 
     private fun processCall(call: TypedCall) {
         val response = call.execute()
-        if (response.body() == null) {
+        if (response.body == null) {
             didFail(IOException("HTTP response have no body."))
             return
         }
 
-        val rawJson = response.body().string()
-        val model = parseModelFromJson(rawJson, call)
-
+        val stream = response.body!!.byteStream()
         when {
-            model == null -> didFail(IllegalModelException())
-            response.code() in 200..299 -> didSucceed(model)
-            response.code() in 300..399 -> didFail(RedirectionException())
-            else -> didFail(APIError(rawJson))
+            response.code in 200..299 -> didSucceed(serializer.deserialize(stream, call.clazz))
+            response.code in 300..399 -> didFail(RedirectionException())
+            else -> didFail(serializer.deserialize(stream, APIError::class.java))
         }
     }
 
@@ -62,13 +58,15 @@ internal class Invocation<T : Model>(
     }
 
     private fun didFail(e: Throwable) {
-        replyHandler.post { listener.onRequestFailed(e) }
+        replyHandler.post {
+            listener.onRequestFailed(e)
+        }
     }
 }
 
 class TypedCall(
         private val call: Call,
-        val clazz: Class<*>
+        val clazz: Class<Model>
 ) {
 
     fun execute(): Response {
@@ -76,6 +74,7 @@ class TypedCall(
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 fun OkHttpClient.newTypedCall(okRequest: Request, clazz: Class<*>): TypedCall {
-    return TypedCall(newCall(okRequest), clazz)
+    return TypedCall(newCall(okRequest), clazz as Class<Model>)
 }
