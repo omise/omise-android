@@ -71,7 +71,7 @@ class CreditCardActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private inner class ActivityRequestListener : RequestListener<Token> {
+    private inner class CreateTokenRequestListener : RequestListener<Token> {
 
         override fun onRequestSucceed(model: Token) {
             val data = Intent()
@@ -129,7 +129,7 @@ class CreditCardActivity : AppCompatActivity() {
         disableForm()
 
         val pkey = intent.getStringExtra(EXTRA_PKEY)
-        val listener = ActivityRequestListener()
+        val listener = CreateTokenRequestListener()
         try {
             Client(pkey).send(request, listener)
         } catch (ex: Exception) {
