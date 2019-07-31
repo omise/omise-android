@@ -12,7 +12,7 @@
     </style>
 
     <style name="AppEditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:background">?attr/editTextBackground</item>
     </style>
 </resources>
