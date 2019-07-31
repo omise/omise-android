@@ -7,7 +7,7 @@ import org.joda.time.DateTime
  *
  * @see <a href="https://www.omise.co/errors-api">Errors API</a>
  */
-class APIError(
+data class APIError(
         @JvmField
         val location: String? = null,
         @JvmField
