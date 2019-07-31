@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="OmiseSDKTheme" parent="@style/Theme.AppCompat">
-        <item name="android:textViewStyle">@style/FormLabel</item>
-        <item name="android:editTextStyle">@style/FormField</item>
-        <item name="android:spinnerStyle">@style/FormSpinner</item>
-        <item name="android:buttonStyle">@style/FormButton</item>
+    <style name="OmiseTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:textViewStyle">@style/OmiseFloatingTitle</item>
+        <item name="android:editTextStyle">@style/OmiseEditText</item>
+        <item name="android:buttonStyle">@style/OmiseButton</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
-    <style name="FormLabel" parent="android:Widget.DeviceDefault.TextView">
-
+    <style name="OmiseEditText" parent="Widget.AppCompat.EditText">
     </style>
 
-    <style name="FormField" parent="android:Widget.DeviceDefault.EditText">
-
+    <style name="OmiseFloatingTitle" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="FormSpinner" parent="android:Widget.DeviceDefault.Spinner">
-
-    </style>
-
-    <style name="FormButton" parent="android:Widget.DeviceDefault.Button">
-        <item name="android:padding">16dp</item>
+    <style name="OmiseButton" parent="Widget.AppCompat.Button">
     </style>
 
 </resources>

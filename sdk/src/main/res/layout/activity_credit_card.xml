@@ -19,8 +19,8 @@
             android:id="@id/edit_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:hint="@string/label_card_number"
             android:nextFocusForward="@id/edit_card_name" />
@@ -29,8 +29,8 @@
             android:id="@id/image_card_brand"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/description_brand_logo" />
 
@@ -43,12 +43,11 @@
         android:layout_marginTop="@dimen/field_separator_margin"
         android:text="@string/label_card_name" />
 
-    <EditText
+    <co.omise.android.ui.CardNameEditText
         android:id="@id/edit_card_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_card_name"
-        android:inputType="textPersonName"
         android:nextFocusForward="@id/spinner_expiry_month" />
 
     <LinearLayout
@@ -71,25 +70,17 @@
                 android:text="@string/label_expiry_date" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@id/spinner_expiry_month"
-                    android:layout_width="0dp"
+                <co.omise.android.ui.ExpiryDateEditText
+                    android:id="@id/edit_expiry_date"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:nextFocusForward="@id/spinner_expiry_year"
-                    android:spinnerMode="dialog" />
-
-                <Spinner
-                    android:id="@id/spinner_expiry_year"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:nextFocusForward="@id/edit_security_code"
-                    android:spinnerMode="dialog" />
+                    android:hint="@string/hint_expiry_date"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/edit_security_code" />
 
             </LinearLayout>
 
@@ -107,16 +98,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_security_code" />
 
-            <EditText
+            <co.omise.android.ui.SecurityCodeEditText
                 android:id="@id/edit_security_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/placeholder_security_code"
-                android:inputType="numberPassword" />
+                android:hint="@string/placeholder_security_code" />
 
         </LinearLayout>
 
     </LinearLayout>
+
 
     <TextView
         android:id="@+id/text_error_message"
@@ -125,14 +116,15 @@
         android:layout_marginTop="@dimen/field_separator_margin"
         android:gravity="center"
         android:text="@string/not_available"
-        android:visibility="gone"
-        android:textColor="@android:color/holo_red_light" />
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone" />
 
     <Button
         android:id="@id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
+        android:enabled="false"
         android:text="@string/button_submit" />
 
 </LinearLayout>

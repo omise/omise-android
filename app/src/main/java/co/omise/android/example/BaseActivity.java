@@ -1,8 +1,8 @@
 package co.omise.android.example;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
     private final ProductRepository repository = new ProductRepository();
 
     protected ProductRepository repository() {
