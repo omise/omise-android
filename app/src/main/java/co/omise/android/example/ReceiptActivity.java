@@ -40,6 +40,6 @@ public class ReceiptActivity extends BaseActivity {
         productNameText.setText(product.getName());
         acknowledgeText.setText(String.format(getString(R.string.format_paid_with_card),
                 product.formatPrice(this),
-                token.card.lastDigits));
+                token.getCard().getLastDigits()));
     }
 }

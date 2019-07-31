@@ -14,9 +14,7 @@ import okhttp3.RequestBody
  * @see [Token API](https://www.omise.co/tokens-api)
  */
 data class Token(
-        @JvmField
         var used: Boolean = false,
-        @JvmField
         var card: Card? = null
 ) : Model(), Parcelable {
 
