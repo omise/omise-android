@@ -88,30 +88,54 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:clipChildren="false"
             android:orientation="vertical">
 
             <TextView
                 android:id="@id/text_security_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:text="@string/label_security_code" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/edit_security_code"
+                android:layout_alignBottom="@id/edit_security_code"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:layout_marginRight="@dimen/tooltip_end_margin"
+                android:layout_marginEnd="@dimen/tooltip_end_margin"
+                android:src="@drawable/ic_tooltip" />
 
             <co.omise.android.ui.SecurityCodeEditText
                 android:id="@id/edit_security_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/text_security_code"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:hint="@string/placeholder_security_code" />
 
             <TextView
                 android:id="@id/text_security_code_error"
                 style="@style/OmiseErrorMessage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_security_code" />
+        </RelativeLayout>
 
     </LinearLayout>
 

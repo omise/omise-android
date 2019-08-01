@@ -3,4 +3,5 @@
     <dimen name="form_padding">16dp</dimen>
     <dimen name="field_separator_margin">16dp</dimen>
     <dimen name="error_message_side_margin">4dp</dimen>
+    <dimen name="tooltip_end_margin">12dp</dimen>
 </resources>
