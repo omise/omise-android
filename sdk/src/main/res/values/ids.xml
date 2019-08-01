@@ -17,4 +17,5 @@
     <item name="text_card_name_error" type="id" />
     <item name="text_expiry_date_error" type="id" />
     <item name="text_security_code_error" type="id" />
+    <item name="button_security_code_tooltip" type="id" />
 </resources>
