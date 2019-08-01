@@ -8,10 +8,10 @@ import co.omise.android.models.APIError
 fun APIError.getMessageFromResources(res: Resources): String = when (code) {
     "invalid_card" -> {
         when {
-            message.contains("number") -> res.getString(R.string.error_api_invalid_card_invalid_card_number)
-            message.contains("expiration") -> res.getString(R.string.error_api_invalid_card_invalid_expiry_date)
-            message.contains("name") -> res.getString(R.string.error_api_invalid_card_empty_card_holder_name)
-            message.contains("brand") -> res.getString(R.string.error_api_invalid_card_unsopported_brand)
+            message.isContains("number") -> res.getString(R.string.error_api_invalid_card_invalid_card_number)
+            message.isContains("expiration") -> res.getString(R.string.error_api_invalid_card_invalid_expiry_date)
+            message.isContains("name") -> res.getString(R.string.error_api_invalid_card_empty_card_holder_name)
+            message.isContains("brand") -> res.getString(R.string.error_api_invalid_card_unsopported_brand)
             else -> res.getString(R.string.error_required, message)
         }
     }

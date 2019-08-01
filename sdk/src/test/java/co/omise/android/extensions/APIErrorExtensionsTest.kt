@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.APIError
+import co.omise.android.models.Serializer
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,100 +14,106 @@ import org.junit.runner.RunWith
 class APIErrorExtensionsTest {
 
     private val resources = ApplicationProvider.getApplicationContext<Application>().resources
-
+    private val serializer = Serializer()
     @Test
     fun getMessageFromResources_invalidCardNumber() {
-        val error = APIError("""
+        val response = """
            {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "number can't be blank and brand not supported (unknown)"
             }
-        """.trimIndent())
+        """.trimIndent()
+        val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
-        val actualError = error.getMessageFromResources(resources)
+        val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_card_number), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_card_number), actualMessage)
     }
 
     @Test
     fun getMessageFromResources_invalidExpiryDate() {
-        val error = APIError("""
+        val response = """
            {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "expiration date cannot be in the past"
             }
-        """.trimIndent())
+        """.trimIndent()
+        val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
-        val actualError = error.getMessageFromResources(resources)
+        val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_expiry_date), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_expiry_date), actualMessage)
     }
 
     @Test
     fun getMessageFromResources_emptyCardHolderName() {
-        val error = APIError("""
+        val response = """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "name can't be blank"
             }
-        """.trimIndent())
+        """.trimIndent()
+        val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
-        val actualError = error.getMessageFromResources(resources)
+        val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_invalid_card_empty_card_holder_name), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_empty_card_holder_name), actualMessage)
     }
 
     @Test
     fun getMessageFromResources_unsupportedBrand() {
-        val error = APIError("""
+        val response = """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "brand not supported (unknown)"
             }
-        """.trimIndent())
+        """.trimIndent()
+        val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
-        val actualError = error.getMessageFromResources(resources)
+        val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_invalid_card_unsopported_brand), actualError)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_unsopported_brand), actualMessage)
     }
 
     @Test
     fun getMessageFromResources_otherError() {
-        val error = APIError("""
+        val response = """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "something when wrong"
             }
-        """.trimIndent())
+        """.trimIndent()
+        val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
-        val actualError = error.getMessageFromResources(resources)
+        val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_required, "something when wrong"), actualError)
+        assertEquals(resources.getString(R.string.error_required, "something when wrong"), actualMessage)
     }
 
     @Test
     fun getMessageFromResources_authenticationFailure() {
-        val error = APIError("""
+        val response = """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#authentication-failure",
               "code": "authentication_failure",
               "message": "authentication failed"
             }
-        """.trimIndent())
+        """.trimIndent()
+        val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
-        val actualError = error.getMessageFromResources(resources)
+        val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_authentication_failure), actualError)
+        assertEquals(resources.getString(R.string.error_api_authentication_failure), actualMessage)
     }
 }
