@@ -1,19 +1,34 @@
 package co.omise.android.models
 
-sealed class SourceType(val name: String?) {
-    class InternetBankingBay : SourceType("internet_banking_bay")
-    class InternetBankingKtb : SourceType("internet_banking_ktb")
-    class InternetBankingScb : SourceType("internet_banking_scb")
-    class InternetBankingBbl : SourceType("internet_banking_bbl")
-    class Alipay : SourceType("alipay")
-    class BillPaymentTescoLotus : SourceType("bill_payment_tesco_lotus")
-    class BarcodeAlipay : SourceType("barcode_alipay")
-    class Econtext : SourceType("econtext")
-    class TrueMoney : SourceType("truemoney")
-    class InstBankingBay : SourceType("installment_bay")
-    class InstFirstChoice : SourceType("installment_first_choice")
-    class InstBbl : SourceType("installment_bbl")
-    class InstKtc : SourceType("installment_ktc")
-    class InstKBank : SourceType("installment_kbank")
-    class Unknown : SourceType(null)
+import com.fasterxml.jackson.annotation.JsonCreator
+
+sealed class SourceType(
+        val name: String?
+) : Model() {
+
+    object InternetBankingBay : SourceType("internet_banking_bay")
+    object InternetBankingKtb : SourceType("internet_banking_ktb")
+    object InternetBankingScb : SourceType("internet_banking_scb")
+    object InternetBankingBbl : SourceType("internet_banking_bbl")
+    object Alipay : SourceType("alipay")
+    object BillPaymentTescoLotus : SourceType("bill_payment_tesco_lotus")
+    object BarcodeAlipay : SourceType("barcode_alipay")
+    object Econtext : SourceType("econtext")
+    object TrueMoney : SourceType("truemoney")
+    object InstBankingBay : SourceType("installment_bay")
+    object InstFirstChoice : SourceType("installment_first_choice")
+    object InstBbl : SourceType("installment_bbl")
+    object InstKtc : SourceType("installment_ktc")
+    object InstKBank : SourceType("installment_kbank")
+    object Unknown : SourceType(null)
+
+    companion object {
+        @JsonCreator
+        @JvmStatic
+        private fun creator(name: String): SourceType? {
+            return SourceType::class.sealedSubclasses.find {
+                it.simpleName == name
+            }?.objectInstance
+        }
+    }
 }
