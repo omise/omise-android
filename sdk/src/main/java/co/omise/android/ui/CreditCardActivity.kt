@@ -16,6 +16,7 @@ import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
+import co.omise.android.models.CardBrand
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
@@ -167,7 +168,7 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun showSecurityCodeTooltipDialog() {
-        val dialog = SecurityCodeTooltipDialogFragment()
+        val dialog = SecurityCodeTooltipDialogFragment.newInstant(CardBrand.VISA)
         dialog.show(supportFragmentManager, null)
     }
 

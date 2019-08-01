@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:padding="@dimen/form_padding">
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/close_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:src="@drawable/ic_close_small" />
+
+    <ImageView
+        android:id="@+id/cvv_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/cvv_3_digits" />
 
     <TextView
+        android:id="@+id/cvv_description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="3 digit number on the back of your card"/>
-</LinearLayout>
+        android:layout_below="@id/cvv_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/form_padding"
+        android:text="3 digit number on the back of your card" />
+</RelativeLayout>
