@@ -5,15 +5,26 @@
     <string name="description_brand_logo">Card brand logo</string>
     <string name="error_api">Error: %1$s</string>
     <string name="error_io">Network communication error, please make sure you have a stable internet connection. (%1$s)</string>
+    <string name="error_invalid_card_number">Credit card number is invalid</string>
+    <string name="error_invalid_card_name">Card holder name is invalid</string>
+    <string name="error_invalid_expiry_date">Card expiry date is invalid</string>
+    <string name="error_invalid_security_code">CVV is invalid</string>
     <string name="error_invalid">%1$s is invalid</string>
     <string name="error_required">%1$s is required</string>
+
+    <string name="error_api_authentication_failure">Authentication failure</string>
+    <string name="error_api_invalid_card_invalid_card_number">Invalid card number</string>
+    <string name="error_api_invalid_card_invalid_expiry_date">Invalid card expiration date</string>
+    <string name="error_api_invalid_card_empty_card_holder_name">Invalid card holder name</string>
+    <string name="error_api_invalid_card_unsopported_brand">Unsupported card brand</string>
+
     <string name="error_unknown">Unknown error occurred. (%1$s)</string>
     <string name="label_card_name">Name on card</string>
-    <string name="label_card_number">Card Number</string>
+    <string name="label_card_number">Card number</string>
     <string name="label_expiry_date">Expiry date</string>
     <string name="label_security_code">Security code</string>
     <string name="menu_card_io">Scan from Camera</string>
     <string name="title_authorizing_payment">Authorizing Payment</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
-    <string name="hint_expiry_date">MM/YY</string>
+    <string name="hint_expiry_date" translatable="false">MM/YY</string>
 </resources>

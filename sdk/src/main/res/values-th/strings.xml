@@ -6,8 +6,20 @@
     <string name="description_brand_logo">โลโก้บัตรเครดิต</string>
     <string name="error_api">พบข้อผิดพลาด: %1$s</string>
     <string name="error_io">ไม่สามารถเชื่อมต่ออินเตอร์เน็ทได้ กรุณาตรวจสอบและลองใหม่อีกครั้ง (%1$s)</string>
+
+    <string name="error_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
+    <string name="error_invalid_card_name">ชื่อผู้ถือบัตรไม่ถูกต้อง</string>
+    <string name="error_invalid_expiry_date">วันหมดอายุของบัตรไม่ถูกต้อง</string>
+    <string name="error_invalid_security_code">หมายเลข CVV ไม่ถูกต้อง</string>
     <string name="error_invalid">%1$sไม่ถูกต้อง</string>
     <string name="error_required">กรุณากรอก%1$s</string>
+
+    <string name="error_api_authentication_failure">การยืนยันตัวตนของร้านค้าไม่ถูกต้อง</string>
+    <string name="error_api_invalid_card_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
+    <string name="error_api_invalid_card_invalid_expiry_date">วันหมดอายุบัตรไม่ถูกต้อง</string>
+    <string name="error_api_invalid_card_empty_card_holder_name">ชื่อผู้ถือบัตรไม่ถูกต้อง</string>
+    <string name="error_api_invalid_card_unsopported_brand">บัตรเครดิตไม่รองรับ</string>
+
     <string name="error_unknown">เกิดข้อผิดพลาด (%1$s)</string>
     <string name="label_card_name">ชื่อผู้ถือบัตร</string>
     <string name="label_card_number">หมายเลขบัตร</string>
