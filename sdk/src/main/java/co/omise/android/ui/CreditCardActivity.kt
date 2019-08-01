@@ -167,12 +167,8 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun showSecurityCodeTooltipDialog() {
-        val dialog = AlertDialog.Builder(this)
-                .setTitle("CVV Info")
-                .setMessage("CVV 3 digits")
-                .create()
-
-        dialog.show()
+        val dialog = SecurityCodeTooltipDialogFragment()
+        dialog.show(supportFragmentManager, null)
     }
 
     companion object {
