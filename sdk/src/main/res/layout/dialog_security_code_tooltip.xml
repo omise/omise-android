@@ -13,7 +13,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="@null"
-        tools:src="@drawable/ic_close_small" />
+        android:src="@drawable/ic_close_small" />
 
     <ImageView
         android:id="@+id/cvv_image"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/cvv_3_digits" />
+        tools:src="@drawable/cvv_3_digits" />
 
     <TextView
         android:id="@+id/cvv_description_text"

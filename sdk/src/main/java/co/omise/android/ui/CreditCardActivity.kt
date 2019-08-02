@@ -7,8 +7,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
@@ -16,7 +16,6 @@ import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
-import co.omise.android.models.CardBrand
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
@@ -168,7 +167,8 @@ class CreditCardActivity : AppCompatActivity() {
     }
 
     private fun showSecurityCodeTooltipDialog() {
-        val dialog = SecurityCodeTooltipDialogFragment.newInstant(CardBrand.VISA)
+        val brand = CardNumber.brand(cardNumberEdit.cardNumber)
+        val dialog = SecurityCodeTooltipDialogFragment.newInstant(brand)
         dialog.show(supportFragmentManager, null)
     }
 

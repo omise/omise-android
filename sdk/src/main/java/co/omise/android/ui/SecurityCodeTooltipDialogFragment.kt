@@ -20,13 +20,12 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
     private val cvvImage: ImageView by lazy { cvv_image }
     private val cvvDescriptionText: TextView by lazy { cvv_description_text }
     private val closeButton: ImageButton by lazy { close_button }
-    private lateinit var cardBrand: CardBrand
+    private var cardBrand: CardBrand? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         cardBrand = arguments?.getParcelable(EXTRA_CARD_BRAND)
-                ?: throw IllegalAccessException("Can not found ${::EXTRA_CARD_BRAND.name}.")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,7 +35,7 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        closeButton.setOnClickListener{ dismiss() }
+        closeButton.setOnClickListener { dismiss() }
 
         when (cardBrand) {
             CardBrand.AMEX -> {
@@ -53,7 +52,7 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
     companion object {
         const val EXTRA_CARD_BRAND = "SecurityCodeTooltipDialogFragment.CardBrand"
 
-        fun newInstant(brand: CardBrand): SecurityCodeTooltipDialogFragment {
+        fun newInstant(brand: CardBrand?): SecurityCodeTooltipDialogFragment {
             val argument = Bundle()
             argument.putParcelable(EXTRA_CARD_BRAND, brand)
 
