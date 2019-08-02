@@ -38,7 +38,7 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val EXTRA_CARD_BRAND = "SecurityCodeTooltipDialogFragment.CardBrand"
+        const val EXTRA_CARD_BRAND = "SecurityCodeTooltipDialogFragment.CardBrand"
 
         fun newInstant(brand: CardBrand): SecurityCodeTooltipDialogFragment {
             val argument = Bundle()
