@@ -3,19 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/small_padding"
-    android:paddingLeft="@dimen/small_padding"
-    android:paddingEnd="@dimen/small_padding"
-    android:paddingRight="@dimen/small_padding">
+    android:background="@drawable/bg_dialog">
 
     <ImageButton
         android:id="@+id/close_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/small_margin"
         android:background="@null"
         android:src="@drawable/ic_close_small" />
 
