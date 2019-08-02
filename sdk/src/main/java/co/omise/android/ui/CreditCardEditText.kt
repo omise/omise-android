@@ -11,11 +11,11 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import co.omise.android.CardNumber
+import co.omise.android.models.CardBrand
 
 class CreditCardEditText : OmiseEditText {
 
     companion object {
-        private const val CARD_NUMBER_LENGTH = 16
         private const val CARD_NUMBER_WITH_SPACE_LENGTH = 19
         private const val SEPARATOR = " "
     }
@@ -24,7 +24,10 @@ class CreditCardEditText : OmiseEditText {
     private var cardBrandImagePaint: Paint? = null
 
     val cardNumber: String
-        get() = text.toString().replace(SEPARATOR, "")
+        get() = text.toString().trim().replace(SEPARATOR, "")
+
+    val cardBrand: CardBrand?
+        get() = CardNumber.brand(cardNumber)
 
     constructor(context: Context) : super(context)
 
@@ -74,8 +77,7 @@ class CreditCardEditText : OmiseEditText {
     override fun validate() {
         super.validate()
 
-        val value = text.toString().trim().replace(SEPARATOR, "")
-        if (value.length < CARD_NUMBER_LENGTH || !CardNumber.luhn(value)) {
+        if (cardBrand == null || !CardNumber.luhn(cardNumber)) {
             throw InputValidationException.InvalidInputException
         }
     }
