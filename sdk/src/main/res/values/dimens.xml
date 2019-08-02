@@ -4,4 +4,9 @@
     <dimen name="field_separator_margin">16dp</dimen>
     <dimen name="error_message_side_margin">4dp</dimen>
     <dimen name="tooltip_end_margin">12dp</dimen>
+
+    <dimen name="dialog_container_top_margin">36dp</dimen>
+    <dimen name="dialog_container_bottom_margin">30dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
 </resources>

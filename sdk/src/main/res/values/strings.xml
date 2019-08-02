@@ -27,6 +27,6 @@
     <string name="title_authorizing_payment">Authorizing Payment</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
     <string name="hint_expiry_date" translatable="false">MM/YY</string>
-    <string name="cvv_tooltip_3_digits">3 digit number on the back of your card</string>
-    <string name="cvv_tooltip_4_digits">4 digit number on the front of your card</string>
+    <string name="cvv_tooltip_3_digits">3 digit number on the\nback of your card</string>
+    <string name="cvv_tooltip_4_digits">4 digit number on the\nfront of your card</string>
 </resources>

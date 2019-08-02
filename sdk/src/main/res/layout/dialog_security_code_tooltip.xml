@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/form_padding">
+    android:paddingStart="@dimen/small_padding"
+    android:paddingLeft="@dimen/small_padding"
+    android:paddingEnd="@dimen/small_padding"
+    android:paddingRight="@dimen/small_padding">
 
     <ImageButton
         android:id="@+id/close_button"
@@ -12,6 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/small_margin"
         android:background="@null"
         android:src="@drawable/ic_close_small" />
 
@@ -21,14 +25,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dialog_container_top_margin"
         tools:src="@drawable/cvv_3_digits" />
 
     <TextView
         android:id="@+id/cvv_description_text"
+        style="@style/OmiseBodyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cvv_image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/form_padding"
+        android:layout_marginBottom="@dimen/dialog_container_bottom_margin"
+        android:gravity="center"
         tools:text="@string/cvv_tooltip_3_digits" />
 </RelativeLayout>
