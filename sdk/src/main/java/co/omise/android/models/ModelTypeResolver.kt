@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase
 import java.util.Collections
 import kotlin.collections.HashMap
-import kotlin.collections.Map
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
 import kotlin.collections.set
 
 class ModelTypeResolver : TypeIdResolverBase() {
@@ -22,6 +20,8 @@ class ModelTypeResolver : TypeIdResolverBase() {
             (types as HashMap<String, Class<*>>)["token"] = Token::class.java
             (types as HashMap<String, Class<*>>)["capability"] = Capability::class.java
             (types as HashMap<String, Class<*>>)["payment_method"] = PaymentMethod::class.java
+            (types as HashMap<String, Class<*>>)["source"] = Source::class.java
+            (types as HashMap<String, Class<*>>)["references"] = References::class.java
             (types as HashMap<String, Class<*>>)["error"] = APIError::class.java
         }
         return Collections.unmodifiableMap(types)

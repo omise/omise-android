@@ -16,23 +16,23 @@ data class Source(
         var currency: String? = null,
         var barcode: String? = null,
         var references: References? = null,
-        @JsonProperty("store_id")
+        @field:JsonProperty("store_id")
         var storeId: String? = null,
-        @JsonProperty("store_name")
+        @field:JsonProperty("store_name")
         var storeName: String? = null,
-        @JsonProperty("terminal_id")
+        @field:JsonProperty("terminal_id")
         var terminalId: String? = null,
         var name: String? = null,
         var email: String? = null,
-        @JsonProperty("phone_number")
+        @field:JsonProperty("phone_number")
         var phoneNumber: String? = null,
-        @JsonProperty("installment_term")
+        @field:JsonProperty("installment_term")
         var installmentTerm: Int = 0
 ) : Model(), Parcelable {
 
     constructor(parcel: Parcel) : this() {
-        type = parcel.readParcelable(SourceType::class.java.classLoader)
-        flow = parcel.readParcelable(FlowType::class.java.classLoader)
+        type = SourceType.creator(parcel.readString())
+        flow = FlowType.creator(parcel.readString())
         amount = parcel.readLong()
         currency = parcel.readString()
         barcode = parcel.readString()
@@ -51,8 +51,8 @@ data class Source(
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeParcelable(type, flags)
-        dest.writeParcelable(flow, flags)
+        dest.writeString(type?.name)
+        dest.writeString(flow?.name)
         dest.writeLong(amount)
         dest.writeString(currency)
         dest.writeString(barcode)
@@ -76,13 +76,14 @@ data class Source(
         }
     }
 
-    class CreateSourceRequestBuilder : RequestBuilder<Source>() {
-        @JsonProperty
-        private var amount: Long = 0
-        @JsonProperty
-        private var currency: String? = null
-        @JsonProperty
-        private var type: SourceType? = null
+    class CreateSourceRequestBuilder(
+            @JsonProperty
+            val amount: Long,
+            @JsonProperty
+            val currency: String,
+            val type: SourceType
+    ) : RequestBuilder<Source>() {
+
         @JsonProperty
         private var description: String? = null
         @JsonProperty
@@ -117,21 +118,6 @@ data class Source(
 
         override fun type(): Class<Source> {
             return Source::class.java
-        }
-
-        fun amount(amount: Long): CreateSourceRequestBuilder {
-            this.amount = amount
-            return this
-        }
-
-        fun currency(currency: String): CreateSourceRequestBuilder {
-            this.currency = currency
-            return this
-        }
-
-        fun type(type: SourceType): CreateSourceRequestBuilder {
-            this.type = type
-            return this
         }
 
         fun description(description: String): CreateSourceRequestBuilder {

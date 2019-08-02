@@ -6,16 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.joda.time.DateTime
 
 data class References(
-        @JsonProperty("va_code")
+        @field:JsonProperty("va_code")
         var vaCode: String? = null,
-        @JsonProperty("omise_tax_id")
+        @field:JsonProperty("omise_tax_id")
         var omiseTaxId: String? = null,
-        @JsonProperty("reference_number_1")
+        @field:JsonProperty("reference_number_1")
         var referenceNumber1: String? = null,
-        @JsonProperty("reference_number_2")
+        @field:JsonProperty("reference_number_2")
         var referenceNumber2: String? = null,
         var barcode: String? = null,
-        @JsonProperty("expires_at")
+        @field:JsonProperty("expires_at")
         var expiresAt: DateTime? = null
 ) : Model() {
 
