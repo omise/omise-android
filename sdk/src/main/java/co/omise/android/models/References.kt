@@ -5,6 +5,11 @@ import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.joda.time.DateTime
 
+/**
+ * Represents Source References object.
+ *
+ * @see [Sources API](https://www.omise.co/sources-api)
+ */
 data class References(
         @field:JsonProperty("va_code")
         var vaCode: String? = null,

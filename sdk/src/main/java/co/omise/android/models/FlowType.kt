@@ -2,6 +2,11 @@ package co.omise.android.models
 
 import com.fasterxml.jackson.annotation.JsonCreator
 
+/**
+ * Represents Source Flow object.
+ *
+ * @see [Sources API](https://www.omise.co/sources-api)
+ */
 sealed class FlowType(
         val name: String
 ) {

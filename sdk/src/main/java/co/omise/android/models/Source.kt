@@ -9,6 +9,11 @@ import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import java.io.IOException
 
+/**
+ * Represents Source object and contains its [RequestBuilder].
+ *
+ * @see [Sources API](https://www.omise.co/sources-api)
+ */
 data class Source(
         var type: SourceType? = null,
         var flow: FlowType? = null,
@@ -76,6 +81,9 @@ data class Source(
         }
     }
 
+    /**
+     * The [RequestBuilder] class for creating a Source.
+     */
     class CreateSourceRequestBuilder(
             @JsonProperty
             val amount: Long,

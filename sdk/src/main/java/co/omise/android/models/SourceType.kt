@@ -3,6 +3,11 @@ package co.omise.android.models
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
+/**
+ * Represents Source Type object.
+ *
+ * @see [Sources API](https://www.omise.co/sources-api)
+ */
 sealed class SourceType(
         @JsonValue val name: String?
 ) {
