@@ -56,9 +56,9 @@ data class CardBrand(
         @JvmField
         val MASTERCARD = CardBrand("mastercard", "^5[1-5]", 16, 16, R.drawable.brand_mastercard)
         @JvmField
-        val MAESTRO = CardBrand("maestro", "^(5018|5020|5038|6304|6759|676[1-3])", 12, 19, R.drawable.brand_mastercard) // TODO: <- maestro logo?
+        val MAESTRO = CardBrand("maestro", "^(5018|5020|5038|6304|6759|676[1-3])", 12, 19, R.drawable.brand_maestro)
         @JvmField
-        val DISCOVER = CardBrand("discover", "^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)", 16, 16, -1) // TODO: Discover logo?
+        val DISCOVER = CardBrand("discover", "^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)", 16, 16, R.drawable.brand_discover)
 
         @JvmField
         val ALL = arrayOf(AMEX, DINERS, JCB, LASER, VISA, MASTERCARD, MAESTRO, DISCOVER)
