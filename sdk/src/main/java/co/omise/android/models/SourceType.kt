@@ -1,10 +1,11 @@
 package co.omise.android.models
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
 
 sealed class SourceType(
-        val name: String?
-) : Model() {
+        @JsonValue val name: String?
+) {
 
     object InternetBankingBay : SourceType("internet_banking_bay")
     object InternetBankingKtb : SourceType("internet_banking_ktb")
@@ -25,9 +26,9 @@ sealed class SourceType(
     companion object {
         @JsonCreator
         @JvmStatic
-        private fun creator(name: String): SourceType? {
-            return SourceType::class.sealedSubclasses.find {
-                it.simpleName == name
+        fun creator(name: String): SourceType? {
+            return SourceType::class.sealedSubclasses.firstOrNull {
+                it.simpleName?.toLowerCase() == name.toLowerCase()
             }?.objectInstance
         }
     }
