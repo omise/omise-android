@@ -18,6 +18,13 @@ class SecurityCodeEditTextTest {
         assertEquals(Unit, editText.validate())
     }
 
+    @Test
+    fun validate_4digitsShouldValid() {
+        "1234".forEach { editText.append(it.toString()) }
+
+        assertEquals(Unit, editText.validate())
+    }
+
     @Test(expected = InputValidationException.InvalidInputException::class)
     fun validate_invalidValue() {
         "12".forEach { editText.append(it.toString()) }
