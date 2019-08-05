@@ -27,4 +27,7 @@
     <string name="label_security_code">セキュリティコード</string>
     <string name="title_authorizing_payment">決済を認証中</string>
     <string name="menu_card_io">カードを読み取る</string>
+
+    <string name="cvv_tooltip_3_digits">カード裏面の3桁の番号</string>
+    <string name="cvv_tooltip_4_digits">カード表面の4桁の番号</string>
 </resources>

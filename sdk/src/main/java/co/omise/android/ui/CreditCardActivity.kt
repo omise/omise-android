@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
@@ -16,6 +18,7 @@ import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
@@ -40,6 +43,7 @@ class CreditCardActivity : AppCompatActivity() {
     private val cardNameErrorText: TextView by lazy { text_card_name_error }
     private val expiryDateErrorText: TextView by lazy { text_expiry_date_error }
     private val securityCodeErrorText: TextView by lazy { text_security_code_error }
+    private val securityCodeTooltipButton: ImageButton by lazy { button_security_code_tooltip }
 
     private val editTexts: List<Pair<OmiseEditText, TextView>> by lazy {
         listOf(
@@ -61,6 +65,7 @@ class CreditCardActivity : AppCompatActivity() {
         setTitle(R.string.default_form_title)
 
         submitButton.setOnClickListener(::submit)
+        securityCodeTooltipButton.setOnClickListener(::showSecurityCodeTooltipDialog)
 
         editTexts.forEach {
             it.first.setOnFocusChangeListener { _, hasFocus ->
@@ -159,6 +164,12 @@ class CreditCardActivity : AppCompatActivity() {
         val isFormValid = editTexts.map { it.first.isValid }
                 .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
+    }
+
+    private fun showSecurityCodeTooltipDialog() {
+        val brand = CardNumber.brand(cardNumberEdit.cardNumber)
+        val dialog = SecurityCodeTooltipDialogFragment.newInstant(brand)
+        dialog.show(supportFragmentManager, null)
     }
 
     companion object {

@@ -51,6 +51,13 @@ class CreditCardEditTextTest {
         assertEquals(Unit, editText.validate())
     }
 
+    @Test
+    fun validate_validAmexNumber() {
+        "378282246310005".forEach { editText.append(it.toString()) }
+
+        assertEquals(Unit, editText.validate())
+    }
+
     @Test(expected = InputValidationException.EmptyInputException::class)
     fun validate_emptyValue() {
         "".forEach { editText.append(it.toString()) }

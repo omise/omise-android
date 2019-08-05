@@ -27,4 +27,7 @@
     <string name="label_security_code">รหัสหลังบัตร</string>
     <string name="menu_card_io">ถ่ายรูปบัตร</string>
     <string name="title_authorizing_payment">กำลังอนุมัติวงเงิน</string>
+
+    <string name="cvv_tooltip_3_digits">หมายเลข 3 หลักด้านหลังบัตร</string>
+    <string name="cvv_tooltip_4_digits">หมายเลข 4 หลักบนหน้าบัตร</string>
 </resources>

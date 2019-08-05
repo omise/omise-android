@@ -8,26 +8,20 @@ import android.util.AttributeSet
 
 class SecurityCodeEditText : OmiseEditText {
     companion object {
-        private const val CVV_LENGTH = 3
-        private const val CVV_REGEX = "[0-9]{3}"
+        private const val CVV_LENGTH = 4
+        private const val CVV_REGEX = "[0-9]{3,4}"
     }
 
     val securityCode: String
         get() = text.toString().trim()
 
-    constructor(context: Context?) : super(context) {
-        init()
-    }
+    constructor(context: Context?) : super(context)
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private fun init() {
+    init {
         filters = arrayOf(InputFilter.LengthFilter(CVV_LENGTH))
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
     }
