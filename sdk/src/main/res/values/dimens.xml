@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="form_padding">16dp</dimen>
+    <dimen name="form_padding">24dp</dimen>
     <dimen name="field_separator_margin">16dp</dimen>
     <dimen name="error_message_side_margin">4dp</dimen>
     <dimen name="tooltip_end_margin">12dp</dimen>
@@ -8,8 +8,13 @@
     <dimen name="dialog_container_background_inset">36dp</dimen>
     <dimen name="dialog_container_top_margin">36dp</dimen>
     <dimen name="dialog_container_bottom_margin">30dp</dimen>
+
     <dimen name="xsmall_margin">4dp</dimen>
     <dimen name="small_margin">8dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="large_margin">24dp</dimen>
+    <dimen name="xlarge_margin">32dp</dimen>
+
     <dimen name="small_padding">8dp</dimen>
     <dimen name="dialog_radius_size">10dp</dimen>
     <dimen name="edit_text_inset_padding">8dp</dimen>

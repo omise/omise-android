@@ -11,12 +11,14 @@
         android:id="@id/text_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
         android:text="@string/label_card_number" />
 
     <co.omise.android.ui.CreditCardEditText
         android:id="@id/edit_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
         android:background="?attr/omiseEditTextBackground"
         android:hint="@string/label_card_number"
         android:nextFocusForward="@id/edit_card_name"
@@ -26,6 +28,7 @@
         android:id="@id/text_card_number_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xsmall_margin"
         android:textAppearance="?attr/omiseEditTextErrorAppearance"
         tools:text="Invalid input" />
 
@@ -40,6 +43,7 @@
         android:id="@id/edit_card_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
         android:background="?attr/omiseEditTextBackground"
         android:hint="@string/label_card_name"
         android:nextFocusForward="@id/spinner_expiry_month"
@@ -50,6 +54,7 @@
         android:id="@id/text_card_name_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xsmall_margin"
         android:textAppearance="?attr/omiseEditTextErrorAppearance"
         tools:text="Invalid input" />
 
@@ -75,14 +80,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/xsmall_margin"
-                android:layout_marginRight="@dimen/xsmall_margin"
+                android:layout_marginEnd="@dimen/medium_margin"
+                android:layout_marginRight="@dimen/medium_margin"
                 android:orientation="vertical">
 
                 <co.omise.android.ui.ExpiryDateEditText
                     android:id="@id/edit_expiry_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
                     android:background="?attr/omiseEditTextBackground"
                     android:hint="@string/hint_expiry_date"
                     android:imeOptions="actionNext"
@@ -94,6 +100,7 @@
                     android:id="@id/text_expiry_date_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/xsmall_margin"
                     android:textAppearance="?attr/omiseEditTextErrorAppearance"
                     tools:text="Invalid input" />
 
@@ -104,8 +111,8 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/xsmall_margin"
-            android:layout_marginLeft="@dimen/xsmall_margin"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:layout_marginLeft="@dimen/medium_margin"
             android:layout_weight="1"
             android:clipChildren="false"
             android:orientation="vertical">
@@ -130,6 +137,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/small_margin"
                 android:background="?attr/omiseEditTextBackground"
                 android:hint="@string/placeholder_security_code"
                 android:textAppearance="?attr/omiseEditTextAppearance" />
@@ -152,6 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_security_code"
+                android:layout_marginTop="@dimen/xsmall_margin"
                 android:textAppearance="?attr/omiseEditTextErrorAppearance"
                 tools:text="Invalid input" />
         </RelativeLayout>
@@ -162,7 +171,7 @@
         android:id="@id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/field_separator_margin"
+        android:layout_marginTop="@dimen/xlarge_margin"
         android:background="?attr/omiseButtonBackground"
         android:enabled="false"
         android:text="@string/button_submit"
