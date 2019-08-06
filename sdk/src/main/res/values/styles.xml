@@ -9,9 +9,8 @@
         <item name="omiseEditTextErrorAppearance">@style/OmiseErrorMessage</item>
     </style>
 
-    <style name="OmiseEditTextAppearance" parent="TextAppearance.AppCompat.Body2">
-        <item name="android:textColor">@color/error</item>
-        <item name="android:textSize">20sp</item>
+    <style name="OmiseEditTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="OmiseEditText" parent="Widget.AppCompat.EditText">
@@ -26,6 +25,7 @@
 
     <style name="OmiseErrorMessage" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/error</item>
+        <item name="android:padding">@dimen/error_message_side_margin</item>
         <item name="android:layout_marginLeft">@dimen/error_message_side_margin</item>
         <item name="android:layout_marginStart">@dimen/error_message_side_margin</item>
         <item name="android:layout_marginRight">@dimen/error_message_side_margin</item>

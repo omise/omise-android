@@ -2,10 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <layer-list>
-            <item android:bottom="@dimen/edit_text_inset_padding" android:left="@dimen/edit_text_inset_padding" android:right="@dimen/edit_text_inset_padding" android:top="@dimen/edit_text_inset_padding">
+            <item>
                 <shape android:shape="rectangle">
-                    <padding android:bottom="20dp" android:left="20dp" android:right="20dp" android:top="20dp" />
-                    <size android:height="50dp" />
+                    <padding android:bottom="@dimen/edit_text_padding" android:left="@dimen/edit_text_padding" android:right="@dimen/edit_text_padding" android:top="@dimen/edit_text_padding" />
+                    <size android:height="@dimen/edit_text_height" />
                     <stroke android:width="1dp" android:color="?attr/colorAccent" />
                     <corners android:radius="4dp" />
                 </shape>
@@ -14,10 +14,10 @@
     </item>
     <item>
         <layer-list>
-            <item android:bottom="@dimen/edit_text_inset_padding" android:left="@dimen/edit_text_inset_padding" android:right="@dimen/edit_text_inset_padding" android:top="@dimen/edit_text_inset_padding">
+            <item>
                 <shape android:shape="rectangle">
-                    <padding android:bottom="20dp" android:left="20dp" android:right="20dp" android:top="20dp" />
-                    <size android:height="50dp" />
+                    <padding android:bottom="@dimen/edit_text_padding" android:left="@dimen/edit_text_padding" android:right="@dimen/edit_text_padding" android:top="@dimen/edit_text_padding" />
+                    <size android:height="@dimen/edit_text_height" />
                     <stroke android:width="1dp" android:color="@android:color/darker_gray" />
                     <corners android:radius="4dp" />
                 </shape>
