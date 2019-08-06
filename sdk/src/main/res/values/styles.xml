@@ -2,19 +2,27 @@
 <resources>
 
     <style name="OmiseTheme" parent="@style/Theme.AppCompat.Light">
-        <item name="android:textViewStyle">@style/OmiseFloatingTitle</item>
-        <item name="android:editTextStyle">@style/OmiseEditText</item>
         <item name="android:buttonStyle">@style/OmiseButton</item>
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="omiseEditTextBackground">@drawable/bg_edit_text_outlined</item>
+        <item name="omiseEditTextAppearance">@style/OmiseEditTextAppearance</item>
+        <item name="omiseEditTextErrorAppearance">@style/OmiseErrorMessage</item>
     </style>
 
-    <style name="OmiseEditText" parent="Widget.AppCompat.EditText"/>
+    <style name="OmiseEditTextAppearance" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">@color/error</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 
-    <style name="OmiseFloatingTitle" parent="TextAppearance.AppCompat.Caption"/>
+    <style name="OmiseEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_edit_text_outlined</item>
+    </style>
 
-    <style name="OmiseBodyTitle" parent="TextAppearance.AppCompat.Body1"/>
+    <style name="OmiseFloatingTitle" parent="TextAppearance.AppCompat.Caption" />
 
-    <style name="OmiseButton" parent="Widget.AppCompat.Button"/>
+    <style name="OmiseBodyTitle" parent="TextAppearance.AppCompat.Body1" />
+
+    <style name="OmiseButton" parent="Widget.AppCompat.Button" />
 
     <style name="OmiseErrorMessage" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/error</item>

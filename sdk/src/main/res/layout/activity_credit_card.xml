@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/layout_credit_card_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,14 +17,17 @@
         android:id="@id/edit_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/omiseEditTextBackground"
         android:hint="@string/label_card_number"
-        android:nextFocusForward="@id/edit_card_name" />
+        android:nextFocusForward="@id/edit_card_name"
+        android:textAppearance="?attr/omiseEditTextAppearance" />
 
     <TextView
         android:id="@id/text_card_number_error"
-        style="@style/OmiseErrorMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/omiseEditTextErrorAppearance"
+        tools:text="Invalid input" />
 
     <TextView
         android:id="@id/text_card_name"
@@ -36,14 +40,18 @@
         android:id="@id/edit_card_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/omiseEditTextBackground"
         android:hint="@string/label_card_name"
-        android:nextFocusForward="@id/spinner_expiry_month" />
+        android:nextFocusForward="@id/spinner_expiry_month"
+        android:textAppearance="?attr/omiseEditTextAppearance"
+        tools:text="John Doe" />
 
     <TextView
         android:id="@id/text_card_name_error"
-        style="@style/OmiseErrorMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/omiseEditTextErrorAppearance"
+        tools:text="Invalid input" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,16 +81,19 @@
                     android:id="@id/edit_expiry_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?attr/omiseEditTextBackground"
                     android:hint="@string/hint_expiry_date"
                     android:imeOptions="actionNext"
-                    android:nextFocusForward="@id/edit_security_code" />
+                    android:nextFocusForward="@id/edit_security_code"
+                    android:textAppearance="?attr/omiseEditTextAppearance" />
 
 
                 <TextView
                     android:id="@id/text_expiry_date_error"
-                    style="@style/OmiseErrorMessage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/omiseEditTextErrorAppearance"
+                    tools:text="Invalid input" />
 
             </LinearLayout>
 
@@ -115,7 +126,9 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:hint="@string/placeholder_security_code" />
+                android:background="?attr/omiseEditTextBackground"
+                android:hint="@string/placeholder_security_code"
+                android:textAppearance="?attr/omiseEditTextAppearance" />
 
             <ImageButton
                 android:id="@id/button_security_code_tooltip"
@@ -132,10 +145,11 @@
 
             <TextView
                 android:id="@id/text_security_code_error"
-                style="@style/OmiseErrorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/edit_security_code" />
+                android:layout_below="@id/edit_security_code"
+                android:textAppearance="?attr/omiseEditTextErrorAppearance"
+                tools:text="Invalid input" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -146,6 +160,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
         android:enabled="false"
-        android:text="@string/button_submit" />
+        android:text="@string/button_submit"
+        tools:enabled="true" />
 
 </LinearLayout>
