@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- EditText -->
     <attr name="omiseEditTextBackground" format="reference" />
     <attr name="omiseEditTextAppearance" format="reference" />
     <attr name="omiseEditTextErrorAppearance" format="reference" />
+
+    <!-- Button -->
+    <attr name="omiseButtonTextAppearance" format="reference" />
+    <attr name="omiseButtonBackground" format="reference" />
 </resources>

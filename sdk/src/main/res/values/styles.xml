@@ -2,11 +2,12 @@
 <resources>
 
     <style name="OmiseTheme" parent="@style/Theme.AppCompat.Light">
-        <item name="android:buttonStyle">@style/OmiseButton</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="omiseEditTextBackground">@drawable/bg_edit_text_outlined</item>
         <item name="omiseEditTextAppearance">@style/OmiseEditTextAppearance</item>
         <item name="omiseEditTextErrorAppearance">@style/OmiseErrorMessage</item>
+        <item name="omiseButtonTextAppearance">@style/OmiseButtonTextAppearance</item>
+        <item name="omiseButtonBackground">@drawable/bg_button</item>
     </style>
 
     <style name="OmiseEditTextAppearance" parent="TextAppearance.AppCompat.Body1">
@@ -21,15 +22,13 @@
 
     <style name="OmiseBodyTitle" parent="TextAppearance.AppCompat.Body1" />
 
-    <style name="OmiseButton" parent="Widget.AppCompat.Button" />
+    <style name="OmiseButtonTextAppearance" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 
     <style name="OmiseErrorMessage" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/error</item>
-        <item name="android:padding">@dimen/error_message_side_margin</item>
-        <item name="android:layout_marginLeft">@dimen/error_message_side_margin</item>
-        <item name="android:layout_marginStart">@dimen/error_message_side_margin</item>
-        <item name="android:layout_marginRight">@dimen/error_message_side_margin</item>
-        <item name="android:layout_marginEnd">@dimen/error_message_side_margin</item>
     </style>
 
 </resources>
