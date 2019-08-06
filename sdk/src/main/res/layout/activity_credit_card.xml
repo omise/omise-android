@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:text="@string/label_card_number" />
+        android:text="@string/label_card_number"
+        android:textAppearance="?attr/omiseEditTextLabelAppearance" />
 
     <co.omise.android.ui.CreditCardEditText
         android:id="@id/edit_card_number"
@@ -37,7 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
-        android:text="@string/label_card_name" />
+        android:text="@string/label_card_name"
+        android:textAppearance="?attr/omiseEditTextLabelAppearance" />
 
     <co.omise.android.ui.CardNameEditText
         android:id="@id/edit_card_name"
@@ -75,7 +77,8 @@
                 android:id="@id/text_expiry_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_expiry_date" />
+                android:text="@string/label_expiry_date"
+                android:textAppearance="?attr/omiseEditTextLabelAppearance" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,7 +129,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="@string/label_security_code" />
+                android:text="@string/label_security_code"
+                android:textAppearance="?attr/omiseEditTextLabelAppearance" />
 
             <co.omise.android.ui.SecurityCodeEditText
                 android:id="@id/edit_security_code"

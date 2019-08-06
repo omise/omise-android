@@ -4,6 +4,7 @@
     <!-- EditText -->
     <attr name="omiseEditTextBackground" format="reference" />
     <attr name="omiseEditTextAppearance" format="reference" />
+    <attr name="omiseEditTextLabelAppearance" format="reference" />
     <attr name="omiseEditTextErrorAppearance" format="reference" />
 
     <!-- Button -->

@@ -22,4 +22,7 @@
     <dimen name="edit_text_padding">8dp</dimen>
     <dimen name="button_height">44dp</dimen>
     <dimen name="button_radius">4dp</dimen>
+
+    <dimen name="edit_text_text_size">18sp</dimen>
+    <dimen name="button_text_size">18sp</dimen>
 </resources>
