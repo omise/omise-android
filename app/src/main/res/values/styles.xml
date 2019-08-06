@@ -3,7 +3,7 @@
 
     <style name="CreditCardTheme" parent="OmiseTheme">
         <item name="toolbarStyle">@style/AppActionBar</item>
-        <item name="editTextStyle">@style/AppEditText</item>
+        <item name="colorAccent">@color/accent</item>
     </style>
 
     <style name="AppActionBar" parent="Widget.AppCompat.Toolbar">
