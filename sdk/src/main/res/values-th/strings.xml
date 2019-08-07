@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="button_submit">จ่ายเงิน</string>
-    <string name="default_form_title">เพิ่มบัตรเครดิต</string>
+    <string name="button_submit">ชำระเงิน</string>
+    <string name="default_form_title">บัตรเครดิต</string>
     <string name="description_brand_logo">โลโก้บัตรเครดิต</string>
     <string name="error_api">พบข้อผิดพลาด: %1$s</string>
     <string name="error_io">ไม่สามารถเชื่อมต่ออินเตอร์เน็ทได้ กรุณาตรวจสอบและลองใหม่อีกครั้ง (%1$s)</string>
