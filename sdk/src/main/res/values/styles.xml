@@ -3,6 +3,7 @@
 
     <style name="OmiseTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="actionBarStyle">@style/OmiseActionBarStyle</item>
         <item name="omiseEditTextBackground">@drawable/bg_edit_text_outlined</item>
         <item name="omiseEditTextAppearance">@style/OmiseEditTextAppearance</item>
         <item name="omiseEditTextLabelAppearance">@style/OmiseEditTextLabelAppearance</item>
@@ -10,6 +11,8 @@
         <item name="omiseButtonTextAppearance">@style/OmiseButtonTextAppearance</item>
         <item name="omiseButtonBackground">@drawable/bg_button</item>
     </style>
+
+    <style name="OmiseActionBarStyle" parent="Widget.AppCompat.Light.ActionBar" />
 
     <style name="OmiseEditTextAppearance" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">@dimen/edit_text_text_size</item>
