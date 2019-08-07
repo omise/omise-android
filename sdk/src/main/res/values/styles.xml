@@ -2,6 +2,7 @@
 <resources>
 
     <style name="OmiseTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/primary_accent</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="actionBarStyle">@style/OmiseActionBarStyle</item>
         <item name="omiseEditTextStyle">@style/OmiseEditText</item>
