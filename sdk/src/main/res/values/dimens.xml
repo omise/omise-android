@@ -20,6 +20,8 @@
     <dimen name="edit_text_inset_padding">8dp</dimen>
     <dimen name="edit_text_height">44dp</dimen>
     <dimen name="edit_text_padding">8dp</dimen>
+    <dimen name="edit_text_radius_size">4dp</dimen>
+    <dimen name="edit_text_stroke_width">1dp</dimen>
     <dimen name="button_height">44dp</dimen>
     <dimen name="button_radius">4dp</dimen>
 
