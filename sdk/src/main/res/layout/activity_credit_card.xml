@@ -9,52 +9,50 @@
 
     <TextView
         android:id="@id/text_card_number"
+        style="?attr/omiseEditTextLabelStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:text="@string/label_card_number"
-        android:textAppearance="?attr/omiseEditTextLabelAppearance" />
+        android:text="@string/label_card_number" />
 
     <co.omise.android.ui.CreditCardEditText
         android:id="@id/edit_card_number"
+        style="?attr/omiseEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:background="?attr/omiseEditTextBackground"
-        android:nextFocusForward="@id/edit_card_name"
-        android:textAppearance="?attr/omiseEditTextAppearance" />
+        android:nextFocusForward="@id/edit_card_name" />
 
     <TextView
         android:id="@id/text_card_number_error"
+        style="?attr/omiseEditTextErrorStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/xsmall_margin"
-        android:textAppearance="?attr/omiseEditTextErrorAppearance"
         tools:text="Invalid input" />
 
     <TextView
         android:id="@id/text_card_name"
+        style="?attr/omiseEditTextLabelStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/field_separator_margin"
-        android:text="@string/label_card_name"
-        android:textAppearance="?attr/omiseEditTextLabelAppearance" />
+        android:text="@string/label_card_name" />
 
     <co.omise.android.ui.CardNameEditText
         android:id="@id/edit_card_name"
+        style="?attr/omiseEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:background="?attr/omiseEditTextBackground"
-        android:nextFocusForward="@id/spinner_expiry_month"
-        android:textAppearance="?attr/omiseEditTextAppearance" />
+        android:nextFocusForward="@id/spinner_expiry_month" />
 
     <TextView
         android:id="@id/text_card_name_error"
+        style="?attr/omiseEditTextErrorStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/xsmall_margin"
-        android:textAppearance="?attr/omiseEditTextErrorAppearance"
         tools:text="Invalid input" />
 
     <LinearLayout
@@ -72,10 +70,10 @@
 
             <TextView
                 android:id="@id/text_expiry_date"
+                style="?attr/omiseEditTextLabelStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_expiry_date"
-                android:textAppearance="?attr/omiseEditTextLabelAppearance" />
+                android:text="@string/label_expiry_date" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,22 +84,20 @@
 
                 <co.omise.android.ui.ExpiryDateEditText
                     android:id="@id/edit_expiry_date"
+                    style="?attr/omiseEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/small_margin"
-                    android:background="?attr/omiseEditTextBackground"
                     android:hint="@string/hint_expiry_date"
                     android:imeOptions="actionNext"
-                    android:nextFocusForward="@id/edit_security_code"
-                    android:textAppearance="?attr/omiseEditTextAppearance" />
-
+                    android:nextFocusForward="@id/edit_security_code" />
 
                 <TextView
                     android:id="@id/text_expiry_date_error"
+                    style="?attr/omiseEditTextErrorStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/xsmall_margin"
-                    android:textAppearance="?attr/omiseEditTextErrorAppearance"
                     tools:text="Invalid input" />
 
             </LinearLayout>
@@ -119,6 +115,7 @@
 
             <TextView
                 android:id="@id/text_security_code"
+                style="?attr/omiseEditTextLabelStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -126,11 +123,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="@string/label_security_code"
-                android:textAppearance="?attr/omiseEditTextLabelAppearance" />
+                android:text="@string/label_security_code" />
 
             <co.omise.android.ui.SecurityCodeEditText
                 android:id="@id/edit_security_code"
+                style="?attr/omiseEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_security_code"
@@ -139,9 +136,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="@dimen/small_margin"
-                android:background="?attr/omiseEditTextBackground"
-                android:imeOptions="actionDone"
-                android:textAppearance="?attr/omiseEditTextAppearance" />
+                android:imeOptions="actionDone" />
 
             <ImageButton
                 android:id="@id/button_security_code_tooltip"
@@ -158,11 +153,11 @@
 
             <TextView
                 android:id="@id/text_security_code_error"
+                style="?attr/omiseEditTextErrorStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_security_code"
                 android:layout_marginTop="@dimen/xsmall_margin"
-                android:textAppearance="?attr/omiseEditTextErrorAppearance"
                 tools:text="Invalid input" />
         </RelativeLayout>
 
@@ -170,13 +165,12 @@
 
     <Button
         android:id="@id/button_submit"
+        style="?attr/omiseButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/xlarge_margin"
-        android:background="?attr/omiseButtonBackground"
         android:enabled="false"
         android:text="@string/button_submit"
-        android:textAppearance="?attr/omiseButtonTextAppearance"
         tools:enabled="true" />
 
 </LinearLayout>

@@ -6,7 +6,7 @@ import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 
-open class OmiseEditText : EditText {
+open class OmiseEditText : AppCompatEditText {
 
     val isValid: Boolean
         get() =

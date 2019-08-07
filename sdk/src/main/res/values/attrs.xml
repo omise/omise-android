@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- EditText -->
-    <attr name="omiseEditTextBackground" format="reference" />
-    <attr name="omiseEditTextAppearance" format="reference" />
-    <attr name="omiseEditTextLabelAppearance" format="reference" />
-    <attr name="omiseEditTextErrorAppearance" format="reference" />
-
-    <!-- Button -->
-    <attr name="omiseButtonTextAppearance" format="reference" />
-    <attr name="omiseButtonBackground" format="reference" />
+    <attr name="omiseButtonStyle" format="reference" />
+    <attr name="omiseEditTextStyle" format="reference" />
+    <attr name="omiseEditTextLabelStyle" format="reference" />
+    <attr name="omiseEditTextErrorStyle" format="reference" />
 </resources>
