@@ -77,7 +77,9 @@ class CreditCardEditText : OmiseEditText {
     override fun validate() {
         super.validate()
 
-        if (cardBrand == null || !CardNumber.luhn(cardNumber)) {
+        val brand = cardBrand ?: throw InputValidationException.InvalidInputException
+
+        if (!CardNumber.luhn(cardNumber) || !brand.valid(cardNumber)) {
             throw InputValidationException.InvalidInputException
         }
     }
