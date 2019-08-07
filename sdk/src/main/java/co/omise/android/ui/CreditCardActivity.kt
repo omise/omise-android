@@ -3,6 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -63,6 +64,7 @@ class CreditCardActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_credit_card)
         setTitle(R.string.default_form_title)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         submitButton.setOnClickListener(::submit)
         securityCodeTooltipButton.setOnClickListener(::showSecurityCodeTooltipDialog)
@@ -89,6 +91,16 @@ class CreditCardActivity : AppCompatActivity() {
             }
             it.first.setOnAfterTextChangeListener(::updateSubmitButton)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

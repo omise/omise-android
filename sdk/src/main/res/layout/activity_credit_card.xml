@@ -49,8 +49,7 @@
         android:background="?attr/omiseEditTextBackground"
         android:hint="@string/label_card_name"
         android:nextFocusForward="@id/spinner_expiry_month"
-        android:textAppearance="?attr/omiseEditTextAppearance"
-        tools:text="John Doe" />
+        android:textAppearance="?attr/omiseEditTextAppearance" />
 
     <TextView
         android:id="@id/text_card_name_error"
