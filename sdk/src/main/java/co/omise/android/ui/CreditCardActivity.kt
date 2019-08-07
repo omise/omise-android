@@ -16,6 +16,7 @@ import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
+import co.omise.android.models.CardParam
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
@@ -141,20 +142,22 @@ class CreditCardActivity : AppCompatActivity() {
         val expiryYear = expiryDateEdit.expiryYear
         val securityCode = securityCodeEdit.securityCode
 
-        val request = Token.CreateTokenRequestBuilder(
-                name,
-                number,
-                expiryMonth,
-                expiryYear,
-                securityCode
-        ).build()
+        val cardParam = CardParam(
+                name = name,
+                number = number,
+                expirationMonth = expiryMonth,
+                expirationYear = expiryYear,
+                securityCode = securityCode)
+
+        val request =
+                Token.CreateTokenRequestBuilder(cardParam).build()
 
         disableForm()
 
-        val pkey = intent.getStringExtra(EXTRA_PKEY)
+        val pKey = intent.getStringExtra(EXTRA_PKEY)
         val listener = CreateTokenRequestListener()
         try {
-            Client(pkey).send(request, listener)
+            Client(pKey).send(request, listener)
         } catch (ex: Exception) {
             listener.onRequestFailed(ex)
         }
