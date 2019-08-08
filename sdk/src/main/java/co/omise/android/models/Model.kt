@@ -2,11 +2,9 @@ package co.omise.android.models
 
 import android.os.Parcel
 import android.os.Parcelable
-
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver
-
 import org.joda.time.DateTime
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "object", visible = true)
@@ -24,8 +22,12 @@ open class Model() : Parcelable {
     var deleted: Boolean = false
 
     constructor(parcel: Parcel) : this() {
+        modelObject = parcel.readString()
         id = parcel.readString()
-        livemode = parcel.readByte() != 0.toByte()
+        livemode = parcel.readInt() == 1
+        location = parcel.readString()
+        created = DateTime.parse(parcel.readString())
+        deleted = parcel.readInt() == 1
     }
 
     override fun describeContents(): Int {
@@ -33,10 +35,11 @@ open class Model() : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(modelObject)
         dest.writeString(id)
         dest.writeInt(if (livemode) 1 else 0)
         dest.writeString(location)
-        dest.writeSerializable(created)
+        dest.writeString(created.toString())
         dest.writeInt(if (deleted) 1 else 0)
     }
 

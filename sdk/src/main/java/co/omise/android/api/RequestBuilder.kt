@@ -1,8 +1,13 @@
 package co.omise.android.api
 
 import co.omise.android.models.Model
+import co.omise.android.models.Serializer
 import okhttp3.HttpUrl
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.util.Objects.requireNonNull
 
 
@@ -70,6 +75,23 @@ abstract class RequestBuilder<T : Model> {
         return HttpUrlBuilder(endpoint, path).build()
     }
 
+    /**
+     * Serializes all the enclosed parameters in a child RequestBuilder. This method should be called in the return statement of the overridden payload() method.
+     *
+     * @return the [RequestBody]
+     * @throws IOException the I/O when [Serializer] is unable to correctly serialize the content of the class using Jackson
+     */
+    @Throws(IOException::class)
+    protected fun serialize(): RequestBody {
+        val stream = ByteArrayOutputStream(4096)
+        serializer().serializeRequestBuilder(stream, this)
+        return stream.toByteArray().toRequestBody(JSON_MEDIA_TYPE, 0, stream.size())
+    }
+
+    private fun serializer(): Serializer {
+        return Serializer()
+    }
+
     inner class HttpUrlBuilder(private val endpoint: Endpoint, private val path: String) {
 
         fun build(): HttpUrl {
@@ -85,5 +107,6 @@ abstract class RequestBuilder<T : Model> {
         const val GET = "GET"
         const val PATCH = "PATCH"
         const val DELETE = "DELETE"
+        val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaTypeOrNull()
     }
 }

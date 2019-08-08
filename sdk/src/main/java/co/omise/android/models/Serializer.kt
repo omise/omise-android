@@ -1,5 +1,6 @@
 package co.omise.android.models
 
+import co.omise.android.api.RequestBuilder
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -15,6 +16,8 @@ import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import java.io.IOException
 import java.io.InputStream
+import java.io.OutputStream
+
 
 class Serializer {
     /**
@@ -67,7 +70,7 @@ class Serializer {
      * @param <T>   The type to deserialize the result into.
      * @return An instance of type T deserialized from the input stream.
      * @throws IOException on general I/O error.
-    </T> */
+     */
     @Throws(IOException::class)
     fun <T : Model> deserialize(input: InputStream, klass: Class<*>): T {
         return objectMapper.readerFor(klass).readValue(input)
@@ -81,7 +84,7 @@ class Serializer {
      * @param <T>   The type to deserialize the result into.
      * @return An instance of type T deserialized from the input stream.
      * @throws IOException on general I/O error.
-    </T> */
+     */
     @Throws(IOException::class)
     fun <T : Error> deserialize(input: InputStream, klass: Class<T>): T {
         return objectMapper.readerFor(klass).readValue(input)
@@ -93,9 +96,22 @@ class Serializer {
      * @param model The [Model] to serialize.
      * @param <T>   The type of the model to serialize.
      * @return The map containing the model's data.
-    </T> */
+     */
     fun <T : Model> serializeToMap(model: T): Map<String, Any> {
         return objectMapper.convertValue(model, object : TypeReference<Map<String, Any>>() {})
+    }
+
+    /**
+     * Serializes the given [RequestBuilder] object to the provided output stream.
+     *
+     * @param outputStream The [OutputStream] to serialize the parameter into.
+     * @param builder      The [RequestBuilder] to serialize.
+     * @param <T>          The type of the parameter object to serialize.
+     * @throws IOException on general I/O error.
+     */
+    @Throws(IOException::class)
+    fun <T : Model> serializeRequestBuilder(outputStream: OutputStream, builder: RequestBuilder<T>) {
+        objectMapper.writerFor(builder.javaClass).writeValue(outputStream, builder)
     }
 
     fun objectMapper(): ObjectMapper {
