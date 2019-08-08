@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="error">#ef3526</color>
-    <color  name="primary_accent">#1a56f0</color>
-    <color  name="button_press">#4D1A56F0</color>
+    <color name="primary_accent">#1a56f0</color>
+    <color name="button_press">#4D1A56F0</color>
     <color name="disable_status">#e4e7ed</color>
 </resources>
