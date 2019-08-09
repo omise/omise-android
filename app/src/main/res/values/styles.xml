@@ -6,10 +6,10 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="omiseEditTextStyle">@style/SampleEditText</item>
-        <item name="omiseEditTextLabelStyle">@style/SampleEditTextLabel</item>
-        <item name="omiseEditTextErrorStyle">@style/SampleEditTextError</item>
-        <item name="omiseButtonStyle">@style/SampleButton</item>
+        <item name="android:editTextStyle">@style/SampleEditText</item>
+        <item name="android:buttonStyle">@style/SampleButton</item>
+        <item name="editTextLabelStyle">@style/SampleEditTextLabel</item>
+        <item name="editTextErrorStyle">@style/SampleEditTextError</item>
     </style>
 
     <style name="SampleEditText" parent="Widget.AppCompat.EditText">
@@ -28,7 +28,7 @@
         <item name="android:textColor">@color/error</item>
     </style>
 
-    <style name="SampleButton">
+    <style name="SampleButton" parent="Widget.AppCompat.Button">
         <item name="android:textColor">@color/button_text_color</item>
     </style>
 </resources>

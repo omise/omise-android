@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <attr name="omiseButtonStyle" format="reference" />
-    <attr name="omiseEditTextStyle" format="reference" />
-    <attr name="omiseEditTextLabelStyle" format="reference" />
-    <attr name="omiseEditTextErrorStyle" format="reference" />
+    <attr name="editTextLabelStyle" format="reference" />
+    <attr name="editTextErrorStyle" format="reference" />
 </resources>
