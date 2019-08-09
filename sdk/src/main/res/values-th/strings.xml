@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="button_submit">ชำระเงิน</string>
+    <string name="button_pay">ชำระเงิน</string>
     <string name="default_form_title">บัตรเครดิต</string>
     <string name="description_brand_logo">โลโก้บัตรเครดิต</string>
     <string name="error_api">พบข้อผิดพลาด: %1$s</string>

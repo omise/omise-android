@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="button_submit">支払う</string>
+    <string name="button_pay">支払う</string>
     <string name="default_form_title">クレジットカード</string>
     <string name="description_brand_logo">カードブランドロゴ</string>
     <string name="error_api">エラー: %1$s</string>
