@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="button_submit">支払う</string>
-    <string name="default_form_title">クレジットカードを追加</string>
+    <string name="button_pay">支払う</string>
+    <string name="default_form_title">クレジットカード</string>
     <string name="description_brand_logo">カードブランドロゴ</string>
     <string name="error_api">エラー: %1$s</string>
     <string name="error_io">ネットワーク通信エラー, 安定したネット環境で再度試してください. (%1$s)</string>

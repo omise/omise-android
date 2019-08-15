@@ -2,6 +2,7 @@ package co.omise.android.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 

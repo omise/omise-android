@@ -72,6 +72,13 @@ class CreditCardEditTextTest {
         editText.validate()
     }
 
+    @Test(expected = InputValidationException.InvalidInputException::class)
+    fun validate_invalidLength() {
+        "424242".forEach { editText.append(it.toString()) }
+
+        editText.validate()
+    }
+
     @Test
     fun cardNumber_returnCardNumberWithoutSeparatorChars() {
         "4242424242424242".forEach { editText.append(it.toString()) }

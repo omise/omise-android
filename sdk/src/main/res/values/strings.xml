@@ -1,7 +1,7 @@
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="button_submit">Submit</string>
-    <string name="default_form_title">Add Credit Card</string>
+    <string name="button_pay">Pay</string>
+    <string name="default_form_title">Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
     <string name="error_api">Error: %1$s</string>
     <string name="error_io">Network communication error, please make sure you have a stable internet connection. (%1$s)</string>
