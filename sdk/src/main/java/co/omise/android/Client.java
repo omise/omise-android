@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.X509TrustManager;
 
-import okhttp3.CertificatePinner;
 import okhttp3.ConnectionSpec;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -72,14 +71,7 @@ public class Client {
         return builder
                 .addInterceptor(buildInterceptor())
                 .connectionSpecs(Collections.singletonList(spec))
-                .certificatePinner(buildCertificatePinner())
                 .readTimeout(60, TimeUnit.SECONDS)
-                .build();
-    }
-
-    private CertificatePinner buildCertificatePinner() {
-        return new CertificatePinner.Builder()
-                .add("vault.omise.co", "sha256/maqNsxEnwszR+xCmoGUiV636PvSM5zvBIBuupBn9AB8=")
                 .build();
     }
 
