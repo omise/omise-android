@@ -3,15 +3,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29"
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "co.omise.android.example"
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode sample_app_code_version
+        versionName sample_app_version
         multiDexEnabled true
     }
 
@@ -37,15 +37,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.multidex:multidex:2.0.1'
-    testImplementation 'junit:junit:4.12'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.google.guava:guava:19.0'
-    implementation project(':sdk')
+    implementation "androidx.multidex:multidex:$multidex_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "com.google.guava:guava:$guava_version"
+    implementation "com.squareup.picasso:picasso:$picasso_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.0.0"
+    implementation project(':sdk')
     // compile 'co.omise:omise-android:2.3.+'
+
+    testImplementation "junit:junit:$junit_version"
 }
 repositories {
     mavenCentral()
