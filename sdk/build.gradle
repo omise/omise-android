@@ -24,6 +24,10 @@ android {
         }
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
     lintOptions {
         abortOnError false
         disable 'InvalidPackage' // okio
