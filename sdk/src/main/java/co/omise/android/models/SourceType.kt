@@ -1,5 +1,6 @@
 package co.omise.android.models
 
+import android.annotation.SuppressLint
 import android.os.Parcel
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
@@ -31,18 +32,22 @@ sealed class SourceType(
     object Unknown : SourceType(null)
 
     companion object {
+        @SuppressLint("DefaultLocale")
         @JsonCreator
         @JvmStatic
-        fun creator(name: String): SourceType? {
+        fun creator(name: String?): SourceType? {
             return SourceType::class.sealedSubclasses.firstOrNull {
-                it.simpleName?.toLowerCase() == name.toLowerCase()
+                it.simpleName?.toLowerCase() == name?.toLowerCase()
             }?.objectInstance
         }
     }
 }
 
 object SourceTypeParceler : Parceler<SourceType> {
-    override fun create(parcel: Parcel): SourceType = SourceType.creator(parcel.readString())!!
+    override fun create(parcel: Parcel): SourceType {
+        val sourceType = SourceType.creator(parcel.readString())
+        return sourceType ?: SourceType.Unknown
+    }
 
     override fun SourceType.write(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
