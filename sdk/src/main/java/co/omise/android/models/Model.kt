@@ -21,4 +21,15 @@ open class Model(
         var created: DateTime? = null,
         @field:JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         var deleted: Boolean = false
-) : Parcelable
+) : Parcelable {
+
+    override fun equals(other: Any?): Boolean {
+        val otherModel = other as Model
+        return otherModel.id == id &&
+                otherModel.modelObject == modelObject &&
+                otherModel.livemode == livemode &&
+                otherModel.location == location &&
+                otherModel.created?.millis == created?.millis &&
+                otherModel.deleted == deleted
+    }
+}
