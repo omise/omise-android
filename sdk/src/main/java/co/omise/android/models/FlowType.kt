@@ -1,6 +1,8 @@
 package co.omise.android.models
 
+import android.os.Parcel
 import com.fasterxml.jackson.annotation.JsonCreator
+import kotlinx.android.parcel.Parceler
 
 /**
  * Represents Source Flow object.
@@ -23,4 +25,13 @@ sealed class FlowType(
             }?.objectInstance
         }
     }
+}
+
+object FlowTypeParceler : Parceler<FlowType> {
+    override fun create(parcel: Parcel): FlowType = FlowType.creator(parcel.readString())!!
+
+    override fun FlowType.write(parcel: Parcel, flags: Int) {
+        parcel.writeString(name)
+    }
+
 }

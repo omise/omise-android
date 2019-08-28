@@ -1,7 +1,9 @@
 package co.omise.android.models
 
+import android.os.Parcel
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
+import kotlinx.android.parcel.Parceler
 
 /**
  * Represents Source Type object.
@@ -36,5 +38,13 @@ sealed class SourceType(
                 it.simpleName?.toLowerCase() == name.toLowerCase()
             }?.objectInstance
         }
+    }
+}
+
+object SourceTypeParceler : Parceler<SourceType> {
+    override fun create(parcel: Parcel): SourceType = SourceType.creator(parcel.readString())!!
+
+    override fun SourceType.write(parcel: Parcel, flags: Int) {
+        parcel.writeString(name)
     }
 }
