@@ -6,10 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PaymentMethod(
-        var name: String? = null,
-        var currencies: List<String>? = null,
+        val name: String? = null,
+        val currencies: List<String>? = null,
         @field:JsonProperty("card_brands")
-        var cardBrands: List<String>? = null,
+        val cardBrands: List<String>? = null,
         @field:JsonProperty("installment_terms")
-        var installmentTerms: List<Int>? = null
+        val installmentTerms: List<Int>? = null
 ) : Model(), Parcelable

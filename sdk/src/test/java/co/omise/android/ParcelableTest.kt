@@ -63,13 +63,11 @@ class ParcelableTest {
     @Test
     fun capabilityParceling_success() {
         val paymentMethodList: List<PaymentMethod> = (1..10).map {
-            PaymentMethod().apply {
-                id = "id-$it"
-                name = "Method no: $it"
-                currencies = listOf("thb, usd, myr, sgd, jpy")
-                cardBrands = listOf("VISA", "MASTER", "LASER")
-                installmentTerms = listOf(1, 2, 4, 6)
-            }
+            PaymentMethod(
+                    "Method no: $it",
+                    listOf("thb, usd, myr, sgd, jpy"),
+                    listOf("VISA", "MASTER", "LASER"),
+                    listOf(1, 2, 4, 6))
         }
         val capability = Capability(
                 mutableListOf("a", "b", "c", "d"),
