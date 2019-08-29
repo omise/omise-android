@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 class ParcelableTest {
 
     @Test
-    fun testModelParceling() {
+    fun testModelParceling_success() {
         val model = Model(
                 "object",
                 "id",
@@ -27,7 +27,7 @@ class ParcelableTest {
     }
 
     @Test
-    fun testSourceParceling() {
+    fun testSourceParceling_success() {
         val source = Source(
                 type = SourceType.TrueMoney,
                 flow = FlowType.Redirect,
@@ -43,7 +43,7 @@ class ParcelableTest {
     }
 
     @Test
-    fun testTokenParceling() {
+    fun testTokenParceling_success() {
         val card = Card(
                 name = "John Doe",
                 country = "Thailand",
@@ -61,7 +61,7 @@ class ParcelableTest {
     }
 
     @Test
-    fun testCapabilityParceling() {
+    fun testCapabilityParceling_success() {
         val paymentMethodList: List<PaymentMethod> = (1..10).map {
             PaymentMethod().apply {
                 id = "id-$it"
