@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import co.omise.android.models.APIError;
 import co.omise.android.models.CardBrand;
 import co.omise.android.models.Model;
 import co.omise.android.models.ModelTypeResolver;
@@ -24,7 +23,7 @@ public class SerializationTest extends OmiseTest {
     public void testModelSerializability() throws IOException {
         Serializer serializer = new Serializer();
         for (Map.Entry<String, Class<?>> testcase : new ModelTypeResolver().getKnownTypes().entrySet()) {
-            if(!testcase.getValue().isInstance(Model.class)) return;
+            if (testcase.getKey().equals("error")) continue;
 
             byte[] sampleBytes = getResourceBytes(objectJsonName(testcase.getValue()));
             Model instance = serializer.deserialize(new ByteArrayInputStream(sampleBytes), testcase.getValue());

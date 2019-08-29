@@ -3,6 +3,7 @@ package co.omise.android.models
 import android.annotation.SuppressLint
 import android.os.Parcel
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
 import kotlinx.android.parcel.Parceler
 
 /**
@@ -11,7 +12,7 @@ import kotlinx.android.parcel.Parceler
  * @see [Sources API](https://www.omise.co/sources-api)
  */
 sealed class FlowType(
-        val name: String?
+        @JsonValue val name: String?
 ) {
 
     object Redirect : FlowType("redirect")
