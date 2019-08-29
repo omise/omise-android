@@ -12,15 +12,15 @@ import org.joda.time.DateTime
 @Parcelize
 open class Model(
         @field:JsonProperty("object")
-        var modelObject: String? = null,
-        var id: String? = null,
+        val modelObject: String? = null,
+        val id: String? = null,
         @field:JsonProperty("livemode")
-        var livemode: Boolean = false,
-        var location: String? = null,
+        val livemode: Boolean = false,
+        val location: String? = null,
         @field:JsonProperty("created_at")
-        var created: DateTime? = null,
+        val created: DateTime? = null,
         @field:JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-        var deleted: Boolean = false
+        val deleted: Boolean = false
 ) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
@@ -31,5 +31,15 @@ open class Model(
                 otherModel.location == location &&
                 otherModel.created?.millis == created?.millis &&
                 otherModel.deleted == deleted
+    }
+
+    override fun hashCode(): Int {
+        var result = modelObject?.hashCode() ?: 0
+        result = 31 * result + (id?.hashCode() ?: 0)
+        result = 31 * result + livemode.hashCode()
+        result = 31 * result + (location?.hashCode() ?: 0)
+        result = 31 * result + (created?.hashCode() ?: 0)
+        result = 31 * result + deleted.hashCode()
+        return result
     }
 }

@@ -16,8 +16,8 @@ import java.io.IOException
  */
 @Parcelize
 data class Token(
-        var used: Boolean = false,
-        var card: Card? = null
+        val used: Boolean = false,
+        val card: Card? = null
 ) : Model(), Parcelable {
 
     /**

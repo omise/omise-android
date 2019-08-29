@@ -21,22 +21,22 @@ import java.io.IOException
 data class Source(
         var type: SourceType = SourceType.Unknown,
         var flow: FlowType = FlowType.Unknown,
-        var amount: Long = 0,
-        var currency: String? = null,
-        var barcode: String? = null,
-        var references: References? = null,
+        val amount: Long = 0,
+        val currency: String? = null,
+        val barcode: String? = null,
+        val references: References? = null,
         @field:JsonProperty("store_id")
-        var storeId: String? = null,
+        val storeId: String? = null,
         @field:JsonProperty("store_name")
-        var storeName: String? = null,
+        val storeName: String? = null,
         @field:JsonProperty("terminal_id")
-        var terminalId: String? = null,
-        var name: String? = null,
-        var email: String? = null,
+        val terminalId: String? = null,
+        val name: String? = null,
+        val email: String? = null,
         @field:JsonProperty("phone_number")
-        var phoneNumber: String? = null,
+        val phoneNumber: String? = null,
         @field:JsonProperty("installment_term")
-        var installmentTerm: Int = 0
+        val installmentTerm: Int = 0
 ) : Model(), Parcelable {
 
     /**

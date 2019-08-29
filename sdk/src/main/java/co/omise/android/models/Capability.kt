@@ -14,11 +14,11 @@ import okhttp3.HttpUrl
  */
 @Parcelize
 data class Capability(
-        var banks: List<String>? = null,
+        val banks: List<String>? = null,
         @field:JsonProperty("payment_methods")
-        var paymentMethods: List<PaymentMethod>? = null,
+        val paymentMethods: List<PaymentMethod>? = null,
         @field:JsonProperty("zero_interest_installments")
-        var zeroInterestInstallments: Boolean = false
+        val zeroInterestInstallments: Boolean = false
 ) : Model(), Parcelable {
 
     /**

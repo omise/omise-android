@@ -11,21 +11,21 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class Card(
-        var country: String? = null,
-        var city: String? = null,
+        val country: String? = null,
+        val city: String? = null,
         @field:JsonProperty("postal_code")
-        var postalCode: String? = null,
-        var financing: String? = null,
+        val postalCode: String? = null,
+        val financing: String? = null,
         @field:JsonProperty("last_digits")
-        var lastDigits: String? = null,
-        var brand: String? = null,
+        val lastDigits: String? = null,
+        val brand: String? = null,
         @field:JsonProperty("expiration_month")
-        var expirationMonth: Int = 0,
+        val expirationMonth: Int = 0,
         @field:JsonProperty("expiration_year")
-        var expirationYear: Int = 0,
-        var fingerprint: String? = null,
-        var name: String? = null,
+        val expirationYear: Int = 0,
+        val fingerprint: String? = null,
+        val name: String? = null,
         @field:JsonProperty("security_code_check")
-        var securityCodeCheck: Boolean = false,
-        var bank: String? = null
+        val securityCodeCheck: Boolean = false,
+        val bank: String? = null
 ) : Model(), Parcelable
