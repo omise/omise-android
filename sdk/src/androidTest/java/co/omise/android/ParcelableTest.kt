@@ -23,7 +23,7 @@ class ParcelableTest {
                 false
         )
 
-        testObjectParceling(model)
+        assertObjectParceling(model)
     }
 
     @Test
@@ -39,7 +39,7 @@ class ParcelableTest {
                 phoneNumber = "123434523413"
         )
 
-        testObjectParceling(source)
+        assertObjectParceling(source)
     }
 
     @Test
@@ -57,7 +57,7 @@ class ParcelableTest {
                 false,
                 card)
 
-        testObjectParceling(token)
+        assertObjectParceling(token)
     }
 
     @Test
@@ -76,10 +76,10 @@ class ParcelableTest {
                 paymentMethodList,
                 false)
 
-        testObjectParceling(capability)
+        assertObjectParceling(capability)
     }
 
-    private fun <T : Model> testObjectParceling(model: T) {
+    private fun <T : Model> assertObjectParceling(model: T) {
         val bundle1 = Bundle()
         bundle1.putParcelable(model::class.java.simpleName, model)
 
