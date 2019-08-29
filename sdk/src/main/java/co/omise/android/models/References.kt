@@ -13,14 +13,14 @@ import org.joda.time.DateTime
 @Parcelize
 data class References(
         @field:JsonProperty("va_code")
-        var vaCode: String? = null,
+        val vaCode: String? = null,
         @field:JsonProperty("omise_tax_id")
-        var omiseTaxId: String? = null,
+        val omiseTaxId: String? = null,
         @field:JsonProperty("reference_number_1")
-        var referenceNumber1: String? = null,
+        val referenceNumber1: String? = null,
         @field:JsonProperty("reference_number_2")
-        var referenceNumber2: String? = null,
-        var barcode: String? = null,
+        val referenceNumber2: String? = null,
+        val barcode: String? = null,
         @field:JsonProperty("expires_at")
-        var expiresAt: DateTime? = null
+        val expiresAt: DateTime? = null
 ) : Model(), Parcelable
