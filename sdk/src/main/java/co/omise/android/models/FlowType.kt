@@ -16,7 +16,7 @@ sealed class FlowType(
 
     object Redirect : FlowType("redirect")
     object Offline : FlowType("offline")
-    object Default : FlowType(null)
+    object Unknown : FlowType(null)
 
     companion object {
         @SuppressLint("DefaultLocale")
@@ -33,7 +33,7 @@ sealed class FlowType(
 object FlowTypeParceler : Parceler<FlowType> {
     override fun create(parcel: Parcel): FlowType {
         val flowType = FlowType.creator(parcel.readString())
-        return flowType ?: FlowType.Default
+        return flowType ?: FlowType.Unknown
     }
 
     override fun FlowType.write(parcel: Parcel, flags: Int) {
