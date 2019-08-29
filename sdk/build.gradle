@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -27,6 +27,10 @@ android {
     lintOptions {
         abortOnError false
         disable 'InvalidPackage' // okio
+    }
+
+    androidExtensions {
+        experimental = true
     }
 
     testOptions {

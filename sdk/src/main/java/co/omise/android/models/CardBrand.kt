@@ -1,10 +1,12 @@
 package co.omise.android.models
 
-import android.os.Parcel
 import android.os.Parcelable
 import co.omise.android.R
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.android.parcel.Parcelize
 import java.util.regex.Pattern
 
+@Parcelize
 data class CardBrand(
         val name: String,
         val patternStr: String,
@@ -12,14 +14,8 @@ data class CardBrand(
         private val maxLength: Int,
         val logoResourceId: Int
 ) : Parcelable {
+    @IgnoredOnParcel
     private val pattern: Pattern = Pattern.compile("$patternStr[0-9]+")
-
-    constructor(parcel: Parcel) : this(
-            parcel.readString() ?: "",
-            parcel.readString() ?: "",
-            parcel.readInt(),
-            parcel.readInt(),
-            parcel.readInt())
 
     fun match(pan: String?): Boolean {
         return if (pan == null || pan.isEmpty()) false else pattern.matcher(pan).matches()
@@ -29,20 +25,7 @@ data class CardBrand(
         return match(pan) && minLength <= pan.length && pan.length <= maxLength
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(patternStr)
-        parcel.writeInt(minLength)
-        parcel.writeInt(maxLength)
-        parcel.writeInt(logoResourceId)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<CardBrand> {
-
+    companion object {
         @JvmField
         val AMEX = CardBrand("amex", "^3[47]", 15, 15, R.drawable.brand_amex)
         @JvmField
@@ -62,13 +45,5 @@ data class CardBrand(
 
         @JvmField
         val ALL = arrayOf(AMEX, DINERS, JCB, LASER, VISA, MASTERCARD, MAESTRO, DISCOVER)
-
-        override fun createFromParcel(parcel: Parcel): CardBrand {
-            return CardBrand(parcel)
-        }
-
-        override fun newArray(size: Int): Array<CardBrand?> {
-            return arrayOfNulls(size)
-        }
     }
 }
