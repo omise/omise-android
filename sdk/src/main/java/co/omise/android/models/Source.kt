@@ -19,8 +19,8 @@ import java.io.IOException
 @TypeParceler<SourceType, SourceTypeParceler>()
 @TypeParceler<FlowType, FlowTypeParceler>()
 data class Source(
-        var type: SourceType = SourceType.Unknown,
-        var flow: FlowType = FlowType.Unknown,
+        val type: SourceType = SourceType.Unknown(null),
+        val flow: FlowType = FlowType.Unknown(null),
         val amount: Long = 0,
         val currency: String? = null,
         val barcode: String? = null,
