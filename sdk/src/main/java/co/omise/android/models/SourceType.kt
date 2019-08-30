@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parceler
  * @see [Sources API](https://www.omise.co/sources-api)
  */
 sealed class SourceType(
-        @JsonValue val name: String?
+        @JsonValue open val name: String?
 ) {
 
     object InternetBankingBay : SourceType("internet_banking_bay")
@@ -24,29 +24,40 @@ sealed class SourceType(
     object BarcodeAlipay : SourceType("barcode_alipay")
     object Econtext : SourceType("econtext")
     object TrueMoney : SourceType("truemoney")
-    object InstBankingBay : SourceType("installment_bay")
-    object InstFirstChoice : SourceType("installment_first_choice")
-    object InstBbl : SourceType("installment_bbl")
-    object InstKtc : SourceType("installment_ktc")
-    object InstKBank : SourceType("installment_kbank")
-    object Unknown : SourceType(null)
+    object InstallmentBay : SourceType("installment_bay")
+    object InstallmentFirstChoice : SourceType("installment_first_choice")
+    object InstallmentBbl : SourceType("installment_bbl")
+    object InstallmentKtc : SourceType("installment_ktc")
+    object InstallmentKBank : SourceType("installment_kbank")
+    data class Unknown(override val name: String?) : SourceType(name)
 
     companion object {
         @SuppressLint("DefaultLocale")
         @JsonCreator
         @JvmStatic
-        fun creator(name: String?): SourceType? {
-            return SourceType::class.sealedSubclasses.firstOrNull {
-                it.simpleName?.toLowerCase() == name?.toLowerCase()
-            }?.objectInstance
+        fun creator(name: String?): SourceType = when (name) {
+            "internet_banking_bay" -> InternetBankingBay
+            "internet_banking_ktb" -> InternetBankingKtb
+            "internet_banking_scb" -> InternetBankingScb
+            "internet_banking_bbl" -> InternetBankingBbl
+            "alipay" -> Alipay
+            "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
+            "barcode_alipay" -> BarcodeAlipay
+            "econtext" -> Econtext
+            "truemoney" -> TrueMoney
+            "installment_bay" -> InstallmentBay
+            "installment_first_choice" -> InstallmentFirstChoice
+            "installment_bbl" -> InstallmentBbl
+            "installment_ktc" -> InstallmentKtc
+            "installment_kbank" -> InstallmentKBank
+            else -> Unknown(name)
         }
     }
 }
 
 object SourceTypeParceler : Parceler<SourceType> {
     override fun create(parcel: Parcel): SourceType {
-        val sourceType = SourceType.creator(parcel.readString())
-        return sourceType ?: SourceType.Unknown
+        return SourceType.creator(parcel.readString())
     }
 
     override fun SourceType.write(parcel: Parcel, flags: Int) {
