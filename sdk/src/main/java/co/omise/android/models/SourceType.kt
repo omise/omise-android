@@ -64,3 +64,21 @@ object SourceTypeParceler : Parceler<SourceType> {
         parcel.writeString(name)
     }
 }
+
+val SourceType.Companion.allElements: List<SourceType>
+    get() = listOf(
+            SourceType.InternetBankingBay,
+            SourceType.InternetBankingKtb,
+            SourceType.InternetBankingScb,
+            SourceType.InternetBankingBbl,
+            SourceType.Alipay,
+            SourceType.BillPaymentTescoLotus,
+            SourceType.BarcodeAlipay,
+            SourceType.Econtext,
+            SourceType.TrueMoney,
+            SourceType.InstallmentBay,
+            SourceType.InstallmentFirstChoice,
+            SourceType.InstallmentBbl,
+            SourceType.InstallmentKtc,
+            SourceType.InstallmentKBank
+    )
