@@ -2,8 +2,12 @@ package co.omise.android.models
 
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver
 import org.joda.time.DateTime
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "object", visible = true)
+@JsonTypeIdResolver(ModelTypeResolver::class)
 interface Model : Parcelable {
     @get:JsonProperty("object")
     var modelObject: String?

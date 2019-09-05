@@ -1,6 +1,5 @@
 package co.omise.android.models
 
-import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
@@ -35,4 +34,4 @@ data class Card(
         override var location: String? = null,
         override var created: DateTime? = null,
         override var deleted: Boolean = false
-) : BaseModel(), Model, Parcelable
+) : Model

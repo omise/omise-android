@@ -21,7 +21,7 @@ class ParcelableTest {
             override var location: String?,
             override var created: DateTime?,
             override var deleted: Boolean
-    ) : BaseModel(), Model
+    ) : Model
 
     @Test
     fun modelParceling_success() {

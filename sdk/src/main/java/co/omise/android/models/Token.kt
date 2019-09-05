@@ -1,6 +1,5 @@
 package co.omise.android.models
 
-import android.os.Parcelable
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -25,7 +24,7 @@ data class Token(
         override var location: String? = null,
         override var created: DateTime? = null,
         override var deleted: Boolean = false
-) : BaseModel(), Model, Parcelable {
+) : Model {
 
     /**
      * The [RequestBuilder] class for creating a Token.
