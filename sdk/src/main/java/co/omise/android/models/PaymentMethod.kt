@@ -7,10 +7,10 @@ import org.joda.time.DateTime
 
 @Parcelize
 data class PaymentMethod(
-        val name: String? = null,
-        val currencies: List<String>? = null,
+        var name: String? = null,
+        var currencies: List<String>? = null,
         @field:JsonProperty("card_brands")
-        val cardBrands: List<String>? = null,
+        var cardBrands: List<String>? = null,
         @field:JsonProperty("installment_terms")
         val installmentTerms: List<Int>? = null,
         override var modelObject: String? = null,
@@ -24,7 +24,7 @@ data class PaymentMethod(
 val PaymentMethod.method: PaymentMethodType
     get() = when {
 
-        name == "card" -> PaymentMethodType.Card(cardBrands ?: emptyList())
+        name == "card" -> PaymentMethodType.CreditCard(cardBrands ?: emptyList())
         name.orEmpty().startsWith("installment_") -> {
             when (name) {
                 "installment_bay" -> PaymentMethodType.Installment.Bay
@@ -57,7 +57,7 @@ val PaymentMethod.method: PaymentMethodType
 sealed class PaymentMethodType : Parcelable {
     companion object
     @Parcelize
-    data class Card(val brands: List<String>) : PaymentMethodType()
+    data class CreditCard(val brands: List<String>) : PaymentMethodType()
 
     sealed class InternetBanking(val value: String) : PaymentMethodType(), Parcelable {
         @Parcelize
