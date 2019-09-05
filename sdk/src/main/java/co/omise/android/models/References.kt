@@ -22,5 +22,11 @@ data class References(
         val referenceNumber2: String? = null,
         val barcode: String? = null,
         @field:JsonProperty("expires_at")
-        val expiresAt: DateTime? = null
-) : Model(), Parcelable
+        val expiresAt: DateTime? = null,
+        override var modelObject: String? = null,
+        override var id: String? = null,
+        override var livemode: Boolean = false,
+        override var location: String? = null,
+        override var created: DateTime? = null,
+        override var deleted: Boolean = false
+) : BaseModel(), Model, Parcelable

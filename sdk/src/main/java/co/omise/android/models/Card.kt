@@ -3,6 +3,7 @@ package co.omise.android.models
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
+import org.joda.time.DateTime
 
 /**
  * Represents Card object.
@@ -27,5 +28,11 @@ data class Card(
         val name: String? = null,
         @field:JsonProperty("security_code_check")
         val securityCodeCheck: Boolean = false,
-        val bank: String? = null
-) : Model(), Parcelable
+        val bank: String? = null,
+        override var modelObject: String? = null,
+        override var id: String? = null,
+        override var livemode: Boolean = false,
+        override var location: String? = null,
+        override var created: DateTime? = null,
+        override var deleted: Boolean = false
+) : BaseModel(), Model, Parcelable

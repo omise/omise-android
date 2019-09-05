@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import okhttp3.HttpUrl
 import okhttp3.RequestBody
+import org.joda.time.DateTime
 import java.io.IOException
 
 /**
@@ -17,8 +18,14 @@ import java.io.IOException
 @Parcelize
 data class Token(
         val used: Boolean = false,
-        val card: Card? = null
-) : Model(), Parcelable {
+        val card: Card? = null,
+        override var modelObject: String? = null,
+        override var id: String? = null,
+        override var livemode: Boolean = false,
+        override var location: String? = null,
+        override var created: DateTime? = null,
+        override var deleted: Boolean = false
+) : BaseModel(), Model, Parcelable {
 
     /**
      * The [RequestBuilder] class for creating a Token.
