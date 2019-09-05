@@ -33,6 +33,11 @@ android {
         experimental = true
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+        noStdlib = true
+    }
+
     testOptions {
         unitTests {
             returnDefaultValues true
