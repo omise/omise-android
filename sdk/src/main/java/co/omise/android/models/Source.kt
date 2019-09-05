@@ -1,6 +1,5 @@
 package co.omise.android.models
 
-import android.os.Parcelable
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -8,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.TypeParceler
 import okhttp3.HttpUrl
 import okhttp3.RequestBody
+import org.joda.time.DateTime
 import java.io.IOException
 
 /**
@@ -36,8 +36,14 @@ data class Source(
         @field:JsonProperty("phone_number")
         val phoneNumber: String? = null,
         @field:JsonProperty("installment_term")
-        val installmentTerm: Int = 0
-) : Model(), Parcelable {
+        val installmentTerm: Int = 0,
+        override var modelObject: String? = null,
+        override var id: String? = null,
+        override var livemode: Boolean = false,
+        override var location: String? = null,
+        override var created: DateTime? = null,
+        override var deleted: Boolean = false
+) : Model {
 
     /**
      * The [RequestBuilder] class for creating a Source.
