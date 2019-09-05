@@ -1,19 +1,19 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.omise.android.R
 import kotlinx.android.synthetic.main.fragment_list.recycler_view
 
 
-abstract class OmiseListFragment<T : OmiseListItem> : Fragment() {
+abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(option: T)
 
     private val recyclerView: RecyclerView by lazy { recycler_view }
@@ -24,7 +24,14 @@ abstract class OmiseListFragment<T : OmiseListItem> : Fragment() {
         }
     }
 
-    private val items: List<T> by lazy { arguments?.getParcelableArray(EXTRA_LIST_ITEMS)?.toList() as List<T> }
+    private val items: List<T> by lazy {
+        if (arguments?.getParcelableArray(EXTRA_LIST_ITEMS) != null) {
+            arguments?.getParcelableArray(EXTRA_LIST_ITEMS)?.toList() as List<T>
+        } else {
+            emptyList()
+        }
+    }
+
     private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(items, onClickListener) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,15 +43,11 @@ abstract class OmiseListFragment<T : OmiseListItem> : Fragment() {
 
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
-
-//        val itemDecoration = PaymentOptionItemDecoration(context!!, layoutManager.orientation)
-//        recyclerView.addItemDecoration(itemDecoration)
-
         recyclerView.adapter = adapter
     }
 
     companion object {
-        const val EXTRA_LIST_ITEMS = "OmiseListFragment.items"
+        internal const val EXTRA_LIST_ITEMS = "OmiseListFragment.items"
     }
 }
 
@@ -71,16 +74,16 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         val typeImage = view.findViewById<ImageView>(R.id.image_indicator_icon)
 
         optionImage.setImageResource(item.icon)
-        nameText.setText(item.title)
+        nameText.text = item.title
         typeImage.setImageResource(item.indicatorIcon)
 
         view.setOnClickListener { listener?.onClick(item) }
     }
 }
 
-interface OmiseListItem {
+interface OmiseListItem : Parcelable {
     val icon: Int
-    val title: Int
+    val title: String
     val indicatorIcon: Int
 }
 

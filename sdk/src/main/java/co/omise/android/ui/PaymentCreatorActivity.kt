@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.method
@@ -29,6 +30,7 @@ class PaymentCreatorActivity : AppCompatActivity() {
 
     private val rootView: View by lazy { payment_creator_container }
     private val snackbar: Snackbar by lazy { Snackbar.make(rootView, "", Snackbar.LENGTH_SHORT) }
+    private val navigation: PaymentCreatorNavigation by lazy { PaymentCreatorNavigationImpl(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,7 @@ class PaymentCreatorActivity : AppCompatActivity() {
             }
         }
 
-        Log.d("PaymentCreator", "${capability.paymentMethods?.first()?.method}}")
+        navigation.navigateToPaymentChooser(capability)
     }
 
     override fun onBackPressed() {
@@ -54,7 +56,7 @@ class PaymentCreatorActivity : AppCompatActivity() {
 }
 
 interface PaymentCreatorNavigation {
-    fun navigateToPaymentMethodChooser()
+    fun navigateToPaymentChooser(capability: Capability)
     fun navigateToCreditCardForm()
     fun navigateToInternetBankingChooser()
     fun navigateToInstallmentChooser()
@@ -62,8 +64,22 @@ interface PaymentCreatorNavigation {
 }
 
 class PaymentCreatorNavigationImpl(activity: PaymentCreatorActivity) : PaymentCreatorNavigation {
-    override fun navigateToPaymentMethodChooser() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    companion object {
+        const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
+    }
+
+    private val supportFragmentManager = activity.supportFragmentManager
+
+    private fun addFragmentToBackStack(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+                .add(R.id.payment_creator_container, fragment)
+                .addToBackStack(FRAGMENT_STACK)
+                .commit()
+    }
+
+    override fun navigateToPaymentChooser(capability: Capability) {
+        val fragment = PaymentChooserFragment.newInstance(capability)
+        addFragmentToBackStack(fragment)
     }
 
     override fun navigateToCreditCardForm() {
@@ -81,4 +97,5 @@ class PaymentCreatorNavigationImpl(activity: PaymentCreatorActivity) : PaymentCr
     override fun navigateToEContextForm() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 }
