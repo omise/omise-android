@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.models.*
+import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -12,9 +13,19 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ParcelableTest {
 
+    @Parcelize
+    data class Dummy(
+            override var modelObject: String?,
+            override var id: String?,
+            override var livemode: Boolean,
+            override var location: String?,
+            override var created: DateTime?,
+            override var deleted: Boolean
+    ) : BaseModel(), Model
+
     @Test
     fun modelParceling_success() {
-        val model = Model(
+        val model = Dummy(
                 "object",
                 "id",
                 true,
