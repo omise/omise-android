@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.models.Capability
+import java.lang.IllegalArgumentException
 
 class PaymentCreatorActivity : OmiseActivity() {
 
@@ -21,7 +22,7 @@ class PaymentCreatorActivity : OmiseActivity() {
 
         listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY, EXTRA_CAPABILITY).forEach {
             if (!intent.hasExtra(it)) {
-                throw IllegalAccessException("Can not found $it.")
+                throw IllegalArgumentException("Can not found $it.")
             }
         }
 

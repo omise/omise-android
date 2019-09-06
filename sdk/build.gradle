@@ -130,6 +130,7 @@ dependencies {
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation "androidx.test:rules:$test_version"
     testImplementation "androidx.test:runner:$test_version"
     testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
