@@ -1,6 +1,10 @@
 package co.omise.android.ui
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethodType
@@ -22,6 +26,23 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         title = getString(R.string.payment_chooser_title)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_payment_chooser, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.close_menu -> {
+                activity?.let {
+                    it.setResult(Activity.RESULT_CANCELED)
+                    it.finish()
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
