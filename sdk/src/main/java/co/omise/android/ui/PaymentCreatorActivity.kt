@@ -2,34 +2,17 @@ package co.omise.android.ui
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.models.Capability
-import co.omise.android.models.method
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
 
-class PaymentCreatorActivity : AppCompatActivity() {
-
-    companion object {
-        const val EXTRA_SOURCE_OBJECT = "PaymentCreatorActivity.sourceObject"
-        const val EXTRA_TOKEN_OBJECT = "PaymentCreatorActivity.tokenObject"
-        const val EXTRA_PKEY = "PaymentCreatorActivity.pkey"
-        const val EXTRA_AMOUNT = "PaymentCreatorActivity.amount"
-        const val EXTRA_CURRENCY = "PaymentCreatorActivity.currency"
-        const val EXTRA_CAPABILITY = "PaymentCreatorActivity.capability"
-    }
+class PaymentCreatorActivity : OmiseActivity() {
 
     private val pkey: String by lazy { intent.getStringExtra(EXTRA_PKEY) }
     private val amount: Long by lazy { intent.getLongExtra(EXTRA_AMOUNT, 0) }
     private val currency: String by lazy { intent.getStringExtra(EXTRA_CURRENCY) }
     private val capability: Capability by lazy { intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY) }
 
-    private val rootView: View by lazy { payment_creator_container }
-    private val snackbar: Snackbar by lazy { Snackbar.make(rootView, "", Snackbar.LENGTH_SHORT) }
     private val navigation: PaymentCreatorNavigation by lazy { PaymentCreatorNavigationImpl(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +61,9 @@ class PaymentCreatorNavigationImpl(activity: PaymentCreatorActivity) : PaymentCr
     }
 
     override fun navigateToPaymentChooser(capability: Capability) {
-        val fragment = PaymentChooserFragment.newInstance(capability)
+        val fragment = PaymentChooserFragment.newInstance(capability).apply {
+            navigation = this@PaymentCreatorNavigationImpl
+        }
         addFragmentToBackStack(fragment)
     }
 
@@ -97,5 +82,4 @@ class PaymentCreatorNavigationImpl(activity: PaymentCreatorActivity) : PaymentCr
     override fun navigateToEContextForm() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }

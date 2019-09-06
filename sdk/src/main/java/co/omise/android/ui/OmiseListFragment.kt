@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_list.recycler_view
 
 
 abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
-    abstract fun onListItemClicked(option: T)
+    abstract fun onListItemClicked(item: T)
 
     private val recyclerView: RecyclerView by lazy { recycler_view }
 

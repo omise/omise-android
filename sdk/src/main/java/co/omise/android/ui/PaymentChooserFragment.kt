@@ -11,13 +11,17 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
     var navigation: PaymentCreatorNavigation? = null
 
-    override fun onListItemClicked(option: PaymentChooserItem) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onListItemClicked(item: PaymentChooserItem) {
+        when (item) {
+            PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
+            PaymentChooserItem.Installments -> TODO()
+            PaymentChooserItem.InternetBanking -> TODO()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        title = "Payment Methods"
+        title = getString(R.string.payment_chooser_title)
     }
 
     companion object {
@@ -54,7 +58,6 @@ sealed class PaymentChooserItem(
         override val title: String,
         override val indicatorIcon: Int
 ) : OmiseListItem {
-    companion object
     @Parcelize
     object CreditCard : PaymentChooserItem(R.drawable.payment_card, "Credit Card", R.drawable.ic_next)
 
@@ -64,10 +67,3 @@ sealed class PaymentChooserItem(
     @Parcelize
     object InternetBanking : PaymentChooserItem(R.drawable.payment_card, "Internet Banking", R.drawable.ic_next)
 }
-
-val PaymentChooserItem.Companion.allElements: List<PaymentChooserItem>
-    get() = arrayListOf(
-            PaymentChooserItem.CreditCard,
-            PaymentChooserItem.Installments,
-            PaymentChooserItem.InternetBanking
-    )
