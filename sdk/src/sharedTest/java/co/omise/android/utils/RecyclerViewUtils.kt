@@ -16,7 +16,7 @@ fun itemCount(count: Int): Matcher<View> {
 
         override fun matchesSafely(item: RecyclerView?): Boolean {
             val target = item ?: return false
-            return target.childCount == count
+            return target.adapter?.itemCount == count
         }
     }
 }

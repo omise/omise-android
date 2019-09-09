@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.models.Capability
-import java.lang.IllegalArgumentException
 
 class PaymentCreatorActivity : OmiseActivity() {
 
@@ -21,9 +20,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         setContentView(R.layout.activity_payment_creator)
 
         listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY, EXTRA_CAPABILITY).forEach {
-            if (!intent.hasExtra(it)) {
-                throw IllegalArgumentException("Can not found $it.")
-            }
+            require(intent.hasExtra(it)) { "Can not found $it." }
         }
 
         navigation.navigateToPaymentChooser(capability)
