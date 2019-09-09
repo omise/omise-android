@@ -1,7 +1,6 @@
 package co.omise.android.ui
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_list.recycler_view
 
 abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
+    abstract fun listItems(): List<T>
 
     private val recyclerView: RecyclerView by lazy { recycler_view }
 
@@ -24,15 +24,7 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
         }
     }
 
-    private val items: List<T> by lazy {
-        if (arguments?.getParcelableArray(EXTRA_LIST_ITEMS) != null) {
-            arguments?.getParcelableArray(EXTRA_LIST_ITEMS)?.toList() as List<T>
-        } else {
-            emptyList()
-        }
-    }
-
-    private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(items, onClickListener) }
+private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), onClickListener) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)
@@ -44,10 +36,6 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
-    }
-
-    companion object {
-        internal const val EXTRA_LIST_ITEMS = "OmiseListFragment.items"
     }
 }
 
@@ -81,7 +69,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
     }
 }
 
-interface OmiseListItem : Parcelable {
+interface OmiseListItem {
     val icon: Int
     val title: String
     val indicatorIcon: Int
