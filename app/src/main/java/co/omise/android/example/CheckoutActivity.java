@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import co.omise.android.models.Token;
 import co.omise.android.ui.CreditCardActivity;
+import co.omise.android.ui.OmiseActivity;
 
 public class CheckoutActivity extends BaseActivity implements View.OnClickListener {
     public static final String OMISE_PKEY = "pkey_test_52d6po3fvio2w6tefpb";
@@ -48,7 +49,7 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, CreditCardActivity.class);
-        intent.putExtra(CreditCardActivity.EXTRA_PKEY, OMISE_PKEY);
+        intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY);
         startActivityForResult(intent, REQUEST_CC);
     }
 
@@ -61,7 +62,7 @@ public class CheckoutActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
 
-                Token token = data.getParcelableExtra(CreditCardActivity.EXTRA_TOKEN_OBJECT);
+                Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
 
                 Intent intent = new Intent(this, ReceiptActivity.class);
                 intent.putExtra(ReceiptActivity.EXTRA_PRODUCT_ID, productId());

@@ -16,15 +16,12 @@ import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
 import co.omise.android.models.Capability;
 import co.omise.android.ui.AuthorizingPaymentActivity;
+import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
-import static co.omise.android.ui.PaymentCreatorActivity.EXTRA_AMOUNT;
-import static co.omise.android.ui.PaymentCreatorActivity.EXTRA_CAPABILITY;
-import static co.omise.android.ui.PaymentCreatorActivity.EXTRA_CURRENCY;
-import static co.omise.android.ui.PaymentCreatorActivity.EXTRA_PKEY;
 
 public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private ProductListAdapter listAdapter = null;
@@ -53,10 +50,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
             @Override
             public void onRequestSucceed(@NotNull Capability model) {
                 Intent intent = new Intent(MainActivity.this, PaymentCreatorActivity.class);
-                intent.putExtra(EXTRA_PKEY, PUBLIC_KEY);
-                intent.putExtra(EXTRA_AMOUNT, 50000);
-                intent.putExtra(EXTRA_CURRENCY, "thb");
-                intent.putExtra(EXTRA_CAPABILITY, model);
+                intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
+                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 50000);
+                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb");
+                intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, model);
                 startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
             }
 
@@ -101,6 +98,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         if (requestCode == MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
             String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
+        } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE && resultCode == RESULT_OK) {
+            Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
         }
