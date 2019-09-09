@@ -41,42 +41,18 @@ class PaymentChooserFragmentTest {
     @Before
     fun setUp() {
         val paymentMethods = listOf(
-                PaymentMethod(
-                        name = "card"
-                ),
-                PaymentMethod(
-                        name = "installment_bay"
-                ),
-                PaymentMethod(
-                        name = "installment_bbl"
-                ),
-                PaymentMethod(
-                        name = "installment_first_choice"
-                ),
-                PaymentMethod(
-                        name = "installment_kabnk"
-                ),
-                PaymentMethod(
-                        name = "installment_ktc"
-                ),
-                PaymentMethod(
-                        name = "internet_banking_bay"
-                ),
-                PaymentMethod(
-                        name = "internet_banking_bbl"
-                ),
-                PaymentMethod(
-                        name = "internet_banking_ktc"
-                ),
-                PaymentMethod(
-                        name = "bill_payment_tesco_lotus"
-                ),
-                PaymentMethod(
-                        name = "econtext"
-                ),
-                PaymentMethod(
-                        name = "alipay"
-                )
+                PaymentMethod(name = "card"),
+                PaymentMethod(name = "installment_bay"),
+                PaymentMethod(name = "installment_bbl"),
+                PaymentMethod(name = "installment_first_choice"),
+                PaymentMethod(name = "installment_kabnk"),
+                PaymentMethod(name = "installment_ktc"),
+                PaymentMethod(name = "internet_banking_bay"),
+                PaymentMethod(name = "internet_banking_bbl"),
+                PaymentMethod(name = "internet_banking_ktc"),
+                PaymentMethod(name = "bill_payment_tesco_lotus"),
+                PaymentMethod(name = "econtext"),
+                PaymentMethod(name = "alipay")
         )
         val capability = Capability(
                 paymentMethods = paymentMethods

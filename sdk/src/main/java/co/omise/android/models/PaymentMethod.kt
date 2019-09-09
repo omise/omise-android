@@ -1,6 +1,5 @@
 package co.omise.android.models
 
-import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
@@ -54,66 +53,35 @@ val PaymentMethod.method: PaymentMethodType
         else -> PaymentMethodType.Unknown(name)
     }
 
-sealed class PaymentMethodType : Parcelable {
-    companion object
-    @Parcelize
+sealed class PaymentMethodType {
     data class CreditCard(val brands: List<String>) : PaymentMethodType()
 
-    sealed class InternetBanking(val value: String) : PaymentMethodType(), Parcelable {
-        @Parcelize
+    sealed class InternetBanking(val value: String) : PaymentMethodType() {
         object Bay : InternetBanking("internet_banking_bay")
 
-        @Parcelize
         object Bbl : InternetBanking("internet_banking_bbl")
 
-        @Parcelize
         object Ktb : InternetBanking("internet_banking_ktb")
 
-        @Parcelize
         object Scb : InternetBanking("internet_banking_scb")
 
-        @Parcelize
         data class Unknown(val name: String?) : InternetBanking(name.orEmpty())
     }
 
-    sealed class Installment(val value: String, val availableTerms: List<Int>) : PaymentMethodType(), Parcelable {
-        @Parcelize
+    sealed class Installment(val value: String, val availableTerms: List<Int>) : PaymentMethodType() {
         object Bbl : Installment("installment_bay", listOf(4, 6, 8, 9, 10))
-
-        @Parcelize
         object Kbank : Installment("installment_kbank", listOf(3, 4, 6, 10))
-
-        @Parcelize
         object Bay : Installment("installment_bay", listOf(3, 4, 6, 9, 10))
-
-        @Parcelize
         object FirstChoice : Installment("installment_first_choice", listOf(3, 4, 6, 9, 10, 12, 18, 24, 36))
-
-        @Parcelize
         object Ktc : Installment("installment_ktc", listOf(3, 4, 5, 6, 7, 8, 9, 10))
-
-        @Parcelize
         data class Unknown(val name: String?, val terms: List<Int>) : Installment(name.orEmpty(), terms)
     }
 
-    @Parcelize
     object Alipay : PaymentMethodType()
-
-    @Parcelize
     object BarcodeAlipay : PaymentMethodType()
-
-    @Parcelize
     object BillPaymentTescoLotus : PaymentMethodType()
-
-    @Parcelize
     object EContext : PaymentMethodType()
-
-    @Parcelize
     object Points : PaymentMethodType()
-
-    @Parcelize
     object Truemoney : PaymentMethodType()
-
-    @Parcelize
     data class Unknown(val name: String?) : PaymentMethodType()
 }
