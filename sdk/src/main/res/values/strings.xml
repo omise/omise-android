@@ -30,4 +30,6 @@
 
     <string name="cvv_tooltip_3_digits">3 digit number on the\nback of your card</string>
     <string name="cvv_tooltip_4_digits">4 digit number on the\nfront of your card</string>
+    <string name="payment_chooser_title">Payment Methods</string>
+    <string name="menu_title_close">Close</string>
 </resources>
