@@ -134,15 +134,21 @@ dependencies {
     testImplementation "androidx.test:rules:$test_version"
     testImplementation "androidx.test:runner:$test_version"
     testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     testImplementation "androidx.test.ext:junit:$junit_ext_version"
     testImplementation "com.android.support:support-annotations:$support_annotations_version"
 
     androidTestImplementation "com.android.support:support-annotations:$support_annotations_version"
     androidTestImplementation "com.google.guava:guava:$guava_version"
     androidTestImplementation "org.robolectric:annotations:$robolectric_version"
+    androidTestImplementation "org.mockito:mockito-core:$mockito_version"
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
     androidTestImplementation "androidx.test:rules:$test_version"
     androidTestImplementation "androidx.test:runner:$test_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
 }
 

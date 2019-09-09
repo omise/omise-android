@@ -47,7 +47,7 @@ interface PaymentCreatorNavigation {
     fun navigateToEContextForm()
 }
 
-class PaymentCreatorNavigationImpl(activity: PaymentCreatorActivity) : PaymentCreatorNavigation {
+open class PaymentCreatorNavigationImpl(activity: PaymentCreatorActivity) : PaymentCreatorNavigation {
     companion object {
         const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
     }

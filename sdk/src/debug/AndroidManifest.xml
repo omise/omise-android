@@ -13,5 +13,8 @@
         <activity
             android:name=".ui.PaymentCreatorActivity"
             android:theme="@style/OmiseTheme" />
+        <activity
+            android:name=".ui.TestFragmentActivity"
+            android:theme="@style/OmiseTheme" />
     </application>
 </manifest>
