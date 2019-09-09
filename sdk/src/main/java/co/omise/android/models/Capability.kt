@@ -14,9 +14,9 @@ import org.joda.time.DateTime
  */
 @Parcelize
 data class Capability(
-        val banks: List<String>? = null,
+        var banks: List<String>? = null,
         @field:JsonProperty("payment_methods")
-        val paymentMethods: List<PaymentMethod>? = null,
+        var paymentMethods: List<PaymentMethod>? = null,
         @field:JsonProperty("zero_interest_installments")
         val zeroInterestInstallments: Boolean = false,
         override var modelObject: String? = null,
