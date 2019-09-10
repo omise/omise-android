@@ -6,12 +6,12 @@ import co.omise.android.R;
 
 public final class CardBrand {
     public static final CardBrand AMEX = new CardBrand("amex", "^3[47]", 15, 15, R.drawable.brand_amex);
-    public static final CardBrand DINERS = new CardBrand("diners", "^3(0[0-5]|6)", 14, 14, R.drawable.brand_diners);
+    public static final CardBrand DINERS = new CardBrand("diners", "^3(0[0-5]|[6,8-9])|^5[4-5]", 14, 14, R.drawable.brand_diners);
     public static final CardBrand JCB = new CardBrand("jcb", "^35(2[89]|[3-8])", 16, 16, R.drawable.brand_jcb);
     public static final CardBrand LASER = new CardBrand("laser", "^(6304|670[69]|6771)", 16, 19, -1); // TODO: Laser logo?
     public static final CardBrand VISA = new CardBrand("visa", "^4", 16, 16, R.drawable.brand_visa);
-    public static final CardBrand MASTERCARD = new CardBrand("mastercard", "^5[1-5]", 16, 16, R.drawable.brand_mastercard);
-    public static final CardBrand MAESTRO = new CardBrand("maestro", "^(5018|5020|5038|6304|6759|676[1-3])", 12, 19, R.drawable.brand_mastercard); // TODO: <- maestro logo?
+    public static final CardBrand MASTERCARD = new CardBrand("mastercard", "^(5[1-5]|2(2(2[1-9]|[3-9])|[3-6]|7(0|1|20)))", 16, 16, R.drawable.brand_mastercard);
+    public static final CardBrand MAESTRO = new CardBrand("maestro", "^(5[0,6-8]|6304|6759|676[1-3])", 12, 19, R.drawable.brand_mastercard); // TODO: <- maestro logo?
     public static final CardBrand DISCOVER = new CardBrand("discover", "^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)", 16, 16, -1); // TODO: Discover logo?
 
     public static final CardBrand[] ALL = new CardBrand[]{
