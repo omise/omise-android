@@ -36,7 +36,7 @@ class PaymentChooserFragmentTest {
     private val mockNavigation = mock(PaymentCreatorNavigation::class.java)
 
     @get:Rule
-    val mActivityRule = IntentsTestRule<TestFragmentActivity>(TestFragmentActivity::class.java)
+    val intentRule = IntentsTestRule<TestFragmentActivity>(TestFragmentActivity::class.java)
 
     @Before
     fun setUp() {
