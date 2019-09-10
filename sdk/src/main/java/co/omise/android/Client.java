@@ -91,6 +91,7 @@ public class Client {
                         .newBuilder()
                         .addHeader("User-Agent", buildUserAgent())
                         .addHeader("Authorization", Credentials.basic(publicKey, "x"))
+                        .addHeader("Omise-Version", "2019-05-29")
                         .build());
             }
         };
