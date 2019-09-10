@@ -3,6 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.models.Capability
@@ -16,7 +17,8 @@ class PaymentCreatorActivity : OmiseActivity() {
     private val currency: String by lazy { intent.getStringExtra(EXTRA_CURRENCY) }
     private val capability: Capability by lazy { intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY) }
 
-    private val navigation: PaymentCreatorNavigation by lazy {
+    @VisibleForTesting
+    val navigation: PaymentCreatorNavigation by lazy {
         PaymentCreatorNavigationImpl(this, pkey, REQUEST_CREDIT_CARD)
     }
 
