@@ -58,13 +58,9 @@ sealed class PaymentMethodType {
 
     sealed class InternetBanking(val value: String) : PaymentMethodType() {
         object Bay : InternetBanking("internet_banking_bay")
-
         object Bbl : InternetBanking("internet_banking_bbl")
-
         object Ktb : InternetBanking("internet_banking_ktb")
-
         object Scb : InternetBanking("internet_banking_scb")
-
         data class Unknown(val name: String?) : InternetBanking(name.orEmpty())
     }
 

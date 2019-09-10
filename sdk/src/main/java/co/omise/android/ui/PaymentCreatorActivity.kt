@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.models.Capability
+import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 
@@ -65,7 +66,7 @@ class PaymentCreatorActivity : OmiseActivity() {
 interface PaymentCreatorNavigation {
     fun navigateToPaymentChooser(capability: Capability)
     fun navigateToCreditCardForm()
-    fun navigateToInternetBankingChooser()
+    fun navigateToInternetBankingChooser(availableBanks: List<PaymentMethod>)
     fun navigateToInstallmentChooser()
     fun navigateToEContextForm()
 }
@@ -102,8 +103,8 @@ private class PaymentCreatorNavigationImpl(
         activity.startActivityForResult(intent, requestCode)
     }
 
-    override fun navigateToInternetBankingChooser() {
-        val fragment = InternetBankingChooserFragment.newInstance()
+    override fun navigateToInternetBankingChooser(availableBanks: List<PaymentMethod>) {
+        val fragment = InternetBankingChooserFragment.newInstance(availableBanks)
         addFragmentToBackStack(fragment)
     }
 

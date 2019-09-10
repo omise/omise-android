@@ -3,11 +3,20 @@ package co.omise.android.ui
 
 import android.os.Bundle
 import co.omise.android.R
+import co.omise.android.models.PaymentMethod
+import co.omise.android.models.PaymentMethodType
 import co.omise.android.models.SourceType
+import co.omise.android.models.method
 
 internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankingChooserItem>() {
 
-//    var paymentCreatorFlow: PaymentCreatorFlow? = null
+    //    var paymentCreatorFlow: PaymentCreatorFlow? = null
+    private val availableBanks: List<PaymentMethodType.InternetBanking> by lazy {
+        val args = arguments ?: return@lazy emptyList<PaymentMethodType.InternetBanking>()
+        val paymentMethods = args.getParcelableArray(EXTRA_INTERNET_BANKING_METHODS) as Array<PaymentMethod>
+        return@lazy paymentMethods.filter { it.method is PaymentMethodType.InternetBanking }
+                .map { it.method as PaymentMethodType.InternetBanking }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -29,11 +38,27 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
     }
 
     override fun listItems(): List<InternetBankingChooserItem> {
-        return InternetBankingChooserItem.allElements
+        return availableBanks.map {
+            when (it) {
+                PaymentMethodType.InternetBanking.Bbl -> InternetBankingChooserItem.Bbl
+                PaymentMethodType.InternetBanking.Scb -> InternetBankingChooserItem.Scb
+                PaymentMethodType.InternetBanking.Bay -> InternetBankingChooserItem.Bay
+                PaymentMethodType.InternetBanking.Ktb -> InternetBankingChooserItem.Ktb
+                else -> InternetBankingChooserItem.Unknown(it.value)
+            }
+        }
+
+//        return InternetBankingChooserItem.allElements
     }
 
     companion object {
-        fun newInstance() = InternetBankingChooserFragment()
+        private const val EXTRA_INTERNET_BANKING_METHODS = "InternetBankingChooserFragment.internetBankingMethods"
+        fun newInstance(availableBanks: List<PaymentMethod>) =
+                InternetBankingChooserFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelableArray(EXTRA_INTERNET_BANKING_METHODS, availableBanks.toTypedArray())
+                    }
+                }
     }
 }
 

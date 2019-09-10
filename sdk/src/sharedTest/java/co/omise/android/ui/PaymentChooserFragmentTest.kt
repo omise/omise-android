@@ -49,7 +49,8 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
-                PaymentMethod(name = "internet_banking_ktc"),
+                PaymentMethod(name = "internet_banking_ktb"),
+                PaymentMethod(name = "internet_banking_scb"),
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay")

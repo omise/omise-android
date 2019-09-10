@@ -23,7 +23,12 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
         when (item) {
             PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
             PaymentChooserItem.Installments -> TODO()
-            PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser()
+            PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser(
+                    capability
+                            ?.paymentMethods
+                            ?.filter { it.method is PaymentMethodType.InternetBanking }
+                            .orEmpty()
+            )
             PaymentChooserItem.TescoLotus -> TODO()
             PaymentChooserItem.ConvenienceStore -> TODO()
             PaymentChooserItem.PayEasy -> TODO()
@@ -81,10 +86,9 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
         fun newInstance(capability: Capability): PaymentChooserFragment {
             return PaymentChooserFragment().apply {
-                val arguments = Bundle().apply {
+                arguments = Bundle().apply {
                     putParcelable(EXTRA_CAPABILITY, capability)
                 }
-                this.arguments = arguments
             }
         }
     }
