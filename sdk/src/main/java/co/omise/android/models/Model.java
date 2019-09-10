@@ -24,7 +24,7 @@ public abstract class Model implements Parcelable {
         id = JSON.string(json, "id");
         livemode = JSON.bool(json, "livemode");
         location = JSON.string(json, "location");
-        created = JSON.dateTime(json, "created");
+        created = JSON.dateTime(json, "created_at");
     }
 
     @Override
