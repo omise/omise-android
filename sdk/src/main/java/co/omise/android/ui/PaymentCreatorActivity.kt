@@ -103,7 +103,8 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToInternetBankingChooser() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val fragment = InternetBankingChooserFragment.newInstance()
+        addFragmentToBackStack(fragment)
     }
 
     override fun navigateToInstallmentChooser() {

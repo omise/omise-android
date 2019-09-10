@@ -23,7 +23,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
         when (item) {
             PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
             PaymentChooserItem.Installments -> TODO()
-            PaymentChooserItem.InternetBanking -> TODO()
+            PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser()
             PaymentChooserItem.TescoLotus -> TODO()
             PaymentChooserItem.ConvenienceStore -> TODO()
             PaymentChooserItem.PayEasy -> TODO()
