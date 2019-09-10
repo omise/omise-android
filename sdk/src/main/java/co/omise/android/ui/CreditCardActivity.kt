@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -33,7 +32,7 @@ import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_erro
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
 import java.io.IOError
 
-class CreditCardActivity : AppCompatActivity() {
+class CreditCardActivity : OmiseActivity() {
 
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
     private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
@@ -185,14 +184,5 @@ class CreditCardActivity : AppCompatActivity() {
         val brand = CardNumber.brand(cardNumberEdit.cardNumber)
         val dialog = SecurityCodeTooltipDialogFragment.newInstant(brand)
         dialog.show(supportFragmentManager, null)
-    }
-
-    companion object {
-        // input
-        const val EXTRA_PKEY = "CreditCardActivity.publicKey"
-
-        const val EXTRA_TOKEN = "CreditCardActivity.token"
-        const val EXTRA_TOKEN_OBJECT = "CreditCardActivity.tokenObject"
-        const val EXTRA_CARD_OBJECT = "CreditCardActivity.cardObject"
     }
 }

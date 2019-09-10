@@ -23,7 +23,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
-import co.omise.android.ui.CreditCardActivity.Companion.EXTRA_PKEY
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
@@ -37,7 +36,7 @@ class CreditCardActivityTest {
 
     private lateinit var scenario: ActivityScenario<CreditCardActivity>
     private val intent = Intent(getApplicationContext(), CreditCardActivity::class.java).apply {
-        putExtra(EXTRA_PKEY, "test_key1234")
+        putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
     }
 
     @Before
