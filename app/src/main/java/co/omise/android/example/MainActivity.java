@@ -9,12 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
-import co.omise.android.api.Client;
-import co.omise.android.api.Request;
-import co.omise.android.api.RequestListener;
 import co.omise.android.models.Capability;
+import co.omise.android.models.PaymentMethod;
+import co.omise.android.models.Source;
 import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
@@ -44,6 +44,37 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     }
 
     private void startPaymentCreatorActivity() {
+        Capability capability = new Capability();
+        List<PaymentMethod> paymentMethods = new ArrayList<>();
+        PaymentMethod cardMethod = new PaymentMethod();
+        cardMethod.setName("card");
+        paymentMethods.add(cardMethod);
+
+        PaymentMethod bblInternetBankingMethod = new PaymentMethod();
+        bblInternetBankingMethod.setName("internet_banking_bbl");
+        paymentMethods.add(bblInternetBankingMethod);
+
+        PaymentMethod scbInternetBanking = new PaymentMethod();
+        scbInternetBanking.setName("internet_banking_scb");
+        paymentMethods.add(scbInternetBanking);
+
+        PaymentMethod bayInternetBanking = new PaymentMethod();
+        bayInternetBanking.setName("internet_banking_bay");
+        paymentMethods.add(bayInternetBanking);
+
+        PaymentMethod ktbInternetBanking = new PaymentMethod();
+        ktbInternetBanking.setName("internet_banking_ktb");
+        paymentMethods.add(ktbInternetBanking);
+
+        capability.setPaymentMethods(paymentMethods);
+
+        Intent intent = new Intent(MainActivity.this, PaymentCreatorActivity.class);
+        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
+        intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 500000L);
+        intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb");
+        intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
+        startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
+        /*
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
         client.send(request, new RequestListener<Capability>() {
@@ -62,6 +93,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
             }
         });
+         */
     }
 
     @Override
@@ -99,7 +131,11 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
             String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
         } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE && resultCode == RESULT_OK) {
-            Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+            if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
+                Toast.makeText(getApplicationContext(), ((Source) data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)).getId(), Toast.LENGTH_LONG).show();
+            } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
+                Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+            }
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
         }

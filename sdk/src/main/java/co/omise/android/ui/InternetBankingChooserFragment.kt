@@ -5,6 +5,7 @@ import android.os.Bundle
 import co.omise.android.R
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.PaymentMethodType
+import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.method
 
@@ -17,6 +18,9 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
         return@lazy paymentMethods.filter { it.method is PaymentMethodType.InternetBanking }
                 .map { it.method as PaymentMethodType.InternetBanking }
     }
+
+    var requester: PaymentCreatorRequester<Source>? = null
+    var listener: InternetBankingChooserFragmentListener? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -34,7 +38,13 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
             is InternetBankingChooserItem.Unknown -> SourceType.Unknown(item.bankName)
         }
 
-//        paymentCreatorFlow?.request(PaymentCreatorParameter.InternetBanking(sourceType))
+        requester?.request(PaymentCreatorRequester.PaymentCreatorParameters.InternetBanking(SourceType.InstallmentKBank)) {
+            if (it.isSuccess) {
+
+            } else {
+
+            }
+        }
     }
 
     override fun listItems(): List<InternetBankingChooserItem> {
@@ -82,3 +92,7 @@ val InternetBankingChooserItem.Companion.allElements: List<InternetBankingChoose
             InternetBankingChooserItem.Bay,
             InternetBankingChooserItem.Ktb
     )
+
+interface InternetBankingChooserFragmentListener {
+    fun onCreateSourceCompleted(result: Result<Source>)
+}
