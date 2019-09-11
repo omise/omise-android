@@ -7,8 +7,10 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.api.Client
+import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.models.Capability
+import co.omise.android.models.Model
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
@@ -153,17 +155,11 @@ private class PaymentCreatorNavigationImpl(
     }
 }
 
-interface PaymentCreatorRequester<T> {
-    fun request(parameter: PaymentCreatorParameters, result: ((Result<T>) -> Unit)? = null)
+interface PaymentCreatorRequester<T : Model> {
+    val amount: Long
+    val currency: String
+    fun request(request: Request<T>, result: ((Result<T>) -> Unit)? = null)
     var listener: PaymentCreatorRequestListener?
-
-    sealed class PaymentCreatorParameters(val sourceType: SourceType) {
-        data class InternetBanking(val type: SourceType) : PaymentCreatorParameters(type)
-        data class Installment(val bank: SourceType, val numberOfTerms: Int) : PaymentCreatorParameters(bank)
-        data class EContext(val type: SourceType, val name: String, val email: String, val phoneNumber: String) : PaymentCreatorParameters(type)
-        data class Billing(val type: SourceType) : PaymentCreatorParameters(type)
-        data class Unknown(val type: SourceType) : PaymentCreatorParameters(type)
-    }
 }
 
 interface PaymentCreatorRequestListener {
@@ -172,16 +168,13 @@ interface PaymentCreatorRequestListener {
 
 private class PaymentCreatorRequesterImpl(
         private val client: Client,
-        private val amount: Long,
-        private val currency: String
+        override val amount: Long,
+        override val currency: String
 ) : PaymentCreatorRequester<Source> {
 
     override var listener: PaymentCreatorRequestListener? = null
 
-    override fun request(parameter: PaymentCreatorRequester.PaymentCreatorParameters, result: ((Result<Source>) -> Unit)?) {
-        val request = Source
-                .CreateSourceRequestBuilder(amount, currency, parameter.sourceType)
-                .build()
+    override fun request(request: Request<Source>, result: ((Result<Source>) -> Unit)?) {
         client.send(request, object : RequestListener<Source> {
             override fun onRequestSucceed(model: Source) {
                 result?.invoke(Result.success(model))

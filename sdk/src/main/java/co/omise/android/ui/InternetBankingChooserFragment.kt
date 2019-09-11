@@ -3,20 +3,20 @@ package co.omise.android.ui
 
 import android.os.Bundle
 import co.omise.android.R
+import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
-import co.omise.android.models.PaymentMethodType
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
-import co.omise.android.models.method
+import co.omise.android.models.backendType
 
 internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankingChooserItem>() {
 
     //    var paymentCreatorFlow: PaymentCreatorFlow? = null
-    private val availableBanks: List<PaymentMethodType.InternetBanking> by lazy {
-        val args = arguments ?: return@lazy emptyList<PaymentMethodType.InternetBanking>()
+    private val availableBanks: List<SourceType.InternetBanking> by lazy {
+        val args = arguments ?: return@lazy emptyList<SourceType.InternetBanking>()
         val paymentMethods = args.getParcelableArray(EXTRA_INTERNET_BANKING_METHODS) as Array<PaymentMethod>
-        return@lazy paymentMethods.filter { it.method is PaymentMethodType.InternetBanking }
-                .map { it.method as PaymentMethodType.InternetBanking }
+        return@lazy paymentMethods.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
+                .map { (it.backendType as BackendType.Source).sourceType as SourceType.InternetBanking }
     }
 
     var requester: PaymentCreatorRequester<Source>? = null
@@ -31,18 +31,20 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
 
     override fun onListItemClicked(item: InternetBankingChooserItem) {
         val sourceType = when (item) {
-            InternetBankingChooserItem.Bbl -> SourceType.InternetBankingBbl
-            InternetBankingChooserItem.Scb -> SourceType.InternetBankingScb
-            InternetBankingChooserItem.Bay -> SourceType.InternetBankingBay
-            InternetBankingChooserItem.Ktb -> SourceType.InternetBankingKtb
+            InternetBankingChooserItem.Bbl -> SourceType.InternetBanking.Bbl
+            InternetBankingChooserItem.Scb -> SourceType.InternetBanking.Scb
+            InternetBankingChooserItem.Bay -> SourceType.InternetBanking.Bay
+            InternetBankingChooserItem.Ktb -> SourceType.InternetBanking.Ktb
             is InternetBankingChooserItem.Unknown -> SourceType.Unknown(item.bankName)
         }
 
-        requester?.request(PaymentCreatorRequester.PaymentCreatorParameters.InternetBanking(SourceType.InstallmentKBank)) {
+        val req = requester ?: return
+
+        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType).build()
+        requester?.request(request) {
             if (it.isSuccess) {
 
             } else {
-
             }
         }
     }
@@ -50,15 +52,13 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
     override fun listItems(): List<InternetBankingChooserItem> {
         return availableBanks.map {
             when (it) {
-                PaymentMethodType.InternetBanking.Bbl -> InternetBankingChooserItem.Bbl
-                PaymentMethodType.InternetBanking.Scb -> InternetBankingChooserItem.Scb
-                PaymentMethodType.InternetBanking.Bay -> InternetBankingChooserItem.Bay
-                PaymentMethodType.InternetBanking.Ktb -> InternetBankingChooserItem.Ktb
-                else -> InternetBankingChooserItem.Unknown(it.value)
+                SourceType.InternetBanking.Bbl -> InternetBankingChooserItem.Bbl
+                SourceType.InternetBanking.Scb -> InternetBankingChooserItem.Scb
+                SourceType.InternetBanking.Bay -> InternetBankingChooserItem.Bay
+                SourceType.InternetBanking.Ktb -> InternetBankingChooserItem.Ktb
+                else -> InternetBankingChooserItem.Unknown(it.name.orEmpty())
             }
         }
-
-//        return InternetBankingChooserItem.allElements
     }
 
     companion object {
