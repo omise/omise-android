@@ -9,11 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
+import co.omise.android.api.Client;
+import co.omise.android.api.Request;
+import co.omise.android.api.RequestListener;
 import co.omise.android.models.Capability;
-import co.omise.android.models.PaymentMethod;
 import co.omise.android.models.Source;
 import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.OmiseActivity;
@@ -44,37 +45,6 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     }
 
     private void startPaymentCreatorActivity() {
-        Capability capability = new Capability();
-        List<PaymentMethod> paymentMethods = new ArrayList<>();
-        PaymentMethod cardMethod = new PaymentMethod();
-        cardMethod.setName("card");
-        paymentMethods.add(cardMethod);
-
-        PaymentMethod bblInternetBankingMethod = new PaymentMethod();
-        bblInternetBankingMethod.setName("internet_banking_bbl");
-        paymentMethods.add(bblInternetBankingMethod);
-
-        PaymentMethod scbInternetBanking = new PaymentMethod();
-        scbInternetBanking.setName("internet_banking_scb");
-        paymentMethods.add(scbInternetBanking);
-
-        PaymentMethod bayInternetBanking = new PaymentMethod();
-        bayInternetBanking.setName("internet_banking_bay");
-        paymentMethods.add(bayInternetBanking);
-
-        PaymentMethod ktbInternetBanking = new PaymentMethod();
-        ktbInternetBanking.setName("internet_banking_ktb");
-        paymentMethods.add(ktbInternetBanking);
-
-        capability.setPaymentMethods(paymentMethods);
-
-        Intent intent = new Intent(MainActivity.this, PaymentCreatorActivity.class);
-        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-        intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 500000L);
-        intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb");
-        intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
-        startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
-        /*
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
         client.send(request, new RequestListener<Capability>() {
@@ -93,7 +63,6 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
             }
         });
-         */
     }
 
     @Override

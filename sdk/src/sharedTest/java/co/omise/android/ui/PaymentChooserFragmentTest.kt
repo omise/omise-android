@@ -88,10 +88,24 @@ class PaymentChooserFragmentTest {
     }
 
     @Test
-    fun paymentMethodClick_invokeNavigation() {
+    fun clickCreditCardPaymentMethod_navigateToCreditCardFrom() {
         onView(withId(R.id.recycler_view))
                 .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
 
         verify(fragment.navigation)?.navigateToCreditCardForm()
+    }
+
+    @Test
+    fun clickInternetBankingPaymentMethod_navigateToInternetBankingChooser() {
+        onView(withId(R.id.recycler_view))
+                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(2, click()))
+
+        val expectedMethods = listOf(
+                PaymentMethod(name = "internet_banking_bay"),
+                PaymentMethod(name = "internet_banking_bbl"),
+                PaymentMethod(name = "internet_banking_ktb"),
+                PaymentMethod(name = "internet_banking_scb")
+        )
+        verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
     }
 }
