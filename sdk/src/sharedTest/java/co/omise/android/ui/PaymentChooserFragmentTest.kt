@@ -45,7 +45,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_bay"),
                 PaymentMethod(name = "installment_bbl"),
                 PaymentMethod(name = "installment_first_choice"),
-                PaymentMethod(name = "installment_kabnk"),
+                PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
