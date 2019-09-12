@@ -13,11 +13,9 @@ import co.omise.android.models.Capability
 import co.omise.android.models.Model
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
-import co.omise.android.models.SourceType
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
-import co.omise.android.ui.PaymentCreatorActivity.Companion.REQUEST_CREDIT_CARD
 
 class PaymentCreatorActivity : OmiseActivity() {
 
@@ -54,6 +52,17 @@ class PaymentCreatorActivity : OmiseActivity() {
                     result.getOrNull()?.let {
                         navigation.createSourceFinished(it)
                     }
+                }
+            }
+        }
+        supportFragmentManager.addOnBackStackChangedListener {
+            supportActionBar?.let {
+                if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
+                    it.setDisplayHomeAsUpEnabled(false)
+                    it.setHomeButtonEnabled(false)
+                } else {
+                    it.setDisplayHomeAsUpEnabled(true)
+                    it.setHomeButtonEnabled(true)
                 }
             }
         }
