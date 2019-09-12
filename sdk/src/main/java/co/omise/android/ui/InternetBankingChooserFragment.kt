@@ -54,7 +54,7 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
                 SourceType.InternetBanking.Scb -> InternetBankingChooserItem.Scb
                 SourceType.InternetBanking.Bay -> InternetBankingChooserItem.Bay
                 SourceType.InternetBanking.Ktb -> InternetBankingChooserItem.Ktb
-                else -> InternetBankingChooserItem.Unknown(it.name.orEmpty())
+                is SourceType.InternetBanking.Unknown -> InternetBankingChooserItem.Unknown(it.name.orEmpty())
             }
         }
     }

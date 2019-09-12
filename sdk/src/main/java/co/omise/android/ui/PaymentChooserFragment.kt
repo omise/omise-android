@@ -23,7 +23,12 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
     override fun onListItemClicked(item: PaymentChooserItem) {
         when (item) {
             PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
-            PaymentChooserItem.Installments -> TODO()
+            PaymentChooserItem.Installments -> navigation?.navigateToInstallmentChooser(
+                    capability
+                            ?.paymentMethods
+                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.Installment }
+                            .orEmpty()
+            )
             PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser(
                     capability
                             ?.paymentMethods

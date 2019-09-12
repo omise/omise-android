@@ -101,8 +101,8 @@ class PaymentCreatorActivity : OmiseActivity() {
 interface PaymentCreatorNavigation {
     fun navigateToPaymentChooser(capability: Capability)
     fun navigateToCreditCardForm()
-    fun navigateToInternetBankingChooser(availableBanks: List<PaymentMethod>)
-    fun navigateToInstallmentChooser()
+    fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>)
+    fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>)
     fun navigateToEContextForm()
     fun createSourceFinished(source: Source)
 }
@@ -141,15 +141,18 @@ private class PaymentCreatorNavigationImpl(
         activity.startActivityForResult(intent, requestCode)
     }
 
-    override fun navigateToInternetBankingChooser(availableBanks: List<PaymentMethod>) {
-        val fragment = InternetBankingChooserFragment.newInstance(availableBanks).apply {
+    override fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>) {
+        val fragment = InternetBankingChooserFragment.newInstance(allowedBanks).apply {
             requester = this@PaymentCreatorNavigationImpl.requester
         }
         addFragmentToBackStack(fragment)
     }
 
-    override fun navigateToInstallmentChooser() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>) {
+        val fragment = InstallmentChooserFragment.newInstance(allowedInstalls).apply {
+            navigation = this@PaymentCreatorNavigationImpl
+        }
+        addFragmentToBackStack(fragment)
     }
 
     override fun navigateToEContextForm() {

@@ -23,6 +23,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
         super.onActivityCreated(savedInstanceState)
 
         title = getString(R.string.installments_title)
+        setHasOptionsMenu(true)
     }
 
     override fun listItems(): List<InstallmentChooserItem> {
