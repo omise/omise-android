@@ -32,6 +32,7 @@ buildscript {
         espresso_version = '3.3.0-alpha01'
         junit_ext_version = '1.1.1'
         mockito_version = '3.0.0'
+        mockito_kotlin_version = '2.2.0'
     }
 
     repositories {

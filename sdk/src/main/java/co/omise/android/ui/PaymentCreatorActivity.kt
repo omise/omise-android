@@ -55,6 +55,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                 }
             }
         }
+
         supportFragmentManager.addOnBackStackChangedListener {
             supportActionBar?.let {
                 if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
