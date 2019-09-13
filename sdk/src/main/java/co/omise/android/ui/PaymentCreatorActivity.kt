@@ -6,9 +6,16 @@ import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
+import co.omise.android.api.Client
+import co.omise.android.api.Request
+import co.omise.android.api.RequestListener
 import co.omise.android.models.Capability
+import co.omise.android.models.Model
+import co.omise.android.models.PaymentMethod
+import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 
 class PaymentCreatorActivity : OmiseActivity() {
 
@@ -17,9 +24,16 @@ class PaymentCreatorActivity : OmiseActivity() {
     private val currency: String by lazy { intent.getStringExtra(EXTRA_CURRENCY) }
     private val capability: Capability by lazy { intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY) }
 
+
+    private val client: Client by lazy { Client(pkey) }
+
+    private val requester: PaymentCreatorRequester<Source> by lazy {
+        PaymentCreatorRequesterImpl(client, amount, currency)
+    }
+
     @VisibleForTesting
     val navigation: PaymentCreatorNavigation by lazy {
-        PaymentCreatorNavigationImpl(this, pkey, REQUEST_CREDIT_CARD)
+        PaymentCreatorNavigationImpl(this, pkey, REQUEST_CREDIT_CARD, requester)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +45,28 @@ class PaymentCreatorActivity : OmiseActivity() {
         }
 
         navigation.navigateToPaymentChooser(capability)
+
+        requester.listener = object : PaymentCreatorRequestListener {
+            override fun onSourceCreated(result: Result<Source>) {
+                if (result.isSuccess) {
+                    result.getOrNull()?.let {
+                        navigation.createSourceFinished(it)
+                    }
+                }
+            }
+        }
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            supportActionBar?.let {
+                if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
+                    it.setDisplayHomeAsUpEnabled(false)
+                    it.setHomeButtonEnabled(false)
+                } else {
+                    it.setDisplayHomeAsUpEnabled(true)
+                    it.setHomeButtonEnabled(true)
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -58,23 +94,26 @@ class PaymentCreatorActivity : OmiseActivity() {
     }
 
     companion object {
-        private const val REQUEST_CREDIT_CARD = 100
+        const val REQUEST_CREDIT_CARD = 100
     }
 }
 
 interface PaymentCreatorNavigation {
     fun navigateToPaymentChooser(capability: Capability)
     fun navigateToCreditCardForm()
-    fun navigateToInternetBankingChooser()
+    fun navigateToInternetBankingChooser(availableBanks: List<PaymentMethod>)
     fun navigateToInstallmentChooser()
     fun navigateToEContextForm()
+    fun createSourceFinished(source: Source)
 }
 
 private class PaymentCreatorNavigationImpl(
         private val activity: PaymentCreatorActivity,
         private val pkey: String,
-        private val requestCode: Int
+        private val requestCode: Int,
+        private val requester: PaymentCreatorRequester<Source>
 ) : PaymentCreatorNavigation {
+
     companion object {
         const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
     }
@@ -102,8 +141,11 @@ private class PaymentCreatorNavigationImpl(
         activity.startActivityForResult(intent, requestCode)
     }
 
-    override fun navigateToInternetBankingChooser() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun navigateToInternetBankingChooser(availableBanks: List<PaymentMethod>) {
+        val fragment = InternetBankingChooserFragment.newInstance(availableBanks).apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
+        addFragmentToBackStack(fragment)
     }
 
     override fun navigateToInstallmentChooser() {
@@ -112,5 +154,47 @@ private class PaymentCreatorNavigationImpl(
 
     override fun navigateToEContextForm() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun createSourceFinished(source: Source) {
+        val intent = Intent().apply {
+            putExtra(EXTRA_SOURCE_OBJECT, source)
+        }
+        activity.setResult(Activity.RESULT_OK, intent)
+        activity.finish()
+    }
+}
+
+interface PaymentCreatorRequester<T : Model> {
+    val amount: Long
+    val currency: String
+    fun request(request: Request<T>, result: ((Result<T>) -> Unit)? = null)
+    var listener: PaymentCreatorRequestListener?
+}
+
+interface PaymentCreatorRequestListener {
+    fun onSourceCreated(result: Result<Source>)
+}
+
+private class PaymentCreatorRequesterImpl(
+        private val client: Client,
+        override val amount: Long,
+        override val currency: String
+) : PaymentCreatorRequester<Source> {
+
+    override var listener: PaymentCreatorRequestListener? = null
+
+    override fun request(request: Request<Source>, result: ((Result<Source>) -> Unit)?) {
+        client.send(request, object : RequestListener<Source> {
+            override fun onRequestSucceed(model: Source) {
+                result?.invoke(Result.success(model))
+                listener?.onSourceCreated(Result.success(model))
+            }
+
+            override fun onRequestFailed(throwable: Throwable) {
+                result?.invoke(Result.failure(throwable))
+                listener?.onSourceCreated(Result.failure(throwable))
+            }
+        })
     }
 }

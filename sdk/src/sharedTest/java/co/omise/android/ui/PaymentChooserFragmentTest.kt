@@ -20,20 +20,20 @@ import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.utils.itemCount
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 
 
 @RunWith(AndroidJUnit4::class)
 class PaymentChooserFragmentTest {
     private lateinit var scenario: ActivityScenario<TestFragmentActivity>
     private lateinit var fragment: PaymentChooserFragment
-    private val mockNavigation = mock(PaymentCreatorNavigation::class.java)
+    private val mockNavigation: PaymentCreatorNavigation = mock()
 
     @get:Rule
     val intentRule = IntentsTestRule<TestFragmentActivity>(TestFragmentActivity::class.java)
@@ -49,7 +49,8 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
-                PaymentMethod(name = "internet_banking_ktc"),
+                PaymentMethod(name = "internet_banking_ktb"),
+                PaymentMethod(name = "internet_banking_scb"),
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay")
@@ -87,10 +88,24 @@ class PaymentChooserFragmentTest {
     }
 
     @Test
-    fun paymentMethodClick_invokeNavigation() {
+    fun clickCreditCardPaymentMethod_navigateToCreditCardFrom() {
         onView(withId(R.id.recycler_view))
                 .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
 
         verify(fragment.navigation)?.navigateToCreditCardForm()
+    }
+
+    @Test
+    fun clickInternetBankingPaymentMethod_navigateToInternetBankingChooser() {
+        onView(withId(R.id.recycler_view))
+                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(2, click()))
+
+        val expectedMethods = listOf(
+                PaymentMethod(name = "internet_banking_bay"),
+                PaymentMethod(name = "internet_banking_bbl"),
+                PaymentMethod(name = "internet_banking_ktb"),
+                PaymentMethod(name = "internet_banking_scb")
+        )
+        verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
     }
 }

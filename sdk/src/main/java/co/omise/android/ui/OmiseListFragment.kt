@@ -24,7 +24,7 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
         }
     }
 
-private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), onClickListener) }
+    private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), onClickListener) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)
@@ -36,6 +36,10 @@ private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), on
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
+    }
+
+    protected fun setUiEnabled(isEnabled: Boolean) {
+        recyclerView.isEnabled = isEnabled
     }
 }
 

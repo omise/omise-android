@@ -15,6 +15,7 @@ import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
 import co.omise.android.models.Capability;
+import co.omise.android.models.Source;
 import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
@@ -99,7 +100,11 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
             String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
         } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE && resultCode == RESULT_OK) {
-            Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+            if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
+                Toast.makeText(getApplicationContext(), ((Source) data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)).getId(), Toast.LENGTH_LONG).show();
+            } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
+                Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+            }
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
         }
