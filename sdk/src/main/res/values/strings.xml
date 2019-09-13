@@ -33,5 +33,6 @@
     <string name="payment_chooser_title">Payment Methods</string>
     <string name="internet_banking_chooser_title">Internet Banking</string>
     <string name="installments_title">Installments</string>
+    <string name="econtext_title">EContext</string>
     <string name="menu_title_close">Close</string>
 </resources>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/xlarge_padding"
+    android:paddingBottom="@dimen/xlarge_padding"
+    android:paddingStart="@dimen/large_padding"
+    android:paddingLeft="@dimen/large_padding"
+    android:paddingEnd="@dimen/large_padding"
+    android:paddingRight="@dimen/large_padding"
+    android:background="?android:attr/windowBackground"
+    android:orientation="vertical">
+
+    <TextView
+        style="?attr/editTextLabelStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Full name" />
+
+    <co.omise.android.ui.OmiseEditText
+        android:id="@+id/edit_full_name"
+        style="?android:attr/editTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:layout_marginTop="@dimen/small_margin"
+        android:nextFocusForward="@id/edit_email"
+        android:imeOptions="actionNext" />
+
+    <TextView
+        style="?attr/editTextLabelStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin"
+        android:text="Email" />
+
+    <co.omise.android.ui.OmiseEditText
+        android:id="@+id/edit_email"
+        style="?android:attr/editTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:nextFocusForward="@id/edit_phone"
+        android:layout_marginTop="@dimen/small_margin"
+        android:imeOptions="actionNext" />
+
+    <TextView
+        style="?attr/editTextLabelStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin"
+        android:text="Phone" />
+
+    <co.omise.android.ui.OmiseEditText
+        android:id="@+id/edit_phone"
+        style="?android:attr/editTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:nextFocusForward="@id/button_submit"
+        android:layout_marginTop="@dimen/small_margin"
+        android:imeOptions="actionDone" />
+
+    <Button
+        android:id="@+id/button_submit"
+        style="?android:attr/buttonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xlarge_margin"
+        android:enabled="true"
+        android:text="Next"
+        tools:enabled="true" />
+</LinearLayout>

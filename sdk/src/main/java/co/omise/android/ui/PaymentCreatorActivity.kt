@@ -164,7 +164,8 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToEContextForm() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val fragment = EContextFormFragment.newInstance()
+        addFragmentToBackStack(fragment)
     }
 
     override fun createSourceFinished(source: Source) {

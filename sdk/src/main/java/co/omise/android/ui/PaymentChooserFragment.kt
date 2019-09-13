@@ -36,9 +36,9 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             .orEmpty()
             )
             PaymentChooserItem.TescoLotus -> TODO()
-            PaymentChooserItem.ConvenienceStore -> TODO()
-            PaymentChooserItem.PayEasy -> TODO()
-            PaymentChooserItem.Netbanking -> TODO()
+            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm()
+            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm()
+            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm()
             PaymentChooserItem.Alipay -> TODO()
         }
     }
