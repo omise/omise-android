@@ -4,6 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.PaymentMethod
@@ -34,12 +35,11 @@ class InstallmentChooserFragmentTest {
             it.replaceFragment(fragment)
         }
 
-        onView(ViewMatchers.withText(R.string.installments_title))
-                .check(matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.installments_title)).check(matches(isDisplayed()))
     }
 
     @Test
     fun displayAllowedInstallmentBanks_showAllowedInstallmentBanksFromArgument() {
-        onView(ViewMatchers.withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 }

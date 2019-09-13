@@ -16,7 +16,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        title = (installment?.backendType as BackendType.Source).sourceType.name.orEmpty()
+        title = (installment?.backendType as? BackendType.Source)?.sourceType?.name.orEmpty()
         setHasOptionsMenu(true)
     }
 
