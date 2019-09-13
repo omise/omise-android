@@ -6,9 +6,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import co.omise.android.R
+import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
-import co.omise.android.models.PaymentMethodType
-import co.omise.android.models.method
+import co.omise.android.models.SourceType
+import co.omise.android.models.backendType
 
 class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
@@ -23,7 +24,12 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
         when (item) {
             PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
             PaymentChooserItem.Installments -> TODO()
-            PaymentChooserItem.InternetBanking -> TODO()
+            PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser(
+                    capability
+                            ?.paymentMethods
+                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
+                            .orEmpty()
+            )
             PaymentChooserItem.TescoLotus -> TODO()
             PaymentChooserItem.ConvenienceStore -> TODO()
             PaymentChooserItem.PayEasy -> TODO()
@@ -60,17 +66,19 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                 .paymentMethods
                 .orEmpty()
                 .forEach {
-                    when (it.method) {
-                        is PaymentMethodType.CreditCard -> item.add(PaymentChooserItem.CreditCard)
-                        is PaymentMethodType.Installment -> item.add(PaymentChooserItem.Installments)
-                        is PaymentMethodType.InternetBanking -> item.add(PaymentChooserItem.InternetBanking)
-                        is PaymentMethodType.BillPaymentTescoLotus -> item.add(PaymentChooserItem.TescoLotus)
-                        is PaymentMethodType.EContext -> item.addAll(listOf(
-                                PaymentChooserItem.ConvenienceStore,
-                                PaymentChooserItem.PayEasy,
-                                PaymentChooserItem.Netbanking
-                        ))
-                        is PaymentMethodType.Alipay -> item.add(PaymentChooserItem.Alipay)
+                    when (it.backendType) {
+                        is BackendType.Token -> item.add(PaymentChooserItem.CreditCard)
+                        is BackendType.Source -> when ((it.backendType as BackendType.Source).sourceType) {
+                            is SourceType.Installment -> item.add(PaymentChooserItem.Installments)
+                            is SourceType.InternetBanking -> item.add(PaymentChooserItem.InternetBanking)
+                            is SourceType.BillPaymentTescoLotus -> item.add(PaymentChooserItem.TescoLotus)
+                            is SourceType.Econtext -> item.addAll(listOf(
+                                    PaymentChooserItem.ConvenienceStore,
+                                    PaymentChooserItem.PayEasy,
+                                    PaymentChooserItem.Netbanking
+                            ))
+                            is SourceType.Alipay -> item.add(PaymentChooserItem.Alipay)
+                        }
                     }
                 }
         return item.distinct()
@@ -81,10 +89,9 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
         fun newInstance(capability: Capability): PaymentChooserFragment {
             return PaymentChooserFragment().apply {
-                val arguments = Bundle().apply {
+                arguments = Bundle().apply {
                     putParcelable(EXTRA_CAPABILITY, capability)
                 }
-                this.arguments = arguments
             }
         }
     }
