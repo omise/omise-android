@@ -103,6 +103,7 @@ interface PaymentCreatorNavigation {
     fun navigateToCreditCardForm()
     fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>)
     fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>)
+    fun navigateToInstallmentTermChooser(installment: PaymentMethod)
     fun navigateToEContextForm()
     fun createSourceFinished(source: Source)
 }
@@ -151,6 +152,13 @@ private class PaymentCreatorNavigationImpl(
     override fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>) {
         val fragment = InstallmentChooserFragment.newInstance(allowedInstalls).apply {
             navigation = this@PaymentCreatorNavigationImpl
+        }
+        addFragmentToBackStack(fragment)
+    }
+
+    override fun navigateToInstallmentTermChooser(installment: PaymentMethod) {
+        val fragment = InstallmentTermChooserFragment.newInstance(installment).apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
         }
         addFragmentToBackStack(fragment)
     }

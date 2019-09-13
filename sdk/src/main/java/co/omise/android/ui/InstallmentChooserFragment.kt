@@ -10,11 +10,12 @@ import co.omise.android.models.backendType
 
 internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooserItem>() {
 
+    private val paymentMethods: List<PaymentMethod> by lazy {
+        val args = arguments ?: return@lazy emptyList<PaymentMethod>()
+        return@lazy (args.getParcelableArray(EXTRA_INSTALLMENT_METHODS) as Array<PaymentMethod>).toList()
+    }
     private val allowedInstallments: List<SourceType.Installment> by lazy {
-        val args = arguments ?: return@lazy emptyList<SourceType.Installment>()
-        val paymentMethods = args.getParcelableArray(EXTRA_INSTALLMENT_METHODS) as Array<PaymentMethod>
-        return@lazy paymentMethods
-                .filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.Installment }
+        return@lazy paymentMethods.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.Installment }
                 .map { (it.backendType as BackendType.Source).sourceType as SourceType.Installment }
     }
     var navigation: PaymentCreatorNavigation? = null
@@ -48,7 +49,8 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
             InstallmentChooserItem.Ktc -> SourceType.Installment.Ktc
             is InstallmentChooserItem.Unknown -> SourceType.Installment.Unknown(item.bankName)
         }
-//        paymentCreatorActivity.showInstallmentTermChooser(installment)
+        val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == sourceType }
+        navigation?.navigateToInstallmentTermChooser(choseInstallment)
     }
 
     companion object {
@@ -71,8 +73,8 @@ internal sealed class InstallmentChooserItem(
     companion object
     object Bbl : InstallmentChooserItem(R.drawable.payment_bbl, "Bangkok Bank", R.drawable.ic_next)
     object KBank : InstallmentChooserItem(R.drawable.payment_kasikorn, "Kasikorn", R.drawable.ic_next)
-    object Bay : InstallmentChooserItem(R.drawable.payment_bay, "krungsri", R.drawable.ic_next)
-    object FirstChoice : InstallmentChooserItem(R.drawable.payment_first_choice, "krungsri First FirstChoice", R.drawable.ic_next)
+    object Bay : InstallmentChooserItem(R.drawable.payment_bay, "Krungsri", R.drawable.ic_next)
+    object FirstChoice : InstallmentChooserItem(R.drawable.payment_first_choice, "Krungsri First Choice", R.drawable.ic_next)
     object Ktc : InstallmentChooserItem(R.drawable.payment_ktc, "KTC", R.drawable.ic_next)
     data class Unknown(val bankName: String) : InstallmentChooserItem(R.drawable.payment_installment, bankName, R.drawable.ic_next)
 }
