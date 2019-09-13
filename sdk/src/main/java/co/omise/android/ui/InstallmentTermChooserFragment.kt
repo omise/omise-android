@@ -22,17 +22,21 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     override fun listItems(): List<InstallmentTermChooserItem> {
         return installment?.installmentTerms.orEmpty().map {
-            InstallmentTermChooserItem(
-                    R.drawable.payment_installment,
-                    "$it months",
-                    R.drawable.ic_redirect
-            )
+            InstallmentTermChooserItem(R.drawable.payment_installment, it, R.drawable.ic_redirect)
         }
     }
 
-    override fun onListItemClicked(option: InstallmentTermChooserItem) {
-//        val sourceType = installment?.sourceType ?: return
-//        paymentCreatorFlow?.request(PaymentCreatorParameter.Installment(sourceType, option.terms))
+    override fun onListItemClicked(item: InstallmentTermChooserItem) {
+        val req = requester ?: return
+        val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType ?: return
+
+        setUiEnabled(false)
+        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType)
+                .installmentTerm(item.installmentTerm)
+                .build()
+        requester?.request(request) {
+            setUiEnabled(true)
+        }
     }
 
     companion object {
@@ -49,6 +53,9 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
 internal data class InstallmentTermChooserItem(
         override val icon: Int,
-        override val title: String,
+        val installmentTerm: Int,
         override val indicatorIcon: Int
-) : OmiseListItem
+) : OmiseListItem {
+    override val title: String
+        get() = "$installmentTerm months"
+}
