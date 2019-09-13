@@ -5,6 +5,7 @@ import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
+import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
 
@@ -16,7 +17,16 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        title = (installment?.backendType as? BackendType.Source)?.sourceType?.name.orEmpty()
+
+        val sourceType = (installment?.backendType as BackendType.Source).sourceType
+        title = when (sourceType as SourceType.Installment) {
+            SourceType.Installment.Bay -> InstallmentChooserItem.Bay
+            SourceType.Installment.FirstChoice -> InstallmentChooserItem.FirstChoice
+            SourceType.Installment.Bbl -> InstallmentChooserItem.Bbl
+            SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
+            SourceType.Installment.KBank -> InstallmentChooserItem.KBank
+            is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(sourceType.name.orEmpty())
+        }.title
         setHasOptionsMenu(true)
     }
 

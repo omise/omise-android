@@ -44,7 +44,7 @@ class InstallmentTermChooserFragmentTest {
             it.replaceFragment(fragment)
         }
 
-        onView(withText(paymentMethod.name)).check(matches(isDisplayed()))
+        onView(withText(InstallmentChooserItem.Bay.title)).check(matches(isDisplayed()))
     }
 
     @Test
