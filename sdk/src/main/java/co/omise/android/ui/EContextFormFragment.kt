@@ -11,6 +11,7 @@ import android.widget.TextView
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
+import co.omise.android.models.SupportedEContext
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import kotlinx.android.synthetic.main.fragment_econtext_form.button_submit
@@ -26,6 +27,9 @@ class EContextFormFragment : OmiseFragment() {
 
     var requester: PaymentCreatorRequester<Source>? = null
 
+    private val type: SupportedEContext? by lazy {
+        arguments?.getParcelable<SupportedEContext>(EXTRA_ECONTEXT_TYPE)
+    }
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
     private val emailEdit: OmiseEditText by lazy { edit_email }
     private val phoneNumberEdit: OmiseEditText by lazy { edit_phone_number }
@@ -48,7 +52,12 @@ class EContextFormFragment : OmiseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        title = getString(R.string.econtext_title)
+        title = when (type) {
+            SupportedEContext.ConvenienceStore -> getString(R.string.title_convenience_store)
+            SupportedEContext.PayEasy -> getString(R.string.title_pay_easy)
+            SupportedEContext.Netbanking -> getString(R.string.title_netbanking)
+            null -> getString(R.string.econtext_title)
+        }
         setHasOptionsMenu(true)
 
         formInputWithErrorTexts.forEach {
@@ -107,6 +116,11 @@ class EContextFormFragment : OmiseFragment() {
     }
 
     companion object {
-        fun newInstance(): EContextFormFragment = EContextFormFragment()
+        private const val EXTRA_ECONTEXT_TYPE = "EContextFormFragment.econtextType"
+        fun newInstance(eContext: SupportedEContext): EContextFormFragment = EContextFormFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(EXTRA_ECONTEXT_TYPE, eContext)
+            }
+        }
     }
 }

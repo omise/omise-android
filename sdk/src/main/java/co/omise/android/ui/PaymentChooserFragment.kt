@@ -8,6 +8,7 @@ import android.view.MenuItem
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
+import co.omise.android.models.SupportedEContext
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
@@ -36,9 +37,9 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             .orEmpty()
             )
             PaymentChooserItem.TescoLotus -> TODO()
-            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm()
-            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm()
-            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm()
+            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEContext.ConvenienceStore)
+            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEContext.PayEasy)
+            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEContext.Netbanking)
             PaymentChooserItem.Alipay -> TODO()
         }
     }

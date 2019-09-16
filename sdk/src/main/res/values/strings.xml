@@ -33,6 +33,9 @@
     <string name="label_security_code">Security code</string>
     <string name="menu_card_io">Scan from Camera</string>
     <string name="title_authorizing_payment">Authorizing Payment</string>
+    <string name="title_convenience_store">Convenience Store</string>
+    <string name="title_pay_easy">Pay-easy</string>
+    <string name="title_netbanking">Netbanking</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
     <string name="hint_expiry_date" translatable="false">MM/YY</string>
 
