@@ -11,7 +11,7 @@ data class PaymentMethod(
         @field:JsonProperty("card_brands")
         var cardBrands: List<String>? = null,
         @field:JsonProperty("installment_terms")
-        val installmentTerms: List<Int>? = null,
+        var installmentTerms: List<Int>? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
