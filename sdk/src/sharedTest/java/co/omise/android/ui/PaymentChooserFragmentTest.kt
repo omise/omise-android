@@ -45,7 +45,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_bay"),
                 PaymentMethod(name = "installment_bbl"),
                 PaymentMethod(name = "installment_first_choice"),
-                PaymentMethod(name = "installment_kabnk"),
+                PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
@@ -107,5 +107,20 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "internet_banking_scb")
         )
         verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
+    }
+
+    @Test
+    fun clickInstallmentPaymentMethod_navigateToInstallmentChooser() {
+        onView(withId(R.id.recycler_view))
+                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(1, click()))
+
+        val expectedMethods = listOf(
+                PaymentMethod(name = "installment_bay"),
+                PaymentMethod(name = "installment_bbl"),
+                PaymentMethod(name = "installment_first_choice"),
+                PaymentMethod(name = "installment_kbank"),
+                PaymentMethod(name = "installment_ktc")
+        )
+        verify(fragment.navigation)?.navigateToInstallmentChooser(expectedMethods)
     }
 }

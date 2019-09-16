@@ -36,6 +36,18 @@ sealed class SourceType(
         object Ktc : Installment("installment_ktc")
         object KBank : Installment("installment_kbank")
         data class Unknown(@JsonValue override val name: String?) : Installment(name)
+
+        companion object {
+            fun availableTerms(installment: Installment): List<Int> =
+                    when (installment) {
+                        Bay -> listOf(3, 4, 6, 9, 10)
+                        FirstChoice -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
+                        Bbl -> listOf(4, 6, 8, 9, 10)
+                        Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
+                        KBank -> listOf(3, 4, 6, 10)
+                        is Unknown -> emptyList()
+                    }
+        }
     }
 
     companion object {

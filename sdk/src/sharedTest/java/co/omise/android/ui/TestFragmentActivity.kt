@@ -34,7 +34,8 @@ class TestFragmentActivity : AppCompatActivity() {
 
     fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-                .replace(android.R.id.content, fragment)
+                .add(android.R.id.content, fragment)
+                .addToBackStack("test_fragment")
                 .commit()
     }
 }
