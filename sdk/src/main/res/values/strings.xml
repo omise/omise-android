@@ -9,6 +9,10 @@
     <string name="error_invalid_card_name">Card holder name is invalid</string>
     <string name="error_invalid_expiry_date">Card expiry date is invalid</string>
     <string name="error_invalid_security_code">CVV is invalid</string>
+    <string name="error_invalid_full_name">Customer name is invalid</string>
+    <string name="error_invalid_email">Email is invalid</string>
+    <string name="error_invalid_phone_number">Phone number is invalid</string>
+    <string name="error_invalid_unknown">Data is invalid</string>
     <string name="error_invalid">%1$s is invalid</string>
     <string name="error_required">%1$s is required</string>
 

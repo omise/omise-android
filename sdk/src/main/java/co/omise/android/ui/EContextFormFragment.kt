@@ -3,6 +3,8 @@ package co.omise.android.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
@@ -58,7 +60,24 @@ class EContextFormFragment : OmiseFragment() {
     }
 
     private fun updateErrorText(view: View, hasFocus: Boolean) {
+        val editText = view as OmiseEditText
+        val errorText = formInputWithErrorTexts.first { it.first == editText }.second
 
+        if (hasFocus || editText.isValid) {
+            errorText.text = ""
+            errorText.visibility = INVISIBLE
+            return
+        }
+
+        val errorMessage = when (editText) {
+            fullNameEdit -> R.string.error_invalid_full_name
+            emailEdit -> R.string.error_invalid_email
+            phoneNumberEdit -> R.string.error_invalid_phone_number
+            else -> R.string.error_invalid_unknown
+        }
+
+        errorText.text = getString(errorMessage)
+        errorText.visibility = VISIBLE
     }
 
     private fun updateSubmitButton() {
