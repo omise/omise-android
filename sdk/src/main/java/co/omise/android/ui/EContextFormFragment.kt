@@ -98,7 +98,6 @@ class EContextFormFragment : OmiseFragment() {
     private fun submitForm() {
         val requester = requester ?: return
 
-
         val fullName = fullNameEdit.text?.toString()?.trim().orEmpty()
         val email = emailEdit.text?.toString()?.trim().orEmpty()
         val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
