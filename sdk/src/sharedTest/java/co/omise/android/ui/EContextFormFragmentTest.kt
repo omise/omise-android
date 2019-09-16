@@ -91,4 +91,18 @@ class EContextFormFragmentTest {
 
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
+
+    @Test
+    fun disableForm_disableFormWhenRequestSent() {
+        onView(withId(R.id.edit_full_name)).perform(typeText("John Doe"), pressImeActionButton())
+        onView(withId(R.id.edit_email)).perform(typeText("johndoe@mail.com"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
+
+        onView(withId(R.id.button_submit)).perform(click())
+
+        onView(withId(R.id.edit_full_name)).check(matches(not(isEnabled())))
+        onView(withId(R.id.edit_email)).check(matches(not(isEnabled())))
+        onView(withId(R.id.edit_phone_number)).check(matches(not(isEnabled())))
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
 }

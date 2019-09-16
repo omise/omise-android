@@ -86,9 +86,9 @@ class EContextFormFragment : OmiseFragment() {
         submitButton.isEnabled = isFormValid
     }
 
-
     private fun submitForm() {
         val requester = requester ?: return
+
 
         val fullName = fullNameEdit.text?.toString()?.trim().orEmpty()
         val email = emailEdit.text?.toString()?.trim().orEmpty()
@@ -100,8 +100,9 @@ class EContextFormFragment : OmiseFragment() {
                 .phoneNumber(phoneNumber)
                 .build()
 
+        view?.let { setAllViewsEnabled(it, false) }
         requester.request(request) {
-
+            view?.let { setAllViewsEnabled(it, true) }
         }
     }
 

@@ -40,12 +40,12 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         val req = requester ?: return
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType ?: return
 
-        setUiEnabled(false)
+        view?.let { setAllViewsEnabled(it, false) }
         val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType)
                 .installmentTerm(item.installmentTerm)
                 .build()
         requester?.request(request) {
-            setUiEnabled(true)
+            view?.let { setAllViewsEnabled(it, true) }
         }
     }
 
