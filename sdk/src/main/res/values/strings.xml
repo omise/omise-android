@@ -1,6 +1,7 @@
 <resources>
     <string name="not_available">(n/a)</string>
     <string name="button_pay">Pay</string>
+    <string name="button_next">Next</string>
     <string name="default_form_title">Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
     <string name="error_api">Error: %1$s</string>
@@ -26,6 +27,9 @@
     <string name="label_card_name">Name on card</string>
     <string name="label_card_number">Card number</string>
     <string name="label_expiry_date">Expiry date</string>
+    <string name="label_full_name">Full name</string>
+    <string name="label_email">Email</string>
+    <string name="label_phone_number">Phone</string>
     <string name="label_security_code">Security code</string>
     <string name="menu_card_io">Scan from Camera</string>
     <string name="title_authorizing_payment">Authorizing Payment</string>
