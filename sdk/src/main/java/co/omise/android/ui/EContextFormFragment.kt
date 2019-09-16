@@ -5,13 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import co.omise.android.R
+import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
+import co.omise.android.models.SourceType
 import kotlinx.android.synthetic.main.fragment_econtext_form.button_submit
 import kotlinx.android.synthetic.main.fragment_econtext_form.edit_email
 import kotlinx.android.synthetic.main.fragment_econtext_form.edit_full_name
-import kotlinx.android.synthetic.main.fragment_econtext_form.edit_phone
+import kotlinx.android.synthetic.main.fragment_econtext_form.edit_phone_number
+import kotlinx.android.synthetic.main.fragment_econtext_form.text_email_error
+import kotlinx.android.synthetic.main.fragment_econtext_form.text_full_name_error
+import kotlinx.android.synthetic.main.fragment_econtext_form.text_phone_number_error
 
 
 class EContextFormFragment : OmiseFragment() {
@@ -20,10 +26,17 @@ class EContextFormFragment : OmiseFragment() {
 
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
     private val emailEdit: OmiseEditText by lazy { edit_email }
-    private val phoneEdit: OmiseEditText by lazy { edit_phone }
+    private val phoneNumberEdit: OmiseEditText by lazy { edit_phone_number }
+    private val fullNameErrorText by lazy { text_full_name_error }
+    private val emailErrorText by lazy { text_email_error }
+    private val phoneNumberErrorText by lazy { text_phone_number_error }
     private val submitButton: Button by lazy { button_submit }
-    private val formEdits: List<OmiseEditText> by lazy {
-        listOf(fullNameEdit, emailEdit, phoneEdit)
+    private val formInputWithErrorTexts: List<Pair<OmiseEditText, TextView>> by lazy {
+        listOf(
+                Pair(fullNameEdit, fullNameErrorText),
+                Pair(emailEdit, emailErrorText),
+                Pair(phoneNumberEdit, phoneNumberErrorText)
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,13 +49,41 @@ class EContextFormFragment : OmiseFragment() {
         title = getString(R.string.econtext_title)
         setHasOptionsMenu(true)
 
+        formInputWithErrorTexts.forEach {
+            it.first.setOnFocusChangeListener(::updateErrorText)
+            it.first.setOnAfterTextChangeListener(::updateSubmitButton)
+        }
+
         submitButton.setOnClickListener(::submitForm)
     }
 
+    private fun updateErrorText(view: View, hasFocus: Boolean) {
+
+    }
+
+    private fun updateSubmitButton() {
+        val isFormValid = formInputWithErrorTexts.map { it.first.isValid }
+                .reduce { acc, b -> acc && b }
+        submitButton.isEnabled = isFormValid
+    }
+
+
     private fun submitForm() {
-        val fullName = fullNameEdit.text?.toString()?.trim() ?: ""
-        val email = emailEdit.text?.toString()?.trim() ?: ""
-        val phone = phoneEdit.text?.toString()?.trim() ?: ""
+        val requester = requester ?: return
+
+        val fullName = fullNameEdit.text?.toString()?.trim().orEmpty()
+        val email = emailEdit.text?.toString()?.trim().orEmpty()
+        val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
+
+        val request = Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.Econtext)
+                .name(fullName)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .build()
+
+        requester.request(request) {
+
+        }
     }
 
     companion object {

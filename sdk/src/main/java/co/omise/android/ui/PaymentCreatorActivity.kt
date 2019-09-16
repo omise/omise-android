@@ -164,7 +164,9 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToEContextForm() {
-        val fragment = EContextFormFragment.newInstance()
+        val fragment = EContextFormFragment.newInstance().apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
         addFragmentToBackStack(fragment)
     }
 

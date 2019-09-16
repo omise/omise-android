@@ -29,10 +29,18 @@
         android:imeOptions="actionNext" />
 
     <TextView
+        android:id="@+id/text_full_name_error"
+        style="?attr/editTextErrorStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        tools:text="Invalid input" />
+
+    <TextView
         style="?attr/editTextLabelStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginTop="@dimen/small_margin"
         android:text="Email" />
 
     <co.omise.android.ui.OmiseEditText
@@ -41,9 +49,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
-        android:nextFocusForward="@id/edit_phone"
+        android:nextFocusForward="@id/edit_phone_number"
         android:layout_marginTop="@dimen/small_margin"
         android:imeOptions="actionNext" />
+
+    <TextView
+        android:id="@+id/text_email_error"
+        style="?attr/editTextErrorStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        tools:text="Invalid input" />
 
     <TextView
         style="?attr/editTextLabelStyle"
@@ -53,7 +69,7 @@
         android:text="Phone" />
 
     <co.omise.android.ui.OmiseEditText
-        android:id="@+id/edit_phone"
+        android:id="@+id/edit_phone_number"
         style="?android:attr/editTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,6 +77,14 @@
         android:nextFocusForward="@id/button_submit"
         android:layout_marginTop="@dimen/small_margin"
         android:imeOptions="actionDone" />
+
+    <TextView
+        android:id="@+id/text_phone_number_error"
+        style="?attr/editTextErrorStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xsmall_margin"
+        tools:text="Invalid input" />
 
     <Button
         android:id="@+id/button_submit"
