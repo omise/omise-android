@@ -8,6 +8,7 @@ import android.view.MenuItem
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
+import co.omise.android.models.Source
 import co.omise.android.models.SupportedEContext
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
@@ -15,6 +16,7 @@ import co.omise.android.models.backendType
 class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
     var navigation: PaymentCreatorNavigation? = null
+    var requester: PaymentCreatorRequester<Source>? = null
     val capability: Capability? by lazy { arguments?.getParcelable<Capability>(EXTRA_CAPABILITY) }
 
     override fun listItems(): List<PaymentChooserItem> {
@@ -40,7 +42,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
             PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEContext.ConvenienceStore)
             PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEContext.PayEasy)
             PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEContext.Netbanking)
-            PaymentChooserItem.Alipay -> TODO()
+            PaymentChooserItem.Alipay -> sendRequest(SourceType.Alipay)
         }
     }
 
@@ -64,6 +66,17 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun sendRequest(sourceType: SourceType) {
+        val requester = requester ?: return
+
+        val request = Source.CreateSourceRequestBuilder(requester.amount, requester.currency, sourceType).build()
+        view?.let { setAllViewsEnabled(it, false) }
+
+        requester.request(request) {
+            view?.let { setAllViewsEnabled(it, true) }
+        }
     }
 
     private fun getPaymentChoosersFrom(capability: Capability): List<PaymentChooserItem> {
