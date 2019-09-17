@@ -8,10 +8,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -27,9 +27,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.hamcrest.CoreMatchers.not
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -46,11 +46,10 @@ class PaymentChooserFragmentTest {
         on { currency }.doReturn("thb")
     }
 
-    @get:Rule
-    val intentRule = IntentsTestRule<TestFragmentActivity>(TestFragmentActivity::class.java)
-
     @Before
     fun setUp() {
+        Intents.init()
+
         val paymentMethods = listOf(
                 PaymentMethod(name = "card"),
                 PaymentMethod(name = "installment_bay"),
@@ -82,6 +81,11 @@ class PaymentChooserFragmentTest {
             it.startActivityForResult(Intent(it, TestFragmentActivity::class.java), 0)
             it.replaceFragment(fragment)
         }
+    }
+
+    @After
+    fun tearDown(){
+        Intents.release()
     }
 
     @Test
