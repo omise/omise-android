@@ -2,9 +2,11 @@ package co.omise.android.models
 
 import android.annotation.SuppressLint
 import android.os.Parcel
+import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 import kotlinx.android.parcel.Parceler
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Represents Source Type object.
@@ -101,3 +103,14 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank
     )
+
+sealed class SupportedEContext : Parcelable {
+    @Parcelize
+    object ConvenienceStore : SupportedEContext()
+
+    @Parcelize
+    object PayEasy : SupportedEContext()
+
+    @Parcelize
+    object Netbanking : SupportedEContext()
+}
