@@ -31,7 +31,7 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
     override fun onListItemClicked(item: InternetBankingChooserItem) {
         val req = requester ?: return
 
-        setUiEnabled(false)
+        view?.let { setAllViewsEnabled(it, false) }
 
         val sourceType = when (item) {
             InternetBankingChooserItem.Bbl -> SourceType.InternetBanking.Bbl
@@ -43,7 +43,7 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
 
         val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType).build()
         requester?.request(request) {
-            setUiEnabled(true)
+            view?.let { setAllViewsEnabled(it, true) }
         }
     }
 
