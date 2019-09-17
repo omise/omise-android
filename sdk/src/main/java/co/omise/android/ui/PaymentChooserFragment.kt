@@ -38,7 +38,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
                             .orEmpty()
             )
-            PaymentChooserItem.TescoLotus -> TODO()
+            PaymentChooserItem.TescoLotus -> sendRequest(SourceType.BillPaymentTescoLotus)
             PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEContext.ConvenienceStore)
             PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEContext.PayEasy)
             PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEContext.Netbanking)
