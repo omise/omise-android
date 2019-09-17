@@ -12,8 +12,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
-import co.omise.android.models.SupportedEContext
 import co.omise.android.models.Source
+import co.omise.android.models.SupportedEContext
 import co.omise.android.utils.focus
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -23,10 +23,8 @@ import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(qualifiers = "w360dp-h640dp")
 class EContextFormFragmentTest {
 
     private val mockRequester: PaymentCreatorRequester<Source> = mock {
@@ -44,7 +42,7 @@ class EContextFormFragmentTest {
             it.replaceFragment(fragment)
         }
 
-        onView(withText(R.string.econtext_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.title_convenience_store)).check(matches(isDisplayed()))
     }
 
     @Test

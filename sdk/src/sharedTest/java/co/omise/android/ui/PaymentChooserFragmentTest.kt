@@ -32,11 +32,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 
 
 @RunWith(AndroidJUnit4::class)
-@Config(qualifiers = "w360dp-h640dp")
 class PaymentChooserFragmentTest {
     private lateinit var scenario: ActivityScenario<TestFragmentActivity>
     private lateinit var fragment: PaymentChooserFragment
@@ -84,7 +82,7 @@ class PaymentChooserFragmentTest {
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         Intents.release()
     }
 
