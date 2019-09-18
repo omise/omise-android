@@ -38,6 +38,8 @@
     <string name="error_api_bad_request_type_not_supported">The source type is not supported by this account</string>
     <string name="error_api_bad_request_other">Bad request: %s</string>
 
+    <string name="error_api_service_not_found">Service not found</string>
+
     <string name="error_unknown">Unknown error occurred. (%1$s)</string>
     <string name="label_card_name">Name on card</string>
     <string name="label_card_number">Card number</string>

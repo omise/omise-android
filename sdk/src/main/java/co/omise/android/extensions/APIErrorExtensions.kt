@@ -35,6 +35,7 @@ fun APIError.getMessageFromResources(res: Resources): String = result@ when (err
         }
     }
     APIErrorCode.AuthenticationFailure -> res.getString(R.string.error_api_authentication_failure)
+    APIErrorCode.ServiceNotFound -> res.getString(R.string.error_api_service_not_found)
     else -> res.getString(R.string.error_required, message)
 }
 
@@ -45,6 +46,7 @@ sealed class APIErrorCode {
     object AuthenticationFailure : APIErrorCode()
     data class InvalidCard(val reasons: List<InvalidCardReason>) : APIErrorCode()
     data class BadRequest(val reasons: List<BadRequestReason>) : APIErrorCode()
+    object ServiceNotFound : APIErrorCode()
     data class Unknown(val code: String?) : APIErrorCode()
 
     companion object {
@@ -56,6 +58,7 @@ sealed class APIErrorCode {
                 "authentication_failure" -> AuthenticationFailure
                 "invalid_card" -> InvalidCard(messages.map { InvalidCardReason.creator(it) })
                 "bad_request" -> BadRequest(messages.map { BadRequestReason.creator(it) })
+                "service_not_found" -> ServiceNotFound
                 else -> Unknown(code)
             }
         }
