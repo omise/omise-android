@@ -116,4 +116,20 @@ class APIErrorExtensionsTest {
 
         assertEquals(resources.getString(R.string.error_api_authentication_failure), actualMessage)
     }
+
+    @Test
+    fun errorCode_collectDataFromErrorMessage() {
+        val errorResponse = """
+            {
+                "object": "error",
+                "location": "https://www.omise.co/api-errors#bad-request",
+                "code": "bad_request",
+                "message": "amount must be at least 150, currency must be JPY, name cannot be blank, email is in invalid format, and phone_number must contain 10-11 digit characters"
+            }
+        """.trimIndent()
+
+        val error = serializer.deserialize(errorResponse.byteInputStream(), APIError::class.java)
+
+        assertEquals(APIErrorCode.BadRequest(emptyList()), error.errorCode)
+    }
 }
