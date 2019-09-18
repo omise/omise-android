@@ -18,7 +18,7 @@
     <string name="error_api_invalid_card_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
     <string name="error_api_invalid_card_invalid_expiry_date">วันหมดอายุบัตรไม่ถูกต้อง</string>
     <string name="error_api_invalid_card_empty_card_holder_name">ชื่อผู้ถือบัตรไม่ถูกต้อง</string>
-    <string name="error_api_invalid_card_unsopported_brand">บัตรเครดิตไม่รองรับ</string>
+    <string name="error_api_invalid_card_unsupported_brand">บัตรเครดิตไม่รองรับ</string>
 
     <string name="error_unknown">เกิดข้อผิดพลาด (%1$s)</string>
     <string name="label_card_name">ชื่อผู้ถือบัตร</string>

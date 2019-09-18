@@ -80,7 +80,7 @@ class APIErrorExtensionsTest {
 
         val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_invalid_card_unsopported_brand), actualMessage)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_unsupported_brand), actualMessage)
     }
 
     @Test
