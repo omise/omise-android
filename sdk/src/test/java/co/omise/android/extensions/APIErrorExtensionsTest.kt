@@ -129,7 +129,13 @@ class APIErrorExtensionsTest {
         """.trimIndent()
 
         val error = serializer.deserialize(errorResponse.byteInputStream(), APIError::class.java)
-
-        assertEquals(APIErrorCode.BadRequest(emptyList()), error.errorCode)
+        val expectedReasons = listOf(
+                BadRequestReason.Unknown("amount must be at least 150"),
+                BadRequestReason.InvalidCurrency,
+                BadRequestReason.EmptyName,
+                BadRequestReason.InvalidEmail,
+                BadRequestReason.InvalidPhoneNumber
+        )
+        assertEquals(APIErrorCode.BadRequest(expectedReasons), error.errorCode)
     }
 }
