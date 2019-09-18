@@ -132,6 +132,7 @@ private class PaymentCreatorNavigationImpl(
     override fun navigateToPaymentChooser(capability: Capability) {
         val fragment = PaymentChooserFragment.newInstance(capability).apply {
             navigation = this@PaymentCreatorNavigationImpl
+            requester = this@PaymentCreatorNavigationImpl.requester
         }
         addFragmentToBackStack(fragment)
     }
