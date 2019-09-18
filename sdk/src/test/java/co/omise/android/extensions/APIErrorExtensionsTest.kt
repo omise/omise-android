@@ -124,15 +124,18 @@ class APIErrorExtensionsTest {
                 "object": "error",
                 "location": "https://www.omise.co/api-errors#bad-request",
                 "code": "bad_request",
-                "message": "amount must be at least 150, currency must be JPY, name cannot be blank, email is in invalid format, and phone_number must contain 10-11 digit characters"
+                "message": "amount must be at least 150, amount must be greater than 150, amount must be less than 50000, currency must be JPY, name cannot be blank,  name is too long (maximum is 10 characters), email is in invalid format, and phone_number must contain 10-11 digit characters"
             }
         """.trimIndent()
 
         val error = serializer.deserialize(errorResponse.byteInputStream(), APIError::class.java)
         val expectedReasons = listOf(
-                BadRequestReason.Unknown("amount must be at least 150"),
+                BadRequestReason.AmountIsLessThanValidAmount(150, ""),
+                BadRequestReason.AmountIsLessThanValidAmount(150, ""),
+                BadRequestReason.AmountIsGreaterThanValidAmount(50000, ""),
                 BadRequestReason.InvalidCurrency,
                 BadRequestReason.EmptyName,
+                BadRequestReason.NameIsTooLong(10),
                 BadRequestReason.InvalidEmail,
                 BadRequestReason.InvalidPhoneNumber
         )

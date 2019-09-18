@@ -7,7 +7,7 @@ import co.omise.android.models.APIError
 
 fun APIError.getMessageFromResources(res: Resources): String = result@ when (errorCode) {
     is APIErrorCode.InvalidCard -> {
-       return@result (errorCode as APIErrorCode.InvalidCard).reasons.forEach {
+        return@result (errorCode as APIErrorCode.InvalidCard).reasons.forEach {
             return when (it) {
                 InvalidCardReason.InvalidCardNumber -> res.getString(R.string.error_api_invalid_card_invalid_card_number)
                 InvalidCardReason.InvalidExpirationDate -> res.getString(R.string.error_api_invalid_card_invalid_expiry_date)
@@ -20,11 +20,11 @@ fun APIError.getMessageFromResources(res: Resources): String = result@ when (err
     is APIErrorCode.BadRequest -> {
         return@result (errorCode as APIErrorCode.BadRequest).reasons.forEach {
             return when (it) {
-                is BadRequestReason.AmountIsGreaterThanValidAmount -> res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, "10000 thb")
-                is BadRequestReason.AmountIsLessThanValidAmount -> res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, "10000 thb")
+                is BadRequestReason.AmountIsGreaterThanValidAmount -> res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, it.validAmount.toString())
+                is BadRequestReason.AmountIsLessThanValidAmount -> res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, it.validAmount.toString())
                 BadRequestReason.InvalidCurrency -> res.getString(R.string.error_api_bad_request_invalid_currency)
                 BadRequestReason.EmptyName -> res.getString(R.string.error_api_bad_request_empty_name)
-                is BadRequestReason.NameIsTooLong -> res.getString(R.string.error_api_bad_request_name_is_too_long_with_valid_length, 1)
+                is BadRequestReason.NameIsTooLong -> res.getString(R.string.error_api_bad_request_name_is_too_long_with_valid_length, it.maximum)
                 BadRequestReason.InvalidName -> res.getString(R.string.error_api_bad_request_invalid_name)
                 BadRequestReason.InvalidEmail -> res.getString(R.string.error_api_bad_request_invalid_email)
                 BadRequestReason.InvalidPhoneNumber -> res.getString(R.string.error_api_bad_request_invalid_phone_number)
@@ -50,6 +50,8 @@ sealed class APIErrorCode {
     companion object {
         fun creator(code: String, message: String): APIErrorCode {
             val messages = message.split(",")
+                    .map { if (it.startsWith("and")) it.replaceFirst("and", "", false) else it }
+                    .map(String::trim)
             return when (code) {
                 "authentication_failure" -> AuthenticationFailure
                 "invalid_card" -> InvalidCard(messages.map { InvalidCardReason.creator(it) })
@@ -92,16 +94,35 @@ sealed class BadRequestReason {
     data class Unknown(val message: String?) : BadRequestReason()
 
     companion object {
+        private val amountAtLeastValidAmountErrorMessageRegex = """amount must be at least ([\d]+)""".toRegex()
+        private val amountLessThanValidAmountErrorMessageRegex = """amount must be greater than ([\d]+)""".toRegex()
+        private val amountGreaterThanValidAmountErrorMessageRegex = """amount must be less than ([\d]+)""".toRegex()
+        private val nameIsTooLongErrorMessageRegex = """name is too long \(maximum is ([\d]+) characters\)""".toRegex()
+
         fun creator(message: String): BadRequestReason = when {
             message.isContains("currency must be") -> InvalidCurrency
-            // when {
-            // AmountIsGreaterThanValidAmount
-            // AmountIsLessThanValidAmount
-            // }
+            message.isContains("amount must be") -> when {
+                message.matches(amountAtLeastValidAmountErrorMessageRegex) -> {
+                    val matchedResult = amountAtLeastValidAmountErrorMessageRegex.findAll(message).toList()[0].groupValues
+                    AmountIsLessThanValidAmount(matchedResult[1].toLong(), "")
+                }
+                message.matches(amountLessThanValidAmountErrorMessageRegex) -> {
+                    val matchedResult = amountLessThanValidAmountErrorMessageRegex.findAll(message).toList()[0].groupValues
+                    AmountIsLessThanValidAmount(matchedResult[1].toLong(), "")
+                }
+                message.matches(amountGreaterThanValidAmountErrorMessageRegex) -> {
+                    val matchedResult = amountGreaterThanValidAmountErrorMessageRegex.findAll(message).toList()[0].groupValues
+                    AmountIsGreaterThanValidAmount(matchedResult[1].toLong(), "")
+                }
+                else -> Unknown(message)
+            }
             message.isContains("type") -> TypeNotSupported
             message.isContains("currency") -> CurrencyNotSupported
             message.isContains("name") && message.isContains("blank") -> EmptyName
-            message.startsWith("name is too long") -> NameIsTooLong(0)
+            message.startsWith("name is too long") -> {
+                val matchedResult = nameIsTooLongErrorMessageRegex.findAll(message).toList()[0].groupValues
+                NameIsTooLong(matchedResult[1].toInt())
+            }
             message.isContains("name") -> InvalidName
             message.isContains("email") -> InvalidEmail
             message.isContains("phone") -> InvalidPhoneNumber
