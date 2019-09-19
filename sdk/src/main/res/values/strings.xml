@@ -23,9 +23,9 @@
     <string name="error_api_invalid_card_empty_card_holder_name">Invalid card holder name</string>
     <string name="error_api_invalid_card_unsupported_brand">Unsupported card brand</string>
 
-    <string name="error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount">Amount exceeds the valid amount of %d %s</string>
+    <string name="error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount">Amount exceeds the valid amount of %s</string>
     <string name="error_api_bad_request_amount_is_greater_than_valid_amount_without_valid_amount">Amount exceeds the valid amount</string>
-    <string name="error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount">Amount is less than the valid amount of %d %s</string>
+    <string name="error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount">Amount is less than the valid amount of %s</string>
     <string name="error_api_bad_request_amount_is_less_than_valid_amount_without_valid_amount">Amount is less than the valid amount</string>
     <string name="error_api_bad_request_currency_not_supported">The currency is not supported by this account</string>
     <string name="error_api_bad_request_empty_name">The customer name is empty</string>

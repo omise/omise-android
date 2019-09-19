@@ -3,6 +3,7 @@ package co.omise.android.extensions
 import android.content.res.Resources
 import co.omise.android.R
 import co.omise.android.models.APIError
+import co.omise.android.models.Amount
 
 
 fun APIError.getMessageFromResources(res: Resources): String = result@ when (errorCode) {
@@ -21,12 +22,14 @@ fun APIError.getMessageFromResources(res: Resources): String = result@ when (err
         return@result (errorCode as APIErrorCode.BadRequest).reasons.forEach {
             return when (it) {
                 is BadRequestReason.AmountIsGreaterThanValidAmount -> if (it?.validAmount != null && !it.currency.isNullOrEmpty()) {
-                    res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, it?.validAmount, it?.currency)
+                    val amount = Amount(it.validAmount, it.currency)
+                    res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, amount.toAmountString())
                 } else {
                     res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_without_valid_amount)
                 }
                 is BadRequestReason.AmountIsLessThanValidAmount -> if (it.validAmount != null && !it.currency.isNullOrEmpty()) {
-                    res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, it?.validAmount, it?.currency)
+                    val amount = Amount(it.validAmount, it.currency)
+                    res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, amount.toAmountString())
                 } else {
                     res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_without_valid_amount)
                 }
