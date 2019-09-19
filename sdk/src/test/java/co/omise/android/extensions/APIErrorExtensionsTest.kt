@@ -130,9 +130,9 @@ class APIErrorExtensionsTest {
 
         val error = serializer.deserialize(errorResponse.byteInputStream(), APIError::class.java)
         val expectedReasons = listOf(
-                BadRequestReason.AmountIsLessThanValidAmount(150, ""),
-                BadRequestReason.AmountIsLessThanValidAmount(150, ""),
-                BadRequestReason.AmountIsGreaterThanValidAmount(50000, ""),
+                BadRequestReason.AmountIsLessThanValidAmount(150),
+                BadRequestReason.AmountIsLessThanValidAmount(150),
+                BadRequestReason.AmountIsGreaterThanValidAmount(50000),
                 BadRequestReason.InvalidCurrency,
                 BadRequestReason.EmptyName,
                 BadRequestReason.NameIsTooLong(10),

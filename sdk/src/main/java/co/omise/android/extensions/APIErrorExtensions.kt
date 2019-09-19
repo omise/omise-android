@@ -20,8 +20,16 @@ fun APIError.getMessageFromResources(res: Resources): String = result@ when (err
     is APIErrorCode.BadRequest -> {
         return@result (errorCode as APIErrorCode.BadRequest).reasons.forEach {
             return when (it) {
-                is BadRequestReason.AmountIsGreaterThanValidAmount -> res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, it.validAmount.toString())
-                is BadRequestReason.AmountIsLessThanValidAmount -> res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, it.validAmount.toString())
+                is BadRequestReason.AmountIsGreaterThanValidAmount -> if (it?.validAmount != null && !it.currency.isNullOrEmpty()) {
+                    res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, it?.validAmount, it?.currency)
+                } else {
+                    res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_without_valid_amount)
+                }
+                is BadRequestReason.AmountIsLessThanValidAmount -> if (it.validAmount != null && !it.currency.isNullOrEmpty()) {
+                    res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, it?.validAmount, it?.currency)
+                } else {
+                    res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_without_valid_amount)
+                }
                 BadRequestReason.InvalidCurrency -> res.getString(R.string.error_api_bad_request_invalid_currency)
                 BadRequestReason.EmptyName -> res.getString(R.string.error_api_bad_request_empty_name)
                 is BadRequestReason.NameIsTooLong -> res.getString(R.string.error_api_bad_request_name_is_too_long_with_valid_length, it.maximum)
@@ -84,8 +92,8 @@ sealed class InvalidCardReason {
 }
 
 sealed class BadRequestReason {
-    data class AmountIsGreaterThanValidAmount(val validAmount: Long, val currency: String) : BadRequestReason()
-    data class AmountIsLessThanValidAmount(val validAmount: Long, val currency: String) : BadRequestReason()
+    data class AmountIsGreaterThanValidAmount(val validAmount: Long? = null, val currency: String? = null) : BadRequestReason()
+    data class AmountIsLessThanValidAmount(val validAmount: Long? = null, val currency: String? = null) : BadRequestReason()
     object InvalidCurrency : BadRequestReason()
     object EmptyName : BadRequestReason()
     data class NameIsTooLong(val maximum: Int) : BadRequestReason()
@@ -97,9 +105,9 @@ sealed class BadRequestReason {
     data class Unknown(val message: String?) : BadRequestReason()
 
     companion object {
-        private val amountAtLeastValidAmountErrorMessageRegex = """amount must be at least ([\d]+)""".toRegex()
-        private val amountLessThanValidAmountErrorMessageRegex = """amount must be greater than ([\d]+)""".toRegex()
-        private val amountGreaterThanValidAmountErrorMessageRegex = """amount must be less than ([\d]+)""".toRegex()
+        private val amountAtLeastValidAmountErrorMessageRegex = """amount must be at least ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+        private val amountLessThanValidAmountErrorMessageRegex = """amount must be greater than ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+        private val amountGreaterThanValidAmountErrorMessageRegex = """amount must be less than ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val nameIsTooLongErrorMessageRegex = """name is too long \(maximum is ([\d]+) characters\)""".toRegex()
 
         fun creator(message: String): BadRequestReason = when {
@@ -107,15 +115,21 @@ sealed class BadRequestReason {
             message.isContains("amount must be") -> when {
                 message.matches(amountAtLeastValidAmountErrorMessageRegex) -> {
                     val matchedResult = amountAtLeastValidAmountErrorMessageRegex.findAll(message).toList()[0].groupValues
-                    AmountIsLessThanValidAmount(matchedResult[1].toLong(), "")
+                    val validAmount = matchedResult.getOrNull(1)?.toLong()
+                    val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                    AmountIsLessThanValidAmount(validAmount, currency)
                 }
                 message.matches(amountLessThanValidAmountErrorMessageRegex) -> {
                     val matchedResult = amountLessThanValidAmountErrorMessageRegex.findAll(message).toList()[0].groupValues
-                    AmountIsLessThanValidAmount(matchedResult[1].toLong(), "")
+                    val validAmount = matchedResult.getOrNull(1)?.toLong()
+                    val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                    AmountIsLessThanValidAmount(validAmount, currency)
                 }
                 message.matches(amountGreaterThanValidAmountErrorMessageRegex) -> {
                     val matchedResult = amountGreaterThanValidAmountErrorMessageRegex.findAll(message).toList()[0].groupValues
-                    AmountIsGreaterThanValidAmount(matchedResult[1].toLong(), "")
+                    val validAmount = matchedResult.getOrNull(1)?.toLong()
+                    val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                    AmountIsGreaterThanValidAmount(validAmount, currency)
                 }
                 else -> Unknown(message)
             }
