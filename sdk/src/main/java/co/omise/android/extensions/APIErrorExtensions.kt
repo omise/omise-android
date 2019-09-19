@@ -6,42 +6,44 @@ import co.omise.android.models.APIError
 import co.omise.android.models.Amount
 
 
-fun APIError.getMessageFromResources(res: Resources): String = result@ when (errorCode) {
+fun APIError.getMessageFromResources(res: Resources): String = when (errorCode) {
     is APIErrorCode.InvalidCard -> {
-        return@result (errorCode as APIErrorCode.InvalidCard).reasons.forEach {
-            return when (it) {
+        (errorCode as APIErrorCode.InvalidCard).reasons.firstOrNull().run {
+            when (this) {
                 InvalidCardReason.InvalidCardNumber -> res.getString(R.string.error_api_invalid_card_invalid_card_number)
                 InvalidCardReason.InvalidExpirationDate -> res.getString(R.string.error_api_invalid_card_invalid_expiry_date)
                 InvalidCardReason.EmptyCardHolderName -> res.getString(R.string.error_api_invalid_card_empty_card_holder_name)
                 InvalidCardReason.UnsupportedBrand -> res.getString(R.string.error_api_invalid_card_unsupported_brand)
-                is InvalidCardReason.Unknown -> res.getString(R.string.error_required, it.message)
+                is InvalidCardReason.Unknown -> res.getString(R.string.error_required, message)
+                else -> res.getString(R.string.error_required, message)
             }
         }
     }
     is APIErrorCode.BadRequest -> {
-        return@result (errorCode as APIErrorCode.BadRequest).reasons.forEach {
-            return when (it) {
-                is BadRequestReason.AmountIsGreaterThanValidAmount -> if (it?.validAmount != null && !it.currency.isNullOrEmpty()) {
-                    val amount = Amount(it.validAmount, it.currency)
+        (errorCode as APIErrorCode.BadRequest).reasons.firstOrNull().run {
+            when (this) {
+                is BadRequestReason.AmountIsGreaterThanValidAmount -> if (validAmount != null && !currency.isNullOrEmpty()) {
+                    val amount = Amount(validAmount, currency)
                     res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount, amount.toAmountString())
                 } else {
                     res.getString(R.string.error_api_bad_request_amount_is_greater_than_valid_amount_without_valid_amount)
                 }
-                is BadRequestReason.AmountIsLessThanValidAmount -> if (it.validAmount != null && !it.currency.isNullOrEmpty()) {
-                    val amount = Amount(it.validAmount, it.currency)
+                is BadRequestReason.AmountIsLessThanValidAmount -> if (validAmount != null && !currency.isNullOrEmpty()) {
+                    val amount = Amount(validAmount, currency)
                     res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount, amount.toAmountString())
                 } else {
                     res.getString(R.string.error_api_bad_request_amount_is_less_than_valid_amount_without_valid_amount)
                 }
                 BadRequestReason.InvalidCurrency -> res.getString(R.string.error_api_bad_request_invalid_currency)
                 BadRequestReason.EmptyName -> res.getString(R.string.error_api_bad_request_empty_name)
-                is BadRequestReason.NameIsTooLong -> res.getString(R.string.error_api_bad_request_name_is_too_long_with_valid_length, it.maximum)
+                is BadRequestReason.NameIsTooLong -> res.getString(R.string.error_api_bad_request_name_is_too_long_with_valid_length, maximum)
                 BadRequestReason.InvalidName -> res.getString(R.string.error_api_bad_request_invalid_name)
                 BadRequestReason.InvalidEmail -> res.getString(R.string.error_api_bad_request_invalid_email)
                 BadRequestReason.InvalidPhoneNumber -> res.getString(R.string.error_api_bad_request_invalid_phone_number)
                 BadRequestReason.TypeNotSupported -> res.getString(R.string.error_api_bad_request_type_not_supported)
                 BadRequestReason.CurrencyNotSupported -> res.getString(R.string.error_api_bad_request_currency_not_supported)
-                is BadRequestReason.Unknown -> res.getString(R.string.error_api_bad_request_other, it.message)
+                is BadRequestReason.Unknown -> res.getString(R.string.error_api_bad_request_other, message)
+                else -> res.getString(R.string.error_required, message)
             }
         }
     }
