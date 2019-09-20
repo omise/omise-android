@@ -15,6 +15,7 @@ class APIErrorExtensionsTest {
 
     private val resources = ApplicationProvider.getApplicationContext<Application>().resources
     private val serializer = Serializer()
+
     @Test
     fun getMessageFromResources_invalidCardNumber() {
         val response = """
@@ -118,27 +119,35 @@ class APIErrorExtensionsTest {
     }
 
     @Test
-    fun errorCode_collectDataFromErrorMessage() {
-        val errorResponse = """
-            {
-                "object": "error",
-                "location": "https://www.omise.co/api-errors#bad-request",
-                "code": "bad_request",
-                "message": "amount must be at least 150, amount must be greater than 150, amount must be less than 50000, currency must be JPY, name cannot be blank,  name is too long (maximum is 10 characters), email is in invalid format, and phone_number must contain 10-11 digit characters"
-            }
-        """.trimIndent()
-
-        val error = serializer.deserialize(errorResponse.byteInputStream(), APIError::class.java)
-        val expectedReasons = listOf(
-                BadRequestReason.AmountIsLessThanValidAmount(150),
-                BadRequestReason.AmountIsLessThanValidAmount(150),
-                BadRequestReason.AmountIsGreaterThanValidAmount(50000),
-                BadRequestReason.InvalidCurrency,
-                BadRequestReason.EmptyName,
-                BadRequestReason.NameIsTooLong(10),
-                BadRequestReason.InvalidEmail,
-                BadRequestReason.InvalidPhoneNumber
+    fun createInvalidCardReasons_createFromErrorMessages() {
+        val errorMessagesWithErrorReasons = listOf(
+                Pair("number can't be blank and brand not supported (unknown)", InvalidCardReason.InvalidCardNumber),
+                Pair("expiration date cannot be in the past", InvalidCardReason.InvalidExpirationDate),
+                Pair("name can't be blank", InvalidCardReason.EmptyCardHolderName),
+                Pair("brand not supported (unknown)", InvalidCardReason.UnsupportedBrand),
+                Pair("something when wrong", InvalidCardReason.Unknown("something when wrong"))
         )
-        assertEquals(APIErrorCode.BadRequest(expectedReasons), error.errorCode)
+
+        errorMessagesWithErrorReasons.forEach {
+            assertEquals(it.second, InvalidCardReason.creator(it.first))
+        }
+    }
+
+    @Test
+    fun createBadRequestReasons_createFromErrorMessages() {
+        val errorMessagesWithErrorReasons = listOf(
+                Pair("amount must be at least 150", BadRequestReason.AmountIsLessThanValidAmount(150)),
+                Pair("amount must be greater than 150", BadRequestReason.AmountIsLessThanValidAmount(150)),
+                Pair("amount must be less than 50000", BadRequestReason.AmountIsGreaterThanValidAmount(50000)),
+                Pair("currency must be JPY", BadRequestReason.InvalidCurrency),
+                Pair("name cannot be blank", BadRequestReason.EmptyName),
+                Pair("name is too long (maximum is 10 characters)", BadRequestReason.NameIsTooLong(10)),
+                Pair("email is in invalid format", BadRequestReason.InvalidEmail),
+                Pair("and phone_number must contain 10-11 digit characters", BadRequestReason.InvalidPhoneNumber)
+        )
+
+        errorMessagesWithErrorReasons.forEach {
+            assertEquals(it.second, BadRequestReason.creator(it.first))
+        }
     }
 }
