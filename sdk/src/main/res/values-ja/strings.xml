@@ -18,7 +18,7 @@
     <string name="error_api_invalid_card_invalid_card_number">無効なカード番号</string>
     <string name="error_api_invalid_card_invalid_expiry_date">無効なカード有効期限</string>
     <string name="error_api_invalid_card_empty_card_holder_name">無効なカード所有者名</string>
-    <string name="error_api_invalid_card_unsopported_brand">サポートされていないカード会社です</string>
+    <string name="error_api_invalid_card_unsupported_brand">サポートされていないカード会社です</string>
 
     <string name="error_unknown">原因不明のエラーです。. (%1$s)</string>
     <string name="label_card_name">カード名義</string>
