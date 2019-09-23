@@ -9,6 +9,8 @@ import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
+import co.omise.android.extensions.getMessageFromResources
+import co.omise.android.models.APIError
 import co.omise.android.models.Capability
 import co.omise.android.models.SupportedEContext
 import co.omise.android.models.Model
@@ -17,6 +19,9 @@ import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
+import java.io.IOError
 
 class PaymentCreatorActivity : OmiseActivity() {
 
@@ -24,7 +29,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private val amount: Long by lazy { intent.getLongExtra(EXTRA_AMOUNT, 0) }
     private val currency: String by lazy { intent.getStringExtra(EXTRA_CURRENCY) }
     private val capability: Capability by lazy { intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY) }
-
+    private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private val client: Client by lazy { Client(pkey) }
 
@@ -52,6 +57,16 @@ class PaymentCreatorActivity : OmiseActivity() {
                 if (result.isSuccess) {
                     result.getOrNull()?.let {
                         navigation.createSourceFinished(it)
+                    }
+                } else {
+                    val message = when (val error = result.exceptionOrNull()) {
+                        is IOError -> getString(R.string.error_io, error.message)
+                        is APIError -> error.getMessageFromResources(resources)
+                        else -> getString(R.string.error_unknown, error?.message)
+                    }
+                    result.exceptionOrNull()?.let {
+                        snackbar.setText(message.orEmpty())
+                        snackbar.show()
                     }
                 }
             }
