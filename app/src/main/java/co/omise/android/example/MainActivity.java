@@ -126,18 +126,24 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE) {
             String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
-        } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE) {
             if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                 Toast.makeText(getApplicationContext(), ((Source) data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)).getId(), Toast.LENGTH_LONG).show();
             } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
                 Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
             }
-        } else if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
+        } else if (requestCode == CREDIT_CARD_REQUEST_CODE) {
+            Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
