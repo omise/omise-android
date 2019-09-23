@@ -26,7 +26,7 @@ public class CardModelTest {
             "   \"fingerprint\":\"mKleiBfwp+PoJWB/ipngANuECUmRKjyxROwFW5IO7TM=\",\n" +
             "   \"name\":\"Somchai Prasert\",\n" +
             "   \"security_code_check\":true,\n" +
-            "   \"created\":\"2015-06-02T05:41:46Z\",\n" +
+            "   \"created_at\":\"2015-06-02T05:41:46Z\",\n" +
             "   \"bank\":\"BBL\"\n" +
             "}";
 
