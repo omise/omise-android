@@ -37,11 +37,12 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listAdapter = new ProductListAdapter(repository().all());
+        setTitle("Checkout");
+//        listAdapter = new ProductListAdapter(repository().all());
 
-        ListView productList = findViewById(R.id.list_products);
-        productList.setAdapter(listAdapter);
-        productList.setOnItemClickListener(this);
+//        ListView productList = findViewById(R.id.list_products);
+//        productList.setAdapter(listAdapter);
+//        productList.setOnItemClickListener(this);
     }
 
     private void startPaymentCreatorActivity() {

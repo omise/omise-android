@@ -22,7 +22,7 @@
         android:icon="@drawable/icon_app"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light">
+        android:theme="@style/OmiseTheme">
 
         <activity
             android:name=".MainActivity"
