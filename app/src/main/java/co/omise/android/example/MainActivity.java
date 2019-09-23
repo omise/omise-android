@@ -6,7 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ import co.omise.android.api.RequestListener;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
 import co.omise.android.ui.AuthorizingPaymentActivity;
+import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
 
@@ -31,13 +33,28 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
     private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
     private static int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
+    private static int CREDIT_CARD_REQUEST_CODE = 0x3D7;
+
+    private EditText amountEdit;
+    private EditText currencyEdit;
+    private Button choosePaymentMethodButton;
+    private Button creditCardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        amountEdit = findViewById(R.id.amount_edit);
+        currencyEdit = findViewById(R.id.currency_edit);
+        choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button);
+        creditCardButton = findViewById(R.id.credit_card_button);
+
         setTitle("Checkout");
+
+        choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
+        creditCardButton.setOnClickListener(view -> payByCreditCard());
+
 //        listAdapter = new ProductListAdapter(repository().all());
 
 //        ListView productList = findViewById(R.id.list_products);
@@ -45,7 +62,9 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 //        productList.setOnItemClickListener(this);
     }
 
-    private void startPaymentCreatorActivity() {
+    private void choosePaymentMethod() {
+        long amount = Long.valueOf(amountEdit.getText().toString().trim());
+        String currency = currencyEdit.getText().toString().trim().toLowerCase();
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
         client.send(request, new RequestListener<Capability>() {
@@ -53,8 +72,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
             public void onRequestSucceed(@NotNull Capability model) {
                 Intent intent = new Intent(MainActivity.this, PaymentCreatorActivity.class);
                 intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 50000);
-                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb");
+                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount);
+                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, currency);
                 intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, model);
                 startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
             }
@@ -64,6 +83,19 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
             }
         });
+    }
+
+    private void payByCreditCard() {
+        Intent intent = new Intent(this, CreditCardActivity.class);
+        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
+        startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
+    }
+
+    private void authorizeUrl() {
+        Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
+        intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{"http://www.example.com"});
+        startActivityForResult(intent, MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
     }
 
     @Override
@@ -83,13 +115,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_authorizing_payment_action) {
-            Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
-            intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
-            intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{"http://www.example.com"});
-            startActivityForResult(intent, MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+            authorizeUrl();
             return true;
         } else if (item.getItemId() == R.id.menu_payment_creator_action) {
-            startPaymentCreatorActivity();
+            choosePaymentMethod();
             return true;
         }
         return super.onOptionsItemSelected(item);

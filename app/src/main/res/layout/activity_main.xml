@@ -25,19 +25,19 @@
         app:layout_constraintTop_toBottomOf="@id/product_image" />
 
     <EditText
-        android:id="@+id/amount_input"
+        android:id="@+id/amount_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="24dp"
         android:text="1000"
-        app:layout_constraintEnd_toStartOf="@id/currency_input"
+        app:layout_constraintEnd_toStartOf="@id/currency_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_text" />
 
     <EditText
-        android:id="@+id/currency_input"
+        android:id="@+id/currency_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -45,7 +45,7 @@
         android:layout_marginRight="40dp"
         android:text="THB"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/amount_input"
+        app:layout_constraintStart_toEndOf="@id/amount_edit"
         app:layout_constraintTop_toBottomOf="@id/title_text" />
 
     <Button
