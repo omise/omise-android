@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
+import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
 import co.omise.android.ui.AuthorizingPaymentActivity;
@@ -63,8 +64,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     }
 
     private void choosePaymentMethod() {
-        long amount = Long.valueOf(amountEdit.getText().toString().trim());
+        double localAmount = Double.valueOf(amountEdit.getText().toString().trim());
         String currency = currencyEdit.getText().toString().trim().toLowerCase();
+        Amount amount = Amount.fromLocalAmount(localAmount, currency);
+
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
         client.send(request, new RequestListener<Capability>() {
@@ -72,8 +75,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
             public void onRequestSucceed(@NotNull Capability model) {
                 Intent intent = new Intent(MainActivity.this, PaymentCreatorActivity.class);
                 intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount);
-                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, currency);
+                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
+                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
                 intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, model);
                 startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
             }
