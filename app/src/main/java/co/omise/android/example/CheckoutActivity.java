@@ -41,6 +41,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private EditText currencyEdit;
     private Button choosePaymentMethodButton;
     private Button creditCardButton;
+    private Button authorizeUrlButton;
     private Snackbar snackbar;
 
     @Override
@@ -52,10 +53,12 @@ public class CheckoutActivity extends AppCompatActivity {
         currencyEdit = findViewById(R.id.currency_edit);
         choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button);
         creditCardButton = findViewById(R.id.credit_card_button);
+        authorizeUrlButton = findViewById(R.id.authorize_url_button);
         snackbar = Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT);
 
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
+        authorizeUrlButton.setOnClickListener(view -> authorizeUrl());
     }
 
     private void choosePaymentMethod() {
