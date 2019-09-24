@@ -25,8 +25,8 @@
         android:theme="@style/OmiseTheme">
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/activity_main">
+            android:name=".CheckoutActivity"
+            android:label="@string/activity_checkout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

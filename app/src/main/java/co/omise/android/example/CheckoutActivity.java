@@ -29,7 +29,7 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_UR
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
 
-public class MainActivity extends AppCompatActivity {
+public class CheckoutActivity extends AppCompatActivity {
 
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
 
@@ -46,15 +46,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_checkout);
 
         amountEdit = findViewById(R.id.amount_edit);
         currencyEdit = findViewById(R.id.currency_edit);
         choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button);
         creditCardButton = findViewById(R.id.credit_card_button);
         snackbar = Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT);
-
-        setTitle(R.string.activity_checkout);
 
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
@@ -70,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         client.send(request, new RequestListener<Capability>() {
             @Override
             public void onRequestSucceed(@NotNull Capability model) {
-                Intent intent = new Intent(MainActivity.this, PaymentCreatorActivity.class);
+                Intent intent = new Intent(CheckoutActivity.this, PaymentCreatorActivity.class);
                 intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
                 intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
                 intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{"http://www.example.com"});
-        startActivityForResult(intent, MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+        startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
     }
 
     @Override

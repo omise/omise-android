@@ -1,7 +1,5 @@
 <resources>
     <string name="activity_checkout" translatable="false">Checkout</string>
-    <string name="activity_main" translatable="false">Omise Co., Ltd.</string>
-    <string name="activity_receipt" translatable="false">Receipt</string>
     <string name="app_name" translatable="false">Omise Android SDK</string>
     <string name="button_checkout" translatable="false">Checkout</string>
     <string name="description_product_image" translatable="false">Product Image</string>

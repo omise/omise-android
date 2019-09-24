@@ -16,7 +16,7 @@ data class Amount(val amount: Long, val currency: String) {
     companion object {
 
         @JvmStatic
-        fun fromLocalAmount(localAMount:Double, currency: String) : Amount {
+        fun fromLocalAmount(localAMount: Double, currency: String): Amount {
             val subunitAmount = if (currency == "jpy") {
                 localAMount.toLong()
             } else {
