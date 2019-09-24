@@ -44,6 +44,8 @@ public class CheckoutActivity extends AppCompatActivity {
     private Button authorizeUrlButton;
     private Snackbar snackbar;
 
+    private Capability capability;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,31 +61,38 @@ public class CheckoutActivity extends AppCompatActivity {
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
         authorizeUrlButton.setOnClickListener(view -> authorizeUrl());
-    }
-
-    private void choosePaymentMethod() {
-        double localAmount = Double.valueOf(amountEdit.getText().toString().trim());
-        String currency = currencyEdit.getText().toString().trim().toLowerCase();
-        Amount amount = Amount.fromLocalAmount(localAmount, currency);
 
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
         client.send(request, new RequestListener<Capability>() {
             @Override
             public void onRequestSucceed(@NotNull Capability model) {
-                Intent intent = new Intent(CheckoutActivity.this, PaymentCreatorActivity.class);
-                intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
-                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
-                intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, model);
-                startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
+                capability = model;
             }
 
             @Override
             public void onRequestFailed(@NotNull Throwable throwable) {
-
+                snackbar.setText(throwable.getMessage()).show();
             }
         });
+    }
+
+    private void choosePaymentMethod() {
+        if (capability == null) {
+            snackbar.setText("Capability have not set yet.");
+            return;
+        }
+
+        double localAmount = Double.valueOf(amountEdit.getText().toString().trim());
+        String currency = currencyEdit.getText().toString().trim().toLowerCase();
+        Amount amount = Amount.fromLocalAmount(localAmount, currency);
+
+        Intent intent = new Intent(CheckoutActivity.this, PaymentCreatorActivity.class);
+        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
+        intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
+        intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
+        intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
+        startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
     }
 
     private void payByCreditCard() {
