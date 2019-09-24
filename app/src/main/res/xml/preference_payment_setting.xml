@@ -15,7 +15,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Allow payment methods">
+    <PreferenceCategory
+        app:key="allowed_payment_methods"
+        app:title="Allow payment methods">
 
         <CheckBoxPreference
             app:defaultValue="true"
@@ -49,7 +51,7 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="installment_pay"
+            app:key="installment_bay"
             app:title="BAY - Installment" />
 
         <CheckBoxPreference
