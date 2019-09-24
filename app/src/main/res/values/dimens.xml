@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="default_text_size">14sp</dimen>
+
+    <dimen name="xsmall_margin">4dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="large_margin">24dp</dimen>
+    <dimen name="xlarge_margin">32dp</dimen>
+    <dimen name="xxlarge_margin">40dp</dimen>
+    <dimen name="xxxlarge_margin">72dp</dimen>
 </resources>

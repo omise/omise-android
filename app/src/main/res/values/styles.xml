@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="android:editTextStyle">@style/SampleEditText</item>
-        <item name="android:buttonStyle">@style/SampleButton</item>
+        <item name="materialButtonStyle">@style/SampleButton</item>
         <item name="editTextLabelStyle">@style/SampleEditTextLabel</item>
         <item name="editTextErrorStyle">@style/SampleEditTextError</item>
     </style>
@@ -28,7 +28,8 @@
         <item name="android:textColor">@color/error</item>
     </style>
 
-    <style name="SampleButton" parent="Widget.AppCompat.Button">
+    <style name="SampleButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/accent</item>
         <item name="android:textColor">@color/button_text_color</item>
     </style>
 </resources>

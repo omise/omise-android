@@ -12,4 +12,17 @@ data class Amount(val amount: Long, val currency: String) {
     fun toAmountString(): String {
         return "$localAmount ${currency.toUpperCase()}"
     }
+
+    companion object {
+
+        @JvmStatic
+        fun fromLocalAmount(localAMount: Double, currency: String): Amount {
+            val subunitAmount = if (currency == "jpy") {
+                localAMount.toLong()
+            } else {
+                localAMount.toLong() * 100
+            }
+            return Amount(subunitAmount, currency)
+        }
+    }
 }
