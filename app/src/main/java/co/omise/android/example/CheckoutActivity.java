@@ -104,11 +104,8 @@ public class CheckoutActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_authorizing_payment_action) {
-            authorizeUrl();
-            return true;
-        } else if (item.getItemId() == R.id.menu_payment_creator_action) {
-            choosePaymentMethod();
+        if (item.getItemId() == R.id.menu_setup) {
+            // TODO: Open setup capability page
             return true;
         }
         return super.onOptionsItemSelected(item);

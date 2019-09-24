@@ -5,7 +5,6 @@
     <string name="description_product_image" translatable="false">Product Image</string>
     <string name="format_paid_with_card" formatted="false" translatable="false">You have paid %s with card %s.</string>
     <string name="format_price" formatted="false" translatable="false">THB %.2f</string>
-    <string name="authorize_payment" translatable="false">Authorize Payment</string>
-    <string name="payment_creation" translatable="false">Payment Creator</string>
+    <string name="menu_title_setup" translatable="false">Setup</string>
     <string name="payment_cancelled" translatable="false">Creating payment cancelled</string>
 </resources>

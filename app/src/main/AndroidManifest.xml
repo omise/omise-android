@@ -34,16 +34,13 @@
         </activity>
 
         <activity
-            android:name="co.omise.android.ui.CreditCardActivity"
-            android:theme="@style/OmiseTheme" />
+            android:name="co.omise.android.ui.CreditCardActivity"/>
 
         <activity
-            android:name="co.omise.android.ui.AuthorizingPaymentActivity"
-            android:theme="@style/OmiseTheme" />
+            android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
 
         <activity
-            android:name="co.omise.android.ui.PaymentCreatorActivity"
-            android:theme="@style/OmiseTheme" />
+            android:name="co.omise.android.ui.PaymentCreatorActivity" />
     </application>
 
 </manifest>
