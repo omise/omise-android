@@ -7,4 +7,8 @@
     <string name="format_price" formatted="false" translatable="false">THB %.2f</string>
     <string name="menu_title_setup" translatable="false">Setup</string>
     <string name="payment_cancelled" translatable="false">Creating payment cancelled</string>
+    <string name="button_choose_payment_method" translatable="false">Choose Payment Method</string>
+    <string name="button_pay_by_credit_card" translatable="false">Pay by Credit Card</string>
+    <string name="button_authorize_url" translatable="false">Authorize URL</string>
+    <string name="head_total_amount" translatable="false">Total Amount</string>
 </resources>
