@@ -34,16 +34,8 @@
         </activity>
 
         <activity
-            android:name=".CheckoutActivity"
-            android:label="@string/activity_checkout" />
-
-        <activity
             android:name="co.omise.android.ui.CreditCardActivity"
             android:theme="@style/OmiseTheme" />
-
-        <activity
-            android:name=".ReceiptActivity"
-            android:label="@string/activity_receipt" />
 
         <activity
             android:name="co.omise.android.ui.AuthorizingPaymentActivity"

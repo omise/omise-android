@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,8 +29,7 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_UR
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
 
-public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener {
-    private ProductListAdapter listAdapter = null;
+public class MainActivity extends AppCompatActivity {
 
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
 
@@ -97,14 +96,6 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{"http://www.example.com"});
         startActivityForResult(intent, MainActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Product product = (Product) listAdapter.getItem(position);
-        Intent intent = new Intent(this, CheckoutActivity.class);
-        intent.putExtra(CheckoutActivity.EXTRA_PRODUCT_ID, product.getId());
-        startActivity(intent);
     }
 
     @Override
