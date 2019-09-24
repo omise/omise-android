@@ -108,6 +108,11 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
     }
 
+    private void settingPaymentOption() {
+        Intent intent = new Intent(this, PaymentSettingActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -118,6 +123,7 @@ public class CheckoutActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_setup) {
             // TODO: Open setup capability page
+            settingPaymentOption();
             return true;
         }
         return super.onOptionsItemSelected(item);

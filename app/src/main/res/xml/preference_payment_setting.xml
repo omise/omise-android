@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Payment methods">
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="is_use_capability_api"
+            app:summary="Will try to load the allowed payment methods from the Capability API and use it if it's available."
+            app:title="Try Capability API" />
+
+        <CheckBoxPreference
+            app:key="is_use_specifics_payment_methods"
+            app:summary="Will ignore the allowed payment methods from the capability API and always use the payment methods specified below."
+            app:title="Use specifics payment methods" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Allow payment methods">
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="internet_banking_bay"
+            app:title="BAY - Internet Banking" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="internet_banking_ktb"
+            app:title="KTB - Internet Banking" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="internet_banking_scb"
+            app:title="SCB - Internet Banking" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="internet_banking_bbl"
+            app:title="BBL - Internet Banking" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="alipay"
+            app:title="Alipay" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="bill_payment_tesco_lotus"
+            app:title="Tesco Lotus Bill Payment" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="installment_pay"
+            app:title="BAY - Installment" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="installment_first_choice"
+            app:title="First Choice - Installment" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="installment_bbl"
+            app:title="BBL - Installment" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="installment_ktc"
+            app:title="KTC - Installment" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="installment_kbank"
+            app:title="K-Bank - Installment" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="econtext"
+            app:title="E-Context" />
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
