@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +19,7 @@ import co.omise.android.api.RequestListener;
 import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
+import co.omise.android.models.Token;
 import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
@@ -40,6 +42,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     private EditText currencyEdit;
     private Button choosePaymentMethodButton;
     private Button creditCardButton;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +53,12 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         currencyEdit = findViewById(R.id.currency_edit);
         choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button);
         creditCardButton = findViewById(R.id.credit_card_button);
+        snackbar = Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT);
 
-        setTitle("Checkout");
+        setTitle(R.string.activity_checkout);
 
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
-
-//        listAdapter = new ProductListAdapter(repository().all());
-
-//        ListView productList = findViewById(R.id.list_products);
-//        productList.setAdapter(listAdapter);
-//        productList.setOnItemClickListener(this);
     }
 
     private void choosePaymentMethod() {
@@ -130,21 +128,24 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
+            snackbar.setText(R.string.payment_cancelled).show();
             return;
         }
 
         if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE) {
             String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
-            Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
+            snackbar.setText(url).show();
         } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE) {
             if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
-                Toast.makeText(getApplicationContext(), ((Source) data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)).getId(), Toast.LENGTH_LONG).show();
+                Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
+                snackbar.setText(source.getId()).show();
             } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
-                Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+                Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
+                snackbar.setText(token.getId()).show();
             }
         } else if (requestCode == CREDIT_CARD_REQUEST_CODE) {
-            Toast.makeText(getApplicationContext(), data.getStringExtra(OmiseActivity.EXTRA_TOKEN), Toast.LENGTH_LONG).show();
+            Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
+            snackbar.setText(token.getId()).show();
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

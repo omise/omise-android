@@ -8,5 +8,6 @@
     <string name="format_paid_with_card" formatted="false" translatable="false">You have paid %s with card %s.</string>
     <string name="format_price" formatted="false" translatable="false">THB %.2f</string>
     <string name="authorize_payment" translatable="false">Authorize Payment</string>
-    <string name="payment_creation">Payment Creator</string>
+    <string name="payment_creation" translatable="false">Payment Creator</string>
+    <string name="payment_cancelled" translatable="false">Creating payment cancelled</string>
 </resources>
