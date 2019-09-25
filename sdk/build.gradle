@@ -116,7 +116,7 @@ uploadArchives {
 dependencies {
     implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "joda-time:joda-time:$joda_time_version"
+    api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"

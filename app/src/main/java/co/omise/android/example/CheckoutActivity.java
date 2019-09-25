@@ -2,11 +2,12 @@ package co.omise.android.example;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,7 +29,7 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_UR
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
 
-public class CheckoutActivity extends BaseActivity {
+public class CheckoutActivity extends AppCompatActivity {
 
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
 
@@ -76,14 +77,10 @@ public class CheckoutActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("CheckoutActivity", "" + PaymentSetting.getAllowedSourceTypesFromSharedPreferences(this).size());
-    }
-
     private void choosePaymentMethod() {
-        if (capability == null) {
+        boolean isUsedSpecificsPaymentMethods = PaymentSetting.isUsedSpecificsPaymentMethods(this);
+
+        if (!isUsedSpecificsPaymentMethods && capability == null) {
             snackbar.setText("Capability have not set yet.");
             return;
         }
@@ -96,7 +93,14 @@ public class CheckoutActivity extends BaseActivity {
         intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
         intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
         intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
-        intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
+
+        if (isUsedSpecificsPaymentMethods) {
+            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityFromSharedPreferences(this));
+
+        } else {
+            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
+        }
+
         startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
     }
 

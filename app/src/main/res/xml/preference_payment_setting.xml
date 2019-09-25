@@ -21,6 +21,11 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
+            app:key="@string/payment_preference_credit_card_key"
+            app:title="Credit Card" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/payment_preference_internet_banking_bay_key"
             app:title="BAY - Internet Banking" />
 
@@ -36,7 +41,7 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="internet_banking_bbl"
+            app:key="@string/payment_preference_internet_banking_bbl_key"
             app:title="BBL - Internet Banking" />
 
         <CheckBoxPreference

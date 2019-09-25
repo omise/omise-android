@@ -18,7 +18,30 @@ data class PaymentMethod(
         override var location: String? = null,
         override var created: DateTime? = null,
         override var deleted: Boolean = false
-) : Model
+) : Model {
+
+    companion object {
+        @JvmStatic
+        fun cardMethod(): PaymentMethod =
+                PaymentMethod(
+                        name = "card"
+                )
+
+        @JvmStatic
+        fun fromSourceType(sourceType: SourceType): PaymentMethod =
+                when {
+                    sourceType is SourceType.Unknown && sourceType.name == "card" -> cardMethod()
+                    else -> PaymentMethod(
+                            name = sourceType.name,
+                            installmentTerms = when (sourceType) {
+                                is SourceType.Installment -> sourceType.availableTerms
+                                else -> null
+                            },
+                            created = null
+                    )
+                }
+    }
+}
 
 val PaymentMethod.backendType: BackendType
     get() = when (name) {
