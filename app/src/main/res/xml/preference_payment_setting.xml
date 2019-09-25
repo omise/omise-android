@@ -4,12 +4,12 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="is_use_capability_api"
+            app:key="@string/payment_preference_is_use_capability_api_key"
             app:summary="Will try to load the allowed payment methods from the Capability API and use it if it's available."
             app:title="Try Capability API" />
 
         <CheckBoxPreference
-            app:key="is_use_specifics_payment_methods"
+            app:key="@string/payment_preference_is_use_specifics_payment_methods_key"
             app:summary="Will ignore the allowed payment methods from the capability API and always use the payment methods specified below."
             app:title="Use specifics payment methods" />
 
@@ -21,17 +21,17 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="internet_banking_bay"
+            app:key="@string/payment_preference_internet_banking_bay_key"
             app:title="BAY - Internet Banking" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="internet_banking_ktb"
+            app:key="@string/payment_preference_internet_banking_ktb_key"
             app:title="KTB - Internet Banking" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="internet_banking_scb"
+            app:key="@string/payment_preference_internet_banking_scb_key"
             app:title="SCB - Internet Banking" />
 
         <CheckBoxPreference
@@ -41,42 +41,42 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="alipay"
+            app:key="@string/payment_preference_alipay_key"
             app:title="Alipay" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="bill_payment_tesco_lotus"
+            app:key="@string/payment_preference_bill_payment_tesco_lotus_key"
             app:title="Tesco Lotus Bill Payment" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="installment_bay"
+            app:key="@string/payment_preference_installment_bay_key"
             app:title="BAY - Installment" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="installment_first_choice"
+            app:key="@string/payment_preference_installment_first_choice_key"
             app:title="First Choice - Installment" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="installment_bbl"
+            app:key="@string/payment_preference_installment_bbl_key"
             app:title="BBL - Installment" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="installment_ktc"
+            app:key="@string/payment_preference_installment_ktc_key"
             app:title="KTC - Installment" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="installment_kbank"
+            app:key="@string/payment_preference_installment_kbank_key"
             app:title="K-Bank - Installment" />
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="econtext"
+            app:key="@string/payment_preference_econtext_key"
             app:title="E-Context" />
     </PreferenceCategory>
 

@@ -12,4 +12,19 @@
     <string name="button_authorize_url" translatable="false">Authorize URL</string>
     <string name="head_total_amount" translatable="false">Total Amount</string>
     <string name="activity_payment_setting" translatable="false">Setting</string>
+
+    <!--  Payment preference keys  -->
+    <string name="payment_preference_is_use_capability_api_key" translatable="false">is_use_capability_api</string>
+    <string name="payment_preference_is_use_specifics_payment_methods_key" translatable="false">is_use_specifics_payment_methods</string>
+    <string name="payment_preference_internet_banking_bay_key" translatable="false">internet_banking_bay</string>
+    <string name="payment_preference_internet_banking_ktb_key" translatable="false">internet_banking_ktb</string>
+    <string name="payment_preference_internet_banking_scb_key" translatable="false">internet_banking_scb</string>
+    <string name="payment_preference_alipay_key" translatable="false">alipay</string>
+    <string name="payment_preference_bill_payment_tesco_lotus_key" translatable="false">bill_payment_tesco_lotus</string>
+    <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
+    <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
+    <string name="payment_preference_installment_bbl_key" translatable="false">installment_bbl</string>
+    <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
+    <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
+    <string name="payment_preference_econtext_key" translatable="false">econtext</string>
 </resources>

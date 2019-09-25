@@ -2,12 +2,11 @@ package co.omise.android.example;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,7 +28,7 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_UR
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
 
-public class CheckoutActivity extends AppCompatActivity {
+public class CheckoutActivity extends BaseActivity {
 
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
 
@@ -75,6 +74,12 @@ public class CheckoutActivity extends AppCompatActivity {
                 snackbar.setText(throwable.getMessage()).show();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("CheckoutActivity", "" + PaymentSetting.getAllowedSourceTypesFromSharedPreferences(this).size());
     }
 
     private void choosePaymentMethod() {
