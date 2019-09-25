@@ -31,13 +31,13 @@ sealed class SourceType(
         data class Unknown(@JsonValue override val name: String?) : InternetBanking(name)
     }
 
-    sealed class Installment(@JsonValue override val name: String?, val availableTerms: List<Int>) : SourceType(name) {
-        object Bay : Installment("installment_bay", listOf(3, 4, 6, 9, 10))
-        object FirstChoice : Installment("installment_first_choice", listOf(3, 4, 6, 9, 10, 12, 18, 24, 36))
-        object Bbl : Installment("installment_bbl", listOf(4, 6, 8, 9, 10))
-        object Ktc : Installment("installment_ktc", listOf(3, 4, 5, 6, 7, 8, 9, 10))
-        object KBank : Installment("installment_kbank", listOf(3, 4, 6, 10))
-        data class Unknown(@JsonValue override val name: String?) : Installment(name, (1..60).toList())
+    sealed class Installment(@JsonValue override val name: String?) : SourceType(name) {
+        object Bay : Installment("installment_bay")
+        object FirstChoice : Installment("installment_first_choice")
+        object Bbl : Installment("installment_bbl")
+        object Ktc : Installment("installment_ktc")
+        object KBank : Installment("installment_kbank")
+        data class Unknown(@JsonValue override val name: String?) : Installment(name)
 
         companion object {
             fun availableTerms(installment: Installment): List<Int> =

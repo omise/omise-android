@@ -34,7 +34,7 @@ data class PaymentMethod(
                     else -> PaymentMethod(
                             name = sourceType.name,
                             installmentTerms = when (sourceType) {
-                                is SourceType.Installment -> sourceType.availableTerms
+                                is SourceType.Installment -> SourceType.Installment.availableTerms(sourceType)
                                 else -> null
                             },
                             created = null
