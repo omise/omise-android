@@ -32,15 +32,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".PaymentSettingActivity"
+            android:label="@string/activity_payment_setting" />
 
-        <activity
-            android:name="co.omise.android.ui.CreditCardActivity"/>
-
-        <activity
-            android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
-
-        <activity
-            android:name="co.omise.android.ui.PaymentCreatorActivity" />
+        <!-- Omise SDK Activities -->
+        <activity android:name="co.omise.android.ui.CreditCardActivity"/>
+        <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
+        <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
     </application>
 
 </manifest>
