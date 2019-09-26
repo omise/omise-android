@@ -44,6 +44,8 @@ public class CheckoutActivity extends AppCompatActivity {
     private Button authorizeUrlButton;
     private Snackbar snackbar;
 
+    private Capability capability;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,31 +61,47 @@ public class CheckoutActivity extends AppCompatActivity {
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
         authorizeUrlButton.setOnClickListener(view -> authorizeUrl());
-    }
-
-    private void choosePaymentMethod() {
-        double localAmount = Double.valueOf(amountEdit.getText().toString().trim());
-        String currency = currencyEdit.getText().toString().trim().toLowerCase();
-        Amount amount = Amount.fromLocalAmount(localAmount, currency);
 
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
         client.send(request, new RequestListener<Capability>() {
             @Override
             public void onRequestSucceed(@NotNull Capability model) {
-                Intent intent = new Intent(CheckoutActivity.this, PaymentCreatorActivity.class);
-                intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-                intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
-                intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
-                intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, model);
-                startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
+                capability = model;
             }
 
             @Override
             public void onRequestFailed(@NotNull Throwable throwable) {
-
+                snackbar.setText(throwable.getMessage()).show();
             }
         });
+    }
+
+    private void choosePaymentMethod() {
+        boolean isUsedSpecificsPaymentMethods = PaymentSetting.isUsedSpecificsPaymentMethods(this);
+
+        if (!isUsedSpecificsPaymentMethods && capability == null) {
+            snackbar.setText("Capability have not set yet.");
+            return;
+        }
+
+        double localAmount = Double.valueOf(amountEdit.getText().toString().trim());
+        String currency = currencyEdit.getText().toString().trim().toLowerCase();
+        Amount amount = Amount.fromLocalAmount(localAmount, currency);
+
+        Intent intent = new Intent(CheckoutActivity.this, PaymentCreatorActivity.class);
+        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
+        intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
+        intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
+
+        if (isUsedSpecificsPaymentMethods) {
+            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityFromSharedPreferences(this));
+
+        } else {
+            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
+        }
+
+        startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
     }
 
     private void payByCreditCard() {
@@ -99,6 +117,11 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
     }
 
+    private void openPaymentSetting() {
+        Intent intent = new Intent(this, PaymentSettingActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -108,7 +131,7 @@ public class CheckoutActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_setup) {
-            // TODO: Open setup capability page
+            openPaymentSetting();
             return true;
         }
         return super.onOptionsItemSelected(item);
