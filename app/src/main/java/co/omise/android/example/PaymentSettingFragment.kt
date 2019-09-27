@@ -15,6 +15,8 @@ class PaymentSettingFragment : PreferenceFragmentCompat() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        activity?.setTitle(R.string.activity_payment_setting)
+
         enablePaymentMethodsSettingIfNeeded()
     }
 
