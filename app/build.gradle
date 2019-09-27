@@ -22,13 +22,13 @@ android {
         }
     }
 
-    flavorDimensions "version"
+    flavorDimensions "language"
     productFlavors {
         java {
-            dimension "version"
+            dimension "language"
         }
         kotlin {
-            dimension "version"
+            dimension "language"
         }
     }
 
