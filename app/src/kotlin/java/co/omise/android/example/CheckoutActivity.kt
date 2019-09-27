@@ -76,7 +76,7 @@ class CheckoutActivity : AppCompatActivity() {
         val isUsedSpecificsPaymentMethods = PaymentSetting.isUsedSpecificsPaymentMethods(this)
 
         if (!isUsedSpecificsPaymentMethods && capability == null) {
-            snackbar.setText("Capability have not set yet.")
+            snackbar.setText(getString(R.string.error_capability_have_not_set_yet))
             return
         }
 
@@ -84,37 +84,40 @@ class CheckoutActivity : AppCompatActivity() {
         val currency = currencyEdit.text.toString().trim().toLowerCase()
         val amount = Amount.fromLocalAmount(localAmount, currency)
 
-        val intent = Intent(this@CheckoutActivity, PaymentCreatorActivity::class.java)
-        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
-        intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.amount)
-        intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.currency)
+        Intent(this, PaymentCreatorActivity::class.java).run {
+            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            putExtra(OmiseActivity.EXTRA_AMOUNT, amount.amount)
+            putExtra(OmiseActivity.EXTRA_CURRENCY, amount.currency)
 
-        if (isUsedSpecificsPaymentMethods) {
-            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityFromSharedPreferences(this))
+            if (isUsedSpecificsPaymentMethods) {
+                putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityFromSharedPreferences(this@CheckoutActivity))
+            } else {
+                putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
+            }
 
-        } else {
-            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
+            startActivityForResult(this, PAYMENT_CREATOR_REQUEST_CODE)
         }
-
-        startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE)
     }
 
     private fun payByCreditCard() {
-        val intent = Intent(this, CreditCardActivity::class.java)
-        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
-        startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE)
+        Intent(this, CreditCardActivity::class.java).run {
+            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            startActivityForResult(this, CREDIT_CARD_REQUEST_CODE)
+        }
     }
 
     private fun authorizeUrl() {
-        val intent = Intent(this, AuthorizingPaymentActivity::class.java)
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/")
-        intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
-        startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
+        Intent(this, AuthorizingPaymentActivity::class.java).run {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/")
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
+            startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
+        }
     }
 
     private fun openPaymentSetting() {
-        val intent = Intent(this, PaymentSettingActivity::class.java)
-        startActivity(intent)
+        Intent(this, PaymentSettingActivity::class.java).run {
+            startActivity(this)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -137,7 +140,7 @@ class CheckoutActivity : AppCompatActivity() {
         }
 
         if (data == null) {
-            snackbar.setText("Payment success but no result.").show()
+            snackbar.setText(R.string.payment_success_but_no_result).show()
             return
         }
 

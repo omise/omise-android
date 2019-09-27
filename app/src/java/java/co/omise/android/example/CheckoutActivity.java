@@ -87,7 +87,7 @@ public class CheckoutActivity extends AppCompatActivity {
         boolean isUsedSpecificsPaymentMethods = PaymentSetting.isUsedSpecificsPaymentMethods(this);
 
         if (!isUsedSpecificsPaymentMethods && capability == null) {
-            snackbar.setText("Capability have not set yet.");
+            snackbar.setText(R.string.error_capability_have_not_set_yet);
             return;
         }
 
