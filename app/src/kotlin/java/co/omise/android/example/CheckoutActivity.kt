@@ -53,6 +53,8 @@ class CheckoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
 
+        supportActionBar?.title = getString(R.string.activity_checkout)
+
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
         authorizeUrlButton.setOnClickListener { authorizeUrl() }

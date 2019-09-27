@@ -10,9 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/OmiseTheme">
 
-        <activity
-            android:name=".CheckoutActivity"
-            android:label="@string/activity_checkout">
+        <activity android:name=".CheckoutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,7 +18,7 @@
         </activity>
         <activity
             android:name=".PaymentSettingActivity"
-            android:label="@string/activity_payment_setting" />
+            android:parentActivityName=".CheckoutActivity" />
 
         <!-- Omise SDK Activities -->
         <activity android:name="co.omise.android.ui.CreditCardActivity" />
