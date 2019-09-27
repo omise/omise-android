@@ -9,6 +9,8 @@ class PaymentSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment_setting)
 
+        supportActionBar?.title = getString(R.string.activity_payment_setting)
+
         supportFragmentManager.beginTransaction()
                 .replace(R.id.content, PaymentSettingFragment())
                 .commit()

@@ -22,6 +22,16 @@ android {
         }
     }
 
+    flavorDimensions "language"
+    productFlavors {
+        java {
+            dimension "language"
+        }
+        kotlin {
+            dimension "language"
+        }
+    }
+
     lintOptions {
         abortOnError false
         disable 'InvalidPackage',
