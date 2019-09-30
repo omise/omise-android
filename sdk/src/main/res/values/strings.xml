@@ -4,7 +4,6 @@
     <string name="button_next">Next</string>
     <string name="default_form_title">Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
-    <string name="error_api">Error: %1$s</string>
     <string name="error_io">Network communication error, please make sure you have a stable internet connection. (%1$s)</string>
     <string name="error_invalid_card_number">Credit card number is invalid</string>
     <string name="error_invalid_card_name">Card holder name is invalid</string>
@@ -13,7 +12,6 @@
     <string name="error_invalid_full_name">Customer name is invalid</string>
     <string name="error_invalid_email">Email is invalid</string>
     <string name="error_invalid_phone_number">Phone number is invalid</string>
-    <string name="error_invalid_unknown">Data is invalid</string>
     <string name="error_invalid">%1$s is invalid</string>
     <string name="error_required">%1$s is required</string>
 
@@ -36,11 +34,11 @@
     <string name="error_api_bad_request_name_is_too_long_with_valid_length">The customer name exceeds the %d character limit</string>
     <string name="error_api_bad_request_name_is_too_long_without_valid_length">The customer name is too long</string>
     <string name="error_api_bad_request_type_not_supported">The source type is not supported by this account</string>
-    <string name="error_api_bad_request_other">Bad request: %s</string>
 
     <string name="error_api_service_not_found">Service not found</string>
 
     <string name="error_unknown">Unknown error occurred. (%1$s)</string>
+    <string name="error_unknown_without_reason">Something went wrong</string>
     <string name="label_card_name">Name on card</string>
     <string name="label_card_number">Card number</string>
     <string name="label_expiry_date">Expiry date</string>
@@ -52,7 +50,7 @@
     <string name="title_authorizing_payment">Authorizing Payment</string>
     <string name="title_convenience_store">Convenience Store</string>
     <string name="title_pay_easy">Pay-easy</string>
-    <string name="title_netbanking">Netbanking</string>
+    <string name="title_netbanking">Net bank</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
     <string name="hint_expiry_date" translatable="false">MM/YY</string>
 
@@ -61,6 +59,6 @@
     <string name="payment_chooser_title">Payment Methods</string>
     <string name="internet_banking_chooser_title">Internet Banking</string>
     <string name="installments_title">Installments</string>
-    <string name="econtext_title">EContext</string>
+    <string name="econtext_title">econtext</string>
     <string name="menu_title_close">Close</string>
 </resources>
