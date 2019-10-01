@@ -34,9 +34,23 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
     }
 
     override fun listItems(): List<InstallmentTermChooserItem> {
-        return installment?.installmentTerms.orEmpty().map {
-            InstallmentTermChooserItem(R.drawable.payment_installment, it, R.drawable.ic_redirect)
-        }
+        return installment
+                ?.installmentTerms
+                .orEmpty()
+                .map {
+                    InstallmentTermChooserItem(
+                            iconRes = R.drawable.payment_installment,
+                            title = with(it) {
+                                if (this > 1) {
+                                    getString(R.string.payment_method_installment_term_months_title, this)
+                                } else {
+                                    getString(R.string.payment_method_installment_term_month_title, this)
+                                }
+                            },
+                            installmentTerm = it,
+                            indicatorIconRes = R.drawable.ic_redirect
+                    )
+                }
     }
 
     override fun onListItemClicked(item: InstallmentTermChooserItem) {
@@ -56,19 +70,16 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         private const val EXTRA_INSTALLMENT = "InstallmentTermChooserFragment.installment"
         fun newInstance(installment: PaymentMethod) =
                 InstallmentTermChooserFragment().apply {
-                    val args = Bundle().apply {
+                    arguments = Bundle().apply {
                         putParcelable(EXTRA_INSTALLMENT, installment)
                     }
-                    arguments = args
                 }
     }
 }
 
 internal data class InstallmentTermChooserItem(
         @DrawableRes override val iconRes: Int,
+        override val title: String,
         val installmentTerm: Int,
         @DrawableRes override val indicatorIconRes: Int
-) : OmiseListItem {
-    override val title: String
-        get() = "$installmentTerm months"
-}
+) : OmiseListItem
