@@ -61,4 +61,24 @@
     <string name="installments_title">Installments</string>
     <string name="econtext_title">econtext</string>
     <string name="menu_title_close">Close</string>
+
+    <string name="payment_method_credit_card_title">Credit Card</string>
+    <string name="payment_method_internet_banking_title">Internet Banking</string>
+    <string name="payment_method_alipay_title">Alipay</string>
+    <string name="payment_method_tesco_lotus_title">Tesco Lotus</string>
+    <string name="payment_method_installments_title">Installments</string>
+    <string name="payment_method_convenience_store_title">Convenience Store</string>
+    <string name="payment_method_pay_easy_title">Pay-easy</string>
+    <string name="payment_method_netbanking_title">Netbanking</string>
+
+    <string name="payment_method_installment_bbl_title">Bangkok Bank</string>
+    <string name="payment_method_installment_kasikorn_title">Kasikorn</string>
+    <string name="payment_method_installment_bay_title">Krungsri</string>
+    <string name="payment_method_installment_first_choice_title">Krungsri First Choice</string>
+    <string name="payment_method_installment_ktc_title">KTC</string>
+
+    <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
+    <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>
+    <string name="payment_method_internet_banking_scb_title">Siam Commercial Bank</string>
+    <string name="payment_method_internet_banking_ktb_title">Krungthai Bank</string>
 </resources>
