@@ -1,6 +1,7 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import androidx.annotation.DrawableRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -26,14 +27,30 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
             SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
             SourceType.Installment.KBank -> InstallmentChooserItem.KBank
             is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(sourceType.name.orEmpty())
-        }.title
+        }.run {
+            titleRes?.let { getString(it) } ?: title
+        }
         setHasOptionsMenu(true)
     }
 
     override fun listItems(): List<InstallmentTermChooserItem> {
-        return installment?.installmentTerms.orEmpty().map {
-            InstallmentTermChooserItem(R.drawable.payment_installment, it, R.drawable.ic_redirect)
-        }
+        return installment
+                ?.installmentTerms
+                .orEmpty()
+                .map {
+                    InstallmentTermChooserItem(
+                            iconRes = R.drawable.payment_installment,
+                            title = with(it) {
+                                if (this > 1) {
+                                    getString(R.string.payment_method_installment_term_months_title, this)
+                                } else {
+                                    getString(R.string.payment_method_installment_term_month_title, this)
+                                }
+                            },
+                            installmentTerm = it,
+                            indicatorIconRes = R.drawable.ic_redirect
+                    )
+                }
     }
 
     override fun onListItemClicked(item: InstallmentTermChooserItem) {
@@ -53,19 +70,16 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         private const val EXTRA_INSTALLMENT = "InstallmentTermChooserFragment.installment"
         fun newInstance(installment: PaymentMethod) =
                 InstallmentTermChooserFragment().apply {
-                    val args = Bundle().apply {
+                    arguments = Bundle().apply {
                         putParcelable(EXTRA_INSTALLMENT, installment)
                     }
-                    arguments = args
                 }
     }
 }
 
 internal data class InstallmentTermChooserItem(
-        override val icon: Int,
+        @DrawableRes override val iconRes: Int,
+        override val title: String,
         val installmentTerm: Int,
-        override val indicatorIcon: Int
-) : OmiseListItem {
-    override val title: String
-        get() = "$installmentTerm months"
-}
+        @DrawableRes override val indicatorIconRes: Int
+) : OmiseListItem

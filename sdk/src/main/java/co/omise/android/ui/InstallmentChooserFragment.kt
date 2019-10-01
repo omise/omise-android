@@ -2,6 +2,8 @@ package co.omise.android.ui
 
 
 import android.os.Bundle
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -66,15 +68,45 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
 }
 
 internal sealed class InstallmentChooserItem(
-        override val icon: Int,
-        override val title: String,
-        override val indicatorIcon: Int
+        @DrawableRes override val iconRes: Int,
+        override val title: String? = null,
+        @StringRes override val titleRes: Int? = null,
+        @DrawableRes override val indicatorIconRes: Int
 ) : OmiseListItem {
     companion object
-    object Bbl : InstallmentChooserItem(R.drawable.payment_bbl, "Bangkok Bank", R.drawable.ic_next)
-    object KBank : InstallmentChooserItem(R.drawable.payment_kasikorn, "Kasikorn", R.drawable.ic_next)
-    object Bay : InstallmentChooserItem(R.drawable.payment_bay, "Krungsri", R.drawable.ic_next)
-    object FirstChoice : InstallmentChooserItem(R.drawable.payment_first_choice, "Krungsri First Choice", R.drawable.ic_next)
-    object Ktc : InstallmentChooserItem(R.drawable.payment_ktc, "KTC", R.drawable.ic_next)
-    data class Unknown(val bankName: String) : InstallmentChooserItem(R.drawable.payment_installment, bankName, R.drawable.ic_next)
+    object Bbl : InstallmentChooserItem(
+            iconRes = R.drawable.payment_bbl,
+            titleRes = R.string.payment_method_installment_bbl_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object KBank : InstallmentChooserItem(
+            iconRes = R.drawable.payment_kasikorn,
+            titleRes = R.string.payment_method_installment_kasikorn_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object Bay : InstallmentChooserItem(
+            iconRes = R.drawable.payment_bay,
+            titleRes = R.string.payment_method_installment_bay_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object FirstChoice : InstallmentChooserItem(
+            iconRes = R.drawable.payment_first_choice,
+            titleRes = R.string.payment_method_installment_first_choice_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object Ktc : InstallmentChooserItem(
+            iconRes = R.drawable.payment_ktc,
+            titleRes = R.string.payment_method_installment_ktc_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    data class Unknown(val bankName: String) : InstallmentChooserItem(
+            iconRes = R.drawable.payment_installment,
+            title = bankName,
+            indicatorIconRes = R.drawable.ic_next
+    )
 }
