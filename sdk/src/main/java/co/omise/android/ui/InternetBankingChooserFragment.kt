@@ -2,6 +2,8 @@ package co.omise.android.ui
 
 
 import android.os.Bundle
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -72,13 +74,38 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
 }
 
 sealed class InternetBankingChooserItem(
-        override val icon: Int,
-        override val title: String,
-        override val indicatorIcon: Int
+        @DrawableRes override val iconRes: Int,
+        override val title: String? = null,
+        @StringRes override val titleRes: Int? = null,
+        @DrawableRes override val indicatorIconRes: Int
 ) : OmiseListItem {
-    object Bbl : InternetBankingChooserItem(R.drawable.payment_bbl, "Bangkok Bank", R.drawable.ic_redirect)
-    object Scb : InternetBankingChooserItem(R.drawable.payment_scb, "Siam Commercial Bank", R.drawable.ic_redirect)
-    object Bay : InternetBankingChooserItem(R.drawable.payment_bay, "Bank of Ayudhya", R.drawable.ic_redirect)
-    object Ktb : InternetBankingChooserItem(R.drawable.payment_ktb, "Krungthai Bank", R.drawable.ic_redirect)
-    data class Unknown(val bankName: String) : InternetBankingChooserItem(R.drawable.payment_banking, bankName, R.drawable.ic_redirect)
+    object Bbl : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_bbl,
+            titleRes = R.string.payment_method_internet_banking_bbl_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object Scb : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_scb,
+            titleRes = R.string.payment_method_internet_banking_scb_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object Bay : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_bay,
+            titleRes = R.string.payment_method_internet_banking_bay_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object Ktb : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_ktb,
+            titleRes = R.string.payment_method_internet_banking_ktb_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    data class Unknown(val bankName: String) : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_banking,
+            title = bankName,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
 }

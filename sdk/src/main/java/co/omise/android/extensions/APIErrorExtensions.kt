@@ -42,8 +42,7 @@ fun APIError.getMessageFromResources(res: Resources): String = when (errorCode) 
                 BadRequestReason.InvalidPhoneNumber -> res.getString(R.string.error_api_bad_request_invalid_phone_number)
                 BadRequestReason.TypeNotSupported -> res.getString(R.string.error_api_bad_request_type_not_supported)
                 BadRequestReason.CurrencyNotSupported -> res.getString(R.string.error_api_bad_request_currency_not_supported)
-                is BadRequestReason.Unknown -> res.getString(R.string.error_api_bad_request_other, message)
-                else -> res.getString(R.string.error_api, message)
+                else -> message ?: res.getString(R.string.error_unknown_without_reason)
             }
         }
     }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
@@ -117,16 +119,55 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 }
 
 sealed class PaymentChooserItem(
-        override val icon: Int,
-        override val title: String,
-        override val indicatorIcon: Int
+        @DrawableRes override val iconRes: Int,
+        @StringRes override val titleRes: Int?,
+        @DrawableRes override val indicatorIconRes: Int
 ) : OmiseListItem {
-    object CreditCard : PaymentChooserItem(R.drawable.payment_card, "Credit Card", R.drawable.ic_next)
-    object Installments : PaymentChooserItem(R.drawable.payment_installment, "Installments", R.drawable.ic_next)
-    object InternetBanking : PaymentChooserItem(R.drawable.payment_banking, "Internet Banking", R.drawable.ic_next)
-    object TescoLotus : PaymentChooserItem(R.drawable.payment_tesco, "Tesco Lotus", R.drawable.ic_redirect)
-    object ConvenienceStore : PaymentChooserItem(R.drawable.payment_conbini, "Convenience Store", R.drawable.ic_next)
-    object PayEasy : PaymentChooserItem(R.drawable.payment_payeasy, "Pay-easy", R.drawable.ic_next)
-    object Netbanking : PaymentChooserItem(R.drawable.payment_netbank, "Netbanking", R.drawable.ic_next)
-    object Alipay : PaymentChooserItem(R.drawable.payment_alipay, "Alipay", R.drawable.ic_redirect)
+    object CreditCard : PaymentChooserItem(
+            iconRes = R.drawable.payment_card,
+            titleRes = R.string.payment_method_credit_card_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object Installments : PaymentChooserItem(
+            iconRes = R.drawable.payment_installment,
+            titleRes = R.string.payment_method_installments_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object InternetBanking : PaymentChooserItem(
+            iconRes = R.drawable.payment_banking,
+            titleRes = R.string.payment_method_internet_banking_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object TescoLotus : PaymentChooserItem(
+            iconRes = R.drawable.payment_tesco,
+            titleRes = R.string.payment_method_tesco_lotus_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object ConvenienceStore : PaymentChooserItem(
+            iconRes = R.drawable.payment_conbini,
+            titleRes = R.string.payment_method_convenience_store_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object PayEasy : PaymentChooserItem(
+            iconRes = R.drawable.payment_payeasy,
+            titleRes = R.string.payment_method_pay_easy_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object Netbanking : PaymentChooserItem(
+            iconRes = R.drawable.payment_netbank,
+            titleRes = R.string.payment_method_netbanking_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object Alipay : PaymentChooserItem(
+            iconRes = R.drawable.payment_alipay,
+            titleRes = R.string.payment_method_alipay_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
 }

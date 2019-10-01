@@ -78,14 +78,12 @@ class EContextFormFragment : OmiseFragment() {
             return
         }
 
-        val errorMessage = when (editText) {
-            fullNameEdit -> R.string.error_invalid_full_name
-            emailEdit -> R.string.error_invalid_email
-            phoneNumberEdit -> R.string.error_invalid_phone_number
-            else -> R.string.error_invalid_unknown
+        errorText.text = when (editText) {
+            fullNameEdit -> getString(R.string.error_invalid_full_name)
+            emailEdit -> getString(R.string.error_invalid_email)
+            phoneNumberEdit -> getString(R.string.error_invalid_phone_number)
+            else -> getString(R.string.error_unknown_without_reason)
         }
-
-        errorText.text = getString(errorMessage)
         errorText.visibility = VISIBLE
     }
 
