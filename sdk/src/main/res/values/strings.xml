@@ -69,7 +69,7 @@
     <string name="payment_method_installments_title">Installments</string>
     <string name="payment_method_convenience_store_title">Convenience Store</string>
     <string name="payment_method_pay_easy_title">Pay-easy</string>
-    <string name="payment_method_netbanking_title">Netbanking</string>
+    <string name="payment_method_netbanking_title">Net Bank</string>
 
     <string name="payment_method_installment_bbl_title">Bangkok Bank</string>
     <string name="payment_method_installment_kasikorn_title">Kasikorn</string>

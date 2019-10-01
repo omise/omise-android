@@ -59,4 +59,23 @@
     <string name="button_next">次</string>
     <string name="error_unknown_without_reason">エラーが発生しました</string>
     <string name="menu_title_close">閉じる</string>
+    <string name="payment_method_alipay_title">アリペイ</string>
+    <string name="payment_method_convenience_store_title">コンビニエンスストア</string>
+    <string name="payment_method_credit_card_title">クレジットカード</string>
+    <string name="payment_method_installment_bay_title">クルンシィ</string>
+    <string name="payment_method_installment_bbl_title">バンコク銀行</string>
+    <string name="payment_method_installment_first_choice_title">クルンシィ・ファーストチョイス</string>
+    <string name="payment_method_installment_kasikorn_title">カシコン</string>
+    <string name="payment_method_installment_ktc_title">クルンタイカード</string>
+    <string name="payment_method_installments_title">分割払い</string>
+    <string name="payment_method_internet_banking_bay_title">アユタヤ銀行</string>
+    <string name="payment_method_internet_banking_bbl_title">バンコク銀行</string>
+    <string name="payment_method_internet_banking_ktb_title">クルンタイ銀行</string>
+    <string name="payment_method_internet_banking_scb_title">サイアム・コマーシャル銀行</string>
+    <string name="payment_method_internet_banking_title">インターネットバンク</string>
+    <string name="payment_method_netbanking_title">ネットバンク</string>
+    <string name="payment_method_pay_easy_title">ペイジー</string>
+    <string name="payment_method_tesco_lotus_title">テスコロータス</string>
+    <string name="payment_method_installment_term_month_title">%d 月</string>
+    <string name="payment_method_installment_term_months_title">%d 月々</string>
 </resources>
