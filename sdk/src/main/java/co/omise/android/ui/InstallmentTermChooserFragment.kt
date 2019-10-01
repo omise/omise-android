@@ -1,6 +1,7 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import androidx.annotation.DrawableRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -26,7 +27,9 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
             SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
             SourceType.Installment.KBank -> InstallmentChooserItem.KBank
             is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(sourceType.name.orEmpty())
-        }.title
+        }.run {
+            titleRes?.let { getString(it) } ?: title
+        }
         setHasOptionsMenu(true)
     }
 
@@ -62,9 +65,9 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 }
 
 internal data class InstallmentTermChooserItem(
-        override val icon: Int,
+        @DrawableRes override val iconRes: Int,
         val installmentTerm: Int,
-        override val indicatorIcon: Int
+        @DrawableRes override val indicatorIconRes: Int
 ) : OmiseListItem {
     override val title: String
         get() = "$installmentTerm months"
