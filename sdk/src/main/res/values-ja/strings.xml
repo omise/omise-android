@@ -76,6 +76,6 @@
     <string name="payment_method_netbanking_title">ネットバンク</string>
     <string name="payment_method_pay_easy_title">ペイジー</string>
     <string name="payment_method_tesco_lotus_title">テスコロータス</string>
-    <string name="payment_method_installment_term_month_title">%d 月</string>
-    <string name="payment_method_installment_term_months_title">%d 月々</string>
+    <string name="payment_method_installment_term_month_title">%d ヶ月</string>
+    <string name="payment_method_installment_term_months_title">%d ヶ月</string>
 </resources>
