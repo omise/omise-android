@@ -11,7 +11,7 @@ import android.widget.TextView
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
-import co.omise.android.models.SupportedEContext
+import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import kotlinx.android.synthetic.main.fragment_econtext_form.button_submit
@@ -27,8 +27,8 @@ class EContextFormFragment : OmiseFragment() {
 
     var requester: PaymentCreatorRequester<Source>? = null
 
-    private val type: SupportedEContext? by lazy {
-        arguments?.getParcelable<SupportedEContext>(EXTRA_ECONTEXT_TYPE)
+    private val type: SupportedEcontext? by lazy {
+        arguments?.getParcelable<SupportedEcontext>(EXTRA_ECONTEXT_TYPE)
     }
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
     private val emailEdit: OmiseEditText by lazy { edit_email }
@@ -53,9 +53,9 @@ class EContextFormFragment : OmiseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         title = when (type) {
-            SupportedEContext.ConvenienceStore -> getString(R.string.title_convenience_store)
-            SupportedEContext.PayEasy -> getString(R.string.title_pay_easy)
-            SupportedEContext.Netbanking -> getString(R.string.title_netbanking)
+            SupportedEcontext.ConvenienceStore -> getString(R.string.title_convenience_store)
+            SupportedEcontext.PayEasy -> getString(R.string.title_pay_easy)
+            SupportedEcontext.Netbanking -> getString(R.string.title_netbanking)
             null -> getString(R.string.econtext_title)
         }
         setHasOptionsMenu(true)
@@ -114,7 +114,7 @@ class EContextFormFragment : OmiseFragment() {
 
     companion object {
         private const val EXTRA_ECONTEXT_TYPE = "EContextFormFragment.econtextType"
-        fun newInstance(eContext: SupportedEContext): EContextFormFragment = EContextFormFragment().apply {
+        fun newInstance(eContext: SupportedEcontext): EContextFormFragment = EContextFormFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_ECONTEXT_TYPE, eContext)
             }

@@ -14,7 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.Source
-import co.omise.android.models.SupportedEContext
+import co.omise.android.models.SupportedEcontext
 import co.omise.android.utils.focus
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
@@ -33,7 +33,7 @@ class EContextFormFragmentTest {
         on { currency }.doReturn("jpy")
     }
 
-    private val fragment = EContextFormFragment.newInstance(SupportedEContext.ConvenienceStore).apply {
+    private val fragment = EContextFormFragment.newInstance(SupportedEcontext.ConvenienceStore).apply {
         requester = mockRequester
     }
 
