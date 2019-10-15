@@ -46,15 +46,6 @@ class PaymentCreatorActivityTest {
         onView(withText(R.string.payment_chooser_title)).check(matches(isDisplayed()))
     }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun initialActivity_missExtrasIntent() {
-        val noExtrasIntent = Intent(
-                ApplicationProvider.getApplicationContext(),
-                PaymentCreatorActivity::class.java
-        )
-        scenario = ActivityScenario.launch(noExtrasIntent)
-    }
-
     @Test
     fun navigateToCreditCardForm_startCreditCartActivity() {
         var activity: PaymentCreatorActivity? = null

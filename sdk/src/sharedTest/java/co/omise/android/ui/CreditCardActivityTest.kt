@@ -45,11 +45,6 @@ class CreditCardActivityTest {
         scenario = launch(intent)
     }
 
-    @Test(expected = IllegalAccessException::class)
-    fun pkey_throwExceptionIfNotFound() {
-        launch(CreditCardActivity::class.java)
-    }
-
     @Test
     fun form_validForm() {
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
