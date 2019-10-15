@@ -11,8 +11,8 @@
         android:id="@+id/image_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_margin"
-        android:layout_marginLeft="@dimen/large_margin"
+        android:layout_marginStart="@dimen/medium_margin"
+        android:layout_marginLeft="@dimen/medium_margin"
         android:layout_marginEnd="@dimen/large_margin"
         android:layout_marginRight="@dimen/large_margin"
         tools:src="@drawable/payment_card" />
