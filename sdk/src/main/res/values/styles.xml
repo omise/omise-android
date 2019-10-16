@@ -55,5 +55,7 @@
         <item name="android:textSize">@dimen/button_text_size</item>
     </style>
 
-    <style name="OmiseItemTextAppearance" parent="TextAppearance.AppCompat.Body2"/>
+    <style name="OmiseItemTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/list_item_text_size</item>
+    </style>
 </resources>
