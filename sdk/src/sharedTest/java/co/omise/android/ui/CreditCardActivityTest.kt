@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
@@ -110,24 +109,6 @@ class CreditCardActivityTest {
         pressBackUnconditionally()
         val result = scenario.result
         assertEquals(RESULT_CANCELED, result.resultCode)
-    }
-
-    @Test
-    fun errorMessages_showErrorMessage() {
-        onView(withId(R.id.edit_card_number)).perform(typeText("42424242"), pressImeActionButton())
-
-        onView(withId(R.id.text_card_number_error)).check(matches(allOf(withText(R.string.error_invalid_card_number))))
-
-
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("123"), pressImeActionButton())
-
-        onView(withId(R.id.text_expiry_date_error)).check(matches(allOf(withText(R.string.error_invalid_expiry_date))))
-
-
-        onView(withId(R.id.edit_security_code)).perform(typeText("12"), pressImeActionButton())
-        onView(withId(R.id.edit_card_number)).perform(click())
-
-        onView(withId(R.id.text_security_code_error)).check(matches(allOf(withText(R.string.error_invalid_security_code))))
     }
 }
 
