@@ -102,7 +102,7 @@ class SecurityCodeTooltipDialogFragmentTest {
 
         onView(withId(R.id.close_button)).inRoot(isDialog()).perform(click())
 
-        assertNull(dialog!!.dialog)
+        assertNull(dialog?.dialog)
     }
 
     private fun withImageResource(@DrawableRes imageRes: Int): Matcher<View> =
