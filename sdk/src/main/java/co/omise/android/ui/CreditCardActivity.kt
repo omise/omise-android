@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import co.omise.android.CardNumber
 import co.omise.android.R
@@ -25,11 +25,11 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
-import kotlinx.android.synthetic.main.activity_credit_card.layout_credit_card_form
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
+import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import java.io.IOError
 
 class CreditCardActivity : OmiseActivity() {
@@ -39,7 +39,7 @@ class CreditCardActivity : OmiseActivity() {
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
     private val submitButton: Button by lazy { button_submit }
-    private val containerLayout: LinearLayout by lazy { layout_credit_card_form }
+    private val scrollView: ScrollView by lazy { scrollview }
     private val cardNumberErrorText: TextView by lazy { text_card_number_error }
     private val cardNameErrorText: TextView by lazy { text_card_name_error }
     private val expiryDateErrorText: TextView by lazy { text_expiry_date_error }
@@ -129,7 +129,7 @@ class CreditCardActivity : OmiseActivity() {
                 else -> getString(R.string.error_unknown, throwable.message)
             }
 
-            Snackbar.make(containerLayout, message, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
         }
     }
 
