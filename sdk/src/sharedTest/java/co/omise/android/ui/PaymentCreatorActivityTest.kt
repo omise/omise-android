@@ -11,7 +11,7 @@ import androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.Capability
@@ -43,16 +43,8 @@ class PaymentCreatorActivityTest {
     @Test
     fun initialActivity_collectExtrasIntent() {
         scenario = ActivityScenario.launch(intent)
-        onView(withText(R.string.payment_chooser_title)).check(matches(isDisplayed()))
-    }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun initialActivity_missExtrasIntent() {
-        val noExtrasIntent = Intent(
-                ApplicationProvider.getApplicationContext(),
-                PaymentCreatorActivity::class.java
-        )
-        scenario = ActivityScenario.launch(noExtrasIntent)
+        onView(withId(R.id.payment_creator_container)).check(matches(isDisplayed()))
     }
 
     @Test

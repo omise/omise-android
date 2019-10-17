@@ -46,12 +46,12 @@ class CreditCardActivity : OmiseActivity() {
     private val securityCodeErrorText: TextView by lazy { text_security_code_error }
     private val securityCodeTooltipButton: ImageButton by lazy { button_security_code_tooltip }
 
-    private val editTexts: List<Pair<OmiseEditText, TextView>> by lazy {
-        listOf(
-                Pair(cardNumberEdit, cardNumberErrorText),
-                Pair(cardNameEdit, cardNameErrorText),
-                Pair(expiryDateEdit, expiryDateErrorText),
-                Pair(securityCodeEdit, securityCodeErrorText)
+    private val editTexts: Map<OmiseEditText, TextView> by lazy {
+        mapOf(
+                cardNumberEdit to cardNumberErrorText,
+                cardNameEdit to cardNameErrorText,
+                expiryDateEdit to expiryDateErrorText,
+                securityCodeEdit to securityCodeErrorText
         )
     }
 
@@ -69,13 +69,13 @@ class CreditCardActivity : OmiseActivity() {
         submitButton.setOnClickListener(::submit)
         securityCodeTooltipButton.setOnClickListener(::showSecurityCodeTooltipDialog)
 
-        editTexts.forEach {
-            it.first.setOnFocusChangeListener { _, hasFocus ->
+        editTexts.forEach { (editText, errorText) ->
+            editText.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     try {
-                        it.first.validate()
+                        editText.validate()
                     } catch (e: InputValidationException.InvalidInputException) {
-                        it.second.text = when (it.first) {
+                        errorText.text = when (editText) {
                             cardNumberEdit -> getString(R.string.error_invalid_card_number)
                             cardNameEdit -> getString(R.string.error_invalid_card_name)
                             expiryDateEdit -> getString(R.string.error_invalid_expiry_date)
@@ -83,13 +83,13 @@ class CreditCardActivity : OmiseActivity() {
                             else -> null
                         }
                     } catch (e: InputValidationException.EmptyInputException) {
-                        it.second.text = null
+                        errorText.text = null
                     }
                 } else {
-                    it.second.text = null
+                    errorText.text = null
                 }
             }
-            it.first.setOnAfterTextChangeListener(::updateSubmitButton)
+            editText.setOnAfterTextChangeListener(::updateSubmitButton)
         }
     }
 
@@ -142,7 +142,7 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun setFormEnabled(enabled: Boolean) {
-        editTexts.forEach { it.first.isEnabled = enabled }
+        editTexts.forEach { (editText, _) -> editText.isEnabled = enabled }
         submitButton.isEnabled = enabled
     }
 
@@ -175,7 +175,7 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun updateSubmitButton() {
-        val isFormValid = editTexts.map { it.first.isValid }
+        val isFormValid = editTexts.map { (editText, _) -> editText.isValid }
                 .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }

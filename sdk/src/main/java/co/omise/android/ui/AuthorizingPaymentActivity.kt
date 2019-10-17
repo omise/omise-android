@@ -12,6 +12,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
+import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 
 
 /**
@@ -20,13 +21,12 @@ import co.omise.android.R
  */
 class AuthorizingPaymentActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
+    private val webView: WebView by lazy { authorizing_payment_webview }
     private lateinit var verifier: AuthorizingPaymentURLVerifier
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
-        webView = findViewById<View>(R.id.authorizing_payment_webview) as WebView
         webView.settings.javaScriptEnabled = true
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
