@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
@@ -22,6 +21,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import co.omise.android.R
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
@@ -30,24 +30,18 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityTest {
 
     private lateinit var scenario: ActivityScenario<CreditCardActivity>
-    private val intent = Intent(getApplicationContext(), CreditCardActivity::class.java).apply {
+    private val intent = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
         putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
     }
 
     @Before
     fun setUp() {
         scenario = launch(intent)
-    }
-
-    @Test(expected = IllegalAccessException::class)
-    fun pkey_throwExceptionIfNotFound() {
-        launch(CreditCardActivity::class.java)
     }
 
     @Test
@@ -115,24 +109,6 @@ class CreditCardActivityTest {
         pressBackUnconditionally()
         val result = scenario.result
         assertEquals(RESULT_CANCELED, result.resultCode)
-    }
-
-    @Test
-    fun errorMessages_showErrorMessage() {
-        onView(withId(R.id.edit_card_number)).perform(typeText("42424242"), pressImeActionButton())
-
-        onView(withId(R.id.text_card_number_error)).check(matches(allOf(withText(R.string.error_invalid_card_number))))
-
-
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("123"), pressImeActionButton())
-
-        onView(withId(R.id.text_expiry_date_error)).check(matches(allOf(withText(R.string.error_invalid_expiry_date))))
-
-
-        onView(withId(R.id.edit_security_code)).perform(typeText("12"), pressImeActionButton())
-        onView(withId(R.id.edit_card_number)).perform(click())
-
-        onView(withId(R.id.text_security_code_error)).check(matches(allOf(withText(R.string.error_invalid_security_code))))
     }
 }
 

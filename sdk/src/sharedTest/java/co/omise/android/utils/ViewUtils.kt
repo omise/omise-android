@@ -10,7 +10,7 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
 
 
-fun focus(isFocus: Boolean): ViewAction =
+fun focus(isFocus: Boolean = true): ViewAction =
         object : ViewAction {
             override fun getDescription(): String = "Set focus status to a View."
 

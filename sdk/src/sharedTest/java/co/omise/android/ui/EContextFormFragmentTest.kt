@@ -4,6 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -51,14 +52,14 @@ class EContextFormFragmentTest {
         onView(withId(R.id.edit_email)).perform(typeText("johndoe@mail.com"), pressImeActionButton())
         onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
 
-        onView(withId(R.id.button_submit)).perform(click())
+        onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
         verify(mockRequester).request(any(), any())
     }
 
     @Test
     fun invalidErrorTexts_showErrorTexts() {
-        onView(withId(R.id.edit_full_name)).perform(focus(true), focus(false))
+        onView(withId(R.id.edit_full_name)).perform(focus(true), pressImeActionButton())
 
         onView(withId(R.id.text_full_name_error)).check(matches(withText(R.string.error_invalid_full_name)))
 
@@ -97,7 +98,7 @@ class EContextFormFragmentTest {
         onView(withId(R.id.edit_email)).perform(typeText("johndoe@mail.com"), pressImeActionButton())
         onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
 
-        onView(withId(R.id.button_submit)).perform(click())
+        onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
         onView(withId(R.id.edit_full_name)).check(matches(not(isEnabled())))
         onView(withId(R.id.edit_email)).check(matches(not(isEnabled())))

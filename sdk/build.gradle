@@ -128,6 +128,7 @@ dependencies {
         exclude group: 'androidx.test', module: 'core'
     }
 
+    testImplementation project(":testsupport")
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation "androidx.test:rules:$test_version"
@@ -136,10 +137,10 @@ dependencies {
     testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     testImplementation "androidx.test.ext:junit:$junit_ext_version"
-    testImplementation "com.android.support:support-annotations:$support_annotations_version"
+    testImplementation "androidx.annotation:annotation:$annotation_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
 
-    androidTestImplementation "com.android.support:support-annotations:$support_annotations_version"
+    androidTestImplementation "androidx.annotation:annotation:$annotation_version"
     androidTestImplementation "com.google.guava:guava:$guava_version"
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
     androidTestImplementation "org.robolectric:annotations:$robolectric_version"

@@ -56,7 +56,7 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
     companion object {
         const val EXTRA_CARD_BRAND = "SecurityCodeTooltipDialogFragment.CardBrand"
 
-        fun newInstant(brand: CardBrand?): SecurityCodeTooltipDialogFragment {
+        fun newInstant(brand: CardBrand? = null): SecurityCodeTooltipDialogFragment {
             val argument = Bundle()
             argument.putParcelable(EXTRA_CARD_BRAND, brand)
 
