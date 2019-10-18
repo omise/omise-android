@@ -12,7 +12,7 @@ import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.models.APIError
 import co.omise.android.models.Capability
-import co.omise.android.models.SupportedEContext
+import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Model
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
@@ -120,7 +120,7 @@ interface PaymentCreatorNavigation {
     fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>)
     fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>)
     fun navigateToInstallmentTermChooser(installment: PaymentMethod)
-    fun navigateToEContextForm(eContext: SupportedEContext)
+    fun navigateToEContextForm(eContext: SupportedEcontext)
     fun createSourceFinished(source: Source)
 }
 
@@ -180,7 +180,7 @@ private class PaymentCreatorNavigationImpl(
         addFragmentToBackStack(fragment)
     }
 
-    override fun navigateToEContextForm(eContext: SupportedEContext) {
+    override fun navigateToEContextForm(eContext: SupportedEcontext) {
         val fragment = EContextFormFragment.newInstance(eContext).apply {
             requester = this@PaymentCreatorNavigationImpl.requester
         }
