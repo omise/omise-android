@@ -6,8 +6,8 @@
                 <shape android:shape="rectangle">
                     <padding android:bottom="@dimen/edit_text_padding" android:left="@dimen/edit_text_padding" android:right="@dimen/edit_text_padding" android:top="@dimen/edit_text_padding" />
                     <size android:height="@dimen/edit_text_height" />
-                    <solid android:color="#00ffffff" />
-                    <stroke android:width="@dimen/edit_text_stroke_width" android:color="#1a56f0" />
+                    <solid android:color="@android:color/transparent" />
+                    <stroke android:width="@dimen/edit_text_stroke_width" android:color="?attr/colorAccent" />
                     <corners android:radius="@dimen/edit_text_radius_size" />
                 </shape>
             </item>
@@ -18,9 +18,9 @@
             <item>
                 <shape android:shape="rectangle">
                     <padding android:bottom="@dimen/edit_text_padding" android:left="@dimen/edit_text_padding" android:right="@dimen/edit_text_padding" android:top="@dimen/edit_text_padding" />
-                    <solid android:color="#00ffffff" />
+                    <solid android:color="@android:color/transparent" />
                     <size android:height="@dimen/edit_text_height" />
-                    <stroke android:width="@dimen/edit_text_stroke_width" android:color="#aaa" />
+                    <stroke android:width="@dimen/edit_text_stroke_width" android:color="@android:color/darker_gray" />
                     <corners android:radius="@dimen/edit_text_radius_size" />
                 </shape>
             </item>
