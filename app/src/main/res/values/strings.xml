@@ -11,7 +11,7 @@
     <string name="button_pay_by_credit_card" translatable="false">Pay by Credit Card</string>
     <string name="button_authorize_url" translatable="false">Authorize URL</string>
     <string name="head_total_amount" translatable="false">Total Amount</string>
-    <string name="activity_payment_setting" translatable="false">Setting</string>
+    <string name="activity_payment_setting" translatable="false">Settings</string>
 
     <string name="payment_preference_is_use_capability_api_key" translatable="false">is_use_capability_api</string>
     <string name="payment_preference_is_use_specifics_payment_methods_key" translatable="false">is_use_specifics_payment_methods</string>
