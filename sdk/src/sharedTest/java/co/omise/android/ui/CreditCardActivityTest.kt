@@ -12,6 +12,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasFocus
@@ -95,7 +96,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
-        onView(withId(R.id.button_submit)).perform(click())
+        onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
         onView(withId(R.id.edit_card_number)).check(matches(not(isEnabled())))
         onView(withId(R.id.edit_card_name)).check(matches(not(isEnabled())))
