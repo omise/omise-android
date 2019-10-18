@@ -44,7 +44,7 @@
 
     <style name="OmiseBodyTitle" parent="TextAppearance.AppCompat.Body1" />
 
-    <style name="OmiseButton" parent="Widget.AppCompat.Button">
+    <style name="OmiseButton" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/bg_button</item>
         <item name="android:textAppearance">@style/OmiseButtonTextAppearance</item>
     </style>
