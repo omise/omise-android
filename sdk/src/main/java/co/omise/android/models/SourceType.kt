@@ -21,6 +21,7 @@ sealed class SourceType(
     object BarcodeAlipay : SourceType("barcode_alipay")
     object Econtext : SourceType("econtext")
     object TrueMoney : SourceType("truemoney")
+    object Points : SourceType("points")
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -71,6 +72,7 @@ sealed class SourceType(
             "installment_bbl" -> Installment.Bbl
             "installment_ktc" -> Installment.Ktc
             "installment_kbank" -> Installment.KBank
+            "points" -> Points
             else -> Unknown(name)
         }
     }
@@ -101,16 +103,17 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.FirstChoice,
             SourceType.Installment.Bbl,
             SourceType.Installment.Ktc,
-            SourceType.Installment.KBank
+            SourceType.Installment.KBank,
+            SourceType.Points
     )
 
-sealed class SupportedEContext : Parcelable {
+sealed class SupportedEcontext : Parcelable {
     @Parcelize
-    object ConvenienceStore : SupportedEContext()
+    object ConvenienceStore : SupportedEcontext()
 
     @Parcelize
-    object PayEasy : SupportedEContext()
+    object PayEasy : SupportedEcontext()
 
     @Parcelize
-    object Netbanking : SupportedEContext()
+    object Netbanking : SupportedEcontext()
 }

@@ -11,7 +11,7 @@ import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
-import co.omise.android.models.SupportedEContext
+import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
@@ -41,9 +41,9 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             .orEmpty()
             )
             PaymentChooserItem.TescoLotus -> sendRequest(SourceType.BillPaymentTescoLotus)
-            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEContext.ConvenienceStore)
-            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEContext.PayEasy)
-            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEContext.Netbanking)
+            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEcontext.PayEasy)
+            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEcontext.Netbanking)
             PaymentChooserItem.Alipay -> sendRequest(SourceType.Alipay)
         }
     }
