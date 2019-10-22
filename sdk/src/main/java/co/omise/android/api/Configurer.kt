@@ -12,10 +12,6 @@ import okhttp3.Response
  */
 class Configurer internal constructor(private val config: Config) : Interceptor {
 
-    init {
-        requireNotNull(config)
-    }
-
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.proceed(configure(config, chain.request()))
     }
@@ -40,7 +36,7 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
                     .addHeader("User-Agent", config.userAgent())
                     .addHeader("Authorization", Credentials.basic(key, "x"))
 
-            if (!apiVersion.isEmpty()) {
+            if (apiVersion.isNotEmpty()) {
                 builder = builder.addHeader("Omise-Version", apiVersion)
             }
 
