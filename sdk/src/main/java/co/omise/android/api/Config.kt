@@ -4,10 +4,11 @@ import android.os.Build
 import co.omise.android.BuildConfig
 
 /**
- * Config class bundles configuration values supplied to the [Client] constructor.
+ * Config class bundles configuration values used in the [Client] constructor
+ * and are used in creating the HTTP requests.
  *
  * @param apiVersion The API version to use.
- * @param publicKey  The key with the `pkey_` prefix.
+ * @param publicKey  The API key with the `pkey_` prefix.
  *
  * @see Client
  */
@@ -29,19 +30,19 @@ class Config(
     }
 
     /**
-     * Returns the API version configuration. This value will be added as
-     * a `Omise-Version` HTTP header during API calls.
+     * Returns the configured API version. This value will be added as `Omise-Version`
+     * to the HTTP header during API calls.
      *
-     * @return A [String] containing the configured API version.
+     * @return A string containing the configured API version.
      */
     fun apiVersion(): String {
         return apiVersion
     }
 
     /**
-     * Returns the configured public key. Public keys always have the `pkey_` prefix.
+     * Returns the configured public API key. Public API keys always have the `pkey_` prefix.
      *
-     * @return A [String] containing the public key.
+     * @return A string containing the public API key.
      */
     fun publicKey(): String {
         return publicKey
@@ -50,7 +51,7 @@ class Config(
     /**
      * Returns a valid user agent string for use with HTTP clients.
      *
-     * @return A [String] containing the user agent.
+     * @return A string containing the user agent.
      */
     fun userAgent(): String {
         return userAgent
