@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
 
+/**
+ * PaymentMethod contains all the information regarding a payment method available to the
+ * user. PaymentMethod list can be found in the [Capability] object.
+ *
+ * @see <a href="https://www.omise.co/capability-api">Capabilities API</a>
+ */
 @Parcelize
 data class PaymentMethod(
         var name: String? = null,
