@@ -11,7 +11,7 @@ fun APIError.getMessageFromResources(res: Resources): String = when (errorCode) 
         (errorCode as APIErrorCode.InvalidCard).reasons.firstOrNull().run {
             when (this) {
                 InvalidCardReason.InvalidCardNumber -> res.getString(R.string.error_api_invalid_card_invalid_card_number)
-                InvalidCardReason.InvalidExpirationDate -> res.getString(R.string.error_api_invalid_card_invalid_expiry_date)
+                InvalidCardReason.InvalidExpirationDate -> res.getString(R.string.error_api_invalid_card_invalid_expiration_date)
                 InvalidCardReason.EmptyCardHolderName -> res.getString(R.string.error_api_invalid_card_empty_card_holder_name)
                 InvalidCardReason.UnsupportedBrand -> res.getString(R.string.error_api_invalid_card_unsupported_brand)
                 is InvalidCardReason.Unknown -> res.getString(R.string.error_required, message)

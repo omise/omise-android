@@ -47,7 +47,7 @@ class APIErrorExtensionsTest {
 
         val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_expiry_date), actualMessage)
+        assertEquals(resources.getString(R.string.error_api_invalid_card_invalid_expiration_date), actualMessage)
     }
 
     @Test

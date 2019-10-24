@@ -7,7 +7,7 @@
     <string name="error_io">ネットワーク通信エラー, 安定したネット環境で再度試してください. (%1$s)</string>
     <string name="error_invalid_card_number">クレジットカード番号が無効です</string>
     <string name="error_invalid_card_name">クレジットカード所有者名が無効です</string>
-    <string name="error_invalid_expiry_date">クレジットカードの有効期限が無効です</string>
+    <string name="error_invalid_expiration_date">クレジットカードの有効期限が無効です</string>
     <string name="error_invalid_security_code">CVVコードが無効です</string>
 
     <string name="error_invalid">%1$s 無効です。</string>
@@ -15,14 +15,14 @@
 
     <string name="error_api_authentication_failure">認証失敗</string>
     <string name="error_api_invalid_card_invalid_card_number">無効なカード番号</string>
-    <string name="error_api_invalid_card_invalid_expiry_date">無効なカード有効期限</string>
+    <string name="error_api_invalid_card_invalid_expiration_date">無効なカード有効期限</string>
     <string name="error_api_invalid_card_empty_card_holder_name">無効なカード所有者名</string>
     <string name="error_api_invalid_card_unsupported_brand">サポートされていないカード会社です</string>
 
     <string name="error_unknown">原因不明のエラーです。. (%1$s)</string>
     <string name="label_card_name">カード名義</string>
     <string name="label_card_number">カード番号</string>
-    <string name="label_expiry_date">有効期限</string>
+    <string name="label_expiration_date">有効期限</string>
     <string name="label_security_code">セキュリティコード</string>
     <string name="title_authorizing_payment">決済を認証中</string>
     <string name="menu_card_io">カードを読み取る</string>
@@ -59,7 +59,7 @@
     <string name="button_next">次</string>
     <string name="error_unknown_without_reason">エラーが発生しました</string>
     <string name="menu_title_close">閉じる</string>
-    <string name="payment_method_alipay_title">アリペイ</string>
+    <string name="payment_method_alipay_title">アリペイオンライン</string>
     <string name="payment_method_convenience_store_title">コンビニエンスストア</string>
     <string name="payment_method_credit_card_title">クレジットカード</string>
     <string name="payment_method_installment_bay_title">クルンシィ</string>

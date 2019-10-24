@@ -78,7 +78,7 @@
                     style="?attr/editTextLabelStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_expiry_date" />
+                    android:text="@string/label_expiration_date" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/small_margin"
-                        android:hint="@string/hint_expiry_date"
+                        android:hint="@string/hint_expiration_date"
                         android:imeOptions="actionNext"
                         android:nextFocusForward="@id/edit_security_code" />
 

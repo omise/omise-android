@@ -8,21 +8,21 @@
 
     <string name="error_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
     <string name="error_invalid_card_name">ชื่อผู้ถือบัตรไม่ถูกต้อง</string>
-    <string name="error_invalid_expiry_date">วันหมดอายุของบัตรไม่ถูกต้อง</string>
+    <string name="error_invalid_expiration_date">วันหมดอายุของบัตรไม่ถูกต้อง</string>
     <string name="error_invalid_security_code">หมายเลข CVV ไม่ถูกต้อง</string>
     <string name="error_invalid">%1$sไม่ถูกต้อง</string>
     <string name="error_required">กรุณากรอก%1$s</string>
 
     <string name="error_api_authentication_failure">การยืนยันตัวตนของร้านค้าไม่ถูกต้อง</string>
     <string name="error_api_invalid_card_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
-    <string name="error_api_invalid_card_invalid_expiry_date">วันหมดอายุบัตรไม่ถูกต้อง</string>
+    <string name="error_api_invalid_card_invalid_expiration_date">วันหมดอายุบัตรไม่ถูกต้อง</string>
     <string name="error_api_invalid_card_empty_card_holder_name">ชื่อผู้ถือบัตรไม่ถูกต้อง</string>
     <string name="error_api_invalid_card_unsupported_brand">บัตรเครดิตไม่รองรับ</string>
 
     <string name="error_unknown">เกิดข้อผิดพลาด (%1$s)</string>
     <string name="label_card_name">ชื่อผู้ถือบัตร</string>
     <string name="label_card_number">หมายเลขบัตร</string>
-    <string name="label_expiry_date">วันหมดอายุ</string>
+    <string name="label_expiration_date">วันหมดอายุ</string>
     <string name="label_security_code">รหัสหลังบัตร</string>
     <string name="menu_card_io">ถ่ายรูปบัตร</string>
     <string name="title_authorizing_payment">กำลังอนุมัติวงเงิน</string>
@@ -59,7 +59,7 @@
     <string name="error_api_bad_request_type_not_supported">บัญชีผู้ใช้นี้ไม่รองรับ source ที่ระบุ</string>
     <string name="button_next">ถัดไป</string>
     <string name="error_unknown_without_reason">พบข้อขัดข้อง</string>
-    <string name="payment_method_alipay_title">อาลีเพย์</string>
+    <string name="payment_method_alipay_title">อาลีเพย์ (ออนไลน์)</string>
     <string name="payment_method_convenience_store_title">ร้านสะดวกซื้อ</string>
     <string name="payment_method_credit_card_title">บัตรเครดิต</string>
     <string name="payment_method_installment_bay_title">ธนาคารกรุงศรี</string>

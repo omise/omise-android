@@ -37,7 +37,7 @@ class CreditCardActivityInstrumentedTest {
 
         onView(withId(R.id.edit_expiry_date)).perform(typeText("123"), pressImeActionButton())
 
-        onView(withId(R.id.text_expiry_date_error)).check(matches(withText(R.string.error_invalid_expiry_date)))
+        onView(withId(R.id.text_expiry_date_error)).check(matches(withText(R.string.error_invalid_expiration_date)))
 
 
         onView(withId(R.id.edit_security_code)).perform(typeText("12"))
