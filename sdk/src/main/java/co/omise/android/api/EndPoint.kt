@@ -59,6 +59,9 @@ abstract class Endpoint {
     }
 
     companion object {
+        /**
+         * Class containing all the information "VAULT" endpoint.
+         */
         @JvmField
         val VAULT: Endpoint = object : Endpoint() {
             override fun host(): String {
@@ -70,6 +73,9 @@ abstract class Endpoint {
             }
         }
 
+        /**
+         * Class containing all the information "API" endpoint.
+         */
         @JvmField
         val API: Endpoint = object : Endpoint() {
             override fun host(): String {
