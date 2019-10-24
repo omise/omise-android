@@ -78,7 +78,7 @@ class CreditCardActivity : OmiseActivity() {
                         errorText.text = when (editText) {
                             cardNumberEdit -> getString(R.string.error_invalid_card_number)
                             cardNameEdit -> getString(R.string.error_invalid_card_name)
-                            expiryDateEdit -> getString(R.string.error_invalid_expiry_date)
+                            expiryDateEdit -> getString(R.string.error_invalid_expiration_date)
                             securityCodeEdit -> getString(R.string.error_invalid_security_code)
                             else -> null
                         }
