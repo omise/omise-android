@@ -10,6 +10,9 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
+/**
+ * ModelTypeResolver is the custom type identifier handler for the SDK.
+ */
 class ModelTypeResolver : TypeIdResolverBase() {
     private var types: Map<String, Class<*>>? = null
 
