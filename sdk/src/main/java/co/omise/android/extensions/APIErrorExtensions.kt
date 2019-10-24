@@ -5,7 +5,6 @@ import co.omise.android.R
 import co.omise.android.models.APIError
 import co.omise.android.models.Amount
 
-
 fun APIError.getMessageFromResources(res: Resources): String = when (errorCode) {
     is APIErrorCode.InvalidCard -> {
         (errorCode as APIErrorCode.InvalidCard).reasons.firstOrNull().run {
