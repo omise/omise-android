@@ -32,6 +32,9 @@ import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_er
 import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import java.io.IOError
 
+/**
+ * CreditCardActivity is the UI class for taking credit card information input from the user.
+ */
 class CreditCardActivity : OmiseActivity() {
 
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
