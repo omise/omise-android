@@ -9,20 +9,20 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.Objects.requireNonNull
 
-
 /**
  * Request Builder is a base class, any classes that extends from it would be
  * responsible for creating a particular [Request] and allows for the Request
  * method, path, payload and class type to be configured.
  *
- * @param <T> the generic type for any Model that would need to be returned by the [Client] when this request is passed to it
+ * @param <T> the generic type for any Model that would need to be returned by
+ * the [Client] when this request is passed to it.
  */
 abstract class RequestBuilder<T : Model> {
 
     /**
-     * Builds request with all its enclosing information and payload (if available)
+     * Builds request with all its enclosing information and payload (if available).
      *
-     * @return built [Request] of type [Model]
+     * @return built [Request] of type [Model].
      */
     fun build(): Request<T> {
         return Request(method(), path(), payload(), type())
@@ -31,23 +31,25 @@ abstract class RequestBuilder<T : Model> {
     /**
      * Default HTTP method.
      *
-     * @return HTTP method as a string
+     * @return HTTP method as a string.
      */
     open fun method(): String {
         return GET
     }
 
     /**
-     * Abstract method that needs to be implement by all children of this class to provide API Path
+     * Abstract method that needs to be implemented by all children of this class
+     * to provide API Path.
      *
-     * @return the url path as [HttpUrl]
+     * @return the URL path as [HttpUrl].
      */
     protected abstract fun path(): HttpUrl
 
     /**
-     * Additional parameters for the request, which is null by default for requests that do not accept params (eg: GET)
+     * Additional parameters for the request, which is null by default for requests
+     * that do not accept params (eg: GET).
      *
-     * @return the params as a [RequestBody]
+     * @return the params as a [RequestBody].
      */
     open fun payload(): RequestBody? {
         //Has to be null as it would fail for GET requests
@@ -55,9 +57,10 @@ abstract class RequestBuilder<T : Model> {
     }
 
     /**
-     * Abstract method that needs to be implement by all children of this class to provide response type
+     * Abstract method that needs to be implemented by all children of this class to
+     * provide response type.
      *
-     * @return Class type of response
+     * @return Class type of response.
      */
     protected abstract fun type(): Class<T>
 
@@ -67,7 +70,7 @@ abstract class RequestBuilder<T : Model> {
      * and with all the supplied segments concatenated.
      *
      * @param endpoint The Omise API [Endpoint] to point to.
-     * @param path     The base API path.
+     * @param path The base API path.
      * @return An [HttpUrl] instance.
      */
     protected fun buildUrl(endpoint: Endpoint, path: String): HttpUrl {
@@ -75,10 +78,12 @@ abstract class RequestBuilder<T : Model> {
     }
 
     /**
-     * Serializes all the enclosed parameters in a child RequestBuilder. This method should be called in the return statement of the overridden payload() method.
+     * Serializes all the enclosed parameters in a child RequestBuilder. This method should be called
+     * in the return statement of the overridden payload() method.
      *
      * @return the [RequestBody]
-     * @throws IOException the I/O when [Serializer] is unable to correctly serialize the content of the class using Jackson
+     * @throws IOException the I/O when [Serializer] is unable to correctly serialize the content of
+     * the class using Jackson.
      */
     @Throws(IOException::class)
     protected fun serialize(): RequestBody {
