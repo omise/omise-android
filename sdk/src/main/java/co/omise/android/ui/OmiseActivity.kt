@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 
-
+/**
+ * OmiseActivity is the base class for all other activities in the SDK.
+ */
 abstract class OmiseActivity : AppCompatActivity() {
 
     companion object {
