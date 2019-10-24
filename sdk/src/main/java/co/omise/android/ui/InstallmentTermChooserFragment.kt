@@ -9,7 +9,11 @@ import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
-
+/**
+ * InstallmentTermChooserFragment is the UI class, extended from base [OmiseListFragment] to show
+ * available Installment terms list for the user to choose from. User would be directed to this page
+ * from [InstallmentChooserFragment] page.
+ */
 internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermChooserItem>() {
     var requester: PaymentCreatorRequester<Source>? = null
     private val installment: PaymentMethod? by lazy {
