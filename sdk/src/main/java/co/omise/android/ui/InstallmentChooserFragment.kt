@@ -10,6 +10,10 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
+/**
+ * InstallmentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
+ * available Installment options list for the user to choose from.
+ */
 internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooserItem>() {
 
     private val paymentMethods: List<PaymentMethod> by lazy {
