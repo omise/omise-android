@@ -16,7 +16,10 @@ import kotlinx.android.synthetic.main.dialog_security_code_tooltip.close_button
 import kotlinx.android.synthetic.main.dialog_security_code_tooltip.cvv_description_text
 import kotlinx.android.synthetic.main.dialog_security_code_tooltip.cvv_image
 
-
+/**
+ * SecurityCodeTooltipDialogFragment is a UI class to show the user information about
+ * the security code and where it is found on the card.
+ */
 class SecurityCodeTooltipDialogFragment : DialogFragment() {
 
     private val cvvImage: ImageView by lazy { cvv_image }
