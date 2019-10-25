@@ -55,7 +55,7 @@ class EContextFormFragment : OmiseFragment() {
         title = when (type) {
             SupportedEcontext.ConvenienceStore -> getString(R.string.title_convenience_store)
             SupportedEcontext.PayEasy -> getString(R.string.title_pay_easy)
-            SupportedEcontext.Netbanking -> getString(R.string.title_netbanking)
+            SupportedEcontext.Netbanking -> getString(R.string.title_netbank)
             null -> getString(R.string.econtext_title)
         }
         setHasOptionsMenu(true)

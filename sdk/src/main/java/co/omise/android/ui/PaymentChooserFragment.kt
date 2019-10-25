@@ -161,7 +161,7 @@ sealed class PaymentChooserItem(
 
     object Netbanking : PaymentChooserItem(
             iconRes = R.drawable.payment_netbank,
-            titleRes = R.string.payment_method_netbanking_title,
+            titleRes = R.string.payment_method_netbank_title,
             indicatorIconRes = R.drawable.ic_next
     )
 
