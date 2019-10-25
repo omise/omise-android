@@ -10,7 +10,9 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
-
+/**
+ * OmiseFragment is the base class for all other fragments in the SDK.
+ */
 abstract class OmiseFragment : Fragment() {
 
     var title: String? = null
