@@ -47,7 +47,7 @@ abstract class RequestBuilder<T : Model> {
 
     /**
      * Additional parameters for the request, which is null by default for requests
-     * that do not accept params (eg: GET).
+     * that do not accept params (e.g. GET).
      *
      * @return the params as a [RequestBody].
      */
