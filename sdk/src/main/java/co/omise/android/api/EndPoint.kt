@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Endpoint is a base class that can be used to encapsulate information
  * about a particular Omise API endpoint. Currently there are two endpoint
- * classes, "API" and "VAULT".
+ * classes: "API" and "VAULT".
  *
  * This class includes the following information for each endpoint:
  *
