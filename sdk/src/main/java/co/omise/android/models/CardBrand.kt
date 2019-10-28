@@ -11,7 +11,7 @@ import java.util.regex.Pattern
  * CardBrand holds information about all card brands recognized in the SDK.
  *
  * @param name Card brand name.
- * @param patternStr Pattern that can be recognized the brand's card numbers.
+ * @param patternStr Pattern that can be used to recognize the brand's card numbers.
  * @param minLength Minimum length of the brand's card numbers.
  * @param maxLength Maximum length of the brand's card numbers.
  * @param logoResourceId Resource ID for the brand's logo image.
