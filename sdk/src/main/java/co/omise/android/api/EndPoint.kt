@@ -60,7 +60,7 @@ abstract class Endpoint {
 
     companion object {
         /**
-         * Class containing all the information "VAULT" endpoint.
+         * Class containing all the information the "VAULT" endpoint.
          */
         @JvmField
         val VAULT: Endpoint = object : Endpoint() {
@@ -74,7 +74,7 @@ abstract class Endpoint {
         }
 
         /**
-         * Class containing all the information "API" endpoint.
+         * Class containing all the information the "API" endpoint.
          */
         @JvmField
         val API: Endpoint = object : Endpoint() {
