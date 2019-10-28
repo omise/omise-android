@@ -39,7 +39,7 @@ abstract class RequestBuilder<T : Model> {
 
     /**
      * Abstract method that needs to be implemented by all children of this class
-     * to provide API Path.
+     * to provide API path.
      *
      * @return the URL path as [HttpUrl].
      */
