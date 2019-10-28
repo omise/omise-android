@@ -5,7 +5,7 @@ import android.net.Uri
 
 /**
  * AuthorizingPaymentURLVerifier is a utility class that verifies the correctness and integrity
- * of a authorizing url that is returned as part of creating a Charge through Omise API.
+ * of an authorizing URL that is returned as part of creating a Charge through the Omise API.
  */
 class AuthorizingPaymentURLVerifier {
     val authorizedURL: Uri
