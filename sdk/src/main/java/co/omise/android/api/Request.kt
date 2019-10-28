@@ -5,7 +5,7 @@ import okhttp3.HttpUrl
 import okhttp3.RequestBody
 
 /**
- * Request class acts as a holder class that encapsulate the information regarding which
+ * Request class acts as a holder class that encapsulates the information regarding which
  * of the Omise APIs the user wants to access and pass any additional data needed for that api request
  *
  * @param <T> the generic type for any Model that would need to be returned by the [Client] when this
