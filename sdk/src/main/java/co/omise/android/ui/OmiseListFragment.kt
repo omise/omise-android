@@ -18,7 +18,7 @@ import co.omise.android.R
 import kotlinx.android.synthetic.main.fragment_list.recycler_view
 
 /**
- * OmiseListFragment is the base class for all list based UI classes.
+ * OmiseListFragment is the base class for all list-based UI classes.
  */
 abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
