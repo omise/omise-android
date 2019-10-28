@@ -5,7 +5,7 @@ import okhttp3.HttpUrl
 import java.util.*
 
 /**
- * Endpoint is a base class that can be used to encapsulates information
+ * Endpoint is a base class that can be used to encapsulate information
  * about a particular Omise API endpoint. Currently there are two endpoint
  * classes, "API" and "VAULT".
  *
