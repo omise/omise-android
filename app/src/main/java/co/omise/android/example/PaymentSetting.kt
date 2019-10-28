@@ -34,7 +34,7 @@ object PaymentSetting {
                     .getBoolean(context.getString(R.string.payment_preference_is_use_specifics_payment_methods_key), false)
 
     @JvmStatic
-    fun getCapabilityPreferences(context: Context): Capability {
+    fun createCapabilityFromPreferences(context: Context): Capability {
         val sourceTypes = getPaymentMethodPreferences(context)
                 .filter { it.value }
                 .toMap()

@@ -40,6 +40,12 @@ data class Capability(
 
     companion object {
 
+        /**
+         * The helper function for creating an instance of [Capability].
+         * @param allowCreditCard allow to create a [Token] with a credit card or not. Default is true.
+         * @param sourceTypes list of [SourceType] that allow to create a [Source].
+         * @return an instance of [Capability] with specific configuration.
+         */
         @JvmStatic
         fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>): Capability {
             val paymentMethods = sourceTypes.map(::createSourceTypeMethod).toMutableList()
