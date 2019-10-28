@@ -3,7 +3,10 @@ package co.omise.android
 import android.content.Intent
 import android.net.Uri
 
-
+/**
+ * AuthorizingPaymentURLVerifier is a utility class that verifies the correctness and integrity
+ * of an authorizing URL that is returned as part of creating a Charge through the Omise API.
+ */
 class AuthorizingPaymentURLVerifier {
     val authorizedURL: Uri
     val expectedReturnURLPatterns: List<Uri>
@@ -42,6 +45,13 @@ class AuthorizingPaymentURLVerifier {
         expectedReturnURLPatterns = returnURLStringPatterns.map { Uri.parse(it) }
     }
 
+    /**
+     * verifyURL checks a supplied URL to see if it matches the expected scheme, host and
+     * path.
+     *
+     * @param uri URL that needs to be verified.
+     * @return true if the URL is valid, false otherwise
+     */
     fun verifyURL(uri: Uri): Boolean {
         for (expectedReturnURLPattern in expectedReturnURLPatterns) {
             if (expectedReturnURLPattern.scheme.equals(uri.scheme, true) &&
@@ -54,6 +64,13 @@ class AuthorizingPaymentURLVerifier {
         return false
     }
 
+    /**
+     * verifyExternalURL checks if a URL supplied from an external source matches
+     * the expected scheme, host and path.
+     *
+     * @param uri URL that needs to be verified.
+     * @return true if the URL is valid, false otherwise
+     */
     fun verifyExternalURL(uri: Uri): Boolean {
         return uri.scheme != "http" &&
                 uri.scheme != "https" &&

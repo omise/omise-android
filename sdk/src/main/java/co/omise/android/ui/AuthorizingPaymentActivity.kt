@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
@@ -12,12 +11,13 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
-import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
-
+import kotlinx.android.synthetic.main.activity_authorizing_payment.*
 
 /**
- * This is an experimental helper class in our SDK which would help you to handle 3DS verification process within your apps out of the box.
- * In case authorize with external app. By default open those external app when completed verification then sent result back our SDK.
+ * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
+ * the implementer with handling 3DS verification process within their app out of the box.
+ * In case the authorization needs to be handled by an external app, the SDK opens that external
+ * app by default but the Intent callback needs to be handled by the implementer.
  */
 class AuthorizingPaymentActivity : AppCompatActivity() {
 

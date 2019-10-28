@@ -4,15 +4,14 @@ import okhttp3.CertificatePinner
 import okhttp3.HttpUrl
 import java.util.*
 
-
 /**
- * Endpoints encapsulates information about a particular Omise API endpoint.
- * Currently there exists 2 endpoints, the API and the VAULT.
+ * Endpoint is a base class that can be used to encapsulate information
+ * about a particular Omise API endpoint. Currently there are two endpoint
+ * classes: "API" and "VAULT".
  *
+ * This class includes the following information for each endpoint:
  *
- * This class encapsulates the following information for each endpoint:
- *
- *  * Host and network scheme (defaults to HTTPS.)
+ *  * Host and network scheme (defaults to HTTPS).
  *  * The certificate hash to pin against.
  *
  */
@@ -21,7 +20,7 @@ abstract class Endpoint {
     /**
      * The scheme to use, defaults to HTTPS.
      *
-     * @return A [String] containing the network scheme to use.
+     * @return A string containing the network scheme.
      */
     fun scheme(): String {
         return "https"
@@ -30,7 +29,7 @@ abstract class Endpoint {
     /**
      * The host name to connect to.
      *
-     * @return A [String] containing the host name to connect to.
+     * @return A string containing the host name.
      */
     abstract fun host(): String
 
@@ -38,19 +37,18 @@ abstract class Endpoint {
      * The certificate hash to use with OkHttp's [CertificatePinner].
      * The default implementation returns a certificate hash for `*.omise.co` domains.
      *
-     * @return A [String] containing the cert hash to pin against or `null` to
-     * pin no certificate.
+     * @return A string containing the cert hash or `null` to pin no certificate.
      */
     fun certificateHash(): String {
         return "sha256/maqNsxEnwszR+xCmoGUiV636PvSM5zvBIBuupBn9AB8="
     }
 
     /**
-     * The authentication key to use. The key should be taken from the given [Config] object.
+     * The authentication key to use. The key should be taken from the supplied [Config] class.
      * [Config.publicKey] should be returned.
      *
-     * @param config A [Config] instance.
-     * @return A [String] containing the authentication key.
+     * @param config A [Config] class instance.
+     * @return A string containing the authentication key.
      */
     abstract fun authenticationKey(config: Config): String
 
@@ -61,6 +59,9 @@ abstract class Endpoint {
     }
 
     companion object {
+        /**
+         * Class containing all the information the "VAULT" endpoint.
+         */
         @JvmField
         val VAULT: Endpoint = object : Endpoint() {
             override fun host(): String {
@@ -72,6 +73,9 @@ abstract class Endpoint {
             }
         }
 
+        /**
+         * Class containing all the information the "API" endpoint.
+         */
         @JvmField
         val API: Endpoint = object : Endpoint() {
             override fun host(): String {
@@ -100,6 +104,5 @@ abstract class Endpoint {
                 endpoints[API.host()] = API
                 return Collections.unmodifiableMap(endpoints)
             }
-
     }
 }

@@ -1,5 +1,9 @@
 package co.omise.android;
 
+/**
+ * SDKLog is the custom SDK logging class that allows easier logging that is
+ * specific to the SDK tag.
+ */
 public final class SDKLog {
     public static String TAG = "co.omise.android";
 

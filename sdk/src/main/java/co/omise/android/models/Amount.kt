@@ -1,6 +1,11 @@
 package co.omise.android.models
 
-
+/**
+ * Amount handles formatting of a given amount based on the supplied currency.
+ *
+ * @param amount The specified amount.
+ * @param currency The specified currency.
+ */
 data class Amount(val amount: Long, val currency: String) {
 
     val localAmount: Double

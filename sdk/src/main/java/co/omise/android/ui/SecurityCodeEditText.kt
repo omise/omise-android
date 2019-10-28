@@ -5,7 +5,10 @@ import android.text.InputFilter
 import android.text.InputType
 import android.util.AttributeSet
 
-
+/**
+ * SecurityCodeEditText is a custom EditText for credit card security code field. This
+ * EditText applies the security code range limitation and InputType.
+ */
 class SecurityCodeEditText : OmiseEditText {
     companion object {
         private const val CVV_LENGTH = 4

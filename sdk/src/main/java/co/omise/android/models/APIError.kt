@@ -1,7 +1,5 @@
 package co.omise.android.models
 
-import org.joda.time.DateTime
-
 /**
  * Represents Error object.
  *
@@ -10,6 +8,5 @@ import org.joda.time.DateTime
 data class APIError(
         val location: String? = null,
         val code: String? = null,
-        override val message: String? = null,
-        val created: DateTime? = null
+        override val message: String? = null
 ) : Error()

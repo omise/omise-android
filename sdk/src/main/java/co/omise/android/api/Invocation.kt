@@ -12,6 +12,16 @@ import okhttp3.Response
 import org.json.JSONException
 import java.io.IOException
 
+/**
+ * Invocation abstracts away the details of sending the HTTP [Request] and parsing
+ * its response from [Client].
+ *
+ * @param replyHandler Handler to send response Runnables.
+ * @param httpClient [OkHttpClient] that is used to send the HTTP Request
+ * @param request Omise Request that is going to be sent to the API.
+ * @param listener Callback for Request responses.
+ * @param serializer Serializer class used to deserialize responses.
+ */
 internal class Invocation<T : Model>(
         private val replyHandler: Handler,
         private val httpClient: OkHttpClient,
@@ -20,6 +30,9 @@ internal class Invocation<T : Model>(
         private val serializer: Serializer = Serializer()
 ) {
 
+    /**
+     * Calling the Invoke function starts the Request process.
+     */
     fun invoke() {
         try {
             val call = httpClient.newTypedCall(
@@ -58,12 +71,17 @@ internal class Invocation<T : Model>(
     }
 
     private fun didFail(e: Throwable) {
-        replyHandler.post {
-            listener.onRequestFailed(e)
-        }
+        replyHandler.post { listener.onRequestFailed(e) }
     }
 }
 
+/**
+ * TypedCall is a custom class that encapsulates a [Call] as well as its
+ * expected response Class.
+ *
+ * @param call OkHttp [Call] that will be executed.
+ * @param clazz Expected response Class.
+ */
 class TypedCall(
         private val call: Call,
         val clazz: Class<Model>

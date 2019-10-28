@@ -5,7 +5,10 @@ import android.util.AttributeSet
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
-
+/**
+ * OmiseEditText is the base class for all other custom EditTexts in the SDK. This base
+ * class performs a basic validation check on the input.
+ */
 open class OmiseEditText : AppCompatEditText {
 
     val isValid: Boolean

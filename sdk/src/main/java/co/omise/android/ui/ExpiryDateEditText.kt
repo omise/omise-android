@@ -10,7 +10,11 @@ import co.omise.android.extensions.disableOptions
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-
+/**
+ * ExpiryDateEditText is a custom EditText for credit card expiration date field. This EditText
+ * handles the formatting of the dates and also limits the month and year inputs to a valid
+ * range.
+ */
 class ExpiryDateEditText : OmiseEditText {
 
     private var cursorPosition = 0

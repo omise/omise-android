@@ -13,6 +13,11 @@ import android.util.AttributeSet
 import co.omise.android.CardNumber
 import co.omise.android.models.CardBrand
 
+/**
+ * CreditCardEditText is a custom EditText for the credit card number field. This EditText
+ * both formats the card number and also draws the card brand logo for the given
+ * card number.
+ */
 class CreditCardEditText : OmiseEditText {
 
     companion object {

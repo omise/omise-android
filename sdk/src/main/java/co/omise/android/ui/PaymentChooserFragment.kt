@@ -8,13 +8,12 @@ import android.view.MenuItem
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import co.omise.android.R
-import co.omise.android.models.BackendType
-import co.omise.android.models.Capability
-import co.omise.android.models.Source
-import co.omise.android.models.SupportedEcontext
-import co.omise.android.models.SourceType
-import co.omise.android.models.backendType
+import co.omise.android.models.*
 
+/**
+ * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
+ * available payment method options list for the user to choose from.
+ */
 class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
     var navigation: PaymentCreatorNavigation? = null
