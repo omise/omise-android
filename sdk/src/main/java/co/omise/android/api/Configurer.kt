@@ -8,7 +8,7 @@ import okhttp3.Response
 
 /**
  * Configurer is used in the [Client] class to handle HTTP request configuration.
- * The [Configurer.configure] function can also be used to directly configure a
+ * The [Configurer.configure] function can also be used to directly configure
  * requests if a custom [okhttp3.OkHttpClient] is used, without the need to go
  * through the Omise [Client].
  *
