@@ -66,7 +66,7 @@ class AuthorizingPaymentURLVerifier {
 
     /**
      * verifyExternalURL checks if a URL supplied from an external source matches
-     * the expected scheme, host and URL path.
+     * the expected scheme, host and path.
      *
      * @param uri URL that needs to be verified.
      * @return true if the URL is valid, false otherwise
