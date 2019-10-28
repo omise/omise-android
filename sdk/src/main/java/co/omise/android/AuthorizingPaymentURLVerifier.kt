@@ -49,7 +49,7 @@ class AuthorizingPaymentURLVerifier {
      * verifyURL checks a supplied URL to see if it matches the expected scheme, host and
      * path.
      *
-     * @param uri Uri that needs to be verified.
+     * @param uri URL that needs to be verified.
      * @return true if the URL is valid, false otherwise
      */
     fun verifyURL(uri: Uri): Boolean {
