@@ -46,7 +46,7 @@ class AuthorizingPaymentURLVerifier {
     }
 
     /**
-     * verifyURL checks a supplied Uri to see if it matches the expected scheme, host and
+     * verifyURL checks a supplied URL to see if it matches the expected scheme, host and
      * path.
      *
      * @param uri Uri that needs to be verified.
