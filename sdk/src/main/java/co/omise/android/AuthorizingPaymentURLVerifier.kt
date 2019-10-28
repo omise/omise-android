@@ -68,7 +68,7 @@ class AuthorizingPaymentURLVerifier {
      * verifyExternalURL checks if a URL supplied from an external source matches
      * the expected scheme, host and URL path.
      *
-     * @param uri Uri that needs to be verified.
+     * @param uri URL that needs to be verified.
      * @return true if the URL is valid, false otherwise
      */
     fun verifyExternalURL(uri: Uri): Boolean {
