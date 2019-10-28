@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver
 import org.joda.time.DateTime
 
 /**
- * Model is a base class that all model classes are extended from and contains fields
+ * Model is a base class from which all model classes are extended and contains fields
  * that are shared between all models.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "object", visible = true)
