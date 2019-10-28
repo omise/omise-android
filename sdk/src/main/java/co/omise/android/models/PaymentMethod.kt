@@ -8,7 +8,7 @@ import org.joda.time.DateTime
  * PaymentMethod contains all the information regarding a payment method available to the
  * user. PaymentMethod list can be found in the [Capability] object.
  *
- * @see <a href="https://www.omise.co/capability-api">Capabilities API</a>
+ * @see [Capabilities API](https://www.omise.co/capability-api)
  */
 @Parcelize
 data class PaymentMethod(
