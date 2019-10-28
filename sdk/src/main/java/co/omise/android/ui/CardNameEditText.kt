@@ -4,7 +4,9 @@ import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
 
-
+/**
+ * CardNameEditText is a custom EditText for the credit card name field.
+ */
 class CardNameEditText : OmiseEditText {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)

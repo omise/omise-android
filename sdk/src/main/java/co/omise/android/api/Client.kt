@@ -11,39 +11,32 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-
 /**
- * Client is the main entry point to the SDK and it needs to be supplied with a public Key. You can use the Client to send a [Request].
+ * Client is the main entry point to the SDK and it needs to be supplied with a public API Key.
+ * You can use the Client to send a [Request]. The constructor creates a Client that sends the
+ * specified API version in the header to access the latest version of the Omise API.
  *
- * @param publicKey The key with the `pkey_` prefix.
+ * @param publicKey The API key with the `pkey_` prefix.
+ *
  * @see Request
- */
-class Client(publicKey: String)
-
-/**
- * Creates a Client that sends the specified API version string in the header to access the latest version
- * of the Omise API.
- *
- *
- *
- * Note: Please ensure to have at least one of the keys supplied to have the client function correctly.
- *
- *
- * @param publicKey The key with `pkey_` prefix.
- *
  * @see [Security Best Practices](https://www.omise.co/security-best-practices)
- *
  */
-{
+class Client(publicKey: String) {
 
     private var httpClient: OkHttpClient
     private val background: Executor
 
+    init {
+        background = Executors.newSingleThreadExecutor()
+        val config = Config(publicKey = publicKey)
+        httpClient = buildHttpClient(config)
+    }
+
     /**
-     * Sends the given request and invoke the callback on the listener.
+     * Sends the supplied request and invokes the callback on the listener.
      *
-     * @param request  The [Request] to send.
-     * @param listener The [RequestListener] to listen for request result.
+     * @param request  The [Request] to be sent.
+     * @param listener The [RequestListener] to listen for request response.
      */
     fun <T : Model> send(request: Request<T>, listener: RequestListener<T>) {
         val handler = Handler()
@@ -72,11 +65,5 @@ class Client(publicKey: String)
                 .certificatePinner(pinner.build())
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()
-    }
-
-    init {
-        background = Executors.newSingleThreadExecutor()
-        val config = Config(publicKey = publicKey)
-        httpClient = buildHttpClient(config)
     }
 }

@@ -7,14 +7,14 @@ import okhttp3.Response
 
 
 /**
- * Configurer handles HTTP requests configuration. You can use the [.configure] method
- * to setup your own [okhttp3.OkHttpClient] and avoid using the [Client] directly, for example.
+ * Configurer is used in the [Client] class to handle HTTP request configuration.
+ * The [Configurer.configure] function can also be used to directly configure
+ * requests if a custom [okhttp3.OkHttpClient] is used, without the need to go
+ * through the Omise [Client].
+ *
+ * @param config [Config] class that contains [Client] configuration information.
  */
 class Configurer internal constructor(private val config: Config) : Interceptor {
-
-    init {
-        requireNotNull(config)
-    }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.proceed(configure(config, chain.request()))
@@ -23,11 +23,11 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
     companion object {
 
         /**
-         * Configures a [Request] according to the given [Config].
+         * Configures an HTTP [Request] according to the given [Config].
          *
-         * @param config  A [Config] to use for configuration.
-         * @param request An HTTP [Request] to configure.
-         * @return A new [Request] instance with configurations from [Config] applied.
+         * @param config  A [Config] class containing the configuration information to be used.
+         * @param request Original HTTP [Request] to configure.
+         * @return A new HTTP [Request] instance with configurations from [config] applied.
          */
         @JvmStatic
         internal fun configure(config: Config, request: Request): Request {
@@ -40,7 +40,7 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
                     .addHeader("User-Agent", config.userAgent())
                     .addHeader("Authorization", Credentials.basic(key, "x"))
 
-            if (!apiVersion.isEmpty()) {
+            if (apiVersion.isNotEmpty()) {
                 builder = builder.addHeader("Omise-Version", apiVersion)
             }
 

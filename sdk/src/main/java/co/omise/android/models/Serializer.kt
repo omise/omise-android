@@ -18,7 +18,10 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-
+/**
+ * Serializer is the custom serializer used in the SDK to serialize and deserialize API
+ * request responses.
+ */
 class Serializer {
     /**
      * Returns the pre-configured [ObjectMapper] used for
@@ -29,18 +32,18 @@ class Serializer {
     var objectMapper: ObjectMapper
 
     /**
-     * Returns the pre-configured {@link DateTimeFormatter} used for
+     * Returns the pre-configured  [DateTimeFormatter] used for
      * serializing and deserializing date and times for Omise API objects.
      *
-     * @return A {@link DateTimeFormatter} instance.
+     * @return A [DateTimeFormatter] instance.
      */
     var dateTimeFormatter: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
 
     /**
-     * Returns the pre-configured {@link DateTimeFormatter} used for
+     * Returns the pre-configured [DateTimeFormatter] used for
      * serializing and deserializing date for Omise API objects.
      *
-     * @return A {@link DateTimeFormatter} instance.
+     * @return A [DateTimeFormatter] instance.
      */
     var localDateFormatter: DateTimeFormatter = ISODateTimeFormat.date()
 
@@ -67,7 +70,7 @@ class Serializer {
      *
      * @param input The [InputStream] that contains the data to deserialize.
      * @param klass The [Class] to deserialize the result into.
-     * @param <T>   The type to deserialize the result into.
+     * @param <T> The type to deserialize the result into.
      * @return An instance of type T deserialized from the input stream.
      * @throws IOException on general I/O error.
      */
@@ -81,7 +84,7 @@ class Serializer {
      *
      * @param input The [InputStream] that contains the data to deserialize.
      * @param klass The [Class] to deserialize the result into.
-     * @param <T>   The type to deserialize the result into.
+     * @param <T> The type to deserialize the result into.
      * @return An instance of type T deserialized from the input stream.
      * @throws IOException on general I/O error.
      */
@@ -94,7 +97,7 @@ class Serializer {
      * Serialize the given model to a map with JSON-like structure.
      *
      * @param model The [Model] to serialize.
-     * @param <T>   The type of the model to serialize.
+     * @param <T> The type of the model to serialize.
      * @return The map containing the model's data.
      */
     fun <T : Model> serializeToMap(model: T): Map<String, Any> {
@@ -105,8 +108,8 @@ class Serializer {
      * Serializes the given [RequestBuilder] object to the provided output stream.
      *
      * @param outputStream The [OutputStream] to serialize the parameter into.
-     * @param builder      The [RequestBuilder] to serialize.
-     * @param <T>          The type of the parameter object to serialize.
+     * @param builder The [RequestBuilder] to serialize.
+     * @param <T> The type of the parameter object to serialize.
      * @throws IOException on general I/O error.
      */
     @Throws(IOException::class)

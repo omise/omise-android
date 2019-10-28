@@ -1,6 +1,5 @@
 package co.omise.android.ui
 
-
 import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -11,6 +10,10 @@ import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
+/**
+ * InternetBankingChooserFragment is the UI class, extended from base [OmiseListFragment] to show
+ * available Internet Banking options list for the user to choose from.
+ */
 internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankingChooserItem>() {
 
     private val allowedBanks: List<SourceType.InternetBanking> by lazy {

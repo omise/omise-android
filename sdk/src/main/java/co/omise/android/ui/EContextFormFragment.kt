@@ -22,7 +22,9 @@ import kotlinx.android.synthetic.main.fragment_econtext_form.text_email_error
 import kotlinx.android.synthetic.main.fragment_econtext_form.text_full_name_error
 import kotlinx.android.synthetic.main.fragment_econtext_form.text_phone_number_error
 
-
+/**
+ * EContextFormFragment is the UI class for handling all EContext payment methods.
+ */
 class EContextFormFragment : OmiseFragment() {
 
     var requester: PaymentCreatorRequester<Source>? = null
