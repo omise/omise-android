@@ -101,8 +101,7 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
 
         if (isUsedSpecificsPaymentMethods) {
-            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityFromSharedPreferences(this));
-
+            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this));
         } else {
             intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
         }
