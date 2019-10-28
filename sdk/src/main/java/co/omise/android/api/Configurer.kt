@@ -1,7 +1,6 @@
 package co.omise.android.api
 
-import android.util.Log
-import co.omise.android.BuildConfig
+import co.omise.android.SDKLog
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -20,15 +19,10 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        if (BuildConfig.DEBUG) {
-            Log.i("APIRequest", "${request.method()} ${request.url().encodedPath()}")
-        }
+        SDKLog.d("${request.method()} ${request.url().encodedPath()}")
 
         val response = chain.proceed(configure(config, chain.request()))
-
-        if (BuildConfig.DEBUG) {
-            Log.i("APIRequest", "${request.method()} ${request.url().encodedPath()} - ${response.code()}")
-        }
+        SDKLog.d("${request.method()} ${request.url().encodedPath()} - ${response.code()}")
 
         return response
     }
