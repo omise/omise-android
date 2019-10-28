@@ -39,3 +39,9 @@ object PaymentSetting {
                     .map { it.second }
             )
 }
+
+fun createCapability(): Capability =
+Capability.builder(allowCreditCard = true)
+        .sourceTypes(SourceType.InternetBanking.Bay,SourceType.InternetBanking.Ktb)
+        .build()
+
