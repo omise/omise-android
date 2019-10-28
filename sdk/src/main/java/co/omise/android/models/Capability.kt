@@ -2,6 +2,7 @@ package co.omise.android.models
 
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
+import co.omise.android.models.PaymentMethod.Companion.createSourceTypeMethod
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import okhttp3.HttpUrl
@@ -35,5 +36,19 @@ data class Capability(
         override fun path(): HttpUrl = buildUrl(Endpoint.API, "capability")
 
         override fun type(): Class<Capability> = Capability::class.java
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>): Capability {
+            val paymentMethods = sourceTypes.map(::createSourceTypeMethod).toMutableList()
+
+            if (allowCreditCard) {
+                paymentMethods.add(PaymentMethod.createCreditCardMethod())
+            }
+
+            return Capability(paymentMethods = paymentMethods)
+        }
     }
 }

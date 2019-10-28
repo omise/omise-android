@@ -90,7 +90,7 @@ class CheckoutActivity : AppCompatActivity() {
             putExtra(OmiseActivity.EXTRA_CURRENCY, amount.currency)
 
             if (isUsedSpecificsPaymentMethods) {
-                putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityFromSharedPreferences(this@CheckoutActivity))
+                putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.getCapabilityPreferences(this@CheckoutActivity))
             } else {
                 putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
             }
