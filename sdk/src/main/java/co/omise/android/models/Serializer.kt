@@ -19,7 +19,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /**
- * Serializer is the custom serializer used in the SDK to deserialize API
+ * Serializer is the custom serializer used in the SDK to serialize and deserialize API
  * request responses.
  */
 class Serializer {
