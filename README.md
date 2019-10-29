@@ -57,7 +57,7 @@ file as follows:
 ```xml
 <activity
   android:name="co.omise.android.ui.CreditCardActivity"
-  android:theme="@style/OmiseSDKTheme" />
+  android:theme="@style/OmiseTheme" />
 ```
 
 Then in your activity, declare the method that will start this activity as follows:
@@ -87,7 +87,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         return;
       }
 
-      Token token = data.getParcelableExtra(CreditCardActivity.EXTRA_TOKEN_OBJECT);
+      Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
       // process your token here.
 
     default:
@@ -96,20 +96,20 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 }
 ```
 
-A number of results are returned as from the activity. You can obtain them from the
+A number of results are returned from the activity. You can obtain them from the
 resulting `Intent` with the following code:
 
-* `data.getStringExtra(CreditCardActivity.EXTRA_TOKEN)` - The string ID of the token. Use
+* `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
   this if you only needs the ID and not   the card data.
-* `data.getParcelableExtra(CreditCardActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
+* `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
   object returned from the Omise API.
-* `data.getParcelableExtra(CreditCardActivity.EXTRA_CARD_OBJECT)` - The `Card` object
+* `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
   which is part of the `Token` object returned from the Omise API.
 
 #### Custom Credit Card Form
 
 If you need to build your own credit card form, components inside `CreditCardActivity`
-can be used on its own. For example, the `CreditCardEditText` can be used in XML like so:
+can be used on its own. For example, the `CreditCardEditText` can be used in XML in this way:
 
 ```xml
 <co.omise.android.ui.CreditCardEditText
@@ -120,15 +120,14 @@ can be used on its own. For example, the `CreditCardEditText` can be used in XML
 This component provides automatic spacing into groups of 4 digits as the user types.
 Additionally the following utility classes are available from the SDK:
 
-* `co.omise.android.ui.ExpiryMonthSpinnerAdapter` - This is a
-  [SpinnerAdapter](https://developer.android.com/reference/android/widget/SpinnerAdapter.html)
-  that provide list of months (01-12) for use in a
-  [Spinner](https://developer.android.com/guide/topics/ui/controls/spinner.html) control
-  for selecting expiry dates.
-* `co.omise.android.ui.ExpiryYearSpinnerAdapter` - Same as above but lists the current
-  year up to twelve years into the future.
-* `co.omise.android.CardNumber` - The `CardNumber` class provides utility methods for
-  validating and formatting credit card numbers.
+* `co.omise.android.ui.CreditCardEditText` - The `CreditCardEditText` class provides utility
+   methods for validating and formatting credit card numbers.
+* `co.omise.android.ui.CardNameEditText` - The `CardNameEditText` class handles formatting and
+   input type for card holder name.
+* `co.omise.android.ui.ExpiryDateEditText` - The `ExpiryDateEditText` class handles formatting and
+  date range limitation.
+* `co.omise.android.ui.SecurityCodeEditText` - The `SecurityCodeEditText` class handles formatting
+   and input type for security code.
 
 #### Manual Tokenization
 
