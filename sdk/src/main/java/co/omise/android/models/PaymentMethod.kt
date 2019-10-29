@@ -28,24 +28,18 @@ data class PaymentMethod(
 
     companion object {
         @JvmStatic
-        fun cardMethod(): PaymentMethod =
-                PaymentMethod(
-                        name = "card"
-                )
+        fun createCreditCardMethod(): PaymentMethod =
+                PaymentMethod(name = "card")
 
         @JvmStatic
-        fun fromSourceType(sourceType: SourceType): PaymentMethod =
-                when {
-                    sourceType is SourceType.Unknown && sourceType.name == "card" -> cardMethod()
-                    else -> PaymentMethod(
-                            name = sourceType.name,
-                            installmentTerms = when (sourceType) {
-                                is SourceType.Installment -> SourceType.Installment.availableTerms(sourceType)
-                                else -> null
-                            },
-                            created = null
-                    )
-                }
+        fun createSourceTypeMethod(sourceType: SourceType): PaymentMethod =
+                PaymentMethod(
+                        name = sourceType.name,
+                        installmentTerms = when (sourceType) {
+                            is SourceType.Installment -> SourceType.Installment.availableTerms(sourceType)
+                            else -> null
+                        }
+                )
     }
 }
 
