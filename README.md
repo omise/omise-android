@@ -135,34 +135,34 @@ If you have built your own credit card form you can use the SDK to manually toke
 card. First build the `Client` and supply your public key like so:
 
 ```java
-Client client = new Client("pkey_test_123");
+private val client = Client("pkey_test_123")
 ```
 
 Then construct the token request with values from your custom form:
 
 ```java
-TokenRequest request = new TokenRequest();
-request.number = "4242424242424242";
-request.name = "JOHN SMITH";
-request.expirationMonth = 10;
-request.expirationYear = 2020;
-request.securityCode = "123";
+val cardParam = CardParam(
+                name = "JOHN Doe",
+                number = "4242424242424242",
+                expirationMonth = 10,
+                expirationYear = 2020,
+                securityCode = "123")
+
+val request = Token.CreateTokenRequestBuilder(cardParam).build()
 ```
 
 And then send the request using the `client` we've constructed earlier:
 
 ```java
-client.send(request, new RequestListener<Token>() {
-  @Override
-  public void onRequestSucceed(Token model) {
+Client(pKey).send(request, object : RequestListener<Token>{
+   override fun onRequestSucceed(model: Token) {
       // you've got Token!
-  }
+   }
 
-  @Override
-  public void onRequestFailed(Throwable throwable) {
+    override fun onRequestFailed(throwable: Throwable) {
       // something bad happened
-  }
-});
+    }
+})
 ```
 
 The `Client` class will automatically dispatch the network call on an internal background
