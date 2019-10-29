@@ -39,13 +39,14 @@ class PaymentSettingFragment : PreferenceFragmentCompat() {
                 .findPreference<CheckBoxPreference>(getString(R.string.payment_preference_is_use_specifics_payment_methods_key))?.isChecked
                 ?: false
 
-        PaymentSetting.getPaymentMethodSettingKeysWithSourceTypes(context!!).forEach {
-            preferenceScreen.findPreference<CheckBoxPreference>(it.first)?.apply {
-                this.isEnabled = isUsedSpecificsPaymentMethod
+        context?.let {
+            PaymentSetting.getPaymentMethodPreferences(it).forEach { preference ->
+                preferenceScreen.findPreference<CheckBoxPreference>(preference.key)?.apply {
+                    this.isEnabled = isUsedSpecificsPaymentMethod
+                }
             }
         }
     }
-
 
     private fun checkedCheckBoxPreference(preferenceKey: String) {
         preferenceScreen
