@@ -50,7 +50,7 @@
     <string name="title_authorizing_payment">Authorizing Payment</string>
     <string name="title_convenience_store">Convenience Store</string>
     <string name="title_pay_easy">Pay-easy</string>
-    <string name="title_netbanking">Net bank</string>
+    <string name="title_netbank">Net Bank</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
     <string name="hint_expiration_date" translatable="false">MM/YY</string>
 
@@ -65,11 +65,11 @@
     <string name="payment_method_credit_card_title">Credit Card</string>
     <string name="payment_method_internet_banking_title">Internet Banking</string>
     <string name="payment_method_alipay_title">Alipay Online</string>
-    <string name="payment_method_tesco_lotus_title">Tesco Lotus</string>
+    <string name="payment_method_tesco_lotus_title">Tesco Lotus Bill Payment</string>
     <string name="payment_method_installments_title">Installments</string>
     <string name="payment_method_convenience_store_title">Convenience Store</string>
     <string name="payment_method_pay_easy_title">Pay-easy</string>
-    <string name="payment_method_netbanking_title">Net Bank</string>
+    <string name="payment_method_netbank_title">Net Bank</string>
 
     <string name="payment_method_installment_bbl_title">Bangkok Bank</string>
     <string name="payment_method_installment_kasikorn_title">Kasikorn</string>

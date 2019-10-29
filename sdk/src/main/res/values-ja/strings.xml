@@ -41,7 +41,7 @@
     <string name="payment_chooser_title">決済方法</string>
     <string name="title_convenience_store">コンビニエンスストア</string>
     <string name="title_pay_easy">ペイジー</string>
-    <string name="title_netbanking">ネットバンク</string>
+    <string name="title_netbank">ネットバンク</string>
     <string name="error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount">金額が%sの有効金額を超過しています</string>
     <string name="error_api_bad_request_amount_is_greater_than_valid_amount_without_valid_amount">金額が有効金額を超過しています</string>
     <string name="econtext_title">イーコンテクスト</string>
@@ -73,9 +73,9 @@
     <string name="payment_method_internet_banking_ktb_title">クルンタイ銀行</string>
     <string name="payment_method_internet_banking_scb_title">サイアム・コマーシャル銀行</string>
     <string name="payment_method_internet_banking_title">インターネットバンク</string>
-    <string name="payment_method_netbanking_title">ネットバンク</string>
+    <string name="payment_method_netbank_title">ネットバンク</string>
     <string name="payment_method_pay_easy_title">ペイジー</string>
-    <string name="payment_method_tesco_lotus_title">テスコロータス</string>
+    <string name="payment_method_tesco_lotus_title">テスコロータス請求書払い</string>
     <string name="payment_method_installment_term_month_title">%d ヶ月</string>
     <string name="payment_method_installment_term_months_title">%d ヶ月</string>
 </resources>
