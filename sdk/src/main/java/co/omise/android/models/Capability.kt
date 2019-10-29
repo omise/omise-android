@@ -41,7 +41,7 @@ data class Capability(
     companion object {
 
         /**
-         * The helper function for creating an instance of [Capability].
+         * The helper function for creating an instance of the [Capability] class.
          * @param allowCreditCard allow to create a [Token] with a credit card or not. Default is true.
          * @param sourceTypes list of [SourceType] that allow to create a [Source].
          * @return an instance of [Capability] with specific configuration.
