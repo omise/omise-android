@@ -36,15 +36,15 @@
     <string name="payment_preference_is_use_specifics_payment_methods_summary" translatable="false">Use the payment methods specified below.</string>
     <string name="payment_preference_allow_payment_methods_category_title" translatable="false">Payment Methods</string>
     <string name="payment_preference_credit_card_title" translatable="false">Credit Card</string>
-    <string name="payment_preference_internet_banking_bay_title" translatable="false">Bank of Ayudhya- Internet Banking</string>
-    <string name="payment_preference_internet_banking_ktb_title" translatable="false">Krungthai Bank - Internet Banking</string>
-    <string name="payment_preference_internet_banking_scb_title" translatable="false">Siam Commercial Bank - Internet Banking</string>
-    <string name="payment_preference_internet_banking_bbl_title" translatable="false">Bangkok Bank - Internet Banking</string>
+    <string name="payment_preference_internet_banking_bay_title" translatable="false">BAY - Internet Banking</string>
+    <string name="payment_preference_internet_banking_ktb_title" translatable="false">KTB - Internet Banking</string>
+    <string name="payment_preference_internet_banking_scb_title" translatable="false">SCB - Internet Banking</string>
+    <string name="payment_preference_internet_banking_bbl_title" translatable="false">BBL - Internet Banking</string>
     <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
     <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Tesco Lotus Bill Payment</string>
     <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
-    <string name="payment_preference_installment_first_choice_title" translatable="false">Krungsri First Choice - Installment</string>
-    <string name="payment_preference_installment_bbl_title" translatable="false">Bangkok Bank - Installment</string>
+    <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
+    <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
     <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_econtext_title" translatable="false">econtext</string>

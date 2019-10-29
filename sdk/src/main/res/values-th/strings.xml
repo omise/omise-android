@@ -41,7 +41,7 @@
     <string name="payment_chooser_title">ช่องทางชำระเงิน</string>
     <string name="title_convenience_store">ร้านสะดวกซื้อ</string>
     <string name="title_pay_easy">เพย์อีซี</string>
-    <string name="title_netbanking">เน็ตแบงก์</string>
+    <string name="title_netbank">เน็ตแบงก์</string>
     <string name="menu_title_close">ปิด</string>
     <string name="econtext_title">อีคอนเท็กซ์</string>
     <string name="error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount">ยอดมีจำนวนมากกว่าที่กำหนดไว้ ซึ่งต้องไม่เกิน %s</string>
@@ -73,9 +73,9 @@
     <string name="payment_method_internet_banking_ktb_title">ธนาคารกรุงไทย</string>
     <string name="payment_method_internet_banking_scb_title">ธนาคารไทยพาณิชย์</string>
     <string name="payment_method_internet_banking_title">อินเทอร์เน็ตแบงก์กิ้ง</string>
-    <string name="payment_method_netbanking_title">เน็ตแบงก์</string>
+    <string name="payment_method_netbank_title">เน็ตแบงก์</string>
     <string name="payment_method_pay_easy_title">เพย์อีซี</string>
-    <string name="payment_method_tesco_lotus_title">เทสโก้โลตัส</string>
+    <string name="payment_method_tesco_lotus_title">เทสโก้โลตัสบิลเพย์เมนต์</string>
     <string name="payment_method_installment_term_month_title">%d เดือน</string>
     <string name="payment_method_installment_term_months_title">%d เดือน</string>
 </resources>
