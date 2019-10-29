@@ -154,7 +154,7 @@ val request = Token.CreateTokenRequestBuilder(cardParam).build()
 And then send the request using the `client` we've constructed earlier:
 
 ```java
-Client(pKey).send(request, object : RequestListener<Token>{
+client.send(request, object : RequestListener<Token>{
    override fun onRequestSucceed(model: Token) {
       // you've got Token!
    }
@@ -168,6 +168,41 @@ Client(pKey).send(request, object : RequestListener<Token>{
 The `Client` class will automatically dispatch the network call on an internal background
 thread and will call listener methods on the thread that initially calls the `send`
 method.
+
+## Creating a source
+If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key like so:
+
+```java
+private val client = Client("pkey_test_123")
+```
+
+Then construct the Source request
+
+```java
+val request = Source.CreateSourceRequestBuilder(250.0, "thb", SourceType.Installment.Bay)
+      .description("Item")
+      .email("e@mail.com")
+      .storeId("id-123")
+      .storeName("Store")
+      .phoneNumber("06207658854")
+      .installmentTerm(3)
+      .build()
+
+```
+
+And then send the request using the `client` we've constructed earlier and you will get a Source in response:
+
+```java
+client.send(request, object : RequestListener<Source>{
+   override fun onRequestSucceed(model: Source) {
+      // you've got Source!
+   }
+
+    override fun onRequestFailed(throwable: Throwable) {
+      // something bad happened
+    }
+})
+```
 
 ## Authorizing Payment
 Some payment method require the customers to authorize the payment via an authorized URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay) and etc. Omise Android SDK provide a built in class to do the authorization.
