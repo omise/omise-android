@@ -25,6 +25,7 @@ import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
+import kotlin.text.StringsKt;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
@@ -78,7 +79,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void onRequestFailed(@NotNull Throwable throwable) {
-                snackbar.setText(throwable.getMessage()).show();
+                snackbar.setText(StringsKt.capitalize(throwable.getMessage())).show();
             }
         });
     }

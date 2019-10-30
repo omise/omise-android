@@ -98,7 +98,7 @@ class APIErrorExtensionsTest {
 
         val actualMessage = error.getMessageFromResources(resources)
 
-        assertEquals(resources.getString(R.string.error_required, "something when wrong"), actualMessage)
+        assertEquals(resources.getString(R.string.error_required, "Something when wrong"), actualMessage)
     }
 
     @Test
@@ -125,7 +125,7 @@ class APIErrorExtensionsTest {
                 Pair("expiration date cannot be in the past", InvalidCardReason.InvalidExpirationDate),
                 Pair("name can't be blank", InvalidCardReason.EmptyCardHolderName),
                 Pair("brand not supported (unknown)", InvalidCardReason.UnsupportedBrand),
-                Pair("something when wrong", InvalidCardReason.Unknown("something when wrong"))
+                Pair("something when wrong", InvalidCardReason.Unknown("Something when wrong"))
         )
 
         errorMessagesWithErrorReasons.forEach {
