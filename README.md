@@ -63,13 +63,13 @@ file as follows:
 Then in your activity, declare the method that will start this activity as follows:
 
 ```java
-private static final String OMISE_PKEY = "pkey_test_123";
-private static final int REQUEST_CC = 100;
+private val OMISE_PKEY: String = "pkey_test_123"
+private val REQUEST_CC: Int = 100
 
-private void showCreditCardForm() {
-  Intent intent = new Intent(this, CreditCardActivity.class);
-  intent.putExtra(CreditCardActivity.EXTRA_PKEY, OMISE_PKEY);
-  startActivityForResult(intent, REQUEST_CC);
+private fun showCreditCardForm() {
+    val intent = Intent(this, CreditCardActivity::class.java)
+    intent.putExtra(CreditCardActivity.EXTRA_PKEY, OMISE_PKEY)
+    startActivityForResult(intent, REQUEST_CC)
 }
 ```
 
@@ -79,20 +79,18 @@ After the end-user completes entering credit card information, the activity resu
 callback will be called, handle it like so:
 
 ```java
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-  switch (requestCode) {
-    case REQUEST_CC:
-      if (resultCode == RESULT_CANCELED) {
-        return;
-      }
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
 
-      Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
-      // process your token here.
+    if (resultCode == RESULT_CANCELED) {
+        // handle the cancellation
+        return
+    }
 
-    default:
-      super.onActivityResult(requestCode, resultCode, data);
-  }
+    if (requestCode == REQUEST_CC) {
+        val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
+        // process your token here.
+    }
 }
 ```
 
