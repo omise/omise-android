@@ -306,17 +306,17 @@ file as follows:
 ```xml
 <activity
   android:name="co.omise.android.ui.AuthorizingPaymentActivity"
-  android:theme="@style/OmiseSDKTheme" />
+  android:theme="@style/OmiseTheme" />
 ```
 
 Then in your activity, declare the method that will start this activity as follows:
 
 ```java
-private void showAuthorizingPaymentForm() {
-    Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
-    intent.putExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZED_URLSTRING, `AUTHORIZED_URL`);
-    intent.putExtra(AuthorizingPaymentActivity.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, `EXPECTED_URL_PATTERNS` );
-    startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE);
+private fun showAuthorizingPaymentForm() {
+    val intent = Intent(this, AuthorizingPaymentActivity::class.java)
+    intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, AUTHORIZED_URL)
+    intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, EXPECTED_URL_PATTERNS)
+    startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
 }
 ```
 
@@ -326,10 +326,10 @@ After the end-user completes the authorizing payment process, the activity resul
 callback will be called, handle it like so:
 
 ```java
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
-        String url = data.getStringExtra(AuthorizingPaymentActivity.EXTRA_RETURNED_URLSTRING);
+        val url = data?.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING)
         // Use the redirected URL here.
     }
 }
