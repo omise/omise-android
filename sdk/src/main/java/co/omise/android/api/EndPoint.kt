@@ -1,8 +1,9 @@
 package co.omise.android.api
 
-import okhttp3.CertificatePinner
 import okhttp3.HttpUrl
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
 
 /**
  * Endpoint is a base class that can be used to encapsulate information
@@ -32,16 +33,6 @@ abstract class Endpoint {
      * @return A string containing the host name.
      */
     abstract fun host(): String
-
-    /**
-     * The certificate hash to use with OkHttp's [CertificatePinner].
-     * The default implementation returns a certificate hash for `*.omise.co` domains.
-     *
-     * @return A string containing the cert hash or `null` to pin no certificate.
-     */
-    fun certificateHash(): String {
-        return "sha256/maqNsxEnwszR+xCmoGUiV636PvSM5zvBIBuupBn9AB8="
-    }
 
     /**
      * The authentication key to use. The key should be taken from the supplied [Config] class.

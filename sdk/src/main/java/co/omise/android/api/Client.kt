@@ -3,7 +3,6 @@ package co.omise.android.api
 import android.os.Build
 import android.os.Handler
 import co.omise.android.models.Model
-import okhttp3.CertificatePinner
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
@@ -44,11 +43,6 @@ class Client(publicKey: String) {
     }
 
     private fun buildHttpClient(config: Config): OkHttpClient {
-        val pinner = CertificatePinner.Builder()
-        for (endpoint in Endpoint.allEndpoints) {
-            pinner.add(endpoint.host(), endpoint.certificateHash())
-        }
-
         val builder = OkHttpClient.Builder()
         val spec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
@@ -62,7 +56,6 @@ class Client(publicKey: String) {
         return builder
                 .addInterceptor(Configurer(config))
                 .connectionSpecs(listOf(spec))
-                .certificatePinner(pinner.build())
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()
     }
