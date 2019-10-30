@@ -62,7 +62,7 @@ file as follows:
 
 Then in your activity, declare the method that will start this activity as follows:
 
-```java
+```kotlin
 private val OMISE_PKEY: String = "pkey_test_123"
 private val REQUEST_CC: Int = 100
 
@@ -78,7 +78,7 @@ Replace the string `pkey_test_123` with the public key obtained from your Omise 
 After the end-user completes entering credit card information, the activity result
 callback will be called, handle it like so:
 
-```java
+```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
@@ -132,13 +132,13 @@ Additionally the following utility classes are available from the SDK:
 If you have built your own credit card form you can use the SDK to manually tokenizes the
 card. First build the `Client` and supply your public key like so:
 
-```java
+```kotlin
 private val client = Client("pkey_test_123")
 ```
 
 Then construct the token request with values from your custom form:
 
-```java
+```kotlin
 val cardParam = CardParam(
                 name = "JOHN Doe",
                 number = "4242424242424242",
@@ -151,7 +151,7 @@ val request = Token.CreateTokenRequestBuilder(cardParam).build()
 
 And then send the request using the `client` we've constructed earlier:
 
-```java
+```kotlin
 client.send(request, object : RequestListener<Token>{
    override fun onRequestSucceed(model: Token) {
       // you've got Token!
@@ -181,7 +181,7 @@ To use it, first declare the availability of the activity in your AndroidManifes
 
 Then in your activity, declare the method that will start this activity as follows:
 
-```java
+```kotlin
 private val OMISE_PKEY : String = "pkey_test_123"
 private val REQUEST_CC : Int = 100
 
@@ -202,7 +202,7 @@ Replace the string pkey_test_123 with the public key obtained from your Omise da
 
 After the end-user completes selecting and creating a payment source, the activity result callback will be called, handle it like so:
 
-```java
+```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == RESULT_CANCELED) {
@@ -230,13 +230,13 @@ Two different results that could be returned are
 ### Creating a source
 If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key like so:
 
-```java
+```kotlin
 private val client = Client("pkey_test_123")
 ```
 
 Then construct the Source request
 
-```java
+```kotlin
 val request = Source.CreateSourceRequestBuilder(250.0, "thb", SourceType.Installment.Bay)
       .description("Item")
       .email("e@mail.com")
@@ -245,12 +245,11 @@ val request = Source.CreateSourceRequestBuilder(250.0, "thb", SourceType.Install
       .phoneNumber("06207658854")
       .installmentTerm(3)
       .build()
-
 ```
 
 And then send the request using the `client` we've constructed earlier and you will get a Source in response:
 
-```java
+```kotlin
 client.send(request, object : RequestListener<Source>{
    override fun onRequestSucceed(model: Source) {
       // you've got Source!
@@ -267,19 +266,19 @@ You can retrieve all of your capabilities and available payment sources through 
 
 First build the Client and supply your public key like so:
 
-```java
+```kotlin
 private val client = Client("pkey_test_123")
 ```
 
 Then construct the Capability request
 
-```java
+```kotlin
 val request = Capability.GetCapabilitiesRequestBuilder().build()
 ```
 
 And then send the request using the client we've constructed earlier:
 
-```java
+```kotlin
 client.send(request, object : RequestListener<Capability> {
    override fun onRequestSucceed(model: Capability) {
         // you have capabilities!
@@ -311,7 +310,7 @@ file as follows:
 
 Then in your activity, declare the method that will start this activity as follows:
 
-```java
+```kotlin
 private fun showAuthorizingPaymentForm() {
     val intent = Intent(this, AuthorizingPaymentActivity::class.java)
     intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, AUTHORIZED_URL)
