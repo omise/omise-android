@@ -216,11 +216,9 @@ After the end-user completes selecting and creating a payment source, the activi
             if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                 Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
                 // process the source here
-
             } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
                 Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
                 // process the token here
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -267,6 +265,38 @@ client.send(request, object : RequestListener<Source>{
     }
 })
 ```
+
+### Retrieve Capabilities
+You can retrieve all of your capabilities and available payment sources through the SDK in the following manner.
+
+First build the Client and supply your public key like so:
+
+```java
+private val client = Client("pkey_test_123")
+```
+
+Then construct the Capability request
+
+```java
+val request = Capability.GetCapabilitiesRequestBuilder().build()
+```
+
+And then send the request using the client we've constructed earlier:
+
+```java
+client.send(request, object : RequestListener<Capability> {
+   override fun onRequestSucceed(model: Capability) {
+        // you have capabilities!
+   }
+
+   override fun onRequestFailed(throwable: Throwable) {
+         // something bad happened
+   }
+   }
+})
+```
+
+The Client class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
 
 ## Authorizing Payment
 Some payment method require the customers to authorize the payment via an authorized URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay) and etc. Omise Android SDK provide a built in class to do the authorization.
