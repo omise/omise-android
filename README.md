@@ -325,7 +325,7 @@ Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the 
 After the end-user completes the authorizing payment process, the activity result
 callback will be called, handle it like so:
 
-```java
+```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
