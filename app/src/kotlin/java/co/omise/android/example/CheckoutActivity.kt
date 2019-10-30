@@ -67,7 +67,7 @@ class CheckoutActivity : AppCompatActivity() {
             }
 
             override fun onRequestFailed(throwable: Throwable) {
-                snackbar.setText(throwable.message.orEmpty()).show()
+                snackbar.setText(throwable.message?.capitalize().orEmpty()).show()
             }
         })
     }

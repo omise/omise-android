@@ -14,7 +14,7 @@ fun APIError.getMessageFromResources(res: Resources): String = when (errorCode) 
                 InvalidCardReason.EmptyCardHolderName -> res.getString(R.string.error_api_invalid_card_empty_card_holder_name)
                 InvalidCardReason.UnsupportedBrand -> res.getString(R.string.error_api_invalid_card_unsupported_brand)
                 is InvalidCardReason.Unknown -> res.getString(R.string.error_required, message)
-                else -> res.getString(R.string.error_required, message)
+                else -> res.getString(R.string.error_required, message?.capitalize())
             }
         }
     }
@@ -47,7 +47,7 @@ fun APIError.getMessageFromResources(res: Resources): String = when (errorCode) 
     }
     APIErrorCode.AuthenticationFailure -> res.getString(R.string.error_api_authentication_failure)
     APIErrorCode.ServiceNotFound -> res.getString(R.string.error_api_service_not_found)
-    else -> res.getString(R.string.error_required, message)
+    else -> res.getString(R.string.error_required, message?.capitalize())
 }
 
 val APIError.errorCode: APIErrorCode
@@ -89,7 +89,7 @@ sealed class InvalidCardReason {
             message.isContains("expiration") -> InvalidExpirationDate
             message.isContains("name") -> EmptyCardHolderName
             message.isContains("brand") -> UnsupportedBrand
-            else -> Unknown(message)
+            else -> Unknown(message.capitalize())
         }
     }
 }
@@ -134,7 +134,7 @@ sealed class BadRequestReason {
                     val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
                     AmountIsGreaterThanValidAmount(validAmount, currency)
                 }
-                else -> Unknown(message)
+                else -> Unknown(message.capitalize())
             }
             message.isContains("type") -> TypeNotSupported
             message.isContains("currency") -> CurrencyNotSupported
@@ -146,7 +146,7 @@ sealed class BadRequestReason {
             message.isContains("name") -> InvalidName
             message.isContains("email") -> InvalidEmail
             message.isContains("phone") -> InvalidPhoneNumber
-            else -> Unknown(message)
+            else -> Unknown(message.capitalize())
         }
     }
 }
