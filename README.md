@@ -44,7 +44,7 @@ compile 'co.omise:omise-android:3.0.0'
 
 ## Usage
 
-#### Credit Card Activity
+#### Credit Card activity
 
 The simplest way to use this SDK is to integrate the provided `CreditCardActivity`
 directly into your application. This activity contains a pre-made credit form and will
@@ -169,7 +169,71 @@ The `Client` class will automatically dispatch the network call on an internal b
 thread and will call listener methods on the thread that initially calls the `send`
 method.
 
-## Creating a source
+### Payment Creator activity
+Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in order to allow users create a payment source from the list of
+sources that are made available by for the implementer.
+
+To use it, first declare the availability of the activity in your AndroidManifest.xml file as follows:
+
+```xml
+<activity
+  android:name="co.omise.android.ui.PaymentCreatorActivity"
+  android:theme="@style/OmiseTheme" />
+```
+
+Then in your activity, declare the method that will start this activity as follows:
+
+```java
+private val OMISE_PKEY : String = "pkey_test_123"
+private val REQUEST_CC : Int = 100
+
+private fun showCreditCardForm() {
+val intent = Intent(this@CheckoutActivity, PaymentCreatorActivity::class.java)
+intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY)
+intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 1500.0)
+intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
+
+// you can retrieve your account's capabilities through the SDk (will be explained in a different section)
+intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
+
+startActivityForResult(intent, REQUEST_CC)
+}
+```
+
+Replace the string pkey_test_123 with the public key obtained from your Omise dashboard.
+
+After the end-user completes selecting and creating a payment source, the activity result callback will be called, handle it like so:
+
+```java
+@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            // handle the cancellation
+            return
+        }
+
+        if (requestCode == REQUEST_CC) {
+            if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
+                Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
+                // process the source here
+
+            } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
+                Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
+                // process the token here
+
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+```
+
+Two different results that could be returned are
+
+* `data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)` - The `Source` object created by the payment creator.
+* `data.hasExtra(OmiseActivity.EXTRA_TOKEN` - The `Token` object created in case the payment source created was a credit card.
+
+### Creating a source
 If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key like so:
 
 ```java
@@ -208,7 +272,7 @@ client.send(request, object : RequestListener<Source>{
 Some payment method require the customers to authorize the payment via an authorized URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay) and etc. Omise Android SDK provide a built in class to do the authorization.
 
 
-#### Authorizing Payment Activity
+#### Authorizing Payment activity
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
