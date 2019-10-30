@@ -27,7 +27,6 @@ public class EndpointTest extends OmiseTest {
         for (Endpoint endpoint : Endpoint.getAllEndpoints()) {
             assertNotNull(endpoint.scheme());
             assertNotNull(endpoint.host());
-            assertNotNull(endpoint.certificateHash());
             assertNotNull(endpoint.authenticationKey(CONFIG));
         }
     }
