@@ -186,15 +186,15 @@ private val OMISE_PKEY : String = "pkey_test_123"
 private val REQUEST_CC : Int = 100
 
 private fun showCreditCardForm() {
-val intent = Intent(this@CheckoutActivity, PaymentCreatorActivity::class.java)
-intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY)
-intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 1500.0)
-intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
+    val intent = Intent(this@CheckoutActivity, PaymentCreatorActivity::class.java)
+    intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY)
+    intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 1500.0)
+    intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
-// you can retrieve your account's capabilities through the SDk (will be explained in a different section)
-intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
+    // you can retrieve your account's capabilities through the SDk (will be explained in a different section)
+    intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
 
-startActivityForResult(intent, REQUEST_CC)
+    startActivityForResult(intent, REQUEST_CC)
 }
 ```
 
@@ -203,25 +203,23 @@ Replace the string pkey_test_123 with the public key obtained from your Omise da
 After the end-user completes selecting and creating a payment source, the activity result callback will be called, handle it like so:
 
 ```java
-@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_CANCELED) {
-            // handle the cancellation
-            return
-        }
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (resultCode == RESULT_CANCELED) {
+        // handle the cancellation
+        return
+    }
 
-        if (requestCode == REQUEST_CC) {
-            if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
-                Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
-                // process the source here
-            } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
-                Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
-                // process the token here
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_CC) {
+        if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
+            val source = data?.getParcelableExtra<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
+            // process the source here
+        } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
+            val token = data?.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
+            // process the token here
         }
     }
+}
 ```
 
 Two different results that could be returned are
