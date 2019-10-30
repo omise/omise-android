@@ -364,7 +364,7 @@ These Android API versions don't support the proper encryption suites out of the
 1. Add Google Play Service Analytics to your app grade setting
 
 ```gradle
- compile 'com.google.android.gms:play-services-analytics:16.0.3'
+ implementation 'com.google.android.gms:play-services-analytics:16.0.3'
  ```
  
 2. Asks the ProviderInstaller to install the encryption suites with the follow code
