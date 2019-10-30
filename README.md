@@ -5,15 +5,14 @@
 [![](https://img.shields.io/badge/discourse-forum-1a53f0.svg?style=flat-square&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAqlJREFUKBU9UVtLVFEU%2FvY%2B27mPtxl1dG7HbNRx0rwgFhJBPohBL9JTZfRQ0YO9RU%2FVL6iHCIKelaCXqIewl4gEBbEyxSGxzKkR8TbemmbmnDlzVvsYtOHbey1Y317fWh8DwCVMCfSHww3ElCs7CjuzbOcNIaEo9SbtlDRjZiNPY%2BvrqSWrTh7l3yPvrmh0KBZW59HcREjEqcGpElAuESRxopU648dTwfrIyH%2BCFXSH1cFgJLqHlma6443SG0CfqYY2NZjQnkV8eiMgP6ijjnizHglErlocdl5VA0mT3v102dseL2W14cYM99%2B9XGY%2FlQArd8Mo6JhbSJUePHytvf2UdnW0qen93cKQ4nWXX1%2FyOkZufsuZN0L7PPzkthDDZ4FQLajSA6XWR8HWIK861sCfj68ggGwl83mzfMclBmAQ%2BktrqBu9wOhcD%2BB0ErSiFFyEkdcYhKD27mal9%2F5FY36b4BB%2FTvO8XdQhlUe11F3WG2fc7QLlC8wai3MGGQCGDkcZQyymCqAPSmati3s45ygWseeqADwuWS%2F3wGS5hClDMMstxvJFHQuGU26yHsY6iHtL0sIaOyZzB9hZz0hHZW71kySSl6LIJlSgj5s5LO6VG53aFgpOfOFCyoFmYsOS5HZIaxVwKYsLSbJJn2kfU%2BlNdms5WMLqQRklX0FX26eFRnKYwzX0XRsgR0uUrWxplM7oqPIq8r8cZrdLNLqaABayxZMTTx2HVfglbP4xkcvqZEMNfmglevRi1ny5mGfJfTuQiBEq%2FMBvG0NqDh2TY47sbtJAuO%2Fe9%2Fn3STRFosm2WIxsFSFrFUfwHb11JNBNcaZSp8yb%2FEhHW3suWRNZRzDGvxb0oifk5lmnX2V2J2dEJkX1Q0baZ1MvYXPXHvhAga7x9PTEyj8a%2BF%2BXbxiTn78bSQAAAABJRU5ErkJggg%3D%3D)](https://forum.omise.co)
 
 
-Omise is a payment service provider currently operating in Thailand. Omise provides a set
-of clean APIs that helps merchants of any size accept credit cards online.
+Omise is a payment service provider currently operating in Thailand. Omise provides a set of clean APIs
+that help merchants of any size accept credit cards online.
 
-Omise Android SDK provides Android bindings for the Omise
-[Tokenization](https://www.omise.co/tokens-api) API so you do not need to pass credit card
-data to your server as well as components for entering credit card information.
+Omise Android SDK provides Android bindings for the Omise [Tokenization](https://www.omise.co/tokens-api)
+ API so you do not need to pass credit card data to your server as well as components for entering credit card information.
 
-Hop into our forum (click the badge above) or email our support team if you have any
-question regarding this SDK and the functionality it provides.
+Hop into our forum (click the badge above) or email our support team if you have any questions
+ regarding this SDK and the functionality it provides.
 
 ## Requirements
 
@@ -23,8 +22,7 @@ question regarding this SDK and the functionality it provides.
 
 ## Merchant Compliance
 
-**Card data should never transit through your server. We recommend that you follow our
-guide on how to safely
+**Card data should never transit through your server. We recommend that you follow our guide on how to safely
 [collect credit information](https://www.omise.co/collecting-card-information).**
 
 To be authorized to create tokens server-side you must have a currently valid PCI-DSS
@@ -35,7 +33,7 @@ having to go through your server.
 
 ## Installation
 
-Adds the following line to your project's build.gradle file inside the `dependencies`
+Add the following line to your project's build.gradle file inside the `dependencies`
 block:
 
 ```groovy
@@ -88,7 +86,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
     if (requestCode == REQUEST_CC) {
         val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
-        // process your token here.
+        // process your token here
     }
 }
 ```
@@ -106,7 +104,7 @@ resulting `Intent` with the following code:
 #### Custom Credit Card Form
 
 If you need to build your own credit card form, components inside `CreditCardActivity`
-can be used on its own. For example, the `CreditCardEditText` can be used in XML in this way:
+can be used on their own. For example, the `CreditCardEditText` can be used in XML in this way:
 
 ```xml
 <co.omise.android.ui.CreditCardEditText
@@ -114,7 +112,7 @@ can be used on its own. For example, the `CreditCardEditText` can be used in XML
   android:layout_height="wrap_content" />
 ```
 
-This component provides automatic spacing into groups of 4 digits as the user types.
+This component provides automatic spacing into groups of 4 digits as the user inputs their credit card number.
 Additionally the following utility classes are available from the SDK:
 
 * `co.omise.android.ui.CreditCardEditText` - The `CreditCardEditText` class provides utility
@@ -129,7 +127,7 @@ Additionally the following utility classes are available from the SDK:
 #### Manual Tokenization
 
 If you have built your own credit card form you can use the SDK to manually tokenizes the
-card. First build the `Client` and supply your public key like so:
+card. First build the `Client` and supply your public key this way:
 
 ```kotlin
 private val client = Client("pkey_test_123")
@@ -148,7 +146,7 @@ val cardParam = CardParam(
 val request = Token.CreateTokenRequestBuilder(cardParam).build()
 ```
 
-And then send the request using the `client` we've constructed earlier:
+And then send the request using the `client` you have constructed earlier:
 
 ```kotlin
 client.send(request, object : RequestListener<Token>{
@@ -167,7 +165,7 @@ thread and will call listener methods on the thread that initially calls the `se
 method.
 
 ### Payment Creator activity
-Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in order to allow users create a payment source from the list of
+Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in order to allow users to create a payment source from the list of
 sources that are made available by for the implementer.
 
 To use it, first declare the availability of the activity in your AndroidManifest.xml file as follows:
@@ -197,9 +195,9 @@ private fun showCreditCardForm() {
 }
 ```
 
-Replace the string pkey_test_123 with the public key obtained from your Omise dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 
-After the end-user completes selecting and creating a payment source, the activity result callback will be called, handle it like so:
+After the end-user completes selecting and creating a payment source, the activity result callback will be called, handle it in the follwing manner:
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -221,19 +219,19 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 }
 ```
 
-Two different results that could be returned are
+Two different results that could be returned are:
 
 * `data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)` - The `Source` object created by the payment creator.
 * `data.hasExtra(OmiseActivity.EXTRA_TOKEN` - The `Token` object created in case the payment source created was a credit card.
 
 ### Creating a source
-If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key like so:
+If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key in this manner:
 
 ```kotlin
 private val client = Client("pkey_test_123")
 ```
 
-Then construct the Source request
+Then construct the Source request:
 
 ```kotlin
 val request = Source.CreateSourceRequestBuilder(250.0, "thb", SourceType.Installment.Bay)
@@ -246,7 +244,7 @@ val request = Source.CreateSourceRequestBuilder(250.0, "thb", SourceType.Install
       .build()
 ```
 
-And then send the request using the `client` we've constructed earlier and you will get a Source in response:
+And then send the request using the `client` you have constructed earlier and you will get a `Source` object in response:
 
 ```kotlin
 client.send(request, object : RequestListener<Source>{
@@ -260,16 +258,18 @@ client.send(request, object : RequestListener<Source>{
 })
 ```
 
+The `Client` class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
+
 ### Retrieve Capabilities
 You can retrieve all of your capabilities and available payment sources through the SDK in the following manner.
 
-First build the Client and supply your public key like so:
+First build the Client and supply your public key this way:
 
 ```kotlin
 private val client = Client("pkey_test_123")
 ```
 
-Then construct the Capability request
+Then construct the Capability request:
 
 ```kotlin
 val request = Capability.GetCapabilitiesRequestBuilder().build()
@@ -290,10 +290,10 @@ client.send(request, object : RequestListener<Capability> {
 })
 ```
 
-The Client class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
+The `Client` class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
 
 ## Authorizing Payment
-Some payment method require the customers to authorize the payment via an authorized URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay) and etc. Omise Android SDK provide a built in class to do the authorization.
+Some payment methods require the customers to authorize the payment via an authorized URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay), etc. Omise Android SDK provides a built in class to do the authorization.
 
 
 #### Authorizing Payment activity
@@ -307,7 +307,7 @@ file as follows:
   android:theme="@style/OmiseTheme" />
 ```
 
-Then in your activity, declare the method that will start this activity as follows:
+Then in your activity, declare the method that will start this activity this way:
 
 ```kotlin
 private fun showAuthorizingPaymentForm() {
@@ -321,21 +321,21 @@ private fun showAuthorizingPaymentForm() {
 Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge and the array of string `EXPECTED_URL_PATTERNS` with the expected pattern of redirected URLs array.
 
 After the end-user completes the authorizing payment process, the activity result
-callback will be called, handle it like so:
+callback will be called, handle it in this manner:
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
         val url = data?.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING)
-        // Use the redirected URL here.
+        // Use the redirected URL here
     }
 }
 ```
 
 #### Authorizing Payment via an external app
 
-Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user would like to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app by default. However merchant developers must handle the `Intent` callback by themselves.
+Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user would like to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However merchant developers must handle the `Intent` callback by themselves.
 
 ## ProGuard Rules
 
@@ -351,21 +351,21 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 
 
 ## Note on TLS 1.2
-PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suite. This means that every clients must connect to Omise service with those valid suites. However TLS 1.2 support in Android is vary depends on the Android OS. Please follow the following instruction to add support for TLS 1.2 in your app.
+PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suites. This means that every client must connect to Omise service with those valid suites. However TLS 1.2 support in Android depends on the Android OS version. Please follow the following instructions to add support for TLS 1.2 in your app.
 
 #### Android API 20 or higher
-You can use our SDK without any change. The SDK already fully supports communication to the Omise Service using TLS 1.2 with the properly encryption suite.
+You can use our SDK without any changes. The SDK already fully supports communication with the Omise Service using TLS 1.2 with the correct encryption suite.
 
 #### Android API 16 to API 19 with Google Play Services
-These Android API versions don't support the proper encryption suites out of the box. However `Google Play Service` has the `ProviderInstaller` API to add support for the proper encryption suite. You may already use the Google Play Service in your app already; Google Play Service includes many common libraries used in many Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Service by doing the following steps
+These Android API versions do not support the proper encryption suites out of the box. However `Google Play Services` has the `ProviderInstaller` API to add the required support. You may already use the Google Play Services in your app; Google Play Services include many common libraries used in various Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Services by carrying out the following steps
 
-1. Add Google Play Service Analytics to your app grade setting
+1. Add Google Play Service Analytics to your app grade setting:
 
 ```gradle
  implementation 'com.google.android.gms:play-services-analytics:17.0.0'
  ```
  
-2. Asks the ProviderInstaller to install the encryption suites with the follow code
+2. Ask the ProviderInstaller to install the encryption suites with the following code:
 
 ```kotlin
 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
@@ -379,16 +379,15 @@ if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
 }
  ```
  
-> **Note:** Google Play Service may not available on every brands or models. Please be concerned about the Google Play Service compatibility
+> **Note:** Google Play Services may not available on every brand or model. Please be mindful about the Google Play Services compatibility.
 
 #### API 15 or lower
-These Android API levels could not support for the proper encryption suites easily which means that the Android devices running those OS versions may not be able to use to connect to many services on the internet. We recommend you to drop support for those API levels
+These Android API levels could not support for the proper encryption suites easily, which means that the Android devices running those OS versions may not be able to connect to many services on the internet over TLS. We recommend that you drop support for those API versions.
 
 
 ## Contributing
 
-Pull requests and bugfixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
-
+Pull requests and bug fixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.
 
 ## LICENSE
 
