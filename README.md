@@ -369,16 +369,16 @@ These Android API versions don't support the proper encryption suites out of the
  
 2. Asks the ProviderInstaller to install the encryption suites with the follow code
 
-```java
- if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-     try {
-         ProviderInstaller.installIfNeeded(this);
-     } catch (GooglePlayServicesRepairableException e) {
-         e.printStackTrace();
-     } catch (GooglePlayServicesNotAvailableException e) {
-         e.printStackTrace();
-     }
- }
+```kotlin
+if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+    try {
+        ProviderInstaller.installIfNeeded(this)
+    } catch (e: GooglePlayServicesRepairableException) {
+        e.printStackTrace()
+    } catch (e: GooglePlayServicesNotAvailableException) {
+        e.printStackTrace()
+    }
+}
  ```
  
 > **Note:** Google Play Service may not available on every brands or models. Please be concerned about the Google Play Service compatibility
