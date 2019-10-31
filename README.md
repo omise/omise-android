@@ -275,7 +275,7 @@ Then construct the Capability request:
 val request = Capability.GetCapabilitiesRequestBuilder().build()
 ```
 
-And then send the request using the client we've constructed earlier:
+And then send the request using the client we constructed earlier:
 
 ```kotlin
 client.send(request, object : RequestListener<Capability> {
