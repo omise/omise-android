@@ -126,7 +126,7 @@ Additionally the following utility classes are available from the SDK:
 
 #### Manual Tokenization
 
-If you have built your own credit card form you can use the SDK to manually tokenizes the
+If you have built your own credit card form, you can use the SDK to manually tokenize the
 card. First build the `Client` and supply your public key this way:
 
 ```kotlin
