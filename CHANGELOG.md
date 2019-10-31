@@ -9,6 +9,7 @@
 * **ADDED:** Theme Customization
 * **REMOVED:** Laser card support
 * **CHANGED:** Credit Card form design
+* **CHANGED:** Converted most of the SDK from Java to Kotlin
 
 # v2.6.5
 
