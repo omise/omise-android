@@ -357,7 +357,7 @@ PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher usin
 You can use our SDK without any changes. The SDK already fully supports communication with the Omise Service using TLS 1.2 with the correct encryption suite.
 
 #### Android API 16 to API 19 with Google Play Services
-These Android API versions do not support the proper encryption suites out of the box. However `Google Play Services` has the `ProviderInstaller` API to add the required support. You may already use the Google Play Services in your app; Google Play Services include many common libraries used in various Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Services by carrying out the following steps
+These versions of the Android API do not support the required encryption suites out of the box. However `Google Play Services` has the `ProviderInstaller` API to add the required support. You may already use  Google Play Services in your app; Google Play Services includes many common libraries used in Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Services by carrying out the following steps.
 
 1. Add Google Play Service Analytics to your app grade setting:
 
