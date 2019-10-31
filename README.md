@@ -305,10 +305,10 @@ as shown in the snippet below:
     </style>
 
     <style name="SampleEditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">#FFFFFFFF</item>
         <item name="android:textColorHint">#B3FFFFFF</item>
         <item name="android:textSize">12sp</item>
-        <item name="backgroundTint">@android:color/white</item>
+        <item name="backgroundTint">#FFFFFFFF</item>
     </style>
 
     <style name="SampleEditTextLabel">
@@ -321,7 +321,7 @@ as shown in the snippet below:
     </style>
 
     <style name="SampleButton" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@android:color/white</item>
+        <item name="backgroundTint">#FFFFFFFF</item>
         <item name="android:textColor">#FF000000</item>
     </style>
 ```
