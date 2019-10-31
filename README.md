@@ -249,7 +249,7 @@ And then send the request using the `client` you have constructed earlier and yo
 ```kotlin
 client.send(request, object : RequestListener<Source>{
    override fun onRequestSucceed(model: Source) {
-      // you've got Source!
+      // you've got a Source!
    }
 
     override fun onRequestFailed(throwable: Throwable) {
