@@ -291,6 +291,50 @@ client.send(request, object : RequestListener<Capability> {
 
 The `Client` class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
 
+### Theme customization
+If you wish to customize the elements on the `Credit Card activity` in order to
+match your application's branding, you can do so by overriding the following styles
+as shown in the snippet below:
+
+```xml
+    <style name="SampleTheme" parent="Theme.MaterialComponents">
+        <item name="android:editTextStyle">@style/SampleEditText</item>
+        <item name="materialButtonStyle">@style/SampleButton</item>
+        <item name="editTextLabelStyle">@style/SampleEditTextLabel</item>
+        <item name="editTextErrorStyle">@style/SampleEditTextError</item>
+    </style>
+
+    <style name="SampleEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">#B3FFFFFF</item>
+        <item name="android:textSize">12sp</item>
+        <item name="backgroundTint">@android:color/white</item>
+    </style>
+
+    <style name="SampleEditTextLabel">
+        <item name="android:textColor">#B3FFFFFF</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+    <style name="SampleEditTextError">
+        <item name="android:textColor">#FFFF0000</item>
+    </style>
+
+    <style name="SampleButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@android:color/white</item>
+        <item name="android:textColor">#FF000000</item>
+    </style>
+```
+
+And if you choose to customize the item text sizes for the lists in `Payment creator activity`, you
+can do so by overriding the following style.
+
+```xml
+    <style name="OmiseItemTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">16sp</item>
+    </style>
+```
+
 ## Authorizing Payment
 Some payment methods require the customer to authorize the payment via an authorization URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay), etc. Omise Android SDK provides a built in class to handle the authorization.
 
