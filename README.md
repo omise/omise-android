@@ -151,7 +151,7 @@ And then send the request using the `client` you have constructed earlier:
 ```kotlin
 client.send(request, object : RequestListener<Token>{
    override fun onRequestSucceed(model: Token) {
-      // you've got Token!
+      // you've got a Token!
    }
 
     override fun onRequestFailed(throwable: Throwable) {
