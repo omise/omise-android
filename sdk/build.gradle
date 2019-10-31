@@ -1,17 +1,20 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26"
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 8
-        versionName "2.6.6"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode omise_sdk_code_version
+        versionName omise_sdk_version
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -26,8 +29,36 @@ android {
         disable 'InvalidPackage' // okio
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            returnDefaultValues true
+            includeAndroidResources true
+            all {
+                testLogging {
+                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+                }
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    android {
+        sourceSets {
+            String sharedTestDir = "$projectDir/src/sharedTest/java"
+            test {
+                java.srcDir sharedTestDir
+            }
+            androidTest {
+                java.srcDir sharedTestDir
+            }
+        }
     }
 }
 
@@ -55,7 +86,7 @@ uploadArchives {
             packaging 'aar'
             groupId 'co.omise'
             artifactId 'omise-android'
-            version '2.6.6'
+            version omise_sdk_version
             url 'https://www.omise.co'
 
             scm {
@@ -70,28 +101,50 @@ uploadArchives {
                     url 'https://opensource.org/licenses/MIT'
                 }
             }
-
-            developers {
-                developer {
-                    id 'chakrit'
-                    name 'Chakrit Wichian'
-                    email 'chakrit@omise.co'
-                }
-            }
         }
     }
 }
 
 dependencies {
-    compile 'joda-time:joda-time:2.9.2'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    androidTestCompile 'com.android.support:support-annotations:26.1.0'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    })
-    androidTestCompile 'com.google.guava:guava:19.0'
-    provided 'io.card:android-sdk:5.4.0'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.json:json:20171018'
+    implementation "androidx.multidex:multidex:$multidex_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    api "joda-time:joda-time:$joda_time_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$joda_time_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
+        exclude group: 'androidx.test', module: 'core'
+    }
+
+    testImplementation project(":testsupport")
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "androidx.test:rules:$test_version"
+    testImplementation "androidx.test:runner:$test_version"
+    testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    testImplementation "androidx.test.ext:junit:$junit_ext_version"
+    testImplementation "androidx.annotation:annotation:$annotation_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+
+    androidTestImplementation "androidx.annotation:annotation:$annotation_version"
+    androidTestImplementation "com.google.guava:guava:$guava_version"
+    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+    androidTestImplementation "org.robolectric:annotations:$robolectric_version"
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    androidTestImplementation "androidx.test:rules:$test_version"
+    androidTestImplementation "androidx.test:runner:$test_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+}
+
+repositories {
+    mavenCentral()
 }

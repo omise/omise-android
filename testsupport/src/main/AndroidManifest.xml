@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.omise.testsupport">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application android:theme="@style/OmiseTheme">
+        <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
+        <activity android:name="co.omise.android.ui.CreditCardActivity" />
+        <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
+        <activity android:name="co.omise.android.ui.TestFragmentActivity" />
+    </application>
+</manifest>

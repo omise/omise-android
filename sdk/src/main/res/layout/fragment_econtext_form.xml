@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/large_padding"
+        android:paddingLeft="@dimen/large_padding"
+        android:paddingTop="@dimen/xlarge_padding"
+        android:paddingEnd="@dimen/large_padding"
+        android:paddingRight="@dimen/large_padding"
+        android:paddingBottom="@dimen/xlarge_padding">
+
+        <TextView
+            style="?attr/editTextLabelStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_full_name" />
+
+        <co.omise.android.ui.OmiseEditText
+            android:id="@+id/edit_full_name"
+            style="?android:attr/editTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            android:nextFocusForward="@id/edit_email" />
+
+        <TextView
+            android:id="@+id/text_full_name_error"
+            style="?attr/editTextErrorStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            tools:text="Invalid input" />
+
+        <TextView
+            style="?attr/editTextLabelStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:text="@string/label_email" />
+
+        <co.omise.android.ui.OmiseEditText
+            android:id="@+id/edit_email"
+            style="?android:attr/editTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:nextFocusForward="@id/edit_phone_number" />
+
+        <TextView
+            android:id="@+id/text_email_error"
+            style="?attr/editTextErrorStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            tools:text="Invalid input" />
+
+        <TextView
+            style="?attr/editTextLabelStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:text="@string/label_phone_number" />
+
+        <co.omise.android.ui.OmiseEditText
+            android:id="@+id/edit_phone_number"
+            style="?android:attr/editTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:imeOptions="actionDone"
+            android:inputType="phone"
+            android:nextFocusForward="@id/button_submit" />
+
+        <TextView
+            android:id="@+id/text_phone_number_error"
+            style="?attr/editTextErrorStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            tools:text="Invalid input" />
+
+        <Button
+            android:id="@+id/button_submit"
+            style="?android:attr/buttonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xlarge_margin"
+            android:enabled="false"
+            android:text="@string/button_next"
+            tools:enabled="true" />
+    </LinearLayout>
+
+</ScrollView>

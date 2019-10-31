@@ -1,18 +1,87 @@
 <resources>
     <string name="not_available">(n/a)</string>
-    <string name="button_submit">Submit</string>
-    <string name="default_form_title">Add Credit Card</string>
+    <string name="button_pay">Pay</string>
+    <string name="button_next">Next</string>
+    <string name="default_form_title">Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
-    <string name="error_api">Error: %1$s</string>
     <string name="error_io">Network communication error, please make sure you have a stable internet connection. (%1$s)</string>
+    <string name="error_invalid_card_number">Credit card number is invalid</string>
+    <string name="error_invalid_card_name">Card holder name is invalid</string>
+    <string name="error_invalid_expiration_date">Card expiration date is invalid</string>
+    <string name="error_invalid_security_code">CVV is invalid</string>
+    <string name="error_invalid_full_name">Customer name is invalid</string>
+    <string name="error_invalid_email">Email is invalid</string>
+    <string name="error_invalid_phone_number">Phone number is invalid</string>
     <string name="error_invalid">%1$s is invalid</string>
     <string name="error_required">%1$s is required</string>
+
+    <string name="error_api_authentication_failure">Authentication failure</string>
+    <string name="error_api_invalid_card_invalid_card_number">Invalid card number</string>
+    <string name="error_api_invalid_card_invalid_expiration_date">Invalid card expiration date</string>
+    <string name="error_api_invalid_card_empty_card_holder_name">Invalid card holder name</string>
+    <string name="error_api_invalid_card_unsupported_brand">Unsupported card brand</string>
+
+    <string name="error_api_bad_request_amount_is_greater_than_valid_amount_with_valid_amount">Amount exceeds the valid amount of %s</string>
+    <string name="error_api_bad_request_amount_is_greater_than_valid_amount_without_valid_amount">Amount exceeds the valid amount</string>
+    <string name="error_api_bad_request_amount_is_less_than_valid_amount_with_valid_amount">Amount is less than the valid amount of %s</string>
+    <string name="error_api_bad_request_amount_is_less_than_valid_amount_without_valid_amount">Amount is less than the valid amount</string>
+    <string name="error_api_bad_request_currency_not_supported">The currency is not supported by this account</string>
+    <string name="error_api_bad_request_empty_name">The customer name is empty</string>
+    <string name="error_api_bad_request_invalid_currency">The currency is invalid</string>
+    <string name="error_api_bad_request_invalid_email">The customer email is invalid</string>
+    <string name="error_api_bad_request_invalid_name">The customer name is invalid</string>
+    <string name="error_api_bad_request_invalid_phone_number">The customer phone number is invalid</string>
+    <string name="error_api_bad_request_name_is_too_long_with_valid_length">The customer name exceeds the %d character limit</string>
+    <string name="error_api_bad_request_name_is_too_long_without_valid_length">The customer name is too long</string>
+    <string name="error_api_bad_request_type_not_supported">The source type is not supported by this account</string>
+
+    <string name="error_api_service_not_found">Service not found</string>
+
     <string name="error_unknown">Unknown error occurred. (%1$s)</string>
+    <string name="error_unknown_without_reason">Something went wrong</string>
     <string name="label_card_name">Name on card</string>
-    <string name="label_card_number">Card Number</string>
-    <string name="label_expiry_date">Expiry date</string>
+    <string name="label_card_number">Card number</string>
+    <string name="label_expiration_date">Expiration date</string>
+    <string name="label_full_name">Full name</string>
+    <string name="label_email">Email</string>
+    <string name="label_phone_number">Phone</string>
     <string name="label_security_code">Security code</string>
     <string name="menu_card_io">Scan from Camera</string>
     <string name="title_authorizing_payment">Authorizing Payment</string>
+    <string name="title_convenience_store">Convenience Store</string>
+    <string name="title_pay_easy">Pay-easy</string>
+    <string name="title_netbank">Net Bank</string>
     <string name="placeholder_security_code" translatable="false">CVV</string>
+    <string name="hint_expiration_date" translatable="false">MM/YY</string>
+
+    <string name="cvv_tooltip_3_digits">3 digit number on the\nback of your card</string>
+    <string name="cvv_tooltip_4_digits">4 digit number on the\nfront of your card</string>
+    <string name="payment_chooser_title">Payment Methods</string>
+    <string name="internet_banking_chooser_title">Internet Banking</string>
+    <string name="installments_title">Installments</string>
+    <string name="econtext_title">econtext</string>
+    <string name="menu_title_close">Close</string>
+
+    <string name="payment_method_credit_card_title">Credit Card</string>
+    <string name="payment_method_internet_banking_title">Internet Banking</string>
+    <string name="payment_method_alipay_title">Alipay Online</string>
+    <string name="payment_method_tesco_lotus_title">Tesco Lotus Bill Payment</string>
+    <string name="payment_method_installments_title">Installments</string>
+    <string name="payment_method_convenience_store_title">Convenience Store</string>
+    <string name="payment_method_pay_easy_title">Pay-easy</string>
+    <string name="payment_method_netbank_title">Net Bank</string>
+
+    <string name="payment_method_installment_bbl_title">Bangkok Bank</string>
+    <string name="payment_method_installment_kasikorn_title">Kasikorn</string>
+    <string name="payment_method_installment_bay_title">Krungsri</string>
+    <string name="payment_method_installment_first_choice_title">Krungsri First Choice</string>
+    <string name="payment_method_installment_ktc_title">KTC</string>
+    <string name="payment_method_installment_term_month_title">%d month</string>
+    <string name="payment_method_installment_term_months_title">%d months</string>
+
+
+    <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
+    <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>
+    <string name="payment_method_internet_banking_scb_title">Siam Commercial Bank</string>
+    <string name="payment_method_internet_banking_ktb_title">Krungthai Bank</string>
 </resources>

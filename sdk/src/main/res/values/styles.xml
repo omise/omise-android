@@ -1,27 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="OmiseSDKTheme" parent="android:Theme.DeviceDefault">
-        <item name="android:textViewStyle">@style/FormLabel</item>
-        <item name="android:editTextStyle">@style/FormField</item>
-        <item name="android:spinnerStyle">@style/FormSpinner</item>
-        <item name="android:buttonStyle">@style/FormButton</item>
+    <style name="OmiseTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/primary_accent</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="actionBarStyle">@style/OmiseActionBarStyle</item>
+        <item name="android:editTextStyle">@style/OmiseEditText</item>
+        <item name="android:buttonStyle">@style/OmiseButton</item>
+        <item name="android:itemTextAppearance">@style/OmiseItemTextAppearance</item>
+        <item name="editTextLabelStyle">@style/OmiseEditTextLabel</item>
+        <item name="editTextErrorStyle">@style/OmiseEditTextErrorMessage</item>
     </style>
 
-    <style name="FormLabel" parent="android:Widget.DeviceDefault.TextView">
 
+    <style name="OmiseActionBarStyle" parent="Widget.AppCompat.Light.ActionBar" />
+
+    <style name="OmiseEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_edit_text_outlined</item>
+        <item name="android:textAppearance">@style/OmiseEditTextAppearance</item>
     </style>
 
-    <style name="FormField" parent="android:Widget.DeviceDefault.EditText">
-
+    <style name="OmiseEditTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/edit_text_text_size</item>
     </style>
 
-    <style name="FormSpinner" parent="android:Widget.DeviceDefault.Spinner">
-
+    <style name="OmiseEditTextLabel">
+        <item name="android:textAppearance">@style/OmiseEditTextLabelAppearance</item>
     </style>
 
-    <style name="FormButton" parent="android:Widget.DeviceDefault.Button">
-        <item name="android:padding">16dp</item>
+    <style name="OmiseEditTextLabelAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="OmiseEditTextErrorMessage">
+        <item name="android:textAppearance">@style/OmiseEditTextErrorMessageAppearance</item>
+    </style>
+
+    <style name="OmiseEditTextErrorMessageAppearance" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/error</item>
+    </style>
+
+    <style name="OmiseFloatingTitle" parent="TextAppearance.AppCompat.Caption" />
+
+    <style name="OmiseBodyTitle" parent="TextAppearance.AppCompat.Body1" />
+
+    <style name="OmiseButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/bg_button</item>
+        <item name="android:textAppearance">@style/OmiseButtonTextAppearance</item>
+    </style>
+
+    <style name="OmiseButtonTextAppearance" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
+    </style>
+
+    <style name="OmiseItemTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/list_item_text_size</item>
+    </style>
 </resources>

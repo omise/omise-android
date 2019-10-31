@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="form_padding">24dp</dimen>
+    <dimen name="field_separator_margin">16dp</dimen>
+    <dimen name="error_message_side_margin">4dp</dimen>
+    <dimen name="tooltip_end_margin">12dp</dimen>
+
+    <dimen name="dialog_container_background_inset">36dp</dimen>
+    <dimen name="dialog_container_top_margin">36dp</dimen>
+    <dimen name="dialog_container_bottom_margin">30dp</dimen>
+
+    <dimen name="xsmall_margin">4dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="large_margin">24dp</dimen>
+    <dimen name="xlarge_margin">32dp</dimen>
+
+    <dimen name="xsmall_padding">4dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="medium_padding">16dp</dimen>
+    <dimen name="large_padding">24dp</dimen>
+    <dimen name="xlarge_padding">32dp</dimen>
+
+    <dimen name="dialog_radius_size">10dp</dimen>
+    <dimen name="edit_text_inset_padding">8dp</dimen>
+    <dimen name="edit_text_height">44dp</dimen>
+    <dimen name="edit_text_padding">8dp</dimen>
+    <dimen name="edit_text_radius_size">4dp</dimen>
+    <dimen name="edit_text_stroke_width">1dp</dimen>
+    <dimen name="button_height">44dp</dimen>
+    <dimen name="button_radius">4dp</dimen>
+
+    <dimen name="list_item_text_size">16sp</dimen>
+    <dimen name="edit_text_text_size">16sp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="list_item_height">64dp</dimen>
+</resources>

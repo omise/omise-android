@@ -3,7 +3,7 @@ package co.omise.android;
 import co.omise.android.models.CardBrand;
 
 /**
- * CardNumber provides helper methods for working with Personal Account Numbers.
+ * CardNumber provides helper methods for working with primary account numbers (credit and debit card numbers).
  */
 public final class CardNumber {
 

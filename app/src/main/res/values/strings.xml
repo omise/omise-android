@@ -1,11 +1,53 @@
 <resources>
     <string name="activity_checkout" translatable="false">Checkout</string>
-    <string name="activity_main" translatable="false">Omise Co., Ltd.</string>
-    <string name="activity_receipt" translatable="false">Receipt</string>
     <string name="app_name" translatable="false">Omise Android SDK</string>
     <string name="button_checkout" translatable="false">Checkout</string>
     <string name="description_product_image" translatable="false">Product Image</string>
     <string name="format_paid_with_card" formatted="false" translatable="false">You have paid %s with card %s.</string>
     <string name="format_price" formatted="false" translatable="false">THB %.2f</string>
-    <string name="authorize_payment" translatable="false">Authorize Payment</string>
+    <string name="menu_title_setup" translatable="false">Setup</string>
+    <string name="payment_cancelled" translatable="false">Payment creation cancelled</string>
+    <string name="button_choose_payment_method" translatable="false">Choose Payment Method</string>
+    <string name="button_pay_by_credit_card" translatable="false">Pay by Credit Card</string>
+    <string name="button_authorize_url" translatable="false">Authorize URL</string>
+    <string name="head_total_amount" translatable="false">Total Amount</string>
+    <string name="activity_payment_setting" translatable="false">Settings</string>
+
+    <string name="payment_preference_is_use_capability_api_key" translatable="false">is_use_capability_api</string>
+    <string name="payment_preference_is_use_specifics_payment_methods_key" translatable="false">is_use_specifics_payment_methods</string>
+    <string name="payment_preference_credit_card_key" translatable="false">credit_card</string>
+    <string name="payment_preference_internet_banking_bay_key" translatable="false">internet_banking_bay</string>
+    <string name="payment_preference_internet_banking_ktb_key" translatable="false">internet_banking_ktb</string>
+    <string name="payment_preference_internet_banking_scb_key" translatable="false">internet_banking_scb</string>
+    <string name="payment_preference_internet_banking_bbl_key" translatable="false">internet_banking_bbl</string>
+    <string name="payment_preference_alipay_key" translatable="false">alipay</string>
+    <string name="payment_preference_bill_payment_tesco_lotus_key" translatable="false">bill_payment_tesco_lotus</string>
+    <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
+    <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
+    <string name="payment_preference_installment_bbl_key" translatable="false">installment_bbl</string>
+    <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
+    <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
+    <string name="payment_preference_econtext_key" translatable="false">econtext</string>
+
+    <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
+    <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
+    <string name="payment_preference_is_use_capability_api_summary" translatable="false">Load allowed payment methods from Capability API.</string>
+    <string name="payment_preference_is_use_specifics_payment_methods_title" translatable="false">Specify Payment Methods</string>
+    <string name="payment_preference_is_use_specifics_payment_methods_summary" translatable="false">Use the payment methods specified below.</string>
+    <string name="payment_preference_allow_payment_methods_category_title" translatable="false">Payment Methods</string>
+    <string name="payment_preference_credit_card_title" translatable="false">Credit Card</string>
+    <string name="payment_preference_internet_banking_bay_title" translatable="false">BAY - Internet Banking</string>
+    <string name="payment_preference_internet_banking_ktb_title" translatable="false">KTB - Internet Banking</string>
+    <string name="payment_preference_internet_banking_scb_title" translatable="false">SCB - Internet Banking</string>
+    <string name="payment_preference_internet_banking_bbl_title" translatable="false">BBL - Internet Banking</string>
+    <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
+    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Tesco Lotus Bill Payment</string>
+    <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
+    <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
+    <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
+    <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
+    <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
+    <string name="payment_preference_econtext_title" translatable="false">econtext</string>
+    <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
+    <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
 </resources>

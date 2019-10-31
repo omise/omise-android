@@ -2,6 +2,10 @@ package co.omise.android.ui;
 
 import org.joda.time.YearMonth;
 
+/**
+ * @deprecated replaced by {@link ExpiryDateEditText}
+ */
+@Deprecated
 public class ExpiryYearSpinnerAdapter extends NumberRangeSpinnerAdapter {
     protected ExpiryYearSpinnerAdapter() {
         super(YearMonth.now().getYear(), YearMonth.now().getYear() + 12);

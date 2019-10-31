@@ -3,55 +3,27 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- card.io support -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.flash"
-        android:required="false" />
-
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/icon_app"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.DeviceDefault">
+        android:theme="@style/OmiseTheme">
 
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/activity_main">
+        <activity android:name=".CheckoutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".CheckoutActivity"
-            android:label="@string/activity_checkout" />
+            android:name=".PaymentSettingActivity"
+            android:parentActivityName=".CheckoutActivity" />
 
-        <activity
-            android:name="co.omise.android.ui.CreditCardActivity"
-            android:theme="@style/OmiseSDKTheme" />
-
-        <activity
-            android:name=".ReceiptActivity"
-            android:label="@string/activity_receipt" />
-
-        <!-- imported card.io activities -->
-        <activity
-            android:name="io.card.payment.CardIOActivity"
-            android:configChanges="keyboardHidden|orientation" />
-
+        <!-- Omise SDK Activities -->
+        <activity android:name="co.omise.android.ui.CreditCardActivity" />
         <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
-
+        <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
     </application>
 
 </manifest>

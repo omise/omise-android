@@ -1,36 +1,64 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26"
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "co.omise.android.example"
-        minSdkVersion 18
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode sample_app_code_version
+        versionName sample_app_version
+        multiDexEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "language"
+    productFlavors {
+        java {
+            dimension "language"
+        }
+        kotlin {
+            dimension "language"
+        }
+    }
+
     lintOptions {
         abortOnError false
         disable 'InvalidPackage',
                 'AllowBackup',
                 'GoogleAppIndexingWarning'
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.guava:guava:19.0'
-    compile project(':sdk')
-    compile 'io.card:android-sdk:5.4.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.multidex:multidex:$multidex_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation "androidx.preference:preference:$preference_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "com.google.guava:guava:$guava_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation project(':sdk')
     // compile 'co.omise:omise-android:2.3.+'
+
+    testImplementation "junit:junit:$junit_version"
+}
+repositories {
+    mavenCentral()
 }
