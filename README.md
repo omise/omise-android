@@ -179,10 +179,10 @@ To use it, first declare the availability of the activity in your AndroidManifes
 Then in your activity, declare the method that will start this activity as follows:
 
 ```kotlin
-private val OMISE_PKEY : String = "pkey_test_123"
-private val REQUEST_CC : Int = 100
+private val OMISE_PKEY: String = "pkey_test_123"
+private val REQUEST_CC: Int = 100
 
-private fun showCreditCardForm() {
+private fun showPaymentCreatorActivity() {
     val intent = Intent(this@CheckoutActivity, PaymentCreatorActivity::class.java)
     intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY)
     intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
