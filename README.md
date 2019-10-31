@@ -292,7 +292,7 @@ client.send(request, object : RequestListener<Capability> {
 The `Client` class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
 
 ### Theme customization
-If you wish to customize the elements on the `Credit Card activity` in order to
+If you wish to customize the elements on the `CreditCardActivity` in order to
 match your application's branding, you can do so by overriding the following styles
 as shown in the snippet below:
 
@@ -326,7 +326,7 @@ as shown in the snippet below:
     </style>
 ```
 
-And if you choose to customize the item text sizes for the lists in `Payment creator activity`, you
+And if you choose to customize the item text sizes for the lists in `PaymentCreatorActivity`, you
 can do so by overriding the following style.
 
 ```xml
