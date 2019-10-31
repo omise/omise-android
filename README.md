@@ -379,7 +379,7 @@ if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
 }
  ```
  
-> **Note:** Google Play Services may not available on every brand or model. Please be mindful about the Google Play Services compatibility.
+> **Note:** Google Play Services may not available on every brand or model. Please be mindful about Google Play Services compatibility.
 
 #### API 15 or lower
 These versions of the Android API do not support the required encryption suites which means that Android devices running those OS versions will not be able to securely connect to our services. We recommend that you drop support for those API versions.
