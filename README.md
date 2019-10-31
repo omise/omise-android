@@ -188,7 +188,7 @@ private fun showCreditCardForm() {
     intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 1500.0)
     intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
-    // you can retrieve your account's capabilities through the SDk (will be explained in a different section)
+    // you can retrieve your account's capabilities through the SDK (will be explained in a different section)
     intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
 
     startActivityForResult(intent, REQUEST_CC)
