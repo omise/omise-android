@@ -95,6 +95,14 @@ uploadArchives {
                 url 'https://github.com/omise/omise-android'
             }
 
+            developers {
+                developer {
+                    id 'natthawut'
+                    name 'Natthawut Haematulin'
+                    email 'natthawut@omise.co'
+                }
+            }
+
             licenses {
                 license {
                     name 'The MIT License (MIT)'
