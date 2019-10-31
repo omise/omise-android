@@ -185,7 +185,7 @@ private val REQUEST_CC : Int = 100
 private fun showCreditCardForm() {
     val intent = Intent(this@CheckoutActivity, PaymentCreatorActivity::class.java)
     intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY)
-    intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 1500.0)
+    intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
     intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
     // you can retrieve your account's capabilities through the SDk (will be explained in a different section)
@@ -222,7 +222,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 Two different results that could be returned are:
 
 * `data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)` - The `Source` object created by the payment creator.
-* `data.hasExtra(OmiseActivity.EXTRA_TOKEN` - The `Token` object created in case the payment source created was a credit card.
+* `data.hasExtra(OmiseActivity.EXTRA_TOKEN)` - The `Token` object created in case the payment source created was a credit card.
 
 ### Creating a source
 If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key in this manner:
@@ -234,7 +234,7 @@ private val client = Client("pkey_test_123")
 Then construct the Source request:
 
 ```kotlin
-val request = Source.CreateSourceRequestBuilder(250.0, "thb", SourceType.Installment.Bay)
+val request = Source.CreateSourceRequestBuilder(25000L, "thb", SourceType.Installment.Bay)
       .description("Item")
       .email("e@mail.com")
       .storeId("id-123")
@@ -285,7 +285,6 @@ client.send(request, object : RequestListener<Capability> {
 
    override fun onRequestFailed(throwable: Throwable) {
          // something bad happened
-   }
    }
 })
 ```
