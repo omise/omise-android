@@ -197,7 +197,7 @@ private fun showCreditCardForm() {
 
 Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 
-After the end-user completes selecting and creating a payment source, the activity result callback will be called, handle it in the follwing manner:
+After the end user selects and creates a payment source, the activity result callback will be called; handle it as follows:
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
