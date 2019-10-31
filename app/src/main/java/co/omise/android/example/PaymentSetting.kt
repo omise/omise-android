@@ -40,7 +40,6 @@ object PaymentSetting {
                 .toMap()
                 .map {
                     when (it.key) {
-                        context.getString(R.string.payment_preference_credit_card_key) -> SourceType.InternetBanking.Bay
                         context.getString(R.string.payment_preference_internet_banking_bay_key) -> SourceType.InternetBanking.Bay
                         context.getString(R.string.payment_preference_internet_banking_ktb_key) -> SourceType.InternetBanking.Ktb
                         context.getString(R.string.payment_preference_internet_banking_scb_key) -> SourceType.InternetBanking.Scb

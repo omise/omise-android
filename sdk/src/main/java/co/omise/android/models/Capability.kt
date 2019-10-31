@@ -48,11 +48,13 @@ data class Capability(
          */
         @JvmStatic
         fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>): Capability {
-            val paymentMethods = sourceTypes.map(::createSourceTypeMethod).toMutableList()
+            val paymentMethods = mutableListOf<PaymentMethod>()
 
             if (allowCreditCard) {
                 paymentMethods.add(PaymentMethod.createCreditCardMethod())
             }
+
+            paymentMethods.addAll(sourceTypes.map(::createSourceTypeMethod))
 
             return Capability(paymentMethods = paymentMethods)
         }
