@@ -166,7 +166,7 @@ method.
 
 ### Payment Creator activity
 Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in order to allow users to create a payment source from the list of
-sources that are made available by for the implementer.
+sources available for the implementer.
 
 To use it, first declare the availability of the activity in your AndroidManifest.xml file as follows:
 
