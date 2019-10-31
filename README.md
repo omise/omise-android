@@ -9,7 +9,7 @@ Omise is a payment service provider currently operating in Thailand. Omise provi
 that help merchants of any size accept credit cards online.
 
 Omise Android SDK provides Android bindings for the Omise [Token](https://www.omise.co/tokens-api)
- API so you do not need to pass credit card data to your server as well as components for entering credit card information.
+and [Source](https://www.omise.co/sources-api) API as well as components for entering credit card information.
 
 Hop into our forum (click the badge above) or email our support team if you have any questions
  regarding this SDK and the functionality it provides.
