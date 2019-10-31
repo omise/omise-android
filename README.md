@@ -36,7 +36,7 @@ having to go through your server.
 Add the following line to your project's build.gradle file inside the `dependencies`
 block:
 
-```groovy
+```gradle
 implementation 'co.omise:omise-android:3.0.0'
 ```
 
