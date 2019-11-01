@@ -296,6 +296,14 @@ If you wish to customize the elements on the `CreditCardActivity` in order to
 match your application's branding, you can do so by overriding the following styles
 as shown in the snippet below:
 
+AndroidManifest.xml
+```xml
+<activity
+  android:name="co.omise.android.ui.CreditCardActivity"
+  android:theme="@style/SampleTheme" />
+```
+
+style.xml
 ```xml
     <style name="SampleTheme" parent="Theme.MaterialComponents">
         <item name="android:editTextStyle">@style/SampleEditText</item>
@@ -329,9 +337,23 @@ as shown in the snippet below:
 And if you choose to customize the item text sizes for the lists in `PaymentCreatorActivity`, you
 can do so by overriding the following style.
 
+AndroidManifest.xml
 ```xml
-    <style name="OmiseItemTextAppearance" parent="TextAppearance.AppCompat.Body1">
+<activity
+  android:name="co.omise.android.ui.PaymentCreatorActivity"
+  android:theme="@style/SampleTheme" />
+```
+
+style.xml
+```xml
+    <style name="SampleTheme" parent="Theme.MaterialComponents">
+        ...
+        <item name="android:itemTextAppearance">@style/SampleItemTextAppearance</item>
+    </style>
+    
+    <style name="SampleItemTextAppearance" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 ```
 
