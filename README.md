@@ -66,7 +66,7 @@ private val REQUEST_CC: Int = 100
 
 private fun showCreditCardForm() {
     val intent = Intent(this, CreditCardActivity::class.java)
-    intent.putExtra(CreditCardActivity.EXTRA_PKEY, OMISE_PKEY)
+    intent.putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PKEY)
     startActivityForResult(intent, REQUEST_CC)
 }
 ```
