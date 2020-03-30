@@ -6,12 +6,12 @@ import org.joda.time.DateTime
 
 @Parcelize
 data class Barcode(
-        val type: String,
-        val image: Document,
-        override var modelObject: String?,
-        override var id: String?,
-        override var livemode: Boolean,
-        override var location: String?,
-        override var created: DateTime?,
-        override var deleted: Boolean
+        val type: String? = null,
+        val image: Document? = null,
+        override var modelObject: String? = null,
+        override var id: String? = null,
+        override var livemode: Boolean = false,
+        override var location: String? = null,
+        override var created: DateTime? = null,
+        override var deleted: Boolean = false
 ) : Model

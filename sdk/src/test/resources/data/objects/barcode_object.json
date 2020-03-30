@@ -1,0 +1,14 @@
+{
+  "object": "barcode",
+  "type": "qr",
+  "image": {
+    "object": "document",
+    "livemode": false,
+    "id": "docu_test_5jb2cjo8xpaltybj8a4",
+    "deleted": false,
+    "filename": "qrcode.png",
+    "location": "/charges/chrg_test_5jb2cjmrltbe0eowb8i/documents/docu_test_5jb2cjo8xpaltybj8a4",
+    "download_uri": "https://api.omise.co/charges/chrg_test_5jb2cjmrltbe0eowb8i/documents/docu_test_5jb2cjo8xpaltybj8a4/downloads/838DE1BE1AFE3709",
+    "created_at": "2020-03-23T08:26:05Z"
+  }
+}
