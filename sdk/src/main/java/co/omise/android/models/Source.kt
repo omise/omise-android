@@ -37,6 +37,8 @@ data class Source(
         val phoneNumber: String? = null,
         @field:JsonProperty("installment_term")
         val installmentTerm: Int = 0,
+        @field:JsonProperty("scanable_code")
+        val scanableCode: Barcode? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
