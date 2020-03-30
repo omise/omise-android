@@ -22,6 +22,7 @@ sealed class SourceType(
     object Econtext : SourceType("econtext")
     object TrueMoney : SourceType("truemoney")
     object PointsCiti: SourceType("points_citi")
+    object PayNow: SourceType("paynow")
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -73,6 +74,7 @@ sealed class SourceType(
             "installment_ktc" -> Installment.Ktc
             "installment_kbank" -> Installment.KBank
             "points_citi" -> PointsCiti
+            "paynow" -> PayNow
             else -> Unknown(name)
         }
     }
