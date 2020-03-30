@@ -21,8 +21,9 @@ sealed class SourceType(
     object BarcodeAlipay : SourceType("barcode_alipay")
     object Econtext : SourceType("econtext")
     object TrueMoney : SourceType("truemoney")
-    object PointsCiti: SourceType("points_citi")
-    object PayNow: SourceType("paynow")
+    object PointsCiti : SourceType("points_citi")
+    object PayNow : SourceType("paynow")
+    object PromptPay : SourceType("promptpay")
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -75,6 +76,7 @@ sealed class SourceType(
             "installment_kbank" -> Installment.KBank
             "points_citi" -> PointsCiti
             "paynow" -> PayNow
+            "promptpay" -> PromptPay
             else -> Unknown(name)
         }
     }
