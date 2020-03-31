@@ -35,6 +35,8 @@ data class Source(
         val email: String? = null,
         @field:JsonProperty("phone_number")
         val phoneNumber: String? = null,
+        @field:JsonProperty("mobile_number")
+        val mobileNumber: String? = null,
         @field:JsonProperty("installment_term")
         val installmentTerm: Int = 0,
         @field:JsonProperty("scannable_code")
