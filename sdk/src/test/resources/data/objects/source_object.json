@@ -29,5 +29,18 @@
       "download_uri": "https://api.omise.co/charges/chrg_test_5jb2cjmrltbe0eowb8i/documents/docu_test_5jb2cjo8xpaltybj8a4/downloads/838DE1BE1AFE3709",
       "created_at": "2020-03-23T08:26:05Z"
     }
+  },
+  "references": {
+    "expires_at": "2020-04-04T02:08:30Z",
+    "customer_amount": 0,
+    "device_id": null,
+    "customer_currency": null,
+    "customer_exchange_rate": 0.0,
+    "omise_tax_id": null,
+    "reference_number_1": null,
+    "reference_number_2": null,
+    "barcode": null,
+    "payment_code": null,
+    "va_code": null
   }
 }
