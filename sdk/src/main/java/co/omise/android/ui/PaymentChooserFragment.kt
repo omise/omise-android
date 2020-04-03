@@ -176,13 +176,13 @@ sealed class PaymentChooserItem(
 
     object PromptPay : PaymentChooserItem(
             iconRes = R.drawable.payment_promptpay,
-            titleRes = R.string.payment_method_promptpay,
+            titleRes = R.string.payment_method_promptpay_title,
             indicatorIconRes = R.drawable.ic_redirect
     )
 
     object PayNow : PaymentChooserItem(
             iconRes = R.drawable.payment_paynow,
-            titleRes = R.string.payment_method_paynow,
+            titleRes = R.string.payment_method_paynow_title,
             indicatorIconRes = R.drawable.ic_redirect
     )
 }

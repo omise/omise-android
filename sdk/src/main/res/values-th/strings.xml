@@ -78,4 +78,6 @@
     <string name="payment_method_tesco_lotus_title">เทสโก้โลตัสบิลเพย์เมนต์</string>
     <string name="payment_method_installment_term_month_title">%d เดือน</string>
     <string name="payment_method_installment_term_months_title">%d เดือน</string>
+    <string name="payment_method_promptpay_title">พร้อมเพย์</string>
+    <string name="payment_method_paynow_title">เพย์นาว</string>
 </resources>
