@@ -44,6 +44,8 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
             PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEcontext.PayEasy)
             PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEcontext.Netbanking)
             PaymentChooserItem.Alipay -> sendRequest(SourceType.Alipay)
+            PaymentChooserItem.PayNow -> sendRequest(SourceType.PayNow)
+            PaymentChooserItem.PromptPay -> sendRequest(SourceType.PromptPay)
         }
     }
 
@@ -98,6 +100,8 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                                     PaymentChooserItem.Netbanking
                             ))
                             is SourceType.Alipay -> item.add(PaymentChooserItem.Alipay)
+                            is SourceType.PayNow -> item.add(PaymentChooserItem.PayNow)
+                            is SourceType.PromptPay -> item.add(PaymentChooserItem.PromptPay)
                         }
                     }
                 }
@@ -167,6 +171,18 @@ sealed class PaymentChooserItem(
     object Alipay : PaymentChooserItem(
             iconRes = R.drawable.payment_alipay,
             titleRes = R.string.payment_method_alipay_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object PromptPay : PaymentChooserItem(
+            iconRes = R.drawable.payment_promptpay,
+            titleRes = R.string.payment_method_promptpay,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object PayNow : PaymentChooserItem(
+            iconRes = R.drawable.payment_paynow,
+            titleRes = R.string.payment_method_paynow,
             indicatorIconRes = R.drawable.ic_redirect
     )
 }
