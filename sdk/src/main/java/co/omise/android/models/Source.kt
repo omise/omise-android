@@ -145,7 +145,7 @@ data class Source(
             return this
         }
 
-        fun zeroInterestInstallments(zeroInterestInstallments: Boolean?): CreateSourceRequestBuilder {
+        fun zeroInterestInstallments(zeroInterestInstallments: Boolean): CreateSourceRequestBuilder {
             this.zeroInterestInstallments = zeroInterestInstallments
             return this
         }

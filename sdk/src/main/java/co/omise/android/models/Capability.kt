@@ -44,7 +44,7 @@ data class Capability(
          * The helper function for creating an instance of the [Capability] class.
          *
          * @param allowCreditCard allow to create a [Token] with a credit card or not. Default is true.
-         * @param sourceTypes list of [SourceType] that allow to create a [Source].\
+         * @param sourceTypes list of [SourceType] that allow to create a [Source].
          * @param zeroInterestInstallments whether merchant absorbs interest for installment payments.
          *
          * @return an instance of [Capability] with specific configuration.
