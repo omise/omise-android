@@ -35,8 +35,14 @@ data class Source(
         val email: String? = null,
         @field:JsonProperty("phone_number")
         val phoneNumber: String? = null,
+        @field:JsonProperty("mobile_number")
+        val mobileNumber: String? = null,
         @field:JsonProperty("installment_term")
         val installmentTerm: Int = 0,
+        @field:JsonProperty("scannable_code")
+        val scannableCode: Barcode? = null,
+        @field:JsonProperty("zero_interest_installments")
+        val zeroInterestInstallments: Boolean? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
@@ -74,6 +80,8 @@ data class Source(
         private var phoneNumber: String? = null
         @JsonProperty("installment_term")
         private var installmentTerm: Int = 0
+        @JsonProperty("zero_interest_installments")
+        private var zeroInterestInstallments: Boolean? = null
 
         override fun method(): String {
             return POST
@@ -134,6 +142,11 @@ data class Source(
 
         fun installmentTerm(installmentTerm: Int): CreateSourceRequestBuilder {
             this.installmentTerm = installmentTerm
+            return this
+        }
+
+        fun zeroInterestInstallments(zeroInterestInstallments: Boolean): CreateSourceRequestBuilder {
+            this.zeroInterestInstallments = zeroInterestInstallments
             return this
         }
     }

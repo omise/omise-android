@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import co.omise.android.models.Barcode;
 import co.omise.android.models.CardBrand;
 import co.omise.android.models.Model;
 import co.omise.android.models.ModelTypeResolver;
@@ -88,6 +89,8 @@ public class SerializationTest extends OmiseTest {
             return "/data/objects/card_brand_object.json";
         } else if (Objects.equal(klass, PaymentMethod.class)) {
             return "/data/objects/payment_method_object.json";
+        } else if (Objects.equal(klass, Barcode.class)) {
+            return "/data/objects/barcode_object.json";
         } else {
             return "/data/objects/" + klass.getSimpleName().toLowerCase() + "_object.json";
         }

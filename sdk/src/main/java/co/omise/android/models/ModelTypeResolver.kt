@@ -25,6 +25,8 @@ class ModelTypeResolver : TypeIdResolverBase() {
             (types as HashMap<String, Class<*>>)["payment_method"] = PaymentMethod::class.java
             (types as HashMap<String, Class<*>>)["source"] = Source::class.java
             (types as HashMap<String, Class<*>>)["error"] = APIError::class.java
+            (types as HashMap<String, Class<*>>)["barcode"] = Barcode::class.java
+            (types as HashMap<String, Class<*>>)["document"] = Document::class.java
         }
         return Collections.unmodifiableMap(types)
     }
