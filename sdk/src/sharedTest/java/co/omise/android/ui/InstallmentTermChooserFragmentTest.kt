@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
+import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
@@ -32,6 +33,7 @@ class InstallmentTermChooserFragmentTest {
     private val mockRequester: PaymentCreatorRequester<Source> = mock {
         on { amount }.doReturn(500000L)
         on { currency }.doReturn("thb")
+        on { capability }.doReturn(Capability.create(sourceTypes = emptyList()))
     }
 
     private val fragment = InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
