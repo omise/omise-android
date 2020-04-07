@@ -41,7 +41,7 @@ class PaymentSettingFragment : PreferenceFragmentCompat() {
 
         context?.let {
             PaymentSetting.getPaymentMethodPreferences(it).forEach { preference ->
-                preferenceScreen.findPreference<CheckBoxPreference>(preference.key)?.apply {
+                preferenceScreen.findPreference<Preference>(preference.key)?.apply {
                     this.isEnabled = isUsedSpecificsPaymentMethod
                 }
             }

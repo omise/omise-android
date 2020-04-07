@@ -15,6 +15,7 @@
 
     <string name="payment_preference_is_use_capability_api_key" translatable="false">is_use_capability_api</string>
     <string name="payment_preference_is_use_specifics_payment_methods_key" translatable="false">is_use_specifics_payment_methods</string>
+    <string name="payment_preference_zero_interest_installments_key" translatable="false">zero_interest_installments</string>
     <string name="payment_preference_credit_card_key" translatable="false">credit_card</string>
     <string name="payment_preference_internet_banking_bay_key" translatable="false">internet_banking_bay</string>
     <string name="payment_preference_internet_banking_ktb_key" translatable="false">internet_banking_ktb</string>
@@ -54,4 +55,8 @@
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
+    <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>
+    <string name="payment_preference_zero_interest_installments_summary" translatable="false">Whether merchant absorbs the interest for installment payments</string>
+    <string name="payment_preference_zero_interest_installments_switch_title" translatable="false">Enabled</string>
+
 </resources>
