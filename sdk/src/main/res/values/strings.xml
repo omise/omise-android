@@ -84,4 +84,6 @@
     <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>
     <string name="payment_method_internet_banking_scb_title">Siam Commercial Bank</string>
     <string name="payment_method_internet_banking_ktb_title">Krungthai Bank</string>
+    <string name="payment_method_promptpay_title">PromptPay</string>
+    <string name="payment_method_paynow_title">PayNow</string>
 </resources>
