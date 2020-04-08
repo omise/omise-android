@@ -32,7 +32,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private val client: Client by lazy { Client(pkey) }
 
     private val requester: PaymentCreatorRequester<Source> by lazy {
-        PaymentCreatorRequesterImpl(client, amount, currency)
+        PaymentCreatorRequesterImpl(client, amount, currency, capability)
     }
 
     @VisibleForTesting
@@ -197,6 +197,7 @@ private class PaymentCreatorNavigationImpl(
 interface PaymentCreatorRequester<T : Model> {
     val amount: Long
     val currency: String
+    val capability: Capability
     fun request(request: Request<T>, result: ((Result<T>) -> Unit)? = null)
     var listener: PaymentCreatorRequestListener?
 }
@@ -208,7 +209,8 @@ interface PaymentCreatorRequestListener {
 private class PaymentCreatorRequesterImpl(
         private val client: Client,
         override val amount: Long,
-        override val currency: String
+        override val currency: String,
+        override val capability: Capability
 ) : PaymentCreatorRequester<Source> {
 
     override var listener: PaymentCreatorRequestListener? = null

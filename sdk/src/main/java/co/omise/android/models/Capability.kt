@@ -42,12 +42,15 @@ data class Capability(
 
         /**
          * The helper function for creating an instance of the [Capability] class.
+         *
          * @param allowCreditCard allow to create a [Token] with a credit card or not. Default is true.
          * @param sourceTypes list of [SourceType] that allow to create a [Source].
+         * @param zeroInterestInstallments whether merchant absorbs interest for installment payments.
+         *
          * @return an instance of [Capability] with specific configuration.
          */
         @JvmStatic
-        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>): Capability {
+        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>, zeroInterestInstallments: Boolean = false): Capability {
             val paymentMethods = mutableListOf<PaymentMethod>()
 
             if (allowCreditCard) {
@@ -56,7 +59,10 @@ data class Capability(
 
             paymentMethods.addAll(sourceTypes.map(::createSourceTypeMethod))
 
-            return Capability(paymentMethods = paymentMethods)
+            return Capability(
+                    paymentMethods = paymentMethods,
+                    zeroInterestInstallments = zeroInterestInstallments
+            )
         }
     }
 }

@@ -10,6 +10,7 @@ object PaymentSetting {
     @JvmStatic
     fun getPaymentMethodPreferences(context: Context): Map<String, Boolean> =
             listOf(
+                    R.string.payment_preference_zero_interest_installments_key,
                     R.string.payment_preference_credit_card_key,
                     R.string.payment_preference_internet_banking_bay_key,
                     R.string.payment_preference_internet_banking_ktb_key,
@@ -37,7 +38,8 @@ object PaymentSetting {
 
     @JvmStatic
     fun createCapabilityFromPreferences(context: Context): Capability {
-        val sourceTypes = getPaymentMethodPreferences(context)
+        val paymentMethodPreferences = getPaymentMethodPreferences(context)
+        val sourceTypes = paymentMethodPreferences
                 .filter { it.value }
                 .toMap()
                 .map {
@@ -61,9 +63,12 @@ object PaymentSetting {
                 }
                 .filterNotNull()
 
-        val allowCreditCardMethod = getPaymentMethodPreferences(context)
-                .get(context.getString(R.string.payment_preference_credit_card_key)) ?: false
+        val allowCreditCardMethod = paymentMethodPreferences[context.getString(R.string.payment_preference_credit_card_key)]
+                ?: false
 
-        return Capability.create(allowCreditCardMethod, sourceTypes)
+        val zeroInterestInstallments = paymentMethodPreferences[context.getString(R.string.payment_preference_zero_interest_installments_key)]
+                ?: false
+
+        return Capability.create(allowCreditCardMethod, sourceTypes, zeroInterestInstallments)
     }
 }

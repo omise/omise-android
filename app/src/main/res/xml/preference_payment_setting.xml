@@ -93,4 +93,19 @@
             app:title="@string/payment_preference_promptpay_title" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:singleLineTitle="false"
+        app:title="@string/payment_preference_zero_interest_installments_title">
+
+        <Preference
+            app:persistent="false"
+            app:selectable="false"
+            app:summary="@string/payment_preference_zero_interest_installments_summary" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/payment_preference_zero_interest_installments_key"
+            app:title="@string/payment_preference_zero_interest_installments_switch_title" />
+    </PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>
