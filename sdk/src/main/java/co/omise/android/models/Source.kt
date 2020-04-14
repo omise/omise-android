@@ -38,7 +38,7 @@ data class Source(
         @field:JsonProperty("mobile_number")
         val mobileNumber: String? = null,
         @field:JsonProperty("installment_term")
-        val installmentTerm: Int = 0,
+        val installmentTerm: Int? = null,
         @field:JsonProperty("scannable_code")
         val scannableCode: Barcode? = null,
         @field:JsonProperty("zero_interest_installments")
