@@ -79,7 +79,7 @@ data class Source(
         @JsonProperty("phone_number")
         private var phoneNumber: String? = null
         @JsonProperty("installment_term")
-        private var installmentTerm: Int = 0
+        private var installmentTerm: Int? = null
         @JsonProperty("zero_interest_installments")
         private var zeroInterestInstallments: Boolean? = null
 
