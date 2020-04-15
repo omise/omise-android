@@ -44,7 +44,7 @@ public class SerializationTest extends OmiseTest {
         }
 
         for (Map.Entry<String, Object> entry : differences.entriesOnlyOnLeft().entrySet()) {
-            if (entry.getKey().equals("deleted")) {
+            if (entry.getKey().equals("deleted") || entry.getValue() == null) {
                 continue;
             }
 

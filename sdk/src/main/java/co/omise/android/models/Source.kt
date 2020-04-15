@@ -38,7 +38,7 @@ data class Source(
         @field:JsonProperty("mobile_number")
         val mobileNumber: String? = null,
         @field:JsonProperty("installment_term")
-        val installmentTerm: Int = 0,
+        val installmentTerm: Int? = null,
         @field:JsonProperty("scannable_code")
         val scannableCode: Barcode? = null,
         @field:JsonProperty("zero_interest_installments")
@@ -79,7 +79,7 @@ data class Source(
         @JsonProperty("phone_number")
         private var phoneNumber: String? = null
         @JsonProperty("installment_term")
-        private var installmentTerm: Int = 0
+        private var installmentTerm: Int? = null
         @JsonProperty("zero_interest_installments")
         private var zeroInterestInstallments: Boolean? = null
 
