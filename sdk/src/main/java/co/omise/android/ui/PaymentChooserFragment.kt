@@ -104,6 +104,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             is SourceType.PayNow -> item.add(PaymentChooserItem.PayNow)
                             is SourceType.PromptPay -> item.add(PaymentChooserItem.PromptPay)
                             is SourceType.PointsCiti -> item.add(PaymentChooserItem.PointsCiti)
+                            is SourceType.TrueMoney -> item.add(PaymentChooserItem.TrueMoney)
                         }
                     }
                 }
@@ -192,5 +193,11 @@ sealed class PaymentChooserItem(
             iconRes = R.drawable.payment_points_citi,
             titleRes = R.string.payment_method_points_citi_title,
             indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object TrueMoney : PaymentChooserItem(
+            iconRes = R.drawable.payment_truemoney,
+            titleRes = R.string.payment_truemoney_title,
+            indicatorIconRes = R.drawable.ic_next
     )
 }

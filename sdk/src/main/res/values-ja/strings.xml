@@ -81,4 +81,5 @@
     <string name="payment_method_promptpay_title">プロンプトペイ</string>
     <string name="payment_method_paynow_title">PayNow</string>
     <string name="payment_method_points_citi_title">Citi Rewardsポイント</string>
+    <string name="payment_truemoney_title">TrueMoneyウォレット</string>
 </resources>
