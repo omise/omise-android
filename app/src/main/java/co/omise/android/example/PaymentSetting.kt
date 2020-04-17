@@ -25,7 +25,8 @@ object PaymentSetting {
                     R.string.payment_preference_installment_kbank_key,
                     R.string.payment_preference_econtext_key,
                     R.string.payment_preference_paynow_key,
-                    R.string.payment_preference_promptpay_key
+                    R.string.payment_preference_promptpay_key,
+                    R.string.payment_preference_points_citi_key
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -58,6 +59,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_econtext_key) -> SourceType.Econtext
                         context.getString(R.string.payment_preference_paynow_key) -> SourceType.PayNow
                         context.getString(R.string.payment_preference_promptpay_key) -> SourceType.PromptPay
+                        context.getString(R.string.payment_preference_points_citi_key) -> SourceType.PointsCiti
                         else -> null
                     }
                 }
