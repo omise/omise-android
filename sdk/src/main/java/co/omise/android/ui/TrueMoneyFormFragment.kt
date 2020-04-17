@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import co.omise.android.R
+import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
+import co.omise.android.models.SourceType
 import kotlinx.android.synthetic.main.fragment_true_money_form.*
 
 /**
@@ -35,5 +37,24 @@ class TrueMoneyFormFragment : OmiseFragment() {
 
         title = getString(R.string.payment_truemoney_title)
         setHasOptionsMenu(true)
+
+        submitButton.isEnabled = true
+
+        submitButton.setOnClickListener(::submitForm)
+    }
+
+    private fun submitForm() {
+        val requester = requester ?: return
+
+        val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
+
+        val request = Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.TrueMoney)
+                .phoneNumber(phoneNumber)
+                .build()
+
+        view?.let { setAllViewsEnabled(it, false) }
+        requester.request(request) {
+            view?.let { setAllViewsEnabled(it, true) }
+        }
     }
 }
