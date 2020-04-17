@@ -47,6 +47,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
             PaymentChooserItem.PayNow -> sendRequest(SourceType.PayNow)
             PaymentChooserItem.PromptPay -> sendRequest(SourceType.PromptPay)
             PaymentChooserItem.PointsCiti -> sendRequest(SourceType.PointsCiti)
+            PaymentChooserItem.TrueMoney -> navigation?.navigateToTrueMoneyForm()
         }
     }
 

@@ -120,6 +120,7 @@ interface PaymentCreatorNavigation {
     fun navigateToInstallmentTermChooser(installment: PaymentMethod)
     fun navigateToEContextForm(eContext: SupportedEcontext)
     fun createSourceFinished(source: Source)
+    fun navigateToTrueMoneyForm()
 }
 
 private class PaymentCreatorNavigationImpl(
@@ -191,6 +192,13 @@ private class PaymentCreatorNavigationImpl(
         }
         activity.setResult(Activity.RESULT_OK, intent)
         activity.finish()
+    }
+
+    override fun navigateToTrueMoneyForm() {
+        val fragment = TrueMoneyFormFragment().apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
+        addFragmentToBackStack(fragment)
     }
 }
 
