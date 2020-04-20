@@ -3,10 +3,12 @@ package co.omise.android.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import co.omise.android.R
+import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
@@ -21,11 +23,6 @@ class TrueMoneyFormFragment : OmiseFragment() {
     private val phoneNumberEdit: OmiseEditText by lazy { edit_phone_number }
     private val phoneNumberErrorText by lazy { text_phone_number_error }
     private val submitButton: Button by lazy { button_submit }
-    private val formInputWithErrorTexts: List<Pair<OmiseEditText, TextView>> by lazy {
-        listOf(
-                Pair(phoneNumberEdit, phoneNumberErrorText)
-        )
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -38,9 +35,28 @@ class TrueMoneyFormFragment : OmiseFragment() {
         title = getString(R.string.payment_truemoney_title)
         setHasOptionsMenu(true)
 
-        submitButton.isEnabled = true
+        with(phoneNumberEdit) {
+            setOnFocusChangeListener(::updateErrorText)
+            setOnAfterTextChangeListener(::updateSubmitButton)
+        }
 
         submitButton.setOnClickListener(::submitForm)
+    }
+
+    private fun updateErrorText(view: View, hasFocus: Boolean) {
+        if (hasFocus || phoneNumberEdit.isValid) {
+            with(phoneNumberErrorText) {
+                text = ""
+                visibility = INVISIBLE
+            }
+            return
+        }
+
+        phoneNumberErrorText.text = getString(R.string.error_invalid_phone_number)
+    }
+
+    private fun updateSubmitButton() {
+        submitButton.isEnabled = phoneNumberEdit.isValid
     }
 
     private fun submitForm() {
