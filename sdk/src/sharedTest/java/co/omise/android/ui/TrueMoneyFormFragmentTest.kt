@@ -8,7 +8,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.Source
-import co.omise.android.utils.focus
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -47,13 +46,6 @@ class TrueMoneyFormFragmentTest {
         onView(withId(R.id.button_submit)).perform(click())
 
         verify(mockRequester).request(any(), any())
-    }
-
-    @Test
-    fun invalidErrorTexts_showErrorTexts() {
-        onView(withId(R.id.edit_phone_number)).perform(focus(true), focus(false))
-
-        onView(withId(R.id.text_phone_number_error)).check(matches(withText(R.string.error_invalid_phone_number)))
     }
 
     @Test
