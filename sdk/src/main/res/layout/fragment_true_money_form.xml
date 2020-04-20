@@ -16,11 +16,24 @@
         android:paddingRight="@dimen/large_padding"
         android:paddingBottom="@dimen/xlarge_padding">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/large_margin"
+            android:src="@drawable/logo_truemoney" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xlarge_margin"
+            android:text="@string/truemoney_info_text"/>
+
         <TextView
             style="?attr/editTextLabelStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/xlarge_margin"
             android:text="@string/label_phone_number" />
 
         <co.omise.android.ui.OmiseEditText

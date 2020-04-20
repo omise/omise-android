@@ -88,4 +88,5 @@
     <string name="payment_method_paynow_title">PayNow</string>
     <string name="payment_method_points_citi_title">Pay with Citi Rewards Points</string>
     <string name="payment_truemoney_title">TrueMoney Wallet</string>
+    <string name="truemoney_info_text">Please input mobile number connected to your TrueMoney Wallet account</string>
 </resources>
