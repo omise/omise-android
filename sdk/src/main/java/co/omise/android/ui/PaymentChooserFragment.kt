@@ -46,6 +46,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
             PaymentChooserItem.Alipay -> sendRequest(SourceType.Alipay)
             PaymentChooserItem.PayNow -> sendRequest(SourceType.PayNow)
             PaymentChooserItem.PromptPay -> sendRequest(SourceType.PromptPay)
+            PaymentChooserItem.PointsCiti -> sendRequest(SourceType.PointsCiti)
         }
     }
 
@@ -102,6 +103,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             is SourceType.Alipay -> item.add(PaymentChooserItem.Alipay)
                             is SourceType.PayNow -> item.add(PaymentChooserItem.PayNow)
                             is SourceType.PromptPay -> item.add(PaymentChooserItem.PromptPay)
+                            is SourceType.PointsCiti -> item.add(PaymentChooserItem.PointsCiti)
                         }
                     }
                 }
@@ -183,6 +185,12 @@ sealed class PaymentChooserItem(
     object PayNow : PaymentChooserItem(
             iconRes = R.drawable.payment_paynow,
             titleRes = R.string.payment_method_paynow_title,
+            indicatorIconRes = R.drawable.ic_redirect
+    )
+
+    object PointsCiti : PaymentChooserItem(
+            iconRes = R.drawable.payment_points_citi,
+            titleRes = R.string.payment_method_points_citi_title,
             indicatorIconRes = R.drawable.ic_redirect
     )
 }

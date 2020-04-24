@@ -31,6 +31,7 @@
     <string name="payment_preference_econtext_key" translatable="false">econtext</string>
     <string name="payment_preference_paynow_key" translatable="false">paynow</string>
     <string name="payment_preference_promptpay_key" translatable="false">promptpay</string>
+    <string name="payment_preference_points_citi_key" translatable="false">points_citi</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -53,6 +54,7 @@
     <string name="payment_preference_econtext_title" translatable="false">econtext</string>
     <string name="payment_preference_paynow_title" translatable="false">PayNow</string>
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
+    <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>

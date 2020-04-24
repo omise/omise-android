@@ -78,6 +78,7 @@
     <string name="payment_method_tesco_lotus_title">テスコロータス請求書払い</string>
     <string name="payment_method_installment_term_month_title">%d ヶ月</string>
     <string name="payment_method_installment_term_months_title">%d ヶ月</string>
-    <string name="payment_method_promptpay_title">PromptPay</string>
+    <string name="payment_method_promptpay_title">プロンプトペイ</string>
     <string name="payment_method_paynow_title">PayNow</string>
+    <string name="payment_method_points_citi_title">Citi Rewardsポイント</string>
 </resources>

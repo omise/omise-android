@@ -80,4 +80,5 @@
     <string name="payment_method_installment_term_months_title">%d เดือน</string>
     <string name="payment_method_promptpay_title">พร้อมเพย์</string>
     <string name="payment_method_paynow_title">เพย์นาว</string>
+    <string name="payment_method_points_citi_title">ชำระด้วยคะแนนซิตี้รีวอร์ด</string>
 </resources>
