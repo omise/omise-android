@@ -42,7 +42,7 @@ implementation 'co.omise:omise-android:3.0.0'
 
 ## Usage
 
-#### Credit Card activity
+### Credit Card activity
 
 The simplest way to use this SDK is to integrate the provided `CreditCardActivity`
 directly into your application. This activity contains a pre-made credit form and will
@@ -101,7 +101,7 @@ resulting `Intent` with the following code:
 * `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
   which is part of the `Token` object returned from the Omise API.
 
-#### Custom Credit Card Form
+### Custom Credit Card Form
 
 If you need to build your own credit card form, components inside `CreditCardActivity`
 can be used on their own. For example, the `CreditCardEditText` can be used in XML in this way:
@@ -124,7 +124,7 @@ Additionally the following utility classes are available from the SDK:
 * `co.omise.android.ui.SecurityCodeEditText` - The `SecurityCodeEditText` class handles formatting
    and input type for security code.
 
-#### Manual Tokenization
+### Manual Tokenization
 
 If you have built your own credit card form, you can use the SDK to manually tokenize the
 card. First build the `Client` and supply your public key this way:
@@ -361,7 +361,7 @@ style.xml
 Some payment methods require the customer to authorize the payment via an authorization URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay), etc. Omise Android SDK provides a built in class to handle the authorization.
 
 
-#### Authorizing Payment activity
+### Authorizing Payment activity
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -398,7 +398,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 }
 ```
 
-#### Authorizing Payment via an external app
+### Authorizing Payment via an external app
 
 Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user would like to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However merchant developers must handle the `Intent` callback by themselves.
 
@@ -418,10 +418,10 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 ## Note on TLS 1.2
 PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suites. This means that every client must connect to Omise service with those valid suites. However TLS 1.2 support in Android depends on the Android OS version. Please follow the following instructions to add support for TLS 1.2 in your app.
 
-#### Android API 20 or higher
+### Android API 20 or higher
 You can use our SDK without any changes. The SDK already fully supports communication with the Omise Service using TLS 1.2 with the correct encryption suite.
 
-#### Android API 16 to API 19 with Google Play Services
+### Android API 16 to API 19 with Google Play Services
 These versions of the Android API do not support the required encryption suites out of the box. However `Google Play Services` has the `ProviderInstaller` API to add the required support. You may already use  Google Play Services in your app; Google Play Services includes many common libraries used in Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Services by carrying out the following steps.
 
 1. Add Google Play Service Analytics to your app grade setting:
@@ -446,7 +446,7 @@ if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
  
 > **Note:** Google Play Services may not available on every brand or model. Please be mindful about Google Play Services compatibility.
 
-#### API 15 or lower
+### API 15 or lower
 These versions of the Android API do not support the required encryption suites which means that Android devices running those OS versions will not be able to securely connect to our services. We recommend that you drop support for those API versions.
 
 
