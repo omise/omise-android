@@ -81,4 +81,6 @@
     <string name="payment_method_promptpay_title">พร้อมเพย์</string>
     <string name="payment_method_paynow_title">เพย์นาว</string>
     <string name="payment_method_points_citi_title">ชำระด้วยคะแนนซิตี้รีวอร์ด</string>
+    <string name="payment_truemoney_title">ทรูมันนี่วอลเล็ท</string>
+    <string name="truemoney_info_text">กรุณากรอกหมายเลขโทรศัพท์ที่ผูกกับบัญชีทรูมันนี่วอลเล็ท</string>
 </resources>
