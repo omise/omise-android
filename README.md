@@ -165,8 +165,8 @@ thread and will call listener methods on the thread that initially calls the `se
 method.
 
 ### Payment Creator activity
-Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in order to allow users to create a payment source from the list of
-sources available for the implementer.
+Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in 
+order to allow users to create a payment source from the list of sources available for the implementer.
 
 To use it, first declare the availability of the activity in your AndroidManifest.xml file as follows:
 
@@ -188,7 +188,7 @@ private fun showPaymentCreatorActivity() {
     intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
     intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
-    // you can retrieve your account's capabilities through the SDK (will be explained in a different section)
+    // you can retrieve your account's capabilities through the SDK (will be explained in the below)
     intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
 
     startActivityForResult(intent, REQUEST_CC)
@@ -196,6 +196,26 @@ private fun showPaymentCreatorActivity() {
 ```
 
 Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
+
+Declare `capability` variable as a `Capability` put the `capability` with `OmiseActivity.EXTRA_CAPABILITY` key to the `Intent`. So, the `PaymentCreatorActivity` will display the payment methods that contains in the object. 
+
+There are 2 options to retrieve the Capability object. 
+
+1. You can retrieve the Capability object from your account's capabilities through the [Capability](#retrieve-capabilities). 
+
+2. Or you can create a `Capability` object to create your own capaiblities by using the helper function `Capability.create()`. 
+
+    **Here is the sample:**
+
+    ```kotlin
+    val capability = Capability.create(
+            allowCreditCard = true,
+            sourceTypes = listOf(SourceType.PromptPay, SourceType.TrueMoney)
+    )
+    ```
+
+    > **Note**
+    > Ensure you enter the supported payment methods with your account's capabilities. If not it won't able to create a source to continue the payment process.
 
 After the end user selects and creates a payment source, the activity result callback will be called; handle it as follows:
 
