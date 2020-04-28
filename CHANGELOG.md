@@ -3,7 +3,7 @@
 ## v3.1.0
 
 * **ADDED** Add `mobileNumber`, `scannableCode`, `zeroInterestInstallments` fields to Source model
-* **ADDED:** Support new source type (PointsCiti, PromptPay, PayNow)
+* **ADDED:** Support new source types (PointsCiti, PromptPay, PayNow)
 * **ADDED:** Support new payment methods in the `PaymentCreatorActivity` (PointsCiti, PromptPay, PayNow, TrueMoney)
 * **ADDED:** Support the term zero-interest installments in the `PaymentCreatorActivity`
 * **CHANGED** Update payment method icons
