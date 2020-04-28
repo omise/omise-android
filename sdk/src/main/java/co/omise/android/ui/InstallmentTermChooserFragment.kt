@@ -43,7 +43,6 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 .orEmpty()
                 .map {
                     InstallmentTermChooserItem(
-                            iconRes = R.drawable.payment_installment,
                             title = with(it) {
                                 if (this > 1) {
                                     getString(R.string.payment_method_installment_term_months_title, this)
@@ -83,7 +82,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 }
 
 internal data class InstallmentTermChooserItem(
-        @DrawableRes override val iconRes: Int,
+        @DrawableRes override val iconRes: Int? = null,
         override val title: String,
         val installmentTerm: Int,
         @DrawableRes override val indicatorIconRes: Int
