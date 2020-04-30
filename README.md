@@ -165,8 +165,8 @@ thread and will call listener methods on the thread that initially calls the `se
 method.
 
 ### Payment Creator activity
-Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` in 
-order to allow users to create a payment source from the list of sources available for the implementer.
+Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` 
+to allow users to create a payment source from the list of sources available for the account.
 
 To use it, first declare the availability of the activity in your AndroidManifest.xml file as follows:
 
@@ -197,13 +197,13 @@ private fun showPaymentCreatorActivity() {
 
 Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 
-Declare `capability` variable as a `Capability` put the `capability` with `OmiseActivity.EXTRA_CAPABILITY` key to the `Intent`. So, the `PaymentCreatorActivity` will display the payment methods that contains in the object. 
+Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way, the `PaymentCreatorActivity` will display the payment methods contained in the `Capability` object.  
 
 There are 2 options to retrieve the Capability object. 
 
 1. You can retrieve the Capability object from your account's capabilities through the [Capability](#retrieve-capabilities). 
 
-2. Or you can create a `Capability` object to create your own capaiblities by using the helper function `Capability.create()`. 
+2. Or you can create a `Capability` object to create your own capabilities using the helper function `Capability.create()`.  
 
     **Here is the sample:**
 
@@ -215,7 +215,8 @@ There are 2 options to retrieve the Capability object.
     ```
 
     > **Note**
-    > Ensure you enter the supported payment methods with your account's capabilities. If not it won't able to create a source to continue the payment process.
+    > Ensure you are adding payment methods supported by the account. 
+    > If not, you won't be able to create a source to continue the payment process..
 
 After the end user selects and creates a payment source, the activity result callback will be called; handle it as follows:
 
