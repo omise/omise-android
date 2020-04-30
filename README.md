@@ -188,7 +188,7 @@ private fun showPaymentCreatorActivity() {
     intent.putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
     intent.putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
-    // you can retrieve your account's capabilities through the SDK (will be explained in the below)
+    // you can retrieve your account's capabilities through the SDK (will be explained below)
     intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
 
     startActivityForResult(intent, REQUEST_CC)
