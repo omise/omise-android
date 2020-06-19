@@ -378,13 +378,34 @@ style.xml
     </style>
 ```
 
-## Authorizing Payment
-Some payment methods require the customer to authorize the payment via an authorization URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay), etc. Omise Android SDK provides a built in class to handle the authorization.
-
-
 ### Authorizing Payment activity
 
-To use it, first declare the availability of the activity in your `AndroidManifest.xml`
+Some payment methods require the customer to authorize the payment via an authorization URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay), etc. Omise Android SDK provides a built in class to handle the authorization.
+
+The new 3DS v2, merchants can use the same authentication flow to authenticate the `authorize_uri` . In the 3DS SDK v2  is introduced the `Omise.initialize(config)` method  to able the merchant set their own configuration e.g. UI customization, timeout. 
+
+> **NOTE**
+>
+> The  `Omise.initialize(config)` method is optional in case if the merchant did not provide the configurations, the Omise SDK will comply the default configurations. 
+
+To define the configurations, we recommend to define the  `Omise.initialize(config)` method in the `Application` class of the merchant app or before invoke any Omise SDK functionality.
+
+```kotlin
+val uiCustomization = UiCustomization(
+  buttonCustomization, 
+  toolbarCustomization, 
+  labelCustomization, 
+  textBoxCustomization
+)
+
+val config = OmiseConfigurations.Builder()
+.uiCustomization(uiCustomization)
+.timeout(5) // Set timeout to 5 mins
+
+Omise.initialize(config) 
+```
+
+To use the authentication page, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
 
 ```xml
@@ -449,8 +470,8 @@ These versions of the Android API do not support the required encryption suites 
 
 ```gradle
  implementation 'com.google.android.gms:play-services-analytics:17.0.0'
- ```
- 
+```
+
 2. Ask the ProviderInstaller to install the encryption suites with the following code:
 
 ```kotlin
@@ -463,8 +484,8 @@ if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
         e.printStackTrace()
     }
 }
- ```
- 
+```
+
 > **Note:** Google Play Services may not available on every brand or model. Please be mindful about Google Play Services compatibility.
 
 ### API 15 or lower
