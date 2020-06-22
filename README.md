@@ -37,7 +37,7 @@ Add the following line to your project's build.gradle file inside the `dependenc
 block:
 
 ```gradle
-implementation 'co.omise:omise-android:3.1.0'
+implementation 'co.omise:omise-android:3.1.1'
 ```
 
 ## Usage

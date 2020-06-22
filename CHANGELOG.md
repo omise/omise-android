@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v3.1.1
+
+* **FIXED:** Fix a potential security on the `jackson-core` lib, issue #136
+
 ## v3.1.0
 
 * **ADDED** Add `mobileNumber`, `scannableCode`, `zeroInterestInstallments` fields to Source model
