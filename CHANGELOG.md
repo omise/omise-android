@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v3.1.2
+
+* **CHANGED** Enhance `AuthorizingPaymentActivity` to support cache in the WebView for short life time
+
 ## v3.1.1
 
 * **FIXED:** Fix a potential security on the `jackson-core` lib, issue #136
