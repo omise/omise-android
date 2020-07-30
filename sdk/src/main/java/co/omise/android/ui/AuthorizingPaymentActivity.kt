@@ -3,7 +3,10 @@ package co.omise.android.ui
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.webkit.CookieManager
+import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +30,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
-        webView.settings.javaScriptEnabled = true
+
+        initializeWebView()
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
@@ -73,5 +77,36 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED)
         super.onBackPressed()
     }
-}
 
+    override fun onDestroy() {
+        clearCache()
+        super.onDestroy()
+    }
+
+    private fun initializeWebView() {
+        with(webView.settings) {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            databaseEnabled = true
+        }
+    }
+
+    private fun clearCache() {
+        webView.clearCache(true)
+        webView.clearHistory()
+
+        val cookieManager = CookieManager.getInstance()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            cookieManager.removeAllCookies(null)
+            cookieManager.flush()
+        } else {
+            val cookieSyncManager = CookieSyncManager.createInstance(this)
+            cookieManager.removeAllCookie()
+            cookieManager.removeSessionCookie()
+            cookieSyncManager.startSync()
+            cookieSyncManager.stopSync()
+            cookieSyncManager.sync()
+        }
+    }
+}
