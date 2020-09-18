@@ -1,1 +1,1 @@
-include ':app', ':sdk', ':testsupport'
+include ':app', ':sdk', ':testsupport', ':3DS-ANDROID-SDK:threeds'
