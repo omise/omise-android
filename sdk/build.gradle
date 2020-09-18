@@ -123,6 +123,7 @@ uploadArchives {
 }
 
 dependencies {
+    implementation project(":3DS-ANDROID-SDK:threeds")
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
