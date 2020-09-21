@@ -11,6 +11,8 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
+import co.omise.android.threeds.ThreeDS
+import co.omise.android.threeds.ThreeDSAuthorizingTransactionListener
 import kotlinx.android.synthetic.main.activity_authorizing_payment.*
 
 /**
@@ -19,10 +21,11 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.*
  * In case the authorization needs to be handled by an external app, the SDK opens that external
  * app by default but the Intent callback needs to be handled by the implementer.
  */
-class AuthorizingPaymentActivity : AppCompatActivity() {
+class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransactionListener {
 
     private val webView: WebView by lazy { authorizing_payment_webview }
     private lateinit var verifier: AuthorizingPaymentURLVerifier
+    private lateinit var threeDS: ThreeDS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +35,18 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
         verifier = AuthorizingPaymentURLVerifier(intent)
+        threeDS = ThreeDS(this).apply {
+            setAuthorizingTransactionListener(this@AuthorizingPaymentActivity)
+        }
+
         if (verifier.isReady) {
             webView.loadUrl(verifier.authorizedURLString)
         }
 
+        setupWebViewClient()
+    }
+
+    private fun setupWebViewClient() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val uri = Uri.parse(url)
@@ -72,6 +83,18 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onBackPressed() {
         setResult(RESULT_CANCELED)
         super.onBackPressed()
+    }
+
+    override fun onCompleted() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onUnsupported() {
+        TODO("Fallback to 3DS V1 redirect flow")
+    }
+
+    override fun onError(e: Throwable) {
+        TODO("Not yet implemented")
     }
 }
 
