@@ -24,8 +24,12 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.*
 class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransactionListener {
 
     private val webView: WebView by lazy { authorizing_payment_webview }
-    private lateinit var verifier: AuthorizingPaymentURLVerifier
-    private lateinit var threeDS: ThreeDS
+    private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
+    private val threeDS: ThreeDS by lazy {
+        ThreeDS(this).apply {
+            setAuthorizingTransactionListener(this@AuthorizingPaymentActivity)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +38,10 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
-        verifier = AuthorizingPaymentURLVerifier(intent)
-        threeDS = ThreeDS(this).apply {
-            setAuthorizingTransactionListener(this@AuthorizingPaymentActivity)
-            authorizeTransaction(verifier.authorizedURLString)
-        }
-
-        if (verifier.isReady) {
-            webView.loadUrl(verifier.authorizedURLString)
-        }
-
         setupWebViewClient()
+        loadAuthorizeUrl()
+
+        threeDS.authorizeTransaction(verifier.authorizedURLString)
     }
 
     private fun setupWebViewClient() {
@@ -70,6 +67,12 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
                     false
                 }
             }
+        }
+    }
+
+    private fun loadAuthorizeUrl() {
+        if (verifier.isReady) {
+            webView.loadUrl(verifier.authorizedURLString)
         }
     }
 
