@@ -1,5 +1,6 @@
 package co.omise.android.ui
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -49,10 +50,10 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val uri = Uri.parse(url)
                 if (verifier.verifyURL(uri)) {
-                    val resultIntent = Intent()
-                    resultIntent.putExtra(EXTRA_RETURNED_URLSTRING, url)
-                    setResult(RESULT_OK, resultIntent)
-                    finish()
+                    val resultIntent = Intent().apply {
+                        putExtra(EXTRA_RETURNED_URLSTRING, url)
+                    }
+                    authorizeSuccessful(resultIntent)
                     return true
                 } else return if (verifier.verifyExternalURL(uri)) {
                     try {
@@ -76,11 +77,20 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
         }
     }
 
+    private fun authorizeSuccessful(result: Intent? = null) {
+        setResult(Activity.RESULT_OK, result)
+        finish()
+    }
+
+    private fun authorizeFailed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
-            setResult(RESULT_OK, data)
-            finish()
+            authorizeSuccessful(data)
         }
     }
 
@@ -91,20 +101,19 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
     }
 
     override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
+        authorizeFailed()
     }
 
     override fun onCompleted() {
-        TODO("Not yet implemented")
+        authorizeSuccessful()
     }
 
     override fun onUnsupported() {
-        TODO("Fallback to 3DS V1 redirect flow")
+        loadAuthorizeUrl()
     }
 
     override fun onError(e: Throwable) {
-        TODO("Not yet implemented")
+        authorizeFailed()
     }
 }
 
