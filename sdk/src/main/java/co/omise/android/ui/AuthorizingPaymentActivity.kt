@@ -37,6 +37,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
         verifier = AuthorizingPaymentURLVerifier(intent)
         threeDS = ThreeDS(this).apply {
             setAuthorizingTransactionListener(this@AuthorizingPaymentActivity)
+            authorizeTransaction(verifier.authorizedURLString)
         }
 
         if (verifier.isReady) {
