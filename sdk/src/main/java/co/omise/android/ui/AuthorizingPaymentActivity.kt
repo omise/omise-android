@@ -81,6 +81,12 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
         }
     }
 
+    override fun onDestroy() {
+        threeDS.cleanup()
+
+        super.onDestroy()
+    }
+
     override fun onBackPressed() {
         setResult(RESULT_CANCELED)
         super.onBackPressed()
