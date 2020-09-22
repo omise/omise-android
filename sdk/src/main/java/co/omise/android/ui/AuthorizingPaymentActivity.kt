@@ -1,5 +1,6 @@
 package co.omise.android.ui
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -20,7 +21,13 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
+<<<<<<< HEAD
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
+=======
+import co.omise.android.threeds.ThreeDS
+import co.omise.android.threeds.ThreeDSAuthorizingTransactionListener
+import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+>>>>>>> 6b66f23... Initialize 3DS SDK (#146)
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -28,10 +35,15 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_p
  * In case the authorization needs to be handled by an external app, the SDK opens that external
  * app by default but the Intent callback needs to be handled by the implementer.
  */
-class AuthorizingPaymentActivity : AppCompatActivity() {
+class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransactionListener {
 
     private val webView: WebView by lazy { authorizing_payment_webview }
-    private lateinit var verifier: AuthorizingPaymentURLVerifier
+    private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
+    private val threeDS: ThreeDS by lazy {
+        ThreeDS(this).apply {
+            setAuthorizingTransactionListener(this@AuthorizingPaymentActivity)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +53,36 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
-        verifier = AuthorizingPaymentURLVerifier(intent)
-        if (verifier.isReady) {
-            webView.loadUrl(verifier.authorizedURLString)
-        }
+        setupWebViewClient()
+        loadAuthorizeUrl()
 
+        threeDS.authorizeTransaction(verifier.authorizedURLString)
+    }
+
+    private fun setupWebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                val uri = Uri.parse(url)
+                if (verifier.verifyURL(uri)) {
+                    val resultIntent = Intent().apply {
+                        putExtra(EXTRA_RETURNED_URLSTRING, url)
+                    }
+                    authorizeSuccessful(resultIntent)
+                    return true
+                } else return if (verifier.verifyExternalURL(uri)) {
+                    try {
+                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+                        true
+                    } catch (e: ActivityNotFoundException) {
+                        e.printStackTrace()
+                        false
+                    }
+                } else {
+                    false
+                }
+            }
+        }
         webView.webChromeClient = object : WebChromeClient() {
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                 AlertDialog.Builder(this@AuthorizingPaymentActivity)
@@ -94,42 +131,51 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 return true
             }
         }
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val uri = Uri.parse(url)
-                if (verifier.verifyURL(uri)) {
-                    val resultIntent = Intent()
-                    resultIntent.putExtra(EXTRA_RETURNED_URLSTRING, url)
-                    setResult(RESULT_OK, resultIntent)
-                    finish()
-                    return true
-                } else return if (verifier.verifyExternalURL(uri)) {
-                    try {
-                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        true
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                        false
-                    }
-                } else {
-                    false
-                }
-            }
+    }
+
+    private fun loadAuthorizeUrl() {
+        if (verifier.isReady) {
+            webView.loadUrl(verifier.authorizedURLString)
         }
+    }
+
+    private fun authorizeSuccessful(result: Intent? = null) {
+        setResult(Activity.RESULT_OK, result)
+        finish()
+    }
+
+    private fun authorizeFailed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
-            setResult(RESULT_OK, data)
-            finish()
+            authorizeSuccessful(data)
         }
     }
 
+    override fun onDestroy() {
+        threeDS.cleanup()
+
+        super.onDestroy()
+    }
+
     override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
+        authorizeFailed()
+    }
+
+    override fun onCompleted() {
+        authorizeSuccessful()
+    }
+
+    override fun onUnsupported() {
+        loadAuthorizeUrl()
+    }
+
+    override fun onError(e: Throwable) {
+        authorizeFailed()
     }
 
     override fun onDestroy() {
