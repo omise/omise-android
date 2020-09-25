@@ -16,7 +16,8 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_U
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
 import co.omise.android.threeds.ThreeDS
-import co.omise.android.threeds.ThreeDSAuthorizingTransactionListener
+import co.omise.android.threeds.ThreeDSListener
+import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.*
 
 /**
@@ -25,13 +26,14 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.*
  * In case the authorization needs to be handled by an external app, the SDK opens that external
  * app by default but the Intent callback needs to be handled by the implementer.
  */
-class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransactionListener {
+class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
+    private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val threeDS: ThreeDS by lazy {
         ThreeDS(this).apply {
-            setAuthorizingTransactionListener(this@AuthorizingPaymentActivity)
+            listener = this@AuthorizingPaymentActivity
         }
     }
 
@@ -44,8 +46,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
         setupWebViewClient()
-        loadAuthorizeUrl()
 
+        progressDialog.show()
         threeDS.authorizeTransaction(verifier.authorizedURLString)
     }
 
@@ -82,11 +84,13 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
     }
 
     private fun authorizeSuccessful(result: Intent? = null) {
+        progressDialog.dismiss()
         setResult(Activity.RESULT_OK, result)
         finish()
     }
 
     private fun authorizeFailed() {
+        progressDialog.dismiss()
         setResult(Activity.RESULT_CANCELED)
         finish()
     }
@@ -108,7 +112,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSAuthorizingTransa
         authorizeFailed()
     }
 
-    override fun onCompleted() {
+    override fun onAuthenticated() {
         authorizeSuccessful()
     }
 
