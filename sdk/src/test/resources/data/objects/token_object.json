@@ -4,6 +4,7 @@
   "livemode": false,
   "location": "https://vault.omise.co/tokens/tokn_test_5086xl7c9k5rnx35qba",
   "used": false,
+  "charge_status": "unknown",
   "card": {
     "object": "card",
     "id": "card_test_5086xl7amxfysl0ac5l",

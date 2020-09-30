@@ -18,6 +18,8 @@ import java.io.IOException
 data class Token(
         val used: Boolean = false,
         val card: Card? = null,
+        @field:JsonProperty("charge_status")
+        val chargeStatus: String? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
