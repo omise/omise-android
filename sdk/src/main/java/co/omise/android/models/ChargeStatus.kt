@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonValue
 import kotlinx.android.parcel.Parceler
 
 /**
- * Represents Token.charge_status field.
+ * Represents charge.status field.
  *
- * @see [Token API](https://www.omise.co/tokens-api)
+ * @see [Charge API](https://www.omise.co/charges-api)
  */
 sealed class ChargeStatus(@JsonValue open val value: String) {
     object Successful : ChargeStatus("successful")
