@@ -4,6 +4,7 @@ import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.TypeParceler
 import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import org.joda.time.DateTime
@@ -15,11 +16,12 @@ import java.io.IOException
  * @see [Token API](https://www.omise.co/tokens-api)
  */
 @Parcelize
+@TypeParceler<ChargeStatus, ChargeStatusParceler>()
 data class Token(
         val used: Boolean = false,
         val card: Card? = null,
         @field:JsonProperty("charge_status")
-        val chargeStatus: String? = null,
+        val chargeStatus: ChargeStatus = ChargeStatus.Unknown,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
