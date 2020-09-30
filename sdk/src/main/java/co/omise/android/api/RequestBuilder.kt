@@ -73,8 +73,8 @@ abstract class RequestBuilder<T : Model> {
      * @param path The base API path.
      * @return An [HttpUrl] instance.
      */
-    protected fun buildUrl(endpoint: Endpoint, path: String): HttpUrl {
-        return HttpUrlBuilder(endpoint, path).build()
+    protected fun buildUrl(endpoint: Endpoint, path: String, vararg segments: String): HttpUrl {
+        return HttpUrlBuilder(endpoint, path, segments.asList()).build()
     }
 
     /**
@@ -96,12 +96,19 @@ abstract class RequestBuilder<T : Model> {
         return Serializer()
     }
 
-    inner class HttpUrlBuilder(private val endpoint: Endpoint, private val path: String) {
+    inner class HttpUrlBuilder(private val endpoint: Endpoint, private val path: String, private val segments: List<String>) {
 
         fun build(): HttpUrl {
             requireNonNull(endpoint)
             requireNonNull(path)
             val builder: HttpUrl.Builder = endpoint.buildUrl().addPathSegment(path)
+
+            segments.forEach { segment ->
+                if (segment.isNotBlank()) {
+                    builder.addPathSegment(segment)
+                }
+            }
+
             return builder.build()
         }
     }
