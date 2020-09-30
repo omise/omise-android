@@ -153,4 +153,22 @@ data class Source(
             return this
         }
     }
+
+    /**
+     * The [RequestBuilder] class for retrieving a particular Source.
+     * @property id the Source ID.
+     */
+    class GetSourceRequestBuilder(val id: String) : RequestBuilder<Source>() {
+        override fun path(): HttpUrl {
+            return buildUrl(Endpoint.API, "sources", id)
+        }
+
+        override fun method(): String {
+            return GET
+        }
+
+        override fun type(): Class<Source> {
+            return Source::class.java
+        }
+    }
 }

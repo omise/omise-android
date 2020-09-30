@@ -57,6 +57,7 @@ data class Token(
 
     /**
      * The [RequestBuilder] class for retrieving a particular Token.
+     * @property id the Token ID.
      */
     class GetTokenRequestBuilder(val id: String) : RequestBuilder<Token>() {
         override fun path(): HttpUrl {
