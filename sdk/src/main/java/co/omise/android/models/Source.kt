@@ -18,6 +18,7 @@ import java.io.IOException
 @Parcelize
 @TypeParceler<SourceType, SourceTypeParceler>()
 @TypeParceler<FlowType, FlowTypeParceler>()
+@TypeParceler<ChargeStatus, ChargeStatusParceler>()
 data class Source(
         val type: SourceType = SourceType.Unknown(null),
         val flow: FlowType = FlowType.Unknown(null),
@@ -43,6 +44,8 @@ data class Source(
         val scannableCode: Barcode? = null,
         @field:JsonProperty("zero_interest_installments")
         val zeroInterestInstallments: Boolean? = null,
+        @field:JsonProperty("charge_status")
+        val chargeStatus: ChargeStatus = ChargeStatus.Unknown,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
