@@ -54,4 +54,26 @@ data class Token(
             return Token::class.java
         }
     }
+
+    /**
+     * The [RequestBuilder] class for retrieving a particular Token.
+     */
+    class GetTokenRequestBuilder(id: String) : RequestBuilder<Token>() {
+        override fun path(): HttpUrl {
+            return buildUrl(Endpoint.VAULT, "tokens")
+        }
+
+        @Throws(IOException::class)
+        override fun payload(): RequestBody? {
+            return serialize()
+        }
+
+        override fun method(): String {
+            return GET
+        }
+
+        override fun type(): Class<Token> {
+            return Token::class.java
+        }
+    }
 }
