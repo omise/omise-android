@@ -42,5 +42,6 @@
     "barcode": null,
     "payment_code": null,
     "va_code": null
-  }
+  },
+  "charge_status": "unknown"
 }

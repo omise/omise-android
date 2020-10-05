@@ -18,6 +18,7 @@ import java.io.IOException
 @Parcelize
 @TypeParceler<SourceType, SourceTypeParceler>()
 @TypeParceler<FlowType, FlowTypeParceler>()
+@TypeParceler<ChargeStatus, ChargeStatusParceler>()
 data class Source(
         val type: SourceType = SourceType.Unknown(null),
         val flow: FlowType = FlowType.Unknown(null),
@@ -43,6 +44,8 @@ data class Source(
         val scannableCode: Barcode? = null,
         @field:JsonProperty("zero_interest_installments")
         val zeroInterestInstallments: Boolean? = null,
+        @field:JsonProperty("charge_status")
+        val chargeStatus: ChargeStatus = ChargeStatus.Unknown,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
@@ -148,6 +151,24 @@ data class Source(
         fun zeroInterestInstallments(zeroInterestInstallments: Boolean): CreateSourceRequestBuilder {
             this.zeroInterestInstallments = zeroInterestInstallments
             return this
+        }
+    }
+
+    /**
+     * The [RequestBuilder] class for retrieving a particular Source.
+     * @property id the Source ID.
+     */
+    class GetSourceRequestBuilder(val id: String) : RequestBuilder<Source>() {
+        override fun path(): HttpUrl {
+            return buildUrl(Endpoint.API, "sources", id)
+        }
+
+        override fun method(): String {
+            return GET
+        }
+
+        override fun type(): Class<Source> {
+            return Source::class.java
         }
     }
 }
