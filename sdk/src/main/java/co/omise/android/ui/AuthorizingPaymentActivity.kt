@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import android.webkit.WebView
@@ -15,6 +16,11 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
+import co.omise.android.api.Client
+import co.omise.android.api.RequestListener
+import co.omise.android.models.APIError
+import co.omise.android.models.ChargeStatus
+import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.ui.ProgressView
@@ -36,10 +42,20 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
             listener = this@AuthorizingPaymentActivity
         }
     }
+    private val handler: Handler by lazy { Handler() }
+    private var runnable: Runnable? = null
+    private val delay = 3_000L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
+
+        if (!intent.hasExtra(OmiseActivity.EXTRA_PKEY)) {
+            throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_PKEY.name}.")
+        }
+        if (!intent.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
+            throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_TOKEN.name}.")
+        }
 
         initializeWebView()
 
@@ -47,8 +63,10 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
         setupWebViewClient()
 
-        progressDialog.show()
-        threeDS.authorizeTransaction(verifier.authorizedURLString)
+//        progressDialog.show()
+//        threeDS.authorizeTransaction(verifier.authorizedURLString)
+
+        retrieveToken()
     }
 
     private fun setupWebViewClient() {
@@ -104,6 +122,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
     override fun onDestroy() {
         clearCache()
+        handler.removeCallbacks(runnable)
         threeDS.cleanup()
 
         super.onDestroy()
@@ -123,6 +142,39 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
     override fun onError(e: Throwable) {
         authorizeFailed()
+    }
+
+    private fun retrieveToken() {
+        val client = Client(intent.getStringExtra(OmiseActivity.EXTRA_PKEY))
+        val tokenRequest = Token.GetTokenRequestBuilder(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)).build()
+        client.send(tokenRequest, object : RequestListener<Token> {
+            override fun onRequestSucceed(model: Token) {
+                when (model.chargeStatus) {
+                    ChargeStatus.Successful -> authorizeSuccessful()
+
+                    ChargeStatus.Reversed,
+                    ChargeStatus.Expired,
+                    ChargeStatus.Failed -> authorizeFailed()
+
+                    ChargeStatus.Unknown,
+                    ChargeStatus.Pending -> recurRetrieveToken()
+                }
+            }
+
+            override fun onRequestFailed(throwable: Throwable) {
+                if (throwable is APIError) {
+                    if (throwable.code == "search_unavailable") {
+                        recurRetrieveToken()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun recurRetrieveToken() {
+        // TODO("Request to next interation")
+        runnable = Runnable { retrieveToken() }
+        handler.postDelayed(runnable, delay)
     }
 
     private fun initializeWebView() {
