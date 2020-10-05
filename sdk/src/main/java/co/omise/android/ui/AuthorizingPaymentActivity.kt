@@ -103,6 +103,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onDestroy() {
+        clearCache()
         threeDS.cleanup()
 
         super.onDestroy()
@@ -122,11 +123,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
     override fun onError(e: Throwable) {
         authorizeFailed()
-    }
-
-    override fun onDestroy() {
-        clearCache()
-        super.onDestroy()
     }
 
     private fun initializeWebView() {
