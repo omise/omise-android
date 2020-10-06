@@ -6,19 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.api.Client
-import co.omise.android.api.Request
-import co.omise.android.api.RequestListener
 import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
-import co.omise.android.models.Model
 import co.omise.android.models.Token
 import co.omise.android.threeds.core.SDKCoroutineScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.*
 
 
 internal class AuthorizingPaymentViewModelFactory(private val omisePublicKey: String) : ViewModelProvider.Factory {
@@ -36,47 +28,42 @@ internal class AuthorizingPaymentViewModel(private val client: Client) : ViewMod
     private val _authorizingPaymentResult = MutableLiveData<Result<Token>>()
     val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
 
-    fun pollingToken(tokenID: String) = scope.launch {
+    fun startPollingToken(tokenID: String) = scope.launch {
+        try {
+            val job = async { pollingToken(tokenID) }
+            withTimeout(maxTimeout) {
+                job.await()
+            }
+        } catch (e: TimeoutCancellationException) {
+            _authorizingPaymentResult.postValue(Result.failure(e))
+        }
+    }
+
+    private suspend fun pollingToken(tokenID: String) {
         try {
             val token = sendGetTokenRequest(tokenID)
             Log.d("polling token", token.chargeStatus.value)
             when (token.chargeStatus) {
-                ChargeStatus.Successful -> _authorizingPaymentResult.postValue(Result.success(token))
-
+                ChargeStatus.Successful,
                 ChargeStatus.Reversed,
                 ChargeStatus.Expired,
-                ChargeStatus.Failed -> TODO()
+                ChargeStatus.Failed -> _authorizingPaymentResult.postValue(Result.success(token))
 
                 ChargeStatus.Unknown,
-                ChargeStatus.Pending -> recurRetrieveToken(tokenID)
+                ChargeStatus.Pending -> {
+                    delay(requestDelay)
+                    pollingToken(tokenID)
+                }
             }
         } catch (e: APIError) {
-           e.printStackTrace()
+            e.printStackTrace()
         } catch (e: Throwable) {
             e.printStackTrace()
         }
     }
 
     private suspend fun sendGetTokenRequest(tokenID: String) =
-            sendRequest(Token.GetTokenRequestBuilder(tokenID).build())
-
-    private suspend fun <T : Model> sendRequest(request: Request<T>) = suspendCoroutine<T> { continuation ->
-        client.send(request, object : RequestListener<T> {
-            override fun onRequestSucceed(model: T) {
-                continuation.resume(model)
-            }
-
-            override fun onRequestFailed(throwable: Throwable) {
-                continuation.resumeWithException(throwable)
-            }
-        })
-    }
-
-    private suspend fun recurRetrieveToken(tokenID: String) {
-        delay(requestDelay)
-
-        pollingToken(tokenID)
-    }
+            client.send(Token.GetTokenRequestBuilder(tokenID).build())
 
     fun cleanup() {
         scope.cancel()

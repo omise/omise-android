@@ -12,6 +12,7 @@ import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
@@ -73,7 +74,14 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 //        threeDS.authorizeTransaction(verifier.authorizedURLString)
 
         val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
-        viewModel.pollingToken(tokenID)
+        viewModel.startPollingToken(tokenID)
+        viewModel.authorizingPaymentResult.observe(this, Observer { result ->
+            if (result.isSuccess) {
+                val token = result.getOrNull()
+            } else {
+                val error = result.exceptionOrNull()
+            }
+        })
     }
 
     private fun setupWebViewClient() {
