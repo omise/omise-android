@@ -131,6 +131,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         clearCache()
         handler.removeCallbacks(runnable)
         threeDS.cleanup()
+        viewModel.cleanup()
 
         super.onDestroy()
     }

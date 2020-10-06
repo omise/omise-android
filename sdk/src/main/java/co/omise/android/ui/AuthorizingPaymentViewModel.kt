@@ -1,5 +1,6 @@
 package co.omise.android.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Model
 import co.omise.android.models.Token
 import co.omise.android.threeds.core.SDKCoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
@@ -37,6 +39,7 @@ internal class AuthorizingPaymentViewModel(private val client: Client) : ViewMod
     fun pollingToken(tokenID: String) = scope.launch {
         try {
             val token = sendGetTokenRequest(tokenID)
+            Log.d("polling token", token.chargeStatus.value)
             when (token.chargeStatus) {
                 ChargeStatus.Successful -> _authorizingPaymentResult.postValue(Result.success(token))
 
@@ -73,5 +76,9 @@ internal class AuthorizingPaymentViewModel(private val client: Client) : ViewMod
         delay(requestDelay)
 
         pollingToken(tokenID)
+    }
+
+    fun cleanup() {
+        scope.cancel()
     }
 }

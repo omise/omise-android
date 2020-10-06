@@ -24,6 +24,7 @@ class Client(publicKey: String) {
 
     private var httpClient: OkHttpClient
     private val background: Executor
+    private val handler = Handler()
 
     init {
         background = Executors.newSingleThreadExecutor()
@@ -38,7 +39,6 @@ class Client(publicKey: String) {
      * @param listener The [RequestListener] to listen for request response.
      */
     fun <T : Model> send(request: Request<T>, listener: RequestListener<T>) {
-        val handler = Handler()
         background.execute { Invocation(handler, httpClient, request, listener).invoke() }
     }
 
