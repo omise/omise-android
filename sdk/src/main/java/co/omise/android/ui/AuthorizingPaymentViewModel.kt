@@ -1,6 +1,5 @@
 package co.omise.android.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,12 @@ import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
 import co.omise.android.threeds.core.SDKCoroutineScope
-import kotlinx.coroutines.*
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 
 internal class AuthorizingPaymentViewModelFactory(private val omisePublicKey: String) : ViewModelProvider.Factory {
@@ -42,7 +46,6 @@ internal class AuthorizingPaymentViewModel(private val client: Client) : ViewMod
     private suspend fun pollingToken(tokenID: String) {
         try {
             val token = sendGetTokenRequest(tokenID)
-            Log.d("polling token", token.chargeStatus.value)
             when (token.chargeStatus) {
                 ChargeStatus.Successful,
                 ChargeStatus.Reversed,
@@ -55,10 +58,8 @@ internal class AuthorizingPaymentViewModel(private val client: Client) : ViewMod
                     pollingToken(tokenID)
                 }
             }
-        } catch (e: APIError) {
-            e.printStackTrace()
         } catch (e: Throwable) {
-            e.printStackTrace()
+            _authorizingPaymentResult.postValue(Result.failure(e))
         }
     }
 

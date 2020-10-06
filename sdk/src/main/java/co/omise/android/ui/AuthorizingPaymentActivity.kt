@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import android.webkit.WebView
@@ -18,11 +17,6 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
-import co.omise.android.api.Client
-import co.omise.android.api.RequestListener
-import co.omise.android.models.APIError
-import co.omise.android.models.ChargeStatus
-import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.ui.ProgressView
@@ -44,10 +38,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
             listener = this@AuthorizingPaymentActivity
         }
     }
-    private val handler: Handler by lazy { Handler() }
-    private var runnable: Runnable? = null
-    private val delay = 3_000L
 
+    private val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
     private lateinit var viewModel: AuthorizingPaymentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,16 +62,21 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
         setupWebViewClient()
 
-//        progressDialog.show()
-//        threeDS.authorizeTransaction(verifier.authorizedURLString)
+        progressDialog.show()
+        threeDS.authorizeTransaction(verifier.authorizedURLString)
 
-        val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
-        viewModel.startPollingToken(tokenID)
+        observeData()
+    }
+
+    private fun observeData() {
         viewModel.authorizingPaymentResult.observe(this, Observer { result ->
             if (result.isSuccess) {
-                val token = result.getOrNull()
+                val intent = Intent().apply {
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
+                }
+                authorizeSuccessful(intent)
             } else {
-                val error = result.exceptionOrNull()
+                authorizeFailed(result.exceptionOrNull())
             }
         })
     }
@@ -116,15 +113,18 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private fun authorizeSuccessful(result: Intent? = null) {
+    private fun authorizeSuccessful(data: Intent? = null) {
         progressDialog.dismiss()
-        setResult(Activity.RESULT_OK, result)
+        setResult(Activity.RESULT_OK, data)
         finish()
     }
 
-    private fun authorizeFailed() {
+    private fun authorizeFailed(error: Throwable? = null) {
         progressDialog.dismiss()
-        setResult(Activity.RESULT_CANCELED)
+        val errorIntent = Intent().apply {
+            putExtra(OmiseActivity.EXTRA_ERROR, error)
+        }
+        setResult(Activity.RESULT_CANCELED, errorIntent)
         finish()
     }
 
@@ -137,7 +137,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
     override fun onDestroy() {
         clearCache()
-        handler.removeCallbacks(runnable)
         threeDS.cleanup()
         viewModel.cleanup()
 
@@ -149,7 +148,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onAuthenticated() {
-        authorizeSuccessful()
+        viewModel.startPollingToken(tokenID)
     }
 
     override fun onUnsupported() {
@@ -157,40 +156,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onError(e: Throwable) {
-        authorizeFailed()
-    }
-
-    private fun retrieveToken() {
-        val client = Client(intent.getStringExtra(OmiseActivity.EXTRA_PKEY))
-        val tokenRequest = Token.GetTokenRequestBuilder(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)).build()
-        client.send(tokenRequest, object : RequestListener<Token> {
-            override fun onRequestSucceed(model: Token) {
-                when (model.chargeStatus) {
-                    ChargeStatus.Successful -> authorizeSuccessful()
-
-                    ChargeStatus.Reversed,
-                    ChargeStatus.Expired,
-                    ChargeStatus.Failed -> authorizeFailed()
-
-                    ChargeStatus.Unknown,
-                    ChargeStatus.Pending -> recurRetrieveToken()
-                }
-            }
-
-            override fun onRequestFailed(throwable: Throwable) {
-                if (throwable is APIError) {
-                    if (throwable.code == "search_unavailable") {
-                        recurRetrieveToken()
-                    }
-                }
-            }
-        })
-    }
-
-    private fun recurRetrieveToken() {
-        // TODO("Request to next interation")
-        runnable = Runnable { retrieveToken() }
-        handler.postDelayed(runnable, delay)
+        authorizeFailed(e)
     }
 
     private fun initializeWebView() {
