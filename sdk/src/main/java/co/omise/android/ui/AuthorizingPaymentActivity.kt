@@ -12,6 +12,7 @@ import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
@@ -46,6 +47,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private var runnable: Runnable? = null
     private val delay = 3_000L
 
+    private lateinit var viewModel: AuthorizingPaymentViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
@@ -57,6 +60,9 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
             throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_TOKEN.name}.")
         }
 
+        val omisePublicKey = intent.getStringExtra(OmiseActivity.EXTRA_PKEY)
+        viewModel = ViewModelProvider(this, AuthorizingPaymentViewModelFactory(omisePublicKey)).get(AuthorizingPaymentViewModel::class.java)
+
         initializeWebView()
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
@@ -66,7 +72,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 //        progressDialog.show()
 //        threeDS.authorizeTransaction(verifier.authorizedURLString)
 
-        retrieveToken()
+        val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
+        viewModel.pollingToken(tokenID)
     }
 
     private fun setupWebViewClient() {
