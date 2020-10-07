@@ -177,7 +177,11 @@ class CheckoutActivity : AppCompatActivity() {
                 snackbar.setText(token.id.orEmpty()).show()
             }
             CHECKOUT_REQUEST_CODE -> {
-                TODO()
+                Intent(this, PaymentProcessingActivity::class.java).run {
+                    val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
+                    putExtra(OmiseActivity.EXTRA_TOKEN, token.id)
+                    startActivity(this)
+                }
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)

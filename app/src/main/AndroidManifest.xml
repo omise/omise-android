@@ -24,6 +24,7 @@
         <activity android:name="co.omise.android.ui.CreditCardActivity" />
         <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
         <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
+        <activity android:name="co.omise.android.example.PaymentProcessingActivity"/>
     </application>
 
 </manifest>
