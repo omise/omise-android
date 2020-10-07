@@ -37,7 +37,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
+    private val tokenID: String by lazy { intent.getStringExtra(OmiseActivity.EXTRA_TOKEN) }
+
     private lateinit var viewModel: AuthorizingPaymentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

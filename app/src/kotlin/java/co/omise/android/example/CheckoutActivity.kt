@@ -32,7 +32,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val PUBLIC_KEY = "[PUBLIC_KEY]"
+        const val PUBLIC_KEY = "[PUBLIC_KEY]"
 
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
         private const val PAYMENT_CREATOR_REQUEST_CODE = 0x3D6
@@ -180,6 +180,7 @@ class CheckoutActivity : AppCompatActivity() {
                 Intent(this, PaymentProcessingActivity::class.java).run {
                     val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
                     putExtra(OmiseActivity.EXTRA_TOKEN, token.id)
+                    putExtra(OmiseActivity.EXTRA_AMOUNT, amountEdit.text.toString().toLong())
                     startActivity(this)
                 }
             }
