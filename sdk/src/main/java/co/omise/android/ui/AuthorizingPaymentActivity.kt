@@ -146,7 +146,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onAuthenticated() {
-        viewModel.startPollingToken(tokenID)
+        viewModel.observeTokenChange(tokenID)
     }
 
     override fun onUnsupported() {
