@@ -4,10 +4,8 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +18,7 @@ import co.omise.android.R
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.ui.ProgressView
-import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -172,17 +170,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         webView.clearHistory()
 
         val cookieManager = CookieManager.getInstance()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            cookieManager.removeAllCookies(null)
-            cookieManager.flush()
-        } else {
-            val cookieSyncManager = CookieSyncManager.createInstance(this)
-            cookieManager.removeAllCookie()
-            cookieManager.removeSessionCookie()
-            cookieSyncManager.startSync()
-            cookieSyncManager.stopSync()
-            cookieSyncManager.sync()
-        }
+        cookieManager.removeAllCookies(null)
+        cookieManager.flush()
     }
 }
