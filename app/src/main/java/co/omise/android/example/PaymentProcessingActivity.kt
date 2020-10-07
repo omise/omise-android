@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import co.omise.android.AuthorizingPaymentURLVerifier
+import co.omise.android.models.Token
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -65,7 +66,9 @@ class PaymentProcessingActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
-                // TODO: Send failure result
+                Intent(this@PaymentProcessingActivity, PaymentResultActivity::class.java).run {
+                    startActivity(this)
+                }
             }
         })
     }
@@ -74,12 +77,18 @@ class PaymentProcessingActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_CANCELED) {
-            // TODO: Send failure result
+            Intent(this, PaymentResultActivity::class.java).run {
+                startActivity(this)
+            }
             return
         }
 
         if (requestCode == authorizingRequestCode && resultCode == Activity.RESULT_OK) {
-            TODO("Send successful result")
+            val token = data?.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
+            Intent(this, PaymentResultActivity::class.java).run {
+                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, token)
+                startActivity(this)
+            }
         }
     }
 }
