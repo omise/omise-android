@@ -23,6 +23,7 @@ import co.omise.android.ui.PaymentCreatorActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_checkout.amount_edit
 import kotlinx.android.synthetic.main.activity_checkout.authorize_url_button
+import kotlinx.android.synthetic.main.activity_checkout.checkout_button
 import kotlinx.android.synthetic.main.activity_checkout.choose_payment_method_button
 import kotlinx.android.synthetic.main.activity_checkout.credit_card_button
 import kotlinx.android.synthetic.main.activity_checkout.currency_edit
@@ -36,6 +37,7 @@ class CheckoutActivity : AppCompatActivity() {
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
         private const val PAYMENT_CREATOR_REQUEST_CODE = 0x3D6
         private const val CREDIT_CARD_REQUEST_CODE = 0x3D7
+        private const val CHECKOUT_REQUEST_CODE = 0x3D8
     }
 
     private val amountEdit: EditText by lazy { amount_edit }
@@ -58,6 +60,8 @@ class CheckoutActivity : AppCompatActivity() {
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
         authorizeUrlButton.setOnClickListener { authorizeUrl() }
+        checkout_button.setOnClickListener { checkout() }
+
 
         val client = Client(PUBLIC_KEY)
         val request = Capability.GetCapabilitiesRequestBuilder().build()
@@ -70,6 +74,13 @@ class CheckoutActivity : AppCompatActivity() {
                 snackbar.setText(throwable.message?.capitalize().orEmpty()).show()
             }
         })
+    }
+
+    private fun checkout() {
+        Intent(this, CreditCardActivity::class.java).run {
+            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            startActivityForResult(this, CHECKOUT_REQUEST_CODE)
+        }
     }
 
     private fun choosePaymentMethod() {
@@ -107,7 +118,10 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun authorizeUrl() {
+        val testTokenID = "tokn_test_5lg2sp0qby6ahk2jk1u"
         Intent(this, AuthorizingPaymentActivity::class.java).run {
+            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            putExtra(OmiseActivity.EXTRA_TOKEN, testTokenID)
             putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/")
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
             startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
@@ -161,6 +175,9 @@ class CheckoutActivity : AppCompatActivity() {
             CREDIT_CARD_REQUEST_CODE -> {
                 val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
                 snackbar.setText(token.id.orEmpty()).show()
+            }
+            CHECKOUT_REQUEST_CODE -> {
+                TODO()
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)
