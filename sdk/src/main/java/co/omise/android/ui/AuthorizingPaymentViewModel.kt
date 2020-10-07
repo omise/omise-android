@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.api.Client
+import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
 import co.omise.android.threeds.core.SDKCoroutineScope
@@ -56,6 +57,13 @@ internal class AuthorizingPaymentViewModel(private val client: Client) : ViewMod
                     delay(requestDelay)
                     observeChargeStatus(tokenID)
                 }
+            }
+        } catch (e: APIError) {
+            if (e.code == "search_unavailable") {
+                delay(requestDelay)
+                observeChargeStatus(tokenID)
+            } else {
+                _authorizingPaymentResult.postValue(Result.failure(e))
             }
         } catch (e: Throwable) {
             _authorizingPaymentResult.postValue(Result.failure(e))
