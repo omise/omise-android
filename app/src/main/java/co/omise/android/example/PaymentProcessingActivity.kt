@@ -2,11 +2,9 @@ package co.omise.android.example
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
-import co.omise.android.models.Token
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -20,7 +18,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class PaymentProcessingActivity : AppCompatActivity() {
-    private val testUrl = "https://587a438ff857.ngrok.io/charge/create"
+    private val testUrl = "https://b43e55ee242a.ngrok.io/charge/create"
     private val authorizingRequestCode = 200
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +27,18 @@ class PaymentProcessingActivity : AppCompatActivity() {
 
         val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
         val amount = intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)
-        Log.d("PaymentProcessing", tokenID)
 
         val JSON = MediaType.get("application/json; charset=utf-8");
         val client = OkHttpClient()
 
+        val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' }
         val param = """
             {
                "description":"test",
                "amount":$amount,
                "tokenID": "$tokenID",
-               "orderID": "1"
+               "orderID": "1",
+               "capture": $is3DsV1
             }
         """.trimIndent()
         val body = RequestBody.create(JSON, param);
@@ -50,8 +49,6 @@ class PaymentProcessingActivity : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val json = response.body()?.string()
-                Log.d("PaymentProcessing", json)
-
                 val jsonObject = JSONObject(json)
 
                 Intent(this@PaymentProcessingActivity, AuthorizingPaymentActivity::class.java).run {
@@ -76,18 +73,18 @@ class PaymentProcessingActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_CANCELED) {
-            Intent(this, PaymentResultActivity::class.java).run {
-                startActivity(this)
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                Intent(this, PaymentResultActivity::class.java).run {
+                    data?.let { putExtras(it) }
+                    startActivity(this)
+                }
             }
-            return
-        }
-
-        if (requestCode == authorizingRequestCode && resultCode == Activity.RESULT_OK) {
-            val token = data?.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
-            Intent(this, PaymentResultActivity::class.java).run {
-                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, token)
-                startActivity(this)
+            Activity.RESULT_CANCELED -> {
+                Intent(this, PaymentResultActivity::class.java).run {
+                    putExtra(OmiseActivity.EXTRA_ERROR, data?.getStringExtra(OmiseActivity.EXTRA_ERROR))
+                    startActivity(this)
+                }
             }
         }
     }

@@ -26,6 +26,16 @@
         tools:text="You order is complete!"
         android:textSize="24sp" />
 
+    <TextView
+        android:id="@+id/result_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/large_margin"
+        android:textAlignment="center"
+        tools:text="You order is complete!" />
+
     <Button
         android:id="@+id/complete_button"
         android:layout_width="match_parent"
