@@ -106,8 +106,10 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun loadAuthorizeUrl() {
-        if (verifier.isReady) {
-            webView.loadUrl(verifier.authorizedURLString)
+        runOnUiThread {
+            if (verifier.isReady) {
+                webView.loadUrl(verifier.authorizedURLString)
+            }
         }
     }
 
@@ -120,7 +122,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private fun authorizeFailed(error: Throwable? = null) {
         progressDialog.dismiss()
         val errorIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_ERROR, error)
+            // TODO: Send appropriate error
+            putExtra(OmiseActivity.EXTRA_ERROR, error?.message)
         }
         setResult(Activity.RESULT_CANCELED, errorIntent)
         finish()
