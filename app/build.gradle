@@ -54,7 +54,6 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
     implementation "com.google.guava:guava:$guava_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation project(':sdk')
     // compile 'co.omise:omise-android:2.3.+'
 
