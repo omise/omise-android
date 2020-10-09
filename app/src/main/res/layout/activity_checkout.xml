@@ -64,24 +64,6 @@
             app:layout_constraintVertical_bias="1" />
 
         <Button
-            android:id="@+id/checkout_button"
-            style="?android:attr/buttonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/large_margin"
-            android:layout_marginLeft="@dimen/large_margin"
-            android:layout_marginTop="@dimen/large_margin"
-            android:layout_marginEnd="@dimen/large_margin"
-            android:layout_marginRight="@dimen/large_margin"
-            android:layout_marginBottom="@dimen/medium_margin"
-            android:text="@string/button_checkout"
-            app:layout_constraintBottom_toTopOf="@id/credit_card_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currency_edit"
-            app:layout_constraintVertical_bias="1" />
-
-        <Button
             android:id="@+id/choose_payment_method_button"
             style="?android:attr/buttonStyle"
             android:layout_width="match_parent"
@@ -93,7 +75,6 @@
             android:layout_marginRight="@dimen/large_margin"
             android:layout_marginBottom="@dimen/medium_margin"
             android:text="@string/button_choose_payment_method"
-            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/credit_card_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +92,6 @@
             android:layout_marginRight="@dimen/large_margin"
             android:layout_marginBottom="@dimen/medium_margin"
             android:text="@string/button_pay_by_credit_card"
-            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/authorize_url_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -127,7 +107,6 @@
             android:layout_marginRight="@dimen/large_margin"
             android:layout_marginBottom="@dimen/large_margin"
             android:text="@string/button_authorize_url"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
