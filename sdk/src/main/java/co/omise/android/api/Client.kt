@@ -9,6 +9,9 @@ import okhttp3.TlsVersion
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Client is the main entry point to the SDK and it needs to be supplied with a public API Key.
@@ -24,6 +27,7 @@ class Client(publicKey: String) {
 
     private var httpClient: OkHttpClient
     private val background: Executor
+    private val handler = Handler()
 
     init {
         background = Executors.newSingleThreadExecutor()
@@ -38,8 +42,19 @@ class Client(publicKey: String) {
      * @param listener The [RequestListener] to listen for request response.
      */
     fun <T : Model> send(request: Request<T>, listener: RequestListener<T>) {
-        val handler = Handler()
         background.execute { Invocation(handler, httpClient, request, listener).invoke() }
+    }
+
+    suspend fun <T : Model> send(request: Request<T>) = suspendCoroutine<T> { continuation ->
+        send(request, object : RequestListener<T> {
+            override fun onRequestSucceed(model: T) {
+                continuation.resume(model)
+            }
+
+            override fun onRequestFailed(throwable: Throwable) {
+                continuation.resumeWithException(throwable)
+            }
+        })
     }
 
     private fun buildHttpClient(config: Config): OkHttpClient {

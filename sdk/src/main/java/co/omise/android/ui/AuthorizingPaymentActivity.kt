@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
@@ -18,7 +18,7 @@ import co.omise.android.R
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.ui.ProgressView
-import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -37,9 +37,22 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
+    private val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
+    private lateinit var viewModel: AuthorizingPaymentViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
+
+        if (!intent.hasExtra(OmiseActivity.EXTRA_PKEY)) {
+            throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_PKEY.name}.")
+        }
+        if (!intent.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
+            throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_TOKEN.name}.")
+        }
+
+        val omisePublicKey = intent.getStringExtra(OmiseActivity.EXTRA_PKEY)
+        viewModel = ViewModelProvider(this, AuthorizingPaymentViewModelFactory(omisePublicKey)).get(AuthorizingPaymentViewModel::class.java)
 
         initializeWebView()
 
@@ -49,6 +62,21 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
         progressDialog.show()
         threeDS.authorizeTransaction(verifier.authorizedURLString)
+
+        observeData()
+    }
+
+    private fun observeData() {
+        viewModel.authorizingPaymentResult.observe(this, Observer { result ->
+            if (result.isSuccess) {
+                val intent = Intent().apply {
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
+                }
+                authorizeSuccessful(intent)
+            } else {
+                authorizeFailed(result.exceptionOrNull())
+            }
+        })
     }
 
     private fun setupWebViewClient() {
@@ -78,20 +106,26 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun loadAuthorizeUrl() {
-        if (verifier.isReady) {
-            webView.loadUrl(verifier.authorizedURLString)
+        runOnUiThread {
+            if (verifier.isReady) {
+                webView.loadUrl(verifier.authorizedURLString)
+            }
         }
     }
 
-    private fun authorizeSuccessful(result: Intent? = null) {
+    private fun authorizeSuccessful(data: Intent? = null) {
         progressDialog.dismiss()
-        setResult(Activity.RESULT_OK, result)
+        setResult(Activity.RESULT_OK, data)
         finish()
     }
 
-    private fun authorizeFailed() {
+    private fun authorizeFailed(error: Throwable? = null) {
         progressDialog.dismiss()
-        setResult(Activity.RESULT_CANCELED)
+        val errorIntent = Intent().apply {
+            // TODO: Send appropriate error
+            putExtra(OmiseActivity.EXTRA_ERROR, error?.message)
+        }
+        setResult(Activity.RESULT_CANCELED, errorIntent)
         finish()
     }
 
@@ -105,6 +139,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     override fun onDestroy() {
         clearCache()
         threeDS.cleanup()
+        viewModel.cleanup()
 
         super.onDestroy()
     }
@@ -114,7 +149,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onAuthenticated() {
-        authorizeSuccessful()
+        viewModel.observeTokenChange(tokenID)
     }
 
     override fun onUnsupported() {
@@ -122,7 +157,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onError(e: Throwable) {
-        authorizeFailed()
+        authorizeFailed(e)
     }
 
     private fun initializeWebView() {
@@ -138,17 +173,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         webView.clearHistory()
 
         val cookieManager = CookieManager.getInstance()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            cookieManager.removeAllCookies(null)
-            cookieManager.flush()
-        } else {
-            val cookieSyncManager = CookieSyncManager.createInstance(this)
-            cookieManager.removeAllCookie()
-            cookieManager.removeSessionCookie()
-            cookieSyncManager.startSync()
-            cookieSyncManager.stopSync()
-            cookieSyncManager.sync()
-        }
+        cookieManager.removeAllCookies(null)
+        cookieManager.flush()
     }
 }
