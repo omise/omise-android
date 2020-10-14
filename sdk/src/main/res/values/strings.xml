@@ -76,6 +76,7 @@
     <string name="payment_method_installment_bay_title">Krungsri</string>
     <string name="payment_method_installment_first_choice_title">Krungsri First Choice</string>
     <string name="payment_method_installment_ktc_title">KTC</string>
+    <string name="payment_method_installment_scb_title">Siam Commercial Bank</string>
     <string name="payment_method_installment_term_month_title">%d month</string>
     <string name="payment_method_installment_term_months_title">%d months</string>
 

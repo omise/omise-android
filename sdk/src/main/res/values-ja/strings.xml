@@ -67,6 +67,7 @@
     <string name="payment_method_installment_first_choice_title">クルンシィ・ファーストチョイス</string>
     <string name="payment_method_installment_kasikorn_title">カシコン</string>
     <string name="payment_method_installment_ktc_title">クルンタイカード</string>
+    <string name="payment_method_installment_scb_title">サイアム・コマーシャル銀行</string>
     <string name="payment_method_installments_title">分割払い</string>
     <string name="payment_method_internet_banking_bay_title">アユタヤ銀行</string>
     <string name="payment_method_internet_banking_bbl_title">バンコク銀行</string>
