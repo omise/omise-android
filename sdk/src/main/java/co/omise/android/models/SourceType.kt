@@ -45,6 +45,7 @@ sealed class SourceType(
         object Bbl : Installment("installment_bbl")
         object Ktc : Installment("installment_ktc")
         object KBank : Installment("installment_kbank")
+        object Scb : Installment("installment_scb")
         data class Unknown(@JsonValue override val name: String?) : Installment(name)
 
         companion object {
@@ -55,6 +56,7 @@ sealed class SourceType(
                         Bbl -> listOf(4, 6, 8, 9, 10)
                         Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                         KBank -> listOf(3, 4, 6, 10)
+                        Scb -> listOf(3, 4, 6, 9, 10)
                         is Unknown -> emptyList()
                     }
         }
@@ -80,6 +82,7 @@ sealed class SourceType(
             "installment_bbl" -> Installment.Bbl
             "installment_ktc" -> Installment.Ktc
             "installment_kbank" -> Installment.KBank
+            "installment_scb" -> Installment.Scb
             "points_citi" -> PointsCiti
             "paynow" -> PayNow
             "promptpay" -> PromptPay
@@ -115,7 +118,8 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
             SourceType.PointsCiti,
-            SourceType.MobileBanking.Scb
+            SourceType.Installment.Scb,
+
     )
 
 sealed class SupportedEcontext : Parcelable {

@@ -30,6 +30,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
             SourceType.Installment.Bbl -> InstallmentChooserItem.Bbl
             SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
             SourceType.Installment.KBank -> InstallmentChooserItem.KBank
+            SourceType.Installment.Scb -> InstallmentChooserItem.Scb
             is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(sourceType.name.orEmpty())
         }.run {
             titleRes?.let { getString(it) } ?: title
