@@ -2,7 +2,8 @@ package co.omise.android.config
 
 
 object AuthorizingPaymentConfig {
-    private var threeDSConfig: ThreeDSConfig? = null
+    var threeDSConfig: ThreeDSConfig? = null
+        private set
 
     @JvmStatic
     fun initialize(threeDSConfig: ThreeDSConfig) {

@@ -3,18 +3,28 @@ package co.omise.android.config
 import co.omise.android.threeds.customization.UiCustomization
 
 
-class ThreeDSConfig {
-    class Builder() {
+class ThreeDSConfig(
+        val uiCustomization: UiCustomization?,
+        val timeout: Int?
+) {
+
+    class Builder {
+
+        private var uiCustomization: UiCustomization? = null
+        private var timeout: Int? = null
+
         fun uiCustomization(uiCustomization: UiCustomization): Builder {
-            TODO("Not yet implemented")
+            this.uiCustomization = uiCustomization
+            return this
         }
 
-        fun timeout(i: Int): Builder {
-            TODO("Not yet implemented")
+        fun timeout(timeout: Int): Builder {
+            this.timeout = timeout
+            return this
         }
 
         fun build(): ThreeDSConfig {
-            TODO("Not yet implemented")
+            return ThreeDSConfig(uiCustomization, timeout)
         }
     }
 }
