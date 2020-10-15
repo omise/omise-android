@@ -4,11 +4,8 @@ import co.omise.android.threeds.core.ThreeDSConfig
 
 
 object AuthorizingPaymentConfig {
-    var threeDSConfig: ThreeDSConfig? = null
-        private set
-
     @JvmStatic
     fun initialize(threeDSConfig: ThreeDSConfig) {
-        this.threeDSConfig = threeDSConfig
+        ThreeDSConfig.initialize(threeDSConfig)
     }
 }
