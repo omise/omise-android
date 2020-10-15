@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.config.AuthorizingPaymentConfig
-import co.omise.android.config.ThreeDSConfig
+import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.customization.LabelCustomization
 import co.omise.android.threeds.customization.TextBoxCustomization
 import co.omise.android.threeds.customization.ToolbarCustomization
