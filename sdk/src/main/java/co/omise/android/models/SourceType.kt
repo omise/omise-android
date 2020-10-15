@@ -118,7 +118,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
             SourceType.PointsCiti,
-            SourceType.Installment.Scb,
+            SourceType.Installment.Scb
 
     )
 

@@ -62,7 +62,8 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "internet_banking_scb"),
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
-                PaymentMethod(name = "alipay")
+                PaymentMethod(name = "alipay"),
+                PaymentMethod(name = "mobile_banking_scb")
         )
         val capability = Capability(
                 paymentMethods = paymentMethods
@@ -90,7 +91,7 @@ class PaymentChooserFragmentTest {
     @Test
     fun displayPaymentMethods_showPaymentMethodsFromCapability() {
         onView(withText(R.string.payment_chooser_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(8)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(9)))
     }
 
     @Test
@@ -122,6 +123,17 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "internet_banking_scb")
         )
         verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
+    }
+
+    @Test
+    fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
+        onView(withId(R.id.recycler_view))
+                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(8, click()))
+
+        val expectedMethods = listOf(
+                PaymentMethod(name = "mobile_banking_scb")
+        )
+        verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
 
     @Test
