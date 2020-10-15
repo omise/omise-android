@@ -5,6 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
+import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.config.ThreeDSConfig
+import co.omise.android.threeds.customization.LabelCustomization
+import co.omise.android.threeds.customization.TextBoxCustomization
+import co.omise.android.threeds.customization.ToolbarCustomization
+import co.omise.android.threeds.customization.UiCustomization
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -51,6 +57,8 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 val json = response.body()?.string()
                 val jsonObject = JSONObject(json)
 
+                initializeAuthoringPaymentConfig()
+
                 Intent(this@PaymentProcessingActivity, AuthorizingPaymentActivity::class.java).run {
                     putExtra(OmiseActivity.EXTRA_PKEY, CheckoutActivity.PUBLIC_KEY)
                     putExtra(OmiseActivity.EXTRA_TOKEN, tokenID)
@@ -87,5 +95,20 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initializeAuthoringPaymentConfig() {
+        // TODO: Add sample UI customization
+        val uiCustomization = UiCustomization(
+                toolbarCustomization = ToolbarCustomization(),
+                labelCustomization = LabelCustomization(),
+                textBoxCustomization = TextBoxCustomization(),
+                buttonCustomizations = mapOf()
+        )
+        val threeDSConfig = ThreeDSConfig.Builder()
+                .uiCustomization(uiCustomization)
+                .timeout(5)
+                .build()
+        AuthorizingPaymentConfig.initialize(threeDSConfig)
     }
 }

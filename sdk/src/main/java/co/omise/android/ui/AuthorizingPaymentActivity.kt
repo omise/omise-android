@@ -32,6 +32,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val threeDS: ThreeDS by lazy {
+        // TODO: Supply config here
         ThreeDS(this).apply {
             listener = this@AuthorizingPaymentActivity
         }
