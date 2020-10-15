@@ -25,6 +25,7 @@ class InstallmentChooserFragmentTest {
             PaymentMethod(name = "installment_kbank"),
             PaymentMethod(name = "installment_ktc"),
             PaymentMethod(name = "installment_scb")
+            PaymentMethod(name = "installment_citi")
     )
     private val mockNavigation: PaymentCreatorNavigation = mock()
     private val fragment = InstallmentChooserFragment.newInstance(paymentMethods).apply {

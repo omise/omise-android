@@ -73,6 +73,7 @@
     <string name="payment_method_internet_banking_bbl_title">バンコク銀行</string>
     <string name="payment_method_internet_banking_ktb_title">クルンタイ銀行</string>
     <string name="payment_method_internet_banking_scb_title">サイアム・コマーシャル銀行</string>
+    <string name="payment_method_internet_banking_citi_title">シティバンク銀行</string>
     <string name="payment_method_internet_banking_title">インターネットバンク</string>
     <string name="payment_method_netbank_title">ネットバンク</string>
     <string name="payment_method_pay_easy_title">ペイジー</string>

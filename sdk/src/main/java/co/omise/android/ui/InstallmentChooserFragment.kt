@@ -42,6 +42,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
                 SourceType.Installment.Bbl -> InstallmentChooserItem.Bbl
                 SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
                 SourceType.Installment.Scb -> InstallmentChooserItem.Scb
+                SourceType.Installment.Citi -> InstallmentChooserItem.Citi
                 is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(it.name.orEmpty())
             }
         }
@@ -55,6 +56,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
             InstallmentChooserItem.FirstChoice -> SourceType.Installment.FirstChoice
             InstallmentChooserItem.Ktc -> SourceType.Installment.Ktc
             InstallmentChooserItem.Scb -> SourceType.Installment.Scb
+            InstallmentChooserItem.Citi -> SourceType.Installment.Citi
             is InstallmentChooserItem.Unknown -> SourceType.Installment.Unknown(item.bankName)
         }
         val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == sourceType }
@@ -113,6 +115,12 @@ internal sealed class InstallmentChooserItem(
     object Scb : InstallmentChooserItem(
             iconRes = R.drawable.payment_scb,
             titleRes = R.string.payment_method_installment_scb_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object Citi : InstallmentChooserItem(
+            iconRes = R.drawable.payment_citi,
+            titleRes = R.string.payment_method_installment_citi_title,
             indicatorIconRes = R.drawable.ic_next
     )
 

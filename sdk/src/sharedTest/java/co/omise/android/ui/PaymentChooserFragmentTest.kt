@@ -56,6 +56,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "installment_scb"),
+                PaymentMethod(name = "installment_citi"),
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
                 PaymentMethod(name = "internet_banking_ktb"),
@@ -135,7 +136,8 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_first_choice"),
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
-                PaymentMethod(name = "installment_scb")
+                PaymentMethod(name = "installment_scb"),
+                PaymentMethod(name = "installment_citi")
         )
         verify(fragment.navigation)?.navigateToInstallmentChooser(expectedMethods)
     }

@@ -41,6 +41,7 @@ sealed class SourceType(
         object Ktc : Installment("installment_ktc")
         object KBank : Installment("installment_kbank")
         object Scb : Installment("installment_scb")
+        object Citi : Installment("installment_citi")
         data class Unknown(@JsonValue override val name: String?) : Installment(name)
 
         companion object {
@@ -52,6 +53,7 @@ sealed class SourceType(
                         Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                         KBank -> listOf(3, 4, 6, 10)
                         Scb -> listOf(3, 4, 6, 9, 10)
+                        Citi -> listOf(4, 5, 6, 7, 8, 9, 10)
                         is Unknown -> emptyList()
                     }
         }
@@ -77,6 +79,7 @@ sealed class SourceType(
             "installment_ktc" -> Installment.Ktc
             "installment_kbank" -> Installment.KBank
             "installment_scb" -> Installment.Scb
+            "installment_citi" -> Installment.Citi
             "points_citi" -> PointsCiti
             "paynow" -> PayNow
             "promptpay" -> PromptPay
@@ -112,6 +115,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
             SourceType.Installment.Scb,
+            SourceType.Installment.Citi,
             SourceType.PointsCiti
     )
 

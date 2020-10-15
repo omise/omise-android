@@ -68,6 +68,7 @@
     <string name="payment_method_installment_kasikorn_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_installment_ktc_title">เคทีซี</string>
     <string name="payment_method_installment_scb_title">ธนาคารไทยพาณิชย์</string>
+    <string name="payment_method_installment_citi_title">ซิตี้แบงก์</string>
     <string name="payment_method_installments_title">ผ่อนชำระ</string>
     <string name="payment_method_internet_banking_bay_title">ธนาคารกรุงศรีอยุธยา</string>
     <string name="payment_method_internet_banking_bbl_title">ธนาคารกรุงเทพ</string>
