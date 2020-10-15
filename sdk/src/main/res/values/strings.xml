@@ -58,12 +58,14 @@
     <string name="cvv_tooltip_4_digits">4 digit number on the\nfront of your card</string>
     <string name="payment_chooser_title">Payment Methods</string>
     <string name="internet_banking_chooser_title">Internet Banking</string>
+    <string name="mobile_banking_chooser_title">Mobile Banking</string>
     <string name="installments_title">Installments</string>
     <string name="econtext_title">econtext</string>
     <string name="menu_title_close">Close</string>
 
     <string name="payment_method_credit_card_title">Credit Card</string>
     <string name="payment_method_internet_banking_title">Internet Banking</string>
+    <string name="payment_method_mobile_banking_title">Mobile Banking</string>
     <string name="payment_method_alipay_title">Alipay Online</string>
     <string name="payment_method_tesco_lotus_title">Tesco Lotus Bill Payment</string>
     <string name="payment_method_installments_title">Installments</string>
@@ -78,7 +80,8 @@
     <string name="payment_method_installment_ktc_title">KTC</string>
     <string name="payment_method_installment_term_month_title">%d month</string>
     <string name="payment_method_installment_term_months_title">%d months</string>
-
+    
+    <string name="payment_method_mobile_banking_scb_title">Siam Commercial Bank</string>
 
     <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
     <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>
