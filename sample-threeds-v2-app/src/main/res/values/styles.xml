@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SampleTheme" parent="Theme.MaterialComponents">
+        <item name="android:windowBackground">@color/primary</item>
+        <item name="android:itemTextAppearance">@style/SampleItemTextAppearance</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:editTextStyle">@style/SampleEditText</item>
+        <item name="materialButtonStyle">@style/SampleButton</item>
+        <item name="editTextLabelStyle">@style/SampleEditTextLabel</item>
+        <item name="editTextErrorStyle">@style/SampleEditTextError</item>
+    </style>
+
+    <style name="SampleEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/accent_dark</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="backgroundTint">@color/accent</item>
+    </style>
+
+    <style name="SampleEditTextLabel">
+        <item name="android:textColor">@color/accent_dark</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+    <style name="SampleEditTextError">
+        <item name="android:textColor">@color/error</item>
+    </style>
+
+    <style name="SampleButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/accent</item>
+        <item name="android:textColor">@color/button_text_color</item>
+    </style>
+
+    <style name="SampleItemTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/accent_dark</item>
+    </style>
+</resources>
