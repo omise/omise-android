@@ -37,7 +37,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
+    private val tokenID: String by lazy { intent.getStringExtra(OmiseActivity.EXTRA_TOKEN) }
+
     private lateinit var viewModel: AuthorizingPaymentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,7 +123,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private fun authorizeFailed(error: Throwable? = null) {
         progressDialog.dismiss()
         val errorIntent = Intent().apply {
-            // TODO: Send appropriate error
             putExtra(OmiseActivity.EXTRA_ERROR, error?.message)
         }
         setResult(Activity.RESULT_CANCELED, errorIntent)
