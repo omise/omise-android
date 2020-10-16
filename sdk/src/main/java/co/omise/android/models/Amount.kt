@@ -25,7 +25,7 @@ data class Amount(val amount: Long, val currency: String) {
             val subunitAmount = if (currency == "jpy") {
                 localAMount.toLong()
             } else {
-                localAMount.toLong() * 100
+                (localAMount*100).toLong()
             }
             return Amount(subunitAmount, currency)
         }
