@@ -32,6 +32,7 @@ class CheckoutActivity : AppCompatActivity() {
     companion object {
 
         private const val PUBLIC_KEY = "[PUBLIC_KEY]"
+        private const val TOKEN_ID = "[TOKEN_ID]"
 
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
         private const val PAYMENT_CREATOR_REQUEST_CODE = 0x3D6
@@ -58,6 +59,7 @@ class CheckoutActivity : AppCompatActivity() {
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
         authorizeUrlButton.setOnClickListener { authorizeUrl() }
+
 
         val client = Client(PUBLIC_KEY)
         val request = Capability.GetCapabilitiesRequestBuilder().build()
@@ -108,6 +110,8 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun authorizeUrl() {
         Intent(this, AuthorizingPaymentActivity::class.java).run {
+            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            putExtra(OmiseActivity.EXTRA_TOKEN, TOKEN_ID)
             putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/")
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
             startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
