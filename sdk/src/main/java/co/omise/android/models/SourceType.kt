@@ -34,6 +34,11 @@ sealed class SourceType(
         data class Unknown(@JsonValue override val name: String?) : InternetBanking(name)
     }
 
+    sealed class MobileBanking(@JsonValue override val name: String?) : SourceType(name) {
+        object Scb : MobileBanking("mobile_banking_scb")
+        data class Unknown(@JsonValue override val name: String?) : MobileBanking(name)
+    }
+
     sealed class Installment(@JsonValue override val name: String?) : SourceType(name) {
         object Bay : Installment("installment_bay")
         object FirstChoice : Installment("installment_first_choice")
@@ -66,6 +71,7 @@ sealed class SourceType(
             "internet_banking_ktb" -> InternetBanking.Ktb
             "internet_banking_scb" -> InternetBanking.Scb
             "internet_banking_bbl" -> InternetBanking.Bbl
+            "mobile_banking_scb" -> MobileBanking.Scb
             "alipay" -> Alipay
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
             "barcode_alipay" -> BarcodeAlipay
@@ -111,8 +117,9 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Bbl,
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
-            SourceType.Installment.Scb,
-            SourceType.PointsCiti
+            SourceType.PointsCiti,
+            SourceType.Installment.Scb
+
     )
 
 sealed class SupportedEcontext : Parcelable {

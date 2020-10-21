@@ -39,6 +39,12 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                             ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
                             .orEmpty()
             )
+            PaymentChooserItem.MobileBanking -> navigation?.navigateToMobileBankingChooser(
+                    capability
+                            ?.paymentMethods
+                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.MobileBanking }
+                            .orEmpty()
+            )
             PaymentChooserItem.TescoLotus -> sendRequest(SourceType.BillPaymentTescoLotus)
             PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
             PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEcontext.PayEasy)
@@ -95,6 +101,7 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
                         is BackendType.Source -> when ((it.backendType as BackendType.Source).sourceType) {
                             is SourceType.Installment -> item.add(PaymentChooserItem.Installments)
                             is SourceType.InternetBanking -> item.add(PaymentChooserItem.InternetBanking)
+                            is SourceType.MobileBanking -> item.add(PaymentChooserItem.MobileBanking)
                             is SourceType.BillPaymentTescoLotus -> item.add(PaymentChooserItem.TescoLotus)
                             is SourceType.Econtext -> item.addAll(listOf(
                                     PaymentChooserItem.ConvenienceStore,
@@ -145,6 +152,12 @@ sealed class PaymentChooserItem(
     object InternetBanking : PaymentChooserItem(
             iconRes = R.drawable.payment_banking,
             titleRes = R.string.payment_method_internet_banking_title,
+            indicatorIconRes = R.drawable.ic_next
+    )
+
+    object MobileBanking : PaymentChooserItem(
+            iconRes = R.drawable.payment_mobile,
+            titleRes = R.string.payment_method_mobile_banking_title,
             indicatorIconRes = R.drawable.ic_next
     )
 
