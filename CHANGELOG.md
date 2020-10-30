@@ -1,5 +1,11 @@
 # CHANGE LOG
 
+## v3.1.3
+
+* **ADDED** Support SCB installment
+* **ADDED** Support SCB mobile banking
+* **CHANGED** Drop CircleCI and migrate to Github Actions
+
 ## v3.1.2
 
 * **CHANGED** Enhance `AuthorizingPaymentActivity` to support cache in the WebView for short life time
