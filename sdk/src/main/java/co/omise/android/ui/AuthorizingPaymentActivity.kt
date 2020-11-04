@@ -15,8 +15,10 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
+import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
+import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 
@@ -32,6 +34,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val threeDS: ThreeDS by lazy {
+        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         ThreeDS(this).apply {
             listener = this@AuthorizingPaymentActivity
         }
