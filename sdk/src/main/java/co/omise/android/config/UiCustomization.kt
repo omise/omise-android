@@ -1,7 +1,7 @@
 package co.omise.android.config
 
 
-class UiCustomization(val uiCustomization: co.omise.android.threeds.customization.UiCustomization) {
+data class UiCustomization internal constructor(internal val uiCustomization: co.omise.android.threeds.customization.UiCustomization) {
     companion object {
         val default = UiCustomization(co.omise.android.threeds.customization.UiCustomization(
                 labelCustomization = co.omise.android.threeds.customization.LabelCustomization(),
@@ -14,17 +14,20 @@ class UiCustomization(val uiCustomization: co.omise.android.threeds.customizatio
     class Builder {
         var uiCustomization: UiCustomization = default
 
-        fun labelCustomization(labelCustomization: LabelCustomization): Builder = apply{
-            TODO("Not yet implemented")
+        fun labelCustomization(labelCustomization: LabelCustomization): Builder = apply {
+            uiCustomization = uiCustomization.copy(
+                    uiCustomization = uiCustomization.uiCustomization.copy(
+                            labelCustomization = labelCustomization.labelCustomization
+                    )
+            )
         }
 
         fun build(): UiCustomization {
-            TODO()
+            return UiCustomization(uiCustomization.uiCustomization)
         }
-
     }
 
-    data class LabelCustomization(private val labelCustomization: co.omise.android.threeds.customization.LabelCustomization) {
+    data class LabelCustomization internal constructor(internal val labelCustomization: co.omise.android.threeds.customization.LabelCustomization) {
         class Builder {
             private var labelCustomization = co.omise.android.threeds.customization.LabelCustomization()
             fun textFontName(fontName: String): Builder = apply {
@@ -35,26 +38,25 @@ class UiCustomization(val uiCustomization: co.omise.android.threeds.customizatio
                 labelCustomization = labelCustomization.copy(textFontColor = hexColor)
             }
 
-            fun textFontSize(fontSize: Int): Builder {
-                TODO("Not yet implemented")
+            fun textFontSize(fontSize: Int): Builder = apply {
+                labelCustomization = labelCustomization.copy(textFontSize = fontSize)
             }
 
-            fun headingTextColor(s: String): Builder {
-                TODO("Not yet implemented")
+            fun headingTextColor(hexColor: String): Builder = apply {
+                labelCustomization = labelCustomization.copy(headingTextColor = hexColor)
             }
 
-            fun headingTextFontName(s: String): Builder {
-                TODO("Not yet implemented")
+            fun headingTextFontName(fontName: String): Builder = apply {
+                labelCustomization = labelCustomization.copy(headingTextFontName = fontName)
             }
 
-            fun headingTextFontSize(i: Int): Builder {
-                TODO("Not yet implemented")
+            fun headingTextFontSize(fontSize: Int): Builder = apply {
+                labelCustomization = labelCustomization.copy(headingTextFontSize = fontSize)
             }
 
             fun build(): LabelCustomization {
                 return LabelCustomization(labelCustomization)
             }
-
         }
     }
 }
