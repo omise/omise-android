@@ -22,6 +22,14 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
             )
         }
 
+        fun textBoxCustomization(textBoxCustomization: TextBoxCustomization): Builder = apply {
+            uiCustomization = uiCustomization.copy(
+                    uiCustomization = uiCustomization.uiCustomization.copy(
+                            textBoxCustomization = textBoxCustomization.textBoxCustomization
+                    )
+            )
+        }
+
         fun build(): UiCustomization {
             return UiCustomization(uiCustomization.uiCustomization)
         }
@@ -59,4 +67,38 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
             }
         }
     }
+
+    data class TextBoxCustomization internal constructor(internal val textBoxCustomization: co.omise.android.threeds.customization.TextBoxCustomization) {
+        class Builder {
+            private var textBoxCustomization = co.omise.android.threeds.customization.TextBoxCustomization()
+            fun textFontName(fontName: String): Builder = apply {
+                textBoxCustomization = textBoxCustomization.copy(textFontName = fontName)
+            }
+
+            fun textFontColor(hexColor: String): Builder = apply {
+                textBoxCustomization = textBoxCustomization.copy(textFontColor = hexColor)
+            }
+
+            fun textFontSize(fontSize: Int): Builder = apply {
+                textBoxCustomization = textBoxCustomization.copy(textFontSize = fontSize)
+            }
+
+            fun borderWidth(borderWidth: Int): Builder = apply {
+                textBoxCustomization = textBoxCustomization.copy(borderWidth = borderWidth)
+            }
+
+            fun borderColor(hexColor: String): Builder = apply {
+                textBoxCustomization = textBoxCustomization.copy(borderColor = hexColor)
+            }
+
+            fun cornerRadius(cornerRadius: Int): Builder = apply {
+                textBoxCustomization = textBoxCustomization.copy(cornerRadius = cornerRadius)
+            }
+
+            fun build(): TextBoxCustomization {
+                return TextBoxCustomization(textBoxCustomization)
+            }
+        }
+    }
+
 }
