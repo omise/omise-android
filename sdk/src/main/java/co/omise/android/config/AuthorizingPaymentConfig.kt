@@ -5,13 +5,12 @@ class AuthorizingPaymentConfig private constructor(internal val threeDSConfig: T
 
     companion object {
         private var instance: AuthorizingPaymentConfig? = null
-        private var default: AuthorizingPaymentConfig = Builder().threeDSConfig(ThreeDSConfig.Builder().build()).build()
+        private var default: AuthorizingPaymentConfig = Builder().threeDSConfig(ThreeDSConfig.default).build()
 
         @JvmStatic
         fun initialize(config: AuthorizingPaymentConfig) {
             instance = config
-            val tdsConfig = co.omise.android.threeds.core.ThreeDSConfig()
-            co.omise.android.threeds.core.ThreeDSConfig.initialize(tdsConfig)
+            co.omise.android.threeds.core.ThreeDSConfig.initialize(config.threeDSConfig.threeDSConfig)
         }
 
         @JvmStatic

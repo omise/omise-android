@@ -7,7 +7,7 @@ class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.and
 
     companion object {
         private var instance: ThreeDSConfig? = null
-        private val default: ThreeDSConfig = Builder().build()
+        internal val default: ThreeDSConfig = Builder().build()
 
         @JvmStatic
         fun get(): ThreeDSConfig = instance ?: default
