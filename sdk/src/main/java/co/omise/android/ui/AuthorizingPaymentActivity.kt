@@ -34,7 +34,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val threeDS: ThreeDS by lazy {
-        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         ThreeDS(this).apply {
             listener = this@AuthorizingPaymentActivity
         }
@@ -57,6 +56,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
         val omisePublicKey = intent.getStringExtra(OmiseActivity.EXTRA_PKEY)
         viewModel = ViewModelProvider(this, AuthorizingPaymentViewModelFactory(omisePublicKey)).get(AuthorizingPaymentViewModel::class.java)
+
+        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
 
         initializeWebView()
 
