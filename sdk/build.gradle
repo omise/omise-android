@@ -114,7 +114,7 @@ uploadArchives {
 }
 
 dependencies {
-    api project(":3DS-ANDROID-SDK:threeds")
+    implementation project(":3DS-ANDROID-SDK:threeds")
     implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"

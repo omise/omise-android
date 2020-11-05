@@ -7,10 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.config.ThreeDSConfig
-import co.omise.android.threeds.customization.LabelCustomization
-import co.omise.android.threeds.customization.TextBoxCustomization
-import co.omise.android.threeds.customization.ToolbarCustomization
-import co.omise.android.threeds.customization.UiCustomization
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -98,15 +94,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
     }
 
     private fun initializeAuthoringPaymentConfig() {
-        // TODO: Add sample UI customization
-        val uiCustomization = UiCustomization(
-                toolbarCustomization = ToolbarCustomization(),
-                labelCustomization = LabelCustomization(),
-                textBoxCustomization = TextBoxCustomization(),
-                buttonCustomizations = mapOf()
-        )
         val threeDSConfig = ThreeDSConfig.Builder()
-                .uiCustomization(uiCustomization)
                 .timeout(5)
                 .build()
         val authPaymentConfig = AuthorizingPaymentConfig.Builder()
