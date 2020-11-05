@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.config.ThreeDSConfig
+import co.omise.android.config.UiCustomization
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -94,7 +95,22 @@ class PaymentProcessingActivity : AppCompatActivity() {
     }
 
     private fun initializeAuthoringPaymentConfig() {
+        val uiCustomization = UiCustomization.Builder()
+                .labelCustomization(UiCustomization.LabelCustomization.Builder()
+                        .textFontName("")
+                        .textFontColor("")
+                        .textFontSize(16)
+                        .headingTextColor("")
+                        .headingTextFontName("")
+                        .headingTextFontSize(28)
+                        .build())
+//                .textBoxCusotmization()
+//                .toolbarCustomization()
+//                .buttonCustomization()
+                .build()
+
         val threeDSConfig = ThreeDSConfig.Builder()
+                .uiCustomization(uiCustomization)
                 .timeout(5)
                 .build()
         val authPaymentConfig = AuthorizingPaymentConfig.Builder()
