@@ -13,6 +13,8 @@ android {
         targetSdkVersion target_sdk_version
         versionCode omise_sdk_code_version
         versionName omise_sdk_version
+        buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
+        buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
