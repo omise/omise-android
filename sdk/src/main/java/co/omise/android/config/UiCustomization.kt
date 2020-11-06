@@ -12,7 +12,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
     }
 
     class Builder {
-        var uiCustomization: UiCustomization = default
+        private var uiCustomization: UiCustomization = default
+        private var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
 
         fun labelCustomization(labelCustomization: LabelCustomization): Builder = apply {
             uiCustomization = uiCustomization.copy(
@@ -34,6 +35,15 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
             uiCustomization = uiCustomization.copy(
                     uiCustomization = uiCustomization.uiCustomization.copy(
                             toolbarCustomization = toolbarCustomization.toolbarCustomization
+                    )
+            )
+        }
+
+        fun buttonCustomization(submitButton: ButtonType, buttonCustomization: ButtonCustomization): Builder = apply {
+            buttonCustomizations[submitButton] = buttonCustomization
+            uiCustomization = uiCustomization.copy(
+                    uiCustomization = uiCustomization.uiCustomization.copy(
+                            buttonCustomizations = buttonCustomizations.map { co.omise.android.threeds.customization.ButtonType.buttonTypeOf(it.key.value) to it.value.buttonCustomization }.toMap()
                     )
             )
         }
@@ -138,6 +148,43 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
 
             fun build(): ToolbarCustomization {
                 return ToolbarCustomization(toolbarCustomization)
+            }
+        }
+    }
+
+    enum class ButtonType(val value: String) {
+        SUBMIT_BUTTON("SUBMIT"),
+        CONTINUE_BUTTON("CONTINUE"),
+        NEXT_BUTTON("NEXT"),
+        CANCEL_BUTTON("CANCEL"),
+        RESEND_BUTTON("RESEND")
+    }
+
+    data class ButtonCustomization internal constructor(internal val buttonCustomization: co.omise.android.threeds.customization.ButtonCustomization) {
+        class Builder {
+            private var buttonCustomization = co.omise.android.threeds.customization.ButtonCustomization()
+            fun textFontName(fontName: String): Builder = apply {
+                buttonCustomization = buttonCustomization.copy(textFontName = fontName)
+            }
+
+            fun textFontColor(hexColor: String): Builder = apply {
+                buttonCustomization = buttonCustomization.copy(textFontColor = hexColor)
+            }
+
+            fun textFontSize(fontSize: Int): Builder = apply {
+                buttonCustomization = buttonCustomization.copy(textFontSize = fontSize)
+            }
+
+            fun backgroundColor(hexColor: String): Builder = apply {
+                buttonCustomization = buttonCustomization.copy(backgroundColor = hexColor)
+            }
+
+            fun cornerRadius(cornerRadius: Int): Builder = apply {
+                buttonCustomization = buttonCustomization.copy(cornerRadius = cornerRadius)
+            }
+
+            fun build(): ButtonCustomization {
+                return ButtonCustomization(buttonCustomization)
             }
         }
     }
