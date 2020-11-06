@@ -30,6 +30,14 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
             )
         }
 
+        fun toolbarCustomization(toolbarCustomization: ToolbarCustomization): Builder = apply {
+            uiCustomization = uiCustomization.copy(
+                    uiCustomization = uiCustomization.uiCustomization.copy(
+                            toolbarCustomization = toolbarCustomization.toolbarCustomization
+                    )
+            )
+        }
+
         fun build(): UiCustomization {
             return UiCustomization(uiCustomization.uiCustomization)
         }
@@ -101,4 +109,36 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
         }
     }
 
+    data class ToolbarCustomization internal constructor(internal val toolbarCustomization: co.omise.android.threeds.customization.ToolbarCustomization) {
+        class Builder {
+            private var toolbarCustomization = co.omise.android.threeds.customization.ToolbarCustomization()
+            fun textFontName(fontName: String): Builder = apply {
+                toolbarCustomization = toolbarCustomization.copy(textFontName = fontName)
+            }
+
+            fun textFontColor(hexColor: String): Builder = apply {
+                toolbarCustomization = toolbarCustomization.copy(textFontColor = hexColor)
+            }
+
+            fun textFontSize(fontSize: Int): Builder = apply {
+                toolbarCustomization = toolbarCustomization.copy(textFontSize = fontSize)
+            }
+
+            fun backgroundColor(hexColor: String): Builder = apply {
+                toolbarCustomization = toolbarCustomization.copy(backgroundColor = hexColor)
+            }
+
+            fun headerText(title: String): Builder = apply {
+                toolbarCustomization = toolbarCustomization.copy(headerText = title)
+            }
+
+            fun buttonText(title: String): Builder = apply {
+                toolbarCustomization = toolbarCustomization.copy(buttonText = title)
+            }
+
+            fun build(): ToolbarCustomization {
+                return ToolbarCustomization(toolbarCustomization)
+            }
+        }
+    }
 }
