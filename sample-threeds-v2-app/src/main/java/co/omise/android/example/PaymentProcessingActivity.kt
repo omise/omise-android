@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
+import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.config.ThreeDSConfig
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -51,6 +53,8 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 val json = response.body()?.string()
                 val jsonObject = JSONObject(json)
 
+                initializeAuthoringPaymentConfig()
+
                 Intent(this@PaymentProcessingActivity, AuthorizingPaymentActivity::class.java).run {
                     putExtra(OmiseActivity.EXTRA_PKEY, CheckoutActivity.PUBLIC_KEY)
                     putExtra(OmiseActivity.EXTRA_TOKEN, tokenID)
@@ -87,5 +91,15 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initializeAuthoringPaymentConfig() {
+        val threeDSConfig = ThreeDSConfig.Builder()
+                .timeout(5)
+                .build()
+        val authPaymentConfig = AuthorizingPaymentConfig.Builder()
+                .threeDSConfig(threeDSConfig)
+                .build()
+        AuthorizingPaymentConfig.initialize(authPaymentConfig)
     }
 }
