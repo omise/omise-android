@@ -21,7 +21,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class PaymentProcessingActivity : AppCompatActivity() {
-    private val testUrl = "https://b43e55ee242a.ngrok.io/charge/create"
+    private val testUrl = "https://1448c4a9013a.ngrok.io/charge/create"
     private val authorizingRequestCode = 200
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
         val JSON = MediaType.get("application/json; charset=utf-8");
         val client = OkHttpClient()
 
-        val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' }
+        val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' } || true
         val param = """
             {
                "description":"test",
@@ -97,15 +97,15 @@ class PaymentProcessingActivity : AppCompatActivity() {
     private fun initializeAuthoringPaymentConfig() {
         val uiCustomization = UiCustomization.Builder()
                 .labelCustomization(UiCustomization.LabelCustomization.Builder()
-                        .textFontName("roboto")
+                        .textFontName("RobotoMono-Regular.ttf")
                         .textFontColor("#000000")
                         .textFontSize(16)
-                        .headingTextColor("roboto")
-                        .headingTextFontName("#000000")
-                        .headingTextFontSize(28)
+                        .headingTextColor("#000000")
+                        .headingTextFontName("RobotoMono-Bold.ttf")
+                        .headingTextFontSize(20)
                         .build())
                 .textBoxCustomization(UiCustomization.TextBoxCustomization.Builder()
-                        .textFontName("roboto")
+                        .textFontName("RobotoMono-Regular.ttf")
                         .textFontColor("#000000")
                         .textFontSize(16)
                         .borderWidth(2)
@@ -113,7 +113,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
                         .borderColor("#FF0000")
                         .build())
                 .toolbarCustomization(UiCustomization.ToolbarCustomization.Builder()
-                        .textFontName("roboto")
+                        .textFontName("RobotoMono-Bold.ttf")
                         .textFontColor("#000000")
                         .textFontSize(20)
                         .backgroundColor("#FFFFFF")
@@ -121,14 +121,14 @@ class PaymentProcessingActivity : AppCompatActivity() {
                         .buttonText("Close")
                         .build())
                 .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, UiCustomization.ButtonCustomization.Builder()
-                        .textFontName("roboto")
+                        .textFontName("RobotoMono-Bold.ttf")
                         .textFontColor("#FFFFFF")
                         .textFontSize(20)
                         .backgroundColor("#FF0000")
                         .cornerRadius(8)
                         .build())
                 .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, UiCustomization.ButtonCustomization.Builder()
-                        .textFontName("roboto")
+                        .textFontName("RobotoMono-Bold.ttf")
                         .textFontColor("#000000")
                         .textFontSize(20)
                         .backgroundColor("#FFFFFF")
