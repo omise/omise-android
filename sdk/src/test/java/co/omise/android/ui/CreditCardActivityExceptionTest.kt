@@ -22,7 +22,7 @@ class CreditCardActivityExceptionTest {
         scenario = launch(intent)
     }
 
-    @Test(expected = IllegalAccessException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun pkey_throwExceptionIfNotFound() {
         launch(CreditCardActivity::class.java)
     }
