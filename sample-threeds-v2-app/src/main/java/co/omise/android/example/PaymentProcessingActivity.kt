@@ -21,7 +21,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 class PaymentProcessingActivity : AppCompatActivity() {
-    private val testUrl = "https://1448c4a9013a.ngrok.io/charge/create"
+    private val testUrl = "https://b43e55ee242a.ngrok.io/charge/create"
     private val authorizingRequestCode = 200
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
         val JSON = MediaType.get("application/json; charset=utf-8");
         val client = OkHttpClient()
 
-        val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' } || true
+        val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' }
         val param = """
             {
                "description":"test",
