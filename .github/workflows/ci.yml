@@ -6,7 +6,7 @@ name: Android CI
 on: [push, pull_request]
 
 jobs:
-  test:
+  unit-test:
     name: Unit Test
     runs-on: ubuntu-latest
     steps:
@@ -23,3 +23,15 @@ jobs:
           PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+
+  instrumented-test:
+    name: Instrumented Test
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew sdk:connectedDebugAndroidTest
