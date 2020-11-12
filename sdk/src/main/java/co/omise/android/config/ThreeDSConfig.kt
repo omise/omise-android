@@ -1,8 +1,6 @@
 package co.omise.android.config
 
 import androidx.annotation.IntRange
-import co.omise.android.threeds.customization.UiCustomization
-
 
 class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.android.threeds.core.ThreeDSConfig) {
 
@@ -19,7 +17,7 @@ class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.and
             const val DEFAULT_TIMEOUT = 5
         }
 
-        private var uiCustomization: UiCustomization? = null
+        private var uiCustomization: UiCustomization = UiCustomization.default
         private var timeout: Int = DEFAULT_TIMEOUT
 
         fun uiCustomization(uiCustomization: UiCustomization): Builder = apply {
@@ -31,7 +29,7 @@ class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.and
         }
 
         fun build(): ThreeDSConfig {
-            return ThreeDSConfig(co.omise.android.threeds.core.ThreeDSConfig(uiCustomization, timeout))
+            return ThreeDSConfig(co.omise.android.threeds.core.ThreeDSConfig(uiCustomization.uiCustomization, timeout))
         }
     }
 }

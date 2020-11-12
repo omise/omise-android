@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.config.ThreeDSConfig
+import co.omise.android.config.UiCustomization
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
@@ -94,7 +95,49 @@ class PaymentProcessingActivity : AppCompatActivity() {
     }
 
     private fun initializeAuthoringPaymentConfig() {
+        val uiCustomization = UiCustomization.Builder()
+                .labelCustomization(UiCustomization.LabelCustomization.Builder()
+                        .textFontName("RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .headingTextColor("#000000")
+                        .headingTextFontName("RobotoMono-Bold.ttf")
+                        .headingTextFontSize(20)
+                        .build())
+                .textBoxCustomization(UiCustomization.TextBoxCustomization.Builder()
+                        .textFontName("RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .borderWidth(2)
+                        .cornerRadius(8)
+                        .borderColor("#FF0000")
+                        .build())
+                .toolbarCustomization(UiCustomization.ToolbarCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .headerText("Secure Checkout")
+                        .buttonText("Close")
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#FFFFFF")
+                        .textFontSize(20)
+                        .backgroundColor("#FF0000")
+                        .cornerRadius(8)
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .cornerRadius(8)
+                        .build())
+                .build()
+
         val threeDSConfig = ThreeDSConfig.Builder()
+                .uiCustomization(uiCustomization)
                 .timeout(5)
                 .build()
         val authPaymentConfig = AuthorizingPaymentConfig.Builder()
