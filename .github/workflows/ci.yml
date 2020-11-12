@@ -6,23 +6,23 @@ name: Android CI
 on: [push, pull_request]
 
 jobs:
-  unit-test:
-    name: Unit Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Run unit tests
-        run: ./gradlew sdk:testDebugUnitTest
-        env:
-          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
-          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+#  unit-test:
+#    name: Unit Test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v1
+#      - name: Set up JDK 1.8
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 1.8
+#      - name: Run unit tests
+#        run: ./gradlew sdk:testDebugUnitTest
+#        env:
+#          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
+#          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
+#          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+#          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
   instrumented-test:
     name: Instrumented Test
@@ -34,5 +34,5 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          profile: Pixel
-          run: ./gradlew sdk:connectedDebugAndroidTest
+          profile: Pixel 3
+          script: ./gradlew sdk:connectedDebugAndroidTest
