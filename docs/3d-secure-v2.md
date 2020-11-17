@@ -4,7 +4,7 @@ Unlike previous version the cardholder is redirected to the bank website, the 3D
 
 ## Get Started
 
-To use the 3D Secure v2 you need to execute the `AuthorizingPaymentConfig.initialize(config)` function before starting the authorizing payment with the `authorize_uri` [see more](https://www.omise.co/how-to-implement-3-D-Secure).
+To use the 3D Secure v2, the `AuthorizingPaymentConfig.initialize(config)` function must be called before starting the authorizing payment with the `authorize_uri` [see more](https://www.omise.co/how-to-implement-3-D-Secure).
 
 ```kotlin
   val threeDSConfig = ThreeDSConfig.Builder()
@@ -17,7 +17,7 @@ To use the 3D Secure v2 you need to execute the `AuthorizingPaymentConfig.initia
   AuthorizingPaymentConfig.initialize(authPaymentConfig)
 ```
 
-These are configuration allowed in the 3DS v2.
+These are available configuration in the 3DS v2.
 
 | Config | Description |
 |---|---|
@@ -32,7 +32,7 @@ To use the authentication page, the Omise SDK provides the `AuthorizingPaymentAc
   android:theme="@style/OmiseTheme" />
 ```
 
-Then in your activity, you can use the `startActivityForResult()` function to start the `AuthorizingPaymentActivity` and handle the authentication result.
+In your activity, you can use the `startActivityForResult()` function to start the `AuthorizingPaymentActivity` and handle result.
 
 ```kotlin
 val intent = Intent(this, AuthorizingPaymentActivity::class.java)
@@ -43,7 +43,7 @@ intent.putExtra(OmiseActivity.EXTRA_TOKEN, TOKEN_ID)
 startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
 ```
 
-After the end-user had completed the authorizing payment process,  the `onActivityResult()` function will be called, you can handle the authorizing payment result in there.
+After the cardholder had completed the authorizing payment process,  the `onActivityResult()` function will be called, you can handle the authorizing payment result in there.
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,5 +75,5 @@ val uiCustomization = UiCustomization.Builder()
           .build()
 ```
 
-You can checkout the [`UiCustomization`](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable elements that you can customize in the challenge flow.
+You can checkout the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable elements that you can customize in the challenge flow.
 
