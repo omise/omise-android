@@ -17,6 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
+import co.omise.android.config.AuthorizingPaymentConfig;
+import co.omise.android.config.ThreeDSConfig;
+import co.omise.android.config.UiCustomization;
 import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
@@ -34,6 +37,7 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLS
 public class CheckoutActivity extends AppCompatActivity {
 
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
+    private static String TOKEN_ID = "[TOKEN_ID]";
 
     private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
     private static int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
@@ -52,6 +56,8 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+
+        initializeAuthoringPaymentConfig();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -116,8 +122,62 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
     }
 
+    private void initializeAuthoringPaymentConfig() {
+        UiCustomization uiCustomization = new UiCustomization.Builder()
+                .labelCustomization(new UiCustomization.LabelCustomization.Builder()
+                        .textFontName("RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .headingTextColor("#000000")
+                        .headingTextFontName("RobotoMono-Bold.ttf")
+                        .headingTextFontSize(20)
+                        .build())
+                .textBoxCustomization(new UiCustomization.TextBoxCustomization.Builder()
+                        .textFontName("RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .borderWidth(2)
+                        .cornerRadius(8)
+                        .borderColor("#FF0000")
+                        .build())
+                .toolbarCustomization(new UiCustomization.ToolbarCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .headerText("Secure Checkout")
+                        .buttonText("Close")
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, new UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#FFFFFF")
+                        .textFontSize(20)
+                        .backgroundColor("#FF0000")
+                        .cornerRadius(8)
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, new UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .cornerRadius(8)
+                        .build())
+                .build();
+
+        ThreeDSConfig threeDSConfig = new ThreeDSConfig.Builder()
+                .uiCustomization(uiCustomization)
+                .timeout(5)
+                .build();
+        AuthorizingPaymentConfig authPaymentConfig = new AuthorizingPaymentConfig.Builder()
+                .threeDSConfig(threeDSConfig)
+                .build();
+        AuthorizingPaymentConfig.initialize(authPaymentConfig);
+    }
+
     private void authorizeUrl() {
         Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
+        intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
+        intent.putExtra(OmiseActivity.EXTRA_TOKEN, TOKEN_ID);
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{"http://www.example.com"});
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
