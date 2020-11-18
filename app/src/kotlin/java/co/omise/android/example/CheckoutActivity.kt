@@ -12,6 +12,9 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_R
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
+import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.config.ThreeDSConfig
+import co.omise.android.config.UiCustomization
 import co.omise.android.models.Amount
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
@@ -53,6 +56,8 @@ class CheckoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
+
+        initializeAuthoringPaymentConfig()
 
         supportActionBar?.title = getString(R.string.activity_checkout)
 
@@ -106,6 +111,58 @@ class CheckoutActivity : AppCompatActivity() {
             putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
             startActivityForResult(this, CREDIT_CARD_REQUEST_CODE)
         }
+    }
+
+    private fun initializeAuthoringPaymentConfig() {
+        val uiCustomization = UiCustomization.Builder()
+                .labelCustomization(UiCustomization.LabelCustomization.Builder()
+                        .textFontName("RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .headingTextColor("#000000")
+                        .headingTextFontName("RobotoMono-Bold.ttf")
+                        .headingTextFontSize(20)
+                        .build())
+                .textBoxCustomization(UiCustomization.TextBoxCustomization.Builder()
+                        .textFontName("RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .borderWidth(2)
+                        .cornerRadius(8)
+                        .borderColor("#FF0000")
+                        .build())
+                .toolbarCustomization(UiCustomization.ToolbarCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .headerText("Secure Checkout")
+                        .buttonText("Close")
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#FFFFFF")
+                        .textFontSize(20)
+                        .backgroundColor("#FF0000")
+                        .cornerRadius(8)
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .cornerRadius(8)
+                        .build())
+                .build()
+
+        val threeDSConfig = ThreeDSConfig.Builder()
+                .uiCustomization(uiCustomization)
+                .timeout(5)
+                .build()
+        val authPaymentConfig = AuthorizingPaymentConfig.Builder()
+                .threeDSConfig(threeDSConfig)
+                .build()
+        AuthorizingPaymentConfig.initialize(authPaymentConfig)
     }
 
     private fun authorizeUrl() {
