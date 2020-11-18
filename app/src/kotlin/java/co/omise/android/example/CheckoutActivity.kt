@@ -147,20 +147,20 @@ class CheckoutActivity : AppCompatActivity() {
         when (requestCode) {
             AUTHORIZING_PAYMENT_REQUEST_CODE -> {
                 val url = data.getStringExtra(EXTRA_RETURNED_URLSTRING)
-                snackbar.setText(url).show()
+                snackbar.setText(url ?: "No returned URL.").show()
             }
             PAYMENT_CREATOR_REQUEST_CODE -> {
                 if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                     val source = data.getParcelableExtra<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
-                    snackbar.setText(source.id.orEmpty()).show()
+                    snackbar.setText(source?.id ?: "No source object.").show()
                 } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
                     val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
-                    snackbar.setText(token.id.orEmpty()).show()
+                    snackbar.setText(token?.id ?: "No token object.").show()
                 }
             }
             CREDIT_CARD_REQUEST_CODE -> {
                 val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
-                snackbar.setText(token.id.orEmpty()).show()
+                snackbar.setText(token?.id ?: "No token object.").show()
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)

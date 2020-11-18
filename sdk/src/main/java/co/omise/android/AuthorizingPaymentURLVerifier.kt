@@ -53,10 +53,12 @@ class AuthorizingPaymentURLVerifier {
      * @return true if the URL is valid, false otherwise
      */
     fun verifyURL(uri: Uri): Boolean {
+        val path = uri.path ?: return false
         for (expectedReturnURLPattern in expectedReturnURLPatterns) {
+            val expectedReturnPath = expectedReturnURLPattern.path ?: continue
             if (expectedReturnURLPattern.scheme.equals(uri.scheme, true) &&
                     expectedReturnURLPattern.host.equals(uri.host, true) &&
-                    uri.path.startsWith(expectedReturnURLPattern.path)) {
+                    path.startsWith(expectedReturnPath)) {
                 return true
             }
         }

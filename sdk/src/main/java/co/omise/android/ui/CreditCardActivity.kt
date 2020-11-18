@@ -37,6 +37,7 @@ import java.io.IOError
  */
 class CreditCardActivity : OmiseActivity() {
 
+    private lateinit var pKey: String
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
     private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
@@ -61,14 +62,12 @@ class CreditCardActivity : OmiseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!intent.hasExtra(EXTRA_PKEY)) {
-            throw IllegalAccessException("Can not found ${::EXTRA_PKEY.name}.")
-        }
-
         setContentView(R.layout.activity_credit_card)
+
+        initialize()
+
         setTitle(R.string.default_form_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         submitButton.setOnClickListener(::submit)
         securityCodeTooltipButton.setOnClickListener(::showSecurityCodeTooltipDialog)
 
@@ -94,6 +93,11 @@ class CreditCardActivity : OmiseActivity() {
             }
             editText.setOnAfterTextChangeListener(::updateSubmitButton)
         }
+    }
+
+    private fun initialize() {
+        require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
+        pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -168,7 +172,6 @@ class CreditCardActivity : OmiseActivity() {
 
         disableForm()
 
-        val pKey = intent.getStringExtra(EXTRA_PKEY)
         val listener = CreateTokenRequestListener()
         try {
             Client(pKey).send(request, listener)

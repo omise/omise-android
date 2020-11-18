@@ -13,6 +13,8 @@ android {
         targetSdkVersion target_sdk_version
         versionCode omise_sdk_code_version
         versionName omise_sdk_version
+        buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
+        buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -48,7 +50,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     android {
         sourceSets {
             String sharedTestDir = "$projectDir/src/sharedTest/java"

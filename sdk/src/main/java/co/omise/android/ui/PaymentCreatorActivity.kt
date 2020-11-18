@@ -23,10 +23,10 @@ import java.io.IOError
  */
 class PaymentCreatorActivity : OmiseActivity() {
 
-    private val pkey: String by lazy { intent.getStringExtra(EXTRA_PKEY) }
-    private val amount: Long by lazy { intent.getLongExtra(EXTRA_AMOUNT, 0) }
-    private val currency: String by lazy { intent.getStringExtra(EXTRA_CURRENCY) }
-    private val capability: Capability by lazy { intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY) }
+    private lateinit var pkey: String
+    private var amount: Long = 0L
+    private lateinit var currency: String
+    private lateinit var capability: Capability
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private val client: Client by lazy { Client(pkey) }
@@ -44,9 +44,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment_creator)
 
-        listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY, EXTRA_CAPABILITY).forEach {
-            require(intent.hasExtra(it)) { "Can not found $it." }
-        }
+        initialize()
 
         navigation.navigateToPaymentChooser(capability)
 
@@ -105,6 +103,16 @@ class PaymentCreatorActivity : OmiseActivity() {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
+    }
+
+    private fun initialize() {
+        listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY, EXTRA_CAPABILITY).forEach {
+            require(intent.hasExtra(it)) { "Could not found $it." }
+        }
+        pkey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        amount = intent.getLongExtra(EXTRA_AMOUNT, 0)
+        currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
+        capability = requireNotNull(intent.getParcelableExtra(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
     }
 
     companion object {
