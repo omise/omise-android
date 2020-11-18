@@ -12,7 +12,7 @@ import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.OmiseActivity
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -31,7 +31,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
         val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
         val amount = intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)
 
-        val JSON = MediaType.get("application/json; charset=utf-8");
+        val JSON = "application/json; charset=utf-8".toMediaType();
         val client = OkHttpClient()
 
         val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' }
@@ -51,7 +51,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                val json = response.body()?.string()
+                val json = response.body?.string()
                 val jsonObject = JSONObject(json)
 
                 initializeAuthoringPaymentConfig()
