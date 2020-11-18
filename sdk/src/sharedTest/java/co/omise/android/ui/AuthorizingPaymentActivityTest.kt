@@ -20,6 +20,8 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.R
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -35,15 +37,19 @@ class AuthorizingPaymentActivityTest {
 
     private val TEST_AUTHORIZED_URL = "https://www.omise.co/pay"
     private val TEST_RETURN_URL = "http://www.example.com"
+    private val TEST_PKEY = "pkey_test_1234"
+    private val TEST_TOKEN_ID = "tokn_test_1234"
     private val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
         putExtra(EXTRA_AUTHORIZED_URLSTRING, TEST_AUTHORIZED_URL)
         putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(TEST_RETURN_URL))
+        putExtra(EXTRA_PKEY, TEST_PKEY)
+        putExtra(EXTRA_TOKEN, TEST_TOKEN_ID)
     }
     private lateinit var scenario: ActivityScenario<AuthorizingPaymentActivity>
 
     @Before
     fun setUp() {
-        scenario = launch<AuthorizingPaymentActivity>(intent)
+        scenario = launch(intent)
     }
 
     @Test
