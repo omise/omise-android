@@ -125,10 +125,11 @@ uploadArchives {
 
 dependencies {
     implementation project(":3DS-ANDROID-SDK:threeds")
+//    implementation "co.omise:threeds-android:1.0.0"
     implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+//    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$joda_time_version"
