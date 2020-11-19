@@ -65,6 +65,7 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        mavenLocal()
     }
 }
 
