@@ -3,7 +3,7 @@ package co.omise.android.api
 import co.omise.android.models.Model
 import co.omise.android.models.Serializer
 import okhttp3.HttpUrl
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -118,6 +118,6 @@ abstract class RequestBuilder<T : Model> {
         const val GET = "GET"
         const val PATCH = "PATCH"
         const val DELETE = "DELETE"
-        val JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8")
+        val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
     }
 }
