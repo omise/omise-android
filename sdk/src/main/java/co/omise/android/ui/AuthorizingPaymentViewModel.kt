@@ -8,7 +8,7 @@ import co.omise.android.api.Client
 import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
-import co.omise.android.threeds.core.SDKCoroutineScope
+import co.omise.android.utils.SDKCoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
