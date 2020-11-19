@@ -46,22 +46,20 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private val tokenID: String by lazy { intent.getStringExtra(OmiseActivity.EXTRA_TOKEN) }
-
+    private lateinit var omisePublicKey: String
+    private lateinit var tokenID: String
     private lateinit var viewModel: AuthorizingPaymentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
 
-        if (!intent.hasExtra(OmiseActivity.EXTRA_PKEY)) {
-            throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_PKEY.name}.")
-        }
-        if (!intent.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
-            throw IllegalAccessException("Can not found ${OmiseActivity.Companion::EXTRA_TOKEN.name}.")
-        }
+        require(intent.hasExtra(OmiseActivity.EXTRA_PKEY)) { "Can not found ${OmiseActivity.Companion::EXTRA_PKEY.name}." }
+        require(intent.hasExtra(OmiseActivity.EXTRA_TOKEN)) { "Can not found ${OmiseActivity.Companion::EXTRA_TOKEN.name}." }
 
-        val omisePublicKey = intent.getStringExtra(OmiseActivity.EXTRA_PKEY)
+        omisePublicKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
+        tokenID = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)) { "${OmiseActivity.Companion::EXTRA_TOKEN.name} must not be null." }
+
         viewModel = ViewModelProvider(this, AuthorizingPaymentViewModelFactory(omisePublicKey)).get(AuthorizingPaymentViewModel::class.java)
 
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
@@ -79,7 +77,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun observeData() {
-        viewModel.authorizingPaymentResult.observe(this, Observer { result ->
+        viewModel.authorizingPaymentResult.observe(this, { result ->
             if (result.isSuccess) {
                 val intent = Intent().apply {
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())

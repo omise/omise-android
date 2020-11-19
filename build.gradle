@@ -18,7 +18,7 @@ buildscript {
         multidex_version = '2.0.1'
         appcompat_version = '1.2.0'
         joda_time_version = '2.9.2'
-        okhttp_version = '3.12.0'
+        okhttp_version = '4.9.0'
         material_version = '1.0.0'
         support_annotations_version = '28.0.0'
         guava_version = '19.0'
