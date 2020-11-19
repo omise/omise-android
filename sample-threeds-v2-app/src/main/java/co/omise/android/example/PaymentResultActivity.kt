@@ -22,7 +22,7 @@ class PaymentResultActivity : AppCompatActivity() {
 
         if (intent.hasExtra(OmiseActivity.EXTRA_TOKEN_OBJECT) && intent.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT) != null) {
             val token = intent.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
-            when (token.chargeStatus) {
+            when (token?.chargeStatus) {
                 ChargeStatus.Successful -> {
                     result_moji_text.text = "🎉"
                     result_message_text.text = "Your order is complete!"
@@ -30,7 +30,7 @@ class PaymentResultActivity : AppCompatActivity() {
                 else -> {
                     result_moji_text.text = "😅"
                     result_message_text.text = "Your order has failed!"
-                    result_description_text.text = "Your order has failed with status ${token.chargeStatus.value}!"
+                    result_description_text.text = "Your order has failed with status ${token?.chargeStatus?.value}!"
                 }
             }
         } else if (intent.hasExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING)) {

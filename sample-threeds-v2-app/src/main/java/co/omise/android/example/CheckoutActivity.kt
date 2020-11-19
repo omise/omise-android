@@ -74,7 +74,7 @@ class CheckoutActivity : AppCompatActivity() {
             CHECKOUT_REQUEST_CODE -> {
                 Intent(this, PaymentProcessingActivity::class.java).run {
                     val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
-                    putExtra(OmiseActivity.EXTRA_TOKEN, token.id)
+                    putExtra(OmiseActivity.EXTRA_TOKEN, token?.id)
                     putExtra(OmiseActivity.EXTRA_AMOUNT, amountEdit.text.toString().toLong())
                     startActivity(this)
                 }

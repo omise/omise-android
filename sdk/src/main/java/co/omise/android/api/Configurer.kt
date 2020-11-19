@@ -19,10 +19,10 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        SDKLog.d("${request.method()} ${request.url().encodedPath()}")
+        SDKLog.d("${request.method} ${request.url.encodedPath}")
 
         val response = chain.proceed(configure(config, chain.request()))
-        SDKLog.d("${request.method()} ${request.url().encodedPath()} - ${response.code()}")
+        SDKLog.d("${request.method} ${request.url.encodedPath} - ${response.code}")
 
         return response
     }
@@ -39,8 +39,8 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
         @JvmStatic
         internal fun configure(config: Config, request: Request): Request {
             val apiVersion = config.apiVersion()
-            val endpoint = Endpoint.allEndpointsByHost[request.url().host()]
-                    ?: throw UnsupportedOperationException("unknown endpoint: " + request.url().host())
+            val endpoint = Endpoint.allEndpointsByHost[request.url.host]
+                    ?: throw UnsupportedOperationException("unknown endpoint: " + request.url.host)
 
             val key = endpoint.authenticationKey(config)
             var builder = request.newBuilder()
