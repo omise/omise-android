@@ -12,6 +12,10 @@ import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.backendType
+import co.omise.android.models.installmentMethods
+import co.omise.android.models.internetBankingMethods
+import co.omise.android.models.mobileBankingMethods
+import java.lang.IllegalArgumentException
 
 /**
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
@@ -21,42 +25,28 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
-    val capability: Capability? by lazy { arguments?.getParcelable<Capability>(EXTRA_CAPABILITY) }
+    val capability: Capability by lazy { requireNotNull(arguments?.getParcelable(EXTRA_CAPABILITY)) { "Capability must not be null." } }
 
     override fun listItems(): List<PaymentChooserItem> {
-        return capability?.let { getPaymentChoosersFrom(it) } ?: emptyList()
+        return getPaymentChoosersFrom(capability)
     }
 
     override fun onListItemClicked(item: PaymentChooserItem) {
+        val navigation = this.navigation ?: throw IllegalArgumentException("PaymentCreatorNavigation must not be null.")
         when (item) {
-            PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
-            PaymentChooserItem.Installments -> navigation?.navigateToInstallmentChooser(
-                    capability
-                            ?.paymentMethods
-                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.Installment }
-                            .orEmpty()
-            )
-            PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser(
-                    capability
-                            ?.paymentMethods
-                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
-                            .orEmpty()
-            )
-            PaymentChooserItem.MobileBanking -> navigation?.navigateToMobileBankingChooser(
-                    capability
-                            ?.paymentMethods
-                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.MobileBanking }
-                            .orEmpty()
-            )
-            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
-            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEcontext.PayEasy)
-            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEcontext.Netbanking)
-            PaymentChooserItem.TrueMoney -> navigation?.navigateToTrueMoneyForm()
+            PaymentChooserItem.CreditCard -> navigation.navigateToCreditCardForm()
+            PaymentChooserItem.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
+            PaymentChooserItem.InternetBanking -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
+            PaymentChooserItem.MobileBanking -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
+            PaymentChooserItem.ConvenienceStore -> navigation.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+            PaymentChooserItem.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
+            PaymentChooserItem.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
+            PaymentChooserItem.TrueMoney -> navigation.navigateToTrueMoneyForm()
             PaymentChooserItem.TescoLotus,
             PaymentChooserItem.Alipay,
             PaymentChooserItem.PayNow,
             PaymentChooserItem.PromptPay,
-            PaymentChooserItem.PointsCiti -> item.sourceType?.let { sendRequest(it) }
+            PaymentChooserItem.PointsCiti -> item.sourceType?.let(::sendRequest)
         }
     }
 
