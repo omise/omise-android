@@ -82,7 +82,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         }
 
         nameText.text = item.titleRes?.let { view.context.getString(it) } ?: item.title
-        typeImage.setImageResource(item.indicatorIconRes)
+        item.indicatorIconRes?.let { typeImage.setImageResource(it) }
 
         view.setOnClickListener { listener?.onClick(item) }
     }
@@ -95,7 +95,8 @@ interface OmiseListItem {
         get() = null
     val titleRes: Int?
         get() = null
-    val indicatorIconRes: Int
+    val indicatorIconRes: Int?
+    get() = null
 }
 
 interface OmiseListItemClickListener {

@@ -7,7 +7,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName
@@ -22,6 +21,7 @@ import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
+import co.omise.android.models.SupportedEcontext
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
 import com.nhaarman.mockitokotlin2.any
@@ -119,41 +119,13 @@ class PaymentChooserFragmentTest {
 
     @Test
     fun clickCreditCardPaymentMethod_navigateToCreditCardFrom() {
-        onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
-
+        onView(withListId(R.id.recycler_view).atPosition(0)).perform(click())
         verify(fragment.navigation)?.navigateToCreditCardForm()
     }
 
     @Test
-    fun clickInternetBankingPaymentMethod_navigateToInternetBankingChooser() {
-        onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(2, click()))
-
-        val expectedMethods = listOf(
-                PaymentMethod(name = "internet_banking_bay"),
-                PaymentMethod(name = "internet_banking_bbl"),
-                PaymentMethod(name = "internet_banking_ktb"),
-                PaymentMethod(name = "internet_banking_scb")
-        )
-        verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
-    }
-
-    @Test
-    fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
-        onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(8, click()))
-
-        val expectedMethods = listOf(
-                PaymentMethod(name = "mobile_banking_scb")
-        )
-        verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
-    }
-
-    @Test
     fun clickInstallmentPaymentMethod_navigateToInstallmentChooser() {
-        onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(1, click()))
+        onView(withListId(R.id.recycler_view).atPosition(1)).perform(click())
 
         val expectedMethods = listOf(
                 PaymentMethod(name = "installment_bay"),
@@ -167,20 +139,59 @@ class PaymentChooserFragmentTest {
     }
 
     @Test
+    fun clickInternetBankingPaymentMethod_navigateToInternetBankingChooser() {
+        onView(withListId(R.id.recycler_view).atPosition(2)).perform(click())
+
+        val expectedMethods = listOf(
+                PaymentMethod(name = "internet_banking_bay"),
+                PaymentMethod(name = "internet_banking_bbl"),
+                PaymentMethod(name = "internet_banking_ktb"),
+                PaymentMethod(name = "internet_banking_scb")
+        )
+        verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
+    }
+
+    @Test
     fun clickBillPaymentTescoLotusPaymentMethod_sendRequestToCreateSource() {
-        onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(3, click()))
+        onView(withListId(R.id.recycler_view).atPosition(3)).perform(click())
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())
     }
 
     @Test
+    fun clickConvenienceStoreMethod_sendRequestToCreateSource() {
+        onView(withListId(R.id.recycler_view).atPosition(4)).perform(click())
+        verify(fragment.navigation)?.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+    }
+
+    @Test
+    fun clickPayEasyMethod_sendRequestToCreateSource() {
+        onView(withListId(R.id.recycler_view).atPosition(5)).perform(click())
+        verify(fragment.navigation)?.navigateToEContextForm(SupportedEcontext.PayEasy)
+    }
+
+    @Test
+    fun clickNetBankingMethod_sendRequestToCreateSource() {
+        onView(withListId(R.id.recycler_view).atPosition(6)).perform(click())
+        verify(fragment.navigation)?.navigateToEContextForm(SupportedEcontext.Netbanking)
+    }
+
+    @Test
     fun clickAlipayPaymentMethod_sendRequestToCreateSource() {
-        onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(7, click()))
+        onView(withListId(R.id.recycler_view).atPosition(7)).perform(click())
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())
+    }
+
+    @Test
+    fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
+        onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
+
+        val expectedMethods = listOf(
+                PaymentMethod(name = "mobile_banking_scb")
+        )
+        verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
 }
