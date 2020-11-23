@@ -5,6 +5,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -14,6 +15,7 @@ import co.omise.android.R
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
+import co.omise.android.utils.withListId
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -40,18 +42,17 @@ class InternetBankingChooserFragmentTest {
 
     @Before
     fun setUp() {
-        fragment = InternetBankingChooserFragment.newInstance(paymentMethods).apply {
-            requester = mockRequest
-        }
-        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
-            it.replaceFragment(fragment)
-        }
-
+        fragment = InternetBankingChooserFragment.newInstance(paymentMethods).apply { requester = mockRequest }
+        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity { it.replaceFragment(fragment) }
         onView(withText(R.string.internet_banking_chooser_title)).check(matches(isDisplayed()))
     }
 
     @Test
     fun displayAllowedBanks_showAllowedBanksFromArgument() {
+        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bbl_title))))
+        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_scb_title))))
+        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bay_title))))
+        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_ktb_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 
