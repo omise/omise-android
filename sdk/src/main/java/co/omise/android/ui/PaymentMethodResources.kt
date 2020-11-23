@@ -3,8 +3,30 @@ package co.omise.android.ui
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import co.omise.android.R
+import co.omise.android.models.BackendType
+import co.omise.android.models.Capability
 import co.omise.android.models.SourceType
+import co.omise.android.models.backendType
 
+val Capability.allowedPaymentChooserItems: List<PaymentChooserItem>
+    get() {
+        val items = mutableListOf<PaymentChooserItem>()
+        this.paymentMethods
+                .orEmpty()
+                .forEach { paymentMethod ->
+                    when (paymentMethod.backendType) {
+                        BackendType.Token -> items.add(PaymentChooserItem.CreditCard)
+                        is BackendType.Source -> when ((paymentMethod.backendType as BackendType.Source).sourceType) {
+                            is SourceType.Installment -> items.add(PaymentChooserItem.Installments)
+                            is SourceType.InternetBanking -> items.add(PaymentChooserItem.InternetBankings)
+                            is SourceType.MobileBanking -> items.add(PaymentChooserItem.MobileBankings)
+                            is SourceType.Econtext -> items.addAll(listOf(PaymentChooserItem.ConvenienceStore, PaymentChooserItem.PayEasy, PaymentChooserItem.Netbanking))
+                            else -> PaymentChooserItem.all.find { it.sourceType == (paymentMethod.backendType as? BackendType.Source)?.sourceType }?.let { items.add(it) }
+                        }
+                    }
+                }
+        return items.distinct()
+    }
 
 sealed class PaymentChooserItem(
         @DrawableRes override val iconRes: Int,
@@ -26,13 +48,13 @@ sealed class PaymentChooserItem(
             indicatorIconRes = R.drawable.ic_next
     )
 
-    object InternetBanking : PaymentChooserItem(
+    object InternetBankings : PaymentChooserItem(
             iconRes = R.drawable.payment_banking,
             titleRes = R.string.payment_method_internet_banking_title,
             indicatorIconRes = R.drawable.ic_next
     )
 
-    object MobileBanking : PaymentChooserItem(
+    object MobileBankings : PaymentChooserItem(
             iconRes = R.drawable.payment_mobile,
             titleRes = R.string.payment_method_mobile_banking_title,
             indicatorIconRes = R.drawable.ic_next
@@ -100,4 +122,9 @@ sealed class PaymentChooserItem(
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.TrueMoney
     )
+
+    companion object {
+        val all: List<PaymentChooserItem>
+            get() = PaymentChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentChooserItem }
+    }
 }
