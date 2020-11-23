@@ -4,7 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -43,12 +43,12 @@ class InstallmentChooserFragmentTest {
 
     @Test
     fun displayAllowedInstallmentBanks_showAllowedInstallmentBanksFromArgument() {
-        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(ViewMatchers.hasDescendant(withText(R.string.payment_method_installment_bay_title))))
-        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(ViewMatchers.hasDescendant(withText(R.string.payment_method_installment_bbl_title))))
-        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(ViewMatchers.hasDescendant(withText(R.string.payment_method_installment_first_choice_title))))
-        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(ViewMatchers.hasDescendant(withText(R.string.payment_method_installment_kasikorn_title))))
-        onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(ViewMatchers.hasDescendant(withText(R.string.payment_method_installment_ktc_title))))
-        onView(withListId(R.id.recycler_view).atPosition(5)).check(matches(ViewMatchers.hasDescendant(withText(R.string.payment_method_installment_scb_title))))
+        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_installment_bay_title))))
+        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_installment_bbl_title))))
+        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_installment_first_choice_title))))
+        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_installment_kasikorn_title))))
+        onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ktc_title))))
+        onView(withListId(R.id.recycler_view).atPosition(5)).check(matches(hasDescendant(withText(R.string.payment_method_installment_scb_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 

@@ -5,6 +5,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -15,6 +16,7 @@ import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
+import co.omise.android.utils.withListId
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -51,6 +53,11 @@ class InstallmentTermChooserFragmentTest {
 
     @Test
     fun displayAllowedInstallmentTerms_showAllowedInstallmentTermsFromArgument() {
+        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText("3 months"))))
+        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText("4 months"))))
+        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText("6 months"))))
+        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText("9 months"))))
+        onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText("10 months"))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethod.installmentTerms!!.size)))
     }
 

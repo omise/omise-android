@@ -185,11 +185,11 @@ internal sealed class InstallmentChooserItem(
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Scb
     )
-
-//    data class Unknown(val bankName: String, val sourceTypeValue: String) : InstallmentChooserItem(
-//            iconRes = R.drawable.payment_installment,
-//            title = bankName,
-//            indicatorIconRes = R.drawable.ic_next,
-//            sourceType = SourceType.Unknown(sourceTypeValue)
-//    )
 }
+
+internal data class InstallmentTermChooserItem(
+        @DrawableRes override val iconRes: Int? = null,
+        override val title: String,
+        val installmentTerm: Int,
+        @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect
+) : OmiseListItem
