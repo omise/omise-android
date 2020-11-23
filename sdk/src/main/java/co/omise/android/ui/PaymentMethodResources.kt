@@ -37,7 +37,7 @@ internal val List<SourceType.InternetBanking>.allowedInternetBankingChooserItems
 internal val List<SourceType.MobileBanking>.allowedMobileBankingChooserItems: List<MobileBankingChooserItem>
     get() = this.mapNotNull { sourceType -> MobileBankingChooserItem.all.find { it.sourceType == sourceType } }
 
-sealed class PaymentChooserItem(
+internal sealed class PaymentChooserItem(
         @DrawableRes override val iconRes: Int,
         @StringRes override val titleRes: Int?,
         @DrawableRes override val indicatorIconRes: Int,
@@ -200,7 +200,7 @@ internal data class InstallmentTermChooserItem(
         @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect
 ) : OmiseListItem
 
-sealed class InternetBankingChooserItem(
+internal sealed class InternetBankingChooserItem(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
@@ -242,7 +242,7 @@ sealed class InternetBankingChooserItem(
     )
 }
 
-sealed class MobileBankingChooserItem(
+internal sealed class MobileBankingChooserItem(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,

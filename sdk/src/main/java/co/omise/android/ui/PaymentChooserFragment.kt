@@ -18,7 +18,7 @@ import co.omise.android.models.mobileBankingMethods
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available payment method options list for the user to choose from.
  */
-class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
+internal class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
 
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
