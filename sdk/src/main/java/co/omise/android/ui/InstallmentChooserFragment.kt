@@ -2,8 +2,6 @@ package co.omise.android.ui
 
 
 import android.os.Bundle
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -34,30 +32,11 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
     }
 
     override fun listItems(): List<InstallmentChooserItem> {
-        return allowedInstallments.map {
-            when (it) {
-                SourceType.Installment.KBank -> InstallmentChooserItem.KBank
-                SourceType.Installment.Bay -> InstallmentChooserItem.Bay
-                SourceType.Installment.FirstChoice -> InstallmentChooserItem.FirstChoice
-                SourceType.Installment.Bbl -> InstallmentChooserItem.Bbl
-                SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
-                SourceType.Installment.Scb -> InstallmentChooserItem.Scb
-                is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(it.name.orEmpty())
-            }
-        }
+        return allowedInstallments.allowedInstallmentChooserItems
     }
 
     override fun onListItemClicked(item: InstallmentChooserItem) {
-        val sourceType = when (item) {
-            InstallmentChooserItem.Bbl -> SourceType.Installment.Bbl
-            InstallmentChooserItem.KBank -> SourceType.Installment.KBank
-            InstallmentChooserItem.Bay -> SourceType.Installment.Bay
-            InstallmentChooserItem.FirstChoice -> SourceType.Installment.FirstChoice
-            InstallmentChooserItem.Ktc -> SourceType.Installment.Ktc
-            InstallmentChooserItem.Scb -> SourceType.Installment.Scb
-            is InstallmentChooserItem.Unknown -> SourceType.Installment.Unknown(item.bankName)
-        }
-        val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == sourceType }
+        val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == item.sourceType }
         navigation?.navigateToInstallmentTermChooser(choseInstallment)
     }
 

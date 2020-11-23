@@ -8,7 +8,7 @@ import co.omise.android.models.Capability
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
-val Capability.allowedPaymentChooserItems: List<PaymentChooserItem>
+internal val Capability.allowedPaymentChooserItems: List<PaymentChooserItem>
     get() {
         val items = mutableListOf<PaymentChooserItem>()
         this.paymentMethods
@@ -27,6 +27,9 @@ val Capability.allowedPaymentChooserItems: List<PaymentChooserItem>
                 }
         return items.distinct()
     }
+
+internal val List<SourceType.Installment>.allowedInstallmentChooserItems: List<InstallmentChooserItem>
+    get() = this.mapNotNull { sourceType -> InstallmentChooserItem.all.find { it.sourceType == sourceType } }
 
 sealed class PaymentChooserItem(
         @DrawableRes override val iconRes: Int,
@@ -133,48 +136,60 @@ internal sealed class InstallmentChooserItem(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
-        @DrawableRes override val indicatorIconRes: Int
+        @DrawableRes override val indicatorIconRes: Int,
+        val sourceType: SourceType
 ) : OmiseListItem {
-    companion object
+    companion object {
+        val all: List<InstallmentChooserItem>
+            get() = InstallmentChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? InstallmentChooserItem }
+    }
+
     object Bbl : InstallmentChooserItem(
             iconRes = R.drawable.payment_bbl,
             titleRes = R.string.payment_method_installment_bbl_title,
-            indicatorIconRes = R.drawable.ic_next
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.Bbl
     )
 
     object KBank : InstallmentChooserItem(
             iconRes = R.drawable.payment_kasikorn,
             titleRes = R.string.payment_method_installment_kasikorn_title,
-            indicatorIconRes = R.drawable.ic_next
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.KBank
     )
 
     object Bay : InstallmentChooserItem(
             iconRes = R.drawable.payment_bay,
             titleRes = R.string.payment_method_installment_bay_title,
-            indicatorIconRes = R.drawable.ic_next
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.Bay
     )
 
     object FirstChoice : InstallmentChooserItem(
             iconRes = R.drawable.payment_first_choice,
             titleRes = R.string.payment_method_installment_first_choice_title,
-            indicatorIconRes = R.drawable.ic_next
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.FirstChoice
     )
 
     object Ktc : InstallmentChooserItem(
             iconRes = R.drawable.payment_ktc,
             titleRes = R.string.payment_method_installment_ktc_title,
-            indicatorIconRes = R.drawable.ic_next
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.Ktc
     )
 
     object Scb : InstallmentChooserItem(
             iconRes = R.drawable.payment_scb,
             titleRes = R.string.payment_method_installment_scb_title,
-            indicatorIconRes = R.drawable.ic_next
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.Scb
     )
 
-    data class Unknown(val bankName: String) : InstallmentChooserItem(
-            iconRes = R.drawable.payment_installment,
-            title = bankName,
-            indicatorIconRes = R.drawable.ic_next
-    )
+//    data class Unknown(val bankName: String, val sourceTypeValue: String) : InstallmentChooserItem(
+//            iconRes = R.drawable.payment_installment,
+//            title = bankName,
+//            indicatorIconRes = R.drawable.ic_next,
+//            sourceType = SourceType.Unknown(sourceTypeValue)
+//    )
 }
