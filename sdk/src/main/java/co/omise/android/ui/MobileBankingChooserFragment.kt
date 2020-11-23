@@ -1,8 +1,6 @@
 package co.omise.android.ui
 
 import android.os.Bundle
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -38,25 +36,13 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingCho
 
         view?.let { setAllViewsEnabled(it, false) }
 
-        val sourceType = when (item) {
-            MobileBankingChooserItem.Scb -> SourceType.MobileBanking.Scb
-            is MobileBankingChooserItem.Unknown -> SourceType.Unknown(item.bankName)
-        }
-
-
+        val sourceType = item.sourceType
         val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType).build()
-        requester?.request(request) {
-            view?.let { setAllViewsEnabled(it, true) }
-        }
+        requester?.request(request) { view?.let { setAllViewsEnabled(it, true) } }
     }
 
     override fun listItems(): List<MobileBankingChooserItem> {
-        return allowedBanks.map {
-            when (it) {
-                SourceType.MobileBanking.Scb -> MobileBankingChooserItem.Scb
-                is SourceType.MobileBanking.Unknown -> MobileBankingChooserItem.Unknown(it.name.orEmpty())
-            }
-        }
+        return allowedBanks.allowedMobileBankingChooserItems
     }
 
     companion object {
@@ -69,24 +55,4 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingCho
                     }
                 }
     }
-}
-
-sealed class MobileBankingChooserItem(
-        @DrawableRes override val iconRes: Int,
-        override val title: String? = null,
-        @StringRes override val titleRes: Int? = null,
-        @DrawableRes override val indicatorIconRes: Int
-) : OmiseListItem {
-    
-    object Scb : MobileBankingChooserItem(
-            iconRes = R.drawable.payment_scb,
-            titleRes = R.string.payment_method_mobile_banking_scb_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    data class Unknown(val bankName: String) : MobileBankingChooserItem(
-            iconRes = R.drawable.payment_banking,
-            title = bankName,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
 }

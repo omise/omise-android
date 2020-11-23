@@ -34,6 +34,9 @@ internal val List<SourceType.Installment>.allowedInstallmentChooserItems: List<I
 internal val List<SourceType.InternetBanking>.allowedInternetBankingChooserItems: List<InternetBankingChooserItem>
     get() = this.mapNotNull { sourceType -> InternetBankingChooserItem.all.find { it.sourceType == sourceType } }
 
+internal val List<SourceType.MobileBanking>.allowedMobileBankingChooserItems: List<MobileBankingChooserItem>
+    get() = this.mapNotNull { sourceType -> MobileBankingChooserItem.all.find { it.sourceType == sourceType } }
+
 sealed class PaymentChooserItem(
         @DrawableRes override val iconRes: Int,
         @StringRes override val titleRes: Int?,
@@ -236,5 +239,26 @@ sealed class InternetBankingChooserItem(
             titleRes = R.string.payment_method_internet_banking_ktb_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.InternetBanking.Ktb
+    )
+}
+
+sealed class MobileBankingChooserItem(
+        @DrawableRes override val iconRes: Int,
+        override val title: String? = null,
+        @StringRes override val titleRes: Int? = null,
+        @DrawableRes override val indicatorIconRes: Int,
+        val sourceType: SourceType
+) : OmiseListItem {
+
+    companion object {
+        val all: List<MobileBankingChooserItem>
+            get() = MobileBankingChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? MobileBankingChooserItem }
+    }
+
+    object Scb : MobileBankingChooserItem(
+            iconRes = R.drawable.payment_scb,
+            titleRes = R.string.payment_method_mobile_banking_scb_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.MobileBanking.Scb
     )
 }
