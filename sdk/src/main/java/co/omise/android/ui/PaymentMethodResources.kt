@@ -31,6 +31,9 @@ internal val Capability.allowedPaymentChooserItems: List<PaymentChooserItem>
 internal val List<SourceType.Installment>.allowedInstallmentChooserItems: List<InstallmentChooserItem>
     get() = this.mapNotNull { sourceType -> InstallmentChooserItem.all.find { it.sourceType == sourceType } }
 
+internal val List<SourceType.InternetBanking>.allowedInternetBankingChooserItems: List<InternetBankingChooserItem>
+    get() = this.mapNotNull { sourceType -> InternetBankingChooserItem.all.find { it.sourceType == sourceType } }
+
 sealed class PaymentChooserItem(
         @DrawableRes override val iconRes: Int,
         @StringRes override val titleRes: Int?,
@@ -193,3 +196,45 @@ internal data class InstallmentTermChooserItem(
         val installmentTerm: Int,
         @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect
 ) : OmiseListItem
+
+sealed class InternetBankingChooserItem(
+        @DrawableRes override val iconRes: Int,
+        override val title: String? = null,
+        @StringRes override val titleRes: Int? = null,
+        @DrawableRes override val indicatorIconRes: Int,
+        val sourceType: SourceType
+) : OmiseListItem {
+
+    companion object {
+        val all: List<InternetBankingChooserItem>
+            get() = InternetBankingChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? InternetBankingChooserItem }
+    }
+
+    object Bbl : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_bbl,
+            titleRes = R.string.payment_method_internet_banking_bbl_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.InternetBanking.Bbl
+    )
+
+    object Scb : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_scb,
+            titleRes = R.string.payment_method_internet_banking_scb_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.InternetBanking.Scb
+    )
+
+    object Bay : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_bay,
+            titleRes = R.string.payment_method_internet_banking_bay_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.InternetBanking.Bay
+    )
+
+    object Ktb : InternetBankingChooserItem(
+            iconRes = R.drawable.payment_ktb,
+            titleRes = R.string.payment_method_internet_banking_ktb_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.InternetBanking.Ktb
+    )
+}

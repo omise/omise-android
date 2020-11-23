@@ -1,8 +1,6 @@
 package co.omise.android.ui
 
 import android.os.Bundle
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -38,14 +36,7 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
 
         view?.let { setAllViewsEnabled(it, false) }
 
-        val sourceType = when (item) {
-            InternetBankingChooserItem.Bbl -> SourceType.InternetBanking.Bbl
-            InternetBankingChooserItem.Scb -> SourceType.InternetBanking.Scb
-            InternetBankingChooserItem.Bay -> SourceType.InternetBanking.Bay
-            InternetBankingChooserItem.Ktb -> SourceType.InternetBanking.Ktb
-            is InternetBankingChooserItem.Unknown -> SourceType.Unknown(item.bankName)
-        }
-
+        val sourceType = item.sourceType
         val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType).build()
         requester?.request(request) {
             view?.let { setAllViewsEnabled(it, true) }
@@ -53,15 +44,7 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
     }
 
     override fun listItems(): List<InternetBankingChooserItem> {
-        return allowedBanks.map {
-            when (it) {
-                SourceType.InternetBanking.Bbl -> InternetBankingChooserItem.Bbl
-                SourceType.InternetBanking.Scb -> InternetBankingChooserItem.Scb
-                SourceType.InternetBanking.Bay -> InternetBankingChooserItem.Bay
-                SourceType.InternetBanking.Ktb -> InternetBankingChooserItem.Ktb
-                is SourceType.InternetBanking.Unknown -> InternetBankingChooserItem.Unknown(it.name.orEmpty())
-            }
-        }
+        return allowedBanks.allowedInternetBankingChooserItems
     }
 
     companion object {
@@ -74,41 +57,4 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
                     }
                 }
     }
-}
-
-sealed class InternetBankingChooserItem(
-        @DrawableRes override val iconRes: Int,
-        override val title: String? = null,
-        @StringRes override val titleRes: Int? = null,
-        @DrawableRes override val indicatorIconRes: Int
-) : OmiseListItem {
-    object Bbl : InternetBankingChooserItem(
-            iconRes = R.drawable.payment_bbl,
-            titleRes = R.string.payment_method_internet_banking_bbl_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object Scb : InternetBankingChooserItem(
-            iconRes = R.drawable.payment_scb,
-            titleRes = R.string.payment_method_internet_banking_scb_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object Bay : InternetBankingChooserItem(
-            iconRes = R.drawable.payment_bay,
-            titleRes = R.string.payment_method_internet_banking_bay_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object Ktb : InternetBankingChooserItem(
-            iconRes = R.drawable.payment_ktb,
-            titleRes = R.string.payment_method_internet_banking_ktb_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    data class Unknown(val bankName: String) : InternetBankingChooserItem(
-            iconRes = R.drawable.payment_banking,
-            title = bankName,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
 }
