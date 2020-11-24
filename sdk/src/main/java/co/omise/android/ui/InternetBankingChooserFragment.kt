@@ -12,7 +12,7 @@ import co.omise.android.models.backendType
  * InternetBankingChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available Internet Banking options list for the user to choose from.
  */
-internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankingChooserItem>() {
+internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankingResource>() {
 
     private val allowedBanks: List<SourceType.InternetBanking> by lazy {
         val args = arguments ?: return@lazy emptyList<SourceType.InternetBanking>()
@@ -31,7 +31,7 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
         setHasOptionsMenu(true)
     }
 
-    override fun onListItemClicked(item: InternetBankingChooserItem) {
+    override fun onListItemClicked(item: InternetBankingResource) {
         val req = requester ?: return
 
         view?.let { setAllViewsEnabled(it, false) }
@@ -43,8 +43,8 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
         }
     }
 
-    override fun listItems(): List<InternetBankingChooserItem> {
-        return allowedBanks.allowedInternetBankingChooserItems
+    override fun listItems(): List<InternetBankingResource> {
+        return allowedBanks.internetBankingResources
     }
 
     companion object {

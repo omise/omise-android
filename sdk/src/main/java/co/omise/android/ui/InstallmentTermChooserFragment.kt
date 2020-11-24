@@ -12,7 +12,7 @@ import co.omise.android.models.backendType
  * available Installment terms list for the user to choose from. User would be directed to this page
  * from [InstallmentChooserFragment] page.
  */
-internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermChooserItem>() {
+internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
     private val installment: PaymentMethod? by lazy {
         arguments?.getParcelable(EXTRA_INSTALLMENT)
@@ -20,18 +20,18 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        title = InstallmentChooserItem.all
+        title = InstallmentResource.all
                 .find { it.sourceType == (installment?.backendType as BackendType.Source).sourceType }
                 ?.let { item -> item.titleRes?.let { getString(it) } ?: title }
         setHasOptionsMenu(true)
     }
 
-    override fun listItems(): List<InstallmentTermChooserItem> {
+    override fun listItems(): List<InstallmentTermResource> {
         return installment
                 ?.installmentTerms
                 .orEmpty()
                 .map {
-                    InstallmentTermChooserItem(
+                    InstallmentTermResource(
                             title = with(it) {
                                 if (this > 1) {
                                     getString(R.string.payment_method_installment_term_months_title, this)
@@ -44,7 +44,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 }
     }
 
-    override fun onListItemClicked(item: InstallmentTermChooserItem) {
+    override fun onListItemClicked(item: InstallmentTermResource) {
         val req = requester ?: return
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType ?: return
 

@@ -12,7 +12,7 @@ import co.omise.android.models.backendType
  * MobileBankingChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available Mobile Banking options list for the user to choose from.
  */
-internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingChooserItem>() {
+internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingResource>() {
 
     private val allowedBanks: List<SourceType.MobileBanking> by lazy {
         val args = arguments ?: return@lazy emptyList<SourceType.MobileBanking>()
@@ -31,7 +31,7 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingCho
         setHasOptionsMenu(true)
     }
 
-    override fun onListItemClicked(item: MobileBankingChooserItem) {
+    override fun onListItemClicked(item: MobileBankingResource) {
         val req = requester ?: return
 
         view?.let { setAllViewsEnabled(it, false) }
@@ -41,8 +41,8 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingCho
         requester?.request(request) { view?.let { setAllViewsEnabled(it, true) } }
     }
 
-    override fun listItems(): List<MobileBankingChooserItem> {
-        return allowedBanks.allowedMobileBankingChooserItems
+    override fun listItems(): List<MobileBankingResource> {
+        return allowedBanks.mobileBankingResources
     }
 
     companion object {

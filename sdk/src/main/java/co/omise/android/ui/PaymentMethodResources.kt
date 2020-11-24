@@ -8,124 +8,124 @@ import co.omise.android.models.Capability
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
-internal val Capability.allowedPaymentChooserItems: List<PaymentChooserItem>
+internal val Capability.paymentMethodResources: List<PaymentMethodResource>
     get() {
-        val items = mutableListOf<PaymentChooserItem>()
+        val items = mutableListOf<PaymentMethodResource>()
         this.paymentMethods
                 .orEmpty()
                 .forEach { paymentMethod ->
                     when (paymentMethod.backendType) {
-                        BackendType.Token -> items.add(PaymentChooserItem.CreditCard)
+                        BackendType.Token -> items.add(PaymentMethodResource.CreditCard)
                         is BackendType.Source -> when ((paymentMethod.backendType as BackendType.Source).sourceType) {
-                            is SourceType.Installment -> items.add(PaymentChooserItem.Installments)
-                            is SourceType.InternetBanking -> items.add(PaymentChooserItem.InternetBankings)
-                            is SourceType.MobileBanking -> items.add(PaymentChooserItem.MobileBankings)
-                            is SourceType.Econtext -> items.addAll(listOf(PaymentChooserItem.ConvenienceStore, PaymentChooserItem.PayEasy, PaymentChooserItem.Netbanking))
-                            else -> PaymentChooserItem.all.find { it.sourceType == (paymentMethod.backendType as? BackendType.Source)?.sourceType }?.let { items.add(it) }
+                            is SourceType.Installment -> items.add(PaymentMethodResource.Installments)
+                            is SourceType.InternetBanking -> items.add(PaymentMethodResource.InternetBankings)
+                            is SourceType.MobileBanking -> items.add(PaymentMethodResource.MobileBankings)
+                            is SourceType.Econtext -> items.addAll(listOf(PaymentMethodResource.ConvenienceStore, PaymentMethodResource.PayEasy, PaymentMethodResource.Netbanking))
+                            else -> PaymentMethodResource.all.find { it.sourceType == (paymentMethod.backendType as? BackendType.Source)?.sourceType }?.let { items.add(it) }
                         }
                     }
                 }
         return items.distinct()
     }
 
-internal val List<SourceType.Installment>.allowedInstallmentChooserItems: List<InstallmentChooserItem>
-    get() = this.mapNotNull { sourceType -> InstallmentChooserItem.all.find { it.sourceType == sourceType } }
+internal val List<SourceType.Installment>.installmentResources: List<InstallmentResource>
+    get() = this.mapNotNull { sourceType -> InstallmentResource.all.find { it.sourceType == sourceType } }
 
-internal val List<SourceType.InternetBanking>.allowedInternetBankingChooserItems: List<InternetBankingChooserItem>
-    get() = this.mapNotNull { sourceType -> InternetBankingChooserItem.all.find { it.sourceType == sourceType } }
+internal val List<SourceType.InternetBanking>.internetBankingResources: List<InternetBankingResource>
+    get() = this.mapNotNull { sourceType -> InternetBankingResource.all.find { it.sourceType == sourceType } }
 
-internal val List<SourceType.MobileBanking>.allowedMobileBankingChooserItems: List<MobileBankingChooserItem>
-    get() = this.mapNotNull { sourceType -> MobileBankingChooserItem.all.find { it.sourceType == sourceType } }
+internal val List<SourceType.MobileBanking>.mobileBankingResources: List<MobileBankingResource>
+    get() = this.mapNotNull { sourceType -> MobileBankingResource.all.find { it.sourceType == sourceType } }
 
-internal sealed class PaymentChooserItem(
+internal sealed class PaymentMethodResource(
         @DrawableRes override val iconRes: Int,
         @StringRes override val titleRes: Int?,
         @DrawableRes override val indicatorIconRes: Int,
         val isCreditCard: Boolean = false,
         val sourceType: SourceType? = null
 ) : OmiseListItem {
-    object CreditCard : PaymentChooserItem(
+    object CreditCard : PaymentMethodResource(
             iconRes = R.drawable.payment_card,
             titleRes = R.string.payment_method_credit_card_title,
             indicatorIconRes = R.drawable.ic_next,
             isCreditCard = true
     )
 
-    object Installments : PaymentChooserItem(
+    object Installments : PaymentMethodResource(
             iconRes = R.drawable.payment_installment,
             titleRes = R.string.payment_method_installments_title,
             indicatorIconRes = R.drawable.ic_next
     )
 
-    object InternetBankings : PaymentChooserItem(
+    object InternetBankings : PaymentMethodResource(
             iconRes = R.drawable.payment_banking,
             titleRes = R.string.payment_method_internet_banking_title,
             indicatorIconRes = R.drawable.ic_next
     )
 
-    object MobileBankings : PaymentChooserItem(
+    object MobileBankings : PaymentMethodResource(
             iconRes = R.drawable.payment_mobile,
             titleRes = R.string.payment_method_mobile_banking_title,
             indicatorIconRes = R.drawable.ic_next
     )
 
-    object TescoLotus : PaymentChooserItem(
+    object TescoLotus : PaymentMethodResource(
             iconRes = R.drawable.payment_tesco,
             titleRes = R.string.payment_method_tesco_lotus_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.BillPaymentTescoLotus
     )
 
-    object ConvenienceStore : PaymentChooserItem(
+    object ConvenienceStore : PaymentMethodResource(
             iconRes = R.drawable.payment_conbini,
             titleRes = R.string.payment_method_convenience_store_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Econtext
     )
 
-    object PayEasy : PaymentChooserItem(
+    object PayEasy : PaymentMethodResource(
             iconRes = R.drawable.payment_payeasy,
             titleRes = R.string.payment_method_pay_easy_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Econtext
     )
 
-    object Netbanking : PaymentChooserItem(
+    object Netbanking : PaymentMethodResource(
             iconRes = R.drawable.payment_netbank,
             titleRes = R.string.payment_method_netbank_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Econtext
     )
 
-    object Alipay : PaymentChooserItem(
+    object Alipay : PaymentMethodResource(
             iconRes = R.drawable.payment_alipay,
             titleRes = R.string.payment_method_alipay_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.Alipay
     )
 
-    object PromptPay : PaymentChooserItem(
+    object PromptPay : PaymentMethodResource(
             iconRes = R.drawable.payment_promptpay,
             titleRes = R.string.payment_method_promptpay_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.PromptPay
     )
 
-    object PayNow : PaymentChooserItem(
+    object PayNow : PaymentMethodResource(
             iconRes = R.drawable.payment_paynow,
             titleRes = R.string.payment_method_paynow_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.PayNow
     )
 
-    object PointsCiti : PaymentChooserItem(
+    object PointsCiti : PaymentMethodResource(
             iconRes = R.drawable.payment_points_citi,
             titleRes = R.string.payment_method_points_citi_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.PointsCiti
     )
 
-    object TrueMoney : PaymentChooserItem(
+    object TrueMoney : PaymentMethodResource(
             iconRes = R.drawable.payment_truemoney,
             titleRes = R.string.payment_truemoney_title,
             indicatorIconRes = R.drawable.ic_next,
@@ -133,12 +133,12 @@ internal sealed class PaymentChooserItem(
     )
 
     companion object {
-        val all: List<PaymentChooserItem>
-            get() = PaymentChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentChooserItem }
+        val all: List<PaymentMethodResource>
+            get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }
     }
 }
 
-internal sealed class InstallmentChooserItem(
+internal sealed class InstallmentResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
@@ -146,46 +146,46 @@ internal sealed class InstallmentChooserItem(
         val sourceType: SourceType
 ) : OmiseListItem {
     companion object {
-        val all: List<InstallmentChooserItem>
-            get() = InstallmentChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? InstallmentChooserItem }
+        val all: List<InstallmentResource>
+            get() = InstallmentResource::class.nestedClasses.mapNotNull { it.objectInstance as? InstallmentResource }
     }
 
-    object Bbl : InstallmentChooserItem(
+    object Bbl : InstallmentResource(
             iconRes = R.drawable.payment_bbl,
             titleRes = R.string.payment_method_installment_bbl_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Bbl
     )
 
-    object KBank : InstallmentChooserItem(
+    object KBank : InstallmentResource(
             iconRes = R.drawable.payment_kasikorn,
             titleRes = R.string.payment_method_installment_kasikorn_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.KBank
     )
 
-    object Bay : InstallmentChooserItem(
+    object Bay : InstallmentResource(
             iconRes = R.drawable.payment_bay,
             titleRes = R.string.payment_method_installment_bay_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Bay
     )
 
-    object FirstChoice : InstallmentChooserItem(
+    object FirstChoice : InstallmentResource(
             iconRes = R.drawable.payment_first_choice,
             titleRes = R.string.payment_method_installment_first_choice_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.FirstChoice
     )
 
-    object Ktc : InstallmentChooserItem(
+    object Ktc : InstallmentResource(
             iconRes = R.drawable.payment_ktc,
             titleRes = R.string.payment_method_installment_ktc_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Ktc
     )
 
-    object Scb : InstallmentChooserItem(
+    object Scb : InstallmentResource(
             iconRes = R.drawable.payment_scb,
             titleRes = R.string.payment_method_installment_scb_title,
             indicatorIconRes = R.drawable.ic_next,
@@ -193,14 +193,14 @@ internal sealed class InstallmentChooserItem(
     )
 }
 
-internal data class InstallmentTermChooserItem(
+internal data class InstallmentTermResource(
         @DrawableRes override val iconRes: Int? = null,
         override val title: String,
         val installmentTerm: Int,
         @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect
 ) : OmiseListItem
 
-internal sealed class InternetBankingChooserItem(
+internal sealed class InternetBankingResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
@@ -209,32 +209,32 @@ internal sealed class InternetBankingChooserItem(
 ) : OmiseListItem {
 
     companion object {
-        val all: List<InternetBankingChooserItem>
-            get() = InternetBankingChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? InternetBankingChooserItem }
+        val all: List<InternetBankingResource>
+            get() = InternetBankingResource::class.nestedClasses.mapNotNull { it.objectInstance as? InternetBankingResource }
     }
 
-    object Bbl : InternetBankingChooserItem(
+    object Bbl : InternetBankingResource(
             iconRes = R.drawable.payment_bbl,
             titleRes = R.string.payment_method_internet_banking_bbl_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.InternetBanking.Bbl
     )
 
-    object Scb : InternetBankingChooserItem(
+    object Scb : InternetBankingResource(
             iconRes = R.drawable.payment_scb,
             titleRes = R.string.payment_method_internet_banking_scb_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.InternetBanking.Scb
     )
 
-    object Bay : InternetBankingChooserItem(
+    object Bay : InternetBankingResource(
             iconRes = R.drawable.payment_bay,
             titleRes = R.string.payment_method_internet_banking_bay_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.InternetBanking.Bay
     )
 
-    object Ktb : InternetBankingChooserItem(
+    object Ktb : InternetBankingResource(
             iconRes = R.drawable.payment_ktb,
             titleRes = R.string.payment_method_internet_banking_ktb_title,
             indicatorIconRes = R.drawable.ic_redirect,
@@ -242,7 +242,7 @@ internal sealed class InternetBankingChooserItem(
     )
 }
 
-internal sealed class MobileBankingChooserItem(
+internal sealed class MobileBankingResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
@@ -251,11 +251,11 @@ internal sealed class MobileBankingChooserItem(
 ) : OmiseListItem {
 
     companion object {
-        val all: List<MobileBankingChooserItem>
-            get() = MobileBankingChooserItem::class.nestedClasses.mapNotNull { it.objectInstance as? MobileBankingChooserItem }
+        val all: List<MobileBankingResource>
+            get() = MobileBankingResource::class.nestedClasses.mapNotNull { it.objectInstance as? MobileBankingResource }
     }
 
-    object Scb : MobileBankingChooserItem(
+    object Scb : MobileBankingResource(
             iconRes = R.drawable.payment_scb,
             titleRes = R.string.payment_method_mobile_banking_scb_title,
             indicatorIconRes = R.drawable.ic_redirect,

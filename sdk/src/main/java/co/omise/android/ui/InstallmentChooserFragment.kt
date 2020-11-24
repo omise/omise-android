@@ -12,7 +12,7 @@ import co.omise.android.models.backendType
  * InstallmentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available Installment options list for the user to choose from.
  */
-internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooserItem>() {
+internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResource>() {
 
     private val paymentMethods: List<PaymentMethod> by lazy {
         val args = arguments ?: return@lazy emptyList<PaymentMethod>()
@@ -31,11 +31,11 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
         setHasOptionsMenu(true)
     }
 
-    override fun listItems(): List<InstallmentChooserItem> {
-        return allowedInstallments.allowedInstallmentChooserItems
+    override fun listItems(): List<InstallmentResource> {
+        return allowedInstallments.installmentResources
     }
 
-    override fun onListItemClicked(item: InstallmentChooserItem) {
+    override fun onListItemClicked(item: InstallmentResource) {
         val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == item.sourceType }
         navigation?.navigateToInstallmentTermChooser(choseInstallment)
     }

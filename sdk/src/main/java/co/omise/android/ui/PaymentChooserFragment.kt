@@ -18,32 +18,32 @@ import co.omise.android.models.mobileBankingMethods
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available payment method options list for the user to choose from.
  */
-internal class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
+internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>() {
 
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
     val capability: Capability by lazy { requireNotNull(arguments?.getParcelable(EXTRA_CAPABILITY)) { "Capability must not be null." } }
 
-    override fun listItems(): List<PaymentChooserItem> {
-        return capability.allowedPaymentChooserItems
+    override fun listItems(): List<PaymentMethodResource> {
+        return capability.paymentMethodResources
     }
 
-    override fun onListItemClicked(item: PaymentChooserItem) {
+    override fun onListItemClicked(item: PaymentMethodResource) {
         val navigation = this.navigation ?: throw IllegalArgumentException("PaymentCreatorNavigation must not be null.")
         when (item) {
-            PaymentChooserItem.CreditCard -> navigation.navigateToCreditCardForm()
-            PaymentChooserItem.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
-            PaymentChooserItem.InternetBankings -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
-            PaymentChooserItem.MobileBankings -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
-            PaymentChooserItem.ConvenienceStore -> navigation.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
-            PaymentChooserItem.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
-            PaymentChooserItem.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
-            PaymentChooserItem.TrueMoney -> navigation.navigateToTrueMoneyForm()
-            PaymentChooserItem.TescoLotus,
-            PaymentChooserItem.Alipay,
-            PaymentChooserItem.PayNow,
-            PaymentChooserItem.PromptPay,
-            PaymentChooserItem.PointsCiti -> item.sourceType?.let(::sendRequest)
+            PaymentMethodResource.CreditCard -> navigation.navigateToCreditCardForm()
+            PaymentMethodResource.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
+            PaymentMethodResource.InternetBankings -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
+            PaymentMethodResource.MobileBankings -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
+            PaymentMethodResource.ConvenienceStore -> navigation.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+            PaymentMethodResource.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
+            PaymentMethodResource.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
+            PaymentMethodResource.TrueMoney -> navigation.navigateToTrueMoneyForm()
+            PaymentMethodResource.TescoLotus,
+            PaymentMethodResource.Alipay,
+            PaymentMethodResource.PayNow,
+            PaymentMethodResource.PromptPay,
+            PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
         }
     }
 
@@ -92,4 +92,3 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() 
         }
     }
 }
-
