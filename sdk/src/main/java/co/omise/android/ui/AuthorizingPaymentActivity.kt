@@ -1,20 +1,26 @@
 package co.omise.android.ui
 
 import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
 import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+import org.jetbrains.annotations.TestOnly
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -40,6 +46,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             webView.loadUrl(verifier.authorizedURLString)
         }
 
+        webView.webChromeClient = object : WebChromeClient() {}
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val uri = Uri.parse(url)
@@ -108,5 +115,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             cookieSyncManager.stopSync()
             cookieSyncManager.sync()
         }
+    }
+
+    @TestOnly
+    fun loadData(htmlData: String) {
+        val encodedHtml = Base64.encodeToString(htmlData.toByteArray(), Base64.NO_PADDING)
+        webView.loadData(encodedHtml, "text/html", "base64")
     }
 }
