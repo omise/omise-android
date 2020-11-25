@@ -2,6 +2,7 @@ package co.omise.android.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Base64
 import android.view.View
 import android.webkit.WebView
 import androidx.test.core.app.ActivityScenario
@@ -12,8 +13,17 @@ import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
+import androidx.test.espresso.web.sugar.Web.onWebView
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
+import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import co.omise.android.AuthorizingPaymentURLVerifier
@@ -21,6 +31,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.R
 import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -43,7 +54,7 @@ class AuthorizingPaymentActivityTest {
 
     @Before
     fun setUp() {
-        scenario = launch<AuthorizingPaymentActivity>(intent)
+        scenario = launch(intent)
     }
 
     @Test
@@ -70,6 +81,32 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_CANCELED, result.resultCode)
     }
 
+    @Test
+    fun webViewDialog_whenJSAlertInvokeThenDisplayAlertDialog() {
+        val html = """
+            <!DOCTYPE html>
+            <html>
+            <body>
+            <p>Test alert().</p>
+            <button onclick="setTimeout(displayAlert, 100);" id="button">Submit</button>
+            <script>
+            function displayAlert() {
+              alert("Test alert!");
+            }
+            </script>
+            </body>
+            </html> 
+       """.trimIndent()
+        loadData(html)
+
+        onWebView()
+                .withElement(findElement(Locator.ID, "button"))
+                .check(webMatches(getText(), containsString("Submit")))
+                .perform(webClick())
+
+        onView(withText(("Test alert!"))).inRoot(isDialog()).check(matches(isDisplayed()))
+    }
+
     private fun withUrl(url: String): Matcher<View> = object : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
             description?.appendText("with webview url: $url")
@@ -90,6 +127,14 @@ class AuthorizingPaymentActivityTest {
         override fun perform(uiController: UiController?, view: View?) {
             val webView = view as? WebView ?: return
             webView.webViewClient.shouldOverrideUrlLoading(webView, url)
+        }
+    }
+
+    private fun loadData(htmlData: String) {
+        scenario.onActivity {
+            val webView = it.findViewById<WebView>(R.id.authorizing_payment_webview)
+            val encodedHtml = Base64.encodeToString(htmlData.toByteArray(), Base64.NO_PADDING)
+            webView.loadData(encodedHtml, "text/html", "base64")
         }
     }
 }

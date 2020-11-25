@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import android.webkit.JsPromptResult
@@ -22,7 +21,6 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_U
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
-import org.jetbrains.annotations.TestOnly
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -89,8 +87,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 AlertDialog.Builder(this@AuthorizingPaymentActivity)
                         .setView(promptLayout)
                         .setMessage(message)
-                        .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
-                        .setNegativeButton(android.R.string.cancel) { _, _ -> result?.confirm() }
+                        .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm(promptEditText.text.toString()) }
+                        .setNegativeButton(android.R.string.cancel) { _, _ -> result?.cancel() }
                         .setOnCancelListener { result?.cancel() }
                         .show()
                 return true
@@ -164,11 +162,5 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             cookieSyncManager.stopSync()
             cookieSyncManager.sync()
         }
-    }
-
-    @TestOnly
-    fun loadData(htmlData: String) {
-        val encodedHtml = Base64.encodeToString(htmlData.toByteArray(), Base64.NO_PADDING)
-        webView.loadData(encodedHtml, "text/html", "base64")
     }
 }
