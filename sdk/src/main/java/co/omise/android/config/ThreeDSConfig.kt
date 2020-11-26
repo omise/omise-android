@@ -3,7 +3,7 @@ package co.omise.android.config
 import androidx.annotation.IntRange
 
 /**
- * Configuration for 3DS V2.
+ * Configuration for 3DS2.
  */
 class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.android.threeds.core.ThreeDSConfig) {
 
