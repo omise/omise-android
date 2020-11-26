@@ -423,7 +423,7 @@ Some request methods allow the user to authorize the payment with an external ap
 
 ### 3D Secure 2
 
-To support 3D Secure 2, you can check out the [3D Secure guide](docs/3ds-secure-v2.md).
+To support 3D Secure 2, you can check out the [3D Secure guide](docs/3d-secure-v2.md).
 
 ## ProGuard Rules
 

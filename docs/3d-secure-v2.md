@@ -58,7 +58,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 }
 ```
 
-You can check out the sample implementation in the [CheckoutActivity](app/src/kotlin/java/co/omise/android/example/CheckoutActivity.kt) class in the **sample-threeds-v2-app** app. 
+You can check out the sample implementation in the [CheckoutActivity](../app/src/kotlin/java/co/omise/android/example/CheckoutActivity.kt) class in the sample app. 
 
 ## Using UI customization
 
