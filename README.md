@@ -421,6 +421,10 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user would like to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However merchant developers must handle the `Intent` callback by themselves.
 
+### 3D Secure 2
+
+To support 3D Secure 2, you can check out the [3D Secure guide](docs/3ds-secure-v2.md).
+
 ## ProGuard Rules
 
 If you enable ProGuard, then add this rules in your ProGuard file.
