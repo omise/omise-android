@@ -113,6 +113,10 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Here's the sample of initializing 3D Secure 2.
+     * This should be call before start the [AuthorizingPaymentActivity].
+     */
     private fun initializeAuthoringPaymentConfig() {
         val uiCustomization = UiCustomization.Builder()
                 .labelCustomization(UiCustomization.LabelCustomization.Builder()
