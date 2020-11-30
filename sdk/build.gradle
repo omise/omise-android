@@ -146,6 +146,7 @@ dependencies {
     testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    testImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     testImplementation "androidx.test.ext:junit:$junit_ext_version"
     testImplementation "androidx.annotation:annotation:$annotation_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
@@ -160,6 +161,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
 }
 

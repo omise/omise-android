@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="OmiseTheme" parent="Theme.AppCompat.Light">
+    <style name="OmiseTheme" parent="Theme.MaterialComponents.Light">
         <item name="colorAccent">@color/primary_accent</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="actionBarStyle">@style/OmiseActionBarStyle</item>
