@@ -1,14 +1,19 @@
 # CHANGE LOG
 
+## v3.2.0
+
+* **CHANGED:** Support Android API 30
+* **CHANGED:** Support displaying dialog from JavaScript alert, confirm, prompt functions
+
 ## v3.1.3
 
-* **ADDED** Support SCB installment
-* **ADDED** Support SCB mobile banking
-* **CHANGED** Drop CircleCI and migrate to Github Actions
+* **ADDED:** Support SCB installment
+* **ADDED:** Support SCB mobile banking
+* **CHANGED:** Drop CircleCI and migrate to Github Actions
 
 ## v3.1.2
 
-* **CHANGED** Enhance `AuthorizingPaymentActivity` to support cache in the WebView for short life time
+* **CHANGED:** Enhance `AuthorizingPaymentActivity` to support cache in the WebView for short life time
 
 ## v3.1.1
 
@@ -20,7 +25,7 @@
 * **ADDED:** Support new source types (PointsCiti, PromptPay, PayNow)
 * **ADDED:** Support new payment methods in the `PaymentCreatorActivity` (PointsCiti, PromptPay, PayNow, TrueMoney)
 * **ADDED:** Support the term zero-interest installments in the `PaymentCreatorActivity`
-* **CHANGED** Update payment method icons
+* **CHANGED:** Update payment method icons
 
 ## v3.0.0
 
