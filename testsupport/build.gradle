@@ -28,7 +28,7 @@ android {
         production {
             dimension "mode"
         }
-        staing {
+        staging {
             dimension "mode"
         }
     }
