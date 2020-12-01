@@ -16,7 +16,6 @@ android {
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -124,7 +123,6 @@ uploadArchives {
 }
 
 dependencies {
-    implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
