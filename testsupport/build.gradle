@@ -23,6 +23,15 @@ android {
         }
     }
 
+    flavorDimensions "mode"
+    productFlavors {
+        production {
+            dimension "mode"
+        }
+        staing {
+            dimension "mode"
+        }
+    }
 }
 
 dependencies {

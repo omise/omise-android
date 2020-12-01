@@ -12,7 +12,6 @@ android {
         targetSdkVersion target_sdk_version
         versionCode sample_app_code_version
         versionName sample_app_version
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -22,13 +21,20 @@ android {
         }
     }
 
-    flavorDimensions "language"
+    flavorDimensions "language", "mode"
+
     productFlavors {
         java {
             dimension "language"
         }
         kotlin {
             dimension "language"
+        }
+        production {
+            dimension "mode"
+        }
+        staing {
+            dimension "mode"
         }
     }
 
@@ -47,7 +53,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.preference:preference:$preference_version"

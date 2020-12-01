@@ -17,7 +17,6 @@ buildscript {
 
         kotlin_version = '1.4.10'
         android_plugin_version = '4.1.0'
-        multidex_version = '2.0.1'
         appcompat_version = '1.1.0'
         joda_time_version = '2.9.2'
         okhttp_version = '4.9.0'
