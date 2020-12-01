@@ -23,6 +23,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
+        run: ./gradlew sdk:build -x test
+      - name: Unit tests
         run: ./gradlew sdk:testDebugUnitTest
       - name: Publish package
         run: ./gradlew uploadArchives
