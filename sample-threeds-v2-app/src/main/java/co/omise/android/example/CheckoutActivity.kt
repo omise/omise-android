@@ -38,7 +38,7 @@ class CheckoutActivity : AppCompatActivity() {
         checkout_button.setOnClickListener { checkout() }
 
 
-        val client = Client(OMISE_PUBLIC_KEY)
+        val client = Client(PUBLIC_KEY)
         val request = Capability.GetCapabilitiesRequestBuilder().build()
         client.send(request, object : RequestListener<Capability> {
             override fun onRequestSucceed(model: Capability) {
@@ -53,7 +53,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun checkout() {
         Intent(this, CreditCardActivity::class.java).run {
-            putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PUBLIC_KEY)
+            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
             startActivityForResult(this, CHECKOUT_REQUEST_CODE)
         }
     }

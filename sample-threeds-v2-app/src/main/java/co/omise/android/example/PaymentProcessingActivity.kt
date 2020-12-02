@@ -57,7 +57,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 initializeAuthoringPaymentConfig()
 
                 Intent(this@PaymentProcessingActivity, AuthorizingPaymentActivity::class.java).run {
-                    putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PUBLIC_KEY)
+                    putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
                     putExtra(OmiseActivity.EXTRA_TOKEN, tokenID)
                     putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, jsonObject.getString("authorize_uri"))
                     putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS,
