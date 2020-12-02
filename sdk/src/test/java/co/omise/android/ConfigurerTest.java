@@ -41,7 +41,7 @@ public class ConfigurerTest extends OmiseTest {
     }
 
     private Request configure(Request req) {
-        return Configurer.configure$sdk_debug(config(), req);
+        return Configurer.configure$sdk_productionDebug(config(), req);
     }
 
     private Config config() {

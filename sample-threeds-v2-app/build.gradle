@@ -12,13 +12,23 @@ android {
         targetSdkVersion target_sdk_version
         versionCode sample_app_code_version
         versionName sample_app_version
-        multiDexEnabled true
     }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "mode"
+
+    productFlavors {
+        production {
+            dimension "mode"
+        }
+        staging {
+            dimension "mode"
         }
     }
 
@@ -37,7 +47,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.preference:preference:$preference_version"

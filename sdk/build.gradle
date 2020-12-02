@@ -25,6 +25,16 @@ android {
         }
     }
 
+    flavorDimensions "mode"
+    productFlavors {
+        production {
+            dimension "mode"
+        }
+        staging {
+            dimension "mode"
+        }
+    }
+
     lintOptions {
         abortOnError false
         disable 'InvalidPackage' // okio
@@ -123,7 +133,10 @@ uploadArchives {
 }
 
 dependencies {
-    implementation project(":3DS-ANDROID-SDK:threeds")
+//    implementation project(":3DS-ANDROID-SDK:threeds")
+    implementation("co.omise:threeds-android:$omise_threeds_sdk_version") {
+        exclude module: 'asm'
+    }
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
