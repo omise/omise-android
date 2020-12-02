@@ -35,7 +35,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Run unit tests
-        run: ./gradlew sdk:testDebugUnitTest
+        run: ./gradlew sdk:testProductionDebugUnitTest
         env:
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
           PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}

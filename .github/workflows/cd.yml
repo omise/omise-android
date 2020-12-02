@@ -25,7 +25,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew sdk:build -x test
       - name: Unit tests
-        run: ./gradlew sdk:testDebugUnitTest
+        run: ./gradlew sdk:testProductionDebugUnitTest
       - name: Publish package
         run: ./gradlew uploadArchives
         env:
