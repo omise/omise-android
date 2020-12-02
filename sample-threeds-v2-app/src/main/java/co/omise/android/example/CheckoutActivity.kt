@@ -13,13 +13,12 @@ import co.omise.android.ui.OmiseActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_checkout.amount_edit
 import kotlinx.android.synthetic.main.activity_checkout.checkout_button
+import kotlinx.android.synthetic.main.activity_checkout.currency_edit
+import java.util.Locale
 
 class CheckoutActivity : AppCompatActivity() {
 
     companion object {
-
-        const val PUBLIC_KEY = "[PUBLIC_KEY]"
-
         private const val CHECKOUT_REQUEST_CODE = 0x3D8
     }
 
@@ -39,7 +38,7 @@ class CheckoutActivity : AppCompatActivity() {
         checkout_button.setOnClickListener { checkout() }
 
 
-        val client = Client(PUBLIC_KEY)
+        val client = Client(OMISE_PUBLIC_KEY)
         val request = Capability.GetCapabilitiesRequestBuilder().build()
         client.send(request, object : RequestListener<Capability> {
             override fun onRequestSucceed(model: Capability) {
@@ -54,7 +53,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun checkout() {
         Intent(this, CreditCardActivity::class.java).run {
-            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            putExtra(OmiseActivity.EXTRA_PKEY, OMISE_PUBLIC_KEY)
             startActivityForResult(this, CHECKOUT_REQUEST_CODE)
         }
     }
@@ -75,7 +74,8 @@ class CheckoutActivity : AppCompatActivity() {
                 Intent(this, PaymentProcessingActivity::class.java).run {
                     val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
                     putExtra(OmiseActivity.EXTRA_TOKEN, token?.id)
-                    putExtra(OmiseActivity.EXTRA_AMOUNT, amountEdit.text.toString().toLong())
+                    putExtra(OmiseActivity.EXTRA_AMOUNT, getAmount())
+                    putExtra(OmiseActivity.EXTRA_CURRENCY, currency_edit.text.toString())
                     startActivity(this)
                 }
             }
@@ -83,5 +83,13 @@ class CheckoutActivity : AppCompatActivity() {
                 super.onActivityResult(requestCode, resultCode, data)
             }
         }
+    }
+
+    private fun  getAmount(): Long {
+        var amount = amountEdit.text.toString().toDouble()
+        if (currency_edit.text.toString().toLowerCase(Locale.getDefault()) != "jpy") {
+            amount *= 100
+        }
+        return amount.toLong()
     }
 }
