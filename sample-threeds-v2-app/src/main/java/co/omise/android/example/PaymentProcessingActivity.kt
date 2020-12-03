@@ -21,7 +21,6 @@ import org.json.JSONObject
 import java.io.IOException
 
 class PaymentProcessingActivity : AppCompatActivity() {
-    private val testUrl = "https://b43e55ee242a.ngrok.io/charge/create"
     private val authorizingRequestCode = 200
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,23 +29,24 @@ class PaymentProcessingActivity : AppCompatActivity() {
 
         val tokenID = intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)
         val amount = intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)
+        val currency = intent.getStringExtra(OmiseActivity.EXTRA_CURRENCY)
 
         val JSON = "application/json; charset=utf-8".toMediaType();
         val client = OkHttpClient()
 
-        val is3DsV1 = amount.toString().let { it[it.length - 2] == '2' }
-        val param = """
+        val params = """
             {
-               "description":"test",
-               "amount":$amount,
-               "tokenID": "$tokenID",
-               "orderID": "1",
-               "capture": $is3DsV1
+               "description" : "test",
+               "card" : "$tokenID",
+               "amount" : $amount,
+               "currency" : "$currency", 
+               "return_uri" : "https://example.com"
             }
         """.trimIndent()
-        val body = RequestBody.create(JSON, param);
+
+        val body = RequestBody.create(JSON, params);
         val request = Request.Builder()
-                .url(testUrl)
+                .url(MERCHANT_ENDPOINT)
                 .post(body)
                 .build()
         client.newCall(request).enqueue(object : Callback {
@@ -57,7 +57,7 @@ class PaymentProcessingActivity : AppCompatActivity() {
                 initializeAuthoringPaymentConfig()
 
                 Intent(this@PaymentProcessingActivity, AuthorizingPaymentActivity::class.java).run {
-                    putExtra(OmiseActivity.EXTRA_PKEY, CheckoutActivity.PUBLIC_KEY)
+                    putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
                     putExtra(OmiseActivity.EXTRA_TOKEN, tokenID)
                     putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, jsonObject.getString("authorize_uri"))
                     putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS,
