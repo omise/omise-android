@@ -1,12 +1,10 @@
 package co.omise.android.ui
 
 import android.os.Bundle
-import androidx.annotation.DrawableRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
-import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
 
 /**
@@ -14,36 +12,26 @@ import co.omise.android.models.backendType
  * available Installment terms list for the user to choose from. User would be directed to this page
  * from [InstallmentChooserFragment] page.
  */
-internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermChooserItem>() {
+internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
     private val installment: PaymentMethod? by lazy {
-        arguments?.getParcelable<PaymentMethod>(EXTRA_INSTALLMENT)
+        arguments?.getParcelable(EXTRA_INSTALLMENT)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        val sourceType = (installment?.backendType as BackendType.Source).sourceType
-        title = when (sourceType as SourceType.Installment) {
-            SourceType.Installment.Bay -> InstallmentChooserItem.Bay
-            SourceType.Installment.FirstChoice -> InstallmentChooserItem.FirstChoice
-            SourceType.Installment.Bbl -> InstallmentChooserItem.Bbl
-            SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
-            SourceType.Installment.KBank -> InstallmentChooserItem.KBank
-            SourceType.Installment.Scb -> InstallmentChooserItem.Scb
-            is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(sourceType.name.orEmpty())
-        }.run {
-            titleRes?.let { getString(it) } ?: title
-        }
+        title = InstallmentResource.all
+                .find { it.sourceType == (installment?.backendType as BackendType.Source).sourceType }
+                ?.let { item -> item.titleRes?.let { getString(it) } ?: title }
         setHasOptionsMenu(true)
     }
 
-    override fun listItems(): List<InstallmentTermChooserItem> {
+    override fun listItems(): List<InstallmentTermResource> {
         return installment
                 ?.installmentTerms
                 .orEmpty()
                 .map {
-                    InstallmentTermChooserItem(
+                    InstallmentTermResource(
                             title = with(it) {
                                 if (this > 1) {
                                     getString(R.string.payment_method_installment_term_months_title, this)
@@ -51,13 +39,12 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                                     getString(R.string.payment_method_installment_term_month_title, this)
                                 }
                             },
-                            installmentTerm = it,
-                            indicatorIconRes = R.drawable.ic_redirect
+                            installmentTerm = it
                     )
                 }
     }
 
-    override fun onListItemClicked(item: InstallmentTermChooserItem) {
+    override fun onListItemClicked(item: InstallmentTermResource) {
         val req = requester ?: return
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType ?: return
 
@@ -81,10 +68,3 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 }
     }
 }
-
-internal data class InstallmentTermChooserItem(
-        @DrawableRes override val iconRes: Int? = null,
-        override val title: String,
-        val installmentTerm: Int,
-        @DrawableRes override val indicatorIconRes: Int
-) : OmiseListItem

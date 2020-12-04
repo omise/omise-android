@@ -2,8 +2,6 @@ package co.omise.android.ui
 
 
 import android.os.Bundle
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import co.omise.android.R
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
@@ -14,7 +12,7 @@ import co.omise.android.models.backendType
  * InstallmentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available Installment options list for the user to choose from.
  */
-internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooserItem>() {
+internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResource>() {
 
     private val paymentMethods: List<PaymentMethod> by lazy {
         val args = arguments ?: return@lazy emptyList<PaymentMethod>()
@@ -33,31 +31,12 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
         setHasOptionsMenu(true)
     }
 
-    override fun listItems(): List<InstallmentChooserItem> {
-        return allowedInstallments.map {
-            when (it) {
-                SourceType.Installment.KBank -> InstallmentChooserItem.KBank
-                SourceType.Installment.Bay -> InstallmentChooserItem.Bay
-                SourceType.Installment.FirstChoice -> InstallmentChooserItem.FirstChoice
-                SourceType.Installment.Bbl -> InstallmentChooserItem.Bbl
-                SourceType.Installment.Ktc -> InstallmentChooserItem.Ktc
-                SourceType.Installment.Scb -> InstallmentChooserItem.Scb
-                is SourceType.Installment.Unknown -> InstallmentChooserItem.Unknown(it.name.orEmpty())
-            }
-        }
+    override fun listItems(): List<InstallmentResource> {
+        return allowedInstallments.installmentResources
     }
 
-    override fun onListItemClicked(item: InstallmentChooserItem) {
-        val sourceType = when (item) {
-            InstallmentChooserItem.Bbl -> SourceType.Installment.Bbl
-            InstallmentChooserItem.KBank -> SourceType.Installment.KBank
-            InstallmentChooserItem.Bay -> SourceType.Installment.Bay
-            InstallmentChooserItem.FirstChoice -> SourceType.Installment.FirstChoice
-            InstallmentChooserItem.Ktc -> SourceType.Installment.Ktc
-            InstallmentChooserItem.Scb -> SourceType.Installment.Scb
-            is InstallmentChooserItem.Unknown -> SourceType.Installment.Unknown(item.bankName)
-        }
-        val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == sourceType }
+    override fun onListItemClicked(item: InstallmentResource) {
+        val choseInstallment = paymentMethods.first { (it.backendType as BackendType.Source).sourceType == item.sourceType }
         navigation?.navigateToInstallmentTermChooser(choseInstallment)
     }
 
@@ -71,54 +50,4 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentChooser
                     }
                 }
     }
-}
-
-internal sealed class InstallmentChooserItem(
-        @DrawableRes override val iconRes: Int,
-        override val title: String? = null,
-        @StringRes override val titleRes: Int? = null,
-        @DrawableRes override val indicatorIconRes: Int
-) : OmiseListItem {
-    companion object
-    object Bbl : InstallmentChooserItem(
-            iconRes = R.drawable.payment_bbl,
-            titleRes = R.string.payment_method_installment_bbl_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object KBank : InstallmentChooserItem(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.payment_method_installment_kasikorn_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object Bay : InstallmentChooserItem(
-            iconRes = R.drawable.payment_bay,
-            titleRes = R.string.payment_method_installment_bay_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object FirstChoice : InstallmentChooserItem(
-            iconRes = R.drawable.payment_first_choice,
-            titleRes = R.string.payment_method_installment_first_choice_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object Ktc : InstallmentChooserItem(
-            iconRes = R.drawable.payment_ktc,
-            titleRes = R.string.payment_method_installment_ktc_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object Scb : InstallmentChooserItem(
-            iconRes = R.drawable.payment_scb,
-            titleRes = R.string.payment_method_installment_scb_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    data class Unknown(val bankName: String) : InstallmentChooserItem(
-            iconRes = R.drawable.payment_installment,
-            title = bankName,
-            indicatorIconRes = R.drawable.ic_next
-    )
 }

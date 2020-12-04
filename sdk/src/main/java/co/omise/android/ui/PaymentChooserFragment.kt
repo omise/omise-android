@@ -5,55 +5,45 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import co.omise.android.R
-import co.omise.android.models.*
+import co.omise.android.models.Capability
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import co.omise.android.models.SupportedEcontext
+import co.omise.android.models.installmentMethods
+import co.omise.android.models.internetBankingMethods
+import co.omise.android.models.mobileBankingMethods
 
 /**
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available payment method options list for the user to choose from.
  */
-class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
+internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>() {
 
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
-    val capability: Capability? by lazy { arguments?.getParcelable<Capability>(EXTRA_CAPABILITY) }
+    val capability: Capability by lazy { requireNotNull(arguments?.getParcelable(EXTRA_CAPABILITY)) { "Capability must not be null." } }
 
-    override fun listItems(): List<PaymentChooserItem> {
-        return capability?.let { getPaymentChoosersFrom(it) } ?: emptyList()
+    override fun listItems(): List<PaymentMethodResource> {
+        return capability.paymentMethodResources
     }
 
-    override fun onListItemClicked(item: PaymentChooserItem) {
+    override fun onListItemClicked(item: PaymentMethodResource) {
+        val navigation = this.navigation ?: throw IllegalArgumentException("PaymentCreatorNavigation must not be null.")
         when (item) {
-            PaymentChooserItem.CreditCard -> navigation?.navigateToCreditCardForm()
-            PaymentChooserItem.Installments -> navigation?.navigateToInstallmentChooser(
-                    capability
-                            ?.paymentMethods
-                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.Installment }
-                            .orEmpty()
-            )
-            PaymentChooserItem.InternetBanking -> navigation?.navigateToInternetBankingChooser(
-                    capability
-                            ?.paymentMethods
-                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
-                            .orEmpty()
-            )
-            PaymentChooserItem.MobileBanking -> navigation?.navigateToMobileBankingChooser(
-                    capability
-                            ?.paymentMethods
-                            ?.filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.MobileBanking }
-                            .orEmpty()
-            )
-            PaymentChooserItem.TescoLotus -> sendRequest(SourceType.BillPaymentTescoLotus)
-            PaymentChooserItem.ConvenienceStore -> navigation?.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
-            PaymentChooserItem.PayEasy -> navigation?.navigateToEContextForm(SupportedEcontext.PayEasy)
-            PaymentChooserItem.Netbanking -> navigation?.navigateToEContextForm(SupportedEcontext.Netbanking)
-            PaymentChooserItem.Alipay -> sendRequest(SourceType.Alipay)
-            PaymentChooserItem.PayNow -> sendRequest(SourceType.PayNow)
-            PaymentChooserItem.PromptPay -> sendRequest(SourceType.PromptPay)
-            PaymentChooserItem.PointsCiti -> sendRequest(SourceType.PointsCiti)
-            PaymentChooserItem.TrueMoney -> navigation?.navigateToTrueMoneyForm()
+            PaymentMethodResource.CreditCard -> navigation.navigateToCreditCardForm()
+            PaymentMethodResource.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
+            PaymentMethodResource.InternetBankings -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
+            PaymentMethodResource.MobileBankings -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
+            PaymentMethodResource.ConvenienceStore -> navigation.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+            PaymentMethodResource.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
+            PaymentMethodResource.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
+            PaymentMethodResource.TrueMoney -> navigation.navigateToTrueMoneyForm()
+            PaymentMethodResource.TescoLotus,
+            PaymentMethodResource.Alipay,
+            PaymentMethodResource.PayNow,
+            PaymentMethodResource.PromptPay,
+            PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
         }
     }
 
@@ -90,35 +80,6 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
         }
     }
 
-    private fun getPaymentChoosersFrom(capability: Capability): List<PaymentChooserItem> {
-        val item = arrayListOf<PaymentChooserItem>()
-        capability
-                .paymentMethods
-                .orEmpty()
-                .forEach {
-                    when (it.backendType) {
-                        is BackendType.Token -> item.add(PaymentChooserItem.CreditCard)
-                        is BackendType.Source -> when ((it.backendType as BackendType.Source).sourceType) {
-                            is SourceType.Installment -> item.add(PaymentChooserItem.Installments)
-                            is SourceType.InternetBanking -> item.add(PaymentChooserItem.InternetBanking)
-                            is SourceType.MobileBanking -> item.add(PaymentChooserItem.MobileBanking)
-                            is SourceType.BillPaymentTescoLotus -> item.add(PaymentChooserItem.TescoLotus)
-                            is SourceType.Econtext -> item.addAll(listOf(
-                                    PaymentChooserItem.ConvenienceStore,
-                                    PaymentChooserItem.PayEasy,
-                                    PaymentChooserItem.Netbanking
-                            ))
-                            is SourceType.Alipay -> item.add(PaymentChooserItem.Alipay)
-                            is SourceType.PayNow -> item.add(PaymentChooserItem.PayNow)
-                            is SourceType.PromptPay -> item.add(PaymentChooserItem.PromptPay)
-                            is SourceType.PointsCiti -> item.add(PaymentChooserItem.PointsCiti)
-                            is SourceType.TrueMoney -> item.add(PaymentChooserItem.TrueMoney)
-                        }
-                    }
-                }
-        return item.distinct()
-    }
-
     companion object {
         private const val EXTRA_CAPABILITY = "PaymentChooserFragment.capability"
 
@@ -130,88 +91,4 @@ class PaymentChooserFragment : OmiseListFragment<PaymentChooserItem>() {
             }
         }
     }
-}
-
-sealed class PaymentChooserItem(
-        @DrawableRes override val iconRes: Int,
-        @StringRes override val titleRes: Int?,
-        @DrawableRes override val indicatorIconRes: Int
-) : OmiseListItem {
-    object CreditCard : PaymentChooserItem(
-            iconRes = R.drawable.payment_card,
-            titleRes = R.string.payment_method_credit_card_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object Installments : PaymentChooserItem(
-            iconRes = R.drawable.payment_installment,
-            titleRes = R.string.payment_method_installments_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object InternetBanking : PaymentChooserItem(
-            iconRes = R.drawable.payment_banking,
-            titleRes = R.string.payment_method_internet_banking_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object MobileBanking : PaymentChooserItem(
-            iconRes = R.drawable.payment_mobile,
-            titleRes = R.string.payment_method_mobile_banking_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object TescoLotus : PaymentChooserItem(
-            iconRes = R.drawable.payment_tesco,
-            titleRes = R.string.payment_method_tesco_lotus_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object ConvenienceStore : PaymentChooserItem(
-            iconRes = R.drawable.payment_conbini,
-            titleRes = R.string.payment_method_convenience_store_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object PayEasy : PaymentChooserItem(
-            iconRes = R.drawable.payment_payeasy,
-            titleRes = R.string.payment_method_pay_easy_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object Netbanking : PaymentChooserItem(
-            iconRes = R.drawable.payment_netbank,
-            titleRes = R.string.payment_method_netbank_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
-
-    object Alipay : PaymentChooserItem(
-            iconRes = R.drawable.payment_alipay,
-            titleRes = R.string.payment_method_alipay_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object PromptPay : PaymentChooserItem(
-            iconRes = R.drawable.payment_promptpay,
-            titleRes = R.string.payment_method_promptpay_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object PayNow : PaymentChooserItem(
-            iconRes = R.drawable.payment_paynow,
-            titleRes = R.string.payment_method_paynow_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object PointsCiti : PaymentChooserItem(
-            iconRes = R.drawable.payment_points_citi,
-            titleRes = R.string.payment_method_points_citi_title,
-            indicatorIconRes = R.drawable.ic_redirect
-    )
-
-    object TrueMoney : PaymentChooserItem(
-            iconRes = R.drawable.payment_truemoney,
-            titleRes = R.string.payment_truemoney_title,
-            indicatorIconRes = R.drawable.ic_next
-    )
 }
