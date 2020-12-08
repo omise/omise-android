@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Base64
 import android.view.View
 import android.webkit.WebView
+import android.widget.ProgressBar
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -33,6 +34,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.R
 import co.omise.android.models.Token
+import co.omise.android.threeds.ui.ProgressView
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
 import com.nhaarman.mockitokotlin2.doNothing
@@ -40,6 +42,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -87,6 +90,11 @@ class AuthorizingPaymentActivityTest {
         doNothing().whenever(viewModel).cleanup()
 
         activityRule.launchActivity(intent)
+    }
+
+    @Test
+    fun onCreate_showProgressBarWhenActivityStarted() {
+        onView(instanceOf(ProgressBar::class.java)).check(matches(isDisplayed()))
     }
 
     @Test

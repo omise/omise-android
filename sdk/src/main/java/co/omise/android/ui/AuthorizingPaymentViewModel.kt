@@ -1,5 +1,6 @@
 package co.omise.android.ui
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,8 @@ import co.omise.android.api.Client
 import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
+import co.omise.android.threeds.ThreeDS
+import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.utils.SDKCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
@@ -18,22 +21,32 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 
-internal open class AuthorizingPaymentViewModelFactory(private val omisePublicKey: String) : ViewModelProvider.Factory {
+internal open class AuthorizingPaymentViewModelFactory(
+        private val activity: Activity,
+        private val omisePublicKey: String
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return AuthorizingPaymentViewModel(Client(omisePublicKey)) as T
+        val threeDS = ThreeDS(activity)
+        val scope = SDKCoroutineScope().coroutineScope
+        return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, scope) as T
     }
 }
 
 internal open class AuthorizingPaymentViewModel(
         private val client: Client,
-        private val scope: CoroutineScope = SDKCoroutineScope().coroutineScope
-) : ViewModel() {
+        private val threeDS: ThreeDS,
+        private val scope: CoroutineScope
+) : ViewModel(), ThreeDSListener {
 
     private val maxTimeout = 30_000L // 30 secs
     private val requestDelay = 3_000L // 3 secs
 
     private val _authorizingPaymentResult = MutableLiveData<Result<Token>>()
     open val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
+
+    init {
+        threeDS.listener = this
+    }
 
     open fun observeTokenChange(tokenID: String) {
         scope.launch {
@@ -80,5 +93,20 @@ internal open class AuthorizingPaymentViewModel(
 
     open fun cleanup() {
         scope.cancel()
+    }
+
+    fun authorizeTransaction(authorizedUrl: String) {
+    }
+
+    override fun onAuthenticated() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onError(e: Throwable) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onUnsupported() {
+        TODO("Not yet implemented")
     }
 }

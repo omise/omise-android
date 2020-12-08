@@ -20,8 +20,10 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
+import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
+import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
@@ -59,24 +61,24 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         tokenID = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)) { "${OmiseActivity.Companion::EXTRA_TOKEN.name} must not be null." }
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
-        initializeWebView()
 
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
-//        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
+        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
 
-//        progressDialog.show()
+        progressDialog.show()
 //        threeDS.authorizeTransaction(verifier.authorizedURLString)
+        viewModel.authorizeTransaction(verifier.authorizedURLString)
 
         observeData()
 
         // TODO: Test load authorize URI.
-        loadAuthorizeUrl()
+//        loadAuthorizeUrl()
     }
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
         if (viewModelFactory == null) {
-            viewModelFactory = AuthorizingPaymentViewModelFactory(omisePublicKey)
+            viewModelFactory = AuthorizingPaymentViewModelFactory(this, omisePublicKey)
         }
         return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
     }
@@ -176,6 +178,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private fun loadAuthorizeUrl() {
         runOnUiThread {
             if (verifier.isReady) {
+                progressDialog.dismiss()
+                setupWebView()
                 webView.loadUrl(verifier.authorizedURLString)
             }
         }
@@ -227,7 +231,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         authorizeFailed(e)
     }
 
-    private fun initializeWebView() {
+    private fun setupWebView() {
         setupWebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
