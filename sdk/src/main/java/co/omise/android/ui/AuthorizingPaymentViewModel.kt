@@ -9,6 +9,7 @@ import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
 import co.omise.android.utils.SDKCoroutineScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
@@ -23,23 +24,29 @@ internal class AuthorizingPaymentViewModelFactory(private val omisePublicKey: St
     }
 }
 
-internal class AuthorizingPaymentViewModel(private val client: Client) : ViewModel() {
+internal class AuthorizingPaymentViewModel(
+        private val client: Client,
+        private val scope: CoroutineScope = SDKCoroutineScope().coroutineScope
+) : ViewModel() {
 
     private val maxTimeout = 30_000L // 30 secs
     private val requestDelay = 3_000L // 3 secs
-    private val scope = SDKCoroutineScope().coroutineScope
 
     private val _authorizingPaymentResult = MutableLiveData<Result<Token>>()
     val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
 
-    fun observeTokenChange(tokenID: String) = scope.launch {
-        try {
-            val job = async { observeChargeStatus(tokenID) }
-            withTimeout(maxTimeout) {
-                job.await()
+    fun getAuthorizingPayment(): LiveData<Result<Token>> = _authorizingPaymentResult
+
+    fun observeTokenChange(tokenID: String) {
+        scope.launch {
+            try {
+                val job = async { observeChargeStatus(tokenID) }
+                withTimeout(maxTimeout) {
+                    job.await()
+                }
+            } catch (e: TimeoutCancellationException) {
+                _authorizingPaymentResult.postValue(Result.failure(e))
             }
-        } catch (e: TimeoutCancellationException) {
-            _authorizingPaymentResult.postValue(Result.failure(e))
         }
     }
 

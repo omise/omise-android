@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Base64
 import android.view.View
 import android.webkit.WebView
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
@@ -26,12 +27,22 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.intercepting.SingleActivityFactory
+import androidx.test.runner.lifecycle.ActivityLifecycleCallback
+import androidx.test.runner.lifecycle.Stage
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.R
+import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
+import co.omise.android.utils.ViewModelUtil
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Description
@@ -39,6 +50,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -57,10 +69,28 @@ class AuthorizingPaymentActivityTest {
         putExtra(EXTRA_TOKEN, TEST_TOKEN_ID)
     }
     private lateinit var scenario: ActivityScenario<AuthorizingPaymentActivity>
+    private val viewModel: AuthorizingPaymentViewModel = mock()
+    private val viewModelFactory = ViewModelUtil.createFor(viewModel)
+    private val authorizingPaymentResult = MutableLiveData<Result<Token>>()
+
+    private val activityFactory = object : SingleActivityFactory<AuthorizingPaymentActivity>(AuthorizingPaymentActivity::class.java) {
+        override fun create(intent: Intent?): AuthorizingPaymentActivity {
+            val activity = AuthorizingPaymentActivity()
+            activity.setAuthorizingPaymentViewModelFactory(viewModelFactory)
+            return activity
+        }
+    }
+
+    @get:Rule
+    var activityRule = ActivityTestRule(activityFactory, false, false)
 
     @Before
     fun setUp() {
-        scenario = launch(intent)
+        whenever(viewModel.observeTokenChange(TEST_TOKEN_ID)).doReturn(Unit)
+        whenever(viewModel.getAuthorizingPayment()).thenReturn(authorizingPaymentResult)
+        activityRule.launchActivity(intent)
+//        whenever(viewModel.authorizingPaymentResult).doReturn(authorizingPaymentResult)
+        whenever(viewModel.cleanup()).doReturn(Unit)
     }
 
     @Test

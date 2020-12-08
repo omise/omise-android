@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -16,7 +15,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
@@ -27,7 +25,8 @@ import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.ui.ProgressView
-import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
+import org.jetbrains.annotations.TestOnly
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -49,6 +48,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private lateinit var omisePublicKey: String
     private lateinit var tokenID: String
     private lateinit var viewModel: AuthorizingPaymentViewModel
+    private var viewModelFactory: ViewModelProvider.Factory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,24 +60,40 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         omisePublicKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
         tokenID = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)) { "${OmiseActivity.Companion::EXTRA_TOKEN.name} must not be null." }
 
-        viewModel = ViewModelProvider(this, AuthorizingPaymentViewModelFactory(omisePublicKey)).get(AuthorizingPaymentViewModel::class.java)
+        viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
-        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
-
-        initializeWebView()
-
-        supportActionBar?.setTitle(R.string.title_authorizing_payment)
-
-        setupWebViewClient()
-
-        progressDialog.show()
-        threeDS.authorizeTransaction(verifier.authorizedURLString)
+//        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
+//
+//        initializeWebView()
+//
+//        supportActionBar?.setTitle(R.string.title_authorizing_payment)
+//
+//        setupWebViewClient()
+//
+//        progressDialog.show()
+//        threeDS.authorizeTransaction(verifier.authorizedURLString)
 
         observeData()
+
+        // TODO: Test load authorize URI.
+        loadAuthorizeUrl()
+    }
+
+    private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
+        if (viewModelFactory == null) {
+            viewModelFactory = AuthorizingPaymentViewModelFactory(omisePublicKey)
+        }
+        return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
+    }
+
+    @TestOnly
+    fun setAuthorizingPaymentViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
+        this.viewModelFactory = viewModelFactory
     }
 
     private fun observeData() {
-        viewModel.authorizingPaymentResult.observe(this, { result ->
+//        viewModel.authorizingPaymentResult.observe(this, { result ->
+        viewModel.getAuthorizingPayment().observe(this, { result ->
             if (result.isSuccess) {
                 val intent = Intent().apply {
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
