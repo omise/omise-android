@@ -101,7 +101,7 @@ internal open class AuthorizingPaymentViewModel(
         }
     }
 
-    private suspend fun sendGetTokenRequest(tokenID: String) =
+    private suspend fun sendGetTokenRequest(tokenID: String): Token =
             client.send(Token.GetTokenRequestBuilder(tokenID).build())
 
     open fun cleanup() {
