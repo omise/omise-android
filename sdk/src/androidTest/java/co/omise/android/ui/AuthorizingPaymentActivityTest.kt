@@ -7,7 +7,6 @@ import android.view.View
 import android.webkit.WebView
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
@@ -29,8 +28,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.intercepting.SingleActivityFactory
-import androidx.test.runner.lifecycle.ActivityLifecycleCallback
-import androidx.test.runner.lifecycle.Stage
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
@@ -38,9 +35,7 @@ import co.omise.android.R
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
-import co.omise.android.utils.ViewModelUtil
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.CoreMatchers.allOf
@@ -70,7 +65,7 @@ class AuthorizingPaymentActivityTest {
     }
     private lateinit var scenario: ActivityScenario<AuthorizingPaymentActivity>
     private val viewModel: AuthorizingPaymentViewModel = mock()
-    private val viewModelFactory = ViewModelUtil.createFor(viewModel)
+    private val viewModelFactory: AuthorizingPaymentViewModelFactory = mock()
     private val authorizingPaymentResult = MutableLiveData<Result<Token>>()
 
     private val activityFactory = object : SingleActivityFactory<AuthorizingPaymentActivity>(AuthorizingPaymentActivity::class.java) {
@@ -86,11 +81,12 @@ class AuthorizingPaymentActivityTest {
 
     @Before
     fun setUp() {
-        whenever(viewModel.observeTokenChange(TEST_TOKEN_ID)).doReturn(Unit)
-        whenever(viewModel.getAuthorizingPayment()).thenReturn(authorizingPaymentResult)
+        whenever(viewModelFactory.create(AuthorizingPaymentViewModel::class.java)).thenReturn(viewModel)
+        whenever(viewModel.authorizingPaymentResult).thenReturn(authorizingPaymentResult)
+        doNothing().whenever(viewModel).observeTokenChange(TEST_TOKEN_ID)
+        doNothing().whenever(viewModel).cleanup()
+
         activityRule.launchActivity(intent)
-//        whenever(viewModel.authorizingPaymentResult).doReturn(authorizingPaymentResult)
-        whenever(viewModel.cleanup()).doReturn(Unit)
     }
 
     @Test

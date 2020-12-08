@@ -20,10 +20,8 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
-import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
-import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
@@ -60,16 +58,13 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         omisePublicKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
         tokenID = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)) { "${OmiseActivity.Companion::EXTRA_TOKEN.name} must not be null." }
 
+        supportActionBar?.setTitle(R.string.title_authorizing_payment)
+        initializeWebView()
+
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
 //        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
-//
-//        initializeWebView()
-//
-//        supportActionBar?.setTitle(R.string.title_authorizing_payment)
-//
-//        setupWebViewClient()
-//
+
 //        progressDialog.show()
 //        threeDS.authorizeTransaction(verifier.authorizedURLString)
 
@@ -92,8 +87,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun observeData() {
-//        viewModel.authorizingPaymentResult.observe(this, { result ->
-        viewModel.getAuthorizingPayment().observe(this, { result ->
+        viewModel.authorizingPaymentResult.observe(this, { result ->
             if (result.isSuccess) {
                 val intent = Intent().apply {
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
@@ -234,6 +228,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun initializeWebView() {
+        setupWebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
             domStorageEnabled = true

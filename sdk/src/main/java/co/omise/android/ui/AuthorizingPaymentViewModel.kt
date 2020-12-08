@@ -18,13 +18,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 
-internal class AuthorizingPaymentViewModelFactory(private val omisePublicKey: String) : ViewModelProvider.Factory {
+internal open class AuthorizingPaymentViewModelFactory(private val omisePublicKey: String) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AuthorizingPaymentViewModel(Client(omisePublicKey)) as T
     }
 }
 
-internal class AuthorizingPaymentViewModel(
+internal open class AuthorizingPaymentViewModel(
         private val client: Client,
         private val scope: CoroutineScope = SDKCoroutineScope().coroutineScope
 ) : ViewModel() {
@@ -33,11 +33,9 @@ internal class AuthorizingPaymentViewModel(
     private val requestDelay = 3_000L // 3 secs
 
     private val _authorizingPaymentResult = MutableLiveData<Result<Token>>()
-    val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
+    open val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
 
-    fun getAuthorizingPayment(): LiveData<Result<Token>> = _authorizingPaymentResult
-
-    fun observeTokenChange(tokenID: String) {
+    open fun observeTokenChange(tokenID: String) {
         scope.launch {
             try {
                 val job = async { observeChargeStatus(tokenID) }
@@ -80,7 +78,7 @@ internal class AuthorizingPaymentViewModel(
     private suspend fun sendGetTokenRequest(tokenID: String) =
             client.send(Token.GetTokenRequestBuilder(tokenID).build())
 
-    fun cleanup() {
+    open fun cleanup() {
         scope.cancel()
     }
 }
