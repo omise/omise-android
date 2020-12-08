@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -34,11 +33,11 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.R
 import co.omise.android.models.Token
-import co.omise.android.threeds.ui.ProgressView
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
@@ -70,6 +69,7 @@ class AuthorizingPaymentActivityTest {
     private val viewModel: AuthorizingPaymentViewModel = mock()
     private val viewModelFactory: AuthorizingPaymentViewModelFactory = mock()
     private val authorizingPaymentResult = MutableLiveData<Result<Token>>()
+    private val authenticationResult = MutableLiveData<AuthenticationResult>()
 
     private val activityFactory = object : SingleActivityFactory<AuthorizingPaymentActivity>(AuthorizingPaymentActivity::class.java) {
         override fun create(intent: Intent?): AuthorizingPaymentActivity {
@@ -86,6 +86,7 @@ class AuthorizingPaymentActivityTest {
     fun setUp() {
         whenever(viewModelFactory.create(AuthorizingPaymentViewModel::class.java)).thenReturn(viewModel)
         whenever(viewModel.authorizingPaymentResult).thenReturn(authorizingPaymentResult)
+        whenever(viewModel.authenticationResult).thenReturn(authenticationResult)
         doNothing().whenever(viewModel).observeTokenChange(TEST_TOKEN_ID)
         doNothing().whenever(viewModel).cleanup()
 
@@ -93,36 +94,45 @@ class AuthorizingPaymentActivityTest {
     }
 
     @Test
-    fun onCreate_showProgressBarWhenActivityStarted() {
+    fun onCreate_shouldExecuteAuthorizeTransaction() {
         onView(instanceOf(ProgressBar::class.java)).check(matches(isDisplayed()))
+        verify(viewModel).authorizeTransaction(TEST_AUTHORIZED_URL)
     }
 
     @Test
-    fun onCreate_loadAuthorizeUrl() {
+    fun fallback3DS1_whenTransactionUse3DS1ThenLoadAuthorizeUrlToWebView() {
+        authenticationResult.postValue(AuthenticationResult.AuthenticationUnsupported)
+
         onView(withId(R.id.authorizing_payment_webview))
                 .check(matches(withUrl(TEST_AUTHORIZED_URL)))
     }
 
     @Test
-    fun verifyUrl_matchedWithExpectedReturnUrl() {
+    fun activityResultOf3DS1_whenAuthorizationCompletedThenReturnExpectedReturnUrl() {
+        authenticationResult.postValue(AuthenticationResult.AuthenticationUnsupported)
+
         onView(withId(R.id.authorizing_payment_webview))
                 .perform(loadUrl(TEST_RETURN_URL))
 
-        val result = scenario.result
-        assertEquals(Activity.RESULT_OK, result.resultCode)
-        assertEquals(TEST_RETURN_URL, result.resultData.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING))
+        val actualResult = activityRule.activityResult
+        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
+        assertEquals(TEST_RETURN_URL, actualResult.resultData.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING))
     }
 
     @Test
     fun activityDestroy_returnCanceledResult() {
-        pressBackUnconditionally()
+        authenticationResult.postValue(AuthenticationResult.AuthenticationUnsupported)
 
-        val result = scenario.result
-        assertEquals(Activity.RESULT_CANCELED, result.resultCode)
+        activityRule.activity.finish()
+
+        val actualResult = activityRule.activityResult
+        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
     }
 
     @Test
     fun webViewDialog_whenJSAlertInvokeThenDisplayAlertDialog() {
+        authenticationResult.postValue(AuthenticationResult.AuthenticationUnsupported)
+
         val html = """
             <!DOCTYPE html>
             <html>
@@ -137,6 +147,7 @@ class AuthorizingPaymentActivityTest {
             </body>
             </html> 
        """.trimIndent()
+
         loadData(html)
 
         onWebView()
@@ -171,9 +182,9 @@ class AuthorizingPaymentActivityTest {
     }
 
     private fun loadData(htmlData: String) {
-        scenario.onActivity {
-            val webView = it.findViewById<WebView>(R.id.authorizing_payment_webview)
-            val encodedHtml = Base64.encodeToString(htmlData.toByteArray(), Base64.NO_PADDING)
+        val webView = activityRule.activity.findViewById<WebView>(R.id.authorizing_payment_webview)
+        val encodedHtml = Base64.encodeToString(htmlData.toByteArray(), Base64.NO_PADDING)
+        activityRule.activity.runOnUiThread {
             webView.loadData(encodedHtml, "text/html", "base64")
         }
     }

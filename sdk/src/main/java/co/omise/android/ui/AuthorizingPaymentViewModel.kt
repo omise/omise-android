@@ -6,11 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.api.Client
+import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
+import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.utils.SDKCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
@@ -26,6 +28,7 @@ internal open class AuthorizingPaymentViewModelFactory(
         private val omisePublicKey: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         val threeDS = ThreeDS(activity)
         val scope = SDKCoroutineScope().coroutineScope
         return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, scope) as T
@@ -43,6 +46,9 @@ internal open class AuthorizingPaymentViewModel(
 
     private val _authorizingPaymentResult = MutableLiveData<Result<Token>>()
     open val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
+
+    private val _authenticationResult = MutableLiveData<AuthenticationResult>()
+    open val authenticationResult: LiveData<AuthenticationResult> = _authenticationResult
 
     init {
         threeDS.listener = this
@@ -93,9 +99,10 @@ internal open class AuthorizingPaymentViewModel(
 
     open fun cleanup() {
         scope.cancel()
+        threeDS.cleanup()
     }
 
-    fun authorizeTransaction(authorizedUrl: String) {
+    open fun authorizeTransaction(authorizedUrl: String) {
     }
 
     override fun onAuthenticated() {
@@ -109,4 +116,10 @@ internal open class AuthorizingPaymentViewModel(
     override fun onUnsupported() {
         TODO("Not yet implemented")
     }
+}
+
+sealed class AuthenticationResult {
+    object AuthenticationUnsupported: AuthenticationResult()
+    data class AuthenticationCompleted(val token: Token): AuthenticationResult()
+    data class AuthenticationError(val error: Throwable): AuthenticationResult()
 }

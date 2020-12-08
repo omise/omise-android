@@ -20,10 +20,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
-import co.omise.android.config.AuthorizingPaymentConfig
-import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
-import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
@@ -39,11 +36,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
-    private val threeDS: ThreeDS by lazy {
-        ThreeDS(this).apply {
-            listener = this@AuthorizingPaymentActivity
-        }
-    }
 
     private lateinit var omisePublicKey: String
     private lateinit var tokenID: String
@@ -64,16 +56,10 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
-        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
-
         progressDialog.show()
-//        threeDS.authorizeTransaction(verifier.authorizedURLString)
         viewModel.authorizeTransaction(verifier.authorizedURLString)
 
         observeData()
-
-        // TODO: Test load authorize URI.
-//        loadAuthorizeUrl()
     }
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
@@ -89,6 +75,17 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun observeData() {
+        viewModel.authenticationResult.observe(this, { result ->
+            progressDialog.dismiss()
+
+            when (result) {
+                AuthenticationResult.AuthenticationUnsupported -> setupWebView()
+                is AuthenticationResult.AuthenticationCompleted -> TODO()
+                is AuthenticationResult.AuthenticationError -> TODO()
+            }
+        })
+
+        // TODO: Remove obverse `authorizingPaymentResult`
         viewModel.authorizingPaymentResult.observe(this, { result ->
             if (result.isSuccess) {
                 val intent = Intent().apply {
@@ -175,16 +172,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private fun loadAuthorizeUrl() {
-        runOnUiThread {
-            if (verifier.isReady) {
-                progressDialog.dismiss()
-                setupWebView()
-                webView.loadUrl(verifier.authorizedURLString)
-            }
-        }
-    }
-
     private fun authorizeSuccessful(data: Intent? = null) {
         progressDialog.dismiss()
         setResult(Activity.RESULT_OK, data)
@@ -208,8 +195,14 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onDestroy() {
-        clearCache()
-        threeDS.cleanup()
+        // Cleanup WebView
+        webView.clearCache(true)
+        webView.clearHistory()
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookies(null)
+        cookieManager.flush()
+
+        // Cleanup ViewModel
         viewModel.cleanup()
 
         super.onDestroy()
@@ -224,7 +217,8 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onUnsupported() {
-        loadAuthorizeUrl()
+        progressDialog.show()
+        setupWebView()
     }
 
     override fun onError(e: Throwable) {
@@ -238,14 +232,11 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
             domStorageEnabled = true
             databaseEnabled = true
         }
-    }
 
-    private fun clearCache() {
-        webView.clearCache(true)
-        webView.clearHistory()
-
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.removeAllCookies(null)
-        cookieManager.flush()
+        runOnUiThread {
+            if (verifier.isReady) {
+                webView.loadUrl(verifier.authorizedURLString)
+            }
+        }
     }
 }
