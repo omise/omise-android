@@ -46,11 +46,10 @@ internal open class AuthorizingPaymentViewModel(
     private val maxTimeout = 30_000L // 30 secs
     private val requestDelay = 3_000L // 3 secs
 
-    private val _token = MutableLiveData<Result<Token>>()
-    open val token: LiveData<Result<Token>> = _token
-
     private val _authentication = MutableLiveData<AuthenticationResult>()
     open val authentication: LiveData<AuthenticationResult> = _authentication
+
+    private var currentToken: Token? = null
 
     init {
         threeDS.listener = this
@@ -64,7 +63,8 @@ internal open class AuthorizingPaymentViewModel(
                     job.await()
                 }
             } catch (e: TimeoutCancellationException) {
-                _token.postValue(Result.failure(e))
+//                _token.postValue(Result.failure(e))
+                TODO("Return recently token.")
             }
         }
     }
@@ -72,12 +72,12 @@ internal open class AuthorizingPaymentViewModel(
     private suspend fun observeChargeStatus(tokenID: String) {
         try {
             val token = sendGetTokenRequest(tokenID)
+            currentToken = token
             when (token.chargeStatus) {
                 ChargeStatus.Successful,
                 ChargeStatus.Reversed,
                 ChargeStatus.Expired,
                 ChargeStatus.Failed -> {
-                    _token.postValue(Result.success(token))
                     _authentication.postValue(AuthenticationResult.AuthenticationCompleted(token))
                 }
 
@@ -92,10 +92,12 @@ internal open class AuthorizingPaymentViewModel(
                 delay(requestDelay)
                 observeChargeStatus(tokenID)
             } else {
-                _token.postValue(Result.failure(e))
+                // TODO: Return recently token?
+                _authentication.postValue(AuthenticationResult.AuthenticationError(e))
             }
         } catch (e: Throwable) {
-            _token.postValue(Result.failure(e))
+            // TODO: Return recently token?
+            _authentication.postValue(AuthenticationResult.AuthenticationError(e))
         }
     }
 

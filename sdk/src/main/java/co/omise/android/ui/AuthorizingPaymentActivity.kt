@@ -20,7 +20,6 @@ import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
-import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
@@ -31,7 +30,7 @@ import org.jetbrains.annotations.TestOnly
  * In case the authorization needs to be handled by an external app, the SDK opens that external
  * app by default but the Intent callback needs to be handled by the implementer.
  */
-class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
+class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
@@ -84,18 +83,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.token)
                 })
                 is AuthenticationResult.AuthenticationError -> authorizationFailed(result.error)
-            }
-        })
-
-        // TODO: Remove obverse `authorizingPaymentResult`
-        viewModel.token.observe(this, { result ->
-            if (result.isSuccess) {
-                val intent = Intent().apply {
-                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
-                }
-                authorizationSuccessful(intent)
-            } else {
-                authorizationFailed(result.exceptionOrNull())
             }
         })
     }
@@ -210,19 +197,6 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
     override fun onBackPressed() {
         authorizationFailed()
-    }
-
-    override fun onAuthenticated() {
-//        viewModel.observeChargeStatus(tokenID)
-    }
-
-    override fun onUnsupported() {
-        progressDialog.show()
-        setupWebView()
-    }
-
-    override fun onError(e: Throwable) {
-        authorizationFailed(e)
     }
 
     private fun setupWebView() {
