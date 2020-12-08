@@ -64,7 +64,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
         if (viewModelFactory == null) {
-            viewModelFactory = AuthorizingPaymentViewModelFactory(this, omisePublicKey)
+            viewModelFactory = AuthorizingPaymentViewModelFactory(this, omisePublicKey, tokenID)
         }
         return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
     }
@@ -75,25 +75,27 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     private fun observeData() {
-        viewModel.authenticationResult.observe(this, { result ->
+        viewModel.authentication.observe(this, { result ->
             progressDialog.dismiss()
 
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
-                is AuthenticationResult.AuthenticationCompleted -> TODO()
-                is AuthenticationResult.AuthenticationError -> TODO()
+                is AuthenticationResult.AuthenticationCompleted -> authorizationSuccessful(Intent().apply {
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.token)
+                })
+                is AuthenticationResult.AuthenticationError -> authorizationFailed(result.error)
             }
         })
 
         // TODO: Remove obverse `authorizingPaymentResult`
-        viewModel.authorizingPaymentResult.observe(this, { result ->
+        viewModel.token.observe(this, { result ->
             if (result.isSuccess) {
                 val intent = Intent().apply {
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
                 }
-                authorizeSuccessful(intent)
+                authorizationSuccessful(intent)
             } else {
-                authorizeFailed(result.exceptionOrNull())
+                authorizationFailed(result.exceptionOrNull())
             }
         })
     }
@@ -106,7 +108,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
                     val resultIntent = Intent().apply {
                         putExtra(EXTRA_RETURNED_URLSTRING, url)
                     }
-                    authorizeSuccessful(resultIntent)
+                    authorizationSuccessful(resultIntent)
                     return true
                 } else return if (verifier.verifyExternalURL(uri)) {
                     try {
@@ -172,14 +174,12 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private fun authorizeSuccessful(data: Intent? = null) {
-        progressDialog.dismiss()
+    private fun authorizationSuccessful(data: Intent? = null) {
         setResult(Activity.RESULT_OK, data)
         finish()
     }
 
-    private fun authorizeFailed(error: Throwable? = null) {
-        progressDialog.dismiss()
+    private fun authorizationFailed(error: Throwable? = null) {
         val errorIntent = Intent().apply {
             putExtra(OmiseActivity.EXTRA_ERROR, error?.message)
         }
@@ -190,7 +190,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
-            authorizeSuccessful(data)
+            authorizationSuccessful(data)
         }
     }
 
@@ -209,11 +209,11 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onBackPressed() {
-        authorizeFailed()
+        authorizationFailed()
     }
 
     override fun onAuthenticated() {
-        viewModel.observeTokenChange(tokenID)
+//        viewModel.observeChargeStatus(tokenID)
     }
 
     override fun onUnsupported() {
@@ -222,7 +222,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     }
 
     override fun onError(e: Throwable) {
-        authorizeFailed(e)
+        authorizationFailed(e)
     }
 
     private fun setupWebView() {

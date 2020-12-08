@@ -25,36 +25,38 @@ import kotlinx.coroutines.withTimeout
 
 internal open class AuthorizingPaymentViewModelFactory(
         private val activity: Activity,
-        private val omisePublicKey: String
+        private val omisePublicKey: String,
+        private val tokenID: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         val threeDS = ThreeDS(activity)
         val scope = SDKCoroutineScope().coroutineScope
-        return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, scope) as T
+        return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, tokenID, scope) as T
     }
 }
 
 internal open class AuthorizingPaymentViewModel(
         private val client: Client,
         private val threeDS: ThreeDS,
+        private val tokenID: String,
         private val scope: CoroutineScope
 ) : ViewModel(), ThreeDSListener {
 
     private val maxTimeout = 30_000L // 30 secs
     private val requestDelay = 3_000L // 3 secs
 
-    private val _authorizingPaymentResult = MutableLiveData<Result<Token>>()
-    open val authorizingPaymentResult: LiveData<Result<Token>> = _authorizingPaymentResult
+    private val _token = MutableLiveData<Result<Token>>()
+    open val token: LiveData<Result<Token>> = _token
 
-    private val _authenticationResult = MutableLiveData<AuthenticationResult>()
-    open val authenticationResult: LiveData<AuthenticationResult> = _authenticationResult
+    private val _authentication = MutableLiveData<AuthenticationResult>()
+    open val authentication: LiveData<AuthenticationResult> = _authentication
 
     init {
         threeDS.listener = this
     }
 
-    open fun observeTokenChange(tokenID: String) {
+    open fun observeChargeStatus() {
         scope.launch {
             try {
                 val job = async { observeChargeStatus(tokenID) }
@@ -62,7 +64,7 @@ internal open class AuthorizingPaymentViewModel(
                     job.await()
                 }
             } catch (e: TimeoutCancellationException) {
-                _authorizingPaymentResult.postValue(Result.failure(e))
+                _token.postValue(Result.failure(e))
             }
         }
     }
@@ -74,7 +76,10 @@ internal open class AuthorizingPaymentViewModel(
                 ChargeStatus.Successful,
                 ChargeStatus.Reversed,
                 ChargeStatus.Expired,
-                ChargeStatus.Failed -> _authorizingPaymentResult.postValue(Result.success(token))
+                ChargeStatus.Failed -> {
+                    _token.postValue(Result.success(token))
+                    _authentication.postValue(AuthenticationResult.AuthenticationCompleted(token))
+                }
 
                 ChargeStatus.Unknown,
                 ChargeStatus.Pending -> {
@@ -87,10 +92,10 @@ internal open class AuthorizingPaymentViewModel(
                 delay(requestDelay)
                 observeChargeStatus(tokenID)
             } else {
-                _authorizingPaymentResult.postValue(Result.failure(e))
+                _token.postValue(Result.failure(e))
             }
         } catch (e: Throwable) {
-            _authorizingPaymentResult.postValue(Result.failure(e))
+            _token.postValue(Result.failure(e))
         }
     }
 
@@ -103,23 +108,24 @@ internal open class AuthorizingPaymentViewModel(
     }
 
     open fun authorizeTransaction(authorizedUrl: String) {
+        threeDS.authorizeTransaction(authorizedUrl)
     }
 
     override fun onAuthenticated() {
-        TODO("Not yet implemented")
+        observeChargeStatus()
     }
 
     override fun onError(e: Throwable) {
-        TODO("Not yet implemented")
+        _authentication.postValue(AuthenticationResult.AuthenticationError(e))
     }
 
     override fun onUnsupported() {
-        TODO("Not yet implemented")
+        _authentication.postValue(AuthenticationResult.AuthenticationUnsupported)
     }
 }
 
 sealed class AuthenticationResult {
-    object AuthenticationUnsupported: AuthenticationResult()
-    data class AuthenticationCompleted(val token: Token): AuthenticationResult()
-    data class AuthenticationError(val error: Throwable): AuthenticationResult()
+    object AuthenticationUnsupported : AuthenticationResult()
+    data class AuthenticationCompleted(val token: Token) : AuthenticationResult()
+    data class AuthenticationError(val error: Throwable) : AuthenticationResult()
 }
