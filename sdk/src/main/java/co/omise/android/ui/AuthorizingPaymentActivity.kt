@@ -82,7 +82,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 is AuthenticationResult.AuthenticationCompleted -> authorizationSuccessful(Intent().apply {
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.token)
                 })
-                is AuthenticationResult.AuthenticationError -> authorizationFailed(result.error)
+                is AuthenticationResult.AuthenticationFailure -> authorizationFailed(result.error)
             }
         })
     }

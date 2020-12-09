@@ -8,9 +8,11 @@ import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
+import co.omise.android.threeds.data.models.TransactionStatus
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +34,7 @@ class AuthorizingPaymentViewModelTest {
     private val authorizeUrl = "https://www.omise.co/pay"
     private val testDispatcher = TestCoroutineDispatcher()
     private val testCoroutineScope = TestCoroutineScope(testDispatcher)
-    private val viewModel = AuthorizingPaymentViewModel(client, threeDS, tokenID)
+    private val viewModel = spy(AuthorizingPaymentViewModel(client, threeDS, tokenID))
     private val observer: Observer<AuthenticationResult> = mock()
 
     @get:Rule
@@ -53,6 +55,12 @@ class AuthorizingPaymentViewModelTest {
     }
 
     @Test
+    fun onCompleted_shouldExecuteObserveChargeStatus() {
+        viewModel.onCompleted(TransactionStatus.AUTHENTICATED)
+        verify(viewModel).observeChargeStatus()
+    }
+
+    @Test
     fun onUnsupported_when3DSUnsupportedAuthorizationThenSetUnsupportedResult() {
         viewModel.onUnsupported()
         assertEquals(AuthenticationResult.AuthenticationUnsupported, viewModel.authentication.value)
@@ -61,8 +69,8 @@ class AuthorizingPaymentViewModelTest {
     @Test
     fun onError_when3DSReturnErrorThenSetErrorResult() {
         val error = Exception("Something went wrong.")
-        viewModel.onError(error)
-        assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
+        viewModel.onFailure(error)
+        assertEquals(AuthenticationResult.AuthenticationFailure(error), viewModel.authentication.value)
     }
 
     @Test
@@ -78,25 +86,25 @@ class AuthorizingPaymentViewModelTest {
     }
 
     @Test
-    fun observeChargeStatus_whenReceiveAPIErrorThenReturnAuthenticationError() = runBlockingTest {
+    fun observeChargeStatus_whenReceiveAPIErrorThenReturnAuthenticationFailure() = runBlockingTest {
         val error = APIError(code = "authentication_failure", message = "Authentication failure.")
         whenever(client.send(any<Request<Token>>())).thenThrow(error)
 
         viewModel.observeChargeStatus()
         testCoroutineScope.resumeDispatcher()
 
-        assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
+        assertEquals(AuthenticationResult.AuthenticationFailure(error), viewModel.authentication.value)
     }
 
     @Test
-    fun observeChargeStatus_whenReceiveExceptionThenReturnAuthenticationError() = runBlockingTest {
+    fun observeChargeStatus_whenReceiveExceptionThenReturnAuthenticationFailure() = runBlockingTest {
         val error = RuntimeException("Something went wrong.")
         whenever(client.send(any<Request<Token>>())).thenThrow(error)
 
         viewModel.observeChargeStatus()
         testCoroutineScope.resumeDispatcher()
 
-        assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
+        assertEquals(AuthenticationResult.AuthenticationFailure(error), viewModel.authentication.value)
     }
 
     @Test

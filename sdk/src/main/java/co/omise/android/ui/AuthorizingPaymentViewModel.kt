@@ -14,6 +14,7 @@ import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.core.ThreeDSConfig
+import co.omise.android.threeds.data.models.TransactionStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
@@ -51,7 +52,7 @@ internal class AuthorizingPaymentViewModel(
     private var currentToken: Token? = null
 
     init {
-        threeDS.listener = this
+        threeDS.setThreeDSListener(this)
     }
 
     @TestOnly
@@ -99,10 +100,10 @@ internal class AuthorizingPaymentViewModel(
                 delay(requestDelay)
                 observeChargeStatus(tokenID)
             } else {
-                _authentication.postValue(AuthenticationResult.AuthenticationError(e))
+                _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
             }
         } catch (e: Throwable) {
-            _authentication.postValue(AuthenticationResult.AuthenticationError(e))
+            _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
         }
     }
 
@@ -118,12 +119,12 @@ internal class AuthorizingPaymentViewModel(
         threeDS.authorizeTransaction(authorizedUrl)
     }
 
-    override fun onAuthenticated() {
+    override fun onCompleted(transStatus: TransactionStatus) {
         observeChargeStatus()
     }
 
-    override fun onError(e: Throwable) {
-        _authentication.postValue(AuthenticationResult.AuthenticationError(e))
+    override fun onFailure(e: Throwable) {
+        _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
     }
 
     override fun onUnsupported() {
@@ -134,5 +135,5 @@ internal class AuthorizingPaymentViewModel(
 sealed class AuthenticationResult {
     object AuthenticationUnsupported : AuthenticationResult()
     data class AuthenticationCompleted(val token: Token) : AuthenticationResult()
-    data class AuthenticationError(val error: Throwable) : AuthenticationResult()
+    data class AuthenticationFailure(val error: Throwable) : AuthenticationResult()
 }

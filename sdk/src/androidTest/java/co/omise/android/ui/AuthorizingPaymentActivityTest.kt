@@ -132,7 +132,7 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun authorizationFailed_returnActivityResultWithErrorMessage() {
         val error = Exception("Somethings went wrong.")
-        authentication.postValue(AuthenticationResult.AuthenticationError(error))
+        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
 
         val actualResult = activityRule.activityResult
         assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
