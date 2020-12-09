@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 
-internal open class AuthorizingPaymentViewModelFactory(
+internal class AuthorizingPaymentViewModelFactory(
         private val activity: Activity,
         private val omisePublicKey: String,
         private val tokenID: String
@@ -36,7 +36,7 @@ internal open class AuthorizingPaymentViewModelFactory(
     }
 }
 
-internal open class AuthorizingPaymentViewModel(
+internal class AuthorizingPaymentViewModel(
         private val client: Client,
         private val threeDS: ThreeDS,
         private val tokenID: String,
@@ -47,7 +47,7 @@ internal open class AuthorizingPaymentViewModel(
     private val requestDelay = 3_000L // 3 secs
 
     private val _authentication = MutableLiveData<AuthenticationResult>()
-    open val authentication: LiveData<AuthenticationResult> = _authentication
+    val authentication: LiveData<AuthenticationResult> = _authentication
 
     private var currentToken: Token? = null
 
@@ -55,7 +55,7 @@ internal open class AuthorizingPaymentViewModel(
         threeDS.listener = this
     }
 
-    open fun observeChargeStatus() {
+    fun observeChargeStatus() {
         scope.launch {
             try {
                 val job = async { observeChargeStatus(tokenID) }
@@ -103,12 +103,12 @@ internal open class AuthorizingPaymentViewModel(
     private suspend fun sendGetTokenRequest(tokenID: String): Token =
             client.send(Token.GetTokenRequestBuilder(tokenID).build())
 
-    open fun cleanup() {
+    fun cleanup() {
         scope.cancel()
         threeDS.cleanup()
     }
 
-    open fun authorizeTransaction(authorizedUrl: String) {
+    fun authorizeTransaction(authorizedUrl: String) {
         threeDS.authorizeTransaction(authorizedUrl)
     }
 

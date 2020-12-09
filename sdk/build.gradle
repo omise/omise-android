@@ -15,7 +15,7 @@ android {
         versionName omise_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "co.omise.android.OmiseTestRunner"
     }
 
     buildTypes {
@@ -183,8 +183,10 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+    androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
 }
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
