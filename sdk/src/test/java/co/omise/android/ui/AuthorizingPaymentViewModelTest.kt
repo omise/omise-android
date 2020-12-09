@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import co.omise.android.api.Client
 import co.omise.android.api.Request
+import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
@@ -70,6 +71,44 @@ class AuthorizingPaymentViewModelTest {
         whenever(client.send(any<Request<Token>>())).thenReturn(pendingToken, successfulToken)
 
         viewModel.observeChargeStatus()
+        coroutineScope.resumeDispatcher()
+
+        assertEquals(AuthenticationResult.AuthenticationCompleted(successfulToken), viewModel.authentication.value)
+    }
+
+    @Test
+    fun observeChargeStatus_whenReceiveAPIErrorThenReturnAuthenticationError() = runBlockingTest {
+        val error = APIError(code = "authentication_failure", message = "Authentication failure.")
+        whenever(client.send(any<Request<Token>>())).thenThrow(error)
+
+        viewModel.observeChargeStatus()
+        coroutineScope.resumeDispatcher()
+
+        assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
+    }
+
+    @Test
+    fun observeChargeStatus_whenReceiveExceptionThenReturnAuthenticationError() = runBlockingTest {
+        val error = RuntimeException("Something went wrong.")
+        whenever(client.send(any<Request<Token>>())).thenThrow(error)
+
+        viewModel.observeChargeStatus()
+        coroutineScope.resumeDispatcher()
+
+        assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
+    }
+
+    @Test
+    fun observeChargeStatus_whenReceiveSearchUnavailableErrorThenContinueObserveChargeStatus() = runBlockingTest {
+        val error = APIError(code = "search_unavailable", message = "Search token unavailable.")
+        val pendingToken = Token(id = tokenID, chargeStatus = ChargeStatus.Pending)
+        val successfulToken = pendingToken.copy(chargeStatus = ChargeStatus.Successful)
+        whenever(client.send(any<Request<Token>>()))
+                .thenThrow(error)
+                .thenReturn(pendingToken, successfulToken)
+
+        viewModel.observeChargeStatus()
+        coroutineScope.resumeDispatcher()
 
         assertEquals(AuthenticationResult.AuthenticationCompleted(successfulToken), viewModel.authentication.value)
     }

@@ -63,8 +63,9 @@ internal open class AuthorizingPaymentViewModel(
                     job.await()
                 }
             } catch (e: TimeoutCancellationException) {
-//                _token.postValue(Result.failure(e))
-                TODO("Return recently token.")
+                currentToken?.let {
+                    _authentication.postValue(AuthenticationResult.AuthenticationCompleted(it))
+                }
             }
         }
     }
@@ -92,11 +93,9 @@ internal open class AuthorizingPaymentViewModel(
                 delay(requestDelay)
                 observeChargeStatus(tokenID)
             } else {
-                // TODO: Return recently token?
                 _authentication.postValue(AuthenticationResult.AuthenticationError(e))
             }
         } catch (e: Throwable) {
-            // TODO: Return recently token?
             _authentication.postValue(AuthenticationResult.AuthenticationError(e))
         }
     }
