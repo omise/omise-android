@@ -30,9 +30,9 @@ class AuthorizingPaymentViewModelTest {
     private val threeDS: ThreeDS = mock()
     private val tokenID = "tokn_test_1234"
     private val authorizeUrl = "https://www.omise.co/pay"
-    private val dispatcher = TestCoroutineDispatcher()
-    private val coroutineScope = TestCoroutineScope(dispatcher)
-    private val viewModel = AuthorizingPaymentViewModel(client, threeDS, tokenID, coroutineScope)
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testCoroutineScope = TestCoroutineScope(testDispatcher)
+    private val viewModel = AuthorizingPaymentViewModel(client, threeDS, tokenID)
     private val observer: Observer<AuthenticationResult> = mock()
 
     @get:Rule
@@ -42,6 +42,7 @@ class AuthorizingPaymentViewModelTest {
     fun setUp() {
         doNothing().whenever(observer).onChanged(any())
         doNothing().whenever(threeDS).authorizeTransaction(authorizeUrl)
+        viewModel.setCoroutineScope(testCoroutineScope)
         viewModel.authentication.observeForever(observer)
     }
 
@@ -71,7 +72,7 @@ class AuthorizingPaymentViewModelTest {
         whenever(client.send(any<Request<Token>>())).thenReturn(pendingToken, successfulToken)
 
         viewModel.observeChargeStatus()
-        coroutineScope.resumeDispatcher()
+        testCoroutineScope.resumeDispatcher()
 
         assertEquals(AuthenticationResult.AuthenticationCompleted(successfulToken), viewModel.authentication.value)
     }
@@ -82,7 +83,7 @@ class AuthorizingPaymentViewModelTest {
         whenever(client.send(any<Request<Token>>())).thenThrow(error)
 
         viewModel.observeChargeStatus()
-        coroutineScope.resumeDispatcher()
+        testCoroutineScope.resumeDispatcher()
 
         assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
     }
@@ -93,7 +94,7 @@ class AuthorizingPaymentViewModelTest {
         whenever(client.send(any<Request<Token>>())).thenThrow(error)
 
         viewModel.observeChargeStatus()
-        coroutineScope.resumeDispatcher()
+        testCoroutineScope.resumeDispatcher()
 
         assertEquals(AuthenticationResult.AuthenticationError(error), viewModel.authentication.value)
     }
@@ -108,7 +109,7 @@ class AuthorizingPaymentViewModelTest {
                 .thenReturn(pendingToken, successfulToken)
 
         viewModel.observeChargeStatus()
-        coroutineScope.resumeDispatcher()
+        testCoroutineScope.resumeDispatcher()
 
         assertEquals(AuthenticationResult.AuthenticationCompleted(successfulToken), viewModel.authentication.value)
     }

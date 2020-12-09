@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import co.omise.android.api.Client
 import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.models.APIError
@@ -13,7 +14,6 @@ import co.omise.android.models.Token
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.core.ThreeDSConfig
-import co.omise.android.utils.SDKCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
@@ -21,6 +21,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import org.jetbrains.annotations.TestOnly
 
 
 internal class AuthorizingPaymentViewModelFactory(
@@ -31,16 +32,14 @@ internal class AuthorizingPaymentViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         val threeDS = ThreeDS(activity)
-        val scope = SDKCoroutineScope().coroutineScope
-        return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, tokenID, scope) as T
+        return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, tokenID) as T
     }
 }
 
 internal class AuthorizingPaymentViewModel(
         private val client: Client,
         private val threeDS: ThreeDS,
-        private val tokenID: String,
-        private val scope: CoroutineScope
+        private val tokenID: String
 ) : ViewModel(), ThreeDSListener {
 
     private val maxTimeout = 30_000L // 30 secs
@@ -55,8 +54,15 @@ internal class AuthorizingPaymentViewModel(
         threeDS.listener = this
     }
 
+    @TestOnly
+    fun setCoroutineScope(coroutineScope: CoroutineScope) {
+        this.coroutineScope = coroutineScope
+    }
+
+    private var coroutineScope: CoroutineScope = viewModelScope
+
     fun observeChargeStatus() {
-        scope.launch {
+        coroutineScope.launch {
             try {
                 val job = async { observeChargeStatus(tokenID) }
                 withTimeout(maxTimeout) {
@@ -104,7 +110,7 @@ internal class AuthorizingPaymentViewModel(
             client.send(Token.GetTokenRequestBuilder(tokenID).build())
 
     fun cleanup() {
-        scope.cancel()
+        viewModelScope.cancel()
         threeDS.cleanup()
     }
 
