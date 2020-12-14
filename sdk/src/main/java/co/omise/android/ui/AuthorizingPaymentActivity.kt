@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -16,18 +15,14 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.R
-import co.omise.android.config.AuthorizingPaymentConfig
-import co.omise.android.threeds.ThreeDS
-import co.omise.android.threeds.ThreeDSListener
-import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.ui.ProgressView
-import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
+import org.jetbrains.annotations.TestOnly
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -35,20 +30,16 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.*
  * In case the authorization needs to be handled by an external app, the SDK opens that external
  * app by default but the Intent callback needs to be handled by the implementer.
  */
-class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
+class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
-    private val threeDS: ThreeDS by lazy {
-        ThreeDS(this).apply {
-            listener = this@AuthorizingPaymentActivity
-        }
-    }
 
     private lateinit var omisePublicKey: String
     private lateinit var tokenID: String
     private lateinit var viewModel: AuthorizingPaymentViewModel
+    private var viewModelFactory: ViewModelProvider.Factory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,31 +51,38 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         omisePublicKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
         tokenID = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)) { "${OmiseActivity.Companion::EXTRA_TOKEN.name} must not be null." }
 
-        viewModel = ViewModelProvider(this, AuthorizingPaymentViewModelFactory(omisePublicKey)).get(AuthorizingPaymentViewModel::class.java)
-
-        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
-
-        initializeWebView()
-
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
-        setupWebViewClient()
+        viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
         progressDialog.show()
-        threeDS.authorizeTransaction(verifier.authorizedURLString)
+        viewModel.authorizeTransaction(verifier.authorizedURLString)
 
         observeData()
     }
 
+    private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
+        if (viewModelFactory == null) {
+            viewModelFactory = AuthorizingPaymentViewModelFactory(this, omisePublicKey, tokenID)
+        }
+        return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
+    }
+
+    @TestOnly
+    fun setAuthorizingPaymentViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
+        this.viewModelFactory = viewModelFactory
+    }
+
     private fun observeData() {
-        viewModel.authorizingPaymentResult.observe(this, { result ->
-            if (result.isSuccess) {
-                val intent = Intent().apply {
-                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.getOrNull())
-                }
-                authorizeSuccessful(intent)
-            } else {
-                authorizeFailed(result.exceptionOrNull())
+        viewModel.authentication.observe(this, { result ->
+            progressDialog.dismiss()
+
+            when (result) {
+                AuthenticationResult.AuthenticationUnsupported -> setupWebView()
+                is AuthenticationResult.AuthenticationCompleted -> authorizationSuccessful(Intent().apply {
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.token)
+                })
+                is AuthenticationResult.AuthenticationFailure -> authorizationFailed(result.error)
             }
         })
     }
@@ -97,7 +95,7 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
                     val resultIntent = Intent().apply {
                         putExtra(EXTRA_RETURNED_URLSTRING, url)
                     }
-                    authorizeSuccessful(resultIntent)
+                    authorizationSuccessful(resultIntent)
                     return true
                 } else return if (verifier.verifyExternalURL(uri)) {
                     try {
@@ -163,22 +161,12 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
         }
     }
 
-    private fun loadAuthorizeUrl() {
-        runOnUiThread {
-            if (verifier.isReady) {
-                webView.loadUrl(verifier.authorizedURLString)
-            }
-        }
-    }
-
-    private fun authorizeSuccessful(data: Intent? = null) {
-        progressDialog.dismiss()
+    private fun authorizationSuccessful(data: Intent? = null) {
         setResult(Activity.RESULT_OK, data)
         finish()
     }
 
-    private fun authorizeFailed(error: Throwable? = null) {
-        progressDialog.dismiss()
+    private fun authorizationFailed(error: Throwable? = null) {
         val errorIntent = Intent().apply {
             putExtra(OmiseActivity.EXTRA_ERROR, error?.message)
         }
@@ -189,48 +177,40 @@ class AuthorizingPaymentActivity : AppCompatActivity(), ThreeDSListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
-            authorizeSuccessful(data)
+            authorizationSuccessful(data)
         }
     }
 
     override fun onDestroy() {
-        clearCache()
-        threeDS.cleanup()
+        // Cleanup WebView
+        webView.clearCache(true)
+        webView.clearHistory()
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookies(null)
+        cookieManager.flush()
+
+        // Cleanup ViewModel
         viewModel.cleanup()
 
         super.onDestroy()
     }
 
     override fun onBackPressed() {
-        authorizeFailed()
+        authorizationFailed()
     }
 
-    override fun onAuthenticated() {
-        viewModel.observeTokenChange(tokenID)
-    }
-
-    override fun onUnsupported() {
-        loadAuthorizeUrl()
-    }
-
-    override fun onError(e: Throwable) {
-        authorizeFailed(e)
-    }
-
-    private fun initializeWebView() {
+    private fun setupWebView() {
+        setupWebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
             domStorageEnabled = true
             databaseEnabled = true
         }
-    }
 
-    private fun clearCache() {
-        webView.clearCache(true)
-        webView.clearHistory()
-
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.removeAllCookies(null)
-        cookieManager.flush()
+        runOnUiThread {
+            if (verifier.isReady) {
+                webView.loadUrl(verifier.authorizedURLString)
+            }
+        }
     }
 }
