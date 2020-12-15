@@ -122,6 +122,10 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
     }
 
+    /**
+     * Here's the sample of initializing 3D Secure 2.
+     * This should be call before start the {@link AuthorizingPaymentActivity}.
+     */
     private void initializeAuthoringPaymentConfig() {
         UiCustomization uiCustomization = new UiCustomization.Builder()
                 .labelCustomization(new UiCustomization.LabelCustomization.Builder()
