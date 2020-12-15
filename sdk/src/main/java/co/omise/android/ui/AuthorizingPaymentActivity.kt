@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
+import co.omise.android.OmiseError
 import co.omise.android.R
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
@@ -168,7 +169,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun authorizationFailed(error: Throwable? = null) {
         val errorIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_ERROR, error?.message)
+            putExtra(OmiseActivity.EXTRA_ERROR, OmiseError("3D Secure authentication failed.", error))
         }
         setResult(Activity.RESULT_CANCELED, errorIntent)
         finish()
