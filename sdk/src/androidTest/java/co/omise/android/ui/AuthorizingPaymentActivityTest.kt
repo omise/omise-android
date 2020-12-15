@@ -30,9 +30,14 @@ import androidx.test.runner.intercepting.SingleActivityFactory
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
+import co.omise.android.OmiseError
 import co.omise.android.R
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
+import co.omise.android.threeds.data.models.MessageType
+import co.omise.android.threeds.events.ErrorMessage
+import co.omise.android.threeds.events.ProtocolErrorEvent
+import co.omise.android.threeds.events.RuntimeErrorEvent
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_ERROR
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
@@ -136,7 +141,36 @@ class AuthorizingPaymentActivityTest {
 
         val actualResult = activityRule.activityResult
         assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
-        assertEquals(error.message, actualResult.resultData.getStringExtra(EXTRA_ERROR))
+        assertEquals(error, actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_ERROR)!!.cause)
+    }
+
+    @Test
+    fun authorizationFailed_protocolError() {
+        val error = ProtocolErrorEvent(
+                transactionId = "1234",
+                errorMessage = ErrorMessage(
+                        messageType = MessageType.ERROR,
+                        messageVersion = "2.2.0"
+                )
+        )
+        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+
+        val actualResult = activityRule.activityResult
+        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
+        assertEquals(error, actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_ERROR)!!.cause)
+    }
+
+    @Test
+    fun authorizationFailed_runtimeError() {
+        val error = RuntimeErrorEvent(
+                errorCode = "1234",
+                errorMessage = "Something went wrong."
+        )
+        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+
+        val actualResult = activityRule.activityResult
+        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
+        assertEquals(error, actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_ERROR)!!.cause)
     }
 
     @Test
