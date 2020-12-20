@@ -56,7 +56,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
-        progressDialog.show()
+        if (!progressDialog.isShowing){
+            progressDialog.show()
+        }
+
         viewModel.authorizeTransaction(verifier.authorizedURLString)
 
         observeData()
