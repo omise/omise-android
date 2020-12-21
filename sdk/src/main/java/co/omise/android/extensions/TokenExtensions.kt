@@ -5,7 +5,6 @@ import co.omise.android.api.RequestListener
 import co.omise.android.models.APIError
 import co.omise.android.models.ChargeStatus
 import co.omise.android.models.Token
-import co.omise.android.ui.AuthenticationResult
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
@@ -22,75 +21,43 @@ fun Client.observeToken(tokenID: String, listener: RequestListener<Token>) {
         try {
             val job = async {
                 try {
-                    val request = Token.GetTokenRequestBuilder(tokenID).build()
-                    val token = this@observeToken.send(request)
-                    currentToken = token
-                    when (token.chargeStatus) {
-                        ChargeStatus.Successful,
-                        ChargeStatus.Reversed,
-                        ChargeStatus.Expired,
-                        ChargeStatus.Failed -> {
-//                    _authentication.postValue(AuthenticationResult.AuthenticationCompleted(token))
-                        }
-
-                        ChargeStatus.Unknown,
-                        ChargeStatus.Pending -> {
-                            delay(delay)
-//                            observeChargeStatus(tokenID)
-                        }
-                    }
-                } catch (e: APIError) {
-                    if (e.code == "search_unavailable") {
-                        delay(delay)
-//                        observeChargeStatus(tokenID)
-                    } else {
-//                _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
-                    }
-                } catch (e: Throwable) {
-//            _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
+                    currentToken = observeChargeStatus(this@observeToken, tokenID, delay)
+                    currentToken?.let(listener::onRequestSucceed)
+                } catch (e: Exception) {
+                    listener.onRequestFailed(e)
                 }
-
             }
             withTimeout(maxTimeout) {
                 job.await()
             }
         } catch (e: TimeoutCancellationException) {
-            currentToken?.let {
-//                _authentication.postValue(AuthenticationResult.AuthenticationCompleted(it))
-            }
+            currentToken?.let(listener::onRequestSucceed)
         }
-
     }
+}
 
-    suspend fun observeChargeStatus(tokenID: String) {
-        try {
-            val request = Token.GetTokenRequestBuilder(tokenID).build()
-            val token = this@observeToken.send(request)
-            currentToken = token
-            when (token.chargeStatus) {
-                ChargeStatus.Successful,
-                ChargeStatus.Reversed,
-                ChargeStatus.Expired,
-                ChargeStatus.Failed -> {
-//                    _authentication.postValue(AuthenticationResult.AuthenticationCompleted(token))
-                }
-
-                ChargeStatus.Unknown,
-                ChargeStatus.Pending -> {
-                    delay(delay)
-                    observeChargeStatus(tokenID)
-                }
-            }
-        } catch (e: APIError) {
-            if (e.code == "search_unavailable") {
+suspend fun observeChargeStatus(client: Client, tokenID: String, delay: Long): Token {
+    try {
+        val request = Token.GetTokenRequestBuilder(tokenID).build()
+        val token = client.send(request)
+        return when (token.chargeStatus) {
+            ChargeStatus.Unknown,
+            ChargeStatus.Pending -> {
                 delay(delay)
-                observeChargeStatus(tokenID)
-            } else {
-//                _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
+                observeChargeStatus(client, tokenID, delay)
             }
-        } catch (e: Throwable) {
-//            _authentication.postValue(AuthenticationResult.AuthenticationFailure(e))
+            else -> {
+                token
+            }
         }
+    } catch (e: APIError) {
+        if (e.code == "search_unavailable") {
+            delay(delay)
+            return observeChargeStatus(client, tokenID, delay)
+        } else {
+            throw e
+        }
+    } catch (e: Throwable) {
+        throw e
     }
-
 }
