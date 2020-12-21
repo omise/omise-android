@@ -84,7 +84,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
                 is AuthenticationResult.AuthenticationCompleted -> authorizationSuccessful(Intent().apply {
-                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, result.token)
+                    putExtra(OmiseActivity.EXTRA_AUTHORIZATION_COMPLETION, result.completionEvent)
                 })
                 is AuthenticationResult.AuthenticationFailure -> authorizationFailed(result.error)
             }

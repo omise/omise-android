@@ -24,6 +24,11 @@ abstract class OmiseActivity : AppCompatActivity() {
          * [co.omise.android.OmiseError] error object.
          */
         const val EXTRA_ERROR = "OmiseActivity.error"
+
+        /**
+         * [co.omise.android.threeds.events.CompletionEvent] completion object.
+         */
+        const val EXTRA_AUTHORIZATION_COMPLETION = "OmiseActivity.authorizationCompletion"
     }
 
     @VisibleForTesting
