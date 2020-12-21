@@ -21,6 +21,11 @@ abstract class OmiseActivity : AppCompatActivity() {
         const val EXTRA_CARD_OBJECT = "OmiseActivity.cardObject"
 
         /**
+         * [AuthoringPaymentResult] intent result from [AuthorizingPaymentActivity].
+         */
+        const val EXTRA_AUTHORIZING_PAYMENT_RESULT = "OmiseActivity.authorizingPaymentResult"
+
+        /**
          * [String] transaction status.
          * "Y" = Authentication verification successful.
          * "N" = Not Authenticated, account not verified, or transaction denied.
