@@ -21,14 +21,16 @@ abstract class OmiseActivity : AppCompatActivity() {
         const val EXTRA_CARD_OBJECT = "OmiseActivity.cardObject"
 
         /**
-         * [co.omise.android.OmiseError] error object.
+         * [String] transaction status.
+         * "Y" = Authentication verification successful.
+         * "N" = Not Authenticated, account not verified, or transaction denied.
          */
-        const val EXTRA_ERROR = "OmiseActivity.error"
+        const val EXTRA_TRANSACTION_STATUS = "OmiseActivity.transactionStatus"
 
         /**
-         * [co.omise.android.threeds.events.CompletionEvent] completion object.
+         * [String] error message from Activity's result.
          */
-        const val EXTRA_AUTHORIZATION_COMPLETION = "OmiseActivity.authorizationCompletion"
+        const val EXTRA_ERROR = "OmiseActivity.error"
     }
 
     @VisibleForTesting

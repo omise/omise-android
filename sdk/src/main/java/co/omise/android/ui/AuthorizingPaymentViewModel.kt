@@ -11,7 +11,7 @@ import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.core.ThreeDSConfig
-import co.omise.android.threeds.events.CompletionEvent
+import co.omise.android.threeds.data.models.TransactionStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import org.jetbrains.annotations.TestOnly
@@ -58,8 +58,8 @@ internal class AuthorizingPaymentViewModel(
         threeDS.authorizeTransaction(authorizedUrl)
     }
 
-    override fun onCompleted(completionEvent: CompletionEvent) {
-        _authentication.postValue(AuthenticationResult.AuthenticationCompleted(completionEvent))
+    override fun onCompleted(transStatus: TransactionStatus) {
+        _authentication.postValue(AuthenticationResult.AuthenticationCompleted(transStatus))
     }
 
     override fun onFailure(e: Throwable) {
@@ -73,6 +73,6 @@ internal class AuthorizingPaymentViewModel(
 
 sealed class AuthenticationResult {
     object AuthenticationUnsupported : AuthenticationResult()
-    data class AuthenticationCompleted(val completionEvent: CompletionEvent) : AuthenticationResult()
+    data class AuthenticationCompleted(val transStatus: TransactionStatus) : AuthenticationResult()
     data class AuthenticationFailure(val error: Throwable) : AuthenticationResult()
 }

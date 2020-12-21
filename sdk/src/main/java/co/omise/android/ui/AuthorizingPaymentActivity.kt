@@ -19,8 +19,10 @@ import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
-import co.omise.android.OmiseError
 import co.omise.android.R
+import co.omise.android.threeds.data.models.TransactionStatus
+import co.omise.android.threeds.events.ProtocolErrorEvent
+import co.omise.android.threeds.events.RuntimeErrorEvent
 import co.omise.android.threeds.ui.ProgressView
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
@@ -56,9 +58,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
-        if (!progressDialog.isShowing){
-            progressDialog.show()
-        }
+        progressDialog.show()
 
         viewModel.authorizeTransaction(verifier.authorizedURLString)
 
@@ -83,10 +83,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
-                is AuthenticationResult.AuthenticationCompleted -> authorizationSuccessful(Intent().apply {
-                    putExtra(OmiseActivity.EXTRA_AUTHORIZATION_COMPLETION, result.completionEvent)
-                })
-                is AuthenticationResult.AuthenticationFailure -> authorizationFailed(result.error)
+                is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.transStatus)
+                is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
             }
         })
     }
@@ -95,13 +93,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val uri = Uri.parse(url)
-                if (verifier.verifyURL(uri)) {
-                    val resultIntent = Intent().apply {
-                        putExtra(EXTRA_RETURNED_URLSTRING, url)
-                    }
-                    authorizationSuccessful(resultIntent)
-                    return true
-                } else return if (verifier.verifyExternalURL(uri)) {
+                return if (verifier.verifyURL(uri)) {
+                    finishActivityWithSuccessful(url)
+                    true
+                } else if (verifier.verifyExternalURL(uri)) {
                     try {
                         val externalIntent = Intent(Intent.ACTION_VIEW, uri)
                         startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
@@ -165,14 +160,31 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
-    private fun authorizationSuccessful(data: Intent? = null) {
+    private fun finishActivityWithSuccessful(returnedUrl: String) {
+        val successfulIntent = Intent().apply { putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl) }
+        setResult(Activity.RESULT_OK, successfulIntent)
+        finish()
+    }
+
+    private fun finishActivityWithSuccessful(transactionStatus: TransactionStatus) {
+        val successfulIntent = Intent().apply { putExtra(OmiseActivity.EXTRA_TRANSACTION_STATUS, transactionStatus.value) }
+        setResult(Activity.RESULT_OK, successfulIntent)
+        finish()
+    }
+
+    private fun finishActivityWithSuccessful(data: Intent?) {
         setResult(Activity.RESULT_OK, data)
         finish()
     }
 
-    private fun authorizationFailed(error: Throwable? = null) {
+    private fun finishActivityWithFailure(error: Throwable? = null) {
+        val errorMessage = when (error) {
+            is ProtocolErrorEvent -> error.errorMessage.errorDetail
+            is RuntimeErrorEvent -> error.errorMessage
+            else -> error?.message
+        }
         val errorIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_ERROR, OmiseError("3D Secure authentication failed.", error))
+            putExtra(OmiseActivity.EXTRA_ERROR, "3D Secure authentication failed: $errorMessage")
         }
         setResult(Activity.RESULT_CANCELED, errorIntent)
         finish()
@@ -181,7 +193,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
-            authorizationSuccessful(data)
+            finishActivityWithSuccessful(data)
         }
     }
 
@@ -200,7 +212,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        authorizationFailed()
+        finishActivityWithFailure()
     }
 
     private fun setupWebView() {
