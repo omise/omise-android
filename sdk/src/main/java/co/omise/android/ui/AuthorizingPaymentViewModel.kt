@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import co.omise.android.api.Client
 import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
@@ -17,23 +16,15 @@ import kotlinx.coroutines.cancel
 import org.jetbrains.annotations.TestOnly
 
 
-internal class AuthorizingPaymentViewModelFactory(
-        private val activity: Activity,
-        private val omisePublicKey: String,
-        private val tokenID: String
-) : ViewModelProvider.Factory {
+internal class AuthorizingPaymentViewModelFactory(private val activity: Activity) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         val threeDS = ThreeDS(activity)
-        return AuthorizingPaymentViewModel(Client(omisePublicKey), threeDS, tokenID) as T
+        return AuthorizingPaymentViewModel(threeDS) as T
     }
 }
 
-internal class AuthorizingPaymentViewModel(
-        private val client: Client,
-        private val threeDS: ThreeDS,
-        private val tokenID: String
-) : ViewModel(), ThreeDSListener {
+internal class AuthorizingPaymentViewModel(private val threeDS: ThreeDS) : ViewModel(), ThreeDSListener {
 
     private val _authentication = MutableLiveData<AuthenticationResult>()
     val authentication: LiveData<AuthenticationResult> = _authentication

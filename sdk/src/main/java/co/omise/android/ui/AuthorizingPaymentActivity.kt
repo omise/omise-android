@@ -39,20 +39,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
 
-    private lateinit var omisePublicKey: String
-    private lateinit var tokenID: String
     private lateinit var viewModel: AuthorizingPaymentViewModel
     private var viewModelFactory: ViewModelProvider.Factory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
-
-        require(intent.hasExtra(OmiseActivity.EXTRA_PKEY)) { "Can not found ${OmiseActivity.Companion::EXTRA_PKEY.name}." }
-        require(intent.hasExtra(OmiseActivity.EXTRA_TOKEN)) { "Can not found ${OmiseActivity.Companion::EXTRA_TOKEN.name}." }
-
-        omisePublicKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
-        tokenID = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_TOKEN)) { "${OmiseActivity.Companion::EXTRA_TOKEN.name} must not be null." }
 
         supportActionBar?.setTitle(R.string.title_authorizing_payment)
 
@@ -67,7 +59,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
         if (viewModelFactory == null) {
-            viewModelFactory = AuthorizingPaymentViewModelFactory(this, omisePublicKey, tokenID)
+            viewModelFactory = AuthorizingPaymentViewModelFactory(this)
         }
         return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
     }
