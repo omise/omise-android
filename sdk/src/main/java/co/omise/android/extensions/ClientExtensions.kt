@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 
-fun Client.observeToken(id: String, interval: Long = 3_000L, timeout: Long = 30_000L, listener: RequestListener<Token>) {
+fun Client.observeTokenUntilChargeStatusChanged(id: String, interval: Long = 3_000L, timeout: Long = 30_000L, listener: RequestListener<Token>) {
     GlobalScope.launch {
         var currentToken: Token? = null
         var isFirstRequest = true
@@ -24,8 +24,8 @@ fun Client.observeToken(id: String, interval: Long = 3_000L, timeout: Long = 30_
                 } else {
                     delay(interval)
                 }
-                currentToken = retrieveToken(this@observeToken, id)
-            } while (!isChargeStatusUpdated(currentToken))
+                currentToken = retrieveToken(this@observeTokenUntilChargeStatusChanged, id)
+            } while (currentToken == null || currentToken?.chargeStatus in listOf(ChargeStatus.Unknown, ChargeStatus.Pending))
             currentToken?.let(listener::onRequestSucceed)
         }
 
@@ -37,10 +37,6 @@ fun Client.observeToken(id: String, interval: Long = 3_000L, timeout: Long = 30_
             currentToken?.let(listener::onRequestSucceed)
         }
     }
-}
-
-private fun isChargeStatusUpdated(token: Token?): Boolean {
-    return token != null && token.chargeStatus !in listOf(ChargeStatus.Unknown, ChargeStatus.Pending)
 }
 
 private suspend fun retrieveToken(client: Client, tokenID: String): Token? {
