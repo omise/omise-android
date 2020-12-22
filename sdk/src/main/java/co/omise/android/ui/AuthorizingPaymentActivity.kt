@@ -197,7 +197,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun finishActivityWithSuccessful(returnedUrl: String) {
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_RETURNED_URLSTRING, ThreeDS1Completed(returnedUrl))
+            putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
             putExtra(OmiseActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
         }
         setResult(Activity.RESULT_OK, resultIntent)

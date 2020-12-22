@@ -32,16 +32,18 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.OmiseError
 import co.omise.android.R
-import co.omise.android.models.ChargeStatus
-import co.omise.android.models.Token
 import co.omise.android.threeds.data.models.MessageType
+import co.omise.android.threeds.data.models.TransactionStatus
 import co.omise.android.threeds.events.ErrorMessage
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
+import co.omise.android.ui.AuthenticationResult.AuthenticationFailure
+import co.omise.android.ui.AuthenticationResult.AuthenticationUnsupported
+import co.omise.android.ui.AuthoringPaymentResult.Failure
+import co.omise.android.ui.AuthoringPaymentResult.ThreeDS1Completed
+import co.omise.android.ui.AuthoringPaymentResult.ThreeDS2Completed
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_ERROR
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN_OBJECT
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -64,13 +66,9 @@ class AuthorizingPaymentActivityTest {
 
     private val authorizeUrl = "https://www.omise.co/pay"
     private val returnUrl = "http://www.example.com"
-    private val publicKey = "pkey_test_1234"
-    private val tokenID = "tokn_test_1234"
     private val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
         putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
         putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
-        putExtra(EXTRA_PKEY, publicKey)
-        putExtra(EXTRA_TOKEN, tokenID)
     }
 
     private val viewModel: AuthorizingPaymentViewModel = mock()
@@ -92,7 +90,6 @@ class AuthorizingPaymentActivityTest {
     fun setUp() {
         whenever(viewModelFactory.create(AuthorizingPaymentViewModel::class.java)).thenReturn(viewModel)
         whenever(viewModel.authentication).thenReturn(authentication)
-        doNothing().whenever(viewModel).observeChargeStatus()
         doNothing().whenever(viewModel).cleanup()
 
         activityRule.launchActivity(intent)
@@ -106,7 +103,7 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun fallback3DS1_whenTransactionUse3DS1ThenLoadAuthorizeUrlToWebView() {
-        authentication.postValue(AuthenticationResult.AuthenticationUnsupported)
+        authentication.postValue(AuthenticationUnsupported)
 
         onView(withId(R.id.authorizing_payment_webview))
                 .check(matches(withUrl(authorizeUrl)))
@@ -114,7 +111,7 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun activityResultOf3DS1_whenAuthorizationCompletedThenReturnExpectedReturnUrl() {
-        authentication.postValue(AuthenticationResult.AuthenticationUnsupported)
+        authentication.postValue(AuthenticationUnsupported)
 
         onView(withId(R.id.authorizing_payment_webview))
                 .perform(loadUrl(returnUrl))
@@ -122,26 +119,27 @@ class AuthorizingPaymentActivityTest {
         val actualResult = activityRule.activityResult
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
         assertEquals(returnUrl, actualResult.resultData.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING))
+        assertEquals(ThreeDS1Completed(returnUrl), actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
     }
 
     @Test
-    fun authorizationCompleted_returnActivityResultWithToken() {
-        val token = Token(id = tokenID, chargeStatus = ChargeStatus.Successful)
-        authentication.postValue(AuthenticationResult.AuthenticationCompleted(token))
+    fun authorizationCompleted_returnActivityResultWith3DS2CompletedResult() {
+        val completionEvent = co.omise.android.threeds.events.CompletionEvent("test_id_1234", TransactionStatus.AUTHENTICATED)
+        authentication.postValue(AuthenticationResult.AuthenticationCompleted(completionEvent))
 
         val actualResult = activityRule.activityResult
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-        assertEquals(token, actualResult.resultData.getParcelableExtra(EXTRA_TOKEN_OBJECT))
+        assertEquals(ThreeDS2Completed("test_id_1234", "Y"), actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
     }
 
     @Test
     fun authorizationFailed_returnActivityResultWithErrorMessage() {
         val error = Exception("Somethings went wrong.")
-        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+        authentication.postValue(AuthenticationFailure(error))
 
         val actualResult = activityRule.activityResult
-        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
-        assertEquals(error, actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_ERROR)!!.cause)
+        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
+        assertEquals(Failure("3D Secure authentication failed: Somethings went wrong."), actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
     }
 
     @Test
@@ -150,14 +148,15 @@ class AuthorizingPaymentActivityTest {
                 transactionId = "1234",
                 errorMessage = ErrorMessage(
                         messageType = MessageType.ERROR,
-                        messageVersion = "2.2.0"
+                        messageVersion = "2.2.0",
+                        errorDetail = "sdkTransID is invalided UUID format."
                 )
         )
-        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+        authentication.postValue(AuthenticationFailure(error))
 
         val actualResult = activityRule.activityResult
-        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
-        assertEquals(error, actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_ERROR)!!.cause)
+        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
+        assertEquals(Failure("3D Secure authentication failed: sdkTransID is invalided UUID format."), actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_AUTHORIZING_PAYMENT_RESULT))
     }
 
     @Test
@@ -166,16 +165,16 @@ class AuthorizingPaymentActivityTest {
                 errorCode = "1234",
                 errorMessage = "Something went wrong."
         )
-        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+        authentication.postValue(AuthenticationFailure(error))
 
         val actualResult = activityRule.activityResult
-        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
-        assertEquals(error, actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_ERROR)!!.cause)
+        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
+        assertEquals(Failure("3D Secure authentication failed: Something went wrong."), actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_AUTHORIZING_PAYMENT_RESULT))
     }
 
     @Test
     fun activityDestroy_returnCanceledResult() {
-        authentication.postValue(AuthenticationResult.AuthenticationUnsupported)
+        authentication.postValue(AuthenticationUnsupported)
 
         activityRule.activity.finish()
 
@@ -185,7 +184,7 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun webViewDialog_whenJSAlertInvokeThenDisplayAlertDialog() {
-        authentication.postValue(AuthenticationResult.AuthenticationUnsupported)
+        authentication.postValue(AuthenticationUnsupported)
 
         val html = """
             <!DOCTYPE html>

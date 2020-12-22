@@ -10,7 +10,6 @@ import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.core.ThreeDSConfig
-import co.omise.android.threeds.data.models.TransactionStatus
 import co.omise.android.threeds.events.CompletionEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
