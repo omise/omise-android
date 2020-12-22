@@ -198,7 +198,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private fun finishActivityWithSuccessful(returnedUrl: String) {
         val resultIntent = Intent().apply {
             putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
-            putExtra(OmiseActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -206,7 +206,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun finishActivityWithSuccessful(completionEvent: CompletionEvent) {
         val resultIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value))
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -224,9 +224,16 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             else -> error?.message
         }
         val resultIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure("3D Secure authentication failed: $errorMessage"))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure("3D Secure authentication failed: $errorMessage"))
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
+    }
+
+    companion object {
+        /**
+         * [AuthoringPaymentResult] intent result from [AuthorizingPaymentActivity].
+         */
+        const val EXTRA_AUTHORIZING_PAYMENT_RESULT = "OmiseActivity.authorizingPaymentResult"
     }
 }

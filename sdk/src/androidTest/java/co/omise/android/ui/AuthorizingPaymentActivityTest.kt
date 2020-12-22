@@ -42,8 +42,7 @@ import co.omise.android.ui.AuthenticationResult.AuthenticationUnsupported
 import co.omise.android.ui.AuthoringPaymentResult.Failure
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS2Completed
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_ERROR
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
