@@ -13,21 +13,24 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 
-fun Client.observeToken(tokenID: String, listener: RequestListener<Token>) {
-    var currentToken: Token? = null
-    val delay = 3_000L
-    val maxTimeout = 30_000L
+fun Client.observeToken(id: String, interval: Long = 3_000L, timeout: Long = 30_000L, listener: RequestListener<Token>) {
     GlobalScope.launch {
-        try {
-            val job = async {
-                try {
-                    currentToken = observeChargeStatus(this@observeToken, tokenID, delay)
-                    currentToken?.let(listener::onRequestSucceed)
-                } catch (e: Exception) {
-                    listener.onRequestFailed(e)
+        var currentToken: Token? = null
+        var isFirstRequest = true
+        val job = async {
+            do {
+                if (isFirstRequest) {
+                    isFirstRequest = false
+                } else {
+                    delay(interval)
                 }
-            }
-            withTimeout(maxTimeout) {
+                currentToken = retrieveToken(this@observeToken, id)
+            } while (!isChargeStatusUpdated(currentToken))
+            currentToken?.let(listener::onRequestSucceed)
+        }
+
+        try {
+            withTimeout(timeout) {
                 job.await()
             }
         } catch (e: TimeoutCancellationException) {
@@ -36,24 +39,17 @@ fun Client.observeToken(tokenID: String, listener: RequestListener<Token>) {
     }
 }
 
-suspend fun observeChargeStatus(client: Client, tokenID: String, delay: Long): Token {
+private fun isChargeStatusUpdated(token: Token?): Boolean {
+    return token != null && token.chargeStatus !in listOf(ChargeStatus.Unknown, ChargeStatus.Pending)
+}
+
+private suspend fun retrieveToken(client: Client, tokenID: String): Token? {
     try {
         val request = Token.GetTokenRequestBuilder(tokenID).build()
-        val token = client.send(request)
-        return when (token.chargeStatus) {
-            ChargeStatus.Unknown,
-            ChargeStatus.Pending -> {
-                delay(delay)
-                observeChargeStatus(client, tokenID, delay)
-            }
-            else -> {
-                token
-            }
-        }
+        return client.send(request)
     } catch (e: APIError) {
         if (e.code == "search_unavailable") {
-            delay(delay)
-            return observeChargeStatus(client, tokenID, delay)
+            return null
         } else {
             throw e
         }
