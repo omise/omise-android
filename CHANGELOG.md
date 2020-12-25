@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v3.2.1
+
+* **FIXED:** Fix can not open WebView on Android 5.0 (#178)
+
 ## v3.2.0
 
 * **CHANGED:** Support Android API 30
