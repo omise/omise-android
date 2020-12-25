@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
@@ -64,7 +66,7 @@ class CheckoutActivity : AppCompatActivity() {
 
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
-        authorizeUrlButton.setOnClickListener { authorizeUrl() }
+        authorizeUrlButton.setOnClickListener { showAuthorizingPaymentDialog() }
 
 
         val client = Client(PUBLIC_KEY)
@@ -170,10 +172,54 @@ class CheckoutActivity : AppCompatActivity() {
         AuthorizingPaymentConfig.initialize(authPaymentConfig)
     }
 
-    private fun authorizeUrl() {
+    private fun showAuthorizingPaymentDialog() {
+        val marginSize = resources.getDimensionPixelSize(R.dimen.medium_margin)
+        val authorizeUrlEditText = EditText(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(marginSize, marginSize, marginSize, marginSize)
+            }
+
+            hint = "Authorize URL"
+        }
+        val returnUrlEditText = EditText(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(marginSize, marginSize, marginSize, marginSize)
+            }
+            hint = "Return URL"
+        }
+        val containerView = LinearLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.VERTICAL
+            addView(authorizeUrlEditText)
+            addView(returnUrlEditText)
+        }
+        AlertDialog.Builder(this)
+                .setTitle("Authorizing Payment")
+                .setView(containerView)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    authorizeUrl(authorizeUrlEditText.text.toString(), returnUrlEditText.text.toString())
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+    }
+
+    private fun authorizeUrl(authorizeUrl: String, returnUrl: String) {
+        Log.d(TAG, """
+            authorizeUrl=$authorizeUrl
+            returnUrl=$returnUrl
+        """.trimIndent())
         Intent(this, AuthorizingPaymentActivity::class.java).run {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/")
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
             startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
         }
     }
