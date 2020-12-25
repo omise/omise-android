@@ -13,7 +13,7 @@ buildscript {
         min_sdk_version = 21
         target_sdk_version = 30
 
-        omise_threeds_sdk_version = '1.0.0-alpha04'
+        omise_threeds_sdk_version = '1.0.0-alpha05'
 
         kotlin_version = '1.4.10'
         android_plugin_version = '4.1.0'
