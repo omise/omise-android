@@ -8,9 +8,9 @@ import android.util.AttributeSet
  * CardNameEditText is a custom EditText for the credit card name field.
  */
 class CardNameEditText : OmiseEditText {
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     val cardName: String
         get() = text.toString().trim()
