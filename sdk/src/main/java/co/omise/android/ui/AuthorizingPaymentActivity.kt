@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
+import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
@@ -29,6 +30,7 @@ import co.omise.android.ui.AuthoringPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS2Completed
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
+import java.net.ProtocolException
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -217,14 +219,23 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun finishActivityWithFailure(error: Throwable? = null) {
-        val errorMessage = when (error) {
-            is ProtocolErrorEvent -> error.errorMessage.errorDetail
-            is RuntimeErrorEvent -> error.errorMessage
-            else -> error?.message
+    private fun finishActivityWithFailure(throwable: Throwable? = null) {
+        val exception = when (throwable) {
+            is ProtocolErrorEvent ->
+                OmiseException("3D Secure authorization failed: protocol error.", ProtocolException(
+                        """
+                            errorCode=${throwable.errorMessage.errorCode?.value},
+                            errorDetail=${throwable.errorMessage.errorDetail},
+                            errorDescription=${throwable.errorMessage.errorDescription},
+                        """.trimIndent()
+                ))
+            is RuntimeErrorEvent ->
+                OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(throwable.errorMessage))
+            else ->
+                OmiseException("3D Secure authorization failed: ${throwable?.message}", throwable)
         }
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure("3D Secure authentication failed: $errorMessage"))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(exception))
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
