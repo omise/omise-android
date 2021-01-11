@@ -21,6 +21,8 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_U
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.OmiseException
 import co.omise.android.R
+import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
@@ -46,12 +48,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AuthorizingPaymentViewModel
     private var viewModelFactory: ViewModelProvider.Factory? = null
+    private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
 
-        supportActionBar?.setTitle(R.string.title_authorizing_payment)
+        supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
+                ?: getString(R.string.title_authorizing_payment)
 
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
