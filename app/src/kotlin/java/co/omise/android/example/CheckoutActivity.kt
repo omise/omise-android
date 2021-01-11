@@ -7,8 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
@@ -66,7 +64,11 @@ class CheckoutActivity : AppCompatActivity() {
 
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
-        authorizeUrlButton.setOnClickListener { showAuthorizingPaymentDialog() }
+        authorizeUrlButton.setOnClickListener {
+            AuthoringPaymentDialog.showAuthorizingPaymentDialog(this) {authorizeUrl, returnUrl ->
+               startAuthoringPaymentActivity(authorizeUrl, returnUrl)
+            }
+        }
 
 
         val client = Client(PUBLIC_KEY)
@@ -134,9 +136,9 @@ class CheckoutActivity : AppCompatActivity() {
                         .textFontName("fonts/RobotoMono-Regular.ttf")
                         .textFontColor("#000000")
                         .textFontSize(16)
-                        .borderWidth(2)
-                        .cornerRadius(8)
-                        .borderColor("#FF0000")
+                        .borderWidth(1)
+                        .cornerRadius(4)
+                        .borderColor("#1A56F0")
                         .build())
                 .toolbarCustomization(UiCustomization.ToolbarCustomization.Builder()
                         .textFontName("fonts/RobotoMono-Bold.ttf")
@@ -150,15 +152,15 @@ class CheckoutActivity : AppCompatActivity() {
                         .textFontName("fonts/RobotoMono-Bold.ttf")
                         .textFontColor("#FFFFFF")
                         .textFontSize(20)
-                        .backgroundColor("#FF0000")
-                        .cornerRadius(8)
+                        .backgroundColor("#1A56F0")
+                        .cornerRadius(4)
                         .build())
                 .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, UiCustomization.ButtonCustomization.Builder()
                         .textFontName("fonts/RobotoMono-Bold.ttf")
                         .textFontColor("#000000")
                         .textFontSize(20)
                         .backgroundColor("#FFFFFF")
-                        .cornerRadius(8)
+                        .cornerRadius(4)
                         .build())
                 .build()
 
@@ -172,47 +174,7 @@ class CheckoutActivity : AppCompatActivity() {
         AuthorizingPaymentConfig.initialize(authPaymentConfig)
     }
 
-    private fun showAuthorizingPaymentDialog() {
-        val marginSize = resources.getDimensionPixelSize(R.dimen.medium_margin)
-        val authorizeUrlEditText = EditText(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(marginSize, marginSize, marginSize, marginSize)
-            }
-
-            hint = "Authorize URL"
-        }
-        val returnUrlEditText = EditText(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(marginSize, marginSize, marginSize, marginSize)
-            }
-            hint = "Return URL"
-        }
-        val containerView = LinearLayout(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            orientation = LinearLayout.VERTICAL
-            addView(authorizeUrlEditText)
-            addView(returnUrlEditText)
-        }
-        AlertDialog.Builder(this)
-                .setTitle("Authorizing Payment")
-                .setView(containerView)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    authorizeUrl(authorizeUrlEditText.text.toString(), returnUrlEditText.text.toString())
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
-    }
-
-    private fun authorizeUrl(authorizeUrl: String, returnUrl: String) {
+    private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {
         Log.d(TAG, """
             authorizeUrl=$authorizeUrl
             returnUrl=$returnUrl
@@ -261,7 +223,7 @@ class CheckoutActivity : AppCompatActivity() {
                     val resultMessage = when (this) {
                         is AuthoringPaymentResult.ThreeDS1Completed -> "Authorization with 3D Secure version 1 completed: returnedUrl=${this.returnedUrl}"
                         is AuthoringPaymentResult.ThreeDS2Completed -> "Authorization with 3D Secure version 2 completed: transStatus=${this.transStatus}"
-                        is AuthoringPaymentResult.Failure -> "Authorization with 3D Secure failed: ${this.errorMessage}"
+                        is AuthoringPaymentResult.Failure -> this.throwable.message ?: "Unknown error."
                         null -> "Not found the authorization result."
                     }
                     Log.d(TAG, resultMessage)
