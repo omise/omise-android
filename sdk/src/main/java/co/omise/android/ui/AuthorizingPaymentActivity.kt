@@ -27,9 +27,9 @@ import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
-import co.omise.android.ui.AuthoringPaymentResult.Failure
-import co.omise.android.ui.AuthoringPaymentResult.ThreeDS1Completed
-import co.omise.android.ui.AuthoringPaymentResult.ThreeDS2Completed
+import co.omise.android.ui.AuthorizingPaymentResult.Failure
+import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
+import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
 import java.net.ProtocolException
@@ -247,7 +247,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     companion object {
         /**
-         * [AuthoringPaymentResult] intent result from [AuthorizingPaymentActivity].
+         * [AuthorizingPaymentResult] intent result from [AuthorizingPaymentActivity].
          */
         const val EXTRA_AUTHORIZING_PAYMENT_RESULT = "OmiseActivity.authorizingPaymentResult"
     }

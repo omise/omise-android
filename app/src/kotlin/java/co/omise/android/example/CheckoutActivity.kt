@@ -19,8 +19,8 @@ import co.omise.android.models.Amount
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
 import co.omise.android.models.Token
-import co.omise.android.ui.AuthoringPaymentResult
 import co.omise.android.ui.AuthorizingPaymentActivity
+import co.omise.android.ui.AuthorizingPaymentResult
 import co.omise.android.ui.CreditCardActivity
 import co.omise.android.ui.OmiseActivity
 import co.omise.android.ui.PaymentCreatorActivity
@@ -65,7 +65,7 @@ class CheckoutActivity : AppCompatActivity() {
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
         authorizeUrlButton.setOnClickListener {
-            AuthoringPaymentDialog.showAuthorizingPaymentDialog(this) {authorizeUrl, returnUrl ->
+            AuthorizingPaymentDialog.showAuthorizingPaymentDialog(this) {authorizeUrl, returnUrl ->
                startAuthoringPaymentActivity(authorizeUrl, returnUrl)
             }
         }
@@ -218,12 +218,12 @@ class CheckoutActivity : AppCompatActivity() {
 
         when (requestCode) {
             AUTHORIZING_PAYMENT_REQUEST_CODE -> {
-                with(data.getParcelableExtra<AuthoringPaymentResult>(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT)) {
+                with(data.getParcelableExtra<AuthorizingPaymentResult>(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT)) {
                     Log.d(TAG, this.toString())
                     val resultMessage = when (this) {
-                        is AuthoringPaymentResult.ThreeDS1Completed -> "Authorization with 3D Secure version 1 completed: returnedUrl=${this.returnedUrl}"
-                        is AuthoringPaymentResult.ThreeDS2Completed -> "Authorization with 3D Secure version 2 completed: transStatus=${this.transStatus}"
-                        is AuthoringPaymentResult.Failure -> this.throwable.message ?: "Unknown error."
+                        is AuthorizingPaymentResult.ThreeDS1Completed -> "Authorization with 3D Secure version 1 completed: returnedUrl=${this.returnedUrl}"
+                        is AuthorizingPaymentResult.ThreeDS2Completed -> "Authorization with 3D Secure version 2 completed: transStatus=${this.transStatus}"
+                        is AuthorizingPaymentResult.Failure -> this.throwable.message ?: "Unknown error."
                         null -> "Not found the authorization result."
                     }
                     Log.d(TAG, resultMessage)

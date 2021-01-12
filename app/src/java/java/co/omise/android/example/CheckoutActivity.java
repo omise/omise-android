@@ -24,7 +24,7 @@ import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
 import co.omise.android.models.Token;
-import co.omise.android.ui.AuthoringPaymentResult;
+import co.omise.android.ui.AuthorizingPaymentResult;
 import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
@@ -74,7 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
-        authorizeUrlButton.setOnClickListener(view -> AuthoringPaymentDialog.showAuthorizingPaymentDialog(this, this::startAuthoringPaymentActivity));
+        authorizeUrlButton.setOnClickListener(view -> AuthorizingPaymentDialog.showAuthorizingPaymentDialog(this, this::startAuthoringPaymentActivity));
 
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
@@ -215,14 +215,14 @@ public class CheckoutActivity extends AppCompatActivity {
         }
 
         if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE) {
-            AuthoringPaymentResult paymentResult = data.getParcelableExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT);
+            AuthorizingPaymentResult paymentResult = data.getParcelableExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT);
             String resultMessage = null;
-            if (paymentResult instanceof AuthoringPaymentResult.ThreeDS1Completed) {
-                resultMessage = "Authorization with 3D Secure version 1 completed: returnedUrl=" + ((AuthoringPaymentResult.ThreeDS1Completed) paymentResult).getReturnedUrl();
-            } else if (paymentResult instanceof AuthoringPaymentResult.ThreeDS2Completed) {
-                resultMessage = "Authorization with 3D Secure version 2 completed: transStatus=" + ((AuthoringPaymentResult.ThreeDS2Completed) paymentResult).getTransStatus();
-            } else if (paymentResult instanceof AuthoringPaymentResult.Failure) {
-                AuthoringPaymentResult.Failure failure = (AuthoringPaymentResult.Failure) paymentResult;
+            if (paymentResult instanceof AuthorizingPaymentResult.ThreeDS1Completed) {
+                resultMessage = "Authorization with 3D Secure version 1 completed: returnedUrl=" + ((AuthorizingPaymentResult.ThreeDS1Completed) paymentResult).getReturnedUrl();
+            } else if (paymentResult instanceof AuthorizingPaymentResult.ThreeDS2Completed) {
+                resultMessage = "Authorization with 3D Secure version 2 completed: transStatus=" + ((AuthorizingPaymentResult.ThreeDS2Completed) paymentResult).getTransStatus();
+            } else if (paymentResult instanceof AuthorizingPaymentResult.Failure) {
+                AuthorizingPaymentResult.Failure failure = (AuthorizingPaymentResult.Failure) paymentResult;
                 resultMessage = failure.getThrowable().getMessage();
                 failure.getThrowable().printStackTrace();
             } else if (paymentResult == null) {
