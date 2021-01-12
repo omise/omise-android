@@ -438,39 +438,8 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 ```
 
 ## Note on TLS 1.2
-PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suites. This means that every client must connect to Omise service with those valid suites. However TLS 1.2 support in Android depends on the Android OS version. Please follow the following instructions to add support for TLS 1.2 in your app.
 
-### Android API 20 or higher
-You can use our SDK without any changes. The SDK already fully supports communication with the Omise Service using TLS 1.2 with the correct encryption suite.
-
-### Android API 16 to API 19 with Google Play Services
-These versions of the Android API do not support the required encryption suites out of the box. However `Google Play Services` has the `ProviderInstaller` API to add the required support. You may already use  Google Play Services in your app; Google Play Services includes many common libraries used in Android apps including GCM, Analytics and more. You can add support for the proper encryption suite with Google Play Services by carrying out the following steps.
-
-1. Add Google Play Service Analytics to your app grade setting:
-
-```gradle
- implementation 'com.google.android.gms:play-services-analytics:17.0.0'
- ```
- 
-2. Ask the ProviderInstaller to install the encryption suites with the following code:
-
-```kotlin
-if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-    try {
-        ProviderInstaller.installIfNeeded(this)
-    } catch (e: GooglePlayServicesRepairableException) {
-        e.printStackTrace()
-    } catch (e: GooglePlayServicesNotAvailableException) {
-        e.printStackTrace()
-    }
-}
- ```
- 
-> **Note:** Google Play Services may not available on every brand or model. Please be mindful about Google Play Services compatibility.
-
-### API 15 or lower
-These versions of the Android API do not support the required encryption suites which means that Android devices running those OS versions will not be able to securely connect to our services. We recommend that you drop support for those API versions.
-
+PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suites. This means that every client must connect to Omise service with those valid suites. However TLS 1.2 support in Android depends on the Android OS version. Since Omise Android SDK version 4+ is required minimum version Android 5.0+ (API 21). The SDK already fully supports communication with the Omise Service using TLS 1.2 with the correct encryption suite.
 
 ## Contributing
 
