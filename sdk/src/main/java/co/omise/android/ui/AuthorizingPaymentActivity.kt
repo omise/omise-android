@@ -22,11 +22,11 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL
 import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.threeds.challenge.ProgressView
 import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
-import co.omise.android.threeds.ui.ProgressView
 import co.omise.android.ui.AuthoringPaymentResult.Failure
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS2Completed
