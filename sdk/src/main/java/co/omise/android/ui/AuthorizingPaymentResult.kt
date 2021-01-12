@@ -25,6 +25,7 @@ sealed class AuthorizingPaymentResult : Parcelable {
 
     /**
      * The failure result that occurred from the authorizing process.
+     * @param throwable if authorization is failed.
      */
     @Parcelize
     data class Failure(val throwable: Throwable) : AuthorizingPaymentResult()
