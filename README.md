@@ -437,7 +437,6 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 -dontwarn com.squareup.**
 ```
 
-
 ## Note on TLS 1.2
 PCI-DSS standard requires the service to communicate in *TLS 1.2* or higher using strong encryption suites. This means that every client must connect to Omise service with those valid suites. However TLS 1.2 support in Android depends on the Android OS version. Please follow the following instructions to add support for TLS 1.2 in your app.
 

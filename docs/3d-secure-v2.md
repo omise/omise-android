@@ -60,6 +60,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 You can check out the sample implementation in the [CheckoutActivity](../app/src/kotlin/java/co/omise/android/example/CheckoutActivity.kt) class in the sample app. 
 
+> #### Note
+> To check the charge status after completed the authorizing payment process, you can implement [`Client.observeTokenUntilChargeStatusChanged()`](#observing-charge-status-in-the-token) function to observe the charge status changes.
+
 ## Using UI customization
 
 In the challenge flow, the Omise SDK allows developers to customize UI elements in the challenge flow. To customize UI, you can create an instance of `UiCustomization` and set your preferred properties through the `UiCustomization` class. Finally, set `UiCustomization` instance through `ThreeDSConfig.uiCustomization()` function.
@@ -77,3 +80,20 @@ val uiCustomization = UiCustomization.Builder()
 ```
 
 You can check out the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable UI elements that you can customize in the challenge flow.
+
+## Observing charge status in the token
+
+This is an utility function for observing the token until the charge status changed. You can use function for checking the charge status after completed the authorizing payment process.
+
+```kotlin
+val client = Client("pkey_test_1234")
+client.observeTokenUntilChargeStatusChanged("tokn_test_1234", object: RequestListener<Token> {
+    override fun onRequestSucceed(model: Token) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRequestFailed(throwable: Throwable) {
+        TODO("Not yet implemented")
+    }
+})
+```
