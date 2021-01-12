@@ -30,8 +30,9 @@ import androidx.test.runner.intercepting.SingleActivityFactory
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
-import co.omise.android.OmiseError
+import co.omise.android.OmiseException
 import co.omise.android.R
+import co.omise.android.threeds.data.models.ErrorCode
 import co.omise.android.threeds.data.models.MessageType
 import co.omise.android.threeds.data.models.TransactionStatus
 import co.omise.android.threeds.events.ErrorMessage
@@ -54,6 +55,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -133,12 +135,14 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun authorizationFailed_returnActivityResultWithErrorMessage() {
-        val error = Exception("Somethings went wrong.")
-        authentication.postValue(AuthenticationFailure(error))
+        val testException = Exception("Somethings went wrong.")
+        authentication.postValue(AuthenticationFailure(testException))
 
         val actualResult = activityRule.activityResult
+        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-        assertEquals(Failure("3D Secure authentication failed: Somethings went wrong."), actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
+        assertTrue(actualFailure.throwable is OmiseException)
+        assertEquals("3D Secure authorization failed: Somethings went wrong.", actualFailure.throwable.message)
     }
 
     @Test
@@ -148,14 +152,25 @@ class AuthorizingPaymentActivityTest {
                 errorMessage = ErrorMessage(
                         messageType = MessageType.ERROR,
                         messageVersion = "2.2.0",
-                        errorDetail = "sdkTransID is invalided UUID format."
+                        errorCode = ErrorCode.InvalidFormat,
+                        errorDetail = "sdkTransID is invalided UUID format.",
+                        errorDescription = "sdkTransID is invalided UUID format.",
                 )
         )
         authentication.postValue(AuthenticationFailure(error))
 
         val actualResult = activityRule.activityResult
+        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-        assertEquals(Failure("3D Secure authentication failed: sdkTransID is invalided UUID format."), actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_AUTHORIZING_PAYMENT_RESULT))
+        assertTrue(actualFailure.throwable is OmiseException)
+        assertEquals("3D Secure authorization failed: protocol error.", actualFailure.throwable.message)
+        assertEquals(
+                """
+                    errorCode=203,
+                    errorDetail=sdkTransID is invalided UUID format.,
+                    errorDescription=sdkTransID is invalided UUID format.,
+                """.trimIndent(),
+                actualFailure.throwable.cause!!.message)
     }
 
     @Test
@@ -167,8 +182,11 @@ class AuthorizingPaymentActivityTest {
         authentication.postValue(AuthenticationFailure(error))
 
         val actualResult = activityRule.activityResult
+        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-        assertEquals(Failure("3D Secure authentication failed: Something went wrong."), actualResult.resultData.getParcelableExtra<OmiseError>(EXTRA_AUTHORIZING_PAYMENT_RESULT))
+        assertTrue(actualFailure.throwable is OmiseException)
+        assertEquals("3D Secure authorization failed: runtime error.", actualFailure.throwable.message)
+        assertEquals("Something went wrong.", actualFailure.throwable.cause!!.message)
     }
 
     @Test

@@ -12,5 +12,5 @@ sealed class AuthoringPaymentResult : Parcelable {
     data class ThreeDS2Completed(val sdkTransID: String, val transStatus: String) : AuthoringPaymentResult()
 
     @Parcelize
-    data class Failure(val errorMessage: String) : AuthoringPaymentResult()
+    data class Failure(val throwable: Throwable) : AuthoringPaymentResult()
 }

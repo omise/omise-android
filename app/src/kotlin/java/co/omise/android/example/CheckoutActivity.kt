@@ -2,6 +2,7 @@ package co.omise.android.example
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -9,7 +10,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
-import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
 import co.omise.android.config.AuthorizingPaymentConfig
@@ -19,6 +19,7 @@ import co.omise.android.models.Amount
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
 import co.omise.android.models.Token
+import co.omise.android.ui.AuthoringPaymentResult
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.CreditCardActivity
 import co.omise.android.ui.OmiseActivity
@@ -34,8 +35,8 @@ class CheckoutActivity : AppCompatActivity() {
 
     companion object {
 
+        private const val TAG = "CheckoutActivity"
         private const val PUBLIC_KEY = "[PUBLIC_KEY]"
-        private const val TOKEN_ID = "[TOKEN_ID]"
 
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
         private const val PAYMENT_CREATOR_REQUEST_CODE = 0x3D6
@@ -63,7 +64,11 @@ class CheckoutActivity : AppCompatActivity() {
 
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
-        authorizeUrlButton.setOnClickListener { authorizeUrl() }
+        authorizeUrlButton.setOnClickListener {
+            AuthoringPaymentDialog.showAuthorizingPaymentDialog(this) {authorizeUrl, returnUrl ->
+               startAuthoringPaymentActivity(authorizeUrl, returnUrl)
+            }
+        }
 
 
         val client = Client(PUBLIC_KEY)
@@ -131,9 +136,9 @@ class CheckoutActivity : AppCompatActivity() {
                         .textFontName("fonts/RobotoMono-Regular.ttf")
                         .textFontColor("#000000")
                         .textFontSize(16)
-                        .borderWidth(2)
-                        .cornerRadius(8)
-                        .borderColor("#FF0000")
+                        .borderWidth(1)
+                        .cornerRadius(4)
+                        .borderColor("#1A56F0")
                         .build())
                 .toolbarCustomization(UiCustomization.ToolbarCustomization.Builder()
                         .textFontName("fonts/RobotoMono-Bold.ttf")
@@ -147,15 +152,15 @@ class CheckoutActivity : AppCompatActivity() {
                         .textFontName("fonts/RobotoMono-Bold.ttf")
                         .textFontColor("#FFFFFF")
                         .textFontSize(20)
-                        .backgroundColor("#FF0000")
-                        .cornerRadius(8)
+                        .backgroundColor("#1A56F0")
+                        .cornerRadius(4)
                         .build())
                 .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, UiCustomization.ButtonCustomization.Builder()
                         .textFontName("fonts/RobotoMono-Bold.ttf")
                         .textFontColor("#000000")
                         .textFontSize(20)
                         .backgroundColor("#FFFFFF")
-                        .cornerRadius(8)
+                        .cornerRadius(4)
                         .build())
                 .build()
 
@@ -169,12 +174,14 @@ class CheckoutActivity : AppCompatActivity() {
         AuthorizingPaymentConfig.initialize(authPaymentConfig)
     }
 
-    private fun authorizeUrl() {
+    private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {
+        Log.d(TAG, """
+            authorizeUrl=$authorizeUrl
+            returnUrl=$returnUrl
+        """.trimIndent())
         Intent(this, AuthorizingPaymentActivity::class.java).run {
-            putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
-            putExtra(OmiseActivity.EXTRA_TOKEN, TOKEN_ID)
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/")
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("http://www.example.com"))
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
             startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
         }
     }
@@ -211,8 +218,17 @@ class CheckoutActivity : AppCompatActivity() {
 
         when (requestCode) {
             AUTHORIZING_PAYMENT_REQUEST_CODE -> {
-                val url = data.getStringExtra(EXTRA_RETURNED_URLSTRING)
-                snackbar.setText(url ?: "No returned URL.").show()
+                with(data.getParcelableExtra<AuthoringPaymentResult>(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT)) {
+                    Log.d(TAG, this.toString())
+                    val resultMessage = when (this) {
+                        is AuthoringPaymentResult.ThreeDS1Completed -> "Authorization with 3D Secure version 1 completed: returnedUrl=${this.returnedUrl}"
+                        is AuthoringPaymentResult.ThreeDS2Completed -> "Authorization with 3D Secure version 2 completed: transStatus=${this.transStatus}"
+                        is AuthoringPaymentResult.Failure -> this.throwable.message ?: "Unknown error."
+                        null -> "Not found the authorization result."
+                    }
+                    Log.d(TAG, resultMessage)
+                    snackbar.setText(resultMessage).show()
+                }
             }
             PAYMENT_CREATOR_REQUEST_CODE -> {
                 if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {

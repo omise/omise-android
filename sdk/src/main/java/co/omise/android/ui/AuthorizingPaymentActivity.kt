@@ -19,16 +19,20 @@ import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
+import co.omise.android.OmiseException
 import co.omise.android.R
+import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.threeds.challenge.ProgressView
+import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
-import co.omise.android.threeds.ui.ProgressView
 import co.omise.android.ui.AuthoringPaymentResult.Failure
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthoringPaymentResult.ThreeDS2Completed
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
+import java.net.ProtocolException
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -44,12 +48,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AuthorizingPaymentViewModel
     private var viewModelFactory: ViewModelProvider.Factory? = null
+    private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
 
-        supportActionBar?.setTitle(R.string.title_authorizing_payment)
+        supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
+                ?: getString(R.string.title_authorizing_payment)
 
         viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
@@ -217,14 +223,23 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun finishActivityWithFailure(error: Throwable? = null) {
-        val errorMessage = when (error) {
-            is ProtocolErrorEvent -> error.errorMessage.errorDetail
-            is RuntimeErrorEvent -> error.errorMessage
-            else -> error?.message
+    private fun finishActivityWithFailure(throwable: Throwable? = null) {
+        val exception = when (throwable) {
+            is ProtocolErrorEvent ->
+                OmiseException("3D Secure authorization failed: protocol error.", ProtocolException(
+                        """
+                            errorCode=${throwable.errorMessage.errorCode?.value},
+                            errorDetail=${throwable.errorMessage.errorDetail},
+                            errorDescription=${throwable.errorMessage.errorDescription},
+                        """.trimIndent()
+                ))
+            is RuntimeErrorEvent ->
+                OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(throwable.errorMessage))
+            else ->
+                OmiseException("3D Secure authorization failed: ${throwable?.message}", throwable)
         }
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure("3D Secure authentication failed: $errorMessage"))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(exception))
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
