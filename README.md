@@ -15,7 +15,7 @@ Hop into our forum (click the badge above) or email our support team if you have
 ## Requirements
 
 * Public key. [Register for an Omise account](https://dashboard.omise.co/signup) to obtain your API keys.
-* Android 4.1+ (API 16) target or higher.
+* Android 5.0+ (API 21) target or higher.
 * Android Studio and Gradle build system.
 
 ## Merchant Compliance
