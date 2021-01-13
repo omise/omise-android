@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
@@ -196,6 +197,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         runOnUiThread {
             if (verifier.isReady) {
+                webView.isVisible = true
                 webView.loadUrl(verifier.authorizedURLString)
             }
         }

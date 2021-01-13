@@ -40,10 +40,10 @@ import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
 import co.omise.android.ui.AuthenticationResult.AuthenticationFailure
 import co.omise.android.ui.AuthenticationResult.AuthenticationUnsupported
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -107,6 +107,7 @@ class AuthorizingPaymentActivityTest {
         authentication.postValue(AuthenticationUnsupported)
 
         onView(withId(R.id.authorizing_payment_webview))
+                .check(matches(isDisplayed()))
                 .check(matches(withUrl(authorizeUrl)))
     }
 
