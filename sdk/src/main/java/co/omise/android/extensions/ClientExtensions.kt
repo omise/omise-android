@@ -14,7 +14,7 @@ import kotlinx.coroutines.withTimeout
 
 
 /**
- * This is an utility function for observing the token until the charge status changed.
+ * This is an utility function for observing the token until the charge status changes.
  *
  * @param id Token ID.
  * @param listener [RequestListener] the callback to be invoked when charnge staus changed or request failed.

@@ -42,7 +42,7 @@ intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PA
 startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
 ```
 
-After the cardholder completed the authorizing payment process,  the `onActivityResult()` function will be called, you can handle the authorizing payment result there.
+After the cardholder completes the payment authorization process, the `onActivityResult()` function will be called in which you can handle the payment authorization result.
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -61,7 +61,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 You can check out the sample implementation in the [CheckoutActivity](../app/src/kotlin/java/co/omise/android/example/CheckoutActivity.kt) class in the sample app. 
 
 > #### Note
-> To check the charge status after completed the authorizing payment process, you can implement [`Client.observeTokenUntilChargeStatusChanged()`](#observing-charge-status-in-the-token) function to observe the charge status changes.
+> To check the charge status after the payment authorization process completes, you can implement the [`Client.observeTokenUntilChargeStatusChanged()`](#observing-charge-status-in-the-token) function to observe changes in the charge status.
 
 ## Using UI customization
 
@@ -79,11 +79,11 @@ val uiCustomization = UiCustomization.Builder()
           .build()
 ```
 
-You can check out the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable UI elements that you can customize in the challenge flow.
+You can check out the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable UI elements in the challenge flow.
 
 ## Observing charge status in the token
 
-This is an utility function for observing the token until the charge status changed. You can use function for checking the charge status after completed the authorizing payment process.
+This is an utility function for observing the token until its charge status changes. You can use this function for checking the charge status after the payment authorization process completes.
 
 ```kotlin
 val client = Client("pkey_test_1234")
