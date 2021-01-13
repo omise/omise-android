@@ -7,10 +7,15 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="android:textViewStyle">@style/SampleTextView</item>
         <item name="android:editTextStyle">@style/SampleEditText</item>
         <item name="materialButtonStyle">@style/SampleButton</item>
         <item name="editTextLabelStyle">@style/SampleEditTextLabel</item>
         <item name="editTextErrorStyle">@style/SampleEditTextError</item>
+    </style>
+
+    <style name="SampleTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="SampleEditText" parent="Widget.AppCompat.EditText">

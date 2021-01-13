@@ -7,7 +7,7 @@
         android:icon="@drawable/icon_app"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/OmiseTheme">
+        android:theme="@style/SampleTheme">
         <activity android:name=".PaymentResultActivity"></activity>
         <activity android:name=".CheckoutActivity">
             <intent-filter>
