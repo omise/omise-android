@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 
 
-class AuthoringPaymentDialog {
+class AuthorizingPaymentDialog {
     companion object {
         @JvmStatic
         fun showAuthorizingPaymentDialog(context: Context, listener: (authorizeUrl: String, returnUrl: String) -> Unit) {

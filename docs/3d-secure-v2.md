@@ -39,26 +39,29 @@ In your activity, you can use the `startActivityForResult()` function to start t
 val intent = Intent(this, AuthorizingPaymentActivity::class.java)
 intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, AUTHORIZED_URL)
 intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, EXPECTED_URL_PATTERNS)
-intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
-intent.putExtra(OmiseActivity.EXTRA_TOKEN, TOKEN_ID)
 startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
 ```
 
-After the cardholder completes the authorizing payment process,  the `onActivityResult()` function will be called, you can handle the authorizing payment result there.
+After the cardholder completes the payment authorization process, the `onActivityResult()` function will be called in which you can handle the payment authorization result.
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
-        // Available only in 3D Secure 1
-        val url = data?.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING)
-        // Available only in 3D Secure 2
-        val token = data?.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
+  super.onActivityResult(requestCode, resultCode, data)
+  if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+    val result = data.getParcelableExtra<AuthorizingPaymentResult>(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT)
+    when (result) {
+      is AuthorizingPaymentResult.ThreeDS1Completed -> TODO()
+      is AuthorizingPaymentResult.ThreeDS2Completed -> TODO()
+      is AuthorizingPaymentResult.Failure -> TODO()
     }
+  }
 }
 ```
 
 You can check out the sample implementation in the [CheckoutActivity](../app/src/kotlin/java/co/omise/android/example/CheckoutActivity.kt) class in the sample app. 
+
+> #### Note
+> To check the charge status after the payment authorization process completes, you can implement the [`Client.observeTokenUntilChargeStatusChanged()`](#observing-charge-status-in-the-token) function to observe changes in the charge status.
 
 ## Using UI customization
 
@@ -76,4 +79,21 @@ val uiCustomization = UiCustomization.Builder()
           .build()
 ```
 
-You can check out the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable elements that you can customize in the challenge flow.
+You can check out the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable UI elements in the challenge flow.
+
+## Observing charge status in the token
+
+This is an utility function for observing the token until its charge status changes. You can use this function for checking the charge status after the payment authorization process completes.
+
+```kotlin
+val client = Client("pkey_test_1234")
+client.observeTokenUntilChargeStatusChanged("tokn_test_1234", object: RequestListener<Token> {
+    override fun onRequestSucceed(model: Token) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onRequestFailed(throwable: Throwable) {
+        TODO("Not yet implemented")
+    }
+})
+```

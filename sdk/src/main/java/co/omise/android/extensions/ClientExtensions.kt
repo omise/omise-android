@@ -13,7 +13,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 
-fun Client.observeTokenUntilChargeStatusChanged(id: String, interval: Long = 3_000L, timeout: Long = 30_000L, listener: RequestListener<Token>) {
+/**
+ * This is an utility function for observing the token until the charge status changes.
+ *
+ * @param id Token ID.
+ * @param listener [RequestListener] the callback to be invoked when charnge staus changed or request failed.
+ * @param interval time interval in millisecond.
+ * @param timeout maximum timeout in millisecond.
+ */
+fun Client.observeTokenUntilChargeStatusChanged(id: String, listener: RequestListener<Token>, interval: Long = 3_000L, timeout: Long = 30_000L) {
     GlobalScope.launch {
         var currentToken: Token? = null
         var isFirstRequest = true
