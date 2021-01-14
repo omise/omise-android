@@ -75,7 +75,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
         }
 
         /**
-         * Set the theme resource for overriding the default theme.
+         * Set the theme resource to override the default theme. The theme resource will not override the EditText and Button
+         * because they are custom widgets. However you can you [TextBoxCustomization] and [ButtonCustomization] to customize those elements.
          *
          * @param theme Theme resource.
          */
