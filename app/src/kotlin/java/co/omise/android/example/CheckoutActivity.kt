@@ -124,7 +124,6 @@ class CheckoutActivity : AppCompatActivity() {
      */
     private fun initializeAuthoringPaymentConfig() {
         val uiCustomization = UiCustomization.Builder()
-                .theme(R.style.SampleTheme)
                 .labelCustomization(UiCustomization.LabelCustomization.Builder()
                         .textFontName("fonts/RobotoMono-Regular.ttf")
                         .textFontColor("#000000")

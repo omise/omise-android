@@ -129,7 +129,6 @@ public class CheckoutActivity extends AppCompatActivity {
      */
     private void initializeAuthoringPaymentConfig() {
         UiCustomization uiCustomization = new UiCustomization.Builder()
-                .theme(R.style.SampleTheme)
                 .labelCustomization(new UiCustomization.LabelCustomization.Builder()
                         .textFontName("fonts/RobotoMono-Regular.ttf")
                         .textFontColor("#000000")
