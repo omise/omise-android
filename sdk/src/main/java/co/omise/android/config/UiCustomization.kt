@@ -1,5 +1,7 @@
 package co.omise.android.config
 
+import androidx.annotation.StyleRes
+
 
 /**
  * Configuration for UI customization in the challenge flow.
@@ -72,6 +74,19 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
             )
         }
 
+        /**
+         * Set the theme resource to override the default theme. The theme resource will not override the EditText and Button
+         * because they are custom widgets. However you can you [TextBoxCustomization] and [ButtonCustomization] to customize those elements.
+         *
+         * @param theme Theme resource.
+         */
+        fun theme(@StyleRes theme: Int): Builder = apply {
+            uiCustomization = uiCustomization.copy(
+                    uiCustomization = uiCustomization.uiCustomization.copy(
+                            theme = theme
+                    )
+            )
+        }
         /**
          * Create an instance of [UiCustomization].
          *

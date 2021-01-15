@@ -221,9 +221,12 @@ class CheckoutActivity : AppCompatActivity() {
                 with(data.getParcelableExtra<AuthorizingPaymentResult>(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT)) {
                     Log.d(TAG, this.toString())
                     val resultMessage = when (this) {
-                        is AuthorizingPaymentResult.ThreeDS1Completed -> "Authorization with 3D Secure version 1 completed: returnedUrl=${this.returnedUrl}"
-                        is AuthorizingPaymentResult.ThreeDS2Completed -> "Authorization with 3D Secure version 2 completed: transStatus=${this.transStatus}"
-                        is AuthorizingPaymentResult.Failure -> this.throwable.message ?: "Unknown error."
+                        is AuthorizingPaymentResult.ThreeDS1Completed -> "Authorization with 3D Secure version 1 completed: returnedUrl=${returnedUrl}"
+                        is AuthorizingPaymentResult.ThreeDS2Completed -> "Authorization with 3D Secure version 2 completed: transStatus=${transStatus}"
+                        is AuthorizingPaymentResult.Failure -> {
+                            Log.e(TAG, throwable.message, throwable.cause)
+                            throwable.message ?: "Unknown error."
+                        }
                         null -> "Not found the authorization result."
                     }
                     Log.d(TAG, resultMessage)
