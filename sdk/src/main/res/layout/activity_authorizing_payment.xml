@@ -7,10 +7,11 @@
     tools:context="co.omise.android.ui.AuthorizingPaymentActivity">
 
     <WebView
+        android:id="@+id/authorizing_payment_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/authorizing_payment_webview" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone" />
 </RelativeLayout>

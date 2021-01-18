@@ -1,12 +1,11 @@
 package co.omise.android.ui
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -16,11 +15,25 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
+import co.omise.android.OmiseException
 import co.omise.android.R
+import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.threeds.challenge.ProgressView
+import co.omise.android.threeds.core.ThreeDSConfig
+import co.omise.android.threeds.events.CompletionEvent
+import co.omise.android.threeds.events.ProtocolErrorEvent
+import co.omise.android.threeds.events.RuntimeErrorEvent
+import co.omise.android.ui.AuthorizingPaymentResult.Failure
+import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
+import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
+import org.jetbrains.annotations.TestOnly
+import java.net.ProtocolException
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -30,22 +43,75 @@ import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_p
  */
 class AuthorizingPaymentActivity : AppCompatActivity() {
 
+    private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
-    private lateinit var verifier: AuthorizingPaymentURLVerifier
+    private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
+
+    private lateinit var viewModel: AuthorizingPaymentViewModel
+    private var viewModelFactory: ViewModelProvider.Factory? = null
+    private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
 
-        initializeWebView()
+        supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
+                ?: getString(R.string.title_authorizing_payment)
 
-        supportActionBar?.setTitle(R.string.title_authorizing_payment)
+        viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
 
-        verifier = AuthorizingPaymentURLVerifier(intent)
-        if (verifier.isReady) {
-            webView.loadUrl(verifier.authorizedURLString)
+        progressDialog.show()
+
+        viewModel.authorizeTransaction(verifier.authorizedURLString)
+
+        observeData()
+    }
+
+    private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
+        if (viewModelFactory == null) {
+            viewModelFactory = AuthorizingPaymentViewModelFactory(this)
         }
+        return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
+    }
 
+    @TestOnly
+    fun setAuthorizingPaymentViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
+        this.viewModelFactory = viewModelFactory
+    }
+
+    private fun observeData() {
+        viewModel.authentication.observe(this, { result ->
+            progressDialog.dismiss()
+
+            when (result) {
+                AuthenticationResult.AuthenticationUnsupported -> setupWebView()
+                is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.completionEvent)
+                is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
+            }
+        })
+    }
+
+    private fun setupWebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                val uri = Uri.parse(url)
+                return if (verifier.verifyURL(uri)) {
+                    finishActivityWithSuccessful(url)
+                    true
+                } else if (verifier.verifyExternalURL(uri)) {
+                    try {
+                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+                        true
+                    } catch (e: ActivityNotFoundException) {
+                        e.printStackTrace()
+                        false
+                    }
+                } else {
+                    false
+                }
+            }
+        }
         webView.webChromeClient = object : WebChromeClient() {
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                 AlertDialog.Builder(this@AuthorizingPaymentActivity)
@@ -94,73 +160,97 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 return true
             }
         }
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val uri = Uri.parse(url)
-                if (verifier.verifyURL(uri)) {
-                    val resultIntent = Intent()
-                    resultIntent.putExtra(EXTRA_RETURNED_URLSTRING, url)
-                    setResult(RESULT_OK, resultIntent)
-                    finish()
-                    return true
-                } else return if (verifier.verifyExternalURL(uri)) {
-                    try {
-                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        true
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                        false
-                    }
-                } else {
-                    false
-                }
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
-            setResult(RESULT_OK, data)
-            finish()
+            finishActivityWithSuccessful(data)
         }
     }
 
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
-    }
-
     override fun onDestroy() {
-        clearCache()
+        // Cleanup WebView
+        webView.clearCache(true)
+        webView.clearHistory()
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookies(null)
+        cookieManager.flush()
+
+        // Cleanup ViewModel
+        viewModel.cleanup()
+
         super.onDestroy()
     }
 
-    private fun initializeWebView() {
+    override fun onBackPressed() {
+        finishActivityWithFailure()
+    }
+
+    private fun setupWebView() {
+        setupWebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
             domStorageEnabled = true
             databaseEnabled = true
         }
+
+        runOnUiThread {
+            if (verifier.isReady) {
+                webView.isVisible = true
+                webView.loadUrl(verifier.authorizedURLString)
+            }
+        }
     }
 
-    private fun clearCache() {
-        webView.clearCache(true)
-        webView.clearHistory()
-
-        val cookieManager = CookieManager.getInstance()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            cookieManager.removeAllCookies(null)
-            cookieManager.flush()
-        } else {
-            val cookieSyncManager = CookieSyncManager.createInstance(this)
-            cookieManager.removeAllCookie()
-            cookieManager.removeSessionCookie()
-            cookieSyncManager.startSync()
-            cookieSyncManager.stopSync()
-            cookieSyncManager.sync()
+    private fun finishActivityWithSuccessful(returnedUrl: String) {
+        val resultIntent = Intent().apply {
+            putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
         }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
+    private fun finishActivityWithSuccessful(completionEvent: CompletionEvent) {
+        val resultIntent = Intent().apply {
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value))
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
+    private fun finishActivityWithSuccessful(data: Intent?) {
+        setResult(Activity.RESULT_OK, data)
+        finish()
+    }
+
+    private fun finishActivityWithFailure(throwable: Throwable? = null) {
+        val exception = when (throwable) {
+            is ProtocolErrorEvent ->
+                OmiseException("3D Secure authorization failed: protocol error.", ProtocolException(
+                        """
+                            errorCode=${throwable.errorMessage.errorCode?.value},
+                            errorDetail=${throwable.errorMessage.errorDetail},
+                            errorDescription=${throwable.errorMessage.errorDescription},
+                        """.trimIndent()
+                ))
+            is RuntimeErrorEvent ->
+                OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(throwable.errorMessage))
+            else ->
+                OmiseException("3D Secure authorization failed: ${throwable?.message}", throwable)
+        }
+        val resultIntent = Intent().apply {
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(exception))
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
+    companion object {
+        /**
+         * [AuthorizingPaymentResult] intent result from [AuthorizingPaymentActivity].
+         */
+        const val EXTRA_AUTHORIZING_PAYMENT_RESULT = "OmiseActivity.authorizingPaymentResult"
     }
 }

@@ -52,15 +52,15 @@ internal class Invocation<T : Model>(
 
     private fun processCall(call: TypedCall) {
         val response = call.execute()
-        if (response.body() == null) {
+        val stream = response.body?.byteStream()
+        if (stream == null) {
             didFail(IOException("HTTP response have no body."))
             return
         }
 
-        val stream = response.body()!!.byteStream()
-        when {
-            response.code() in 200..299 -> didSucceed(serializer.deserialize(stream, call.clazz))
-            response.code() in 300..399 -> didFail(RedirectionException())
+        when (response.code) {
+            in 200..299 -> didSucceed(serializer.deserialize(stream, call.clazz))
+            in 300..399 -> didFail(RedirectionException())
             else -> didFail(serializer.deserialize(stream, APIError::class.java))
         }
     }

@@ -2,37 +2,42 @@ package co.omise.android.example;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
+import co.omise.android.config.AuthorizingPaymentConfig;
+import co.omise.android.config.ThreeDSConfig;
+import co.omise.android.config.UiCustomization;
 import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
 import co.omise.android.models.Token;
+import co.omise.android.ui.AuthorizingPaymentResult;
 import co.omise.android.ui.AuthorizingPaymentActivity;
 import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
+import kotlin.Unit;
 import kotlin.text.StringsKt;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
-import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING;
 
 public class CheckoutActivity extends AppCompatActivity {
 
+    private static String TAG = "CheckoutActivity";
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
 
     private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
@@ -53,6 +58,8 @@ public class CheckoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
+        initializeAuthoringPaymentConfig();
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.activity_checkout);
@@ -67,7 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
-        authorizeUrlButton.setOnClickListener(view -> authorizeUrl());
+        authorizeUrlButton.setOnClickListener(view -> AuthorizingPaymentDialog.showAuthorizingPaymentDialog(this, this::startAuthoringPaymentActivity));
 
         Client client = new Client(PUBLIC_KEY);
         Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
@@ -116,11 +123,68 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
     }
 
-    private void authorizeUrl() {
+    /**
+     * Here's the sample of initializing 3D Secure 2.
+     * This should be call before start the {@link AuthorizingPaymentActivity}.
+     */
+    private void initializeAuthoringPaymentConfig() {
+        UiCustomization uiCustomization = new UiCustomization.Builder()
+                .labelCustomization(new UiCustomization.LabelCustomization.Builder()
+                        .textFontName("fonts/RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .headingTextColor("#000000")
+                        .headingTextFontName("fonts/RobotoMono-Bold.ttf")
+                        .headingTextFontSize(20)
+                        .build())
+                .textBoxCustomization(new UiCustomization.TextBoxCustomization.Builder()
+                        .textFontName("fonts/RobotoMono-Regular.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(16)
+                        .borderWidth(1)
+                        .cornerRadius(4)
+                        .borderColor("#1A56F0")
+                        .build())
+                .toolbarCustomization(new UiCustomization.ToolbarCustomization.Builder()
+                        .textFontName("fonts/RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .headerText("Secure Checkout")
+                        .buttonText("Close")
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, new UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("fonts/RobotoMono-Bold.ttf")
+                        .textFontColor("#FFFFFF")
+                        .textFontSize(20)
+                        .backgroundColor("#1A56F0")
+                        .cornerRadius(4)
+                        .build())
+                .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, new UiCustomization.ButtonCustomization.Builder()
+                        .textFontName("fonts/RobotoMono-Bold.ttf")
+                        .textFontColor("#000000")
+                        .textFontSize(20)
+                        .backgroundColor("#FFFFFF")
+                        .cornerRadius(4)
+                        .build())
+                .build();
+
+        ThreeDSConfig threeDSConfig = new ThreeDSConfig.Builder()
+                .uiCustomization(uiCustomization)
+                .timeout(5)
+                .build();
+        AuthorizingPaymentConfig authPaymentConfig = new AuthorizingPaymentConfig.Builder()
+                .threeDSConfig(threeDSConfig)
+                .build();
+        AuthorizingPaymentConfig.initialize(authPaymentConfig);
+    }
+
+    private Unit startAuthoringPaymentActivity(String authorizeUrl, String returnUrl) {
         Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, "https://pay.omise.co/offsites/");
-        intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{"http://www.example.com"});
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl);
+        intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+        return Unit.INSTANCE;
     }
 
     private void openPaymentSetting() {
@@ -151,8 +215,21 @@ public class CheckoutActivity extends AppCompatActivity {
         }
 
         if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE) {
-            String url = data.getStringExtra(EXTRA_RETURNED_URLSTRING);
-            snackbar.setText(url).show();
+            AuthorizingPaymentResult paymentResult = data.getParcelableExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT);
+            String resultMessage = null;
+            if (paymentResult instanceof AuthorizingPaymentResult.ThreeDS1Completed) {
+                resultMessage = "Authorization with 3D Secure version 1 completed: returnedUrl=" + ((AuthorizingPaymentResult.ThreeDS1Completed) paymentResult).getReturnedUrl();
+            } else if (paymentResult instanceof AuthorizingPaymentResult.ThreeDS2Completed) {
+                resultMessage = "Authorization with 3D Secure version 2 completed: transStatus=" + ((AuthorizingPaymentResult.ThreeDS2Completed) paymentResult).getTransStatus();
+            } else if (paymentResult instanceof AuthorizingPaymentResult.Failure) {
+                AuthorizingPaymentResult.Failure failure = (AuthorizingPaymentResult.Failure) paymentResult;
+                resultMessage = failure.getThrowable().getMessage();
+                failure.getThrowable().printStackTrace();
+            } else if (paymentResult == null) {
+                resultMessage = "Not found the authorization result.";
+            }
+            Log.d(TAG, resultMessage);
+            snackbar.setText(resultMessage).show();
         } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE) {
             if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                 Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);

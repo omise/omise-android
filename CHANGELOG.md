@@ -1,5 +1,11 @@
 # CHANGE LOG
 
+## v4.0.0-alpha01
+
+* **CHANGED:** Require minimum SDK version 21
+* **ADDED:** 3D Secure version 2
+* **ADDED:** Observing `ChargeStatus` change with Token ID
+
 ## v3.2.1
 
 * **FIXED:** Fix can not open WebView on Android 5.0 (#178)

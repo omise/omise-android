@@ -55,9 +55,7 @@ abstract class Endpoint {
          */
         @JvmField
         val VAULT: Endpoint = object : Endpoint() {
-            override fun host(): String {
-                return "vault.omise.co"
-            }
+            override fun host(): String = OMISE_VAULT
 
             override fun authenticationKey(config: Config): String {
                 return config.publicKey()
@@ -69,9 +67,7 @@ abstract class Endpoint {
          */
         @JvmField
         val API: Endpoint = object : Endpoint() {
-            override fun host(): String {
-                return "api.omise.co"
-            }
+            override fun host(): String = OMISE_API
 
             override fun authenticationKey(config: Config): String {
                 return config.publicKey()

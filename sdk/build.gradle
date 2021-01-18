@@ -15,13 +15,23 @@ android {
         versionName omise_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "co.omise.android.OmiseTestRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "mode"
+    productFlavors {
+        production {
+            dimension "mode"
+        }
+        staging {
+            dimension "mode"
         }
     }
 
@@ -36,6 +46,7 @@ android {
 
     testOptions {
         unitTests {
+            animationsDisabled true
             returnDefaultValues true
             includeAndroidResources true
             all {
@@ -123,6 +134,10 @@ uploadArchives {
 }
 
 dependencies {
+//    implementation project(":3DS-ANDROID-SDK:threeds")
+    implementation("co.omise:threeds-android:$omise_threeds_sdk_version") {
+        exclude module: 'asm'
+    }
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
@@ -131,6 +146,11 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$joda_time_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
         exclude group: 'androidx.test', module: 'core'
@@ -147,7 +167,9 @@ dependencies {
     testImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     testImplementation "androidx.test.ext:junit:$junit_ext_version"
     testImplementation "androidx.annotation:annotation:$annotation_version"
+    testImplementation "androidx.arch.core:core-testing:$arch_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     androidTestImplementation "androidx.annotation:annotation:$annotation_version"
     androidTestImplementation "com.google.guava:guava:$guava_version"
@@ -161,8 +183,10 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+    androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
 }
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }

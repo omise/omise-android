@@ -112,9 +112,7 @@ class PaymentChooserFragmentTest {
     fun closeMenu_finishActivityWithCanceledCode() {
         onView(withId(R.id.close_menu)).perform(click())
 
-        scenario.onActivity {
-            assertEquals(Activity.RESULT_CANCELED, it.activityResult?.resultCode)
-        }
+        assertEquals(Activity.RESULT_CANCELED, scenario.result.resultCode)
     }
 
     @Test
