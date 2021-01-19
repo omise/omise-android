@@ -27,7 +27,7 @@ jobs:
       - name: Unit tests
         run: ./gradlew sdk:testProductionDebugUnitTest
       - name: Publish package
-        run: ./gradlew uploadArchives
+        run: ./gradlew sdk:publish
         env:
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
           PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
