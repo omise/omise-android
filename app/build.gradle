@@ -60,7 +60,7 @@ dependencies {
     implementation "com.google.guava:guava:$guava_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':sdk')
-    // compile 'co.omise:omise-android:2.3.+'
+//    implementation "co.omise:omise-android:$omise_sdk_version"
 
     testImplementation "junit:junit:$junit_version"
 }
