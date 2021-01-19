@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: 'kotlin-android-extensions'
 
@@ -85,53 +85,102 @@ signing {
     sign configurations.archives
 }
 
-uploadArchives {
-    repositories.mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                setGroupId 'co.omise'
+                setArtifactId 'omise-android'
+                version android.defaultConfig.versionName
+                artifact bundleProductionReleaseAar
+                pom {
+                    name = 'Omise Android SDK'
+                    description = 'Android SDK for Omise API'
+                    url = 'https://www.omise.co'
+                    withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        configurations.implementation.allDependencies.each {
+                            if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+                            }
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://git.github.com/omise/omise-android'
+                        developerConnection = 'scm:git:git://git.github.com/omise/omise-android'
+                        url = 'https://github.com/omise/omise-android'
+                    }
 
-        def ossrhUsername = System.getenv("SONATYPE_USERNAME")
-        def ossrhPassword = System.getenv("SONATYPE_PASSWORD")
+                    developers {
+                        developer {
+                            id = 'natthawut'
+                            name = 'Natthawut Haematulin'
+                            email = 'natthawut@omise.co'
+                        }
+                    }
 
-        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-            authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-
-        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
-            authentication(userName: ossrhUsername, password: ossrhPassword)
-        }
-
-        pom.project {
-            name 'Omise Android SDK'
-            description 'Android SDK for Omise API'
-            packaging 'aar'
-            groupId 'co.omise'
-            artifactId 'omise-android'
-            version omise_sdk_version
-            url 'https://www.omise.co'
-
-            scm {
-                connection 'scm:git:git://git.github.com/omise/omise-android'
-                developerConnection 'scm:git:git://git.github.com/omise/omise-android'
-                url 'https://github.com/omise/omise-android'
-            }
-
-            developers {
-                developer {
-                    id 'natthawut'
-                    name 'Natthawut Haematulin'
-                    email 'natthawut@omise.co'
-                }
-            }
-
-            licenses {
-                license {
-                    name 'The MIT License (MIT)'
-                    url 'https://opensource.org/licenses/MIT'
+                    licenses {
+                        license {
+                            name = 'The MIT License (MIT)'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+// uploadArchives {
+//    repositories.mavenDeployer {
+//        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//
+//        def ossrhUsername = System.getenv("SONATYPE_USERNAME")
+//        def ossrhPassword = System.getenv("SONATYPE_PASSWORD")
+//
+//        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+//            authentication(userName: ossrhUsername, password: ossrhPassword)
+//        }
+//
+//        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+//            authentication(userName: ossrhUsername, password: ossrhPassword)
+//        }
+//
+//        pom.project {
+//            name 'Omise Android SDK'
+//            description 'Android SDK for Omise API'
+//            packaging 'aar'
+//            groupId 'co.omise'
+//            artifactId 'omise-android'
+//            version omise_sdk_version
+//            url 'https://www.omise.co'
+//
+//            scm {
+//                connection 'scm:git:git://git.github.com/omise/omise-android'
+//                developerConnection 'scm:git:git://git.github.com/omise/omise-android'
+//                url 'https://github.com/omise/omise-android'
+//            }
+//
+//            developers {
+//                developer {
+//                    id 'natthawut'
+//                    name 'Natthawut Haematulin'
+//                    email 'natthawut@omise.co'
+//                }
+//            }
+//
+//            licenses {
+//                license {
+//                    name 'The MIT License (MIT)'
+//                    url 'https://opensource.org/licenses/MIT'
+//                }
+//            }
+//        }
+//    }
+//}
 
 dependencies {
 //    implementation project(":3DS-ANDROID-SDK:threeds")
