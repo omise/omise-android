@@ -76,72 +76,72 @@ android {
     }
 }
 
-signing {
-    def signingKey = System.getenv("PGP_SIGNING_KEY")
-    def signingPassword = System.getenv("PGP_SIGNING_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign configurations.archives
-}
-
-project.afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                setGroupId 'co.omise'
-                setArtifactId 'omise-android'
-                version android.defaultConfig.versionName
+publishing {
+    publications {
+        release(MavenPublication) {
+            setGroupId 'co.omise'
+            setArtifactId 'omise-android'
+            version android.defaultConfig.versionName
+            project.afterEvaluate {
                 artifact bundleProductionReleaseAar
-                pom {
-                    name = 'Omise Android SDK'
-                    description = 'Android SDK for Omise API'
-                    url = 'https://www.omise.co'
-                    withXml {
-                        def dependenciesNode = asNode().appendNode('dependencies')
-                        configurations.implementation.allDependencies.each {
-                            if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
-                                def dependencyNode = dependenciesNode.appendNode('dependency')
-                                dependencyNode.appendNode('groupId', it.group)
-                                dependencyNode.appendNode('artifactId', it.name)
-                                dependencyNode.appendNode('version', it.version)
-                            }
-                        }
-                    }
-                    scm {
-                        connection = 'scm:git:git://git.github.com/omise/omise-android'
-                        developerConnection = 'scm:git:git://git.github.com/omise/omise-android'
-                        url = 'https://github.com/omise/omise-android'
-                    }
-                    developers {
-                        developer {
-                            id = 'natthawut'
-                            name = 'Natthawut Haematulin'
-                            email = 'natthawut@omise.co'
-                        }
-                    }
-                    licenses {
-                        license {
-                            name = 'The MIT License (MIT)'
-                            url = 'https://opensource.org/licenses/MIT'
+            }
+            pom {
+                name = 'Omise Android SDK'
+                description = 'Android SDK for Omise API'
+                url = 'https://www.omise.co'
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each {
+                        if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
                         }
                     }
                 }
-            }
-        }
-        repositories {
-            maven {
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-                def ossrhUsername = System.getenv("SONATYPE_USERNAME")
-                def ossrhPassword = System.getenv("SONATYPE_PASSWORD")
-                credentials {
-                    username ossrhUsername
-                    password ossrhPassword
+                scm {
+                    connection = 'scm:git:git://git.github.com/omise/omise-android'
+                    developerConnection = 'scm:git:git://git.github.com/omise/omise-android'
+                    url = 'https://github.com/omise/omise-android'
+                }
+                developers {
+                    developer {
+                        id = 'natthawut'
+                        name = 'Natthawut Haematulin'
+                        email = 'natthawut@omise.co'
+                    }
+                }
+                licenses {
+                    license {
+                        name = 'The MIT License (MIT)'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
                 }
             }
         }
     }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            def ossrhUsername = System.getenv("SONATYPE_USERNAME")
+            def ossrhPassword = System.getenv("SONATYPE_PASSWORD")
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = System.getenv("PGP_SIGNING_KEY")
+    def signingPassword = System.getenv("PGP_SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.release
 }
 
 dependencies {
