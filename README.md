@@ -2,15 +2,13 @@
 
 [![](https://img.shields.io/maven-central/v/co.omise/omise-android.svg?style=flat-square)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22co.omise%22%20AND%20a%3A%22omise-android%22)
 [![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@omise.co)
+[![Android CI](https://github.com/omise/omise-android/workflows/Android%20CI/badge.svg)](https://github.com/omise/omise-android/actions)
 
 Omise is a payment service provider currently operating in Thailand. Omise provides a set of clean APIs
 that help merchants of any size accept credit cards online.
 
 Omise Android SDK provides Android bindings for the Omise [Token](https://www.omise.co/tokens-api)
 and [Source](https://www.omise.co/sources-api) API as well as components for entering credit card information.
-
-Hop into our forum (click the badge above) or email our support team if you have any questions
- regarding this SDK and the functionality it provides.
 
 ## Requirements
 
