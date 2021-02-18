@@ -1,0 +1,12 @@
+steps:
+  - label: ":hammer: Building Project"
+    command: "./gradlew clean assembleDevelopmentDebug"
+    artifact_paths: "app/build/outputs/apk/development/debug/*.apk"
+
+  - label: "Running unit tests"
+    command:
+      - './gradlew testDevelopmentDebugUnitTest'
+      - 'zip -r app/build/reports/test-results.zip app/build/reports/tests'
+    artifact_paths:
+      - "app/build/reports/test-results.zip"
+      - "app/build/test-results/testDevelopmentDebugUnitTest/*.xml"
