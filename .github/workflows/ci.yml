@@ -34,6 +34,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
+          target: default
+          arch: x86
+          profile: Nexus 6
           script: ./gradlew connectedAndroidTest
       - name: Upload test report
         uses: actions/upload-artifact@v2
