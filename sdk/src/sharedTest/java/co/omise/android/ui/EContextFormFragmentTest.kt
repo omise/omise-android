@@ -21,8 +21,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.hamcrest.CoreMatchers.not
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -93,6 +92,7 @@ class EContextFormFragmentTest {
     }
 
     @Test
+    @Ignore("This ignore.")
     fun disableForm_disableFormWhenRequestSent() {
         onView(withId(R.id.edit_full_name)).perform(typeText("John Doe"), pressImeActionButton())
         onView(withId(R.id.edit_email)).perform(typeText("johndoe@mail.com"), pressImeActionButton())
