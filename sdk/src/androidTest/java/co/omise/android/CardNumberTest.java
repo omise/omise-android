@@ -2,6 +2,7 @@ package co.omise.android;
 
 import co.omise.android.models.CardBrand;
 
+//Comment
 public class CardNumberTest extends SDKTest {
     public void testNormalize() {
         assertEquals("", CardNumber.normalize(null));
