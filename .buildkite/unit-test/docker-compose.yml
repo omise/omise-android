@@ -1,0 +1,8 @@
+version: '3'
+services:
+  unit-test:
+    build:
+      context: ../..
+      dockerfile: .buildkite/unit-test/Dockerfile
+    volumes:
+      - ../artifacts:/home/circleci/app/threeds/build/reports/
