@@ -89,7 +89,7 @@ class PaymentChooserFragmentTest {
     @Test
     fun displayPaymentMethods_showPaymentMethodsFromCapability() {
         onView(withText(R.string.payment_chooser_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(9)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(10)))
     }
 
     @Test

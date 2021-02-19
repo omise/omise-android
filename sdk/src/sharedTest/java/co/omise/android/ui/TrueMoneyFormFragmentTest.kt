@@ -39,7 +39,6 @@ class TrueMoneyFormFragmentTest {
     }
 
     @Test
-    @Ignore("This ignore.")
     fun clickSubmitButton_requestCreatingSource() {
         onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
 
