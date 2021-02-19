@@ -37,7 +37,7 @@ jobs:
           target: default
           arch: x86
           profile: Nexus 6
-          script: ./gradlew connectedAndroidTest
+          script: ./gradlew testDebugUnitTest
       - name: Upload test report
         uses: actions/upload-artifact@v2
         with:
