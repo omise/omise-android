@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Build the app
+        run: ./gradlew build
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2.6.1
         with:
