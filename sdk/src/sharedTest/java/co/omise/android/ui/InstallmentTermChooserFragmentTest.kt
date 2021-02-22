@@ -53,7 +53,7 @@ class InstallmentTermChooserFragmentTest {
 
     @Test
     fun displayAllowedInstallmentTerms_showAllowedInstallmentTermsFromArgument() {
-        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText("3 months"))))
+        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText("35 months"))))
         onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText("4 months"))))
         onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText("6 months"))))
         onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText("9 months"))))

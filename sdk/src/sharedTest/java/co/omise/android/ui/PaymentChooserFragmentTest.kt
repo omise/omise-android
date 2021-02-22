@@ -105,7 +105,7 @@ class PaymentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(8)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_title))))
 
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(9)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(10)))
     }
 
     @Test
