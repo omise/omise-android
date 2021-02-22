@@ -24,6 +24,7 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
+#
   test:
     name: Unit test
     runs-on: ubuntu-latest
