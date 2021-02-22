@@ -39,6 +39,7 @@ jobs:
           profile: Nexus 6
           script: ./gradlew testDebugUnitTest
       - name: Upload test report
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
