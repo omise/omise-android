@@ -43,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: sdk/build/reports/tests/testDebugUnitTest/index.html
+          path: sdk/build/reports
