@@ -21,13 +21,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/large_margin"
-            android:src="@drawable/logo_truemoney" />
+            android:src="@drawable/logo_fpx" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/xlarge_margin"
-            android:text="@string/truemoney_info_text"/>
+            android:text="@string/fpx_info_text"/>
 
         <TextView
             style="?attr/editTextLabelStyle"

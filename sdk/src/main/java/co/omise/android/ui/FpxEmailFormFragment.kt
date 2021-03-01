@@ -32,7 +32,7 @@ class FpxEmailFormFragment : OmiseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        title = getString(R.string.payment_truemoney_title)
+        title = getString(R.string.payment_method_fpx_title)
         setHasOptionsMenu(true)
 
         with(emailEdit) {

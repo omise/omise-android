@@ -15,14 +15,13 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        title = getString(R.string.internet_banking_chooser_title)
+        title = getString(R.string.payment_method_fpx_title)
         setHasOptionsMenu(true)
     }
 
     override fun onListItemClicked(item: FpxResource) {
         val req = requester ?: return
         val email = arguments?.getString(FPX_EMAIL).orEmpty()
-        val banks = arguments?.getParcelableArray(FPX_BANKS).orEmpty()
         val bankCode = item.bankCode.orEmpty()
 
         view?.let { setAllViewsEnabled(it, false) }
@@ -43,6 +42,7 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
 
         val allowedBanks = FpxResource.all
                 .filter { bank -> capabilityBanks.any { it.code == bank.bankCode } }
+                .map { bank -> bank.replaceWithCapabilityData(capabilityBanks.find { it.code == bank.bankCode }!!) }
 
         return allowedBanks
     }

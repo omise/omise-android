@@ -2,6 +2,7 @@ package co.omise.android.ui
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,6 +72,7 @@ class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListIte
 class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListener?) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: OmiseListItem) {
+        val listItemView = view.findViewById<LinearLayout>(R.id.list_item_view)
         val optionImage = view.findViewById<ImageView>(R.id.image_item_icon)
         val nameText = view.findViewById<TextView>(R.id.text_item_title)
         val typeImage = view.findViewById<ImageView>(R.id.image_indicator_icon)
@@ -82,7 +85,16 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         }
 
         nameText.text = item.titleRes?.let { view.context.getString(it) } ?: item.title
-        item.indicatorIconRes?.let { typeImage.setImageResource(it) }
+
+        if (item.enabled == true) {
+            item.indicatorIconRes?.let { typeImage.setImageResource(it) }
+            listItemView.isEnabled = true
+            listItemView.alpha = 1F
+        } else {
+            item.indicatorIconRes?.let { typeImage.setImageResource(android.R.color.transparent) }
+            listItemView.isEnabled = false
+            listItemView.alpha = 0.25F
+        }
 
         view.setOnClickListener { listener?.onClick(item) }
     }
@@ -96,7 +108,9 @@ interface OmiseListItem {
     val titleRes: Int?
         get() = null
     val indicatorIconRes: Int?
-    get() = null
+        get() = null
+    val enabled: Boolean?
+        get() = true
 }
 
 interface OmiseListItemClickListener {

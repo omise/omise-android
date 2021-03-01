@@ -130,7 +130,7 @@ internal sealed class PaymentMethodResource(
     )
 
     object Fpx : PaymentMethodResource(
-            iconRes = R.drawable.payment_truemoney,
+            iconRes = R.drawable.payment_fpx,
             titleRes = R.string.payment_method_fpx_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Fpx
@@ -271,8 +271,9 @@ internal sealed class FpxResource(
         @DrawableRes override val iconRes: Int,
         override var title: String? = null,
         @StringRes override var titleRes: Int? = null,
-        @DrawableRes override val indicatorIconRes: Int,
+        @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
         var bankCode: String? = null,
+        override var enabled: Boolean? = false,
 ) : OmiseListItem {
 
     companion object {
@@ -283,139 +284,102 @@ internal sealed class FpxResource(
     fun replaceWithCapabilityData(bank: Bank): FpxResource {
         this.title = bank.name
         this.bankCode = bank.code
+        this.enabled = bank.active
         return this
     }
 
     object Affin : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_affin,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_affin,
             bankCode = "affin"
     )
 
     object Alliance : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_alliance,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_alliance,
             bankCode = "alliance"
     )
 
     object Agro : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_agro,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_agro,
             bankCode = "agro"
     )
 
     object Ambank : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_ambank,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_ambank,
             bankCode = "ambank"
     )
 
     object Islam : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_islam,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_islam,
             bankCode = "islam"
     )
 
     object Muamalat : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_muamalat,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_muamalat,
             bankCode = "muamalat"
     )
 
     object Rakyat : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_rakyat,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_rakyat,
             bankCode = "rakyat"
     )
 
     object Bsn : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_bsn,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_bsn,
             bankCode = "bsn"
     )
 
     object Cimb : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_cimb,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_cimb,
             bankCode = "cimb"
     )
 
     object Hongleong : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_hongleong,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_hongleong,
             bankCode = "hongleong"
     )
 
     object Hsbc : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_hsbc,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_hsbc,
             bankCode = "hsbc"
     )
 
     object Kfh : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_kfh,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_kfh,
             bankCode = "kfh"
     )
 
     object Maybank2e : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_maybank2e,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_maybank,
             bankCode = "maybank2e"
     )
 
     object Maybank2u : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_maybank2u,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_maybank,
             bankCode = "maybank2u"
     )
 
     object Ocbc : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_ocbc,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_ocbc,
             bankCode = "ocbc"
     )
 
     object Public : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_public,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_publicbank,
             bankCode = "public"
     )
 
     object Rhb : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_rhb,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_rhb,
             bankCode = "rhb"
     )
 
     object Sc : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_sc,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_sc,
             bankCode = "sc"
     )
 
     object Uob : FpxResource(
-            iconRes = R.drawable.payment_kasikorn,
-            titleRes = R.string.bank_title_uob,
-            indicatorIconRes = R.drawable.ic_redirect,
+            iconRes = R.drawable.payment_uob,
             bankCode = "uob"
     )
 }
