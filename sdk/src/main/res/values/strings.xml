@@ -93,4 +93,25 @@
     <string name="payment_method_points_citi_title">Pay with Citi Rewards Points</string>
     <string name="payment_truemoney_title">TrueMoney Wallet</string>
     <string name="truemoney_info_text">Please input the mobile number connected to your TrueMoney Wallet account</string>
+    <string name="payment_method_fpx_title">FPX</string>
+
+    <string name="bank_title_affin">"Affin Bank "</string>
+    <string name="bank_title_alliance">Alliance Bank (Personal)</string>
+    <string name="bank_title_agro">AGRONet</string>
+    <string name="bank_title_ambank">AmBank</string>
+    <string name="bank_title_islam">Bank Islam</string>
+    <string name="bank_title_muamalat">Bank Muamalat</string>
+    <string name="bank_title_rakyat">Bank Rakyat</string>
+    <string name="bank_title_bsn">BSN</string>
+    <string name="bank_title_cimb">CIMB Clicks</string>
+    <string name="bank_title_hongleong">Hong Leong Bank</string>
+    <string name="bank_title_hsbc">HSBC Bank</string>
+    <string name="bank_title_kfh">KFH</string>
+    <string name="bank_title_maybank2e">Maybank2E</string>
+    <string name="bank_title_maybank2u">Maybank2U</string>
+    <string name="bank_title_ocbc">OCBC Bank</string>
+    <string name="bank_title_public">Public Bank</string>
+    <string name="bank_title_rhb">RHB Bank</string>
+    <string name="bank_title_sc">Standard Chartered</string>
+    <string name="bank_title_uob">UOB Bank</string>
 </resources>

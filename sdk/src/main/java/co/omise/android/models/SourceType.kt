@@ -24,6 +24,7 @@ sealed class SourceType(
     object PointsCiti : SourceType("points_citi")
     object PayNow : SourceType("paynow")
     object PromptPay : SourceType("promptpay")
+    object Fpx : SourceType("fpx")
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -76,6 +77,7 @@ sealed class SourceType(
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
             "barcode_alipay" -> BarcodeAlipay
             "econtext" -> Econtext
+            "fpx" -> Fpx
             "truemoney" -> TrueMoney
             "installment_bay" -> Installment.Bay
             "installment_first_choice" -> Installment.FirstChoice
@@ -111,6 +113,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.BillPaymentTescoLotus,
             SourceType.BarcodeAlipay,
             SourceType.Econtext,
+            SourceType.Fpx,
             SourceType.TrueMoney,
             SourceType.Installment.Bay,
             SourceType.Installment.FirstChoice,
