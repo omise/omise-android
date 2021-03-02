@@ -40,11 +40,13 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
     override fun listItems(): List<FpxResource> {
         val capabilityBanks = arguments?.getParcelableArray(FPX_BANKS).orEmpty() as Array<Bank>
 
-        val allowedBanks = FpxResource.all
-                .filter { bank -> capabilityBanks.any { it.code == bank.bankCode } }
-                .map { bank -> bank.replaceWithCapabilityData(capabilityBanks.find { it.code == bank.bankCode }!!) }
-
-        return allowedBanks
+        return capabilityBanks.map {
+            FpxResource(
+                    iconRes = FpxResource.getBankImageFromCode(it.code),
+                    title = it.name,
+                    bankCode = it.code,
+                    enabled = it.active)
+        }
     }
 
     companion object {

@@ -267,119 +267,41 @@ internal sealed class MobileBankingResource(
     )
 }
 
-internal sealed class FpxResource(
+internal class FpxResource(
         @DrawableRes override val iconRes: Int,
-        override var title: String? = null,
-        @StringRes override var titleRes: Int? = null,
+        override val title: String? = null,
         @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
-        var bankCode: String? = null,
-        override var enabled: Boolean? = false,
+        override val enabled: Boolean? = false,
+        val bankCode: String? = null,
 ) : OmiseListItem {
 
     companion object {
         val all: List<FpxResource>
             get() = FpxResource::class.nestedClasses.mapNotNull { it.objectInstance as? FpxResource }
+
+        fun getBankImageFromCode(code: String?) : Int {
+            return when (code) {
+                "affin" -> R.drawable.payment_affin
+                "alliance" -> R.drawable.payment_alliance
+                "agro" -> R.drawable.payment_agro
+                "ambank" -> R.drawable.payment_ambank
+                "islam" -> R.drawable.payment_islam
+                "muamalat" -> R.drawable.payment_muamalat
+                "rakyat" -> R.drawable.payment_rakyat
+                "bsn" -> R.drawable.payment_bsn
+                "cimb" -> R.drawable.payment_cimb
+                "hongleong" -> R.drawable.payment_hongleong
+                "hsbc" -> R.drawable.payment_hsbc
+                "kfh" -> R.drawable.payment_kfh
+                "maybank2e" -> R.drawable.payment_maybank
+                "maybank2u" -> R.drawable.payment_maybank
+                "ocbc" -> R.drawable.payment_ocbc
+                "public" -> R.drawable.payment_publicbank
+                "rhb" -> R.drawable.payment_rhb
+                "sc" -> R.drawable.payment_sc
+                "uob" -> R.drawable.payment_uob
+                else -> R.drawable.payment_unknown
+            }
+        }
     }
-
-    fun replaceWithCapabilityData(bank: Bank): FpxResource {
-        this.title = bank.name
-        this.bankCode = bank.code
-        this.enabled = bank.active
-        return this
-    }
-
-    object Affin : FpxResource(
-            iconRes = R.drawable.payment_affin,
-            bankCode = "affin"
-    )
-
-    object Alliance : FpxResource(
-            iconRes = R.drawable.payment_alliance,
-            bankCode = "alliance"
-    )
-
-    object Agro : FpxResource(
-            iconRes = R.drawable.payment_agro,
-            bankCode = "agro"
-    )
-
-    object Ambank : FpxResource(
-            iconRes = R.drawable.payment_ambank,
-            bankCode = "ambank"
-    )
-
-    object Islam : FpxResource(
-            iconRes = R.drawable.payment_islam,
-            bankCode = "islam"
-    )
-
-    object Muamalat : FpxResource(
-            iconRes = R.drawable.payment_muamalat,
-            bankCode = "muamalat"
-    )
-
-    object Rakyat : FpxResource(
-            iconRes = R.drawable.payment_rakyat,
-            bankCode = "rakyat"
-    )
-
-    object Bsn : FpxResource(
-            iconRes = R.drawable.payment_bsn,
-            bankCode = "bsn"
-    )
-
-    object Cimb : FpxResource(
-            iconRes = R.drawable.payment_cimb,
-            bankCode = "cimb"
-    )
-
-    object Hongleong : FpxResource(
-            iconRes = R.drawable.payment_hongleong,
-            bankCode = "hongleong"
-    )
-
-    object Hsbc : FpxResource(
-            iconRes = R.drawable.payment_hsbc,
-            bankCode = "hsbc"
-    )
-
-    object Kfh : FpxResource(
-            iconRes = R.drawable.payment_kfh,
-            bankCode = "kfh"
-    )
-
-    object Maybank2e : FpxResource(
-            iconRes = R.drawable.payment_maybank,
-            bankCode = "maybank2e"
-    )
-
-    object Maybank2u : FpxResource(
-            iconRes = R.drawable.payment_maybank,
-            bankCode = "maybank2u"
-    )
-
-    object Ocbc : FpxResource(
-            iconRes = R.drawable.payment_ocbc,
-            bankCode = "ocbc"
-    )
-
-    object Public : FpxResource(
-            iconRes = R.drawable.payment_publicbank,
-            bankCode = "public"
-    )
-
-    object Rhb : FpxResource(
-            iconRes = R.drawable.payment_rhb,
-            bankCode = "rhb"
-    )
-
-    object Sc : FpxResource(
-            iconRes = R.drawable.payment_sc,
-            bankCode = "sc"
-    )
-
-    object Uob : FpxResource(
-            iconRes = R.drawable.payment_uob,
-            bankCode = "uob"
-    )
 }
