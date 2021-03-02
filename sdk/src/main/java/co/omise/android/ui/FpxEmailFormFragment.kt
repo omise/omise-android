@@ -9,6 +9,9 @@ import android.widget.Button
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
+import co.omise.android.models.Bank
+import co.omise.android.models.Capability
+import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import kotlinx.android.synthetic.main.fragment_fpx_email_form.*
 
@@ -20,9 +23,9 @@ class FpxEmailFormFragment : OmiseFragment() {
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
 
-    private val emailEdit: OmiseEditText by lazy { edit_mail }
-    private val emailErrorText by lazy { text_email_error }
+    private val emailEdit: OmiseEditText by lazy { edit_email }
     private val submitButton: Button by lazy { button_submit }
+    private val allowedEmailFormat = "\\A[\\w+\\-.]+@[a-z\\d\\-.]+\\.[a-z]{2,}\\z"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -36,34 +39,34 @@ class FpxEmailFormFragment : OmiseFragment() {
         setHasOptionsMenu(true)
 
         with(emailEdit) {
-            setOnFocusChangeListener(::updateErrorText)
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
         submitButton.setOnClickListener(::submitForm)
     }
 
-    private fun updateErrorText(view: View, hasFocus: Boolean) {
-        if (hasFocus || emailEdit.isValid) {
-            with(emailErrorText) {
-                text = ""
-                visibility = INVISIBLE
-            }
-            return
-        }
-
-        emailErrorText.text = getString(R.string.error_invalid_email)
-    }
-
     private fun updateSubmitButton() {
-        submitButton.isEnabled = emailEdit.isValid
+        val text = emailEdit.text.toString()
+        when {
+            text.isEmpty() || allowedEmailFormat.toRegex().matches(text) -> submitButton.isEnabled = true
+            else -> submitButton.isEnabled = false
+        }
     }
 
     private fun submitForm() {
         val requester = requester ?: return
         val email = emailEdit.text?.toString()?.trim().orEmpty()
-        val banks = requester.capability.paymentMethods?.find { it.name.equals("fpx") }?.banks ?: return
+        val banks = requester.capability.paymentMethods?.find { it.name.equals("fpx") }?.banks ?: mockBanks()
 
         navigation?.navigateToFpxBankChooser(banks, email)
+    }
+
+    private fun mockBanks() : List<Bank> {
+        return listOf(
+                Bank("AmBank", "ambank", true),
+                Bank("KFH", "kfh", true),
+                Bank("OCBC Bank", "ocbc", false),
+                Bank("Standard Chartered", "sc", true)
+        )
     }
 }

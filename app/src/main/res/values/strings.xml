@@ -58,7 +58,7 @@
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
     <string name="payment_preference_econtext_title" translatable="false">econtext</string>
-    <string name="payment_preference_fpx_title" translatable="false">[APP] FPX - payment_method_fpx_title</string>
+    <string name="payment_preference_fpx_title" translatable="false">FPX</string>
     <string name="payment_preference_paynow_title" translatable="false">PayNow</string>
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
     <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>

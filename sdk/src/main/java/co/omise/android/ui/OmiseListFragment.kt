@@ -93,7 +93,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         } else {
             item.indicatorIconRes?.let { typeImage.setImageResource(android.R.color.transparent) }
             listItemView.isEnabled = false
-            listItemView.alpha = 0.25F
+            listItemView.alpha = 0.2F
         }
 
         view.setOnClickListener { listener?.onClick(item) }
