@@ -89,4 +89,6 @@
     <string name="truemoney_info_text">กรุณากรอกหมายเลขโทรศัพท์ที่ผูกกับบัญชีทรูมันนี่วอลเล็ท</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">กรุณากรอกอีเมลเพื่อรับการยืนยันการรับชำระจากเอฟพีเอ็กซ์ (ถ้ามี)</string>
+    <string name="empty_text">ไม่มีข้อมูล</string>
+    <string name="fpx_no_data">ไม่สามารถเรียกข้อมูลธนาคารได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</string>
 </resources>

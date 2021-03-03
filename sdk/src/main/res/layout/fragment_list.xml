@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recycler_view"
@@ -6,3 +12,15 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
     tools:listitem="@layout/list_item" />
+
+<TextView
+    android:id="@+id/no_data_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:text="@string/empty_text"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:visibility="invisible"
+    android:paddingLeft="@dimen/medium_margin"
+    android:paddingRight="@dimen/medium_margin"/>
+</FrameLayout>

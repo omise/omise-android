@@ -95,4 +95,6 @@
     <string name="truemoney_info_text">Please input the mobile number connected to your TrueMoney Wallet account</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(Optional) Please input your email to receive transaction confirmation from FPX</string>
+    <string name="empty_text">No data available</string>
+    <string name="fpx_no_data">Cannot retrieve list of banks. Please try again later.</string>
 </resources>

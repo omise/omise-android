@@ -2,11 +2,13 @@ package co.omise.android.ui
 
 import android.os.Bundle
 import co.omise.android.R
-import co.omise.android.models.*
+import co.omise.android.models.Bank
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
 
 /**
  * FpxBankChooserFragment is the UI class, extended from base [OmiseListFragment] to show
- * availabl FPX bank options list for the user to choose from.
+ * available FPX bank options list for the user to choose from.
  */
 internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
 
@@ -16,6 +18,7 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
         super.onActivityCreated(savedInstanceState)
 
         title = getString(R.string.payment_method_fpx_title)
+        noDataText.text = getString(R.string.fpx_no_data)
         setHasOptionsMenu(true)
     }
 

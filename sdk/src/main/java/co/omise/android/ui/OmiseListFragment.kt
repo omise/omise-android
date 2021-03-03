@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.omise.android.R
-import kotlinx.android.synthetic.main.fragment_list.recycler_view
+import kotlinx.android.synthetic.main.fragment_list.*
 
 /**
  * OmiseListFragment is the base class for all list-based UI classes.
@@ -26,6 +27,7 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
     abstract fun listItems(): List<T>
 
+    protected val noDataText: TextView by lazy { no_data_text }
     private val recyclerView: RecyclerView by lazy { recycler_view }
 
     private val onClickListener = object : OmiseListItemClickListener {
@@ -44,8 +46,16 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
         recyclerView.layoutManager = layoutManager
         context?.let { recyclerView.addItemDecoration(OmiseItemDecoration(it)) }
+
+        if (adapter.itemCount == 0) {
+            noDataText.visibility = View.VISIBLE
+        } else {
+            noDataText.visibility = View.INVISIBLE
+        }
+
         recyclerView.adapter = adapter
     }
 
