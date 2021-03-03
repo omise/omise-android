@@ -90,5 +90,5 @@
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(任意) メールアドレスを入力し、FPXからの取引確認メールを受信します</string>
     <string name="empty_text">データなし</string>
-    <string name="fpx_no_data">Cannot retrieve list of banks. Please try again later.</string>
+    <string name="fpx_no_data">銀行のリストを検索できません。後でもう一度お試しください。</string>
 </resources>
