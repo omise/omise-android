@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_fpx_email_form.*
 /**
  * FpxEmailFormFragment is the UI class to show an email form for FPX payments.
  */
-class FpxEmailFormFragment : OmiseFragment() {
+internal class FpxEmailFormFragment : OmiseFragment() {
 
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
