@@ -3,15 +3,12 @@ package co.omise.android.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Bank
-import co.omise.android.models.Capability
-import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import kotlinx.android.synthetic.main.fragment_fpx_email_form.*
 
@@ -55,8 +52,9 @@ internal class FpxEmailFormFragment : OmiseFragment() {
 
     private fun submitForm() {
         val requester = requester ?: return
+        val paymentMethod = requester.capability?.paymentMethods?.find { it.name.equals("fpx") }
+        val banks = if(requester.specificPaymentMode) mockBanks() else paymentMethod?.banks
         val email = emailEdit.text?.toString()?.trim().orEmpty()
-        val banks = requester.capability.paymentMethods?.find { it.name.equals("fpx") }?.banks ?: mockBanks()
 
         navigation?.navigateToFpxBankChooser(banks, email)
     }
@@ -64,9 +62,7 @@ internal class FpxEmailFormFragment : OmiseFragment() {
     private fun mockBanks() : List<Bank> {
         return listOf(
                 Bank("AmBank", "ambank", true),
-                Bank("KFH", "kfh", true),
-                Bank("OCBC Bank", "ocbc", false),
-                Bank("Standard Chartered", "sc", true)
+                Bank("OCBC Bank", "ocbc", false)
         )
     }
 }

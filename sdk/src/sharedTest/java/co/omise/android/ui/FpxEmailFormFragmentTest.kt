@@ -11,12 +11,11 @@ import co.omise.android.models.Bank
 import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.hamcrest.CoreMatchers.not
-import org.junit.Before
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -36,6 +35,7 @@ class FpxEmailFormFragmentTest {
 
     private val mockRequester: PaymentCreatorRequester<Source> = mock {
         on { capability }.doReturn(Capability(paymentMethods = paymentMethods))
+        on { specificPaymentMode }.doReturn(false)
     }
 
     private val fragment = FpxEmailFormFragment().apply {
@@ -43,17 +43,18 @@ class FpxEmailFormFragmentTest {
         navigation = mockNavigation
     }
 
-    @Before
-    fun setUp() {
-        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
-            it.replaceFragment(fragment)
-        }
+    private lateinit var scenario: ActivityScenario<TestFragmentActivity>
 
-        onView(withText(R.string.payment_method_fpx_title)).check(matches(isDisplayed()))
+    @After
+    fun cleanup() {
+        scenario.close()
     }
 
     @Test
-    fun clickSubmitButton_requestNavigateToBankChooser() {
+    fun clickSubmitButton_requestNavigateToBankChooserWithCapabilityMode() {
+        scenario = ActivityScenario.launch(TestFragmentActivity::class.java).onActivity { it.replaceFragment(fragment) }
+
+        onView(withText(R.string.payment_method_fpx_title)).check(matches(isDisplayed()))
         onView(withId(R.id.edit_email)).perform(typeText("example@omise.co"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(click())
 
@@ -61,7 +62,31 @@ class FpxEmailFormFragmentTest {
     }
 
     @Test
+    fun clickSubmitButton_requestNavigateToBankChooserWithSpecificPaymentMode() {
+        scenario = ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+            it.replaceFragment(FpxEmailFormFragment().apply {
+                requester = mock {
+                    on { specificPaymentMode }.doReturn(true)
+                }
+                navigation = mockNavigation
+            })
+        }
+
+        onView(withText(R.string.payment_method_fpx_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_email)).perform(typeText("example@omise.co"), pressImeActionButton())
+        onView(withId(R.id.button_submit)).perform(click())
+
+        verify(mockNavigation).navigateToFpxBankChooser(listOf(
+                Bank("AmBank", "ambank", true),
+                Bank("OCBC Bank", "ocbc", false)
+        ), "example@omise.co")
+    }
+
+    @Test
     fun validInputs_enableSubmitButton() {
+        scenario = ActivityScenario.launch(TestFragmentActivity::class.java).onActivity { it.replaceFragment(fragment) }
+
+        onView(withText(R.string.payment_method_fpx_title)).check(matches(isDisplayed()))
         onView(withId(R.id.edit_email)).perform(typeText("example@omise.co"), pressImeActionButton())
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
 
@@ -71,8 +96,10 @@ class FpxEmailFormFragmentTest {
 
     @Test
     fun invalidInputs_disableSubmitButton() {
-        onView(withId(R.id.edit_email)).perform(typeText("example@"), pressImeActionButton())
+        scenario = ActivityScenario.launch(TestFragmentActivity::class.java).onActivity { it.replaceFragment(fragment) }
 
+        onView(withText(R.string.payment_method_fpx_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_email)).perform(typeText("example@"), pressImeActionButton())
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
 }

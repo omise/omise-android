@@ -56,10 +56,10 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
         private const val FPX_EMAIL = "FpxBankChooserFragment.email"
         private const val FPX_BANKS = "FpxBankChooserFragment.banks"
 
-        fun newInstance(banks: List<Bank>, email: String) =
+        fun newInstance(banks: List<Bank>?, email: String) =
                 FpxBankChooserFragment().apply {
                     arguments = Bundle().apply {
-                        putParcelableArray(FPX_BANKS, banks.toTypedArray())
+                        putParcelableArray(FPX_BANKS, banks?.toTypedArray())
                         putString(FPX_EMAIL, email)
                     }
                 }

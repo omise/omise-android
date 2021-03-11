@@ -27,12 +27,13 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var amount: Long = 0L
     private lateinit var currency: String
     private lateinit var capability: Capability
+    private var specificPaymentMode: Boolean = true
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private val client: Client by lazy { Client(pkey) }
 
     private val requester: PaymentCreatorRequester<Source> by lazy {
-        PaymentCreatorRequesterImpl(client, amount, currency, capability)
+        PaymentCreatorRequesterImpl(client, amount, currency, capability, specificPaymentMode)
     }
 
     @VisibleForTesting
@@ -113,6 +114,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         amount = intent.getLongExtra(EXTRA_AMOUNT, 0)
         currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
         capability = requireNotNull(intent.getParcelableExtra(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
+        specificPaymentMode = intent.getBooleanExtra(EXTRA_SPECIFIC_PAYMENT_MODE, true)
     }
 
     companion object {
@@ -131,7 +133,7 @@ interface PaymentCreatorNavigation {
     fun createSourceFinished(source: Source)
     fun navigateToTrueMoneyForm()
     fun navigateToFpxEmailForm()
-    fun navigateToFpxBankChooser(banks: List<Bank>, email: String)
+    fun navigateToFpxBankChooser(banks: List<Bank>?, email: String)
 }
 
 private class PaymentCreatorNavigationImpl(
@@ -227,7 +229,7 @@ private class PaymentCreatorNavigationImpl(
         addFragmentToBackStack(fragment)
     }
 
-    override fun navigateToFpxBankChooser(banks: List<Bank>, email: String) {
+    override fun navigateToFpxBankChooser(banks: List<Bank>?, email: String) {
         val fragment = FpxBankChooserFragment.newInstance(banks, email).apply {
             requester = this@PaymentCreatorNavigationImpl.requester
         }
@@ -241,6 +243,7 @@ interface PaymentCreatorRequester<T : Model> {
     val capability: Capability
     fun request(request: Request<T>, result: ((Result<T>) -> Unit)? = null)
     var listener: PaymentCreatorRequestListener?
+    val specificPaymentMode: Boolean
 }
 
 interface PaymentCreatorRequestListener {
@@ -251,7 +254,8 @@ private class PaymentCreatorRequesterImpl(
         private val client: Client,
         override val amount: Long,
         override val currency: String,
-        override val capability: Capability
+        override val capability: Capability,
+        override val specificPaymentMode: Boolean
 ) : PaymentCreatorRequester<Source> {
 
     override var listener: PaymentCreatorRequestListener? = null
