@@ -44,25 +44,15 @@ internal class FpxEmailFormFragment : OmiseFragment() {
 
     private fun updateSubmitButton() {
         val text = emailEdit.text.toString()
-        when {
-            text.isEmpty() || allowedEmailFormat.toRegex().matches(text) -> submitButton.isEnabled = true
-            else -> submitButton.isEnabled = false
-        }
+
+        submitButton.isEnabled = text.isEmpty() || allowedEmailFormat.toRegex().matches(text)
     }
 
     private fun submitForm() {
         val requester = requester ?: return
-        val paymentMethod = requester.capability?.paymentMethods?.find { it.name.equals("fpx") }
-        val banks = if(requester.specificPaymentMode) mockBanks() else paymentMethod?.banks
+        val banks = requester.capability?.paymentMethods?.find { it.name.equals("fpx") }?.banks
         val email = emailEdit.text?.toString()?.trim().orEmpty()
 
         navigation?.navigateToFpxBankChooser(banks, email)
-    }
-
-    private fun mockBanks() : List<Bank> {
-        return listOf(
-                Bank("AmBank", "ambank", true),
-                Bank("OCBC Bank", "ocbc", false)
-        )
     }
 }

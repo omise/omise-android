@@ -39,8 +39,19 @@ data class PaymentMethod(
                         installmentTerms = when (sourceType) {
                             is SourceType.Installment -> SourceType.Installment.availableTerms(sourceType)
                             else -> null
+                        },
+                        banks = when (sourceType) {
+                            is SourceType.Fpx -> mockFpxBanks()
+                            else -> null
                         }
                 )
+
+        private fun mockFpxBanks(): List<Bank>? {
+            return listOf(
+                    Bank("AmBank", "ambank", true),
+                    Bank("OCBC Bank", "ocbc", false)
+            )
+        }
     }
 }
 

@@ -6,8 +6,7 @@
     android:layout_height="@dimen/list_item_height"
     android:background="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:visibility="visible">
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/image_item_icon"
