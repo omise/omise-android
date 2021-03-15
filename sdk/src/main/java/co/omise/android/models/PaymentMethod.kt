@@ -41,17 +41,10 @@ data class PaymentMethod(
                             else -> null
                         },
                         banks = when (sourceType) {
-                            is SourceType.Fpx -> mockFpxBanks()
+                            is SourceType.Fpx -> SourceType.Fpx.banks
                             else -> null
                         }
                 )
-
-        private fun mockFpxBanks(): List<Bank>? {
-            return listOf(
-                    Bank("AmBank", "ambank", true),
-                    Bank("OCBC Bank", "ocbc", false)
-            )
-        }
     }
 }
 

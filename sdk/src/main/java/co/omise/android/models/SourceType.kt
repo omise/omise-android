@@ -24,7 +24,9 @@ sealed class SourceType(
     object PointsCiti : SourceType("points_citi")
     object PayNow : SourceType("paynow")
     object PromptPay : SourceType("promptpay")
-    object Fpx : SourceType("fpx")
+    object Fpx : SourceType("fpx") {
+        var banks : List<Bank>? = null
+    }
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
