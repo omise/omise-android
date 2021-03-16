@@ -3,10 +3,7 @@ package co.omise.android.ui
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import co.omise.android.R
-import co.omise.android.models.BackendType
-import co.omise.android.models.Capability
-import co.omise.android.models.SourceType
-import co.omise.android.models.backendType
+import co.omise.android.models.*
 
 internal val Capability.paymentMethodResources: List<PaymentMethodResource>
     get() {
@@ -130,6 +127,13 @@ internal sealed class PaymentMethodResource(
             titleRes = R.string.payment_truemoney_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.TrueMoney
+    )
+
+    object Fpx : PaymentMethodResource(
+            iconRes = R.drawable.payment_fpx,
+            titleRes = R.string.payment_method_fpx_title,
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Fpx
     )
 
     companion object {
@@ -261,4 +265,43 @@ internal sealed class MobileBankingResource(
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.MobileBanking.Scb
     )
+}
+
+internal class FpxResource(
+        @DrawableRes override val iconRes: Int,
+        override val title: String? = null,
+        @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
+        override val enabled: Boolean? = false,
+        val bankCode: String? = null,
+) : OmiseListItem {
+
+    companion object {
+        val all: List<FpxResource>
+            get() = FpxResource::class.nestedClasses.mapNotNull { it.objectInstance as? FpxResource }
+
+        fun getBankImageFromCode(code: String?) : Int {
+            return when (code) {
+                "affin" -> R.drawable.payment_affin
+                "alliance" -> R.drawable.payment_alliance
+                "agro" -> R.drawable.payment_agro
+                "ambank" -> R.drawable.payment_ambank
+                "islam" -> R.drawable.payment_islam
+                "muamalat" -> R.drawable.payment_muamalat
+                "rakyat" -> R.drawable.payment_rakyat
+                "bsn" -> R.drawable.payment_bsn
+                "cimb" -> R.drawable.payment_cimb
+                "hongleong" -> R.drawable.payment_hongleong
+                "hsbc" -> R.drawable.payment_hsbc
+                "kfh" -> R.drawable.payment_kfh
+                "maybank2e" -> R.drawable.payment_maybank
+                "maybank2u" -> R.drawable.payment_maybank
+                "ocbc" -> R.drawable.payment_ocbc
+                "public" -> R.drawable.payment_publicbank
+                "rhb" -> R.drawable.payment_rhb
+                "sc" -> R.drawable.payment_sc
+                "uob" -> R.drawable.payment_uob
+                else -> R.drawable.payment_unknown
+            }
+        }
+    }
 }

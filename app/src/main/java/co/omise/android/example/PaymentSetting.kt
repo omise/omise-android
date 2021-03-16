@@ -2,6 +2,7 @@ package co.omise.android.example
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import co.omise.android.models.Bank
 import co.omise.android.models.Capability
 import co.omise.android.models.SourceType
 
@@ -26,6 +27,7 @@ object PaymentSetting {
                     R.string.payment_preference_installment_kbank_key,
                     R.string.payment_preference_installment_scb_key,
                     R.string.payment_preference_econtext_key,
+                    R.string.payment_preference_fpx_key,
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
                     R.string.payment_preference_points_citi_key,
@@ -62,6 +64,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_installment_kbank_key) -> SourceType.Installment.KBank
                         context.getString(R.string.payment_preference_installment_scb_key) -> SourceType.Installment.Scb
                         context.getString(R.string.payment_preference_econtext_key) -> SourceType.Econtext
+                        context.getString(R.string.payment_preference_fpx_key) -> SourceType.Fpx
                         context.getString(R.string.payment_preference_paynow_key) -> SourceType.PayNow
                         context.getString(R.string.payment_preference_promptpay_key) -> SourceType.PromptPay
                         context.getString(R.string.payment_preference_points_citi_key) -> SourceType.PointsCiti
@@ -76,6 +79,14 @@ object PaymentSetting {
 
         val zeroInterestInstallments = paymentMethodPreferences[context.getString(R.string.payment_preference_zero_interest_installments_key)]
                 ?: false
+
+        val fpx = sourceTypes.find { it.name == "fpx" } as SourceType.Fpx
+        fpx.banks = listOf(
+                Bank("Affin Bank", "affin", true),
+                Bank("Alliance Bank (Personal)", "alliance", true),
+                Bank("Bank Islam", "islam", true),
+                Bank("Standard Chartered", "sc", false)
+        )
 
         return Capability.create(allowCreditCardMethod, sourceTypes, zeroInterestInstallments)
     }

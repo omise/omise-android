@@ -18,6 +18,7 @@ data class PaymentMethod(
         var cardBrands: List<String>? = null,
         @field:JsonProperty("installment_terms")
         var installmentTerms: List<Int>? = null,
+        var banks: List<Bank>? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
@@ -37,6 +38,10 @@ data class PaymentMethod(
                         name = sourceType.name,
                         installmentTerms = when (sourceType) {
                             is SourceType.Installment -> SourceType.Installment.availableTerms(sourceType)
+                            else -> null
+                        },
+                        banks = when (sourceType) {
+                            is SourceType.Fpx -> SourceType.Fpx.banks
                             else -> null
                         }
                 )

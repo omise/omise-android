@@ -87,4 +87,8 @@
     <string name="payment_method_points_citi_title">Citi Rewardsポイント</string>
     <string name="payment_truemoney_title">TrueMoneyウォレット</string>
     <string name="truemoney_info_text">TrueMoney ウォレットアカウントに登録されている携帯電話番号を入力してください</string>
+    <string name="payment_method_fpx_title">FPX</string>
+    <string name="fpx_info_text">(任意) メールアドレスを入力し、FPXからの取引確認メールを受信します</string>
+    <string name="empty_text">データなし</string>
+    <string name="fpx_no_data">銀行のリストを検索できません。後でもう一度お試しください。</string>
 </resources>

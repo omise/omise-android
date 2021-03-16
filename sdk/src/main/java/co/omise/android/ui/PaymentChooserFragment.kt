@@ -44,6 +44,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.PayNow,
             PaymentMethodResource.PromptPay,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
+            PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
         }
     }
 
