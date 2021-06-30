@@ -65,6 +65,7 @@
     <string name="payment_method_credit_card_title">クレジットカード</string>
     <string name="payment_method_installment_bay_title">クルンシィ</string>
     <string name="payment_method_installment_bbl_title">バンコク銀行</string>
+    <string name="payment_method_installment_ezypay_title">Maybank Ezypay</string>
     <string name="payment_method_installment_first_choice_title">クルンシィ・ファーストチョイス</string>
     <string name="payment_method_installment_kasikorn_title">カシコン</string>
     <string name="payment_method_installment_ktc_title">クルンタイカード</string>
