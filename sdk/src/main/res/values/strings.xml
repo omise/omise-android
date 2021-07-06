@@ -74,6 +74,7 @@
     <string name="payment_method_netbank_title">Net Bank</string>
 
     <string name="payment_method_installment_bbl_title">Bangkok Bank</string>
+    <string name="payment_method_installment_ezypay_title">Maybank Ezypay</string>
     <string name="payment_method_installment_kasikorn_title">Kasikorn</string>
     <string name="payment_method_installment_bay_title">Krungsri</string>
     <string name="payment_method_installment_first_choice_title">Krungsri First Choice</string>

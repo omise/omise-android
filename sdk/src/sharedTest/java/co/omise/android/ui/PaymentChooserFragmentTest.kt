@@ -54,6 +54,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "card"),
                 PaymentMethod(name = "installment_bay"),
                 PaymentMethod(name = "installment_bbl"),
+                PaymentMethod(name = "installment_ezypay"),
                 PaymentMethod(name = "installment_first_choice"),
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
@@ -128,6 +129,7 @@ class PaymentChooserFragmentTest {
         val expectedMethods = listOf(
                 PaymentMethod(name = "installment_bay"),
                 PaymentMethod(name = "installment_bbl"),
+                PaymentMethod(name = "installment_ezypay"),
                 PaymentMethod(name = "installment_first_choice"),
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),

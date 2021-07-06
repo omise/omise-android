@@ -161,6 +161,13 @@ internal sealed class InstallmentResource(
             sourceType = SourceType.Installment.Bbl
     )
 
+    object Ezypay : InstallmentResource(
+            iconRes = R.drawable.payment_maybank,
+            titleRes = R.string.payment_method_installment_ezypay_title,
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.Ezypay
+    )
+
     object KBank : InstallmentResource(
             iconRes = R.drawable.payment_kasikorn,
             titleRes = R.string.payment_method_installment_kasikorn_title,
