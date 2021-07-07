@@ -2,7 +2,7 @@
 
 ## v4.0.0-alpha02
 
-* **ADDED:** Ezypay installment payment to Android sdk
+* **ADDED:** EzyPay installment payment to Android SDK
 
 
 ## v4.0.0-alpha01
