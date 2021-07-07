@@ -1,5 +1,10 @@
 # CHANGE LOG
 
+## v4.0.0-alpha02
+
+* **ADDED:** Ezypay installment payment to Android sdk
+
+
 ## v4.0.0-alpha01
 
 * **CHANGED:** Require minimum SDK version 21
