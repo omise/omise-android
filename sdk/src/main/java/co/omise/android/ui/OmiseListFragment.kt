@@ -108,7 +108,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
             listItemView.alpha = 0.2F
         }
 
-        if (subtitleText.text != "") {
+        if (subtitleText.text.isNotBlank()) {
             subtitleText.visibility = View.VISIBLE
         } else {
             subtitleText.visibility = View.GONE

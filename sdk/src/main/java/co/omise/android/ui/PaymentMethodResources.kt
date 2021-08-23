@@ -148,7 +148,7 @@ internal sealed class PaymentMethodResource(
     object AlipayHk : PaymentMethodResource(
             iconRes = R.drawable.payment_alipay_hk,
             titleRes = R.string.payment_method_alipay_hk_title,
-        subtitleRes = R.string.payment_method_alipayplus_footnote,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.AlipayHk
     )

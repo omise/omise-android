@@ -27,20 +27,23 @@
         <TextView
                 android:id="@+id/text_item_title"
                 style="?android:attr/itemTextAppearance"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/medium_margin"
                 android:layout_marginLeft="@dimen/medium_margin"
                 android:layout_weight="3"
                 tools:text="Credit Card" tools:ignore="NestedWeights"/>
+
         <TextView
                 android:id="@+id/subtext_item_title"
-                style="?android:attr/itemTextAppearance"
-                android:layout_width="match_parent"
+                style="?android:attr/textAppearanceListItemSecondary"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/medium_margin"
                 android:layout_weight="2"
-                tools:text="Powered by Omise" android:textSize="12sp" android:textColor="#616161"/>
+                tools:text="Powered by Omise"
+                android:textSize="12sp"
+                android:textColor="#616161" />
     </LinearLayout>
 
     <ImageView
