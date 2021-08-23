@@ -35,6 +35,8 @@ data class Source(
         val name: String? = null,
         val email: String? = null,
         val bank: String? = null,
+        @field:JsonProperty("platform_type")
+        val platformType: String? = null,
         @field:JsonProperty("phone_number")
         val phoneNumber: String? = null,
         @field:JsonProperty("mobile_number")
@@ -82,6 +84,8 @@ data class Source(
         private var email: String? = null
         @JsonProperty("bank")
         private var bank: String? = null
+        @JsonProperty("platform_type")
+        private var platformType: String? = "android"
         @JsonProperty("phone_number")
         private var phoneNumber: String? = null
         @JsonProperty("installment_term")
@@ -143,6 +147,11 @@ data class Source(
 
         fun bank(bank: String): CreateSourceRequestBuilder {
             this.bank = bank
+            return this
+        }
+
+        fun platformType(platformType: String): CreateSourceRequestBuilder {
+            this.platformType = platformType
             return this
         }
 
