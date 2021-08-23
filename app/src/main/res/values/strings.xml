@@ -22,6 +22,8 @@
     <string name="payment_preference_internet_banking_scb_key" translatable="false">internet_banking_scb</string>
     <string name="payment_preference_internet_banking_bbl_key" translatable="false">internet_banking_bbl</string>
     <string name="payment_preference_alipay_key" translatable="false">alipay</string>
+    <string name="payment_preference_alipay_cn_key" translatable="false">alipay_cn</string>
+    <string name="payment_preference_alipay_hk_key" translatable="false">alipay_hk</string>
     <string name="payment_preference_bill_payment_tesco_lotus_key" translatable="false">bill_payment_tesco_lotus</string>
     <string name="payment_preference_mobile_banking_scb_key" translatable="false">mobile_banking_scb</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
@@ -31,11 +33,15 @@
     <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
     <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
     <string name="payment_preference_installment_scb_key" translatable="false">installment_scb</string>
+    <string name="payment_preference_dana_key" translatable="false">dana</string>
     <string name="payment_preference_econtext_key" translatable="false">econtext</string>
     <string name="payment_preference_fpx_key" translatable="false">fpx</string>
+    <string name="payment_preference_gcash_key" translatable="false">gcash</string>
+    <string name="payment_preference_kakaopay_key" translatable="false">kakaopay</string>
     <string name="payment_preference_paynow_key" translatable="false">paynow</string>
     <string name="payment_preference_promptpay_key" translatable="false">promptpay</string>
     <string name="payment_preference_points_citi_key" translatable="false">points_citi</string>
+    <string name="payment_preference_touch_n_go_key" translatable="false">touch_n_go</string>
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
@@ -51,6 +57,8 @@
     <string name="payment_preference_internet_banking_scb_title" translatable="false">SCB - Internet Banking</string>
     <string name="payment_preference_internet_banking_bbl_title" translatable="false">BBL - Internet Banking</string>
     <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
+    <string name="payment_preference_alipay_cn_title" translatable="false">AlipayCN</string>
+    <string name="payment_preference_alipay_hk_title" translatable="false">AlipayHK</string>
     <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Tesco Lotus Bill Payment</string>
     <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
@@ -59,11 +67,15 @@
     <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
+    <string name="payment_preference_dana_title" translatable="false">DANA</string>
     <string name="payment_preference_econtext_title" translatable="false">econtext</string>
     <string name="payment_preference_fpx_title" translatable="false">FPX</string>
+    <string name="payment_preference_gcash_title" translatable="false">GCash</string>
+    <string name="payment_preference_kakaopay_title" translatable="false">Kakao Pay</string>
     <string name="payment_preference_paynow_title" translatable="false">PayNow</string>
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
     <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>
+    <string name="payment_preference_touch_n_go_title" translatable="false">TNG eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
