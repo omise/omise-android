@@ -1,5 +1,11 @@
 # CHANGE LOG
 
+
+## v4.0.0-alpha03
+
+* **ADDED:** Support for Alipay, AlipayHK, DANA, GCash, Kakao Pay, and Touch'n Go
+* **ADDED:** `platform_type` field for Source
+
 ## v4.0.0-alpha02
 
 * **ADDED:** EzyPay installment payment to Android SDK
