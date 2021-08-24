@@ -17,8 +17,6 @@ object PaymentSetting {
                     R.string.payment_preference_internet_banking_ktb_key,
                     R.string.payment_preference_internet_banking_scb_key,
                     R.string.payment_preference_internet_banking_bbl_key,
-                    R.string.payment_preference_alipay_key,
-                    R.string.payment_preference_bill_payment_tesco_lotus_key,
                     R.string.payment_preference_mobile_banking_scb_key,
                     R.string.payment_preference_installment_bay_key,
                     R.string.payment_preference_installment_first_choice_key,
@@ -27,11 +25,19 @@ object PaymentSetting {
                     R.string.payment_preference_installment_ktc_key,
                     R.string.payment_preference_installment_kbank_key,
                     R.string.payment_preference_installment_scb_key,
+                    R.string.payment_preference_alipay_key,
+                    R.string.payment_preference_alipay_cn_key,
+                    R.string.payment_preference_alipay_hk_key,
+                    R.string.payment_preference_bill_payment_tesco_lotus_key,
                     R.string.payment_preference_econtext_key,
+                    R.string.payment_preference_dana_key,
                     R.string.payment_preference_fpx_key,
+                    R.string.payment_preference_gcash_key,
+                    R.string.payment_preference_kakaopay_key,
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
                     R.string.payment_preference_points_citi_key,
+                    R.string.payment_preference_touch_n_go_key,
                     R.string.payment_preference_truemoney_key
             )
                     .map { context.getString(it) }
@@ -71,6 +77,12 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_promptpay_key) -> SourceType.PromptPay
                         context.getString(R.string.payment_preference_points_citi_key) -> SourceType.PointsCiti
                         context.getString(R.string.payment_preference_truemoney_key) -> SourceType.TrueMoney
+                        context.getString(R.string.payment_preference_alipay_hk_key) -> SourceType.AlipayHk
+                        context.getString(R.string.payment_preference_alipay_cn_key) -> SourceType.AlipayCn
+                        context.getString(R.string.payment_preference_dana_key) -> SourceType.Dana
+                        context.getString(R.string.payment_preference_gcash_key) -> SourceType.Gcash
+                        context.getString(R.string.payment_preference_kakaopay_key) -> SourceType.Kakaopay
+                        context.getString(R.string.payment_preference_touch_n_go_key) -> SourceType.TouchNGo
                         else -> null
                     }
                 }

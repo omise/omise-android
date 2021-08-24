@@ -92,4 +92,11 @@
     <string name="fpx_info_text">กรุณากรอกอีเมลเพื่อรับการยืนยันการรับชำระจากเอฟพีเอ็กซ์ (ถ้ามี)</string>
     <string name="empty_text">ไม่มีข้อมูล</string>
     <string name="fpx_no_data">ไม่สามารถเรียกข้อมูลรายชื่อธนาคารได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</string>
+    <string name="payment_method_alipay_cn_title">อาลีเพย์</string>
+    <string name="payment_method_alipay_hk_title">อาลีเพย์ฮ่องกง</string>
+    <string name="payment_method_dana_title">ดานา</string>
+    <string name="payment_method_gcash_title">จีแคช</string>
+    <string name="payment_method_kakaopay_title">กาเกาเพย์</string>
+    <string name="payment_method_touch_n_go_title">ทัชแอนด์โก</string>
+    <string name="payment_method_alipayplus_footnote">(อาลีเพย์พลัส)</string>
 </resources>

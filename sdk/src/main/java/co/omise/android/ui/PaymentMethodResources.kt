@@ -37,6 +37,7 @@ internal val List<SourceType.MobileBanking>.mobileBankingResources: List<MobileB
 internal sealed class PaymentMethodResource(
         @DrawableRes override val iconRes: Int,
         @StringRes override val titleRes: Int?,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val isCreditCard: Boolean = false,
         val sourceType: SourceType? = null
@@ -136,6 +137,54 @@ internal sealed class PaymentMethodResource(
             sourceType = SourceType.Fpx
     )
 
+    object AlipayCn : PaymentMethodResource(
+            iconRes = R.drawable.payment_alipay_cn,
+            titleRes = R.string.payment_method_alipay_cn_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.AlipayCn
+    )
+
+    object AlipayHk : PaymentMethodResource(
+            iconRes = R.drawable.payment_alipay_hk,
+            titleRes = R.string.payment_method_alipay_hk_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.AlipayHk
+    )
+
+    object Dana : PaymentMethodResource(
+            iconRes = R.drawable.payment_dana,
+            titleRes = R.string.payment_method_dana_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.Dana
+    )
+
+    object Gcash : PaymentMethodResource(
+            iconRes = R.drawable.payment_gcash,
+            titleRes = R.string.payment_method_gcash_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.Gcash
+    )
+
+    object Kakaopay : PaymentMethodResource(
+            iconRes = R.drawable.payment_kakaopay,
+            titleRes = R.string.payment_method_kakaopay_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.Kakaopay
+    )
+
+    object TouchNGo : PaymentMethodResource(
+            iconRes = R.drawable.payment_touch_n_go,
+            titleRes = R.string.payment_method_touch_n_go_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.TouchNGo
+    )
+
     companion object {
         val all: List<PaymentMethodResource>
             get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }
@@ -146,6 +195,7 @@ internal sealed class InstallmentResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val sourceType: SourceType
 ) : OmiseListItem {
@@ -215,6 +265,7 @@ internal sealed class InternetBankingResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val sourceType: SourceType
 ) : OmiseListItem {
@@ -257,6 +308,7 @@ internal sealed class MobileBankingResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val sourceType: SourceType
 ) : OmiseListItem {

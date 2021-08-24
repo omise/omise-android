@@ -43,6 +43,12 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.Alipay,
             PaymentMethodResource.PayNow,
             PaymentMethodResource.PromptPay,
+            PaymentMethodResource.AlipayCn,
+            PaymentMethodResource.AlipayHk,
+            PaymentMethodResource.Dana,
+            PaymentMethodResource.Gcash,
+            PaymentMethodResource.Kakaopay,
+            PaymentMethodResource.TouchNGo,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
         }

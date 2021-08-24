@@ -98,4 +98,11 @@
     <string name="fpx_info_text">(Optional) Please input your email to receive transaction confirmation from FPX</string>
     <string name="empty_text">No data available</string>
     <string name="fpx_no_data">Cannot retrieve list of banks. Please try again later.</string>
+    <string name="payment_method_alipayplus_footnote">(Alipay+™ Partner)</string>
+    <string name="payment_method_alipay_cn_title">Alipay</string>
+    <string name="payment_method_alipay_hk_title">AlipayHK</string>
+    <string name="payment_method_dana_title">DANA</string>
+    <string name="payment_method_gcash_title">GCash</string>
+    <string name="payment_method_kakaopay_title">Kakao Pay</string>
+    <string name="payment_method_touch_n_go_title">TNG eWallet</string>
 </resources>

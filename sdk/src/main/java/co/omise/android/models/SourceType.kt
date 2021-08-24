@@ -24,6 +24,12 @@ sealed class SourceType(
     object PointsCiti : SourceType("points_citi")
     object PayNow : SourceType("paynow")
     object PromptPay : SourceType("promptpay")
+    object AlipayCn : SourceType("alipay_cn")
+    object AlipayHk : SourceType("alipay_hk")
+    object Dana : SourceType("dana")
+    object Gcash : SourceType("gcash")
+    object Kakaopay : SourceType("kakaopay")
+    object TouchNGo : SourceType("touch_n_go")
     object Fpx : SourceType("fpx") {
         var banks : List<Bank>? = null
     }
@@ -93,6 +99,12 @@ sealed class SourceType(
             "points_citi" -> PointsCiti
             "paynow" -> PayNow
             "promptpay" -> PromptPay
+            "alipay_cn" -> AlipayCn
+            "alipay_hk" -> AlipayHk
+            "dana" -> Dana
+            "gcash" -> Gcash
+            "kakaopay" -> Kakaopay
+            "touch_n_go" -> TouchNGo
             else -> Unknown(name)
         }
     }

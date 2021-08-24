@@ -85,6 +85,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         val listItemView = view.findViewById<LinearLayout>(R.id.list_item_view)
         val optionImage = view.findViewById<ImageView>(R.id.image_item_icon)
         val nameText = view.findViewById<TextView>(R.id.text_item_title)
+        val subtitleText = view.findViewById<TextView>(R.id.subtext_item_title)
         val typeImage = view.findViewById<ImageView>(R.id.image_indicator_icon)
 
         if (item.iconRes != null) {
@@ -95,6 +96,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         }
 
         nameText.text = item.titleRes?.let { view.context.getString(it) } ?: item.title
+        subtitleText.text = item.subtitleRes?.let { view.context.getString(it) } ?: item.subtitle
 
         if (item.enabled == true) {
             item.indicatorIconRes?.let { typeImage.setImageResource(it) }
@@ -104,6 +106,12 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
             item.indicatorIconRes?.let { typeImage.setImageResource(android.R.color.transparent) }
             listItemView.isEnabled = false
             listItemView.alpha = 0.2F
+        }
+
+        if (subtitleText.text.isNotBlank()) {
+            subtitleText.visibility = View.VISIBLE
+        } else {
+            subtitleText.visibility = View.GONE
         }
 
         view.setOnClickListener { listener?.onClick(item) }
@@ -116,6 +124,10 @@ interface OmiseListItem {
     val title: String?
         get() = null
     val titleRes: Int?
+        get() = null
+    val subtitle: String?
+        get() = null
+    val subtitleRes: Int?
         get() = null
     val indicatorIconRes: Int?
         get() = null
