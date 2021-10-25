@@ -2,6 +2,7 @@ package co.omise.android.ui
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
@@ -54,9 +55,13 @@ class InstallmentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText(R.string.payment_method_installment_kasikorn_title))))
         onView(withListId(R.id.recycler_view).atPosition(5)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ktc_title))))
         onView(withListId(R.id.recycler_view).atPosition(6)).check(matches(hasDescendant(withText(R.string.payment_method_installment_scb_title))))
+
+        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp());
+
         onView(withListId(R.id.recycler_view).atPosition(7)).check(matches(hasDescendant(withText(R.string.payment_method_installment_citi_title))))
         onView(withListId(R.id.recycler_view).atPosition(8)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ttb_title))))
         onView(withListId(R.id.recycler_view).atPosition(9)).check(matches(hasDescendant(withText(R.string.payment_method_installment_uob_title))))
+
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 
