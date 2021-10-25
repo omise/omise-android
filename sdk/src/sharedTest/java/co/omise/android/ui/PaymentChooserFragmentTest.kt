@@ -171,7 +171,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
                 PaymentMethod(name = "internet_banking_ktb"),
-                PaymentMethod(name = "internet_banking_scb"),
+                PaymentMethod(name = "internet_banking_scb")
         )
         verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
     }
