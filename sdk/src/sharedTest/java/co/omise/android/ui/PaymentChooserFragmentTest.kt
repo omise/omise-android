@@ -60,6 +60,9 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "installment_scb"),
+                PaymentMethod(name = "installment_citi"),
+                PaymentMethod(name = "installment_ttb"),
+                PaymentMethod(name = "installment_uob"),
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
                 PaymentMethod(name = "internet_banking_ktb"),
@@ -112,7 +115,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
 
-        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
 
         assertListAtIndexHasResource(9, R.string.payment_method_alipay_cn_title)
         assertListAtIndexHasResource(10, R.string.payment_method_alipay_hk_title)
@@ -152,7 +155,10 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_first_choice"),
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
-                PaymentMethod(name = "installment_scb")
+                PaymentMethod(name = "installment_scb"),
+                PaymentMethod(name = "installment_citi"),
+                PaymentMethod(name = "installment_ttb"),
+                PaymentMethod(name = "installment_uob")
         )
         verify(fragment.navigation)?.navigateToInstallmentChooser(expectedMethods)
     }
@@ -165,7 +171,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "internet_banking_bay"),
                 PaymentMethod(name = "internet_banking_bbl"),
                 PaymentMethod(name = "internet_banking_ktb"),
-                PaymentMethod(name = "internet_banking_scb")
+                PaymentMethod(name = "internet_banking_scb"),
         )
         verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
     }
