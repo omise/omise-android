@@ -1,6 +1,12 @@
 # CHANGE LOG
 
 
+## v4.0.0-alpha04
+
+* **ADDED:** Support for Citi installment
+* **ADDED:** Support for TTB installment
+* **ADDED:** Support for Uob installment
+
 ## v4.0.0-alpha03
 
 * **ADDED:** Support for Alipay, AlipayHK, DANA, GCash, Kakao Pay, and Touch'n Go
