@@ -252,6 +252,27 @@ internal sealed class InstallmentResource(
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Scb
     )
+
+    object Citi : InstallmentResource(
+        iconRes = R.drawable.payment_citi,
+        titleRes = R.string.payment_method_installment_citi_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.Citi
+    )
+
+    object Ttb : InstallmentResource(
+        iconRes = R.drawable.payment_ttb,
+        titleRes = R.string.payment_method_installment_ttb_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.Ttb
+    )
+
+    object Uob : InstallmentResource(
+        iconRes = R.drawable.payment_uob,
+        titleRes = R.string.payment_method_installment_uob_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.Uob
+    )
 }
 
 internal data class InstallmentTermResource(
