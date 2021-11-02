@@ -87,6 +87,7 @@
     <string name="payment_method_installment_term_months_title">%d months</string>
     
     <string name="payment_method_mobile_banking_scb_title">Siam Commercial Bank</string>
+    <string name="payment_method_mobile_banking_kbank_title">Kasikorn</string>
 
     <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
     <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>

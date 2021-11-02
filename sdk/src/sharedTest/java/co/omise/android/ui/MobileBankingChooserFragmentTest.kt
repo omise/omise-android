@@ -29,7 +29,8 @@ import org.junit.runner.RunWith
 class MobileBankingChooserFragmentTest {
     private lateinit var fragment: MobileBankingChooserFragment
     private val paymentMethods = listOf(
-            PaymentMethod(name = "mobile_banking_scb")
+            PaymentMethod(name = "mobile_banking_scb"),
+            PaymentMethod(name = "mobile_banking_kbank")
     )
 
     private val mockRequest = mock<PaymentCreatorRequester<Source>> {
@@ -49,8 +50,9 @@ class MobileBankingChooserFragmentTest {
     }
 
     @Test
-    fun displayAllowedInstallmentBanks_showAllowedInstallmentBanksFromArgument() {
+    fun displayAllowedBanks_showAllowedBanksFromArgument() {
         onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_scb_title))))
+        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_kbank_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 
