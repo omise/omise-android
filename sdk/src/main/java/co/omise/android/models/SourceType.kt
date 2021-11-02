@@ -45,6 +45,7 @@ sealed class SourceType(
 
     sealed class MobileBanking(@JsonValue override val name: String?) : SourceType(name) {
         object Scb : MobileBanking("mobile_banking_scb")
+        object OcbcPao : MobileBanking("mobile_banking_ocbc_pao")
         data class Unknown(@JsonValue override val name: String?) : MobileBanking(name)
     }
 
@@ -89,6 +90,7 @@ sealed class SourceType(
             "internet_banking_scb" -> InternetBanking.Scb
             "internet_banking_bbl" -> InternetBanking.Bbl
             "mobile_banking_scb" -> MobileBanking.Scb
+            "mobile_banking_ocbc_pao" -> MobileBanking.OcbcPao
             "alipay" -> Alipay
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
             "barcode_alipay" -> BarcodeAlipay

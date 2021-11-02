@@ -345,6 +345,13 @@ internal sealed class MobileBankingResource(
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.MobileBanking.Scb
     )
+
+    object OcbcPao : MobileBankingResource(
+        iconRes = R.drawable.payment_ocbc,
+        titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.OcbcPao
+    )
 }
 
 internal class FpxResource(
