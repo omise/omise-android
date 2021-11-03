@@ -347,7 +347,7 @@ internal sealed class MobileBankingResource(
     )
 
     object OcbcPao : MobileBankingResource(
-        iconRes = R.drawable.payment_ocbc,
+        iconRes = R.drawable.payment_ocbc_pao,
         titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MobileBanking.OcbcPao
