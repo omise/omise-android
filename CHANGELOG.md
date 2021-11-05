@@ -1,6 +1,11 @@
 # CHANGE LOG
 
 
+## v4.0.0-alpha05
+
+* **ADDED:** Support for KBank mobile banking
+* **ADDED:** Support for OCBC Pay Anyone mobile banking
+
 ## v4.0.0-alpha04
 
 * **ADDED:** Support for Citi installment
