@@ -71,6 +71,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay"),
                 PaymentMethod(name = "mobile_banking_kbank"),
+                PaymentMethod(name = "mobile_banking_ocbc_pao"),
                 PaymentMethod(name = "mobile_banking_scb"),
                 PaymentMethod(name = "alipay_cn"),
                 PaymentMethod(name = "alipay_hk"),
@@ -217,7 +218,8 @@ class PaymentChooserFragmentTest {
 
         val expectedMethods = listOf(
                 PaymentMethod(name = "mobile_banking_kbank"),
-                PaymentMethod(name = "mobile_banking_scb"),
+                PaymentMethod(name = "mobile_banking_ocbc_pao"),
+                PaymentMethod(name = "mobile_banking_scb")
         )
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
