@@ -102,5 +102,6 @@
     <string name="payment_method_kakaopay_title">กาเกาเพย์</string>
     <string name="payment_method_touch_n_go_title">ทัชแอนด์โก</string>
     <string name="payment_method_alipayplus_footnote">(อาลีเพย์พลัส)</string>
+    <string name="payment_method_mobile_banking_kbank_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
 </resources>

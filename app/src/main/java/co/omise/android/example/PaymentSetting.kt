@@ -17,6 +17,7 @@ object PaymentSetting {
                     R.string.payment_preference_internet_banking_ktb_key,
                     R.string.payment_preference_internet_banking_scb_key,
                     R.string.payment_preference_internet_banking_bbl_key,
+                    R.string.payment_preference_mobile_banking_kbank_key,
                     R.string.payment_preference_mobile_banking_ocbc_pao_key,
                     R.string.payment_preference_mobile_banking_scb_key,
                     R.string.payment_preference_installment_bay_key,
@@ -67,6 +68,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_internet_banking_bbl_key) -> SourceType.InternetBanking.Bbl
                         context.getString(R.string.payment_preference_alipay_key) -> SourceType.Alipay
                         context.getString(R.string.payment_preference_bill_payment_tesco_lotus_key) -> SourceType.BillPaymentTescoLotus
+                        context.getString(R.string.payment_preference_mobile_banking_kbank_key) -> SourceType.MobileBanking.KBank
                         context.getString(R.string.payment_preference_mobile_banking_ocbc_pao_key) -> SourceType.MobileBanking.OcbcPao
                         context.getString(R.string.payment_preference_mobile_banking_scb_key) -> SourceType.MobileBanking.Scb
                         context.getString(R.string.payment_preference_installment_bay_key) -> SourceType.Installment.Bay
