@@ -102,6 +102,6 @@
     <string name="payment_method_kakaopay_title">カカオペイ</string>
     <string name="payment_method_touch_n_go_title">タッチンゴー</string>
     <string name="payment_method_alipayplus_footnote">(アリペイプラス)</string>
-    <string name="payment_method_mobile_banking_kbank_title">カシコン</string>
+    <string name="payment_method_mobile_banking_kbank_title">カシコン銀行</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
 </resources>
