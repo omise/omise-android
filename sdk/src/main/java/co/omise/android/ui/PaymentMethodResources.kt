@@ -340,7 +340,7 @@ internal sealed class MobileBankingResource(
     }
 
     object KBank : MobileBankingResource(
-        iconRes = R.drawable.payment_kasikorn,
+        iconRes = R.drawable.payment_kplus,
         titleRes = R.string.payment_method_mobile_banking_kbank_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MobileBanking.KBank
