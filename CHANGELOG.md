@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.0.0-alpha06
+
+* **CHANGED:** Update KBank mobile banking logo and title
 
 ## v4.0.0-alpha05
 
