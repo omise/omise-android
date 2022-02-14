@@ -70,6 +70,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay"),
+                PaymentMethod(name = "mobile_banking_bay"),
                 PaymentMethod(name = "mobile_banking_kbank"),
                 PaymentMethod(name = "mobile_banking_ocbc_pao"),
                 PaymentMethod(name = "mobile_banking_scb"),
@@ -217,6 +218,7 @@ class PaymentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
 
         val expectedMethods = listOf(
+                PaymentMethod(name = "mobile_banking_bay"),
                 PaymentMethod(name = "mobile_banking_kbank"),
                 PaymentMethod(name = "mobile_banking_ocbc_pao"),
                 PaymentMethod(name = "mobile_banking_scb")

@@ -339,6 +339,13 @@ internal sealed class MobileBankingResource(
             get() = MobileBankingResource::class.nestedClasses.mapNotNull { it.objectInstance as? MobileBankingResource }
     }
 
+    object Bay : MobileBankingResource(
+        iconRes = R.drawable.payment_bay,
+        titleRes = R.string.payment_method_mobile_banking_bay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.Bay
+    )
+    
     object KBank : MobileBankingResource(
         iconRes = R.drawable.payment_kplus,
         titleRes = R.string.payment_method_mobile_banking_kbank_title,

@@ -44,6 +44,7 @@ sealed class SourceType(
     }
 
     sealed class MobileBanking(@JsonValue override val name: String?) : SourceType(name) {
+        object Bay : MobileBanking("mobile_banking_bay")
         object KBank : MobileBanking("mobile_banking_kbank")
         object OcbcPao : MobileBanking("mobile_banking_ocbc_pao")
         object Scb : MobileBanking("mobile_banking_scb")
@@ -90,6 +91,7 @@ sealed class SourceType(
             "internet_banking_ktb" -> InternetBanking.Ktb
             "internet_banking_scb" -> InternetBanking.Scb
             "internet_banking_bbl" -> InternetBanking.Bbl
+            "mobile_banking_bay" -> MobileBanking.Bay
             "mobile_banking_kbank" -> MobileBanking.KBank
             "mobile_banking_ocbc_pao" -> MobileBanking.OcbcPao
             "mobile_banking_scb" -> MobileBanking.Scb
