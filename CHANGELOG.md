@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v4.0.0-alpha07
+
+* **ADDED:** Support for Bay mobile banking
+
 ## v4.0.0-alpha06
 
 * **CHANGED:** Update KBank mobile banking logo and title
