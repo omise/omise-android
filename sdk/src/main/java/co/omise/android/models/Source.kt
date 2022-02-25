@@ -9,6 +9,7 @@ import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import org.joda.time.DateTime
 import java.io.IOException
+import kotlin.jvm.Throws
 
 /**
  * Represents Source object and contains its [RequestBuilder].
@@ -34,6 +35,9 @@ data class Source(
         val terminalId: String? = null,
         val name: String? = null,
         val email: String? = null,
+        val bank: String? = null,
+        @field:JsonProperty("platform_type")
+        val platformType: String? = null,
         @field:JsonProperty("phone_number")
         val phoneNumber: String? = null,
         @field:JsonProperty("mobile_number")
@@ -79,6 +83,10 @@ data class Source(
         private var name: String? = null
         @JsonProperty("email")
         private var email: String? = null
+        @JsonProperty("bank")
+        private var bank: String? = null
+        @JsonProperty("platform_type")
+        private var platformType: String? = "android"
         @JsonProperty("phone_number")
         private var phoneNumber: String? = null
         @JsonProperty("installment_term")
@@ -135,6 +143,16 @@ data class Source(
 
         fun email(email: String): CreateSourceRequestBuilder {
             this.email = email
+            return this
+        }
+
+        fun bank(bank: String): CreateSourceRequestBuilder {
+            this.bank = bank
+            return this
+        }
+
+        fun platformType(platformType: String): CreateSourceRequestBuilder {
+            this.platformType = platformType
             return this
         }
 

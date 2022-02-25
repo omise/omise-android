@@ -1,5 +1,34 @@
 # CHANGE LOG
 
+## v4.0.0-alpha07
+
+* **ADDED:** Support for Bay mobile banking
+
+## v4.0.0-alpha06
+
+* **CHANGED:** Update KBank mobile banking logo and title
+
+## v4.0.0-alpha05
+
+* **ADDED:** Support for KBank mobile banking
+* **ADDED:** Support for OCBC Pay Anyone mobile banking
+
+## v4.0.0-alpha04
+
+* **ADDED:** Support for Citi installment
+* **ADDED:** Support for TTB installment
+* **ADDED:** Support for Uob installment
+
+## v4.0.0-alpha03
+
+* **ADDED:** Support for Alipay, AlipayHK, DANA, GCash, Kakao Pay, and Touch'n Go
+* **ADDED:** `platform_type` field for Source
+
+## v4.0.0-alpha02
+
+* **ADDED:** EzyPay installment payment to Android SDK
+
+
 ## v4.0.0-alpha01
 
 * **CHANGED:** Require minimum SDK version 21

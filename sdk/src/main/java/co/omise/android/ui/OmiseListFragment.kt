@@ -2,20 +2,23 @@ package co.omise.android.ui
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.omise.android.R
-import kotlinx.android.synthetic.main.fragment_list.recycler_view
+import kotlinx.android.synthetic.main.fragment_list.*
 
 /**
  * OmiseListFragment is the base class for all list-based UI classes.
@@ -24,6 +27,7 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
     abstract fun listItems(): List<T>
 
+    protected val noDataText: TextView by lazy { no_data_text }
     private val recyclerView: RecyclerView by lazy { recycler_view }
 
     private val onClickListener = object : OmiseListItemClickListener {
@@ -42,8 +46,16 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
         recyclerView.layoutManager = layoutManager
         context?.let { recyclerView.addItemDecoration(OmiseItemDecoration(it)) }
+
+        if (adapter.itemCount == 0) {
+            noDataText.visibility = View.VISIBLE
+        } else {
+            noDataText.visibility = View.INVISIBLE
+        }
+
         recyclerView.adapter = adapter
     }
 
@@ -70,8 +82,10 @@ class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListIte
 class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListener?) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: OmiseListItem) {
+        val listItemView = view.findViewById<LinearLayout>(R.id.list_item_view)
         val optionImage = view.findViewById<ImageView>(R.id.image_item_icon)
         val nameText = view.findViewById<TextView>(R.id.text_item_title)
+        val subtitleText = view.findViewById<TextView>(R.id.subtext_item_title)
         val typeImage = view.findViewById<ImageView>(R.id.image_indicator_icon)
 
         if (item.iconRes != null) {
@@ -82,7 +96,23 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
         }
 
         nameText.text = item.titleRes?.let { view.context.getString(it) } ?: item.title
-        item.indicatorIconRes?.let { typeImage.setImageResource(it) }
+        subtitleText.text = item.subtitleRes?.let { view.context.getString(it) } ?: item.subtitle
+
+        if (item.enabled == true) {
+            item.indicatorIconRes?.let { typeImage.setImageResource(it) }
+            listItemView.isEnabled = true
+            listItemView.alpha = 1F
+        } else {
+            item.indicatorIconRes?.let { typeImage.setImageResource(android.R.color.transparent) }
+            listItemView.isEnabled = false
+            listItemView.alpha = 0.2F
+        }
+
+        if (subtitleText.text.isNotBlank()) {
+            subtitleText.visibility = View.VISIBLE
+        } else {
+            subtitleText.visibility = View.GONE
+        }
 
         view.setOnClickListener { listener?.onClick(item) }
     }
@@ -95,8 +125,14 @@ interface OmiseListItem {
         get() = null
     val titleRes: Int?
         get() = null
+    val subtitle: String?
+        get() = null
+    val subtitleRes: Int?
+        get() = null
     val indicatorIconRes: Int?
-    get() = null
+        get() = null
+    val enabled: Boolean?
+        get() = true
 }
 
 interface OmiseListItemClickListener {

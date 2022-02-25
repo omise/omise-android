@@ -65,10 +65,14 @@
     <string name="payment_method_credit_card_title">บัตรเครดิต</string>
     <string name="payment_method_installment_bay_title">ธนาคารกรุงศรี</string>
     <string name="payment_method_installment_bbl_title">ธนาคารกรุงเทพ</string>
+    <string name="payment_method_installment_ezypay_title">เมย์แบงก์อีซีเพย์</string>
     <string name="payment_method_installment_first_choice_title">กรุงศรีเฟิร์สช้อยส์</string>
     <string name="payment_method_installment_kasikorn_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_installment_ktc_title">เคทีซี</string>
     <string name="payment_method_installment_scb_title">ธนาคารไทยพาณิชย์</string>
+    <string name="payment_method_installment_citi_title">ธนาคารซิตี้แบงก์์</string>
+    <string name="payment_method_installment_ttb_title">ธนาคารทีเอ็มบีธนชาต</string>
+    <string name="payment_method_installment_uob_title">ธนาคารยูโอบี</string>
     <string name="payment_method_installments_title">ผ่อนชำระ</string>
     <string name="payment_method_internet_banking_bay_title">ธนาคารกรุงศรีอยุธยา</string>
     <string name="payment_method_internet_banking_bbl_title">ธนาคารกรุงเทพ</string>
@@ -87,5 +91,19 @@
     <string name="payment_method_points_citi_title">ชำระด้วยคะแนนซิตี้รีวอร์ด</string>
     <string name="payment_truemoney_title">ทรูมันนี่วอลเล็ท</string>
     <string name="truemoney_info_text">กรุณากรอกหมายเลขโทรศัพท์ที่ผูกกับบัญชีทรูมันนี่วอลเล็ท</string>
+    <string name="payment_method_fpx_title">FPX</string>
+    <string name="fpx_info_text">กรุณากรอกอีเมลเพื่อรับการยืนยันการรับชำระจากเอฟพีเอ็กซ์ (ถ้ามี)</string>
+    <string name="empty_text">ไม่มีข้อมูล</string>
+    <string name="fpx_no_data">ไม่สามารถเรียกข้อมูลรายชื่อธนาคารได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</string>
+    <string name="payment_method_alipay_cn_title">อาลีเพย์</string>
+    <string name="payment_method_alipay_hk_title">อาลีเพย์ฮ่องกง</string>
+    <string name="payment_method_dana_title">ดานา</string>
+    <string name="payment_method_gcash_title">จีแคช</string>
+    <string name="payment_method_kakaopay_title">กาเกาเพย์</string>
+    <string name="payment_method_touch_n_go_title">ทัชแอนด์โก</string>
+    <string name="payment_method_alipayplus_footnote">(อาลีเพย์พลัส)</string>
+    <string name="payment_method_mobile_banking_kbank_title">ธนาคารกสิกรไทย</string>
+    <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
+    <string name="payment_method_mobile_banking_bay_title">ธนาคารกรุงศรีอยุธยา</string>
     <string name="googlepay">Google Pay™</string>
 </resources>

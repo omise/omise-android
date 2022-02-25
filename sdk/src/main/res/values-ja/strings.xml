@@ -65,6 +65,7 @@
     <string name="payment_method_credit_card_title">クレジットカード</string>
     <string name="payment_method_installment_bay_title">クルンシィ</string>
     <string name="payment_method_installment_bbl_title">バンコク銀行</string>
+    <string name="payment_method_installment_ezypay_title">メイバンクイージーペイ</string>
     <string name="payment_method_installment_first_choice_title">クルンシィ・ファーストチョイス</string>
     <string name="payment_method_installment_kasikorn_title">カシコン</string>
     <string name="payment_method_installment_ktc_title">クルンタイカード</string>
@@ -75,6 +76,9 @@
     <string name="payment_method_mobile_banking_scb_title">サイアム・コマーシャル銀行</string>
     <string name="payment_method_internet_banking_ktb_title">クルンタイ銀行</string>
     <string name="payment_method_internet_banking_scb_title">サイアム・コマーシャル銀行</string>
+    <string name="payment_method_installment_citi_title">シティバンク</string>
+    <string name="payment_method_installment_ttb_title">TMBタナチャート銀行</string>
+    <string name="payment_method_installment_uob_title">ユナイテッド・オーバーシーズ銀行</string>
     <string name="payment_method_internet_banking_title">インターネットバンク</string>
     <string name="payment_method_mobile_banking_title">モバイルバンキング</string>
     <string name="payment_method_netbank_title">ネットバンク</string>
@@ -87,5 +91,19 @@
     <string name="payment_method_points_citi_title">Citi Rewardsポイント</string>
     <string name="payment_truemoney_title">TrueMoneyウォレット</string>
     <string name="truemoney_info_text">TrueMoney ウォレットアカウントに登録されている携帯電話番号を入力してください</string>
+    <string name="payment_method_fpx_title">FPX</string>
+    <string name="fpx_info_text">(任意) メールアドレスを入力し、FPXからの取引確認メールを受信します</string>
+    <string name="empty_text">データなし</string>
+    <string name="fpx_no_data">銀行のリストを検索できません。後でもう一度お試しください。</string>
+    <string name="payment_method_alipay_cn_title">アリペイ</string>
+    <string name="payment_method_alipay_hk_title">アリペイ香港</string>
+    <string name="payment_method_dana_title">ダナ</string>
+    <string name="payment_method_gcash_title">ジーキャッシュ</string>
+    <string name="payment_method_kakaopay_title">カカオペイ</string>
+    <string name="payment_method_touch_n_go_title">タッチンゴー</string>
+    <string name="payment_method_alipayplus_footnote">(アリペイプラス)</string>
+    <string name="payment_method_mobile_banking_kbank_title">カシコン銀行</string>
+    <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
+    <string name="payment_method_mobile_banking_bay_title">アユタヤ銀行</string>
     <string name="googlepay">Google Pay™</string>
 </resources>

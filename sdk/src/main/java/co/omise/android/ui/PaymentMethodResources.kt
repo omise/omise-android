@@ -40,6 +40,7 @@ internal val List<SourceType.MobileBanking>.mobileBankingResources: List<MobileB
 internal sealed class PaymentMethodResource(
         @DrawableRes override val iconRes: Int,
         @StringRes override val titleRes: Int?,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val isCreditCard: Boolean = false,
         val sourceType: SourceType? = null,
@@ -140,6 +141,61 @@ internal sealed class PaymentMethodResource(
             sourceType = SourceType.TrueMoney
     )
 
+    object Fpx : PaymentMethodResource(
+            iconRes = R.drawable.payment_fpx,
+            titleRes = R.string.payment_method_fpx_title,
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Fpx
+    )
+
+    object AlipayCn : PaymentMethodResource(
+            iconRes = R.drawable.payment_alipay_cn,
+            titleRes = R.string.payment_method_alipay_cn_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.AlipayCn
+    )
+
+    object AlipayHk : PaymentMethodResource(
+            iconRes = R.drawable.payment_alipay_hk,
+            titleRes = R.string.payment_method_alipay_hk_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.AlipayHk
+    )
+
+    object Dana : PaymentMethodResource(
+            iconRes = R.drawable.payment_dana,
+            titleRes = R.string.payment_method_dana_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.Dana
+    )
+
+    object Gcash : PaymentMethodResource(
+            iconRes = R.drawable.payment_gcash,
+            titleRes = R.string.payment_method_gcash_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.Gcash
+    )
+
+    object Kakaopay : PaymentMethodResource(
+            iconRes = R.drawable.payment_kakaopay,
+            titleRes = R.string.payment_method_kakaopay_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.Kakaopay
+    )
+
+    object TouchNGo : PaymentMethodResource(
+            iconRes = R.drawable.payment_touch_n_go,
+            titleRes = R.string.payment_method_touch_n_go_title,
+            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.TouchNGo
+    )
+
     companion object {
         val all: List<PaymentMethodResource>
             get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }
@@ -150,6 +206,7 @@ internal sealed class InstallmentResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val sourceType: SourceType
 ) : OmiseListItem {
@@ -163,6 +220,13 @@ internal sealed class InstallmentResource(
             titleRes = R.string.payment_method_installment_bbl_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Bbl
+    )
+
+    object Ezypay : InstallmentResource(
+            iconRes = R.drawable.payment_maybank,
+            titleRes = R.string.payment_method_installment_ezypay_title,
+            indicatorIconRes = R.drawable.ic_next,
+            sourceType = SourceType.Installment.Ezypay
     )
 
     object KBank : InstallmentResource(
@@ -199,6 +263,27 @@ internal sealed class InstallmentResource(
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.Installment.Scb
     )
+
+    object Citi : InstallmentResource(
+        iconRes = R.drawable.payment_citi,
+        titleRes = R.string.payment_method_installment_citi_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.Citi
+    )
+
+    object Ttb : InstallmentResource(
+        iconRes = R.drawable.payment_ttb,
+        titleRes = R.string.payment_method_installment_ttb_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.Ttb
+    )
+
+    object Uob : InstallmentResource(
+        iconRes = R.drawable.payment_uob,
+        titleRes = R.string.payment_method_installment_uob_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.Uob
+    )
 }
 
 internal data class InstallmentTermResource(
@@ -212,6 +297,7 @@ internal sealed class InternetBankingResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val sourceType: SourceType
 ) : OmiseListItem {
@@ -254,6 +340,7 @@ internal sealed class MobileBankingResource(
         @DrawableRes override val iconRes: Int,
         override val title: String? = null,
         @StringRes override val titleRes: Int? = null,
+        @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val sourceType: SourceType
 ) : OmiseListItem {
@@ -263,10 +350,71 @@ internal sealed class MobileBankingResource(
             get() = MobileBankingResource::class.nestedClasses.mapNotNull { it.objectInstance as? MobileBankingResource }
     }
 
+    object Bay : MobileBankingResource(
+        iconRes = R.drawable.payment_bay,
+        titleRes = R.string.payment_method_mobile_banking_bay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.Bay
+    )
+    
+    object KBank : MobileBankingResource(
+        iconRes = R.drawable.payment_kplus,
+        titleRes = R.string.payment_method_mobile_banking_kbank_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.KBank
+    )
+
+    object OcbcPao : MobileBankingResource(
+        iconRes = R.drawable.payment_ocbc_pao,
+        titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.OcbcPao
+    )
+
     object Scb : MobileBankingResource(
             iconRes = R.drawable.payment_scb,
             titleRes = R.string.payment_method_mobile_banking_scb_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.MobileBanking.Scb
     )
+
+}
+
+internal class FpxResource(
+        @DrawableRes override val iconRes: Int,
+        override val title: String? = null,
+        @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
+        override val enabled: Boolean? = false,
+        val bankCode: String? = null,
+) : OmiseListItem {
+
+    companion object {
+        val all: List<FpxResource>
+            get() = FpxResource::class.nestedClasses.mapNotNull { it.objectInstance as? FpxResource }
+
+        fun getBankImageFromCode(code: String?) : Int {
+            return when (code) {
+                "affin" -> R.drawable.payment_affin
+                "alliance" -> R.drawable.payment_alliance
+                "agro" -> R.drawable.payment_agro
+                "ambank" -> R.drawable.payment_ambank
+                "islam" -> R.drawable.payment_islam
+                "muamalat" -> R.drawable.payment_muamalat
+                "rakyat" -> R.drawable.payment_rakyat
+                "bsn" -> R.drawable.payment_bsn
+                "cimb" -> R.drawable.payment_cimb
+                "hongleong" -> R.drawable.payment_hongleong
+                "hsbc" -> R.drawable.payment_hsbc
+                "kfh" -> R.drawable.payment_kfh
+                "maybank2e" -> R.drawable.payment_maybank
+                "maybank2u" -> R.drawable.payment_maybank
+                "ocbc" -> R.drawable.payment_ocbc
+                "public" -> R.drawable.payment_publicbank
+                "rhb" -> R.drawable.payment_rhb
+                "sc" -> R.drawable.payment_sc
+                "uob" -> R.drawable.payment_uob
+                else -> R.drawable.payment_unknown
+            }
+        }
+    }
 }

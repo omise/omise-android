@@ -130,6 +130,8 @@ interface PaymentCreatorNavigation {
     fun navigateToEContextForm(eContext: SupportedEcontext)
     fun createSourceFinished(source: Source)
     fun navigateToTrueMoneyForm()
+    fun navigateToFpxEmailForm()
+    fun navigateToFpxBankChooser(banks: List<Bank>?, email: String)
     fun navigateToGooglePayForm()
 }
 
@@ -213,6 +215,21 @@ private class PaymentCreatorNavigationImpl(
 
     override fun navigateToTrueMoneyForm() {
         val fragment = TrueMoneyFormFragment().apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
+        addFragmentToBackStack(fragment)
+    }
+
+    override fun navigateToFpxEmailForm() {
+        val fragment = FpxEmailFormFragment().apply {
+            navigation = this@PaymentCreatorNavigationImpl
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
+        addFragmentToBackStack(fragment)
+    }
+
+    override fun navigateToFpxBankChooser(banks: List<Bank>?, email: String) {
+        val fragment = FpxBankChooserFragment.newInstance(banks, email).apply {
             requester = this@PaymentCreatorNavigationImpl.requester
         }
         addFragmentToBackStack(fragment)
