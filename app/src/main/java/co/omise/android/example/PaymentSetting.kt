@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import co.omise.android.models.Capability
 import co.omise.android.models.SourceType
+import co.omise.android.models.TokenizationMethod
 
 
 object PaymentSetting {
@@ -29,7 +30,8 @@ object PaymentSetting {
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
                     R.string.payment_preference_points_citi_key,
-                    R.string.payment_preference_truemoney_key
+                    R.string.payment_preference_truemoney_key,
+                    R.string.payment_preference_googlepay_key,
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -71,12 +73,23 @@ object PaymentSetting {
                 }
                 .filterNotNull()
 
+        val tokenizationMethods = paymentMethodPreferences
+                .filter { it.value }
+                .toMap()
+                .map {
+                    when (it.key) {
+                        context.getString(R.string.payment_preference_googlepay_key) -> TokenizationMethod.GooglePay
+                        else -> null
+                    }
+                }
+                .filterNotNull()
+
         val allowCreditCardMethod = paymentMethodPreferences[context.getString(R.string.payment_preference_credit_card_key)]
                 ?: false
 
         val zeroInterestInstallments = paymentMethodPreferences[context.getString(R.string.payment_preference_zero_interest_installments_key)]
                 ?: false
 
-        return Capability.create(allowCreditCardMethod, sourceTypes, zeroInterestInstallments)
+        return Capability.create(allowCreditCardMethod, sourceTypes, tokenizationMethods, zeroInterestInstallments)
     }
 }

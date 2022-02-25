@@ -3,10 +3,7 @@ package co.omise.android.ui
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import co.omise.android.R
-import co.omise.android.models.BackendType
-import co.omise.android.models.Capability
-import co.omise.android.models.SourceType
-import co.omise.android.models.backendType
+import co.omise.android.models.*
 
 internal val Capability.paymentMethodResources: List<PaymentMethodResource>
     get() {
@@ -15,7 +12,10 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                 .orEmpty()
                 .forEach { paymentMethod ->
                     when (paymentMethod.backendType) {
-                        BackendType.Token -> items.add(PaymentMethodResource.CreditCard)
+                        is BackendType.Token -> when ((paymentMethod.backendType as BackendType.Token).tokenizationMethod) {
+                            is TokenizationMethod.Card -> items.add(PaymentMethodResource.CreditCard)
+                            else -> PaymentMethodResource.all.find { it.tokenizationMethod == (paymentMethod.backendType as? BackendType.Token)?.tokenizationMethod }?.let { items.add(it) }
+                        }
                         is BackendType.Source -> when ((paymentMethod.backendType as BackendType.Source).sourceType) {
                             is SourceType.Installment -> items.add(PaymentMethodResource.Installments)
                             is SourceType.InternetBanking -> items.add(PaymentMethodResource.InternetBankings)
@@ -42,13 +42,21 @@ internal sealed class PaymentMethodResource(
         @StringRes override val titleRes: Int?,
         @DrawableRes override val indicatorIconRes: Int,
         val isCreditCard: Boolean = false,
-        val sourceType: SourceType? = null
+        val sourceType: SourceType? = null,
+        val tokenizationMethod: TokenizationMethod? = null
 ) : OmiseListItem {
     object CreditCard : PaymentMethodResource(
             iconRes = R.drawable.payment_card,
             titleRes = R.string.payment_method_credit_card_title,
             indicatorIconRes = R.drawable.ic_next,
             isCreditCard = true
+    )
+
+    object GooglePay : PaymentMethodResource(
+            iconRes = R.drawable.googlepay,
+            titleRes = R.string.googlepay,
+            indicatorIconRes = R.drawable.ic_next,
+            tokenizationMethod = TokenizationMethod.GooglePay,
     )
 
     object Installments : PaymentMethodResource(

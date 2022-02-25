@@ -3,6 +3,7 @@ package co.omise.android.models
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import co.omise.android.models.PaymentMethod.Companion.createSourceTypeMethod
+import co.omise.android.models.PaymentMethod.Companion.createTokenizationMethod
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import okhttp3.HttpUrl
@@ -17,7 +18,9 @@ import org.joda.time.DateTime
 data class Capability(
         var banks: List<String>? = null,
         @field:JsonProperty("payment_methods")
-        var paymentMethods: List<PaymentMethod>? = null,
+        var paymentMethods: MutableList<PaymentMethod>? = null,
+        @field:JsonProperty("tokenization_methods")
+        var tokenizationMethods: List<String>? = null,
         @field:JsonProperty("zero_interest_installments")
         val zeroInterestInstallments: Boolean = false,
         override var modelObject: String? = null,
@@ -26,7 +29,18 @@ data class Capability(
         override var location: String? = null,
         override var created: DateTime? = null,
         override var deleted: Boolean = false
+
 ) : Model {
+
+    init {
+        // Need to add them to payment methods as we use tokenization methods as payment methods as well
+        tokenizationMethods?.forEach {
+            tokenizationMethod ->
+                paymentMethods?.add((PaymentMethod(
+                        name = tokenizationMethod,
+                )))
+        }
+    }
 
     /**
      * The {@link RequestBuilder} class for retrieving account Capabilities.
@@ -45,18 +59,20 @@ data class Capability(
          *
          * @param allowCreditCard allow to create a [Token] with a credit card or not. Default is true.
          * @param sourceTypes list of [SourceType] that allow to create a [Source].
+         * @param tokenizationMethods list of [TokenizationMethod] that we can create a [Token] with.
          * @param zeroInterestInstallments whether merchant absorbs interest for installment payments.
          *
          * @return an instance of [Capability] with specific configuration.
          */
         @JvmStatic
-        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>, zeroInterestInstallments: Boolean = false): Capability {
+        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>, tokenizationMethods: List<TokenizationMethod>, zeroInterestInstallments: Boolean = false): Capability {
             val paymentMethods = mutableListOf<PaymentMethod>()
 
             if (allowCreditCard) {
                 paymentMethods.add(PaymentMethod.createCreditCardMethod())
             }
 
+            paymentMethods.addAll(tokenizationMethods.map(::createTokenizationMethod))
             paymentMethods.addAll(sourceTypes.map(::createSourceTypeMethod))
 
             return Capability(

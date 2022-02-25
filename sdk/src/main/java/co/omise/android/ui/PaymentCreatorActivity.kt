@@ -130,6 +130,7 @@ interface PaymentCreatorNavigation {
     fun navigateToEContextForm(eContext: SupportedEcontext)
     fun createSourceFinished(source: Source)
     fun navigateToTrueMoneyForm()
+    fun navigateToGooglePayForm()
 }
 
 private class PaymentCreatorNavigationImpl(
@@ -215,6 +216,13 @@ private class PaymentCreatorNavigationImpl(
             requester = this@PaymentCreatorNavigationImpl.requester
         }
         addFragmentToBackStack(fragment)
+    }
+
+    override fun navigateToGooglePayForm() {
+        val intent = Intent(activity, GooglePayActivity::class.java).apply {
+            putExtra(EXTRA_PKEY, pkey)
+        }
+        activity.startActivityForResult(intent, requestCode)
     }
 }
 

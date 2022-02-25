@@ -16,7 +16,7 @@ buildscript {
         omise_threeds_sdk_version = '1.0.0-alpha08'
 
         kotlin_version = '1.4.10'
-        android_plugin_version = '4.1.0'
+        android_plugin_version = '4.1.2'
         appcompat_version = '1.2.0'
         joda_time_version = '2.9.2'
         okhttp_version = '4.9.0'
@@ -69,6 +69,7 @@ allprojects {
             name 'Google'
         }
         mavenLocal()
+        google()
     }
 }
 

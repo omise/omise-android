@@ -81,7 +81,7 @@
     <string name="payment_method_installment_scb_title">Siam Commercial Bank</string>
     <string name="payment_method_installment_term_month_title">%d month</string>
     <string name="payment_method_installment_term_months_title">%d months</string>
-    
+
     <string name="payment_method_mobile_banking_scb_title">Siam Commercial Bank</string>
 
     <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
@@ -93,4 +93,7 @@
     <string name="payment_method_points_citi_title">Pay with Citi Rewards Points</string>
     <string name="payment_truemoney_title">TrueMoney Wallet</string>
     <string name="truemoney_info_text">Please input the mobile number connected to your TrueMoney Wallet account</string>
+    <string name="googlepay">Google Pay™</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
