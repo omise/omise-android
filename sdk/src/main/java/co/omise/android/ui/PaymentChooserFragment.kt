@@ -51,7 +51,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.TouchNGo,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
-            PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()// need to change
+            PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
         }
     }
 
