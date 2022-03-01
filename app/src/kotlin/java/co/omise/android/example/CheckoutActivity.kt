@@ -36,7 +36,7 @@ class CheckoutActivity : AppCompatActivity() {
     companion object {
 
         private const val TAG = "CheckoutActivity"
-        private const val PUBLIC_KEY = "pkey_5n54bddcaydqys04vcy"
+        private const val PUBLIC_KEY = "[PUBLIC_KEY]"
 
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
         private const val PAYMENT_CREATOR_REQUEST_CODE = 0x3D6

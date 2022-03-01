@@ -38,7 +38,7 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETU
 public class CheckoutActivity extends AppCompatActivity {
 
     private static String TAG = "CheckoutActivity";
-    private static String PUBLIC_KEY = "pkey_5n54bddcaydqys04vcy";
+    private static String PUBLIC_KEY = "[PUBLIC_KEY]";
 
     private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
     private static int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
