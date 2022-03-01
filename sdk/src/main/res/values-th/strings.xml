@@ -105,5 +105,5 @@
     <string name="payment_method_mobile_banking_kbank_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
     <string name="payment_method_mobile_banking_bay_title">ธนาคารกรุงศรีอยุธยา</string>
-    <string name="googlepay">Google Pay™</string>
+    <string name="googlepay">Google Pay</string>
 </resources>

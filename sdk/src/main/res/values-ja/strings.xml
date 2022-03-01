@@ -105,5 +105,5 @@
     <string name="payment_method_mobile_banking_kbank_title">カシコン銀行</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
     <string name="payment_method_mobile_banking_bay_title">アユタヤ銀行</string>
-    <string name="googlepay">Google Pay™</string>
+    <string name="googlepay">Google Pay</string>
 </resources>
