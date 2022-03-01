@@ -51,7 +51,7 @@ class PaymentChooserFragmentTest {
     fun setUp() {
         Intents.init()
 
-        val paymentMethods = listOf(
+        val paymentMethods = mutableListOf(
                 PaymentMethod(name = "card"),
                 PaymentMethod(name = "installment_bay"),
                 PaymentMethod(name = "installment_bbl"),

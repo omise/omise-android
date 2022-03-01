@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
@@ -66,11 +67,6 @@ class GooglePayActivity : AppCompatActivity() {
         merchantId = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
     }
 
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
-    }
-
     /**
      * Determine the viewer's ability to pay with a payment method supported by your app and display a
      * Google Pay payment button.
@@ -120,7 +116,6 @@ class GooglePayActivity : AppCompatActivity() {
     }
 
     private fun requestPayment() {
-
         // Disables the button to prevent multiple clicks.
         googlePayButton.isClickable = false
 
@@ -176,8 +171,8 @@ class GooglePayActivity : AppCompatActivity() {
     }
 
     /**
-     * PaymentData response object contains the payment information, as well as any additional
-     * requested information, such as billing and shipping address.
+     * PaymentData response object contains the payment information.
+     * We will call our tokens API here and add a listener to wait for its response.
      *
      * @param paymentData A response object returned by Google after a payer approves payment.
      * @see [Payment
@@ -190,11 +185,6 @@ class GooglePayActivity : AppCompatActivity() {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
             val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
 
-            // Logging token string.
-            Log.d("GooglePaymentToken", paymentMethodData
-                    .getJSONObject("tokenizationData")
-                    .getString("token"))
-
             val paymentToken = paymentMethodData
                     .getJSONObject("tokenizationData")
                     .getString("token")
@@ -203,6 +193,8 @@ class GooglePayActivity : AppCompatActivity() {
                     method = "googlepay",
                     data = paymentToken
             )
+
+            googlePayButton.isClickable = false
 
             val request =
                     Token.CreateTokenRequestBuilder(tokenization = tokenParam).build()
@@ -217,7 +209,6 @@ class GooglePayActivity : AppCompatActivity() {
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString())
         }
-
     }
 
     /**
@@ -259,5 +250,20 @@ class GooglePayActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG).show()
             onBackPressed()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        setResult(RESULT_CANCELED)
+        super.onBackPressed()
     }
 }
