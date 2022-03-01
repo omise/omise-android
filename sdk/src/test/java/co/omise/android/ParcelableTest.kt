@@ -80,15 +80,10 @@ class ParcelableTest {
                     listOf("VISA", "MASTER", "LASER"),
                     listOf(1, 2, 4, 6))
         }
-        val tokenizationMethods: List<String> =
-            listOf(
-                    "googlepay",
-                    "kanpay"
-            )
         val capability = Capability(
                 mutableListOf("a", "b", "c", "d"),
                 paymentMethodList as MutableList<PaymentMethod>?,
-                tokenizationMethods,
+                null,
                 false)
 
         assertObjectParceling(capability)
