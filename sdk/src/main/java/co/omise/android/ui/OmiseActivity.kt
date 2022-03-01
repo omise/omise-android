@@ -15,6 +15,7 @@ abstract class OmiseActivity : AppCompatActivity() {
         const val EXTRA_AMOUNT = "OmiseActivity.amount"
         const val EXTRA_CURRENCY = "OmiseActivity.currency"
         const val EXTRA_CAPABILITY = "OmiseActivity.capability"
+        const val EXTRA_CARD_BRANDS = "OmiseActivity.cardBrands"
 
         const val EXTRA_TOKEN = "OmiseActivity.token"
         const val EXTRA_TOKEN_OBJECT = "OmiseActivity.tokenObject"

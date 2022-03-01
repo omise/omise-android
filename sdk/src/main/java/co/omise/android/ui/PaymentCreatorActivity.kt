@@ -11,6 +11,9 @@ import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.models.*
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AMOUNT
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CARD_BRANDS
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CURRENCY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
@@ -27,6 +30,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var amount: Long = 0L
     private lateinit var currency: String
     private lateinit var capability: Capability
+    private var cardBrands = arrayListOf<String>()
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private val client: Client by lazy { Client(pkey) }
@@ -37,7 +41,7 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     @VisibleForTesting
     val navigation: PaymentCreatorNavigation by lazy {
-        PaymentCreatorNavigationImpl(this, pkey, REQUEST_CREDIT_CARD, requester)
+        PaymentCreatorNavigationImpl(this, pkey, amount, currency, cardBrands, REQUEST_CREDIT_CARD, requester)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +117,8 @@ class PaymentCreatorActivity : OmiseActivity() {
         amount = intent.getLongExtra(EXTRA_AMOUNT, 0)
         currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
         capability = requireNotNull(intent.getParcelableExtra(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
+        val fetchBrands : List<String>? = capability.paymentMethods?.find { it.name == "card" }?.cardBrands
+        cardBrands = if (fetchBrands != null) fetchBrands as ArrayList<String> else arrayListOf()
     }
 
     companion object {
@@ -138,6 +144,9 @@ interface PaymentCreatorNavigation {
 private class PaymentCreatorNavigationImpl(
         private val activity: PaymentCreatorActivity,
         private val pkey: String,
+        private val amount: Long,
+        private val currency: String,
+        private var cardBrands: ArrayList<String>,
         private val requestCode: Int,
         private val requester: PaymentCreatorRequester<Source>
 ) : PaymentCreatorNavigation {
@@ -238,6 +247,9 @@ private class PaymentCreatorNavigationImpl(
     override fun navigateToGooglePayForm() {
         val intent = Intent(activity, GooglePayActivity::class.java).apply {
             putExtra(EXTRA_PKEY, pkey)
+            putExtra(EXTRA_AMOUNT, amount)
+            putExtra(EXTRA_CURRENCY, currency)
+            putStringArrayListExtra(EXTRA_CARD_BRANDS, cardBrands)
         }
         activity.startActivityForResult(intent, requestCode)
     }

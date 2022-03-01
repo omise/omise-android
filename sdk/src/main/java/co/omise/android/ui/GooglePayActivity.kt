@@ -6,20 +6,33 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ScrollView
 import android.widget.Toast
 import co.omise.android.R
+import co.omise.android.api.Client
+import co.omise.android.api.RequestListener
+import co.omise.android.extensions.getMessageFromResources
+import co.omise.android.models.APIError
 import co.omise.android.models.Googlepay
+import co.omise.android.models.Token
+import co.omise.android.models.TokenizationParam
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_credit_card.*
 import kotlinx.android.synthetic.main.activity_google_pay.*
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.IOError
 
 class GooglePayActivity : AppCompatActivity() {
     private lateinit var pKey: String
     private lateinit var googlepay: Googlepay
     private lateinit var paymentsClient: PaymentsClient
+    private lateinit var cardNetworks: ArrayList<String>
+    private var price: Long = 0
+    private lateinit var currencyCode: String
+    private lateinit var merchantId: String
 
     /**
      * Arbitrarily-picked constant integer you define to track a request for payment data activity.
@@ -38,7 +51,7 @@ class GooglePayActivity : AppCompatActivity() {
         setTitle(R.string.googlepay)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        googlepay = Googlepay(pKey, false)
+        googlepay = Googlepay(pKey, false, cardNetworks, price, currencyCode, merchantId)
         paymentsClient = googlepay.createPaymentsClient(this)
         possiblyShowGooglePayButton()
 
@@ -46,8 +59,11 @@ class GooglePayActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        require(intent.hasExtra(OmiseActivity.EXTRA_PKEY)) { "Could not find ${OmiseActivity.Companion::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
+        cardNetworks = requireNotNull(intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)) { "${OmiseActivity.Companion::EXTRA_CARD_BRANDS.name} must not be null." }
+        price = requireNotNull(intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)) { "${OmiseActivity.Companion::EXTRA_AMOUNT.name} must not be null." }
+        currencyCode = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_CURRENCY)) { "${OmiseActivity.Companion::EXTRA_CURRENCY.name} must not be null." }
+        merchantId = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
     }
 
     override fun onBackPressed() {
@@ -64,7 +80,7 @@ class GooglePayActivity : AppCompatActivity() {
     private fun possiblyShowGooglePayButton() {
 
         val isReadyToPayJson = googlepay.isReadyToPayRequest() ?: return
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
+        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
 
         // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
         // OnCompleteListener to be triggered when the result of the call is known.
@@ -77,7 +93,7 @@ class GooglePayActivity : AppCompatActivity() {
                 Toast.makeText(
                         this,
                         "Internal error occurred, please try a different payment method",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show()
                 onBackPressed()
             }
         }
@@ -98,7 +114,7 @@ class GooglePayActivity : AppCompatActivity() {
             Toast.makeText(
                     this,
                     "Unfortunately, Google Pay is not available on this device",
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_LONG).show()
             onBackPressed()
         }
     }
@@ -143,7 +159,7 @@ class GooglePayActivity : AppCompatActivity() {
                         }
 
                     RESULT_CANCELED -> {
-                        // The user cancelled the payment attempt
+                        onBackPressed()
                     }
 
                     AutoResolveHelper.RESULT_ERROR -> {
@@ -179,6 +195,25 @@ class GooglePayActivity : AppCompatActivity() {
                     .getJSONObject("tokenizationData")
                     .getString("token"))
 
+            val paymentToken = paymentMethodData
+                    .getJSONObject("tokenizationData")
+                    .getString("token")
+
+            val tokenParam = TokenizationParam(
+                    method = "googlepay",
+                    data = paymentToken
+            )
+
+            val request =
+                    Token.CreateTokenRequestBuilder(tokenization = tokenParam).build()
+
+            val listener = CreateTokenRequestListener()
+            try {
+                Client(pKey).send(request, listener)
+            } catch (ex: Exception) {
+                listener.onRequestFailed(ex)
+            }
+
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString())
         }
@@ -196,5 +231,33 @@ class GooglePayActivity : AppCompatActivity() {
      */
     private fun handleError(statusCode: Int) {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
+    }
+
+    private inner class CreateTokenRequestListener : RequestListener<Token> {
+
+        override fun onRequestSucceed(model: Token) {
+            val data = Intent()
+            data.putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
+            data.putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
+            data.putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
+
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
+
+        override fun onRequestFailed(throwable: Throwable) {
+
+            val message = when (throwable) {
+                is IOError -> getString(R.string.error_io, throwable.message)
+                is APIError -> throwable.getMessageFromResources(resources)
+                else -> getString(R.string.error_unknown, throwable.message)
+            }
+
+            Toast.makeText(
+                    baseContext,
+                    message,
+                    Toast.LENGTH_LONG).show()
+            onBackPressed()
+        }
     }
 }

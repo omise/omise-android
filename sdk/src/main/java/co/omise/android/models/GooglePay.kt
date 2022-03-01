@@ -9,7 +9,14 @@ import org.json.JSONException
 import org.json.JSONObject
 import kotlin.jvm.Throws
 
-class Googlepay(private var pKey: String, private var isLiveMode: Boolean) {
+class Googlepay(
+        private val pKey: String,
+        private val isLiveMode: Boolean,
+        private val cardNetworks: ArrayList<String>,
+        private val price: Long,
+        private val currencyCode: String,
+        merchantId: String
+) {
     private val gateway = "omise"
 
     /**
@@ -46,26 +53,33 @@ class Googlepay(private var pKey: String, private var isLiveMode: Boolean) {
      * Card networks supported by your app and your gateway.
      *
      *
-     * TODO: Confirm card networks supported by your app and gateway & update in Constants.java.
-     *
      * @return Allowed card networks
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
-    private val allowedCardNetworks = JSONArray(listOf(
-            "AMEX",
-            "DISCOVER",
-            "INTERAC",
-            "JCB",
-            "MASTERCARD",
-            "MIR",
-            "VISA"))
+    private fun allowedCardNetworks(): JSONArray {
+        val networksMapping = HashMap<String, String>()
+        networksMapping["American Express"] = "AMEX"
+        networksMapping["JCB"] = "JCB"
+        networksMapping["MasterCard"] = "MASTERCARD"
+        networksMapping["Visa"] = "VISA"
+
+        var newList = arrayListOf<String>()
+        if (!this.cardNetworks.isEmpty())
+            for(network in this.cardNetworks) {
+                if (networksMapping[network] != null)
+                    newList.add(networksMapping[network].toString())
+            }
+        else
+            // If merchant doesn't decide to use capabilities
+            newList = arrayListOf("AMEX", "JCB", "MASTERCARD", "VISA")
+
+        return JSONArray(newList)
+    }
 
     /**
      * Card authentication methods supported by your app and your gateway.
+     * Mapped from Omise's capability list to GPay accepted format.
      *
-     *
-     * TODO: Confirm your processor supports Android device tokens on your supported card networks
-     * and make updates in Constants.java.
      *
      * @return Allowed card authentication methods.
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
@@ -89,7 +103,7 @@ class Googlepay(private var pKey: String, private var isLiveMode: Boolean) {
 
             val parameters = JSONObject().apply {
                 put("allowedAuthMethods", allowedCardAuthMethods)
-                put("allowedCardNetworks", allowedCardNetworks)
+                put("allowedCardNetworks", allowedCardNetworks())
             }
 
             put("type", "CARD")
@@ -119,11 +133,13 @@ class Googlepay(private var pKey: String, private var isLiveMode: Boolean) {
      * @see [TransactionInfo](https://developers.google.com/pay/api/android/reference/object.TransactionInfo)
      */
     @Throws(JSONException::class)
-    private fun getTransactionInfo(price: String): JSONObject {
+    private fun getTransactionInfo(price: Long, currencyCode: String): JSONObject {
+        val priceUnits = Amount(price, currencyCode).toString(2)
+
         return JSONObject().apply {
-            put("totalPrice", price)
+            put("totalPrice", priceUnits)
             put("totalPriceStatus", "FINAL")
-            put("currencyCode", "THB")
+            put("currencyCode", currencyCode.toUpperCase())
         }
     }
 
@@ -153,7 +169,7 @@ class Googlepay(private var pKey: String, private var isLiveMode: Boolean) {
      * @see [MerchantInfo](https://developers.google.com/pay/api/android/reference/object.MerchantInfo)
      */
     private val merchantInfo: JSONObject =
-            JSONObject().put("merchantId", "123456")
+            JSONObject().put("merchantId", merchantId)
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the
@@ -183,7 +199,7 @@ class Googlepay(private var pKey: String, private var isLiveMode: Boolean) {
         return try {
             baseRequest.apply {
                 put("allowedPaymentMethods", JSONArray().put(cardPaymentMethod()))
-                put("transactionInfo", getTransactionInfo("5000"))
+                put("transactionInfo", getTransactionInfo(price, currencyCode))
                 put("merchantInfo", merchantInfo)
             }
         } catch (e: JSONException) {

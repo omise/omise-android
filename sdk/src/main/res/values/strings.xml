@@ -112,4 +112,5 @@
     <string name="payment_method_kakaopay_title">Kakao Pay</string>
     <string name="payment_method_touch_n_go_title">TNG eWallet</string>
     <string name="googlepay">Google Pay™</string>
+    <string name="pay_with_googlepay_button_content_description" translatable="false">Pay With Google Pay</string>
 </resources>
