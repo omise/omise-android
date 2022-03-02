@@ -105,13 +105,12 @@ object PaymentSetting {
         val tokenizationMethods = paymentMethodPreferences
                 .filter { it.value }
                 .toMap()
-                .map {
+                .mapNotNull {
                     when (it.key) {
                         context.getString(R.string.payment_preference_googlepay_key) -> TokenizationMethod.GooglePay
                         else -> null
                     }
                 }
-                .filterNotNull()
 
         val allowCreditCardMethod = paymentMethodPreferences[context.getString(R.string.payment_preference_credit_card_key)]
                 ?: false

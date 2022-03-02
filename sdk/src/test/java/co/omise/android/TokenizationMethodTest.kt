@@ -68,7 +68,25 @@ class TokenizationMethodTest {
 
 
         val expected = JSONObject(
-                "{\"apiVersion\":2,\"apiVersionMinor\":0,\"allowedPaymentMethods\":[{\"type\":\"CARD\",\"parameters\":{\"allowedAuthMethods\":[\"PAN_ONLY\"],\"allowedCardNetworks\":[\"VISA\"]}}]}"
+            """
+            {
+              "apiVersion": 2,
+              "apiVersionMinor": 0,
+              "allowedPaymentMethods": [
+                {
+                  "type": "CARD",
+                  "parameters": {
+                    "allowedAuthMethods": [
+                      "PAN_ONLY"
+                    ],
+                    "allowedCardNetworks": [
+                      "VISA"
+                    ]
+                  }
+                }
+              ]
+            }
+            """
         )
 
         val mapper = ObjectMapper()
@@ -83,7 +101,28 @@ class TokenizationMethodTest {
 
 
         val expected = JSONObject(
-                "{\"apiVersion\":2,\"apiVersionMinor\":0,\"allowedPaymentMethods\":[{\"type\":\"CARD\",\"parameters\":{\"allowedAuthMethods\":[\"PAN_ONLY\"],\"allowedCardNetworks\":[\"AMEX\",\"JCB\",\"MASTERCARD\",\"VISA\"]}}]}"
+            """
+            {
+              "apiVersion": 2,
+              "apiVersionMinor": 0,
+              "allowedPaymentMethods": [
+                {
+                  "type": "CARD",
+                  "parameters": {
+                    "allowedAuthMethods": [
+                      "PAN_ONLY"
+                    ],
+                    "allowedCardNetworks": [
+                      "AMEX",
+                      "JCB",
+                      "MASTERCARD",
+                      "VISA"
+                    ]
+                  }
+                }
+              ]
+            }
+            """
         )
 
         val mapper = ObjectMapper()
@@ -98,7 +137,42 @@ class TokenizationMethodTest {
 
 
         val expected = JSONObject(
-                "{\"apiVersion\":2,\"apiVersionMinor\":0,\"allowedPaymentMethods\":[{\"type\":\"CARD\",\"parameters\":{\"allowedAuthMethods\":[\"PAN_ONLY\"],\"allowedCardNetworks\":[\"AMEX\",\"MASTERCARD\",\"JCB\"]},\"tokenizationSpecification\":{\"type\":\"PAYMENT_GATEWAY\",\"parameters\":{\"gateway\":\"omise\",\"gatewayMerchantId\":\"pkey_123\"}}}],\"transactionInfo\":{\"totalPrice\":\"30.00\",\"totalPriceStatus\":\"FINAL\",\"currencyCode\":\"SGD\"},\"merchantInfo\":{\"merchantId\":\"merchantId\"}}"
+            """
+            {
+              "apiVersion": 2,
+              "apiVersionMinor": 0,
+              "allowedPaymentMethods": [
+                {
+                  "type": "CARD",
+                  "parameters": {
+                    "allowedAuthMethods": [
+                      "PAN_ONLY"
+                    ],
+                    "allowedCardNetworks": [
+                      "AMEX",
+                      "MASTERCARD",
+                      "JCB"
+                    ]
+                  },
+                  "tokenizationSpecification": {
+                    "type": "PAYMENT_GATEWAY",
+                    "parameters": {
+                      "gateway": "omise",
+                      "gatewayMerchantId": "pkey_123"
+                    }
+                  }
+                }
+              ],
+              "transactionInfo": {
+                "totalPrice": "30.00",
+                "totalPriceStatus": "FINAL",
+                "currencyCode": "SGD"
+              },
+              "merchantInfo": {
+                "merchantId": "merchantId"
+              }
+            }
+            """
         )
 
         val mapper = ObjectMapper()
