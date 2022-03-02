@@ -18,7 +18,6 @@ import kotlin.jvm.Throws
  */
 @Parcelize
 @TypeParceler<ChargeStatus, ChargeStatusParceler>()
-@TypeParceler<TokenizationMethod, TokenizationMethodParceler>()
 data class Token(
         val used: Boolean = false,
         val card: Card? = null,

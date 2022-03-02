@@ -29,19 +29,3 @@ sealed class TokenizationMethod(
         }
     }
 }
-
-object TokenizationMethodParceler : Parceler<TokenizationMethod> {
-    override fun create(parcel: Parcel): TokenizationMethod {
-        return TokenizationMethod.creator(parcel.readString())
-    }
-
-    override fun TokenizationMethod.write(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-    }
-}
-
-val TokenizationMethod.Companion.allElements: List<TokenizationMethod>
-    get() = listOf(
-            TokenizationMethod.GooglePay,
-            TokenizationMethod.Card
-    )
