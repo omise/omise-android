@@ -7,20 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.ScrollView
 import android.widget.Toast
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.models.APIError
-import co.omise.android.models.Googlepay
+import co.omise.android.request.GooglePay
 import co.omise.android.models.Token
 import co.omise.android.models.TokenizationParam
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_credit_card.*
 import kotlinx.android.synthetic.main.activity_google_pay.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -28,7 +25,7 @@ import java.io.IOError
 
 class GooglePayActivity : AppCompatActivity() {
     private lateinit var pKey: String
-    private lateinit var googlepay: Googlepay
+    private lateinit var googlePay: GooglePay
     private lateinit var paymentsClient: PaymentsClient
     private lateinit var cardNetworks: ArrayList<String>
     private var price: Long = 0
@@ -52,8 +49,8 @@ class GooglePayActivity : AppCompatActivity() {
         setTitle(R.string.googlepay)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        googlepay = Googlepay(pKey, cardNetworks, price, currencyCode, merchantId)
-        paymentsClient = googlepay.createPaymentsClient(this)
+        googlePay = GooglePay(pKey, cardNetworks, price, currencyCode, merchantId)
+        paymentsClient = googlePay.createPaymentsClient(this)
         possiblyShowGooglePayButton()
 
         googlePayButton.setOnClickListener { requestPayment() }
@@ -75,7 +72,7 @@ class GooglePayActivity : AppCompatActivity() {
     ) */
     private fun possiblyShowGooglePayButton() {
 
-        val isReadyToPayJson = googlepay.isReadyToPayRequest() ?: return
+        val isReadyToPayJson = googlePay.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
 
         // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
@@ -119,7 +116,7 @@ class GooglePayActivity : AppCompatActivity() {
         // Disables the button to prevent multiple clicks.
         googlePayButton.isClickable = false
 
-        val paymentDataRequestJson = googlepay.getPaymentDataRequest()
+        val paymentDataRequestJson = googlePay.getPaymentDataRequest()
         if (paymentDataRequestJson == null) {
             Log.e("RequestPayment", "Can't fetch payment data request")
             return

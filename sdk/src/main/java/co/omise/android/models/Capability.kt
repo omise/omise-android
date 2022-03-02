@@ -65,7 +65,7 @@ data class Capability(
          * @return an instance of [Capability] with specific configuration.
          */
         @JvmStatic
-        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>, tokenizationMethods: List<TokenizationMethod>, zeroInterestInstallments: Boolean = false): Capability {
+        fun create(allowCreditCard: Boolean = true, sourceTypes: List<SourceType>, tokenizationMethods: List<TokenizationMethod> = emptyList(), zeroInterestInstallments: Boolean = false): Capability {
             val paymentMethods = mutableListOf<PaymentMethod>()
 
             if (allowCreditCard) {

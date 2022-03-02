@@ -1,6 +1,7 @@
-package co.omise.android.models
+package co.omise.android.request
 
 import android.app.Activity
+import co.omise.android.models.Amount
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
 import com.google.android.gms.wallet.WalletConstants
@@ -9,7 +10,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import kotlin.jvm.Throws
 
-class Googlepay(
+class GooglePay(
         private val pKey: String,
         private val cardNetworks: ArrayList<String>,
         private val price: Long,
@@ -56,14 +57,15 @@ class Googlepay(
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
     private fun allowedCardNetworks(): JSONArray {
-        val networksMapping = HashMap<String, String>()
-        networksMapping["American Express"] = "AMEX"
-        networksMapping["JCB"] = "JCB"
-        networksMapping["MasterCard"] = "MASTERCARD"
-        networksMapping["Visa"] = "VISA"
+        val networksMapping= hashMapOf(
+            "American Express" to "AMEX",
+            "JCB" to "JCB",
+            "MasterCard" to "MASTERCARD",
+            "Visa" to "VISA"
+        )
 
         var newList = arrayListOf<String>()
-        if (!this.cardNetworks.isEmpty())
+        if (this.cardNetworks.isNotEmpty())
             for(network in this.cardNetworks) {
                 if (networksMapping[network] != null)
                     newList.add(networksMapping[network].toString())
