@@ -11,7 +11,6 @@ import kotlin.jvm.Throws
 
 class Googlepay(
         private val pKey: String,
-        private val isLiveMode: Boolean,
         private val cardNetworks: ArrayList<String>,
         private val price: Long,
         private val currencyCode: String,
@@ -178,9 +177,9 @@ class Googlepay(
      * @param activity is the caller's activity.
      */
     fun createPaymentsClient(activity: Activity): PaymentsClient {
-        var env = WalletConstants.ENVIRONMENT_TEST
-        if (isLiveMode)
-            env = WalletConstants.ENVIRONMENT_PRODUCTION
+        var env = WalletConstants.ENVIRONMENT_PRODUCTION
+        if (isTestMode())
+            env = WalletConstants.ENVIRONMENT_TEST
 
         val walletOptions = Wallet.WalletOptions.Builder()
                 .setEnvironment(env)
@@ -205,6 +204,10 @@ class Googlepay(
         } catch (e: JSONException) {
             null
         }
+    }
+
+    private fun isTestMode(): Boolean {
+        return pKey.startsWith("pkey_test_")
     }
 }
 

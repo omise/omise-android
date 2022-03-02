@@ -52,7 +52,7 @@ class GooglePayActivity : AppCompatActivity() {
         setTitle(R.string.googlepay)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        googlepay = Googlepay(pKey, false, cardNetworks, price, currencyCode, merchantId)
+        googlepay = Googlepay(pKey, cardNetworks, price, currencyCode, merchantId)
         paymentsClient = googlepay.createPaymentsClient(this)
         possiblyShowGooglePayButton()
 
@@ -64,7 +64,7 @@ class GooglePayActivity : AppCompatActivity() {
         cardNetworks = requireNotNull(intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)) { "${OmiseActivity.Companion::EXTRA_CARD_BRANDS.name} must not be null." }
         price = requireNotNull(intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)) { "${OmiseActivity.Companion::EXTRA_AMOUNT.name} must not be null." }
         currencyCode = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_CURRENCY)) { "${OmiseActivity.Companion::EXTRA_CURRENCY.name} must not be null." }
-        merchantId = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
+        merchantId = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_MERCHANT_ID.name} must not be null." }
     }
 
     /**
