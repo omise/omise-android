@@ -278,11 +278,11 @@ override fun navigateToGooglePayForm() {
 }
 ```
 
-Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
-Replace the `amount` with the amount you want to charge with, in subunits.
-Replace the `currency` with your currency in the ISO 4217 format.
-Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
-Replace the `googlePayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode
+- Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
+- Replace the `amount` with the amount you want to charge with, in subunits.
+- Replace the `currency` with your currency in the ISO 4217 format.
+- Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
+- Replace the `googlePayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode
 
 #### Return values
 
