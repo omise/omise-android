@@ -258,11 +258,11 @@ file as follows:
 Then in your activity, declare the method that will start this activity as follows:
 
 ```kotlin
-private val OMISE_PKEY: String = "pkey_test_123" // replace this with your Omise public key obtained from our dashboard.
-private val amount: Long = 3000 // replace this with the amount you want to charge with, in subunits.
-private val currency: String = "THB" // replace this with your currency in the ISO 4217 format.
-private val cardBrands: ArrayList<String> = arrayListOf("Visa", "Mastercard") // replace this with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
-private val googlePayMerchantId: String = "merchant_123" // replace this with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test moode
+private val OMISE_PKEY: String = "pkey_test_123"
+private val amount: Long = 3000
+private val currency: String = "THB"
+private val cardBrands: ArrayList<String> = arrayListOf("Visa", "Mastercard")
+private val googlePayMerchantId: String = "merchant_123"
 
 private val REQUEST_GPAY: Int = 100
 
@@ -277,6 +277,14 @@ override fun navigateToGooglePayForm() {
     activity.startActivityForResult(intent, REQUEST_GPAY)
 }
 ```
+
+Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
+Replace the `amount` with the amount you want to charge with, in subunits.
+Replace the `currency` with your currency in the ISO 4217 format.
+Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
+Replace the `googlePayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode
+
+#### Return values
 
 A number of results are returned from the activity. You can obtain them from the
 resulting `Intent` with the following code:
