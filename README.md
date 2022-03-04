@@ -241,6 +241,53 @@ Two different results that could be returned are:
 * `data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)` - The `Source` object created by the payment creator.
 * `data.hasExtra(OmiseActivity.EXTRA_TOKEN)` - The `Token` object created in case the payment source created was a credit card.
 
+### Google Pay activity
+
+We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will
+automatically [tokenize the Google Pay token](https://www.omise.co/security-best-practices) for you.
+
+To use it, first declare the availability of the activity in your `AndroidManifest.xml`
+file as follows:
+
+```xml
+<activity
+  android:name="co.omise.android.ui.GooglePayActivity"
+  android:theme="@style/OmiseTheme" />
+```
+
+Then in your activity, declare the method that will start this activity as follows:
+
+```kotlin
+private val OMISE_PKEY: String = "pkey_test_123" // replace this with your Omise public key obtained from our dashboard.
+private val amount: Long = 3000 // replace this with the amount you want to charge with, in subunits.
+private val currency: String = "THB" // replace this with your currency in the ISO 4217 format.
+private val cardBrands: ArrayList<String> = arrayListOf("Visa", "Mastercard") // replace this with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
+private val googlePayMerchantId: String = "merchant_123" // replace this with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test moode
+
+private val REQUEST_GPAY: Int = 100
+
+override fun navigateToGooglePayForm() {
+    val intent = Intent(activity, GooglePayActivity::class.java).apply {
+        putExtra(EXTRA_PKEY, OMISE_PKEY)
+        putExtra(EXTRA_AMOUNT, amount)
+        putExtra(EXTRA_CURRENCY, currency)
+        putStringArrayListExtra(EXTRA_CARD_BRANDS, cardBrands)
+        putExtra(EXTRA_GOOGLEPAY_MERCHANT_ID, googlePayMerchantId)
+    }
+    activity.startActivityForResult(intent, REQUEST_GPAY)
+}
+```
+
+A number of results are returned from the activity. You can obtain them from the
+resulting `Intent` with the following code:
+
+* `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
+  this if you only need the ID and not the card data.
+* `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
+  object returned from the Omise API.
+* `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
+  which is part of the `Token` object returned from the Omise API.
+
 ### Creating a source
 If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key in this manner:
 

@@ -1,7 +1,6 @@
-package co.omise.android
+package co.omise.android.request
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import co.omise.android.request.GooglePay
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
