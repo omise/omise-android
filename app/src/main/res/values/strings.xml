@@ -74,7 +74,7 @@
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
     <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
     <string name="payment_preference_installment_ezypay_title" translatable="false">Maybank Ezypay - Installment</string>
-    <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string> paym
+    <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
     <string name="payment_preference_installment_citi_title" translatable="false">Citi - Installment</string>
