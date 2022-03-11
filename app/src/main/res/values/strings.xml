@@ -49,6 +49,7 @@
     <string name="payment_preference_points_citi_key" translatable="false">points_citi</string>
     <string name="payment_preference_touch_n_go_key" translatable="false">touch_n_go</string>
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
+    <string name="payment_preference_rabbit_linepay_key" translatable="false">rabbit_linepay</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -73,7 +74,7 @@
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
     <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
     <string name="payment_preference_installment_ezypay_title" translatable="false">Maybank Ezypay - Installment</string>
-    <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
+    <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string> paym
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
     <string name="payment_preference_installment_citi_title" translatable="false">Citi - Installment</string>
@@ -87,6 +88,7 @@
     <string name="payment_preference_paynow_title" translatable="false">PayNow</string>
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
     <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>
+    <string name="payment_preference_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
     <string name="payment_preference_touch_n_go_title" translatable="false">TNG eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>

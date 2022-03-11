@@ -33,6 +33,7 @@ sealed class SourceType(
     object Fpx : SourceType("fpx") {
         var banks : List<Bank>? = null
     }
+    object RabbitLinePay : SourceType("rabbit_linepay")
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -120,6 +121,7 @@ sealed class SourceType(
             "gcash" -> Gcash
             "kakaopay" -> Kakaopay
             "touch_n_go" -> TouchNGo
+            "rabbit_linepay" -> RabbitLinePay
             else -> Unknown(name)
         }
     }
