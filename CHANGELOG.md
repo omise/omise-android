@@ -8,7 +8,7 @@
 * **ADDED:** `platform_type` field for Source
 * **ADDED:** Support for wallets: Alipay (SG), AlipayHK (SG), DANA (SG), GCash (SG), Kakao Pay (SG), Touch'n Go (SG) and Rabbit LINE Pay (TH)
 * **ADDED:** Support for installments: Citi (TH), TTB (TH), UOB (TH) and Ezypay (MY)
-* **ADDED:** Support for KBank mobile banking: Kbank (TH), Bay (TH) and OCBC Pay Anyone (SG)
+* **ADDED:** Support for mobile banking payments: Kbank (TH), Bay (TH) and OCBC Pay Anyone (SG)
 
 ## v3.2.1
 
