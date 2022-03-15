@@ -111,4 +111,5 @@
     <string name="payment_method_gcash_title">GCash</string>
     <string name="payment_method_kakaopay_title">Kakao Pay</string>
     <string name="payment_method_touch_n_go_title">TNG eWallet</string>
+    <string name="payment_method_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
 </resources>
