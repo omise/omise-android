@@ -122,7 +122,7 @@ Additionally the following utility classes are available from the SDK:
 
 ### Manual Tokenization
 
-If you have built your own credit card form, you can use the SDK to manually tokenize the
+If you have built your own credit card or Google Pay form, you can use the SDK to manually tokenize the
 card. First build the `Client` and supply your public key this way:
 
 ```kotlin
@@ -132,6 +132,7 @@ private val client = Client("pkey_test_123")
 Then construct the token request with values from your custom form:
 
 ```kotlin
+// Sample builder for credit card
 val cardParam = CardParam(
                 name = "JOHN Doe",
                 number = "4242424242424242",
@@ -140,6 +141,14 @@ val cardParam = CardParam(
                 securityCode = "123")
 
 val request = Token.CreateTokenRequestBuilder(cardParam).build()
+
+// Sample builder for Google Pay
+val tokenizationParam = TokenizationParam(
+        method = "googlepay",
+        data = "{attach Google Pay token here}"
+)
+
+val request = Token.CreateTokenRequestBuilder(tokenization = tokenizationParam).build()
 ```
 
 And then send the request using the `client` you have constructed earlier:
@@ -295,6 +304,15 @@ resulting `Intent` with the following code:
   object returned from the Omise API.
 * `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
   which is part of the `Token` object returned from the Omise API.
+
+#### Use your own activity
+
+You can use your own activity if you prefer to. We recommend that you follow [Google's tutorial and guidelines](https://developers.google.com/pay/api/android/overview) and make sure
+that you follow their [brand guidelines](https://developers.google.com/pay/api/android/guides/brand-guidelines) as well.
+
+You can make use of our Google Pay request builder `request/GooglePay.kt`, which will include request builders you can use to request the Google Pay token.
+Configurations to the builders are modifiable through the class' constructor to suit your needs. However, you are also welcome to make your own integration and call
+our tokens builder yourself.
 
 ### Creating a source
 If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key in this manner:
