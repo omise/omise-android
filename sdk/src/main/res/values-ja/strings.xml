@@ -104,5 +104,5 @@
     <string name="payment_method_alipayplus_footnote">(アリペイプラス)</string>
     <string name="payment_method_mobile_banking_kbank_title">カシコン銀行</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
-    <string name="payment_method_mobile_banking_bbl_title">バンコク銀行</string>
+    <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
 </resources>

@@ -340,7 +340,7 @@ internal sealed class MobileBankingResource(
     }
 
     object Bbl : MobileBankingResource(
-        iconRes = R.drawable.payment_bbl,
+        iconRes = R.drawable.bblm,
         titleRes = R.string.payment_method_mobile_banking_bbl_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MobileBanking.Bbl

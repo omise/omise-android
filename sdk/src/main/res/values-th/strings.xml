@@ -104,5 +104,5 @@
     <string name="payment_method_alipayplus_footnote">(อาลีเพย์พลัส)</string>
     <string name="payment_method_mobile_banking_kbank_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
-    <string name="payment_method_mobile_banking_bbl_title">ธนาคารกรุงเทพ</string>
+    <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
 </resources>
