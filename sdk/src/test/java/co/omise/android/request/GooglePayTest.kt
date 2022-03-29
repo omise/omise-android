@@ -30,7 +30,12 @@ class GooglePayTest {
                     ],
                     "allowedCardNetworks": [
                       "VISA"
-                    ]
+                    ],
+                    "billingAddressRequired": false,
+                    "billingAddressParameters": {
+                      "format": "FULL",
+                      "phoneNumberRequired": false
+                    }
                   }
                 }
               ]
@@ -66,7 +71,12 @@ class GooglePayTest {
                       "JCB",
                       "MASTERCARD",
                       "VISA"
-                    ]
+                    ],
+                    "billingAddressRequired": false,
+                    "billingAddressParameters": {
+                      "format": "FULL",
+                      "phoneNumberRequired": false
+                    }
                   }
                 }
               ]
@@ -101,7 +111,12 @@ class GooglePayTest {
                       "AMEX",
                       "MASTERCARD",
                       "JCB"
-                    ]
+                    ],
+                    "billingAddressRequired": false,
+                    "billingAddressParameters": {
+                      "format": "FULL",
+                      "phoneNumberRequired": false
+                    }
                   },
                   "tokenizationSpecification": {
                     "type": "PAYMENT_GATEWAY",
@@ -126,5 +141,81 @@ class GooglePayTest {
 
         val mapper = ObjectMapper()
         assertEquals(mapper.readTree(expected.toString()), mapper.readTree(getPaymentDataRequest.toString()))
+    }
+
+
+    @Test
+    fun googlepay_billingAddressIsSetWhenEnabled() {
+        val googlePay = GooglePay("pkey_123", arrayListOf("Visa"), 3000, "thb", "merchantId", requestBillingAddress = true)
+        val isReadyToPay = googlePay.isReadyToPayRequest()
+
+
+        val expected = JSONObject(
+                """
+            {
+              "apiVersion": 2,
+              "apiVersionMinor": 0,
+              "allowedPaymentMethods": [
+                {
+                  "type": "CARD",
+                  "parameters": {
+                    "allowedAuthMethods": [
+                      "PAN_ONLY"
+                    ],
+                    "allowedCardNetworks": [
+                      "VISA"
+                    ],
+                    "billingAddressRequired": true,
+                    "billingAddressParameters": {
+                      "format": "FULL",
+                      "phoneNumberRequired": false
+                    }
+                  }
+                }
+              ]
+            }
+            """
+        )
+
+        val mapper = ObjectMapper()
+        assertEquals(mapper.readTree(expected.toString()), mapper.readTree(isReadyToPay.toString()))
+    }
+
+
+    @Test
+    fun googlepay_phoneNumberIsSetWhenEnabled() {
+        val googlePay = GooglePay("pkey_123", arrayListOf("Visa"), 3000, "thb", "merchantId", requestBillingAddress = true, requestPhoneNumber = true)
+        val isReadyToPay = googlePay.isReadyToPayRequest()
+
+
+        val expected = JSONObject(
+                """
+            {
+              "apiVersion": 2,
+              "apiVersionMinor": 0,
+              "allowedPaymentMethods": [
+                {
+                  "type": "CARD",
+                  "parameters": {
+                    "allowedAuthMethods": [
+                      "PAN_ONLY"
+                    ],
+                    "allowedCardNetworks": [
+                      "VISA"
+                    ],
+                    "billingAddressRequired": true,
+                    "billingAddressParameters": {
+                      "format": "FULL",
+                      "phoneNumberRequired": true
+                    }
+                  }
+                }
+              ]
+            }
+            """
+        )
+
+        val mapper = ObjectMapper()
+        assertEquals(mapper.readTree(expected.toString()), mapper.readTree(isReadyToPay.toString()))
     }
 }

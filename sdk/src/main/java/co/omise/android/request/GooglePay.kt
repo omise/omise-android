@@ -15,7 +15,9 @@ class GooglePay(
         private val cardNetworks: ArrayList<String>,
         private val price: Long,
         private val currencyCode: String,
-        merchantId: String
+        merchantId: String,
+        private val requestBillingAddress: Boolean = false,
+        private val requestPhoneNumber: Boolean = false
 ) {
     private val gateway = "omise"
 
@@ -105,6 +107,11 @@ class GooglePay(
             val parameters = JSONObject().apply {
                 put("allowedAuthMethods", allowedCardAuthMethods)
                 put("allowedCardNetworks", allowedCardNetworks())
+                put("billingAddressRequired", requestBillingAddress)
+                put("billingAddressParameters", JSONObject().apply {
+                    put("format", "FULL")
+                    put("phoneNumberRequired", requestPhoneNumber)
+                })
             }
 
             put("type", "CARD")
