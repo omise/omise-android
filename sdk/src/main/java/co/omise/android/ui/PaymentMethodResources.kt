@@ -347,7 +347,7 @@ internal sealed class MobileBankingResource(
     }
 
     object Bay : MobileBankingResource(
-        iconRes = R.drawable.payment_bay,
+        iconRes = R.drawable.kma,
         titleRes = R.string.payment_method_mobile_banking_bay_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MobileBanking.Bay
@@ -368,7 +368,7 @@ internal sealed class MobileBankingResource(
     )
 
     object Scb : MobileBankingResource(
-            iconRes = R.drawable.payment_scb,
+            iconRes = R.drawable.scb_easy,
             titleRes = R.string.payment_method_mobile_banking_scb_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.MobileBanking.Scb
