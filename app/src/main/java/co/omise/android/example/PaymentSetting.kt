@@ -44,6 +44,7 @@ object PaymentSetting {
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
                     R.string.payment_preference_points_citi_key,
+                    R.string.payment_preference_rabbit_linepay_key,
                     R.string.payment_preference_touch_n_go_key,
                     R.string.payment_preference_truemoney_key,
                     R.string.payment_preference_googlepay_key,
@@ -97,6 +98,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_gcash_key) -> SourceType.Gcash
                         context.getString(R.string.payment_preference_kakaopay_key) -> SourceType.Kakaopay
                         context.getString(R.string.payment_preference_touch_n_go_key) -> SourceType.TouchNGo
+                        context.getString(R.string.payment_preference_rabbit_linepay_key) -> SourceType.RabbitLinePay
                         else -> null
                     }
                 }
