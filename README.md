@@ -138,18 +138,19 @@ val cardParam = CardParam(
                 number = "4242424242424242",
                 expirationMonth = 10,
                 expirationYear = 2020,
-                securityCode = "123")
+                securityCode = "123"
+)
 
 val request = Token.CreateTokenRequestBuilder(cardParam).build()
 
 // Sample builder for Google Pay
 val tokenizationParam = TokenizationParam(
-    method = "googlepay",
-    data = "{\"signature\":\"MEQCIA+wGZttxT13yz599zQjYugoz5kClNSmVa39vKv6ZOenAiARRtHQ0aYSrfd3oWhB\/ZtEeJs3ilT\/J0pYz1EWnzU2fw\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEev+pVoUgtoS+y8Ecz3c72OFBD3d74XJOcnRxVmCV+2TJTW1g4d0UhDkhHeURhHQNvJPyBFHfYIUUj\/EYhYAzgQ\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1647856171825\\\"}\",\"signatures\":[\"MEYCIQClXfVcil7qaG2btVbyzf6x1\/MqCTbbJM\/tGN4iME4M9wIhANL53daWJHdDPpKxR3M\/Jis4WPVb093PW7fChj\/gCQUS\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"4JighTc0b1HhRQu+NgQN1XQWWOeB4YyR5cMFi8Vu3FeWHAjPtGs3LjrdpWhJhWekURzD6BZCbg1xakYvAMsahoTyUzDLtNpKmlglFpVjBSSYkPKFT6xovTKsWS7xC\/x9AvJsATtotwN8TTiP3+1dXtLLFClnCTkg9vEvChvXq0FwnrUOBtMiWukBY84R2rpzqNuZoh6gdvWHgPP6RczhtERg+kqKdd4\/UnKE8ElzOWYDmZoJvFhxU\/O97vHW1ohOe8ut94bxiPH6DB82Ec87Mu\/oArsGMpsnFVsWzIcLX+q+KayGRbKxPQzV726fO7GipG94KiF7YfCk1r+D+jkFR7x0ev6l+XRoTz+PKIlhrcn3DEYJudJAP\/Xh2kj\/csnLn4XdKV0aZ5Ua3IauA4fQl80pAo9foujiRGwagHHOfnp6iMjA\/CdG9SNQS3eUdsxtlJKPoK4rtv7cwISNQvoCWMv748YvV3f+LEOWf8couRgrxPCPbk1vO8TfNOgSAjULzRs+C1xy6\/j5aZU46PpomEClDWrujMAcDVqCnExTx2QE9IAb4n02V6UxWv8Dgqv5TsRKjPe7WSCO0+jRWAvs6wBBUbFPHvEe4do+rQ\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BGJhfH3jWMmZtIALmYr7fWxYSNSCFoAT9MCOcbCZdO3LmP6njpGk9LISmr+H1Wk9XUZuMvNQmMHE+yFzW\/sA5lg\\\\u003d\\\",\\\"tag\\\":\\\"d9a6aVaoIEQm+bTjd5M2HL7+OeIup0Jb6rM1CN7v3NQ\\\\u003d\\\"}\"}",
+                method = "googlepay",
+                data = "{\"signature\":\"MEQCIA+wGZttxT13yz599zQjYugoz5kClNSmVa39vKv6ZOenAiARRtHQ0aYSrfd3oWhB\/ZtEeJs3ilT\/J0pYz1EWnzU2fw\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEev+pVoUgtoS+y8Ecz3c72OFBD3d74XJOcnRxVmCV+2TJTW1g4d0UhDkhHeURhHQNvJPyBFHfYIUUj\/EYhYAzgQ\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1647856171825\\\"}\",\"signatures\":[\"MEYCIQClXfVcil7qaG2btVbyzf6x1\/MqCTbbJM\/tGN4iME4M9wIhANL53daWJHdDPpKxR3M\/Jis4WPVb093PW7fChj\/gCQUS\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"4JighTc0b1HhRQu+NgQN1XQWWOeB4YyR5cMFi8Vu3FeWHAjPtGs3LjrdpWhJhWekURzD6BZCbg1xakYvAMsahoTyUzDLtNpKmlglFpVjBSSYkPKFT6xovTKsWS7xC\/x9AvJsATtotwN8TTiP3+1dXtLLFClnCTkg9vEvChvXq0FwnrUOBtMiWukBY84R2rpzqNuZoh6gdvWHgPP6RczhtERg+kqKdd4\/UnKE8ElzOWYDmZoJvFhxU\/O97vHW1ohOe8ut94bxiPH6DB82Ec87Mu\/oArsGMpsnFVsWzIcLX+q+KayGRbKxPQzV726fO7GipG94KiF7YfCk1r+D+jkFR7x0ev6l+XRoTz+PKIlhrcn3DEYJudJAP\/Xh2kj\/csnLn4XdKV0aZ5Ua3IauA4fQl80pAo9foujiRGwagHHOfnp6iMjA\/CdG9SNQS3eUdsxtlJKPoK4rtv7cwISNQvoCWMv748YvV3f+LEOWf8couRgrxPCPbk1vO8TfNOgSAjULzRs+C1xy6\/j5aZU46PpomEClDWrujMAcDVqCnExTx2QE9IAb4n02V6UxWv8Dgqv5TsRKjPe7WSCO0+jRWAvs6wBBUbFPHvEe4do+rQ\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BGJhfH3jWMmZtIALmYr7fWxYSNSCFoAT9MCOcbCZdO3LmP6njpGk9LISmr+H1Wk9XUZuMvNQmMHE+yFzW\/sA5lg\\\\u003d\\\",\\\"tag\\\":\\\"d9a6aVaoIEQm+bTjd5M2HL7+OeIup0Jb6rM1CN7v3NQ\\\\u003d\\\"}\"}",
 
-    // Add your billing information here (optional)
-    billing_name = "John Doe",
-    billing_street1 = "1600 Amphitheatre Parkway"
+                // Add your billing information here (optional)
+                billing_name = "John Doe",
+                billing_street1 = "1600 Amphitheatre Parkway"
 )
 
 val request = Token.CreateTokenRequestBuilder(tokenization = tokenizationParam).build()

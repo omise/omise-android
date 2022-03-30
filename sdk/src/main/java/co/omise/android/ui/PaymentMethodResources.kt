@@ -196,6 +196,13 @@ internal sealed class PaymentMethodResource(
             sourceType = SourceType.TouchNGo
     )
 
+    object RabbitLinepay : PaymentMethodResource(
+            iconRes = R.drawable.payment_rabbit_linepay,
+            titleRes = R.string.payment_method_rabbit_linepay_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.RabbitLinePay
+    )
+
     companion object {
         val all: List<PaymentMethodResource>
             get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }

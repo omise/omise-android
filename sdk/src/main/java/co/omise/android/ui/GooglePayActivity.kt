@@ -198,7 +198,6 @@ class GooglePayActivity : AppCompatActivity() {
                     .getJSONObject("tokenizationData")
                     .getString("token")
 
-
             if (requestBillingAddress) {
                 val billingAddress = paymentMethodData.getJSONObject("info")
                         .getJSONObject("billingAddress")
