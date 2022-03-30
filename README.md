@@ -299,7 +299,7 @@ override fun navigateToGooglePayForm() {
 - Replace the `amount` with the amount you want to charge with, in subunits.
 - Replace the `currency` with your currency in the ISO 4217 format.
 - Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
-- Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode
+- Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode).
 - Set the `googlepayRequestBillingAddress` to `true` if you want to attach the cardholder's name and billing address to the token.
 - When the cardholder's billing address is requested, set the `googlepayRequestPhoneNumber` to `true` to also attach the cardholder's phone number to the token.
 
