@@ -9,6 +9,7 @@ import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import org.joda.time.DateTime
 import java.io.IOException
+import kotlin.jvm.Throws
 
 /**
  * Represents Token object and contains its [RequestBuilder].
@@ -35,7 +36,9 @@ data class Token(
      */
     class CreateTokenRequestBuilder(
             @field:JsonProperty("card")
-            val card: CardParam
+            val card: CardParam? = null,
+            @field:JsonProperty("tokenization")
+            val tokenization: TokenizationParam? = null,
     ) : RequestBuilder<Token>() {
         override fun path(): HttpUrl {
             return buildUrl(Endpoint.VAULT, "tokens")

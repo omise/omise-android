@@ -82,7 +82,8 @@ class ParcelableTest {
         }
         val capability = Capability(
                 mutableListOf("a", "b", "c", "d"),
-                paymentMethodList,
+                paymentMethodList as MutableList<PaymentMethod>?,
+                null,
                 false)
 
         assertObjectParceling(capability)
