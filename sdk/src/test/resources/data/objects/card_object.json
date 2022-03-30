@@ -15,5 +15,6 @@
   "name": "Somchai Prasert",
   "security_code_check": true,
   "created_at": "2015-06-02T05:41:46Z",
-  "bank": "BBL"
+  "bank": "BBL",
+  "tokenization_method": "googlepay"
 }

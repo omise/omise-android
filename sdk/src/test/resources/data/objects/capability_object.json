@@ -46,5 +46,8 @@
       ]
     }
   ],
+  "tokenization_methods": [
+    "googlepay"
+  ],
   "zero_interest_installments": false
 }

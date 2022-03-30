@@ -69,6 +69,7 @@ allprojects {
             name 'Google'
         }
         mavenLocal()
+        google()
     }
 }
 

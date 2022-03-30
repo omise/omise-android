@@ -52,6 +52,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.RabbitLinepay,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
+            PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
         }
     }
 

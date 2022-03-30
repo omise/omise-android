@@ -37,6 +37,8 @@ class CheckoutActivity : AppCompatActivity() {
 
         private const val TAG = "CheckoutActivity"
         private const val PUBLIC_KEY = "[PUBLIC_KEY]"
+        private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
+
 
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
         private const val PAYMENT_CREATOR_REQUEST_CODE = 0x3D6
@@ -100,6 +102,7 @@ class CheckoutActivity : AppCompatActivity() {
             putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
             putExtra(OmiseActivity.EXTRA_AMOUNT, amount.amount)
             putExtra(OmiseActivity.EXTRA_CURRENCY, amount.currency)
+            putExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID, GOOGLEPAY_MERCHANT_ID)
 
             if (isUsedSpecificsPaymentMethods) {
                 putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this@CheckoutActivity))

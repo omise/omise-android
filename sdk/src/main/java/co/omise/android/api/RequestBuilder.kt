@@ -8,6 +8,7 @@ import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.Objects.requireNonNull
+import kotlin.jvm.Throws
 
 /**
  * Request Builder is a base class, any classes that extends from it would be
