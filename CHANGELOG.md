@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v4.1.0
+* **ADDED:** Support for GooglePay
+* **CHANGED:** Logo and label for mobile banking payments: Kbank (TH), Bay (TH) and SCB (TH)
+
 ## v4.0.0
 
 * **CHANGED:** Require minimum SDK version 21
