@@ -144,8 +144,12 @@ val request = Token.CreateTokenRequestBuilder(cardParam).build()
 
 // Sample builder for Google Pay
 val tokenizationParam = TokenizationParam(
-        method = "googlepay",
-        data = "{attach Google Pay token here}"
+    method = "googlepay",
+    data = "{\"signature\":\"MEQCIA+wGZttxT13yz599zQjYugoz5kClNSmVa39vKv6ZOenAiARRtHQ0aYSrfd3oWhB\/ZtEeJs3ilT\/J0pYz1EWnzU2fw\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEev+pVoUgtoS+y8Ecz3c72OFBD3d74XJOcnRxVmCV+2TJTW1g4d0UhDkhHeURhHQNvJPyBFHfYIUUj\/EYhYAzgQ\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1647856171825\\\"}\",\"signatures\":[\"MEYCIQClXfVcil7qaG2btVbyzf6x1\/MqCTbbJM\/tGN4iME4M9wIhANL53daWJHdDPpKxR3M\/Jis4WPVb093PW7fChj\/gCQUS\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"4JighTc0b1HhRQu+NgQN1XQWWOeB4YyR5cMFi8Vu3FeWHAjPtGs3LjrdpWhJhWekURzD6BZCbg1xakYvAMsahoTyUzDLtNpKmlglFpVjBSSYkPKFT6xovTKsWS7xC\/x9AvJsATtotwN8TTiP3+1dXtLLFClnCTkg9vEvChvXq0FwnrUOBtMiWukBY84R2rpzqNuZoh6gdvWHgPP6RczhtERg+kqKdd4\/UnKE8ElzOWYDmZoJvFhxU\/O97vHW1ohOe8ut94bxiPH6DB82Ec87Mu\/oArsGMpsnFVsWzIcLX+q+KayGRbKxPQzV726fO7GipG94KiF7YfCk1r+D+jkFR7x0ev6l+XRoTz+PKIlhrcn3DEYJudJAP\/Xh2kj\/csnLn4XdKV0aZ5Ua3IauA4fQl80pAo9foujiRGwagHHOfnp6iMjA\/CdG9SNQS3eUdsxtlJKPoK4rtv7cwISNQvoCWMv748YvV3f+LEOWf8couRgrxPCPbk1vO8TfNOgSAjULzRs+C1xy6\/j5aZU46PpomEClDWrujMAcDVqCnExTx2QE9IAb4n02V6UxWv8Dgqv5TsRKjPe7WSCO0+jRWAvs6wBBUbFPHvEe4do+rQ\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BGJhfH3jWMmZtIALmYr7fWxYSNSCFoAT9MCOcbCZdO3LmP6njpGk9LISmr+H1Wk9XUZuMvNQmMHE+yFzW\/sA5lg\\\\u003d\\\",\\\"tag\\\":\\\"d9a6aVaoIEQm+bTjd5M2HL7+OeIup0Jb6rM1CN7v3NQ\\\\u003d\\\"}\"}",
+
+    // Add your billing information here (optional)
+    billing_name = "John Doe",
+    billing_street1 = "1600 Amphitheatre Parkway"
 )
 
 val request = Token.CreateTokenRequestBuilder(tokenization = tokenizationParam).build()
@@ -252,8 +256,7 @@ Two different results that could be returned are:
 
 ### Google Pay activity
 
-We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will
-automatically [tokenize the Google Pay token](https://www.omise.co/security-best-practices) for you.
+We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will automatically [tokenize the Google Pay token](https://www.omise.co/security-best-practices) for you.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -271,7 +274,9 @@ private val OMISE_PKEY: String = "pkey_test_123"
 private val amount: Long = 3000
 private val currency: String = "THB"
 private val cardBrands: ArrayList<String> = arrayListOf("Visa", "Mastercard")
-private val googlePayMerchantId: String = "merchant_123"
+private val googlepayMerchantId: String = "merchant_123"
+private val googlepayRequestBillingAddress: Boolean = false
+private val googlepayRequestPhoneNumber: Boolean = false
 
 private val REQUEST_GPAY: Int = 100
 
@@ -281,7 +286,9 @@ override fun navigateToGooglePayForm() {
         putExtra(EXTRA_AMOUNT, amount)
         putExtra(EXTRA_CURRENCY, currency)
         putStringArrayListExtra(EXTRA_CARD_BRANDS, cardBrands)
-        putExtra(EXTRA_GOOGLEPAY_MERCHANT_ID, googlePayMerchantId)
+        putExtra(EXTRA_GOOGLEPAY_MERCHANT_ID, googlepayMerchantId)
+        putExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, googlepayRequestBillingAddress)
+        putEXTRA(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
     }
     activity.startActivityForResult(intent, REQUEST_GPAY)
 }
@@ -291,7 +298,9 @@ override fun navigateToGooglePayForm() {
 - Replace the `amount` with the amount you want to charge with, in subunits.
 - Replace the `currency` with your currency in the ISO 4217 format.
 - Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
-- Replace the `googlePayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode
+- Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode
+- Set the `googlepayRequestBillingAddress` to `true` if you want to attach the cardholder's name and billing address to the token.
+- When the cardholder's billing address is requested, set the `googlepayRequestPhoneNumber` to `true` to also attach the cardholder's phone number to the token.
 
 #### Return values
 
