@@ -33,6 +33,7 @@ sealed class SourceType(
     object Fpx : SourceType("fpx") {
         var banks : List<Bank>? = null
     }
+    object RabbitLinePay : SourceType("rabbit_linepay")
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -44,6 +45,7 @@ sealed class SourceType(
     }
 
     sealed class MobileBanking(@JsonValue override val name: String?) : SourceType(name) {
+        object Bay : MobileBanking("mobile_banking_bay")
         object Bbl : MobileBanking("mobile_banking_bbl")
         object KBank : MobileBanking("mobile_banking_kbank")
         object OcbcPao : MobileBanking("mobile_banking_ocbc_pao")
@@ -91,6 +93,7 @@ sealed class SourceType(
             "internet_banking_ktb" -> InternetBanking.Ktb
             "internet_banking_scb" -> InternetBanking.Scb
             "internet_banking_bbl" -> InternetBanking.Bbl
+            "mobile_banking_bay" -> MobileBanking.Bay
             "mobile_banking_bbl" -> MobileBanking.Bbl
             "mobile_banking_kbank" -> MobileBanking.KBank
             "mobile_banking_ocbc_pao" -> MobileBanking.OcbcPao
@@ -120,6 +123,7 @@ sealed class SourceType(
             "gcash" -> Gcash
             "kakaopay" -> Kakaopay
             "touch_n_go" -> TouchNGo
+            "rabbit_linepay" -> RabbitLinePay
             else -> Unknown(name)
         }
     }

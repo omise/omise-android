@@ -122,7 +122,7 @@ Additionally the following utility classes are available from the SDK:
 
 ### Manual Tokenization
 
-If you have built your own credit card form, you can use the SDK to manually tokenize the
+If you have built your own credit card or Google Pay form, you can use the SDK to manually tokenize the
 card. First build the `Client` and supply your public key this way:
 
 ```kotlin
@@ -132,14 +132,28 @@ private val client = Client("pkey_test_123")
 Then construct the token request with values from your custom form:
 
 ```kotlin
+// Sample builder for credit card
 val cardParam = CardParam(
                 name = "JOHN Doe",
                 number = "4242424242424242",
                 expirationMonth = 10,
                 expirationYear = 2020,
-                securityCode = "123")
+                securityCode = "123"
+)
 
 val request = Token.CreateTokenRequestBuilder(cardParam).build()
+
+// Sample builder for Google Pay
+val tokenizationParam = TokenizationParam(
+                method = "googlepay",
+                data = "{\"signature\":\"MEQCIA+wGZttxT13yz599zQjYugoz5kClNSmVa39vKv6ZOenAiARRtHQ0aYSrfd3oWhB\/ZtEeJs3ilT\/J0pYz1EWnzU2fw\\u003d\\u003d\",\"intermediateSigningKey\":{\"signedKey\":\"{\\\"keyValue\\\":\\\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEev+pVoUgtoS+y8Ecz3c72OFBD3d74XJOcnRxVmCV+2TJTW1g4d0UhDkhHeURhHQNvJPyBFHfYIUUj\/EYhYAzgQ\\\\u003d\\\\u003d\\\",\\\"keyExpiration\\\":\\\"1647856171825\\\"}\",\"signatures\":[\"MEYCIQClXfVcil7qaG2btVbyzf6x1\/MqCTbbJM\/tGN4iME4M9wIhANL53daWJHdDPpKxR3M\/Jis4WPVb093PW7fChj\/gCQUS\"]},\"protocolVersion\":\"ECv2\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"4JighTc0b1HhRQu+NgQN1XQWWOeB4YyR5cMFi8Vu3FeWHAjPtGs3LjrdpWhJhWekURzD6BZCbg1xakYvAMsahoTyUzDLtNpKmlglFpVjBSSYkPKFT6xovTKsWS7xC\/x9AvJsATtotwN8TTiP3+1dXtLLFClnCTkg9vEvChvXq0FwnrUOBtMiWukBY84R2rpzqNuZoh6gdvWHgPP6RczhtERg+kqKdd4\/UnKE8ElzOWYDmZoJvFhxU\/O97vHW1ohOe8ut94bxiPH6DB82Ec87Mu\/oArsGMpsnFVsWzIcLX+q+KayGRbKxPQzV726fO7GipG94KiF7YfCk1r+D+jkFR7x0ev6l+XRoTz+PKIlhrcn3DEYJudJAP\/Xh2kj\/csnLn4XdKV0aZ5Ua3IauA4fQl80pAo9foujiRGwagHHOfnp6iMjA\/CdG9SNQS3eUdsxtlJKPoK4rtv7cwISNQvoCWMv748YvV3f+LEOWf8couRgrxPCPbk1vO8TfNOgSAjULzRs+C1xy6\/j5aZU46PpomEClDWrujMAcDVqCnExTx2QE9IAb4n02V6UxWv8Dgqv5TsRKjPe7WSCO0+jRWAvs6wBBUbFPHvEe4do+rQ\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BGJhfH3jWMmZtIALmYr7fWxYSNSCFoAT9MCOcbCZdO3LmP6njpGk9LISmr+H1Wk9XUZuMvNQmMHE+yFzW\/sA5lg\\\\u003d\\\",\\\"tag\\\":\\\"d9a6aVaoIEQm+bTjd5M2HL7+OeIup0Jb6rM1CN7v3NQ\\\\u003d\\\"}\"}",
+
+                // Add your billing information here (optional)
+                billing_name = "John Doe",
+                billing_street1 = "1600 Amphitheatre Parkway"
+)
+
+val request = Token.CreateTokenRequestBuilder(tokenization = tokenizationParam).build()
 ```
 
 And then send the request using the `client` you have constructed earlier:
@@ -240,6 +254,75 @@ Two different results that could be returned are:
 
 * `data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)` - The `Source` object created by the payment creator.
 * `data.hasExtra(OmiseActivity.EXTRA_TOKEN)` - The `Token` object created in case the payment source created was a credit card.
+
+### Google Pay activity
+
+We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will automatically [tokenize the Google Pay token](https://www.omise.co/security-best-practices) for you.
+
+To use it, first declare the availability of the activity in your `AndroidManifest.xml`
+file as follows:
+
+```xml
+<activity
+  android:name="co.omise.android.ui.GooglePayActivity"
+  android:theme="@style/OmiseTheme" />
+```
+
+Then in your activity, declare the method that will start this activity as follows:
+
+```kotlin
+private val OMISE_PKEY: String = "pkey_test_123"
+private val amount: Long = 3000
+private val currency: String = "THB"
+private val cardBrands: ArrayList<String> = arrayListOf("Visa", "Mastercard")
+private val googlepayMerchantId: String = "merchant_123"
+private val googlepayRequestBillingAddress: Boolean = false
+private val googlepayRequestPhoneNumber: Boolean = false
+
+private val REQUEST_GPAY: Int = 100
+
+override fun navigateToGooglePayForm() {
+    val intent = Intent(activity, GooglePayActivity::class.java).apply {
+        putExtra(EXTRA_PKEY, OMISE_PKEY)
+        putExtra(EXTRA_AMOUNT, amount)
+        putExtra(EXTRA_CURRENCY, currency)
+        putStringArrayListExtra(EXTRA_CARD_BRANDS, cardBrands)
+        putExtra(EXTRA_GOOGLEPAY_MERCHANT_ID, googlepayMerchantId)
+        putExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, googlepayRequestBillingAddress)
+        putEXTRA(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
+    }
+    activity.startActivityForResult(intent, REQUEST_GPAY)
+}
+```
+
+- Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
+- Replace the `amount` with the amount you want to charge with, in subunits.
+- Replace the `currency` with your currency in the ISO 4217 format.
+- Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
+- Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode).
+- Set the `googlepayRequestBillingAddress` to `true` if you want to attach the cardholder's name and billing address to the token.
+- When the cardholder's billing address is requested, set the `googlepayRequestPhoneNumber` to `true` to also attach the cardholder's phone number to the token.
+
+#### Return values
+
+A number of results are returned from the activity. You can obtain them from the
+resulting `Intent` with the following code:
+
+* `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
+  this if you only need the ID and not the card data.
+* `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
+  object returned from the Omise API.
+* `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
+  which is part of the `Token` object returned from the Omise API.
+
+#### Use your own activity
+
+You can use your own activity if you prefer to. We recommend that you follow [Google's tutorial and guidelines](https://developers.google.com/pay/api/android/overview) and make sure
+that you follow their [brand guidelines](https://developers.google.com/pay/api/android/guides/brand-guidelines) as well.
+
+You can make use of our Google Pay request builder `request/GooglePay.kt`, which will include request builders you can use to request the Google Pay token.
+Configurations to the builders are modifiable through the class' constructor to suit your needs. However, you are also welcome to make your own integration and call
+our tokens builder yourself.
 
 ### Creating a source
 If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key in this manner:

@@ -73,7 +73,7 @@
     <string name="payment_method_installments_title">分割払い</string>
     <string name="payment_method_internet_banking_bay_title">アユタヤ銀行</string>
     <string name="payment_method_internet_banking_bbl_title">バンコク銀行</string>
-    <string name="payment_method_mobile_banking_scb_title">サイアム・コマーシャル銀行</string>
+    <string name="payment_method_mobile_banking_scb_title">SCB EASY</string>
     <string name="payment_method_internet_banking_ktb_title">クルンタイ銀行</string>
     <string name="payment_method_internet_banking_scb_title">サイアム・コマーシャル銀行</string>
     <string name="payment_method_installment_citi_title">シティバンク</string>
@@ -102,7 +102,9 @@
     <string name="payment_method_kakaopay_title">カカオペイ</string>
     <string name="payment_method_touch_n_go_title">タッチンゴー</string>
     <string name="payment_method_alipayplus_footnote">(アリペイプラス)</string>
-    <string name="payment_method_mobile_banking_kbank_title">カシコン銀行</string>
+    <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
+    <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
+    <string name="googlepay">Google Pay</string>ช
 </resources>

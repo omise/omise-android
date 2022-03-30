@@ -5,6 +5,7 @@ import androidx.preference.PreferenceManager
 import co.omise.android.models.Bank
 import co.omise.android.models.Capability
 import co.omise.android.models.SourceType
+import co.omise.android.models.TokenizationMethod
 
 
 object PaymentSetting {
@@ -17,6 +18,7 @@ object PaymentSetting {
                     R.string.payment_preference_internet_banking_ktb_key,
                     R.string.payment_preference_internet_banking_scb_key,
                     R.string.payment_preference_internet_banking_bbl_key,
+                    R.string.payment_preference_mobile_banking_bay_key,
                     R.string.payment_preference_mobile_banking_bbl_key,
                     R.string.payment_preference_mobile_banking_kbank_key,
                     R.string.payment_preference_mobile_banking_ocbc_pao_key,
@@ -43,8 +45,10 @@ object PaymentSetting {
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
                     R.string.payment_preference_points_citi_key,
+                    R.string.payment_preference_rabbit_linepay_key,
                     R.string.payment_preference_touch_n_go_key,
-                    R.string.payment_preference_truemoney_key
+                    R.string.payment_preference_truemoney_key,
+                    R.string.payment_preference_googlepay_key,
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -69,6 +73,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_internet_banking_bbl_key) -> SourceType.InternetBanking.Bbl
                         context.getString(R.string.payment_preference_alipay_key) -> SourceType.Alipay
                         context.getString(R.string.payment_preference_bill_payment_tesco_lotus_key) -> SourceType.BillPaymentTescoLotus
+                        context.getString(R.string.payment_preference_mobile_banking_bay_key) -> SourceType.MobileBanking.Bay
                         context.getString(R.string.payment_preference_mobile_banking_bbl_key) -> SourceType.MobileBanking.Bbl
                         context.getString(R.string.payment_preference_mobile_banking_kbank_key) -> SourceType.MobileBanking.KBank
                         context.getString(R.string.payment_preference_mobile_banking_ocbc_pao_key) -> SourceType.MobileBanking.OcbcPao
@@ -95,10 +100,21 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_gcash_key) -> SourceType.Gcash
                         context.getString(R.string.payment_preference_kakaopay_key) -> SourceType.Kakaopay
                         context.getString(R.string.payment_preference_touch_n_go_key) -> SourceType.TouchNGo
+                        context.getString(R.string.payment_preference_rabbit_linepay_key) -> SourceType.RabbitLinePay
                         else -> null
                     }
                 }
                 .filterNotNull()
+
+        val tokenizationMethods = paymentMethodPreferences
+                .filter { it.value }
+                .toMap()
+                .mapNotNull {
+                    when (it.key) {
+                        context.getString(R.string.payment_preference_googlepay_key) -> TokenizationMethod.GooglePay
+                        else -> null
+                    }
+                }
 
         val allowCreditCardMethod = paymentMethodPreferences[context.getString(R.string.payment_preference_credit_card_key)]
                 ?: false
@@ -114,6 +130,6 @@ object PaymentSetting {
                 Bank("Standard Chartered", "sc", false)
         )
 
-        return Capability.create(allowCreditCardMethod, sourceTypes, zeroInterestInstallments)
+        return Capability.create(allowCreditCardMethod, sourceTypes, tokenizationMethods, zeroInterestInstallments)
     }
 }

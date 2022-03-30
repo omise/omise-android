@@ -12,7 +12,10 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                 .orEmpty()
                 .forEach { paymentMethod ->
                     when (paymentMethod.backendType) {
-                        BackendType.Token -> items.add(PaymentMethodResource.CreditCard)
+                        is BackendType.Token -> when ((paymentMethod.backendType as BackendType.Token).tokenizationMethod) {
+                            is TokenizationMethod.Card -> items.add(PaymentMethodResource.CreditCard)
+                            else -> PaymentMethodResource.all.find { it.tokenizationMethod == (paymentMethod.backendType as? BackendType.Token)?.tokenizationMethod }?.let { items.add(it) }
+                        }
                         is BackendType.Source -> when ((paymentMethod.backendType as BackendType.Source).sourceType) {
                             is SourceType.Installment -> items.add(PaymentMethodResource.Installments)
                             is SourceType.InternetBanking -> items.add(PaymentMethodResource.InternetBankings)
@@ -40,13 +43,21 @@ internal sealed class PaymentMethodResource(
         @StringRes override val subtitleRes: Int? = null,
         @DrawableRes override val indicatorIconRes: Int,
         val isCreditCard: Boolean = false,
-        val sourceType: SourceType? = null
+        val sourceType: SourceType? = null,
+        val tokenizationMethod: TokenizationMethod? = null
 ) : OmiseListItem {
     object CreditCard : PaymentMethodResource(
             iconRes = R.drawable.payment_card,
             titleRes = R.string.payment_method_credit_card_title,
             indicatorIconRes = R.drawable.ic_next,
             isCreditCard = true
+    )
+
+    object GooglePay : PaymentMethodResource(
+            iconRes = R.drawable.googlepay,
+            titleRes = R.string.googlepay,
+            indicatorIconRes = R.drawable.ic_next,
+            tokenizationMethod = TokenizationMethod.GooglePay,
     )
 
     object Installments : PaymentMethodResource(
@@ -183,6 +194,13 @@ internal sealed class PaymentMethodResource(
             subtitleRes = R.string.payment_method_alipayplus_footnote,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.TouchNGo
+    )
+
+    object RabbitLinepay : PaymentMethodResource(
+            iconRes = R.drawable.payment_rabbit_linepay,
+            titleRes = R.string.payment_method_rabbit_linepay_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.RabbitLinePay
     )
 
     companion object {
@@ -339,6 +357,13 @@ internal sealed class MobileBankingResource(
             get() = MobileBankingResource::class.nestedClasses.mapNotNull { it.objectInstance as? MobileBankingResource }
     }
 
+    object Bay : MobileBankingResource(
+        iconRes = R.drawable.kma,
+        titleRes = R.string.payment_method_mobile_banking_bay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.Bay
+    )
+
     object Bbl : MobileBankingResource(
         iconRes = R.drawable.bblm,
         titleRes = R.string.payment_method_mobile_banking_bbl_title,
@@ -361,7 +386,7 @@ internal sealed class MobileBankingResource(
     )
 
     object Scb : MobileBankingResource(
-            iconRes = R.drawable.payment_scb,
+            iconRes = R.drawable.scb_easy,
             titleRes = R.string.payment_method_mobile_banking_scb_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.MobileBanking.Scb

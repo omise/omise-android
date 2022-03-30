@@ -18,6 +18,10 @@ data class Amount(val amount: Long, val currency: String) {
         return "$localAmount ${currency.toUpperCase()}"
     }
 
+    fun toString(decimalPlaces: Int): String {
+        return String.format("%." + decimalPlaces + "f", localAmount)
+    }
+
     companion object {
 
         @JvmStatic

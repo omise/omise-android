@@ -45,16 +45,23 @@ data class PaymentMethod(
                             else -> null
                         }
                 )
+
+        @JvmStatic
+        fun createTokenizationMethod(tokenizationMethod: TokenizationMethod): PaymentMethod =
+                PaymentMethod(
+                        name = tokenizationMethod.name,
+                )
     }
 }
 
 val PaymentMethod.backendType: BackendType
     get() = when (name) {
-        "card" -> BackendType.Token
+        "card" -> BackendType.Token(TokenizationMethod.creator(name))
+        "googlepay" -> BackendType.Token(TokenizationMethod.creator(name))
         else -> BackendType.Source(SourceType.creator(name))
     }
 
 sealed class BackendType(open val name: String?) {
-    object Token : BackendType("card")
+    data class Token(val tokenizationMethod: TokenizationMethod) : BackendType(tokenizationMethod.name)
     data class Source(val sourceType: SourceType) : BackendType(sourceType.name)
 }

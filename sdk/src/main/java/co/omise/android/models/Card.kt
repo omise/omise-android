@@ -28,6 +28,8 @@ data class Card(
         @field:JsonProperty("security_code_check")
         val securityCodeCheck: Boolean = false,
         val bank: String? = null,
+        @field:JsonProperty("tokenization_method")
+        val tokenizationMethod: String? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,

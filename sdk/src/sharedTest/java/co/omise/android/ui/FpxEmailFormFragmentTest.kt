@@ -25,7 +25,7 @@ class FpxEmailFormFragmentTest {
 
     private val banks = listOf(Bank("affin", "Affin Bank", true))
 
-    private val paymentMethods = listOf(PaymentMethod(
+    private val paymentMethods = mutableListOf(PaymentMethod(
             name = "fpx",
             currencies = arrayListOf("MYR"),
             banks = banks

@@ -51,7 +51,7 @@ class PaymentChooserFragmentTest {
     fun setUp() {
         Intents.init()
 
-        val paymentMethods = listOf(
+        val paymentMethods = mutableListOf(
                 PaymentMethod(name = "card"),
                 PaymentMethod(name = "installment_bay"),
                 PaymentMethod(name = "installment_bbl"),
@@ -70,6 +70,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay"),
+                PaymentMethod(name = "mobile_banking_bay"),
                 PaymentMethod(name = "mobile_banking_bbl"),
                 PaymentMethod(name = "mobile_banking_kbank"),
                 PaymentMethod(name = "mobile_banking_ocbc_pao"),
@@ -79,7 +80,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "dana"),
                 PaymentMethod(name = "gcash"),
                 PaymentMethod(name = "kakaopay"),
-                PaymentMethod(name = "touch_n_go")
+                PaymentMethod(name = "touch_n_go"),
         )
         val capability = Capability(
                 paymentMethods = paymentMethods
@@ -218,6 +219,7 @@ class PaymentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
 
         val expectedMethods = listOf(
+                PaymentMethod(name = "mobile_banking_bay"),
                 PaymentMethod(name = "mobile_banking_bbl"),
                 PaymentMethod(name = "mobile_banking_kbank"),
                 PaymentMethod(name = "mobile_banking_ocbc_pao"),

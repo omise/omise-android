@@ -35,7 +35,7 @@ class InstallmentTermChooserFragmentTest {
     private val mockRequester: PaymentCreatorRequester<Source> = mock {
         on { amount }.doReturn(500000L)
         on { currency }.doReturn("thb")
-        on { capability }.doReturn(Capability.create(sourceTypes = emptyList()))
+        on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
     }
 
     private val fragment = InstallmentTermChooserFragment.newInstance(paymentMethod).apply {

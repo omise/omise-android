@@ -39,6 +39,9 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private static String TAG = "CheckoutActivity";
     private static String PUBLIC_KEY = "[PUBLIC_KEY]";
+    private static String GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]";
+    private static boolean GOOGLEPAY_REQUEST_BILLING_ADDRESS = false;
+    private static boolean GOOGLEPAY_REQUEST_PHONE_NUMBER = false;
 
     private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
     private static int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
@@ -107,6 +110,9 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
         intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
         intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
+        intent.putExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID, GOOGLEPAY_MERCHANT_ID);
+        intent.putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, GOOGLEPAY_REQUEST_BILLING_ADDRESS);
+        intent.putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, GOOGLEPAY_REQUEST_PHONE_NUMBER);
 
         if (isUsedSpecificsPaymentMethods) {
             intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this));
