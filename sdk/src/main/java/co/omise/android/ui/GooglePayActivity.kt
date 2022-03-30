@@ -31,6 +31,8 @@ class GooglePayActivity : AppCompatActivity() {
     private var price: Long = 0
     private lateinit var currencyCode: String
     private lateinit var merchantId: String
+    private var requestBillingAddress: Boolean = false
+    private var requestPhoneNumber: Boolean = false
 
     /**
      * Arbitrarily-picked constant integer you define to track a request for payment data activity.
@@ -49,7 +51,7 @@ class GooglePayActivity : AppCompatActivity() {
         setTitle(R.string.googlepay)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        googlePay = GooglePay(pKey, cardNetworks, price, currencyCode, merchantId)
+        googlePay = GooglePay(pKey, cardNetworks, price, currencyCode, merchantId, requestBillingAddress, requestPhoneNumber)
         paymentsClient = googlePay.createPaymentsClient(this)
         possiblyShowGooglePayButton()
 
@@ -62,6 +64,8 @@ class GooglePayActivity : AppCompatActivity() {
         price = requireNotNull(intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)) { "${OmiseActivity.Companion::EXTRA_AMOUNT.name} must not be null." }
         currencyCode = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_CURRENCY)) { "${OmiseActivity.Companion::EXTRA_CURRENCY.name} must not be null." }
         merchantId = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_MERCHANT_ID.name} must not be null." }
+        requestBillingAddress = requireNotNull(intent.getBooleanExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS.name} must not be null." }
+        requestPhoneNumber = requireNotNull(intent.getBooleanExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER.name} must not be null." }
     }
 
     /**
@@ -177,6 +181,14 @@ class GooglePayActivity : AppCompatActivity() {
      */
     private fun handlePaymentSuccess(paymentData: PaymentData) {
         val paymentInformation = paymentData.toJson()
+        var billingName: String = ""
+        var billingCity: String = ""
+        var billingCountry: String = ""
+        var billingPostalCode: String = ""
+        var billingState: String = ""
+        var billingStreet1: String = ""
+        var billingStreet2: String = ""
+        var billingPhoneNumber: String = ""
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
@@ -186,9 +198,37 @@ class GooglePayActivity : AppCompatActivity() {
                     .getJSONObject("tokenizationData")
                     .getString("token")
 
+            if (requestBillingAddress) {
+                val billingAddress = paymentMethodData.getJSONObject("info")
+                        .getJSONObject("billingAddress")
+
+                billingName = billingAddress.getString("name")
+                billingCity = billingAddress.getString("locality")
+                billingCountry = billingAddress.getString("countryCode")
+                billingPostalCode = billingAddress.getString("postalCode")
+                billingState = billingAddress.getString("administrativeArea")
+                billingStreet1 = billingAddress.getString("address1")
+                billingStreet2 = listOf(
+                        billingAddress.getString("address2"),
+                        billingAddress.getString("address3")
+                ).filter { s -> s != "" }.joinToString(" ")
+
+                if (requestPhoneNumber) {
+                    billingPhoneNumber = billingAddress.getString("phoneNumber")
+                }
+            }
+
             val tokenParam = TokenizationParam(
                     method = "googlepay",
-                    data = paymentToken
+                    data = paymentToken,
+                    billingName = billingName,
+                    billingCity = billingCity,
+                    billingCountry = billingCountry,
+                    billingPostalCode = billingPostalCode,
+                    billingState = billingState,
+                    billingStreet1 = billingStreet1,
+                    billingStreet2 = billingStreet2,
+                    billingPhoneNumber = billingPhoneNumber
             )
 
             googlePayButton.isClickable = false
