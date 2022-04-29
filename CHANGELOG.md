@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.1.1
+* **CHANGED** 3DS library version to 1.0.0-alpha09
+
 ## v4.1.0
 * **ADDED:** Support for GooglePay
 * **ADDED:** Support for BBL mobile banking 
