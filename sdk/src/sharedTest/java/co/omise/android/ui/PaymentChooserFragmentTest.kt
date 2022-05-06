@@ -118,10 +118,10 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(6, R.string.payment_method_netbank_title)
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
-        assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
 
         onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
 
+        assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
         assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
         assertListAtIndexHasResource(11, R.string.payment_method_alipay_hk_title)
         assertListAtIndexHasResource(12, R.string.payment_method_dana_title)
