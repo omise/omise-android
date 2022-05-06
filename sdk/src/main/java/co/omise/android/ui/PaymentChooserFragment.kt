@@ -50,6 +50,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.Kakaopay,
             PaymentMethodResource.TouchNGo,
             PaymentMethodResource.RabbitLinepay,
+            PaymentMethodResource.OcbcPao,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()

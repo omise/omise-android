@@ -203,6 +203,13 @@ internal sealed class PaymentMethodResource(
             sourceType = SourceType.RabbitLinePay
     )
 
+    object OcbcPao : PaymentMethodResource(
+        iconRes = R.drawable.payment_ocbc_pao,
+        titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.OcbcPao
+    )
+
     companion object {
         val all: List<PaymentMethodResource>
             get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }
@@ -376,13 +383,6 @@ internal sealed class MobileBankingResource(
         titleRes = R.string.payment_method_mobile_banking_kbank_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MobileBanking.KBank
-    )
-
-    object OcbcPao : MobileBankingResource(
-        iconRes = R.drawable.payment_ocbc_pao,
-        titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.MobileBanking.OcbcPao
     )
 
     object Scb : MobileBankingResource(
