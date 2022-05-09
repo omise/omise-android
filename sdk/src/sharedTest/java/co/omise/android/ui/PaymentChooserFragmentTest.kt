@@ -121,18 +121,19 @@ class PaymentChooserFragmentTest {
 
         onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
 
-        assertListAtIndexHasResource(9, R.string.payment_method_alipay_cn_title)
-        assertListAtIndexHasResource(10, R.string.payment_method_alipay_hk_title)
-        assertListAtIndexHasResource(11, R.string.payment_method_dana_title)
-        assertListAtIndexHasResource(12, R.string.payment_method_gcash_title)
-        assertListAtIndexHasResource(13, R.string.payment_method_kakaopay_title)
-        assertListAtIndexHasResource(14, R.string.payment_method_touch_n_go_title)
+        assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
+        assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
+        assertListAtIndexHasResource(11, R.string.payment_method_alipay_hk_title)
+        assertListAtIndexHasResource(12, R.string.payment_method_dana_title)
+        assertListAtIndexHasResource(13, R.string.payment_method_gcash_title)
+        assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
+        assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
 
-        for (i in 9..14) {
+        for (i in 10..15) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(15)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(16)))
     }
 
     @Test
@@ -222,7 +223,6 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "mobile_banking_bay"),
                 PaymentMethod(name = "mobile_banking_bbl"),
                 PaymentMethod(name = "mobile_banking_kbank"),
-                PaymentMethod(name = "mobile_banking_ocbc_pao"),
                 PaymentMethod(name = "mobile_banking_scb")
         )
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)

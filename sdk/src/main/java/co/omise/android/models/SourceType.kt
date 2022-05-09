@@ -34,6 +34,8 @@ sealed class SourceType(
         var banks : List<Bank>? = null
     }
     object RabbitLinePay : SourceType("rabbit_linepay")
+    object OcbcPao : SourceType("mobile_banking_ocbc_pao")
+
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
@@ -48,7 +50,6 @@ sealed class SourceType(
         object Bay : MobileBanking("mobile_banking_bay")
         object Bbl : MobileBanking("mobile_banking_bbl")
         object KBank : MobileBanking("mobile_banking_kbank")
-        object OcbcPao : MobileBanking("mobile_banking_ocbc_pao")
         object Scb : MobileBanking("mobile_banking_scb")
         data class Unknown(@JsonValue override val name: String?) : MobileBanking(name)
     }
@@ -96,7 +97,6 @@ sealed class SourceType(
             "mobile_banking_bay" -> MobileBanking.Bay
             "mobile_banking_bbl" -> MobileBanking.Bbl
             "mobile_banking_kbank" -> MobileBanking.KBank
-            "mobile_banking_ocbc_pao" -> MobileBanking.OcbcPao
             "mobile_banking_scb" -> MobileBanking.Scb
             "alipay" -> Alipay
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
@@ -124,6 +124,7 @@ sealed class SourceType(
             "kakaopay" -> Kakaopay
             "touch_n_go" -> TouchNGo
             "rabbit_linepay" -> RabbitLinePay
+            "mobile_banking_ocbc_pao" -> OcbcPao
             else -> Unknown(name)
         }
     }
