@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.1.2
+* **CHANGED:** Move OCBC Pay Anyone payment out of Mobile Banking section.
+
 ## v4.1.1
 * **CHANGED** 3DS library version to 1.0.0-alpha09
 
