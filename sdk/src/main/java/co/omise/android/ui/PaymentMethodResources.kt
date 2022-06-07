@@ -210,6 +210,41 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.OcbcPao
     )
 
+    object Boost : PaymentMethodResource(
+        iconRes = R.drawable.payment_boost,
+        titleRes = R.string.payment_method_boots_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.Boost
+    )
+
+    object ShopeePay : PaymentMethodResource(
+        iconRes = R.drawable.payment_shopeepay,
+        titleRes = R.string.payment_method_shopeepay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.ShopeePay
+    )
+
+    object DuitNowOBW : PaymentMethodResource(
+        iconRes = R.drawable.payment_duitnow_obw,
+        titleRes = R.string.payment_method_duitnow_obw_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.Boost
+    )
+
+    object DuitNowQR : PaymentMethodResource(
+        iconRes = R.drawable.payment_duitnow_qr,
+        titleRes = R.string.payment_method_duitnow_qr_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.Boost
+    )
+
+    object MaybankQR : PaymentMethodResource(
+        iconRes = R.drawable.payment_maybank_qr,
+        titleRes = R.string.payment_method_maybank_qr_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.Boost
+    )
+
     companion object {
         val all: List<PaymentMethodResource>
             get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }

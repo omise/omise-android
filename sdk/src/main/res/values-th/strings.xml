@@ -107,4 +107,9 @@
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
     <string name="googlepay">Google Pay</string>
+    <string name="payment_method_boots_title">Boost</string>
+    <string name="payment_method_shopeepay_title">ShopeePay</string>
+    <string name="payment_method_maybank_qr_title">Maybank QR Pay</string>
+    <string name="payment_method_duitnow_qr_title">DuitNow QR</string>
+    <string name="payment_method_duitnow_obw_title">DuitNow OBW</string>
 </resources>

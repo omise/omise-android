@@ -52,6 +52,11 @@
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
     <string name="payment_preference_googlepay_key" translatable="false">googlepay</string>
     <string name="payment_preference_rabbit_linepay_key" translatable="false">rabbit_linepay</string>
+    <string name="payment_preference_boost_key" translatable="false">boost</string>
+    <string name="payment_preference_shopeepay_key" translatable="false">shopeepay</string>
+    <string name="payment_preference_duitnow_obw_key" translatable="false">duitnow_obw</string>
+    <string name="payment_preference_duitnow_qr_key" translatable="false">duitnow_qr</string>
+    <string name="payment_preference_maybank_qr_key" translatable="false">maybank_qr</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -95,6 +100,11 @@
     <string name="payment_preference_touch_n_go_title" translatable="false">TNG eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
     <string name="payment_preference_googlepay_title" translatable="false">Google Pay</string>
+    <string name="payment_preference_boost_title" translatable="false">Boost</string>
+    <string name="payment_preference_shopeepay_title" translatable="false">ShopeePay</string>
+    <string name="payment_preference_duitnow_obw_title" translatable="false">DuitNow OBW</string>
+    <string name="payment_preference_duitnow_qr_title" translatable="false">DuitNow QR payment</string>
+    <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>
