@@ -81,6 +81,10 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "gcash"),
                 PaymentMethod(name = "kakaopay"),
                 PaymentMethod(name = "touch_n_go"),
+                PaymentMethod(name = "boost"),
+                PaymentMethod(name = "shopeepay"),
+                PaymentMethod(name = "duitnow_qr"),
+                PaymentMethod(name = "maybank_qr"),
         )
         val capability = Capability(
                 paymentMethods = paymentMethods

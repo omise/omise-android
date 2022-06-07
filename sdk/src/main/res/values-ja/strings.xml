@@ -110,6 +110,6 @@
     <string name="payment_method_boots_title">Boost</string>
     <string name="payment_method_shopeepay_title">ShopeePay</string>
     <string name="payment_method_maybank_qr_title">Maybank QR Pay</string>
-    <string name="payment_method_duitnow_qr_title">DuitNow QR</string>
-    <string name="payment_method_duitnow_obw_title">DuitNow OBW</string>
+    <string name="payment_method_duitnow_qr_title">Duitnow QR</string>
+    <string name="payment_method_duitnow_obw_title">Duitnow OBW</string>
 </resources>

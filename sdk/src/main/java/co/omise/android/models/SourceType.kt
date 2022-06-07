@@ -37,8 +37,8 @@ sealed class SourceType(
     object OcbcPao : SourceType("mobile_banking_ocbc_pao")
     object Boost: SourceType("boost")
     object ShopeePay: SourceType("shopeepay")
-    object DuitNowOBW  : SourceType("duitnow_obw")
-    object DuitNowQR : SourceType("duitnow_qr")
+    object DuitnowOBW  : SourceType("duitnow_obw")
+    object DuitnowQR : SourceType("duitnow_qr")
     object MaybankQR : SourceType("maybank_qr")
 
     data class Unknown(override val name: String?) : SourceType(name)
@@ -132,8 +132,8 @@ sealed class SourceType(
             "mobile_banking_ocbc_pao" -> OcbcPao
             "boost" -> Boost
             "shopeepay" -> ShopeePay
-            "duitnow_obw" -> DuitNowOBW
-            "duitnow_qr" -> DuitNowQR
+            "duitnow_obw" -> DuitnowOBW
+            "duitnow_qr" -> DuitnowQR
             "maybank_qr" -> MaybankQR
             else -> Unknown(name)
         }

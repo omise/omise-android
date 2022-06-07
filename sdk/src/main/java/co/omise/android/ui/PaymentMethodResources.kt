@@ -224,25 +224,25 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.ShopeePay
     )
 
-    object DuitNowOBW : PaymentMethodResource(
-        iconRes = R.drawable.payment_duitnow_obw,
+    object DuitnowOBW : PaymentMethodResource(
+        iconRes = R.drawable.payment_duitnow,
         titleRes = R.string.payment_method_duitnow_obw_title,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.Boost
+        sourceType = SourceType.DuitnowOBW
     )
 
-    object DuitNowQR : PaymentMethodResource(
-        iconRes = R.drawable.payment_duitnow_qr,
+    object DuitnowQR : PaymentMethodResource(
+        iconRes = R.drawable.payment_duitnow,
         titleRes = R.string.payment_method_duitnow_qr_title,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.Boost
+        sourceType = SourceType.DuitnowQR
     )
 
     object MaybankQR : PaymentMethodResource(
-        iconRes = R.drawable.payment_maybank_qr,
+        iconRes = R.drawable.payment_mae_maybank,
         titleRes = R.string.payment_method_maybank_qr_title,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.Boost
+        sourceType = SourceType.MaybankQR
     )
 
     companion object {
