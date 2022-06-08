@@ -83,6 +83,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "touch_n_go"),
                 PaymentMethod(name = "boost"),
                 PaymentMethod(name = "shopeepay"),
+                PaymentMethod(name = "duitnow_obw"),
                 PaymentMethod(name = "duitnow_qr"),
                 PaymentMethod(name = "maybank_qr"),
         )
@@ -122,22 +123,27 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(6, R.string.payment_method_netbank_title)
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
+        assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
 
         onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
 
-        assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
         assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
         assertListAtIndexHasResource(11, R.string.payment_method_alipay_hk_title)
         assertListAtIndexHasResource(12, R.string.payment_method_dana_title)
         assertListAtIndexHasResource(13, R.string.payment_method_gcash_title)
         assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
         assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
+        assertListAtIndexHasResource(16, R.string.payment_method_boots_title)
+        assertListAtIndexHasResource(17, R.string.payment_method_shopeepay_title)
+        assertListAtIndexHasResource(18, R.string.payment_method_duitnow_obw_title)
+        assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
+        assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
 
         for (i in 10..15) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(16)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(21)))
     }
 
     @Test

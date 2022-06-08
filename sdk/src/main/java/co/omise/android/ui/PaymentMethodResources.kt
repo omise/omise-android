@@ -467,3 +467,41 @@ internal class FpxResource(
         }
     }
 }
+
+internal class DuitnowOBWResource(
+    @DrawableRes override val iconRes: Int,
+    override val title: String? = null,
+    @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
+    val bankCode: String? = null,
+    override val enabled: Boolean? = false,
+) : OmiseListItem {
+
+    companion object {
+        val all: List<DuitnowOBWResource>
+            get() = DuitnowOBWResource::class.nestedClasses.mapNotNull { it.objectInstance as? DuitnowOBWResource }
+
+        fun getBankImageFromCode(code: String?) : Int {
+            return when (code) {
+                "affin" -> R.drawable.payment_affin
+                "alliance" -> R.drawable.payment_alliance
+                "agro" -> R.drawable.payment_agro
+                "ambank" -> R.drawable.payment_ambank
+                "islam" -> R.drawable.payment_islam
+                "muamalat" -> R.drawable.payment_muamalat
+                "rakyat" -> R.drawable.payment_rakyat
+                "bsn" -> R.drawable.payment_bsn
+                "cimb" -> R.drawable.payment_cimb
+                "hongleong" -> R.drawable.payment_hongleong
+                "hsbc" -> R.drawable.payment_hsbc
+                "kfh" -> R.drawable.payment_kfh
+                "maybank2u" -> R.drawable.payment_maybank
+                "ocbc" -> R.drawable.payment_ocbc
+                "public" -> R.drawable.payment_publicbank
+                "rhb" -> R.drawable.payment_rhb
+                "sc" -> R.drawable.payment_sc
+                "uob" -> R.drawable.payment_uob
+                else -> R.drawable.payment_unknown
+            }
+        }
+    }
+}
