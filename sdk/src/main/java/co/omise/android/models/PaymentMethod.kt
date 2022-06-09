@@ -19,6 +19,7 @@ data class PaymentMethod(
         @field:JsonProperty("installment_terms")
         var installmentTerms: List<Int>? = null,
         var banks: List<Bank>? = null,
+        var provider: String? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,
@@ -42,6 +43,10 @@ data class PaymentMethod(
                         },
                         banks = when (sourceType) {
                             is SourceType.Fpx -> SourceType.Fpx.banks
+                            else -> null
+                        },
+                        provider = when (sourceType) {
+                            is SourceType.TouchNGo -> SourceType.TouchNGo.provider
                             else -> null
                         }
                 )

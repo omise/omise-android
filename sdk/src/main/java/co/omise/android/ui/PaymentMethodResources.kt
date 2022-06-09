@@ -21,6 +21,14 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                             is SourceType.InternetBanking -> items.add(PaymentMethodResource.InternetBankings)
                             is SourceType.MobileBanking -> items.add(PaymentMethodResource.MobileBankings)
                             is SourceType.Econtext -> items.addAll(listOf(PaymentMethodResource.ConvenienceStore, PaymentMethodResource.PayEasy, PaymentMethodResource.Netbanking))
+                            is SourceType.TouchNGo -> {
+                                var TouchNGo = PaymentMethodResource.TouchNGo
+                                when (paymentMethod.provider) {
+                                    "AlipayPlus" -> TouchNGo.subtitleRes =
+                                        R.string.payment_method_alipayplus_footnote
+                                }
+                                items.add(TouchNGo)
+                            }
                             else -> PaymentMethodResource.all.find { it.sourceType == (paymentMethod.backendType as? BackendType.Source)?.sourceType }?.let { items.add(it) }
                         }
                     }
@@ -38,13 +46,13 @@ internal val List<SourceType.MobileBanking>.mobileBankingResources: List<MobileB
     get() = this.mapNotNull { sourceType -> MobileBankingResource.all.find { it.sourceType == sourceType } }
 
 internal sealed class PaymentMethodResource(
-        @DrawableRes override val iconRes: Int,
-        @StringRes override val titleRes: Int?,
-        @StringRes override val subtitleRes: Int? = null,
-        @DrawableRes override val indicatorIconRes: Int,
-        val isCreditCard: Boolean = false,
-        val sourceType: SourceType? = null,
-        val tokenizationMethod: TokenizationMethod? = null
+    @DrawableRes override val iconRes: Int,
+    @StringRes override val titleRes: Int?,
+    @StringRes override var subtitleRes: Int? = null,
+    @DrawableRes override val indicatorIconRes: Int,
+    val isCreditCard: Boolean = false,
+    val sourceType: SourceType? = null,
+    val tokenizationMethod: TokenizationMethod? = null
 ) : OmiseListItem {
     object CreditCard : PaymentMethodResource(
             iconRes = R.drawable.payment_card,
@@ -191,7 +199,7 @@ internal sealed class PaymentMethodResource(
     object TouchNGo : PaymentMethodResource(
             iconRes = R.drawable.payment_touch_n_go,
             titleRes = R.string.payment_method_touch_n_go_title,
-            subtitleRes = R.string.payment_method_alipayplus_footnote,
+            subtitleRes = null,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.TouchNGo
     )

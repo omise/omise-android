@@ -29,7 +29,9 @@ sealed class SourceType(
     object Dana : SourceType("dana")
     object Gcash : SourceType("gcash")
     object Kakaopay : SourceType("kakaopay")
-    object TouchNGo : SourceType("touch_n_go")
+    object TouchNGo : SourceType("touch_n_go") {
+        var provider : String? = null
+    }
     object Fpx : SourceType("fpx") {
         var banks : List<Bank>? = null
     }
