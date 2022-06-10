@@ -103,7 +103,7 @@
     <string name="payment_preference_boost_title" translatable="false">Boost</string>
     <string name="payment_preference_shopeepay_title" translatable="false">ShopeePay</string>
     <string name="payment_preference_duitnow_obw_title" translatable="false">Duitnow OBW</string>
-    <string name="payment_preference_duitnow_qr_title" translatable="false">Duitnow QR payment</string>
+    <string name="payment_preference_duitnow_qr_title" translatable="false">Duitnow QR</string>
     <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>

@@ -115,9 +115,9 @@
     <string name="googlepay">Google Pay</string>
     <string name="pay_with_googlepay_button_content_description" translatable="false">Pay With Google Pay</string>
     <string name="payment_method_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
-    <string name="payment_method_boots_title">Boost</string>
-    <string name="payment_method_shopeepay_title">ShopeePay</string>
-    <string name="payment_method_maybank_qr_title">Maybank QRPay</string>
-    <string name="payment_method_duitnow_qr_title">Duitnow QR payment</string>
-    <string name="payment_method_duitnow_obw_title">Duitnow OBW</string>
+    <string name="payment_method_boots_title" translatable="false">Boost</string>
+    <string name="payment_method_shopeepay_title" translatable="false">ShopeePay</string>
+    <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPay</string>
+    <string name="payment_method_duitnow_qr_title" translatable="false">Duitnow QR</string>
+    <string name="payment_method_duitnow_obw_title" translatable="false">Duitnow OBW</string>
 </resources>

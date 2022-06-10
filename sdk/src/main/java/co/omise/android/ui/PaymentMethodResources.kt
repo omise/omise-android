@@ -24,7 +24,7 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                             is SourceType.TouchNGo -> {
                                 var TouchNGo = PaymentMethodResource.TouchNGo
                                 when (paymentMethod.provider) {
-                                    "AlipayPlus" -> TouchNGo.subtitleRes =
+                                    "Alipay_plus" -> TouchNGo.subtitleRes =
                                         R.string.payment_method_alipayplus_footnote
                                 }
                                 items.add(TouchNGo)
@@ -240,7 +240,7 @@ internal sealed class PaymentMethodResource(
     )
 
     object DuitnowQR : PaymentMethodResource(
-        iconRes = R.drawable.payment_duitnow,
+        iconRes = R.drawable.payment_duitnow_qr,
         titleRes = R.string.payment_method_duitnow_qr_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.DuitnowQR
