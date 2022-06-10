@@ -52,6 +52,7 @@
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
     <string name="payment_preference_googlepay_key" translatable="false">googlepay</string>
     <string name="payment_preference_rabbit_linepay_key" translatable="false">rabbit_linepay</string>
+    <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -95,6 +96,7 @@
     <string name="payment_preference_touch_n_go_title" translatable="false">TNG eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
     <string name="payment_preference_googlepay_title" translatable="false">Google Pay</string>
+    <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>

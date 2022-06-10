@@ -35,6 +35,7 @@ sealed class SourceType(
     }
     object RabbitLinePay : SourceType("rabbit_linepay")
     object OcbcPao : SourceType("mobile_banking_ocbc_pao")
+    object GrabPay : SourceType("grabpay")
 
     data class Unknown(override val name: String?) : SourceType(name)
 
@@ -125,6 +126,7 @@ sealed class SourceType(
             "touch_n_go" -> TouchNGo
             "rabbit_linepay" -> RabbitLinePay
             "mobile_banking_ocbc_pao" -> OcbcPao
+            "grabpay" -> GrabPay
             else -> Unknown(name)
         }
     }
