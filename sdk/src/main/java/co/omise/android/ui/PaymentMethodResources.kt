@@ -252,6 +252,14 @@ internal sealed class PaymentMethodResource(
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MaybankQR
     )
+    
+    object GrabPay : PaymentMethodResource(
+            iconRes = R.drawable.payment_grabpay,
+            titleRes = R.string.payment_method_grabpay_title,
+            subtitleRes = R.string.payment_method_grabpay_footnote,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.GrabPay
+    )
 
     companion object {
         val all: List<PaymentMethodResource>

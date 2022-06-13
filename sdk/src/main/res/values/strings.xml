@@ -120,4 +120,6 @@
     <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_method_duitnow_qr_title" translatable="false">Duitnow QR</string>
     <string name="payment_method_duitnow_obw_title" translatable="false">Duitnow OBW</string>
+    <string name="payment_method_grabpay_title" translatable="false">Grab</string>
+    <string name="payment_method_grabpay_footnote">(GrabPay and PayLater)</string>
 </resources>

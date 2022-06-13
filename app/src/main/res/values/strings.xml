@@ -57,6 +57,7 @@
     <string name="payment_preference_duitnow_obw_key" translatable="false">duitnow_obw</string>
     <string name="payment_preference_duitnow_qr_key" translatable="false">duitnow_qr</string>
     <string name="payment_preference_maybank_qr_key" translatable="false">maybank_qr</string>
+    <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -105,6 +106,7 @@
     <string name="payment_preference_duitnow_obw_title" translatable="false">Duitnow OBW</string>
     <string name="payment_preference_duitnow_qr_title" translatable="false">Duitnow QR</string>
     <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
+    <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>

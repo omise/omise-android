@@ -86,6 +86,8 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "duitnow_obw"),
                 PaymentMethod(name = "duitnow_qr"),
                 PaymentMethod(name = "maybank_qr"),
+                PaymentMethod(name = "rabbit_linepay"),
+                PaymentMethod(name = "grabpay"),
         )
         val capability = Capability(
                 paymentMethods = paymentMethods
@@ -133,17 +135,24 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(13, R.string.payment_method_gcash_title)
         assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
         assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
+
+        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
+
         assertListAtIndexHasResource(16, R.string.payment_method_boots_title)
         assertListAtIndexHasResource(17, R.string.payment_method_shopeepay_title)
         assertListAtIndexHasResource(18, R.string.payment_method_duitnow_obw_title)
         assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
         assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
+        assertListAtIndexHasResource(21, R.string.payment_method_rabbit_linepay_title)
+        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_title)
 
         for (i in 10..14) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(21)))
+        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_footnote)
+
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(22)))
     }
 
     @Test
