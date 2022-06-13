@@ -245,6 +245,7 @@ class PaymentChooserFragmentTest {
     @Test
     fun clickDuitNowOBWPaymentMethod_navigateToDuitNowOBWBankChooser() {
         onView(withId(R.id.recycler_view)).perform(swipeUp())
+        onView(withId(R.id.recycler_view)).perform(swipeUp())
         onView(withListId(R.id.recycler_view).atPosition(18)).perform(click())
         verify(fragment.navigation)?.navigateToDuitNowOBWBankChooser()
     }
