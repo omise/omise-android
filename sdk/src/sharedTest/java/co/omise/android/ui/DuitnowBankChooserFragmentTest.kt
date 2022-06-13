@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class DuitnowBankChooserFragmentTest {
+class DuitNowBankChooserFragmentTest {
 
     private val banks = listOf(
             Bank("Affin Bank", "affin", true),
@@ -36,7 +36,7 @@ class DuitnowBankChooserFragmentTest {
         on { currency }.doReturn("myr")
     }
 
-    private val fragment = DuitnowOBWBankChooserFragment.newInstance(banks).apply {
+    private val fragment = DuitNowOBWBankChooserFragment.newInstance(banks).apply {
         requester = mockRequester
     }
 

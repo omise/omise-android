@@ -248,18 +248,18 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.ShopeePay
     )
 
-    object DuitnowOBW : PaymentMethodResource(
+    object DuitNowOBW : PaymentMethodResource(
         iconRes = R.drawable.payment_duitnow_obw,
         titleRes = R.string.payment_method_duitnow_obw_title,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.DuitnowOBW
+        sourceType = SourceType.DuitNowOBW
     )
 
-    object DuitnowQR : PaymentMethodResource(
+    object DuitNowQR : PaymentMethodResource(
         iconRes = R.drawable.payment_duitnow_qr,
         titleRes = R.string.payment_method_duitnow_qr_title,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.DuitnowQR
+        sourceType = SourceType.DuitNowQR
     )
 
     object MaybankQR : PaymentMethodResource(
@@ -509,7 +509,7 @@ internal class FpxResource(
     }
 }
 
-internal class DuitnowOBWResource(
+internal class DuitNowOBWResource(
     @DrawableRes override val iconRes: Int,
     override val title: String? = null,
     @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
@@ -518,8 +518,8 @@ internal class DuitnowOBWResource(
 ) : OmiseListItem {
 
     companion object {
-        val all: List<DuitnowOBWResource>
-            get() = DuitnowOBWResource::class.nestedClasses.mapNotNull { it.objectInstance as? DuitnowOBWResource }
+        val all: List<DuitNowOBWResource>
+            get() = DuitNowOBWResource::class.nestedClasses.mapNotNull { it.objectInstance as? DuitNowOBWResource }
 
         fun getBankImageFromCode(code: String?) : Int {
             return when (code) {

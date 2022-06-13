@@ -5,10 +5,10 @@ import co.omise.android.R
 import co.omise.android.models.*
 
 /**
- * DuitnowOBWBankChooserFragment is the UI class, extended from base [OmiseListFragment] to show available
- * Duitnow OBW bank options list for the user to choose from.
+ * DuitNowOBWBankChooserFragment is the UI class, extended from base [OmiseListFragment] to show available
+ * DuitNow OBW bank options list for the user to choose from.
  */
-internal class DuitnowOBWBankChooserFragment : OmiseListFragment<DuitnowOBWResource>() {
+internal class DuitNowOBWBankChooserFragment : OmiseListFragment<DuitNowOBWResource>() {
 
     var requester: PaymentCreatorRequester<Source>? = null
 
@@ -20,14 +20,14 @@ internal class DuitnowOBWBankChooserFragment : OmiseListFragment<DuitnowOBWResou
         setHasOptionsMenu(true)
     }
 
-    override fun onListItemClicked(item: DuitnowOBWResource) {
+    override fun onListItemClicked(item: DuitNowOBWResource) {
         val req = requester ?: return
         val bankCode = item.bankCode.orEmpty()
 
         view?.let { setAllViewsEnabled(it, false) }
 
         val request =
-                Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.DuitnowOBW)
+                Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.DuitNowOBW)
                         .bank(bankCode)
                         .build()
 
@@ -35,13 +35,13 @@ internal class DuitnowOBWBankChooserFragment : OmiseListFragment<DuitnowOBWResou
         req.request(request) { view?.let { setAllViewsEnabled(it, true) } }
     }
 
-    override fun listItems(): List<DuitnowOBWResource> {
+    override fun listItems(): List<DuitNowOBWResource> {
         val capabilityBanks =
                 arguments?.getParcelableArray(DUITNOWOBW_BANKS).orEmpty() as Array<Bank>
 
         return capabilityBanks.map {
-            DuitnowOBWResource(
-                    iconRes = DuitnowOBWResource.getBankImageFromCode(it.code),
+            DuitNowOBWResource(
+                    iconRes = DuitNowOBWResource.getBankImageFromCode(it.code),
                     title = it.name,
                     bankCode = it.code,
                     enabled = it.active
@@ -50,10 +50,10 @@ internal class DuitnowOBWBankChooserFragment : OmiseListFragment<DuitnowOBWResou
     }
 
     companion object {
-        private const val DUITNOWOBW_BANKS = "DuitnowOBWBankChooserFragment.banks"
+        private const val DUITNOWOBW_BANKS = "DuitNowOBWBankChooserFragment.banks"
 
         fun newInstance(banks: List<Bank>?) =
-                DuitnowOBWBankChooserFragment().apply {
+                DuitNowOBWBankChooserFragment().apply {
                     arguments =
                             Bundle().apply {
                                 putParcelableArray(DUITNOWOBW_BANKS, banks?.toTypedArray())

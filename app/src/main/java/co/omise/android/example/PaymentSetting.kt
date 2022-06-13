@@ -109,8 +109,8 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_rabbit_linepay_key) -> SourceType.RabbitLinePay
                         context.getString(R.string.payment_preference_boost_key) -> SourceType.Boost
                         context.getString(R.string.payment_preference_shopeepay_key) -> SourceType.ShopeePay
-                        context.getString(R.string.payment_preference_duitnow_obw_key) -> SourceType.DuitnowOBW
-                        context.getString(R.string.payment_preference_duitnow_qr_key) -> SourceType.DuitnowQR
+                        context.getString(R.string.payment_preference_duitnow_obw_key) -> SourceType.DuitNowOBW
+                        context.getString(R.string.payment_preference_duitnow_qr_key) -> SourceType.DuitNowQR
                         context.getString(R.string.payment_preference_maybank_qr_key) -> SourceType.MaybankQR
                         context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay
                         else -> null

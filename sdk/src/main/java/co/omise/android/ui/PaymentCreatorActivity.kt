@@ -159,7 +159,7 @@ interface PaymentCreatorNavigation {
     fun navigateToFpxEmailForm()
     fun navigateToFpxBankChooser(banks: List<Bank>?, email: String)
     fun navigateToGooglePayForm()
-    fun navigateToDuitnowOBWBankChooser()
+    fun navigateToDuitNowOBWBankChooser()
 }
 
 private class PaymentCreatorNavigationImpl(
@@ -281,9 +281,9 @@ private class PaymentCreatorNavigationImpl(
         activity.startActivityForResult(intent, requestCode)
     }
 
-    override fun navigateToDuitnowOBWBankChooser() {
+    override fun navigateToDuitNowOBWBankChooser() {
         /**
-         *  Duitnow OBW didn't support capability api for banks list
+         *  DuitNow OBW didn't support capability api for banks list
          *  so need to define local banks list
          */
         var banks = listOf(
@@ -307,9 +307,10 @@ private class PaymentCreatorNavigationImpl(
             Bank(name = "UOB Bank", code = "uob", active = true),
         )
 
-        val fragment = DuitnowOBWBankChooserFragment.newInstance(banks).apply {
+        val fragment = DuitNowOBWBankChooserFragment.newInstance(banks).apply {
             requester = this@PaymentCreatorNavigationImpl.requester
         }
+
         addFragmentToBackStack(fragment)
     }
 }

@@ -47,13 +47,13 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.OcbcPao,
             PaymentMethodResource.Boost,
             PaymentMethodResource.ShopeePay,
-            PaymentMethodResource.DuitnowQR,
+            PaymentMethodResource.DuitNowQR,
             PaymentMethodResource.MaybankQR,
             PaymentMethodResource.GrabPay,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
-            PaymentMethodResource.DuitnowOBW -> navigation.navigateToDuitnowOBWBankChooser()
+            PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()
         }
     }
 
