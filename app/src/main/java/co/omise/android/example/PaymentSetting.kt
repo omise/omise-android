@@ -49,6 +49,7 @@ object PaymentSetting {
                     R.string.payment_preference_touch_n_go_key,
                     R.string.payment_preference_truemoney_key,
                     R.string.payment_preference_googlepay_key,
+                    R.string.payment_preference_grabpay_key,
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -101,6 +102,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_kakaopay_key) -> SourceType.Kakaopay
                         context.getString(R.string.payment_preference_touch_n_go_key) -> SourceType.TouchNGo
                         context.getString(R.string.payment_preference_rabbit_linepay_key) -> SourceType.RabbitLinePay
+                        context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay
                         else -> null
                     }
                 }

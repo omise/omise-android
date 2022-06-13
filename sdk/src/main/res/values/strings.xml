@@ -115,4 +115,6 @@
     <string name="googlepay">Google Pay</string>
     <string name="pay_with_googlepay_button_content_description" translatable="false">Pay With Google Pay</string>
     <string name="payment_method_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
+    <string name="payment_method_grabpay_title" translatable="false">Grab</string>
+    <string name="payment_method_grabpay_footnote">(GrabPay and PayLater)</string>
 </resources>
