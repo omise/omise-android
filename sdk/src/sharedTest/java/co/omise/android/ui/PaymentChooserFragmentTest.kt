@@ -139,7 +139,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
         assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
 
-        for (i in 10..15) {
+        for (i in 10..14) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
