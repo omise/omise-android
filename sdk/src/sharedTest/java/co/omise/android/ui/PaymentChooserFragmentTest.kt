@@ -3,10 +3,8 @@ package co.omise.android.ui
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
@@ -241,15 +239,7 @@ class PaymentChooserFragmentTest {
         )
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
-
-    @Test
-    fun clickDuitNowOBWPaymentMethod_navigateToDuitNowOBWBankChooser() {
-        onView(withId(R.id.recycler_view)).perform(swipeUp())
-        onView(withId(R.id.recycler_view)).perform(swipeUp())
-        onView(withListId(R.id.recycler_view).atPosition(18)).perform(click())
-        verify(fragment.navigation)?.navigateToDuitNowOBWBankChooser()
-    }
-
+    
     private fun assertListAtIndexHasResource(index: Int, res: Int) {
         onView(withListId(R.id.recycler_view).atPosition(index)).check(matches(hasDescendant(withText(res))))
     }
