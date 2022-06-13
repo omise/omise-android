@@ -1,7 +1,7 @@
 # CHANGE LOG
 
 ## v4.1.3
-* **CHANGED:** Added supprot for GrabPay payment method.
+* **CHANGED:** Added support for GrabPay payment method.
 
 ## v4.1.2
 * **CHANGED:** Move OCBC Pay Anyone payment out of Mobile Banking section.
