@@ -111,15 +111,15 @@
     <string name="payment_method_dana_title">DANA</string>
     <string name="payment_method_gcash_title">GCash</string>
     <string name="payment_method_kakaopay_title">Kakao Pay</string>
-    <string name="payment_method_touch_n_go_title">TNG eWallet</string>
+    <string name="payment_method_touch_n_go_title">Touch ’n Go</string>
     <string name="googlepay">Google Pay</string>
     <string name="pay_with_googlepay_button_content_description" translatable="false">Pay With Google Pay</string>
     <string name="payment_method_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
     <string name="payment_method_boots_title" translatable="false">Boost</string>
     <string name="payment_method_shopeepay_title" translatable="false">ShopeePay</string>
-    <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPay</string>
-    <string name="payment_method_duitnow_qr_title" translatable="false">Duitnow QR</string>
-    <string name="payment_method_duitnow_obw_title" translatable="false">Duitnow OBW</string>
+    <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPAY</string>
+    <string name="payment_method_duitnow_qr_title" translatable="false">DuitNow QR</string>
+    <string name="payment_method_duitnow_obw_title" translatable="false">DuitNow Online Banking/Wallets</string>
     <string name="payment_method_grabpay_title" translatable="false">Grab</string>
     <string name="payment_method_grabpay_rms_title" translatable="false">GrabPay</string>
     <string name="payment_method_grabpay_footnote" translatable="false">(GrabPay and PayLater)</string>
