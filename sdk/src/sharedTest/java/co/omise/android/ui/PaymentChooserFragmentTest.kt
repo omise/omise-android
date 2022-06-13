@@ -247,6 +247,14 @@ class PaymentChooserFragmentTest {
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
 
+    @Test
+    fun clickDuitnowOBWPaymentMethod_sendRequestToCreateSource() {
+        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
+        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
+        onView(withListId(R.id.recycler_view).atPosition(19)).perform(click())
+        verify(fragment.navigation)?.navigateToDuitnowOBWBankChooser()
+    }
+
     private fun assertListAtIndexHasResource(index: Int, res: Int) {
         onView(withListId(R.id.recycler_view).atPosition(index)).check(matches(hasDescendant(withText(res))))
     }
