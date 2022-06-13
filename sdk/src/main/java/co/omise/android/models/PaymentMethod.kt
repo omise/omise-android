@@ -47,6 +47,7 @@ data class PaymentMethod(
                         },
                         provider = when (sourceType) {
                             is SourceType.TouchNGo -> SourceType.TouchNGo.provider
+                            is SourceType.GrabPay -> SourceType.GrabPay.provider
                             else -> null
                         }
                 )

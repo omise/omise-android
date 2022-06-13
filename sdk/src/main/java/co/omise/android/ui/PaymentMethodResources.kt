@@ -249,7 +249,7 @@ internal sealed class PaymentMethodResource(
     )
 
     object DuitnowOBW : PaymentMethodResource(
-        iconRes = R.drawable.payment_duitnow,
+        iconRes = R.drawable.payment_duitnow_obw,
         titleRes = R.string.payment_method_duitnow_obw_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.DuitnowOBW

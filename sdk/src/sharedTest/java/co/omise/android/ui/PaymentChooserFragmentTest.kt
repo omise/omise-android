@@ -251,7 +251,7 @@ class PaymentChooserFragmentTest {
     fun clickDuitnowOBWPaymentMethod_sendRequestToCreateSource() {
         onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
         onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
-        onView(withListId(R.id.recycler_view).atPosition(19)).perform(click())
+        onView(withListId(R.id.recycler_view).atPosition(18)).perform(click())
         verify(fragment.navigation)?.navigateToDuitnowOBWBankChooser()
     }
 
