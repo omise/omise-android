@@ -239,7 +239,7 @@ class PaymentChooserFragmentTest {
         )
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
-    
+
     private fun assertListAtIndexHasResource(index: Int, res: Int) {
         onView(withListId(R.id.recycler_view).atPosition(index)).check(matches(hasDescendant(withText(res))))
     }
