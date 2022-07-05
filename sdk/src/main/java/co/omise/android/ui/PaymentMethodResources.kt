@@ -423,6 +423,7 @@ internal class FpxResource(
                 "islam" -> R.drawable.payment_islam
                 "muamalat" -> R.drawable.payment_muamalat
                 "rakyat" -> R.drawable.payment_rakyat
+                "bocm" -> R.drawable.payment_bocm
                 "bsn" -> R.drawable.payment_bsn
                 "cimb" -> R.drawable.payment_cimb
                 "hongleong" -> R.drawable.payment_hongleong
