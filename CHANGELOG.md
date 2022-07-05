@@ -1,8 +1,8 @@
 # CHANGE LOG
 
 ## v4.1.4
-* **ADDED:** Add Bank of China logo for FPX payments.
-* **CHANGED** Fix allowed installment terms for UOB and TTB installments.
+* **ADDED:** Added Bank of China logo for FPX payments.
+* **CHANGED** Fixed allowed installment terms for UOB and TTB installments.
 
 ## v4.1.3
 * **CHANGED:** Added support for GrabPay payment method.
