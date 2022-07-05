@@ -79,8 +79,8 @@ sealed class SourceType(
                         KBank -> listOf(3, 4, 6, 10)
                         Scb -> listOf(3, 4, 6, 9, 10)
                         Citi -> listOf(4, 5, 6, 7, 8, 9, 10)
-                        Ttb -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
-                        Uob -> listOf(4, 5, 6, 7, 8, 9, 10)
+                        Ttb -> listOf(3, 4, 6, 10, 12)
+                        Uob -> listOf(3, 4, 6, 10)
                         is Unknown -> emptyList()
                     }
         }
