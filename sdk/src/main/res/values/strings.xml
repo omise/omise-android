@@ -117,7 +117,7 @@
     <string name="payment_method_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
     <string name="payment_method_boots_title" translatable="false">Boost</string>
     <string name="payment_method_shopeepay_title" translatable="false">ShopeePay</string>
-    <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPAY</string>
+    <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_method_duitnow_qr_title" translatable="false">DuitNow QR</string>
     <string name="payment_method_duitnow_obw_title" translatable="false">DuitNow Online Banking/Wallets</string>
     <string name="payment_method_grabpay_title" translatable="false">Grab</string>
