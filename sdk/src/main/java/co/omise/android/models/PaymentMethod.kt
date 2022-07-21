@@ -42,12 +42,12 @@ data class PaymentMethod(
                             else -> null
                         },
                         banks = when (sourceType) {
-                            is SourceType.Fpx -> SourceType.Fpx.banks
+                            is SourceType.Fpx -> sourceType.banks
                             else -> null
                         },
                         provider = when (sourceType) {
-                            is SourceType.TouchNGo -> SourceType.TouchNGo.provider
-                            is SourceType.GrabPay -> SourceType.GrabPay.provider
+                            is SourceType.TouchNGo -> sourceType.provider
+                            is SourceType.GrabPay -> sourceType.provider
                             else -> null
                         }
                 )

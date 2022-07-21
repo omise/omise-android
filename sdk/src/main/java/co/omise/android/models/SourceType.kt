@@ -29,10 +29,8 @@ sealed class SourceType(
     object Dana : SourceType("dana")
     object Gcash : SourceType("gcash")
     object Kakaopay : SourceType("kakaopay")
-    data class TouchNGo(val provider: String? = null) : SourceType("touch_n_go") 
-    object Fpx : SourceType("fpx") {
-        var banks : List<Bank>? = null
-    }
+    data class TouchNGo(val provider: String? = null) : SourceType("touch_n_go")
+    data class Fpx(var banks : List<Bank>? = null) : SourceType("fpx")
     object RabbitLinePay : SourceType("rabbit_linepay")
     object OcbcPao : SourceType("mobile_banking_ocbc_pao")
     object Boost: SourceType("boost")
@@ -40,9 +38,7 @@ sealed class SourceType(
     object DuitNowOBW  : SourceType("duitnow_obw")
     object DuitNowQR : SourceType("duitnow_qr")
     object MaybankQR : SourceType("maybank_qr")
-    object GrabPay : SourceType("grabpay"){
-        var provider : String? = null
-    }
+    data class GrabPay(val provider: String? = null) : SourceType("grabpay")
 
     data class Unknown(override val name: String?) : SourceType(name)
 
@@ -110,7 +106,7 @@ sealed class SourceType(
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
             "barcode_alipay" -> BarcodeAlipay
             "econtext" -> Econtext
-            "fpx" -> Fpx
+            "fpx" -> Fpx()
             "truemoney" -> TrueMoney
             "installment_bay" -> Installment.Bay
             "installment_first_choice" -> Installment.FirstChoice
@@ -130,7 +126,7 @@ sealed class SourceType(
             "dana" -> Dana
             "gcash" -> Gcash
             "kakaopay" -> Kakaopay
-            "touch_n_go" -> TouchNGo
+            "touch_n_go" -> TouchNGo()
             "rabbit_linepay" -> RabbitLinePay
             "mobile_banking_ocbc_pao" -> OcbcPao
             "boost" -> Boost
@@ -138,7 +134,7 @@ sealed class SourceType(
             "duitnow_obw" -> DuitNowOBW
             "duitnow_qr" -> DuitNowQR
             "maybank_qr" -> MaybankQR
-            "grabpay" -> GrabPay
+            "grabpay" -> GrabPay()
             else -> Unknown(name)
         }
     }
@@ -164,7 +160,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.BillPaymentTescoLotus,
             SourceType.BarcodeAlipay,
             SourceType.Econtext,
-            SourceType.Fpx,
+            SourceType.Fpx(),
             SourceType.TrueMoney,
             SourceType.Installment.Bay,
             SourceType.Installment.FirstChoice,

@@ -29,7 +29,7 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
 
         view?.let { setAllViewsEnabled(it, false) }
 
-        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.Fpx)
+        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.Fpx())
                 .email(email)
                 .bank(bankCode)
                 .build()

@@ -161,7 +161,7 @@ internal sealed class PaymentMethodResource(
             iconRes = R.drawable.payment_fpx,
             titleRes = R.string.payment_method_fpx_title,
             indicatorIconRes = R.drawable.ic_next,
-            sourceType = SourceType.Fpx
+            sourceType = SourceType.Fpx()
     )
 
     object AlipayCn : PaymentMethodResource(
@@ -209,7 +209,7 @@ internal sealed class PaymentMethodResource(
             titleRes = R.string.payment_method_touch_n_go_title,
             subtitleRes = null,
             indicatorIconRes = R.drawable.ic_redirect,
-            sourceType = SourceType.TouchNGo
+            sourceType = SourceType.TouchNGo()
     )
 
     object TouchNGo_Alipay : PaymentMethodResource(
@@ -217,7 +217,7 @@ internal sealed class PaymentMethodResource(
         titleRes = R.string.payment_method_touch_n_go_title,
         subtitleRes = R.string.payment_method_alipayplus_footnote,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.TouchNGo
+        sourceType = SourceType.TouchNGo()
     )
 
     object RabbitLinepay : PaymentMethodResource(
@@ -274,14 +274,14 @@ internal sealed class PaymentMethodResource(
             titleRes = R.string.payment_method_grabpay_title,
             subtitleRes = R.string.payment_method_grabpay_footnote,
             indicatorIconRes = R.drawable.ic_redirect,
-            sourceType = SourceType.GrabPay
+            sourceType = SourceType.GrabPay()
     )
 
     object GrabPay_RMS : PaymentMethodResource(
         iconRes = R.drawable.payment_grabpay,
         titleRes = R.string.payment_method_grabpay_rms_title,
         indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.GrabPay
+        sourceType = SourceType.GrabPay()
     )
 
     companion object {
