@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v4.2.0
+* **ADDED:** Added support for Boost, DuitNow QR, DuitNow Online Banking/Wallets, Maybank QRPay and ShopeePay payment method.
+* **CHANGED** Update Touch 'n Go and Grabpay to support RMS provider.
+
 ## v4.1.4
 * **ADDED:** Added Bank of China logo for FPX payments.
 * **CHANGED** Fixed allowed installment terms for UOB and TTB installments.
