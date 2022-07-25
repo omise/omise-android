@@ -18,7 +18,7 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
         super.onActivityCreated(savedInstanceState)
 
         title = getString(R.string.payment_method_fpx_title)
-        noDataText.text = getString(R.string.fpx_no_data)
+        noDataText.text = getString(R.string.banks_no_data)
         setHasOptionsMenu(true)
     }
 
@@ -29,7 +29,7 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
 
         view?.let { setAllViewsEnabled(it, false) }
 
-        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.Fpx)
+        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.Fpx())
                 .email(email)
                 .bank(bankCode)
                 .build()

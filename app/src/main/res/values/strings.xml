@@ -25,7 +25,7 @@
     <string name="payment_preference_alipay_cn_key" translatable="false">alipay_cn</string>
     <string name="payment_preference_alipay_hk_key" translatable="false">alipay_hk</string>
     <string name="payment_preference_bill_payment_tesco_lotus_key" translatable="false">bill_payment_tesco_lotus</string>
-     <string name="payment_preference_mobile_banking_bay_key" translatable="false">mobile_banking_bay</string>
+    <string name="payment_preference_mobile_banking_bay_key" translatable="false">mobile_banking_bay</string>
     <string name="payment_preference_mobile_banking_scb_key" translatable="false">mobile_banking_scb</string>
     <string name="payment_preference_mobile_banking_bbl_key" translatable="false">mobile_banking_bbl</string>
     <string name="payment_preference_mobile_banking_kbank_key" translatable="false">mobile_banking_kbank</string>
@@ -52,6 +52,11 @@
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
     <string name="payment_preference_googlepay_key" translatable="false">googlepay</string>
     <string name="payment_preference_rabbit_linepay_key" translatable="false">rabbit_linepay</string>
+    <string name="payment_preference_boost_key" translatable="false">boost</string>
+    <string name="payment_preference_shopeepay_key" translatable="false">shopeepay</string>
+    <string name="payment_preference_duitnow_obw_key" translatable="false">duitnow_obw</string>
+    <string name="payment_preference_duitnow_qr_key" translatable="false">duitnow_qr</string>
+    <string name="payment_preference_maybank_qr_key" translatable="false">maybank_qr</string>
     <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
@@ -93,9 +98,14 @@
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
     <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>
     <string name="payment_preference_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
-    <string name="payment_preference_touch_n_go_title" translatable="false">TNG eWallet</string>
+    <string name="payment_preference_touch_n_go_title" translatable="false">Touch \'n Go eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
     <string name="payment_preference_googlepay_title" translatable="false">Google Pay</string>
+    <string name="payment_preference_boost_title" translatable="false">Boost</string>
+    <string name="payment_preference_shopeepay_title" translatable="false">ShopeePay</string>
+    <string name="payment_preference_duitnow_obw_title" translatable="false">DuitNow Online Banking/Wallets</string>
+    <string name="payment_preference_duitnow_qr_title" translatable="false">DuitNow QR</string>
+    <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>

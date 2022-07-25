@@ -49,6 +49,11 @@ object PaymentSetting {
                     R.string.payment_preference_touch_n_go_key,
                     R.string.payment_preference_truemoney_key,
                     R.string.payment_preference_googlepay_key,
+                    R.string.payment_preference_boost_key,
+                    R.string.payment_preference_shopeepay_key,
+                    R.string.payment_preference_duitnow_obw_key,
+                    R.string.payment_preference_duitnow_qr_key,
+                    R.string.payment_preference_maybank_qr_key,
                     R.string.payment_preference_grabpay_key,
             )
                     .map { context.getString(it) }
@@ -90,7 +95,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_installment_ttb_key) -> SourceType.Installment.Ttb
                         context.getString(R.string.payment_preference_installment_uob_key) -> SourceType.Installment.Uob
                         context.getString(R.string.payment_preference_econtext_key) -> SourceType.Econtext
-                        context.getString(R.string.payment_preference_fpx_key) -> SourceType.Fpx
+                        context.getString(R.string.payment_preference_fpx_key) -> SourceType.Fpx()
                         context.getString(R.string.payment_preference_paynow_key) -> SourceType.PayNow
                         context.getString(R.string.payment_preference_promptpay_key) -> SourceType.PromptPay
                         context.getString(R.string.payment_preference_points_citi_key) -> SourceType.PointsCiti
@@ -100,9 +105,14 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_dana_key) -> SourceType.Dana
                         context.getString(R.string.payment_preference_gcash_key) -> SourceType.Gcash
                         context.getString(R.string.payment_preference_kakaopay_key) -> SourceType.Kakaopay
-                        context.getString(R.string.payment_preference_touch_n_go_key) -> SourceType.TouchNGo
+                        context.getString(R.string.payment_preference_touch_n_go_key) -> SourceType.TouchNGo()
                         context.getString(R.string.payment_preference_rabbit_linepay_key) -> SourceType.RabbitLinePay
-                        context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay
+                        context.getString(R.string.payment_preference_boost_key) -> SourceType.Boost
+                        context.getString(R.string.payment_preference_shopeepay_key) -> SourceType.ShopeePay
+                        context.getString(R.string.payment_preference_duitnow_obw_key) -> SourceType.DuitNowOBW
+                        context.getString(R.string.payment_preference_duitnow_qr_key) -> SourceType.DuitNowQR
+                        context.getString(R.string.payment_preference_maybank_qr_key) -> SourceType.MaybankQR
+                        context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay()
                         else -> null
                     }
                 }

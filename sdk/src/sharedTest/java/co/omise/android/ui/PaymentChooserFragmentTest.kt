@@ -5,18 +5,13 @@ import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.Capability
@@ -81,6 +76,11 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "gcash"),
                 PaymentMethod(name = "kakaopay"),
                 PaymentMethod(name = "touch_n_go"),
+                PaymentMethod(name = "boost"),
+                PaymentMethod(name = "shopeepay"),
+                PaymentMethod(name = "duitnow_obw"),
+                PaymentMethod(name = "duitnow_qr"),
+                PaymentMethod(name = "maybank_qr"),
                 PaymentMethod(name = "rabbit_linepay"),
                 PaymentMethod(name = "grabpay"),
         )
@@ -121,7 +121,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
 
-        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
+        onView(withId(R.id.recycler_view)).perform(swipeUp())
 
         assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
         assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
@@ -131,18 +131,21 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
         assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
 
-        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
-
-        assertListAtIndexHasResource(16, R.string.payment_method_rabbit_linepay_title)
-        assertListAtIndexHasResource(17, R.string.payment_method_grabpay_title)
-
-        for (i in 10..15) {
+        for (i in 11..14) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
-        assertListAtIndexHasResource(17, R.string.payment_method_grabpay_footnote)
+        onView(withId(R.id.recycler_view)).perform(swipeUp())
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(18)))
+        assertListAtIndexHasResource(16, R.string.payment_method_boots_title)
+        assertListAtIndexHasResource(17, R.string.payment_method_shopeepay_title)
+        assertListAtIndexHasResource(18, R.string.payment_method_duitnow_obw_title)
+        assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
+        assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
+        assertListAtIndexHasResource(21, R.string.payment_method_rabbit_linepay_title)
+        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_title)
+
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(23)))
     }
 
     @Test

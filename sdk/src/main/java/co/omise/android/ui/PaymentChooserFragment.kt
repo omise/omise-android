@@ -6,13 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import co.omise.android.R
-import co.omise.android.models.Capability
-import co.omise.android.models.Source
-import co.omise.android.models.SourceType
-import co.omise.android.models.SupportedEcontext
-import co.omise.android.models.installmentMethods
-import co.omise.android.models.internetBankingMethods
-import co.omise.android.models.mobileBankingMethods
+import co.omise.android.models.*
 
 /**
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
@@ -51,10 +45,15 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.TouchNGo,
             PaymentMethodResource.RabbitLinepay,
             PaymentMethodResource.OcbcPao,
+            PaymentMethodResource.Boost,
+            PaymentMethodResource.ShopeePay,
+            PaymentMethodResource.DuitNowQR,
+            PaymentMethodResource.MaybankQR,
             PaymentMethodResource.GrabPay,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
+            PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()
         }
     }
 

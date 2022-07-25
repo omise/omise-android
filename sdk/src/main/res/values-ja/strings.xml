@@ -94,7 +94,7 @@
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(任意) メールアドレスを入力し、FPXからの取引確認メールを受信します</string>
     <string name="empty_text">データなし</string>
-    <string name="fpx_no_data">銀行のリストを検索できません。後でもう一度お試しください。</string>
+    <string name="banks_no_data">銀行のリストを検索できません。後でもう一度お試しください。</string>
     <string name="payment_method_alipay_cn_title">アリペイ</string>
     <string name="payment_method_alipay_hk_title">アリペイ香港</string>
     <string name="payment_method_dana_title">ダナ</string>
@@ -106,5 +106,5 @@
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
-    <string name="googlepay">Google Pay</string>ช
+    <string name="googlepay">Google Pay</string>
 </resources>

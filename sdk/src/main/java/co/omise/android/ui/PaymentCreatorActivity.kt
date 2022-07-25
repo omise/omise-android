@@ -159,6 +159,7 @@ interface PaymentCreatorNavigation {
     fun navigateToFpxEmailForm()
     fun navigateToFpxBankChooser(banks: List<Bank>?, email: String)
     fun navigateToGooglePayForm()
+    fun navigateToDuitNowOBWBankChooser()
 }
 
 private class PaymentCreatorNavigationImpl(
@@ -278,6 +279,39 @@ private class PaymentCreatorNavigationImpl(
             putExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
         }
         activity.startActivityForResult(intent, requestCode)
+    }
+
+    override fun navigateToDuitNowOBWBankChooser() {
+        /**
+         *  DuitNow OBW didn't support capability api for banks list
+         *  so need to define local banks list
+         */
+        var banks = listOf(
+            Bank(name = "Affin Bank", code = "affin", active = true),
+            Bank(name = "Alliance Bank (Personal)", code = "alliance", active = true),
+            Bank(name = "AGRONet", code = "agro", active = true),
+            Bank(name = "AmBank", code = "ambank", active = true),
+            Bank(name = "Bank Islam", code = "islam", active = true),
+            Bank(name = "Bank Muamalat", code = "muamalat", active = true),
+            Bank(name = "Bank Rakyat", code = "rakyat", active = true),
+            Bank(name = "BSN", code = "bsn", active = true),
+            Bank(name = "CIMB Clicks", code = "cimb", active = true),
+            Bank(name = "Hong Leong Bank", code = "hongleong", active = true),
+            Bank(name = "HSBC Bank", code = "hsbc", active = true),
+            Bank(name = "KFH", code = "kfh", active = true),
+            Bank(name = "Maybank2U", code = "maybank2u", active = true),
+            Bank(name = "OCBC Bank", code = "ocbc", active = true),
+            Bank(name = "Public Bank", code = "public", active = true),
+            Bank(name = "RHB Bank", code = "rhb", active = true),
+            Bank(name = "Standard Chartered", code = "sc", active = true),
+            Bank(name = "UOB Bank", code = "uob", active = true),
+        )
+
+        val fragment = DuitNowOBWBankChooserFragment.newInstance(banks).apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
+
+        addFragmentToBackStack(fragment)
     }
 }
 
