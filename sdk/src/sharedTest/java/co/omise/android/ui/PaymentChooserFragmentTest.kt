@@ -78,6 +78,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "touch_n_go"),
                 PaymentMethod(name = "boost"),
                 PaymentMethod(name = "shopeepay"),
+                PaymentMethod(name = "shopeepay_jumpapp"),
                 PaymentMethod(name = "duitnow_obw"),
                 PaymentMethod(name = "duitnow_qr"),
                 PaymentMethod(name = "maybank_qr"),

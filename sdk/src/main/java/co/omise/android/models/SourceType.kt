@@ -35,6 +35,7 @@ sealed class SourceType(
     object OcbcPao : SourceType("mobile_banking_ocbc_pao")
     object Boost: SourceType("boost")
     object ShopeePay: SourceType("shopeepay")
+    object ShopeePayJumpApp: SourceType("shopeepay_jumpapp")
     object DuitNowOBW  : SourceType("duitnow_obw")
     object DuitNowQR : SourceType("duitnow_qr")
     object MaybankQR : SourceType("maybank_qr")
@@ -131,6 +132,7 @@ sealed class SourceType(
             "mobile_banking_ocbc_pao" -> OcbcPao
             "boost" -> Boost
             "shopeepay" -> ShopeePay
+            "shopeepay_jumpapp" -> ShopeePayJumpApp
             "duitnow_obw" -> DuitNowOBW
             "duitnow_qr" -> DuitNowQR
             "maybank_qr" -> MaybankQR
