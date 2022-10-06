@@ -29,6 +29,12 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                                     else -> items.add(PaymentMethodResource.TouchNGo)
                                 }
                             }
+                            //when ShopeepayJumpApp is available will use is instead of ShopeePay normal flow
+                            is SourceType.ShopeePayJumpApp ->{
+                                // if ShopeePay is not in the list items list will got no modify
+                                items.remove(PaymentMethodResource.ShopeePay)
+                                items.add(PaymentMethodResource.ShopeePayJumpApp)
+                            }
                             is SourceType.GrabPay -> {
                                 when (paymentMethod.provider) {
                                     PaymentMethodResource.RMS_PROVIDER -> items.add(
@@ -246,6 +252,13 @@ internal sealed class PaymentMethodResource(
         titleRes = R.string.payment_method_shopeepay_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.ShopeePay
+    )
+
+    object ShopeePayJumpApp : PaymentMethodResource(
+        iconRes = R.drawable.payment_shopeepay,
+        titleRes = R.string.payment_method_shopeepay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.ShopeePayJumpApp
     )
 
     object DuitNowOBW : PaymentMethodResource(
