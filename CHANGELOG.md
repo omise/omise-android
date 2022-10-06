@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.2.1
+* **ADDED:** Added support ShopeePay JumpApp.
+
 ## v4.2.0
 * **ADDED:** Added support for Boost, DuitNow QR, DuitNow Online Banking/Wallets, Maybank QRPay and ShopeePay payment method.
 * **CHANGED** Update Touch 'n Go and Grabpay to support RMS provider.
