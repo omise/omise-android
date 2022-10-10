@@ -1,6 +1,6 @@
 # CHANGE LOG
 
-## v4.2.1
+## v4.3.0
 * **ADDED:** Added support ShopeePay JumpApp.
 
 ## v4.2.0
