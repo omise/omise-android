@@ -43,13 +43,13 @@ buildscript {
     }
 
     repositories {
-        jcenter()
+        google()
         mavenCentral()
         maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
-        google()
+        jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$android_plugin_version"
@@ -62,14 +62,14 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        google()
         mavenCentral()
         maven {
             url 'https://maven.google.com/'
             name 'Google'
         }
         mavenLocal()
-        google()
+        jcenter()
     }
 }
 
