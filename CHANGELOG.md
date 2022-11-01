@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v4.3.1
+* **FIXED:** Fix JCenter deprecation
+* **CHANGED:** Switch authorization to use only in-app browser
+
 ## v4.3.0
 * **ADDED:** Added support ShopeePay JumpApp.
 
