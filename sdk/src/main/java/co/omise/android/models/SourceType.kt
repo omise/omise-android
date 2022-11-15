@@ -63,7 +63,7 @@ sealed class SourceType(
         object Bay : Installment("installment_bay")
         object FirstChoice : Installment("installment_first_choice")
         object Bbl : Installment("installment_bbl")
-        object Ezypay : Installment("installment_ezypay")
+        object Mbb : Installment("installment_mbb")
         object Ktc : Installment("installment_ktc")
         object KBank : Installment("installment_kbank")
         object Scb : Installment("installment_scb")
@@ -78,7 +78,7 @@ sealed class SourceType(
                         Bay -> listOf(3, 4, 6, 9, 10)
                         FirstChoice -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
                         Bbl -> listOf(4, 6, 8, 9, 10)
-                        Ezypay -> listOf(6, 12, 24)
+                        Mbb -> listOf(6, 12, 18, 24)
                         Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                         KBank -> listOf(3, 4, 6, 10)
                         Scb -> listOf(3, 4, 6, 9, 10)
@@ -112,7 +112,7 @@ sealed class SourceType(
             "installment_bay" -> Installment.Bay
             "installment_first_choice" -> Installment.FirstChoice
             "installment_bbl" -> Installment.Bbl
-            "installment_ezypay" -> Installment.Ezypay
+            "installment_mbb" -> Installment.Mbb
             "installment_ktc" -> Installment.Ktc
             "installment_kbank" -> Installment.KBank
             "installment_scb" -> Installment.Scb
@@ -167,7 +167,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Bay,
             SourceType.Installment.FirstChoice,
             SourceType.Installment.Bbl,
-            SourceType.Installment.Ezypay,
+            SourceType.Installment.Mbb,
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
             SourceType.PointsCiti,

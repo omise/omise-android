@@ -26,7 +26,7 @@ class InstallmentChooserFragmentTest {
     private val paymentMethods = listOf(
             PaymentMethod(name = "installment_bay"),
             PaymentMethod(name = "installment_bbl"),
-            PaymentMethod(name = "installment_ezypay"),
+            PaymentMethod(name = "installment_mbb"),
             PaymentMethod(name = "installment_first_choice"),
             PaymentMethod(name = "installment_kbank"),
             PaymentMethod(name = "installment_ktc"),
@@ -50,7 +50,7 @@ class InstallmentChooserFragmentTest {
     fun displayAllowedInstallmentBanks_showAllowedInstallmentBanksFromArgument() {
         onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_installment_bay_title))))
         onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_installment_bbl_title))))
-        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ezypay_title))))
+        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_installment_mbb_title))))
         onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_installment_first_choice_title))))
         onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText(R.string.payment_method_installment_kasikorn_title))))
         onView(withListId(R.id.recycler_view).atPosition(5)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ktc_title))))
