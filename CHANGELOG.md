@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## v4.4.0
+* **ADDED:** Installment Maybank for Malaysian merchants
+* **REMOVED:** Unused and deprecated Installment Ezypay
+
 ## v4.3.1
 * **FIXED:** Fix JCenter deprecation
 * **CHANGED:** Switch authorization to use only in-app browser
