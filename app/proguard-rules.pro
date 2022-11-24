@@ -24,5 +24,4 @@
 -dontwarn com.squareup.**
 
 -keep class co.omise.android.** { *; }
--keep class org.bouncycastle.** { *; }
 -keep class com.nimbusds.jose.** { *; }

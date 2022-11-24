@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.4.1
+* **FIXED:** Patch 3DS SDK
+
 ## v4.4.0
 * **ADDED:** Installment Maybank for Malaysian merchants
 * **REMOVED:** Unused and deprecated Installment Ezypay

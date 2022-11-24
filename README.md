@@ -518,7 +518,6 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 -dontwarn com.squareup.**
 
 -keep class co.omise.android.** { *; }
--keep class org.bouncycastle.** { *; }
 -keep class com.nimbusds.jose.** { *; }
 ```
 
