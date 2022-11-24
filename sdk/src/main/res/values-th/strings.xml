@@ -65,7 +65,7 @@
     <string name="payment_method_credit_card_title">บัตรเครดิต</string>
     <string name="payment_method_installment_bay_title">ธนาคารกรุงศรี</string>
     <string name="payment_method_installment_bbl_title">ธนาคารกรุงเทพ</string>
-    <string name="payment_method_installment_ezypay_title">เมย์แบงก์อีซีเพย์</string>
+    <string name="payment_method_installment_mbb_title">เมย์แบงก์</string>
     <string name="payment_method_installment_first_choice_title">กรุงศรีเฟิร์สช้อยส์</string>
     <string name="payment_method_installment_kasikorn_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_installment_ktc_title">เคทีซี</string>
