@@ -40,6 +40,7 @@ sealed class SourceType(
     object DuitNowQR : SourceType("duitnow_qr")
     object MaybankQR : SourceType("maybank_qr")
     data class GrabPay(val provider: String? = null) : SourceType("grabpay")
+    object PayPay : SourceType("paypay")
 
     data class Unknown(override val name: String?) : SourceType(name)
 
@@ -137,6 +138,7 @@ sealed class SourceType(
             "duitnow_qr" -> DuitNowQR
             "maybank_qr" -> MaybankQR
             "grabpay" -> GrabPay()
+            "paypay" -> PayPay
             else -> Unknown(name)
         }
     }

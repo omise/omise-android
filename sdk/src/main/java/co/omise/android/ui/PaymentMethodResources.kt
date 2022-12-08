@@ -297,6 +297,13 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.GrabPay()
     )
 
+    object PayPay : PaymentMethodResource(
+            iconRes = R.drawable.payment_paypay,
+            titleRes = R.string.payment_method_paypay_title,
+            indicatorIconRes = R.drawable.ic_redirect,
+            sourceType = SourceType.PayPay
+    )
+
     companion object {
         const val ALIPAY_PlUS_PROVIDER = "Alipay_plus"
         const val RMS_PROVIDER = "RMS"
