@@ -1,6 +1,6 @@
 # CHANGE LOG
 
-## v4.4.1
+## v4.4.2
 * **CHANGED:** Logo and label for Lotus Bill Payment
 
 ## v4.4.1
