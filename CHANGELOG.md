@@ -1,6 +1,9 @@
 # CHANGE LOG
 
 ## v4.4.1
+* **CHANGED:** Logo and label for Lotus Bill Payment
+
+## v4.4.1
 * **FIXED:** Patch 3DS SDK
 
 ## v4.4.0
