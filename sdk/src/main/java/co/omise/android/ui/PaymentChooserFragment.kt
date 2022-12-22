@@ -51,10 +51,12 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.DuitNowQR,
             PaymentMethodResource.MaybankQR,
             PaymentMethodResource.GrabPay,
+            PaymentMethodResource.AtomeQR,
             PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
             PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()
+            PaymentMethodResource.Atome -> navigation.navigateToAtomeForm()
         }
     }
 

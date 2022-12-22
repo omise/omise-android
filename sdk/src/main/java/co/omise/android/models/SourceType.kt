@@ -39,6 +39,8 @@ sealed class SourceType(
     object DuitNowOBW  : SourceType("duitnow_obw")
     object DuitNowQR : SourceType("duitnow_qr")
     object MaybankQR : SourceType("maybank_qr")
+    object Atome : SourceType("atome")
+    object AtomeQR : SourceType("atome_qr")
     data class GrabPay(val provider: String? = null) : SourceType("grabpay")
 
     data class Unknown(override val name: String?) : SourceType(name)
@@ -137,6 +139,8 @@ sealed class SourceType(
             "duitnow_qr" -> DuitNowQR
             "maybank_qr" -> MaybankQR
             "grabpay" -> GrabPay()
+            "atome" -> Atome
+            "atome_qr" -> AtomeQR
             else -> Unknown(name)
         }
     }
@@ -174,8 +178,9 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Scb,
             SourceType.Installment.Citi,
             SourceType.Installment.Ttb,
-            SourceType.Installment.Uob
-
+            SourceType.Installment.Uob,
+            SourceType.Atome,
+            SourceType.AtomeQR
     )
 
 sealed class SupportedEcontext : Parcelable {

@@ -3,6 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
@@ -154,6 +155,7 @@ interface PaymentCreatorNavigation {
     fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>)
     fun navigateToInstallmentTermChooser(installment: PaymentMethod)
     fun navigateToEContextForm(eContext: SupportedEcontext)
+    fun navigateToAtomeForm()
     fun createSourceFinished(source: Source)
     fun navigateToTrueMoneyForm()
     fun navigateToFpxEmailForm()
@@ -233,6 +235,13 @@ private class PaymentCreatorNavigationImpl(
 
     override fun navigateToEContextForm(eContext: SupportedEcontext) {
         val fragment = EContextFormFragment.newInstance(eContext).apply {
+            requester = this@PaymentCreatorNavigationImpl.requester
+        }
+        addFragmentToBackStack(fragment)
+    }
+
+    override fun navigateToAtomeForm() {
+        val fragment = AtomeFormFragment().apply {
             requester = this@PaymentCreatorNavigationImpl.requester
         }
         addFragmentToBackStack(fragment)

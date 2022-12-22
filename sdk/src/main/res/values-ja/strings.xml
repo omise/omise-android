@@ -93,6 +93,7 @@
     <string name="truemoney_info_text">TrueMoney ウォレットアカウントに登録されている携帯電話番号を入力してください</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(任意) メールアドレスを入力し、FPXからの取引確認メールを受信します</string>
+    <string name="atome_info_text">Please input below information to complete the charge creation with Atome</string>
     <string name="empty_text">データなし</string>
     <string name="banks_no_data">銀行のリストを検索できません。後でもう一度お試しください。</string>
     <string name="payment_method_alipay_cn_title">アリペイ</string>
@@ -107,4 +108,16 @@
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
     <string name="googlepay">Google Pay</string>
+    <string name="payment_method_atome_title">Atome</string>
+    <string name="payment_method_atome_qr_title">Atome QR</string>
+    <string name="label_name">Name (optional)</string>
+    <string name="label_email_optional">Email (optional)</string>
+    <string name="label_shipping">Shipping address</string>
+    <string name="label_billing">Billing address</string>
+    <string name="label_street">Street</string>
+    <string name="label_postal">Postal code</string>
+    <string name="label_city">City</string>
+    <string name="label_country_code">Country code</string>
+    <string name="label_billing_shipping">My billing and shipping address are the same</string>
+    <string name="error_invalid_address">Address cannot be empty or country code is invalid</string>
 </resources>

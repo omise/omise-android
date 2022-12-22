@@ -93,6 +93,7 @@
     <string name="truemoney_info_text">กรุณากรอกหมายเลขโทรศัพท์ที่ผูกกับบัญชีทรูมันนี่วอลเล็ท</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">กรุณากรอกอีเมลเพื่อรับการยืนยันการรับชำระจากเอฟพีเอ็กซ์ (ถ้ามี)</string>
+    <string name="atome_info_text">กรุณากรอกที่จำเป็นเพื่อยืนยันการรับชำระจาก Atome</string>
     <string name="empty_text">ไม่มีข้อมูล</string>
     <string name="banks_no_data">ไม่สามารถเรียกข้อมูลรายชื่อธนาคารได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</string>
     <string name="payment_method_alipay_cn_title">อาลีเพย์</string>
@@ -107,4 +108,16 @@
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
     <string name="googlepay">Google Pay</string>
+    <string name="payment_method_atome_title">Atome</string>
+    <string name="payment_method_atome_qr_title">Atome QR</string>
+    <string name="label_name">ชื่อ (ไม่จำเป็น)</string>
+    <string name="label_email_optional">อีเมล (ไม่เป็นจำ)</string>
+    <string name="label_shipping">ที่อยู่ในการจัดส่ง</string>
+    <string name="label_billing">ที่อยู่สำหรับส่งใบแจ้งหนี้</string>
+    <string name="label_street">ที่อยู่</string>
+    <string name="label_postal">รหัสไปรษณีย์</string>
+    <string name="label_city">จังหวัด</string>
+    <string name="label_country_code">รหัสประเทศ</string>
+    <string name="label_billing_shipping">ที่อยู่เดียวกันทั้งจัดส่งและแจ้งหนี้</string>
+    <string name="error_invalid_address">กรุณากรอกข้อมูลที่อยู่ให้ถูกต้อง</string>
 </resources>
