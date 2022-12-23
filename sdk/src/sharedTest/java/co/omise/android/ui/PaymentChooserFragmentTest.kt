@@ -5,9 +5,7 @@ import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.*
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
@@ -49,47 +47,47 @@ class PaymentChooserFragmentTest {
         Intents.init()
 
         val paymentMethods = mutableListOf(
-                PaymentMethod(name = "card"),
-                PaymentMethod(name = "installment_bay"),
-                PaymentMethod(name = "installment_bbl"),
-                PaymentMethod(name = "installment_mbb"),
-                PaymentMethod(name = "installment_first_choice"),
-                PaymentMethod(name = "installment_kbank"),
-                PaymentMethod(name = "installment_ktc"),
-                PaymentMethod(name = "installment_scb"),
-                PaymentMethod(name = "installment_citi"),
-                PaymentMethod(name = "installment_ttb"),
-                PaymentMethod(name = "installment_uob"),
-                PaymentMethod(name = "internet_banking_bay"),
-                PaymentMethod(name = "internet_banking_bbl"),
-                PaymentMethod(name = "internet_banking_ktb"),
-                PaymentMethod(name = "internet_banking_scb"),
-                PaymentMethod(name = "bill_payment_tesco_lotus"),
-                PaymentMethod(name = "econtext"),
-                PaymentMethod(name = "alipay"),
-                PaymentMethod(name = "mobile_banking_bay"),
-                PaymentMethod(name = "mobile_banking_bbl"),
-                PaymentMethod(name = "mobile_banking_kbank"),
-                PaymentMethod(name = "mobile_banking_ocbc_pao"),
-                PaymentMethod(name = "mobile_banking_scb"),
-                PaymentMethod(name = "alipay_cn"),
-                PaymentMethod(name = "alipay_hk"),
-                PaymentMethod(name = "dana"),
-                PaymentMethod(name = "gcash"),
-                PaymentMethod(name = "kakaopay"),
-                PaymentMethod(name = "touch_n_go"),
-                PaymentMethod(name = "boost"),
-                PaymentMethod(name = "shopeepay"),
-                PaymentMethod(name = "shopeepay_jumpapp"),
-                PaymentMethod(name = "duitnow_obw"),
-                PaymentMethod(name = "duitnow_qr"),
-                PaymentMethod(name = "maybank_qr"),
-                PaymentMethod(name = "rabbit_linepay"),
-                PaymentMethod(name = "grabpay"),
-                PaymentMethod(name = "atome"),
+            PaymentMethod(name = "card"),
+            PaymentMethod(name = "installment_bay"),
+            PaymentMethod(name = "installment_bbl"),
+            PaymentMethod(name = "installment_mbb"),
+            PaymentMethod(name = "installment_first_choice"),
+            PaymentMethod(name = "installment_kbank"),
+            PaymentMethod(name = "installment_ktc"),
+            PaymentMethod(name = "installment_scb"),
+            PaymentMethod(name = "installment_citi"),
+            PaymentMethod(name = "installment_ttb"),
+            PaymentMethod(name = "installment_uob"),
+            PaymentMethod(name = "internet_banking_bay"),
+            PaymentMethod(name = "internet_banking_bbl"),
+            PaymentMethod(name = "internet_banking_ktb"),
+            PaymentMethod(name = "internet_banking_scb"),
+            PaymentMethod(name = "bill_payment_tesco_lotus"),
+            PaymentMethod(name = "econtext"),
+            PaymentMethod(name = "alipay"),
+            PaymentMethod(name = "mobile_banking_bay"),
+            PaymentMethod(name = "mobile_banking_bbl"),
+            PaymentMethod(name = "mobile_banking_kbank"),
+            PaymentMethod(name = "mobile_banking_ocbc_pao"),
+            PaymentMethod(name = "mobile_banking_scb"),
+            PaymentMethod(name = "alipay_cn"),
+            PaymentMethod(name = "alipay_hk"),
+            PaymentMethod(name = "dana"),
+            PaymentMethod(name = "gcash"),
+            PaymentMethod(name = "kakaopay"),
+            PaymentMethod(name = "touch_n_go"),
+            PaymentMethod(name = "boost"),
+            PaymentMethod(name = "shopeepay"),
+            PaymentMethod(name = "shopeepay_jumpapp"),
+            PaymentMethod(name = "duitnow_obw"),
+            PaymentMethod(name = "duitnow_qr"),
+            PaymentMethod(name = "maybank_qr"),
+            PaymentMethod(name = "rabbit_linepay"),
+            PaymentMethod(name = "grabpay"),
+            PaymentMethod(name = "atome"),
         )
         val capability = Capability(
-                paymentMethods = paymentMethods
+            paymentMethods = paymentMethods
         )
 
         fragment = PaymentChooserFragment.newInstance(capability).apply {
@@ -98,7 +96,7 @@ class PaymentChooserFragmentTest {
         }
 
         intending(hasComponent(hasClassName(TestFragmentActivity::class.java.name)))
-                .respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, Intent()))
+            .respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, Intent()))
 
         scenario = ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
             it.startActivityForResult(Intent(it, TestFragmentActivity::class.java), 0)
@@ -125,7 +123,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
 
-        onView(withId(R.id.recycler_view)).perform(swipeUpSlowly())
+        onView(withId(R.id.recycler_view)).perform(swipeUp())
 
         assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
         assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
@@ -133,32 +131,28 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(12, R.string.payment_method_dana_title)
         assertListAtIndexHasResource(13, R.string.payment_method_gcash_title)
         assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
+        assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
 
         for (i in 11..14) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
-        assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
+        onView(withId(R.id.recycler_view)).perform(swipeUp())
+
         assertListAtIndexHasResource(16, R.string.payment_method_boots_title)
         assertListAtIndexHasResource(17, R.string.payment_method_shopeepay_title)
-
-        onView(withId(R.id.recycler_view)).perform(swipeUpSlowly())
-
         assertListAtIndexHasResource(18, R.string.payment_method_duitnow_obw_title)
         assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
         assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
         assertListAtIndexHasResource(21, R.string.payment_method_rabbit_linepay_title)
         assertListAtIndexHasResource(22, R.string.payment_method_grabpay_title)
         assertListAtIndexHasResource(22, R.string.payment_method_grabpay_footnote)
+
+        onView(withId(R.id.recycler_view)).perform(swipeUp())
+
         assertListAtIndexHasResource(23, R.string.payment_method_atome_title)
 
         onView(withId(R.id.recycler_view)).check(matches(itemCount(24)))
-    }
-
-    private fun swipeUpSlowly(): ViewAction? {
-        val start: CoordinatesProvider = GeneralLocation.BOTTOM_CENTER
-        val end: CoordinatesProvider = GeneralLocation.TOP_CENTER
-        return GeneralSwipeAction(Swipe.SLOW, start, end, Press.FINGER)
     }
 
     @Test
@@ -179,16 +173,16 @@ class PaymentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(1)).perform(click())
 
         val expectedMethods = listOf(
-                PaymentMethod(name = "installment_bay"),
-                PaymentMethod(name = "installment_bbl"),
-                PaymentMethod(name = "installment_mbb"),
-                PaymentMethod(name = "installment_first_choice"),
-                PaymentMethod(name = "installment_kbank"),
-                PaymentMethod(name = "installment_ktc"),
-                PaymentMethod(name = "installment_scb"),
-                PaymentMethod(name = "installment_citi"),
-                PaymentMethod(name = "installment_ttb"),
-                PaymentMethod(name = "installment_uob")
+            PaymentMethod(name = "installment_bay"),
+            PaymentMethod(name = "installment_bbl"),
+            PaymentMethod(name = "installment_mbb"),
+            PaymentMethod(name = "installment_first_choice"),
+            PaymentMethod(name = "installment_kbank"),
+            PaymentMethod(name = "installment_ktc"),
+            PaymentMethod(name = "installment_scb"),
+            PaymentMethod(name = "installment_citi"),
+            PaymentMethod(name = "installment_ttb"),
+            PaymentMethod(name = "installment_uob")
         )
         verify(fragment.navigation)?.navigateToInstallmentChooser(expectedMethods)
     }
@@ -198,10 +192,10 @@ class PaymentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(2)).perform(click())
 
         val expectedMethods = listOf(
-                PaymentMethod(name = "internet_banking_bay"),
-                PaymentMethod(name = "internet_banking_bbl"),
-                PaymentMethod(name = "internet_banking_ktb"),
-                PaymentMethod(name = "internet_banking_scb")
+            PaymentMethod(name = "internet_banking_bay"),
+            PaymentMethod(name = "internet_banking_bbl"),
+            PaymentMethod(name = "internet_banking_ktb"),
+            PaymentMethod(name = "internet_banking_scb")
         )
         verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
     }
@@ -245,10 +239,10 @@ class PaymentChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
 
         val expectedMethods = listOf(
-                PaymentMethod(name = "mobile_banking_bay"),
-                PaymentMethod(name = "mobile_banking_bbl"),
-                PaymentMethod(name = "mobile_banking_kbank"),
-                PaymentMethod(name = "mobile_banking_scb")
+            PaymentMethod(name = "mobile_banking_bay"),
+            PaymentMethod(name = "mobile_banking_bbl"),
+            PaymentMethod(name = "mobile_banking_kbank"),
+            PaymentMethod(name = "mobile_banking_scb")
         )
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
