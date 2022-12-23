@@ -93,7 +93,7 @@
     <string name="truemoney_info_text">กรุณากรอกหมายเลขโทรศัพท์ที่ผูกกับบัญชีทรูมันนี่วอลเล็ท</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">กรุณากรอกอีเมลเพื่อรับการยืนยันการรับชำระจากเอฟพีเอ็กซ์ (ถ้ามี)</string>
-    <string name="atome_info_text">กรุณากรอกที่จำเป็นเพื่อยืนยันการรับชำระจาก Atome</string>
+    <string name="atome_info_text">กรุณากรอกข้อมูลที่จำเป็นเพื่อยืนยันการรับชำระจาก Atome</string>
     <string name="empty_text">ไม่มีข้อมูล</string>
     <string name="banks_no_data">ไม่สามารถเรียกข้อมูลรายชื่อธนาคารได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง</string>
     <string name="payment_method_alipay_cn_title">อาลีเพย์</string>
