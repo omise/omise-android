@@ -228,9 +228,9 @@
             app:title="@string/payment_preference_grabpay_title" />
 
         <CheckBoxPreference
-                app:defaultValue="true"
-                app:key="@string/payment_preference_atome_key"
-                app:title="@string/payment_preference_atome_title" />
+            app:defaultValue="true"
+            app:key="@string/payment_preference_atome_key"
+            app:title="@string/payment_preference_atome_title" />
 
     </PreferenceCategory>
 
