@@ -128,7 +128,7 @@
     <string name="label_name">Name (optional)</string>
     <string name="label_email_optional">Email (optional)</string>
     <string name="label_shipping">Shipping address</string>
-    <string name="label_billing">Billing address</string>
+    <string name="label_billing">Billing address (optional)</string>
     <string name="label_street">Street</string>
     <string name="label_postal">Postal code</string>
     <string name="label_city">City</string>

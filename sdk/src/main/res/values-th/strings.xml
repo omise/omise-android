@@ -112,7 +112,7 @@
     <string name="label_name">ชื่อ (ไม่จำเป็น)</string>
     <string name="label_email_optional">อีเมล (ไม่จำเป็น)</string>
     <string name="label_shipping">ที่อยู่ในการจัดส่ง</string>
-    <string name="label_billing">ที่อยู่สำหรับส่งใบแจ้งหนี้</string>
+    <string name="label_billing">ที่อยู่สำหรับส่งใบแจ้งหนี้ (ไม่จำเป็น)</string>
     <string name="label_street">ที่อยู่</string>
     <string name="label_postal">รหัสไปรษณีย์</string>
     <string name="label_city">จังหวัด</string>
