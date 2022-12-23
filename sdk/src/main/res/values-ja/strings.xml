@@ -109,7 +109,6 @@
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
     <string name="googlepay">Google Pay</string>
     <string name="payment_method_atome_title">Atome</string>
-    <string name="payment_method_atome_qr_title">Atome QR</string>
     <string name="label_name">Name (optional)</string>
     <string name="label_email_optional">Email (optional)</string>
     <string name="label_shipping">Shipping address</string>

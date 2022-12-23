@@ -304,13 +304,6 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.Atome
     )
 
-    object AtomeQR : PaymentMethodResource(
-        iconRes = R.drawable.payment_atome,
-        titleRes = R.string.payment_method_atome_qr_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.AtomeQR
-    )
-
     companion object {
         const val ALIPAY_PlUS_PROVIDER = "Alipay_plus"
         const val RMS_PROVIDER = "RMS"

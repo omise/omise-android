@@ -56,7 +56,6 @@ object PaymentSetting {
                     R.string.payment_preference_maybank_qr_key,
                     R.string.payment_preference_grabpay_key,
                     R.string.payment_preference_atome_key,
-                    R.string.payment_preference_atome_qr_key,
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -116,7 +115,6 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_maybank_qr_key) -> SourceType.MaybankQR
                         context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay()
                         context.getString(R.string.payment_preference_atome_key) -> SourceType.Atome
-                        context.getString(R.string.payment_preference_atome_qr_key) -> SourceType.AtomeQR
                         else -> null
                     }
                 }
