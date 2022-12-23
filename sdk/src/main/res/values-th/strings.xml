@@ -117,6 +117,6 @@
     <string name="label_postal">รหัสไปรษณีย์</string>
     <string name="label_city">จังหวัด</string>
     <string name="label_country_code">รหัสประเทศ</string>
-    <string name="label_billing_shipping">ที่อยู่เดียวกันทั้งจัดส่งและแจ้งหนี้</string>
+    <string name="label_billing_shipping">ใช้ที่อยู่เดียวกันสำหรับจัดส่งสินค้าและใบแจ้งหนี้</string>
     <string name="error_invalid_address">กรุณากรอกข้อมูลที่อยู่ให้ถูกต้อง</string>
 </resources>
