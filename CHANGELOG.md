@@ -1,6 +1,6 @@
 # CHANGE LOG
 
-## v4.4.3
+## v4.5.0
 * **ADDED:** Added support for Atome payment method
 
 ## v4.4.2
