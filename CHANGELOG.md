@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.5.0
+* **ADDED:** Added support for Atome payment method
+
 ## v4.4.2
 * **CHANGED:** Logo and label for Lotus Bill Payment
 
