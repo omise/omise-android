@@ -79,7 +79,7 @@
     <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
     <string name="payment_preference_alipay_cn_title" translatable="false">AlipayCN</string>
     <string name="payment_preference_alipay_hk_title" translatable="false">AlipayHK</string>
-    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Lotus Bill Payment</string>
+    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Lotus\'s Bill Payment</string>
     <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
     <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
