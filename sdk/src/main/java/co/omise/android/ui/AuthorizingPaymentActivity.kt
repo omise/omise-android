@@ -99,7 +99,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                         true
                     } catch (e: ActivityNotFoundException) {
                         e.printStackTrace()
-                        false
+                        true
                     }
                 } else {
                     false
