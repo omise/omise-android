@@ -18,8 +18,6 @@
     <string name="payment_preference_zero_interest_installments_key" translatable="false">zero_interest_installments</string>
     <string name="payment_preference_credit_card_key" translatable="false">credit_card</string>
     <string name="payment_preference_internet_banking_bay_key" translatable="false">internet_banking_bay</string>
-    <string name="payment_preference_internet_banking_ktb_key" translatable="false">internet_banking_ktb</string>
-    <string name="payment_preference_internet_banking_scb_key" translatable="false">internet_banking_scb</string>
     <string name="payment_preference_internet_banking_bbl_key" translatable="false">internet_banking_bbl</string>
     <string name="payment_preference_alipay_key" translatable="false">alipay</string>
     <string name="payment_preference_alipay_cn_key" translatable="false">alipay_cn</string>
@@ -73,8 +71,6 @@
     <string name="payment_preference_mobile_banking_kbank_title" translatable="false">KBANK - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_ocbc_pao_title" translatable="false">OCBC Pay Anyone</string>
     <string name="payment_preference_internet_banking_bay_title" translatable="false">BAY - Internet Banking</string>
-    <string name="payment_preference_internet_banking_ktb_title" translatable="false">KTB - Internet Banking</string>
-    <string name="payment_preference_internet_banking_scb_title" translatable="false">SCB - Internet Banking</string>
     <string name="payment_preference_internet_banking_bbl_title" translatable="false">BBL - Internet Banking</string>
     <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
     <string name="payment_preference_alipay_cn_title" translatable="false">AlipayCN</string>
