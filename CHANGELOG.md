@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.5.1
+* **FIXED:** Patch explicit error thrown when redirecting to non-existing custom scheme uri
+
 ## v4.5.0
 * **ADDED:** Added support for Atome payment method
 
