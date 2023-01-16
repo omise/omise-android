@@ -1,7 +1,7 @@
 # CHANGE LOG
 
 ## v4.5.2
-* **CHANGED** Update logo and name of Lotus's Bill Payment 
+* **CHANGED:** Update logo and name of Lotus's Bill Payment 
 
 ## v4.5.1
 * **FIXED:** Patch explicit error thrown when redirecting to non-existing custom scheme uri
