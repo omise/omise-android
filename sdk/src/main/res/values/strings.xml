@@ -67,7 +67,7 @@
     <string name="payment_method_internet_banking_title">Internet Banking</string>
     <string name="payment_method_mobile_banking_title">Mobile Banking</string>
     <string name="payment_method_alipay_title">Alipay Online</string>
-    <string name="payment_method_tesco_lotus_title">Lotus Bill Payment</string>
+    <string name="payment_method_tesco_lotus_title">Lotus\'s Bill Payment</string>
     <string name="payment_method_installments_title">Installments</string>
     <string name="payment_method_convenience_store_title">Convenience Store</string>
     <string name="payment_method_pay_easy_title">Pay-easy</string>
