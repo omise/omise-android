@@ -58,6 +58,7 @@
     <string name="payment_preference_duitnow_qr_key" translatable="false">duitnow_qr</string>
     <string name="payment_preference_maybank_qr_key" translatable="false">maybank_qr</string>
     <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
+    <string name="payment_preference_atome_key" translatable="false">atome</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -78,7 +79,7 @@
     <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
     <string name="payment_preference_alipay_cn_title" translatable="false">AlipayCN</string>
     <string name="payment_preference_alipay_hk_title" translatable="false">AlipayHK</string>
-    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Tesco Lotus Bill Payment</string>
+    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Lotus\'s Bill Payment</string>
     <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
     <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
@@ -107,10 +108,10 @@
     <string name="payment_preference_duitnow_qr_title" translatable="false">DuitNow QR</string>
     <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
+    <string name="payment_preference_atome_title" translatable="false">Atome</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>
     <string name="payment_preference_zero_interest_installments_summary" translatable="false">Whether merchant absorbs the interest for installment payments</string>
     <string name="payment_preference_zero_interest_installments_switch_title" translatable="false">Enabled</string>
-
 </resources>

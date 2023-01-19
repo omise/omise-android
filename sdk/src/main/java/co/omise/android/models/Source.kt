@@ -9,7 +9,6 @@ import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import org.joda.time.DateTime
 import java.io.IOException
-import kotlin.jvm.Throws
 
 /**
  * Represents Source object and contains its [RequestBuilder].
@@ -42,6 +41,12 @@ data class Source(
         val phoneNumber: String? = null,
         @field:JsonProperty("mobile_number")
         val mobileNumber: String? = null,
+        @field:JsonProperty("shipping")
+        val shipping: Shipping? = null,
+        @field:JsonProperty("billing")
+        val billing: Billing? = null,
+        @field:JsonProperty("items")
+        val items: ArrayList<Item>? = ArrayList(),
         @field:JsonProperty("installment_term")
         val installmentTerm: Int? = null,
         @field:JsonProperty("scannable_code")
@@ -71,26 +76,46 @@ data class Source(
 
         @JsonProperty
         private var description: String? = null
+
         @JsonProperty
         private var barcode: String? = null
+
         @JsonProperty("store_id")
         private var storeId: String? = null
+
         @JsonProperty("store_name")
         private var storeName: String? = null
+
         @JsonProperty("terminal_id")
         private var terminalId: String? = null
+
         @JsonProperty("name")
         private var name: String? = null
+
         @JsonProperty("email")
         private var email: String? = null
+
         @JsonProperty("bank")
         private var bank: String? = null
+
         @JsonProperty("platform_type")
         private var platformType: String? = "android"
+
         @JsonProperty("phone_number")
         private var phoneNumber: String? = null
+
+        @JsonProperty("shipping")
+        private var shipping: Shipping? = null
+
+        @JsonProperty("billing")
+        private var billing: Billing? = null
+
+        @JsonProperty("items")
+        private var items: List<Item>? = null
+
         @JsonProperty("installment_term")
         private var installmentTerm: Int? = null
+
         @JsonProperty("zero_interest_installments")
         private var zeroInterestInstallments: Boolean? = null
 
@@ -158,6 +183,21 @@ data class Source(
 
         fun phoneNumber(phoneNumber: String): CreateSourceRequestBuilder {
             this.phoneNumber = phoneNumber
+            return this
+        }
+
+        fun shipping(shipping: Shipping): CreateSourceRequestBuilder {
+            this.shipping = shipping
+            return this
+        }
+
+        fun billing(billing: Billing): CreateSourceRequestBuilder {
+            this.billing = billing
+            return this
+        }
+
+        fun items(items: List<Item>): CreateSourceRequestBuilder{
+            this.items = items
             return this
         }
 

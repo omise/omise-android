@@ -67,7 +67,7 @@
     <string name="payment_method_internet_banking_title">Internet Banking</string>
     <string name="payment_method_mobile_banking_title">Mobile Banking</string>
     <string name="payment_method_alipay_title">Alipay Online</string>
-    <string name="payment_method_tesco_lotus_title">Tesco Lotus Bill Payment</string>
+    <string name="payment_method_tesco_lotus_title">Lotus\'s Bill Payment</string>
     <string name="payment_method_installments_title">Installments</string>
     <string name="payment_method_convenience_store_title">Convenience Store</string>
     <string name="payment_method_pay_easy_title">Pay-easy</string>
@@ -103,6 +103,7 @@
     <string name="truemoney_info_text">Please input the mobile number connected to your TrueMoney Wallet account</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(Optional) Please input your email to receive transaction confirmation from FPX</string>
+    <string name="atome_info_text">Please input below information to complete the charge creation with Atome</string>
     <string name="empty_text">No data available</string>
     <string name="banks_no_data">Cannot retrieve list of banks. Please try again later.</string>
     <string name="payment_method_alipayplus_footnote">(Alipay+™ Partner)</string>
@@ -123,4 +124,15 @@
     <string name="payment_method_grabpay_title" translatable="false">Grab</string>
     <string name="payment_method_grabpay_rms_title" translatable="false">GrabPay</string>
     <string name="payment_method_grabpay_footnote" translatable="false">(GrabPay and PayLater)</string>
+    <string name="payment_method_atome_title">Atome</string>
+    <string name="label_name">Name (optional)</string>
+    <string name="label_email_optional">Email (optional)</string>
+    <string name="label_shipping">Shipping address</string>
+    <string name="label_billing">Billing address (optional)</string>
+    <string name="label_street">Street</string>
+    <string name="label_postal">Postal code</string>
+    <string name="label_city">City</string>
+    <string name="label_country_code">Country code</string>
+    <string name="label_billing_shipping">My billing and shipping address are the same</string>
+    <string name="error_invalid_address">Address cannot be empty or country code is invalid</string>
 </resources>

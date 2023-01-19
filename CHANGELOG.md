@@ -1,5 +1,20 @@
 # CHANGE LOG
 
+## v4.5.2
+* **CHANGED:** Update logo and name of Lotus's Bill Payment 
+
+## v4.5.1
+* **FIXED:** Patch explicit error thrown when redirecting to non-existing custom scheme uri
+
+## v4.5.0
+* **ADDED:** Added support for Atome payment method
+
+## v4.4.2
+* **CHANGED:** Logo and label for Lotus Bill Payment
+
+## v4.4.1
+* **FIXED:** Patch 3DS SDK
+
 ## v4.4.0
 * **ADDED:** Installment Maybank for Malaysian merchants
 * **REMOVED:** Unused and deprecated Installment Ezypay
