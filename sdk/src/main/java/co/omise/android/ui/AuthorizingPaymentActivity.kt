@@ -96,6 +96,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                         Log.i("testaa", "app verified" + uri)
                         true
                     } catch (e: ActivityNotFoundException) {
+                        Log.i("testaa", "verify exception" + uri)
                         e.printStackTrace()
                         true
                     }
