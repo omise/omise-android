@@ -5,13 +5,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.webkit.CookieManager
-import android.webkit.JsPromptResult
-import android.webkit.JsResult
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,12 +24,11 @@ import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
-import co.omise.android.ui.AuthorizingPaymentResult.Failure
-import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
-import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
+import co.omise.android.ui.AuthorizingPaymentResult.*
+import kotlinx.android.synthetic.main.activity_authorizing_payment.*
 import org.jetbrains.annotations.TestOnly
 import java.net.ProtocolException
+
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -88,20 +83,25 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private fun setupWebViewClient() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val uri = Uri.parse(url)
+                val newUrl = "bualuangmbanking://mbanking.payment?paymentIdentifier=5UIC52IS1BDCTLXAY5A\\u0026paymentRequestId=BCB5E521-7879-43F4-8810-37336D6C2335\\u0026signature=UKoJM9CiA8odz52LGnbjiUKRlz%2FR6xKXlv%2BGcyETVboXlrDG2kvNWUTL0cVxOpqPlu4sI59xjNwRnSVmiM5MUuEjC6a9lGJFrRyfgDTDp4aC%2FQnOByIXQnQGvl1Gvdhf%2Flg9kdQF%2B1kirqHO9yPAPxT1TzKQNsm19QXoqZLYnuzG8SQUL0dPG2y%2FFr1CTFjSdtKH6ulCNDrTEsqphuCNu8OxKVqJdp5UElm4pPi231Z031Oot%2BV%2FaIBtzg7z%2BRXVEmLnGi8X5TnMyUOj3a%2BnTxrdwh%2FjHgsJDCcmyuBWo7nopo9PTpFz2NXwxFxfCpRqPLcpTKHdYUtqNHOjnHL1iw%3D%3D\\u0026siteName=OMISEAPP\\u0026timeStamp=2023-01-18T16%3A20%3A32.444%2B07%3A00"
+                val uri = Uri.parse(newUrl)
                 return if (verifier.verifyURL(uri)) {
+                    Log.i("testaa", "url verified")
                     finishActivityWithSuccessful(url)
                     true
                 } else if (verifier.verifyExternalURL(uri)) {
                     try {
                         val externalIntent = Intent(Intent.ACTION_VIEW, uri)
                         startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+                        Log.i("testaa", "app verified" + uri)
                         true
                     } catch (e: ActivityNotFoundException) {
                         e.printStackTrace()
+                        Log.i("testaa", "verify exception " + uri)
                         false
                     }
                 } else {
+                    Log.i("testaa", "verify false")
                     false
                 }
             }
