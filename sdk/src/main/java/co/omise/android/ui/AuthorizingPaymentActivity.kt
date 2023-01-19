@@ -93,10 +93,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                     try {
                         val externalIntent = Intent(Intent.ACTION_VIEW, uri)
                         startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        Log.i("testaa", "app verified" + uri)
+                        Log.i("testaa", "app verified " + uri)
                         true
                     } catch (e: ActivityNotFoundException) {
-                        Log.i("testaa", "verify exception" + uri)
+                        Log.i("testaa", "verify exception " + uri)
                         e.printStackTrace()
                         true
                     }
