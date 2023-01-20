@@ -474,6 +474,10 @@ file as follows:
 
 Then in your activity, declare the method that will start this activity this way:
 
+#### App flow
+
+This method will handle AUTHORIZED_URL from your app, and will return result in `onActivityResult`
+
 ```kotlin
 private fun showAuthorizingPaymentForm() {
     val intent = Intent(this, AuthorizingPaymentActivity::class.java)
@@ -497,6 +501,18 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     }
 }
 ```
+
+#### Browser flow
+
+Some third-party banking apps may require whitelisting of your app in order to use app flow. If that is not possible, you can use browser flow.
+To do that, add this parameter to `intent` when starting `AuthorizingPaymentActivity`
+
+```kotlin
+intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_USE_BROWSER_FLOW, true)
+```
+
+This will immediately finish `AuthorizingPaymentActivity` and will instead pass `AUTHORIZED_URL` to the device's default browser (ex. Chrome)
+Using this flow, you will not receive result in `onActivityResult`
 
 ### Authorizing Payment via an external app
 
