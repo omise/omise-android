@@ -5,9 +5,13 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.webkit.*
+import android.webkit.CookieManager
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,11 +30,12 @@ import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
-import co.omise.android.ui.AuthorizingPaymentResult.*
-import kotlinx.android.synthetic.main.activity_authorizing_payment.*
+import co.omise.android.ui.AuthorizingPaymentResult.Failure
+import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
+import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
+import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
 import java.net.ProtocolException
-
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -97,22 +102,18 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val uri = Uri.parse(url)
                 return if (verifier.verifyURL(uri)) {
-                    Log.i("testaa", "url verified")
                     finishActivityWithSuccessful(url)
                     true
                 } else if (verifier.verifyExternalURL(uri)) {
                     try {
                         val externalIntent = Intent(Intent.ACTION_VIEW, uri)
                         startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        Log.i("testaa", "app verified " + uri)
                         true
                     } catch (e: ActivityNotFoundException) {
-                        Log.i("testaa", "verify exception " + uri)
                         e.printStackTrace()
                         true
                     }
                 } else {
-                    Log.i("testaa", "verify false")
                     false
                 }
             }

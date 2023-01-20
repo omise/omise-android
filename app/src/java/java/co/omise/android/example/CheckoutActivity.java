@@ -191,7 +191,7 @@ public class CheckoutActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl);
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
-        intent.putExtra(EXTRA_USE_BROWSER_FLOW, true); // remove this or change it to false for app-flow
+        intent.putExtra(EXTRA_USE_BROWSER_FLOW, false); // change to true for browser flow
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
         return Unit.INSTANCE;
     }
