@@ -511,7 +511,7 @@ To do that, add this parameter to `intent` when starting `AuthorizingPaymentActi
 intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_USE_BROWSER_FLOW, true)
 ```
 
-This will immediately finish `AuthorizingPaymentActivity` and will instead pass `AUTHORIZED_URL` to the device's default browser (ex. Chrome)
+This will immediately finish `AuthorizingPaymentActivity` and will instead pass `AUTHORIZED_URL` to the device's default browser (ex. Chrome).
 Using this flow, you will not receive result in `onActivityResult`
 
 ### Authorizing Payment via an external app
