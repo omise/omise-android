@@ -1,6 +1,7 @@
 package co.omise.android.example;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -186,10 +187,13 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private Unit startAuthoringPaymentActivity(String authorizeUrl, String returnUrl) {
-        Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
+        /*Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl);
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
-        startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+        startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);*/
+        // Browser flow
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authorizeUrl));
+        startActivity(browserIntent);
         return Unit.INSTANCE;
     }
 

@@ -83,19 +83,17 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private fun setupWebViewClient() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val newUrl = "bualuangmbanking://mbanking.payment?paymentIdentifier=5UJ0ZX463J61MGZJG64&paymentRequestId=A435CB70-4668-4825-82E3-F7D69EE6E063&signature=JO2yjoeaoFgABkwg4Ex3TfYr1G0sWNUHri0pxnhnX%2BGkOJJwbiB9s9wU6jBPiiGx9mYvKzXe09xbrLFjI2ixE5SRsxfDEBfcZrDjaOtLKzgjRKqdV76LFNdOzpWXJ9NqIL%2BorRkiRSKJuE5et%2Fvl7nLC68D4ejpccGYdXl%2BhoB221Ki1DMghLpbd9KBag2z5vBjTRQCAaZUxABXrhSj%2BdkPnZz8sQ1PVjdiWQcyotP4EYKm7VaTP6th2NslkSnB0e1z633mcjfXeaySmOH7uHtNDtroy1kh94wHY8RKv3223%2BhcGZocxYKpjdMgoJx0hSCQAY8Hv0urxdhpsX3ncPg%3D%3D&siteName=OMISEAPP&timeStamp=2023-01-20T10:42:35.481+07:00"
-                val uri = Uri.parse(newUrl)
+                val uri = Uri.parse(url)
                 return if (verifier.verifyURL(uri)) {
                     Log.i("testaa", "url verified")
                     finishActivityWithSuccessful(url)
                     true
                 } else if (verifier.verifyExternalURL(uri)) {
                     try {
-                        //val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-                        //startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        //Log.i("testaa", "app verified " + uri)
-                        //true
-                        false
+                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+                        Log.i("testaa", "app verified " + uri)
+                        true
                     } catch (e: ActivityNotFoundException) {
                         Log.i("testaa", "verify exception " + uri)
                         e.printStackTrace()
