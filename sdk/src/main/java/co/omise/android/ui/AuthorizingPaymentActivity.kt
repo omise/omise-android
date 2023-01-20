@@ -83,7 +83,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private fun setupWebViewClient() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val newUrl = "bualuangmbanking://mbanking.payment?paymentIdentifier=5UIC52IS1BDCTLXAY5A\\u0026paymentRequestId=BCB5E521-7879-43F4-8810-37336D6C2335\\u0026signature=UKoJM9CiA8odz52LGnbjiUKRlz%2FR6xKXlv%2BGcyETVboXlrDG2kvNWUTL0cVxOpqPlu4sI59xjNwRnSVmiM5MUuEjC6a9lGJFrRyfgDTDp4aC%2FQnOByIXQnQGvl1Gvdhf%2Flg9kdQF%2B1kirqHO9yPAPxT1TzKQNsm19QXoqZLYnuzG8SQUL0dPG2y%2FFr1CTFjSdtKH6ulCNDrTEsqphuCNu8OxKVqJdp5UElm4pPi231Z031Oot%2BV%2FaIBtzg7z%2BRXVEmLnGi8X5TnMyUOj3a%2BnTxrdwh%2FjHgsJDCcmyuBWo7nopo9PTpFz2NXwxFxfCpRqPLcpTKHdYUtqNHOjnHL1iw%3D%3D\\u0026siteName=OMISEAPP\\u0026timeStamp=2023-01-18T16%3A20%3A32.444%2B07%3A00"
+                val newUrl = "bualuangmbanking://mbanking.payment?paymentIdentifier=5UJ0ZX463J61MGZJG64&paymentRequestId=A435CB70-4668-4825-82E3-F7D69EE6E063&signature=JO2yjoeaoFgABkwg4Ex3TfYr1G0sWNUHri0pxnhnX%2BGkOJJwbiB9s9wU6jBPiiGx9mYvKzXe09xbrLFjI2ixE5SRsxfDEBfcZrDjaOtLKzgjRKqdV76LFNdOzpWXJ9NqIL%2BorRkiRSKJuE5et%2Fvl7nLC68D4ejpccGYdXl%2BhoB221Ki1DMghLpbd9KBag2z5vBjTRQCAaZUxABXrhSj%2BdkPnZz8sQ1PVjdiWQcyotP4EYKm7VaTP6th2NslkSnB0e1z633mcjfXeaySmOH7uHtNDtroy1kh94wHY8RKv3223%2BhcGZocxYKpjdMgoJx0hSCQAY8Hv0urxdhpsX3ncPg%3D%3D&siteName=OMISEAPP&timeStamp=2023-01-20T10:42:35.481+07:00"
                 val uri = Uri.parse(newUrl)
                 return if (verifier.verifyURL(uri)) {
                     Log.i("testaa", "url verified")
