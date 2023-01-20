@@ -35,6 +35,7 @@ import kotlin.text.StringsKt;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
+import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_USE_BROWSER_FLOW;
 
 public class CheckoutActivity extends AppCompatActivity {
 
@@ -187,10 +188,9 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private Unit startAuthoringPaymentActivity(String authorizeUrl, String returnUrl) {
-        /*Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
+        Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl);
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
-        startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);*/
         intent.putExtra(EXTRA_USE_BROWSER_FLOW, true); // remove this or change it to false for app-flow
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
         return Unit.INSTANCE;
