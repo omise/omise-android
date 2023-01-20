@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
+import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
+import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_USE_BROWSER_FLOW
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.OmiseException
 import co.omise.android.R
@@ -48,6 +50,16 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (intent.getBooleanExtra(EXTRA_USE_BROWSER_FLOW, false)) {
+            // Browser flow
+            val authorizeUrl = intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING)
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(authorizeUrl))
+            startActivity(browserIntent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_authorizing_payment)
 
         supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText

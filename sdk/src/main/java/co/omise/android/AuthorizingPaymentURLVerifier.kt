@@ -24,6 +24,7 @@ class AuthorizingPaymentURLVerifier {
         const val EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS = "AuthorizingPaymentURLVerifier.expectedReturnURLPatterns"
         const val EXTRA_RETURNED_URLSTRING = "AuthorizingPaymentURLVerifier.returnedURL"
         const val REQUEST_EXTERNAL_CODE = 300
+        const val EXTRA_USE_BROWSER_FLOW = "AuthorizingPaymentURLVerifier.useBrowserFlow"
     }
 
     constructor(authorizedURL: Uri, expectedReturnURLPatterns: List<Uri>) {
