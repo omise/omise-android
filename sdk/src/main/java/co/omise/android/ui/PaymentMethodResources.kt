@@ -481,6 +481,13 @@ internal sealed class MobileBankingResource(
         sourceType = SourceType.MobileBanking.KBank
     )
 
+    object KTB : MobileBankingResource(
+        iconRes = R.drawable.payment_ktb_next,
+        titleRes = R.string.payment_method_mobile_banking_ktb_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.KTB
+    )
+
     object Scb : MobileBankingResource(
             iconRes = R.drawable.scb_easy,
             titleRes = R.string.payment_method_mobile_banking_scb_title,

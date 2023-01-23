@@ -29,6 +29,7 @@
     <string name="payment_preference_mobile_banking_scb_key" translatable="false">mobile_banking_scb</string>
     <string name="payment_preference_mobile_banking_bbl_key" translatable="false">mobile_banking_bbl</string>
     <string name="payment_preference_mobile_banking_kbank_key" translatable="false">mobile_banking_kbank</string>
+    <string name="payment_preference_mobile_banking_ktb_key" translatable="false">mobile_banking_ktb</string>
     <string name="payment_preference_mobile_banking_ocbc_pao_key" translatable="false">mobile_banking_ocbc_pao</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
     <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
@@ -71,6 +72,7 @@
     <string name="payment_preference_mobile_banking_bbl_title" translatable="false">BBL - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_scb_title" translatable="false">SCB - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_kbank_title" translatable="false">KBANK - Mobile Banking</string>
+    <string name="payment_preference_mobile_banking_ktb_title" translatable="false">KTB - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_ocbc_pao_title" translatable="false">OCBC Pay Anyone</string>
     <string name="payment_preference_internet_banking_bay_title" translatable="false">BAY - Internet Banking</string>
     <string name="payment_preference_internet_banking_ktb_title" translatable="false">KTB - Internet Banking</string>
