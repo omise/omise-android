@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.6.0
+* **ADDED:** Added support for Krungthai NEXT (mobile_banking_ktb) payment method
+
 ## v4.5.2
 * **CHANGED:** Update logo and name of Lotus's Bill Payment 
 
