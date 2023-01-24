@@ -21,6 +21,7 @@ object PaymentSetting {
                     R.string.payment_preference_mobile_banking_bay_key,
                     R.string.payment_preference_mobile_banking_bbl_key,
                     R.string.payment_preference_mobile_banking_kbank_key,
+                    R.string.payment_preference_mobile_banking_ktb_key,
                     R.string.payment_preference_mobile_banking_scb_key,
                     R.string.payment_preference_installment_bay_key,
                     R.string.payment_preference_installment_first_choice_key,
@@ -83,6 +84,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_mobile_banking_bay_key) -> SourceType.MobileBanking.Bay
                         context.getString(R.string.payment_preference_mobile_banking_bbl_key) -> SourceType.MobileBanking.Bbl
                         context.getString(R.string.payment_preference_mobile_banking_kbank_key) -> SourceType.MobileBanking.KBank
+                        context.getString(R.string.payment_preference_mobile_banking_ktb_key) -> SourceType.MobileBanking.KTB
                         context.getString(R.string.payment_preference_mobile_banking_ocbc_pao_key) -> SourceType.OcbcPao
                         context.getString(R.string.payment_preference_mobile_banking_scb_key) -> SourceType.MobileBanking.Scb
                         context.getString(R.string.payment_preference_installment_bay_key) -> SourceType.Installment.Bay

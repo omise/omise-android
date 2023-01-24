@@ -68,6 +68,7 @@ class PaymentChooserFragmentTest {
             PaymentMethod(name = "mobile_banking_bay"),
             PaymentMethod(name = "mobile_banking_bbl"),
             PaymentMethod(name = "mobile_banking_kbank"),
+            PaymentMethod(name = "mobile_banking_ktb"),
             PaymentMethod(name = "mobile_banking_ocbc_pao"),
             PaymentMethod(name = "mobile_banking_scb"),
             PaymentMethod(name = "alipay_cn"),
@@ -242,6 +243,7 @@ class PaymentChooserFragmentTest {
             PaymentMethod(name = "mobile_banking_bay"),
             PaymentMethod(name = "mobile_banking_bbl"),
             PaymentMethod(name = "mobile_banking_kbank"),
+            PaymentMethod(name = "mobile_banking_ktb"),
             PaymentMethod(name = "mobile_banking_scb")
         )
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
