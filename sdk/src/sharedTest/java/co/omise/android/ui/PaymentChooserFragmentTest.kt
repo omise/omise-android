@@ -85,8 +85,8 @@ class PaymentChooserFragmentTest {
             PaymentMethod(name = "maybank_qr"),
             PaymentMethod(name = "rabbit_linepay"),
             PaymentMethod(name = "grabpay"),
+            PaymentMethod(name = "paypay"),
             PaymentMethod(name = "atome"),
-                // test
         )
         val capability = Capability(
             paymentMethods = paymentMethods
@@ -147,14 +147,15 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
         assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
         assertListAtIndexHasResource(21, R.string.payment_method_rabbit_linepay_title)
-        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_title)
-        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_footnote)
 
         onView(withId(R.id.recycler_view)).perform(swipeUp())
 
-        assertListAtIndexHasResource(23, R.string.payment_method_atome_title)
+        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_title)
+        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_footnote)
+        assertListAtIndexHasResource(23, R.string.payment_method_paypay_title)
+        assertListAtIndexHasResource(24, R.string.payment_method_atome_title)
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(24)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(25)))
     }
 
     @Test

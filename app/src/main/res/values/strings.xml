@@ -59,6 +59,7 @@
     <string name="payment_preference_duitnow_qr_key" translatable="false">duitnow_qr</string>
     <string name="payment_preference_maybank_qr_key" translatable="false">maybank_qr</string>
     <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
+    <string name="payment_preference_paypay_key" translatable="false">paypay</string>
     <string name="payment_preference_atome_key" translatable="false">atome</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
@@ -110,6 +111,7 @@
     <string name="payment_preference_duitnow_qr_title" translatable="false">DuitNow QR</string>
     <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
+    <string name="payment_preference_paypay_title" translatable="false">PayPay</string>
     <string name="payment_preference_atome_title" translatable="false">Atome</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
