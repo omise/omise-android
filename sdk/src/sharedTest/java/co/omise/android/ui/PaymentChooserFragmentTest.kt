@@ -86,6 +86,7 @@ class PaymentChooserFragmentTest {
             PaymentMethod(name = "rabbit_linepay"),
             PaymentMethod(name = "grabpay"),
             PaymentMethod(name = "atome"),
+                // test
         )
         val capability = Capability(
             paymentMethods = paymentMethods
