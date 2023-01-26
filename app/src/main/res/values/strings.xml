@@ -29,11 +29,12 @@
     <string name="payment_preference_mobile_banking_scb_key" translatable="false">mobile_banking_scb</string>
     <string name="payment_preference_mobile_banking_bbl_key" translatable="false">mobile_banking_bbl</string>
     <string name="payment_preference_mobile_banking_kbank_key" translatable="false">mobile_banking_kbank</string>
+    <string name="payment_preference_mobile_banking_ktb_key" translatable="false">mobile_banking_ktb</string>
     <string name="payment_preference_mobile_banking_ocbc_pao_key" translatable="false">mobile_banking_ocbc_pao</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
     <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
     <string name="payment_preference_installment_bbl_key" translatable="false">installment_bbl</string>
-    <string name="payment_preference_installment_ezypay_key" translatable="false">installment_ezypay</string>
+    <string name="payment_preference_installment_mbb_key" translatable="false">installment_mbb</string>
     <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
     <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
     <string name="payment_preference_installment_scb_key" translatable="false">installment_scb</string>
@@ -59,6 +60,7 @@
     <string name="payment_preference_maybank_qr_key" translatable="false">maybank_qr</string>
     <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
     <string name="payment_preference_paypay_key" translatable="false">paypay</string>
+    <string name="payment_preference_atome_key" translatable="false">atome</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -71,6 +73,7 @@
     <string name="payment_preference_mobile_banking_bbl_title" translatable="false">BBL - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_scb_title" translatable="false">SCB - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_kbank_title" translatable="false">KBANK - Mobile Banking</string>
+    <string name="payment_preference_mobile_banking_ktb_title" translatable="false">KTB - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_ocbc_pao_title" translatable="false">OCBC Pay Anyone</string>
     <string name="payment_preference_internet_banking_bay_title" translatable="false">BAY - Internet Banking</string>
     <string name="payment_preference_internet_banking_ktb_title" translatable="false">KTB - Internet Banking</string>
@@ -79,11 +82,11 @@
     <string name="payment_preference_alipay_title" translatable="false">Alipay Online</string>
     <string name="payment_preference_alipay_cn_title" translatable="false">AlipayCN</string>
     <string name="payment_preference_alipay_hk_title" translatable="false">AlipayHK</string>
-    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Tesco Lotus Bill Payment</string>
+    <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Lotus\'s Bill Payment</string>
     <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
     <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
-    <string name="payment_preference_installment_ezypay_title" translatable="false">Maybank Ezypay - Installment</string>
+    <string name="payment_preference_installment_mbb_title" translatable="false">Maybank - Installment</string>
     <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
@@ -109,10 +112,10 @@
     <string name="payment_preference_maybank_qr_title" translatable="false">Maybank QRPay</string>
     <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
     <string name="payment_preference_paypay_title" translatable="false">PayPay</string>
+    <string name="payment_preference_atome_title" translatable="false">Atome</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>
     <string name="payment_preference_zero_interest_installments_summary" translatable="false">Whether merchant absorbs the interest for installment payments</string>
     <string name="payment_preference_zero_interest_installments_switch_title" translatable="false">Enabled</string>
-
 </resources>

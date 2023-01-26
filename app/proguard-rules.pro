@@ -22,3 +22,6 @@
 -dontwarn org.joda.time.**
 -dontwarn javax.annotation.**
 -dontwarn com.squareup.**
+
+-keep class co.omise.android.** { *; }
+-keep class com.nimbusds.jose.** { *; }

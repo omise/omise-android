@@ -21,11 +21,12 @@ object PaymentSetting {
                     R.string.payment_preference_mobile_banking_bay_key,
                     R.string.payment_preference_mobile_banking_bbl_key,
                     R.string.payment_preference_mobile_banking_kbank_key,
+                    R.string.payment_preference_mobile_banking_ktb_key,
                     R.string.payment_preference_mobile_banking_scb_key,
                     R.string.payment_preference_installment_bay_key,
                     R.string.payment_preference_installment_first_choice_key,
                     R.string.payment_preference_installment_bbl_key,
-                    R.string.payment_preference_installment_ezypay_key,
+                    R.string.payment_preference_installment_mbb_key,
                     R.string.payment_preference_installment_ktc_key,
                     R.string.payment_preference_installment_kbank_key,
                     R.string.payment_preference_installment_scb_key,
@@ -56,6 +57,7 @@ object PaymentSetting {
                     R.string.payment_preference_maybank_qr_key,
                     R.string.payment_preference_grabpay_key,
                     R.string.payment_preference_paypay_key,
+                    R.string.payment_preference_atome_key,
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -83,12 +85,13 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_mobile_banking_bay_key) -> SourceType.MobileBanking.Bay
                         context.getString(R.string.payment_preference_mobile_banking_bbl_key) -> SourceType.MobileBanking.Bbl
                         context.getString(R.string.payment_preference_mobile_banking_kbank_key) -> SourceType.MobileBanking.KBank
+                        context.getString(R.string.payment_preference_mobile_banking_ktb_key) -> SourceType.MobileBanking.KTB
                         context.getString(R.string.payment_preference_mobile_banking_ocbc_pao_key) -> SourceType.OcbcPao
                         context.getString(R.string.payment_preference_mobile_banking_scb_key) -> SourceType.MobileBanking.Scb
                         context.getString(R.string.payment_preference_installment_bay_key) -> SourceType.Installment.Bay
                         context.getString(R.string.payment_preference_installment_first_choice_key) -> SourceType.Installment.FirstChoice
                         context.getString(R.string.payment_preference_installment_bbl_key) -> SourceType.Installment.Bbl
-                        context.getString(R.string.payment_preference_installment_ezypay_key) -> SourceType.Installment.Ezypay
+                        context.getString(R.string.payment_preference_installment_mbb_key) -> SourceType.Installment.Mbb
                         context.getString(R.string.payment_preference_installment_ktc_key) -> SourceType.Installment.Ktc
                         context.getString(R.string.payment_preference_installment_kbank_key) -> SourceType.Installment.KBank
                         context.getString(R.string.payment_preference_installment_scb_key) -> SourceType.Installment.Scb
@@ -115,6 +118,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_maybank_qr_key) -> SourceType.MaybankQR
                         context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay()
                         context.getString(R.string.payment_preference_paypay_key) -> SourceType.PayPay
+                        context.getString(R.string.payment_preference_atome_key) -> SourceType.Atome
                         else -> null
                     }
                 }
@@ -136,13 +140,16 @@ object PaymentSetting {
         val zeroInterestInstallments = paymentMethodPreferences[context.getString(R.string.payment_preference_zero_interest_installments_key)]
                 ?: false
 
-        val fpx = sourceTypes.find { it.name == "fpx" } as SourceType.Fpx
-        fpx.banks = listOf(
+        val fpx = sourceTypes.find { it.name == "fpx" }
+        if (fpx != null) {
+            fpx as SourceType.Fpx
+            fpx.banks = listOf(
                 Bank("Affin Bank", "affin", true),
                 Bank("Alliance Bank (Personal)", "alliance", true),
                 Bank("Bank Islam", "islam", true),
                 Bank("Standard Chartered", "sc", false)
-        )
+            )
+        }
 
         return Capability.create(allowCreditCardMethod, sourceTypes, tokenizationMethods, zeroInterestInstallments)
     }

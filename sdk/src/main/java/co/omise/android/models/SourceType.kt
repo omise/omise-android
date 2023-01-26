@@ -39,6 +39,7 @@ sealed class SourceType(
     object DuitNowOBW  : SourceType("duitnow_obw")
     object DuitNowQR : SourceType("duitnow_qr")
     object MaybankQR : SourceType("maybank_qr")
+    object Atome : SourceType("atome")
     data class GrabPay(val provider: String? = null) : SourceType("grabpay")
     object PayPay : SourceType("paypay")
 
@@ -56,6 +57,7 @@ sealed class SourceType(
         object Bay : MobileBanking("mobile_banking_bay")
         object Bbl : MobileBanking("mobile_banking_bbl")
         object KBank : MobileBanking("mobile_banking_kbank")
+        object KTB : MobileBanking("mobile_banking_ktb")
         object Scb : MobileBanking("mobile_banking_scb")
         data class Unknown(@JsonValue override val name: String?) : MobileBanking(name)
     }
@@ -64,7 +66,7 @@ sealed class SourceType(
         object Bay : Installment("installment_bay")
         object FirstChoice : Installment("installment_first_choice")
         object Bbl : Installment("installment_bbl")
-        object Ezypay : Installment("installment_ezypay")
+        object Mbb : Installment("installment_mbb")
         object Ktc : Installment("installment_ktc")
         object KBank : Installment("installment_kbank")
         object Scb : Installment("installment_scb")
@@ -79,7 +81,7 @@ sealed class SourceType(
                         Bay -> listOf(3, 4, 6, 9, 10)
                         FirstChoice -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
                         Bbl -> listOf(4, 6, 8, 9, 10)
-                        Ezypay -> listOf(6, 12, 24)
+                        Mbb -> listOf(6, 12, 18, 24)
                         Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                         KBank -> listOf(3, 4, 6, 10)
                         Scb -> listOf(3, 4, 6, 9, 10)
@@ -103,6 +105,7 @@ sealed class SourceType(
             "mobile_banking_bay" -> MobileBanking.Bay
             "mobile_banking_bbl" -> MobileBanking.Bbl
             "mobile_banking_kbank" -> MobileBanking.KBank
+            "mobile_banking_ktb" -> MobileBanking.KTB
             "mobile_banking_scb" -> MobileBanking.Scb
             "alipay" -> Alipay
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
@@ -113,7 +116,7 @@ sealed class SourceType(
             "installment_bay" -> Installment.Bay
             "installment_first_choice" -> Installment.FirstChoice
             "installment_bbl" -> Installment.Bbl
-            "installment_ezypay" -> Installment.Ezypay
+            "installment_mbb" -> Installment.Mbb
             "installment_ktc" -> Installment.Ktc
             "installment_kbank" -> Installment.KBank
             "installment_scb" -> Installment.Scb
@@ -139,6 +142,7 @@ sealed class SourceType(
             "maybank_qr" -> MaybankQR
             "grabpay" -> GrabPay()
             "paypay" -> PayPay
+            "atome" -> Atome
             else -> Unknown(name)
         }
     }
@@ -169,15 +173,15 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Bay,
             SourceType.Installment.FirstChoice,
             SourceType.Installment.Bbl,
-            SourceType.Installment.Ezypay,
+            SourceType.Installment.Mbb,
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
             SourceType.PointsCiti,
             SourceType.Installment.Scb,
             SourceType.Installment.Citi,
             SourceType.Installment.Ttb,
-            SourceType.Installment.Uob
-
+            SourceType.Installment.Uob,
+            SourceType.Atome,
     )
 
 sealed class SupportedEcontext : Parcelable {

@@ -298,10 +298,17 @@ internal sealed class PaymentMethodResource(
     )
 
     object PayPay : PaymentMethodResource(
-            iconRes = R.drawable.payment_paypay,
-            titleRes = R.string.payment_method_paypay_title,
-            indicatorIconRes = R.drawable.ic_redirect,
-            sourceType = SourceType.PayPay
+        iconRes = R.drawable.payment_paypay,
+        titleRes = R.string.payment_method_paypay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.PayPay
+    )
+
+    object Atome : PaymentMethodResource(
+        iconRes = R.drawable.payment_atome,
+        titleRes = R.string.payment_method_atome_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.Atome
     )
 
     companion object {
@@ -332,11 +339,11 @@ internal sealed class InstallmentResource(
             sourceType = SourceType.Installment.Bbl
     )
 
-    object Ezypay : InstallmentResource(
+    object Mbb : InstallmentResource(
             iconRes = R.drawable.payment_maybank,
-            titleRes = R.string.payment_method_installment_ezypay_title,
+            titleRes = R.string.payment_method_installment_mbb_title,
             indicatorIconRes = R.drawable.ic_next,
-            sourceType = SourceType.Installment.Ezypay
+            sourceType = SourceType.Installment.Mbb
     )
 
     object KBank : InstallmentResource(
@@ -479,6 +486,13 @@ internal sealed class MobileBankingResource(
         titleRes = R.string.payment_method_mobile_banking_kbank_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.MobileBanking.KBank
+    )
+
+    object KTB : MobileBankingResource(
+        iconRes = R.drawable.payment_ktb_next,
+        titleRes = R.string.payment_method_mobile_banking_ktb_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.MobileBanking.KTB
     )
 
     object Scb : MobileBankingResource(
