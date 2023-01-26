@@ -155,7 +155,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(23, R.string.payment_method_paypay_title)
         assertListAtIndexHasResource(24, R.string.payment_method_atome_title)
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(24)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(25)))
     }
 
     @Test
