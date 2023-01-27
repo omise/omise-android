@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.7.0
+* **ADDED:** Added support for PayPay payment method
+
 ## v4.6.0
 * **ADDED:** Added support for Krungthai NEXT (mobile_banking_ktb) payment method
 
