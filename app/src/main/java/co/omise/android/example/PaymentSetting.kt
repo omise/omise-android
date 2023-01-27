@@ -56,6 +56,7 @@ object PaymentSetting {
                     R.string.payment_preference_duitnow_qr_key,
                     R.string.payment_preference_maybank_qr_key,
                     R.string.payment_preference_grabpay_key,
+                    R.string.payment_preference_paypay_key,
                     R.string.payment_preference_atome_key,
             )
                     .map { context.getString(it) }
@@ -116,6 +117,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_duitnow_qr_key) -> SourceType.DuitNowQR
                         context.getString(R.string.payment_preference_maybank_qr_key) -> SourceType.MaybankQR
                         context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay()
+                        context.getString(R.string.payment_preference_paypay_key) -> SourceType.PayPay
                         context.getString(R.string.payment_preference_atome_key) -> SourceType.Atome
                         else -> null
                     }
