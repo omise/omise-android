@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.8.0
+* **CHANGED:** Removed support for SCB and KTB Internet Banking payment method
+
 ## v4.7.0
 * **ADDED:** Added support for PayPay payment method
 
