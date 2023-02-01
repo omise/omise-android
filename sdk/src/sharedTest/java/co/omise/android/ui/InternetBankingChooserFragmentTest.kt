@@ -31,9 +31,7 @@ class InternetBankingChooserFragmentTest {
     private lateinit var fragment: InternetBankingChooserFragment
     private val paymentMethods = listOf(
             PaymentMethod(name = "internet_banking_bbl"),
-            PaymentMethod(name = "internet_banking_scb"),
-            PaymentMethod(name = "internet_banking_bay"),
-            PaymentMethod(name = "internet_banking_ktb")
+            PaymentMethod(name = "internet_banking_bay")
     )
     private val mockRequest = mock<PaymentCreatorRequester<Source>> {
         on { amount }.doReturn(500000L)
@@ -50,9 +48,7 @@ class InternetBankingChooserFragmentTest {
     @Test
     fun displayAllowedBanks_showAllowedBanksFromArgument() {
         onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bbl_title))))
-        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_scb_title))))
-        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bay_title))))
-        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_ktb_title))))
+        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bay_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 

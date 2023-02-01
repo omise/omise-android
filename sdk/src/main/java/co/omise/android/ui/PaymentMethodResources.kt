@@ -431,25 +431,11 @@ internal sealed class InternetBankingResource(
             sourceType = SourceType.InternetBanking.Bbl
     )
 
-    object Scb : InternetBankingResource(
-            iconRes = R.drawable.payment_scb,
-            titleRes = R.string.payment_method_internet_banking_scb_title,
-            indicatorIconRes = R.drawable.ic_redirect,
-            sourceType = SourceType.InternetBanking.Scb
-    )
-
     object Bay : InternetBankingResource(
             iconRes = R.drawable.payment_bay,
             titleRes = R.string.payment_method_internet_banking_bay_title,
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.InternetBanking.Bay
-    )
-
-    object Ktb : InternetBankingResource(
-            iconRes = R.drawable.payment_ktb,
-            titleRes = R.string.payment_method_internet_banking_ktb_title,
-            indicatorIconRes = R.drawable.ic_redirect,
-            sourceType = SourceType.InternetBanking.Ktb
     )
 }
 

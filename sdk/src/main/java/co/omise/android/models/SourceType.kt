@@ -47,8 +47,6 @@ sealed class SourceType(
 
     sealed class InternetBanking(@JsonValue override val name: String?) : SourceType(name) {
         object Bay : InternetBanking("internet_banking_bay")
-        object Ktb : InternetBanking("internet_banking_ktb")
-        object Scb : InternetBanking("internet_banking_scb")
         object Bbl : InternetBanking("internet_banking_bbl")
         data class Unknown(@JsonValue override val name: String?) : InternetBanking(name)
     }
@@ -99,8 +97,6 @@ sealed class SourceType(
         @JvmStatic
         fun creator(name: String?): SourceType = when (name) {
             "internet_banking_bay" -> InternetBanking.Bay
-            "internet_banking_ktb" -> InternetBanking.Ktb
-            "internet_banking_scb" -> InternetBanking.Scb
             "internet_banking_bbl" -> InternetBanking.Bbl
             "mobile_banking_bay" -> MobileBanking.Bay
             "mobile_banking_bbl" -> MobileBanking.Bbl
@@ -161,8 +157,6 @@ object SourceTypeParceler : Parceler<SourceType> {
 val SourceType.Companion.allElements: List<SourceType>
     get() = listOf(
             SourceType.InternetBanking.Bay,
-            SourceType.InternetBanking.Ktb,
-            SourceType.InternetBanking.Scb,
             SourceType.InternetBanking.Bbl,
             SourceType.Alipay,
             SourceType.BillPaymentTescoLotus,
