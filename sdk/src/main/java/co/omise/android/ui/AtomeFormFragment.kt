@@ -53,17 +53,23 @@ class AtomeFormFragment : OmiseFragment() {
         setHasOptionsMenu(true)
 
         with(emailEdit) {
-            setOnFocusChangeListener(::updateEmailErrorText)
+            setOnFocusChangeListener { _, hasFocus ->
+                updateEmailErrorText(hasFocus)
+            }
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
         with(phoneNumberEdit) {
-            setOnFocusChangeListener(::updatePhoneErrorText)
+            setOnFocusChangeListener { _, hasFocus ->
+                updatePhoneErrorText(hasFocus)
+            }
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
         with(shippingStreetEdit) {
-            setOnFocusChangeListener(::updateShippingAddressErrorText)
+            setOnFocusChangeListener { _, hasFocus ->
+                updateShippingAddressErrorText(hasFocus)
+            }
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
@@ -76,12 +82,16 @@ class AtomeFormFragment : OmiseFragment() {
         }
 
         with(shippingCountryEdit) {
-            setOnFocusChangeListener(::updateShippingAddressErrorText)
+            setOnFocusChangeListener { _, hasFocus ->
+                updateShippingAddressErrorText(hasFocus)
+            }
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
         with(billingCountryEdit) {
-            setOnFocusChangeListener(::updateBillingAddressErrorText)
+            setOnFocusChangeListener { _, hasFocus ->
+                updateBillingAddressErrorText(hasFocus)
+            }
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
@@ -91,7 +101,7 @@ class AtomeFormFragment : OmiseFragment() {
         submitButton.setOnClickListener(::submitForm)
     }
 
-    private fun updateEmailErrorText(view: View, hasFocus: Boolean) {
+    private fun updateEmailErrorText(hasFocus: Boolean) {
         if (hasFocus || emailEdit.text?.isEmpty() == true || isEmailValid(emailEdit)) {
             with(emailErrorText) {
                 text = ""
@@ -104,7 +114,7 @@ class AtomeFormFragment : OmiseFragment() {
         emailErrorText.text = getString(R.string.error_invalid_email)
     }
 
-    private fun updatePhoneErrorText(view: View, hasFocus: Boolean) {
+    private fun updatePhoneErrorText(hasFocus: Boolean) {
         if (hasFocus || isPhoneNumberValid(phoneNumberEdit)) {
             with(phoneNumberErrorText) {
                 text = ""
@@ -117,7 +127,7 @@ class AtomeFormFragment : OmiseFragment() {
         phoneNumberErrorText.text = getString(R.string.error_invalid_phone_number)
     }
 
-    private fun updateShippingAddressErrorText(view: View, hasFocus: Boolean) {
+    private fun updateShippingAddressErrorText(hasFocus: Boolean) {
         if (hasFocus || (
                     shippingStreetEdit.isValid &&
                             shippingPostalEdit.isValid &&
@@ -135,7 +145,7 @@ class AtomeFormFragment : OmiseFragment() {
         shippingAddressErrorText.text = getString(R.string.error_invalid_address)
     }
 
-    private fun updateBillingAddressErrorText(view: View, hasFocus: Boolean) {
+    private fun updateBillingAddressErrorText(hasFocus: Boolean) {
         if (hasFocus || billingCountryEdit.text?.isEmpty() == true || isCountryCodeValid(billingCountryEdit)) {
             with(billingAddressErrorText) {
                 text = ""
