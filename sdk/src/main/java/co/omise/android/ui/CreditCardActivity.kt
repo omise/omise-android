@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ScrollView
 import android.widget.TextView
@@ -77,13 +78,7 @@ class CreditCardActivity : OmiseActivity() {
                     try {
                         editText.validate()
                     } catch (e: InputValidationException.InvalidInputException) {
-                        errorText.text = when (editText) {
-                            cardNumberEdit -> getString(R.string.error_invalid_card_number)
-                            cardNameEdit -> getString(R.string.error_invalid_card_name)
-                            expiryDateEdit -> getString(R.string.error_invalid_expiration_date)
-                            securityCodeEdit -> getString(R.string.error_invalid_security_code)
-                            else -> null
-                        }
+                        errorText.text = editText.getErrorMessage()
                     } catch (e: InputValidationException.EmptyInputException) {
                         errorText.text = null
                     }
@@ -92,6 +87,16 @@ class CreditCardActivity : OmiseActivity() {
                 }
             }
             editText.setOnAfterTextChangeListener(::updateSubmitButton)
+        }
+    }
+
+    private fun EditText.getErrorMessage() : String? {
+        return when (this) {
+            cardNumberEdit -> getString(R.string.error_invalid_card_number)
+            cardNameEdit -> getString(R.string.error_invalid_card_name)
+            expiryDateEdit -> getString(R.string.error_invalid_expiration_date)
+            securityCodeEdit -> getString(R.string.error_invalid_security_code)
+            else -> null
         }
     }
 

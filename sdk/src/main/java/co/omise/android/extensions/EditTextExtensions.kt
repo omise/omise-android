@@ -21,7 +21,9 @@ fun EditText.disableOptions() {
             return false
         }
 
-        override fun onDestroyActionMode(mode: ActionMode?) {}
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            //Do nothing
+        }
     }
 }
 
@@ -32,9 +34,11 @@ fun EditText.setOnAfterTextChangeListener(action: () -> Unit) {
         }
 
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            //Do nothing
         }
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            //Do nothing
         }
     })
 }
