@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
@@ -24,8 +23,10 @@ class TrueMoneyFormFragment : OmiseFragment() {
     private val phoneNumberErrorText by lazy { text_phone_number_error }
     private val submitButton: Button by lazy { button_submit }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_true_money_form, container, false)
     }
 
@@ -36,14 +37,16 @@ class TrueMoneyFormFragment : OmiseFragment() {
         setHasOptionsMenu(true)
 
         with(phoneNumberEdit) {
-            setOnFocusChangeListener(::updateErrorText)
+            setOnFocusChangeListener { _, hasFocus ->
+                updateErrorText(hasFocus)
+            }
             setOnAfterTextChangeListener(::updateSubmitButton)
         }
 
         submitButton.setOnClickListener(::submitForm)
     }
 
-    private fun updateErrorText(view: View, hasFocus: Boolean) {
+    private fun updateErrorText(hasFocus: Boolean) {
         if (hasFocus || phoneNumberEdit.isValid) {
             with(phoneNumberErrorText) {
                 text = ""
@@ -64,9 +67,13 @@ class TrueMoneyFormFragment : OmiseFragment() {
 
         val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
 
-        val request = Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.TrueMoney)
-                .phoneNumber(phoneNumber)
-                .build()
+        val request = Source.CreateSourceRequestBuilder(
+            requester.amount,
+            requester.currency,
+            SourceType.TrueMoney
+        )
+            .phoneNumber(phoneNumber)
+            .build()
 
         view?.let { setAllViewsEnabled(it, false) }
         requester.request(request) {
