@@ -45,9 +45,13 @@ class CreditCardEditText : OmiseEditText {
         inputType = InputType.TYPE_CLASS_PHONE
 
         addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                //Do nothing
+            }
 
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                //Do nothing
+            }
 
             override fun afterTextChanged(e: Editable) {
                 if (e.isEmpty() || e.length % 5 != 0) {

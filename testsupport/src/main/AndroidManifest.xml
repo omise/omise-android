@@ -4,7 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application android:theme="@style/OmiseTheme">
+    <application android:theme="@style/OmiseTheme"
+        android:usesCleartextTraffic="false"
+        android:allowBackup="false">
         <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
         <activity android:name="co.omise.android.ui.CreditCardActivity" />
         <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
