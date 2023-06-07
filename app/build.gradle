@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "co.omise.android.example"

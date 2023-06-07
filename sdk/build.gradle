@@ -6,13 +6,10 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion build_tools_version
 
     defaultConfig {
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
-        versionCode omise_sdk_code_version
-        versionName omise_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
