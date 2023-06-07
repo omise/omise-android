@@ -183,7 +183,6 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     androidTestImplementation "androidx.annotation:annotation:$annotation_version"
-    androidTestImplementation "com.google.guava:guava:$guava_version"
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
     androidTestImplementation "org.robolectric:annotations:$robolectric_version"
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
