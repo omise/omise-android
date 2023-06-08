@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.webkit.CookieManager
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
@@ -16,6 +15,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
@@ -58,7 +58,13 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
                 ?: getString(R.string.title_authorizing_payment)
 
-        setupWebView()
+        viewModel = ViewModelProvider(this, getAuthorizingPaymentViewModelFactory()).get(AuthorizingPaymentViewModel::class.java)
+
+        progressDialog.show()
+
+        viewModel.authorizeTransaction(verifier.authorizedURLString)
+
+        observeData()
     }
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
@@ -74,7 +80,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.authentication.observe(this) { result ->
+        viewModel.authentication.observe(this, { result ->
             progressDialog.dismiss()
 
             when (result) {
@@ -82,7 +88,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.completionEvent)
                 is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
             }
-        }
+        })
     }
 
     private fun setupWebViewClient() {
@@ -171,6 +177,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         cookieManager.removeAllCookies(null)
         cookieManager.flush()
 
+        // Cleanup ViewModel
+        viewModel.cleanup()
+
         super.onDestroy()
     }
 
@@ -188,7 +197,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         runOnUiThread {
             if (verifier.isReady) {
-                webView.visibility = View.VISIBLE
+                webView.isVisible = true
                 webView.loadUrl(verifier.authorizedURLString)
             }
         }
