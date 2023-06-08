@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "co.omise.android.example"
@@ -57,7 +56,6 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.preference:preference:$preference_version"
     implementation "com.google.android.material:material:$material_version"
-    implementation "com.google.guava:guava:$guava_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':sdk')
 //    implementation "co.omise:omise-android:$omise_sdk_version"

@@ -52,7 +52,9 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.MaybankQR,
             PaymentMethodResource.GrabPay,
             PaymentMethodResource.PayPay,
-            PaymentMethodResource.PointsCiti -> item.sourceType?.let(::sendRequest)
+            PaymentMethodResource.PointsCiti,
+            PaymentMethodResource.GrabPay_RMS,
+            PaymentMethodResource.TouchNGo_Alipay -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
             PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()

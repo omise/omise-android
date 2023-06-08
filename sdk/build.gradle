@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion compile_sdk_version
-    buildToolsVersion build_tools_version
 
     defaultConfig {
         minSdkVersion min_sdk_version
@@ -184,7 +183,6 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     androidTestImplementation "androidx.annotation:annotation:$annotation_version"
-    androidTestImplementation "com.google.guava:guava:$guava_version"
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
     androidTestImplementation "org.robolectric:annotations:$robolectric_version"
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
