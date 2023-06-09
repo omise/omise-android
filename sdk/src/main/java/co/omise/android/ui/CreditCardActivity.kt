@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
+import kotlinx.android.synthetic.main.activity_credit_card.edit_country
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
@@ -36,13 +37,14 @@ import java.io.IOError
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
  */
-class CreditCardActivity : OmiseActivity() {
 
     private lateinit var pKey: String
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
     private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
+//    private val countryEdit: SecurityCodeEditText by lazy { edit_country }
+
     private val submitButton: Button by lazy { button_submit }
     private val scrollView: ScrollView by lazy { scrollview }
     private val cardNumberErrorText: TextView by lazy { text_card_number_error }
@@ -60,8 +62,12 @@ class CreditCardActivity : OmiseActivity() {
         )
     }
 
+//    private lateinit var binding: ActivityCreditCardBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        binding = ActivityCreditCardBinding.inflate(layoutin)
 
         setContentView(R.layout.activity_credit_card)
 

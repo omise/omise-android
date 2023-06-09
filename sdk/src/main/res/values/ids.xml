@@ -5,6 +5,16 @@
     <item name="edit_card_number" type="id" />
     <item name="edit_expiry_date" type="id" />
     <item name="edit_security_code" type="id" />
+    <item name="edit_country" type="id" />
+    <item name="edit_street" type="id" />
+    <item name="edit_city" type="id" />
+    <item name="edit_state" type="id" />
+    <item name="edit_zip_code" type="id" />
+    <item name="text_country_error" type="id" />
+    <item name="text_street_error" type="id" />
+    <item name="text_city_error" type="id" />
+    <item name="text_state_error" type="id" />
+    <item name="text_zip_code_error" type="id" />
     <item name="image_card_brand" type="id" />
     <item name="spinner_expiry_month" type="id" />
     <item name="spinner_expiry_year" type="id" />
