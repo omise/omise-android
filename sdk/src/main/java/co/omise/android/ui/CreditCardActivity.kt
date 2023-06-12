@@ -180,22 +180,17 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun submit() {
-        val number = cardNumberEdit.cardNumber
-        val name = cardNameEdit.cardName
-        val expiryMonth = expiryDateEdit.expiryMonth
-        val expiryYear = expiryDateEdit.expiryYear
-        val securityCode = securityCodeEdit.securityCode
-        val street = streetEdit.text
-        val city = cityEdit.text
-        val state = stateEdit.text
-        val zipCode = zipCodeEdit.text
-
         val cardParam = CardParam(
-            name = name,
-            number = number,
-            expirationMonth = expiryMonth,
-            expirationYear = expiryYear,
-            securityCode = securityCode,
+            name = cardNameEdit.cardName,
+            number = cardNumberEdit.cardNumber,
+            expirationMonth = expiryDateEdit.expiryMonth,
+            expirationYear = expiryDateEdit.expiryYear,
+            securityCode = securityCodeEdit.securityCode,
+            country = selectedCountry?.code,
+            street1 = streetEdit.text.toString(),
+            city = cityEdit.text.toString(),
+            state = stateEdit.text.toString(),
+            postalCode = zipCodeEdit.text.toString(),
         )
 
         val request =
