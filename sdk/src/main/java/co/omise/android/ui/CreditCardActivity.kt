@@ -3,7 +3,6 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
@@ -18,22 +17,22 @@ import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
-import co.omise.android.models.CardBrand
 import co.omise.android.models.CardParam
+import co.omise.android.models.CountryInfo
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
+import kotlinx.android.synthetic.main.activity_credit_card.edit_country
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
-import kotlinx.android.synthetic.main.activity_credit_card.edit_country
+import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
-import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import java.io.IOError
 
 /**
@@ -58,12 +57,20 @@ class CreditCardActivity : OmiseActivity() {
 
     private val editTexts: Map<OmiseEditText, TextView> by lazy {
         mapOf(
-                cardNumberEdit to cardNumberErrorText,
-                cardNameEdit to cardNameErrorText,
-                expiryDateEdit to expiryDateErrorText,
-                securityCodeEdit to securityCodeErrorText
+            cardNumberEdit to cardNumberErrorText,
+            cardNameEdit to cardNameErrorText,
+            expiryDateEdit to expiryDateErrorText,
+            securityCodeEdit to securityCodeErrorText
         )
     }
+
+    private var selectedCountry: CountryInfo? = null
+        set(value) {
+            field = value
+            value?.let {
+                countryEdit.setText(it.name)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +103,7 @@ class CreditCardActivity : OmiseActivity() {
         }
     }
 
-    private fun EditText.getErrorMessage() : String? {
+    private fun EditText.getErrorMessage(): String? {
         return when (this) {
             cardNumberEdit -> getString(R.string.error_invalid_card_number)
             cardNameEdit -> getString(R.string.error_invalid_card_name)
@@ -172,14 +179,15 @@ class CreditCardActivity : OmiseActivity() {
         val securityCode = securityCodeEdit.securityCode
 
         val cardParam = CardParam(
-                name = name,
-                number = number,
-                expirationMonth = expiryMonth,
-                expirationYear = expiryYear,
-                securityCode = securityCode)
+            name = name,
+            number = number,
+            expirationMonth = expiryMonth,
+            expirationYear = expiryYear,
+            securityCode = securityCode
+        )
 
         val request =
-                Token.CreateTokenRequestBuilder(cardParam).build()
+            Token.CreateTokenRequestBuilder(cardParam).build()
 
         disableForm()
 
@@ -193,7 +201,7 @@ class CreditCardActivity : OmiseActivity() {
 
     private fun updateSubmitButton() {
         val isFormValid = editTexts.map { (editText, _) -> editText.isValid }
-                .reduce { acc, b -> acc && b }
+            .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }
 
@@ -204,7 +212,12 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun showCountryDropdownDialog() {
-       val dialog = CountryDropdownDialogFragment.newInstant()
+        val dialog = CountryListDialogFragment.newInstant()
+        dialog.listener = object : CountryListDialogFragment.CountryListDialogListener {
+            override fun onCountrySelected(country: CountryInfo) {
+                selectedCountry = country
+            }
+        }
         dialog.show(supportFragmentManager, null)
     }
 }

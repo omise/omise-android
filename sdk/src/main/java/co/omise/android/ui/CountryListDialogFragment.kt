@@ -6,21 +6,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.RecyclerView
 import co.omise.android.R
-import co.omise.android.models.CardBrand
 import co.omise.android.models.CountryInfo
+import kotlinx.android.synthetic.main.dialog_country_list.close_button
+import kotlinx.android.synthetic.main.dialog_country_list.country_list
 
 /**
  * CountryDropdownDialogFragment is a UI class to show the user
  * the security code and where it is found on the card.
  */
-class CountryDropdownDialogFragment : DialogFragment() {
+class CountryListDialogFragment : DialogFragment() {
 
-//    private val cvvImage: ImageView by lazy { cvv_image }
-//    private val cvvDescriptionText: TextView by lazy { cvv_description_text }
-//    private val closeButton: ImageButton by lazy { close_button }
+    interface CountryListDialogListener {
+        fun onCountrySelected(country: CountryInfo)
+    }
+
+    private val listView: RecyclerView by lazy { country_list }
+    private val closeButton: ImageButton by lazy { close_button }
     private var selectedCountry: CountryInfo? = null
+
+    var listener: CountryListDialogListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +37,7 @@ class CountryDropdownDialogFragment : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_security_code_tooltip, container)
+        return inflater.inflate(R.layout.dialog_country_list, container)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -37,17 +45,27 @@ class CountryDropdownDialogFragment : DialogFragment() {
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-//        closeButton.setOnClickListener { dismiss() }
+        closeButton.setOnClickListener { dismiss() }
+
+        val adapter = CountryListAdapter(::onCountryClick)
+        listView.adapter = adapter
+        adapter.submitList(CountryInfo.ALL)
+
+    }
+
+    private fun onCountryClick(country: CountryInfo) {
+        listener?.onCountrySelected(country)
+        dismiss()
     }
 
     companion object {
         const val EXTRA_SELECTED_COUNTRY = "CountryDropdownDialogFragment.SelectedCountry"
 
-        fun newInstant(selectedCountry: CountryInfo? = null): CountryDropdownDialogFragment {
+        fun newInstant(selectedCountry: CountryInfo? = null): CountryListDialogFragment {
             val argument = Bundle()
             argument.putParcelable(EXTRA_SELECTED_COUNTRY, selectedCountry)
 
-            val dialogFragment = CountryDropdownDialogFragment()
+            val dialogFragment = CountryListDialogFragment()
             dialogFragment.arguments = argument
 
             return dialogFragment
