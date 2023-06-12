@@ -36,6 +36,10 @@ class CountryListDialogFragment : DialogFragment() {
         selectedCountry = arguments?.getParcelable(EXTRA_SELECTED_COUNTRY)
     }
 
+    override fun getTheme(): Int {
+        return R.style.OmiseDialogTheme
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_country_list, container)
     }

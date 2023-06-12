@@ -41,7 +41,7 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
             currentCountry = country
 
             // TODO: change to locale name
-            titleTextView.text = country.name
+            titleTextView.text = country.displayName
         }
     }
 

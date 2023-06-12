@@ -68,7 +68,7 @@ class CreditCardActivity : OmiseActivity() {
         set(value) {
             field = value
             value?.let {
-                countryEdit.setText(it.name)
+                countryEdit.setText(it.displayName)
             }
         }
 

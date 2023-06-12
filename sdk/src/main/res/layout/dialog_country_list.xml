@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_dialog">
+    android:background="@android:color/white">
 
     <ImageButton
         android:id="@+id/close_button"
@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/small_margin"
         android:background="@null"
         android:src="@drawable/ic_close_small" />
 
@@ -22,15 +23,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_margin="@dimen/medium_padding"
         android:layout_toStartOf="@id/close_button"
-        tools:text="Select your cardholder country" />
+        android:text="Select cardholder country" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/country_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_text"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/list_country_item" />
 </RelativeLayout>

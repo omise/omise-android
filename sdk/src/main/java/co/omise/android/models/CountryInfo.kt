@@ -2,9 +2,16 @@ package co.omise.android.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.util.Locale
 
 @Parcelize
 data class CountryInfo(val name: String, val code: String) : Parcelable {
+
+    val displayName: String?
+        get() {
+            val locale = Locale(Locale.getDefault().language, code)
+            return locale.displayCountry
+        }
 
     companion object {
         val ALL = listOf(
