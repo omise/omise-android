@@ -3,6 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
@@ -17,6 +18,7 @@ import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
+import co.omise.android.models.CardBrand
 import co.omise.android.models.CardParam
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
@@ -37,13 +39,14 @@ import java.io.IOError
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
  */
+class CreditCardActivity : OmiseActivity() {
 
     private lateinit var pKey: String
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
     private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
-//    private val countryEdit: SecurityCodeEditText by lazy { edit_country }
+    private val countryEdit: OmiseEditText by lazy { edit_country }
 
     private val submitButton: Button by lazy { button_submit }
     private val scrollView: ScrollView by lazy { scrollview }
@@ -62,12 +65,8 @@ import java.io.IOError
         )
     }
 
-//    private lateinit var binding: ActivityCreditCardBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        binding = ActivityCreditCardBinding.inflate(layoutin)
 
         setContentView(R.layout.activity_credit_card)
 
@@ -77,6 +76,7 @@ import java.io.IOError
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         submitButton.setOnClickListener(::submit)
         securityCodeTooltipButton.setOnClickListener(::showSecurityCodeTooltipDialog)
+        countryEdit.setOnClickListener(::showCountryDropdownDialog)
 
         editTexts.forEach { (editText, errorText) ->
             editText.setOnFocusChangeListener { _, hasFocus ->
@@ -200,6 +200,11 @@ import java.io.IOError
     private fun showSecurityCodeTooltipDialog() {
         val brand = CardNumber.brand(cardNumberEdit.cardNumber)
         val dialog = SecurityCodeTooltipDialogFragment.newInstant(brand)
+        dialog.show(supportFragmentManager, null)
+    }
+
+    private fun showCountryDropdownDialog() {
+       val dialog = CountryDropdownDialogFragment.newInstant()
         dialog.show(supportFragmentManager, null)
     }
 }
