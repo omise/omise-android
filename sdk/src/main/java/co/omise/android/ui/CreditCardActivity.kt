@@ -25,9 +25,13 @@ import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
+import kotlinx.android.synthetic.main.activity_credit_card.edit_city
 import kotlinx.android.synthetic.main.activity_credit_card.edit_country
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
+import kotlinx.android.synthetic.main.activity_credit_card.edit_state
+import kotlinx.android.synthetic.main.activity_credit_card.edit_street
+import kotlinx.android.synthetic.main.activity_credit_card.edit_zip_code
 import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
@@ -46,6 +50,10 @@ class CreditCardActivity : OmiseActivity() {
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
     private val countryEdit: OmiseEditText by lazy { edit_country }
+    private val streetEdit: OmiseEditText by lazy { edit_street }
+    private val cityEdit: OmiseEditText by lazy { edit_city }
+    private val stateEdit: OmiseEditText by lazy { edit_state }
+    private val zipCodeEdit: OmiseEditText by lazy { edit_zip_code }
 
     private val submitButton: Button by lazy { button_submit }
     private val scrollView: ScrollView by lazy { scrollview }
@@ -177,13 +185,17 @@ class CreditCardActivity : OmiseActivity() {
         val expiryMonth = expiryDateEdit.expiryMonth
         val expiryYear = expiryDateEdit.expiryYear
         val securityCode = securityCodeEdit.securityCode
+        val street = streetEdit.text
+        val city = cityEdit.text
+        val state = stateEdit.text
+        val zipCode = zipCodeEdit.text
 
         val cardParam = CardParam(
             name = name,
             number = number,
             expirationMonth = expiryMonth,
             expirationYear = expiryYear,
-            securityCode = securityCode
+            securityCode = securityCode,
         )
 
         val request =

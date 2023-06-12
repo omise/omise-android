@@ -141,7 +141,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="@dimen/small_margin"
-                    android:imeOptions="actionDone" />
+                    android:imeOptions="actionNext" />
 
                 <ImageButton
                     android:id="@id/button_security_code_tooltip"
@@ -180,6 +180,7 @@
             style="?android:attr/editTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xsmall_margin"
             android:focusable="false" />
 
         <TextView
@@ -204,7 +205,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
             android:imeOptions="actionNext"
-            android:maxLines="1" />
+            android:inputType="text"
+            android:lines="1"
+            android:nextFocusForward="@id/edit_city" />
 
         <TextView
             android:id="@id/text_street_error"
@@ -228,7 +231,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
             android:imeOptions="actionNext"
-            android:maxLines="1" />
+            android:inputType="text"
+            android:lines="1"
+            android:nextFocusForward="@id/edit_state" />
 
         <TextView
             android:id="@id/text_city_error"
@@ -252,7 +257,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
             android:imeOptions="actionNext"
-            android:maxLines="1" />
+            android:inputType="text"
+            android:lines="1"
+            android:nextFocusForward="@id/edit_zip_code" />
 
         <TextView
             android:id="@id/text_state_error"
@@ -275,8 +282,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
+            android:imeOptions="actionDone"
             android:inputType="number"
-            android:maxLines="1" />
+            android:lines="1" />
 
         <TextView
             android:id="@id/text_zip_code_error"
