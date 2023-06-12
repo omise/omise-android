@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -30,13 +31,18 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_country
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
 import kotlinx.android.synthetic.main.activity_credit_card.edit_state
-import kotlinx.android.synthetic.main.activity_credit_card.edit_street
-import kotlinx.android.synthetic.main.activity_credit_card.edit_zip_code
+import kotlinx.android.synthetic.main.activity_credit_card.edit_street1
+import kotlinx.android.synthetic.main.activity_credit_card.edit_postal_code
 import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_city_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_country_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_state_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_street1_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_error
 import java.io.IOError
 
 /**
@@ -50,10 +56,10 @@ class CreditCardActivity : OmiseActivity() {
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
     private val countryEdit: OmiseEditText by lazy { edit_country }
-    private val streetEdit: OmiseEditText by lazy { edit_street }
+    private val streetEdit: OmiseEditText by lazy { edit_street1 }
     private val cityEdit: OmiseEditText by lazy { edit_city }
     private val stateEdit: OmiseEditText by lazy { edit_state }
-    private val zipCodeEdit: OmiseEditText by lazy { edit_zip_code }
+    private val postalCodeEdit: OmiseEditText by lazy { edit_postal_code }
 
     private val submitButton: Button by lazy { button_submit }
     private val scrollView: ScrollView by lazy { scrollview }
@@ -61,14 +67,40 @@ class CreditCardActivity : OmiseActivity() {
     private val cardNameErrorText: TextView by lazy { text_card_name_error }
     private val expiryDateErrorText: TextView by lazy { text_expiry_date_error }
     private val securityCodeErrorText: TextView by lazy { text_security_code_error }
+    private val countryErrorText: TextView by lazy { text_country_error }
+    private val street1ErrorText: TextView by lazy { text_street1_error }
+    private val cityErrorText: TextView by lazy { text_city_error }
+    private val stateErrorText: TextView by lazy { text_state_error }
+    private val postalCodeErrorText: TextView by lazy { text_postal_code_error }
+
     private val securityCodeTooltipButton: ImageButton by lazy { button_security_code_tooltip }
+
+    private val avsCountries = listOf(
+        CountryInfo(name = "United States of America", code = "US"),
+        CountryInfo(name = "United Kingdom of Great Britain and Northern Ireland", code = "GB"),
+        CountryInfo(name = "Canada", code = "CA"),
+    )
 
     private val editTexts: Map<OmiseEditText, TextView> by lazy {
         mapOf(
             cardNumberEdit to cardNumberErrorText,
             cardNameEdit to cardNameErrorText,
             expiryDateEdit to expiryDateErrorText,
-            securityCodeEdit to securityCodeErrorText
+            securityCodeEdit to securityCodeErrorText,
+            countryEdit to countryErrorText,
+            streetEdit to street1ErrorText,
+            cityEdit to cityErrorText,
+            stateEdit to stateErrorText,
+            postalCodeEdit to postalCodeErrorText
+        )
+    }
+    private val billingAddressEditTexts: Map<OmiseEditText, TextView> by lazy {
+        mapOf(
+            countryEdit to countryErrorText,
+            streetEdit to street1ErrorText,
+            cityEdit to cityErrorText,
+            stateEdit to stateErrorText,
+            postalCodeEdit to postalCodeErrorText
         )
     }
 
@@ -77,6 +109,7 @@ class CreditCardActivity : OmiseActivity() {
             field = value
             value?.let {
                 countryEdit.setText(it.displayName)
+                invalidateForm()
             }
         }
 
@@ -124,6 +157,7 @@ class CreditCardActivity : OmiseActivity() {
     private fun initialize() {
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        invalidateForm()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -190,7 +224,7 @@ class CreditCardActivity : OmiseActivity() {
             street1 = streetEdit.text.toString(),
             city = cityEdit.text.toString(),
             state = stateEdit.text.toString(),
-            postalCode = zipCodeEdit.text.toString(),
+            postalCode = postalCodeEdit.text.toString(),
         )
 
         val request =
@@ -226,5 +260,13 @@ class CreditCardActivity : OmiseActivity() {
             }
         }
         dialog.show(supportFragmentManager, null)
+    }
+
+    private fun invalidateForm() {
+        billingAddressEditTexts.filterNot { it.key == countryEdit }.forEach { (key, value) ->
+            val isVisible = selectedCountry != null && avsCountries.contains(selectedCountry)
+            key.visibility = if (isVisible) View.VISIBLE else View.GONE
+            value.visibility = if (isVisible) View.VISIBLE else View.GONE
+        }
     }
 }
