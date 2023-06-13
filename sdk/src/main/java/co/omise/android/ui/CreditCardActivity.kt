@@ -44,6 +44,7 @@ import kotlinx.android.synthetic.main.activity_credit_card.text_state_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_street1_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_error
 import java.io.IOError
+import java.util.Locale
 
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
@@ -142,6 +143,8 @@ class CreditCardActivity : OmiseActivity() {
             }
             editText.setOnAfterTextChangeListener(::updateSubmitButton)
         }
+
+        selectedCountry = CountryInfo.ALL.find { it.code == Locale.getDefault().country }
     }
 
     private fun EditText.getErrorMessage(): String? {

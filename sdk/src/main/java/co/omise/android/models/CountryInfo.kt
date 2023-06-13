@@ -9,7 +9,11 @@ data class CountryInfo(val name: String, val code: String) : Parcelable {
 
     val displayName: String?
         get() {
-            val locale = Locale(Locale.getDefault().language, code)
+            // TODO: fix language
+            val supportedLanguages = listOf("TH", "JA", "EN")
+            val systemLanguage = Locale.getDefault().language
+            val language = if (supportedLanguages.contains(systemLanguage)) systemLanguage else "EN"
+            val locale = Locale(language, code)
             return locale.displayCountry
         }
 

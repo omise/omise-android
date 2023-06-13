@@ -13,6 +13,7 @@ import co.omise.android.R
 import co.omise.android.models.CountryInfo
 import kotlinx.android.synthetic.main.dialog_country_list.close_button
 import kotlinx.android.synthetic.main.dialog_country_list.country_list
+import java.text.Collator
 
 /**
  * CountryDropdownDialogFragment is a UI class to show the user
@@ -53,8 +54,9 @@ class CountryListDialogFragment : DialogFragment() {
 
         val adapter = CountryListAdapter(::onCountryClick)
         listView.adapter = adapter
-        adapter.submitList(CountryInfo.ALL)
-
+        adapter.submitList(CountryInfo.ALL.sortedWith { o1, o2 ->
+            Collator.getInstance().compare(o1.displayName, o2.displayName)
+        })
     }
 
     private fun onCountryClick(country: CountryInfo) {
