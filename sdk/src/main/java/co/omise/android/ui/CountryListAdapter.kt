@@ -3,7 +3,6 @@ package co.omise.android.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,7 +26,6 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
     class CountryViewHolder(itemView: View, val onClick: (CountryInfo) -> Unit) : ViewHolder(itemView) {
         private var currentCountry: CountryInfo? = null
         private val titleTextView: TextView = itemView.findViewById(R.id.text_item_title)
-        private val indicatorImageView: ImageView = itemView.findViewById(R.id.image_indicator_icon)
 
         init {
             itemView.setOnClickListener {
@@ -39,12 +37,9 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
 
         fun bind(country: CountryInfo) {
             currentCountry = country
-
-            // TODO: change to locale name
-            titleTextView.text = country.displayName
+            titleTextView.text = country.name
         }
     }
-
 }
 
 object CountryDiffCallback : DiffUtil.ItemCallback<CountryInfo>() {

@@ -111,7 +111,7 @@ class CreditCardActivity : OmiseActivity() {
         set(value) {
             field = value
             value?.let {
-                countryEdit.setText(it.displayName)
+                countryEdit.setText(it.name)
                 invalidateBillingAddressForm()
             }
         }

@@ -55,7 +55,7 @@ class CountryListDialogFragment : DialogFragment() {
         val adapter = CountryListAdapter(::onCountryClick)
         listView.adapter = adapter
         adapter.submitList(CountryInfo.ALL.sortedWith { o1, o2 ->
-            Collator.getInstance().compare(o1.displayName, o2.displayName)
+            Collator.getInstance().compare(o1.name, o2.name)
         })
     }
 
