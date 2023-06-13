@@ -31,20 +31,20 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_city
 import kotlinx.android.synthetic.main.activity_credit_card.edit_country
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
+import kotlinx.android.synthetic.main.activity_credit_card.edit_postal_code
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
 import kotlinx.android.synthetic.main.activity_credit_card.edit_state
 import kotlinx.android.synthetic.main.activity_credit_card.edit_street1
-import kotlinx.android.synthetic.main.activity_credit_card.edit_postal_code
 import kotlinx.android.synthetic.main.activity_credit_card.scrollview
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_city_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_country_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_state_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_street1_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_error
 import java.io.IOError
 import java.util.Locale
 
@@ -59,7 +59,7 @@ class CreditCardActivity : OmiseActivity() {
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
     private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
     private val countryEdit: OmiseEditText by lazy { edit_country }
-    private val streetEdit: OmiseEditText by lazy { edit_street1 }
+    private val street1Edit: OmiseEditText by lazy { edit_street1 }
     private val cityEdit: OmiseEditText by lazy { edit_city }
     private val stateEdit: OmiseEditText by lazy { edit_state }
     private val postalCodeEdit: OmiseEditText by lazy { edit_postal_code }
@@ -89,7 +89,17 @@ class CreditCardActivity : OmiseActivity() {
             expiryDateEdit to expiryDateErrorText,
             securityCodeEdit to securityCodeErrorText,
             countryEdit to countryErrorText,
-            streetEdit to street1ErrorText,
+            street1Edit to street1ErrorText,
+            cityEdit to cityErrorText,
+            stateEdit to stateErrorText,
+            postalCodeEdit to postalCodeErrorText
+        )
+    }
+
+    private val billingAddressEditTexts: Map<OmiseEditText, TextView> by lazy {
+        mapOf(
+            countryEdit to countryErrorText,
+            street1Edit to street1ErrorText,
             cityEdit to cityErrorText,
             stateEdit to stateErrorText,
             postalCodeEdit to postalCodeErrorText
@@ -126,7 +136,11 @@ class CreditCardActivity : OmiseActivity() {
                     } catch (e: InputValidationException.InvalidInputException) {
                         errorText.text = editText.getErrorMessage()
                     } catch (e: InputValidationException.EmptyInputException) {
-                        errorText.text = getString(R.string.error_required, getString(R.string.label_country))
+                        if (isBillingAddressRequired()) {
+                            errorText.text = editText.getErrorMessage()
+                        } else {
+                            errorText.text = null
+                        }
                     }
                 } else {
                     errorText.text = null
@@ -144,6 +158,10 @@ class CreditCardActivity : OmiseActivity() {
             cardNameEdit -> getString(R.string.error_invalid_card_name)
             expiryDateEdit -> getString(R.string.error_invalid_expiration_date)
             securityCodeEdit -> getString(R.string.error_invalid_security_code)
+            street1Edit -> getString(R.string.error_required_street1)
+            cityEdit -> getString(R.string.error_required_city)
+            stateEdit -> getString(R.string.error_required_state)
+            postalCodeEdit -> getString(R.string.error_required_postal_code)
             else -> null
         }
     }
@@ -215,7 +233,7 @@ class CreditCardActivity : OmiseActivity() {
             expirationYear = expiryDateEdit.expiryYear,
             securityCode = securityCodeEdit.securityCode,
             country = selectedCountry?.code,
-            street1 = streetEdit.text.toString(),
+            street1 = street1Edit.text.toString(),
             city = cityEdit.text.toString(),
             state = stateEdit.text.toString(),
             postalCode = postalCodeEdit.text.toString(),
@@ -235,7 +253,9 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun updateSubmitButton() {
-        val isFormValid = editTexts.map { (editText, _) -> editText.isValid }
+        val fields = if (isBillingAddressRequired()) editTexts else editTexts.filterKeys { !billingAddressEditTexts.contains(it) }
+        val isFormValid = fields
+            .map { (editText, _) -> editText.isValid }
             .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }
@@ -257,7 +277,16 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun invalidateBillingAddressForm() {
-        val isBillingAddressRequired = selectedCountry != null && avsCountries.contains(selectedCountry)
-        billingAddressContainer.visibility = if (isBillingAddressRequired) View.VISIBLE else View.GONE
+        billingAddressContainer.visibility = if (isBillingAddressRequired()) View.VISIBLE else View.GONE
+        billingAddressEditTexts.forEach { (editText, errorText) ->
+            if (editText != countryEdit) {
+                editText.text = null
+                errorText.text = null
+            }
+        }
+    }
+
+    private fun isBillingAddressRequired(): Boolean {
+        return selectedCountry != null && avsCountries.contains(selectedCountry)
     }
 }
