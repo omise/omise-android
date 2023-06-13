@@ -173,7 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/field_separator_margin"
-            android:text="Country or region" />
+            android:text="@string/label_country" />
 
         <co.omise.android.ui.OmiseEditText
             android:id="@id/edit_country"
@@ -191,108 +191,116 @@
             android:layout_marginTop="@dimen/xsmall_margin"
             tools:text="Invalid input" />
 
-        <TextView
-            style="?attr/editTextLabelStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/field_separator_margin"
-            android:text="Address" />
-
-        <co.omise.android.ui.OmiseEditText
-            android:id="@id/edit_street1"
-            style="?android:attr/editTextStyle"
+        <LinearLayout
+            android:id="@+id/billing_address_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:lines="1"
-            android:nextFocusForward="@id/edit_city" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@id/text_street1_error"
-            style="?attr/editTextErrorStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xsmall_margin"
-            tools:text="Invalid input" />
+            <TextView
+                style="?attr/editTextLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_separator_margin"
+                android:text="@string/label_address" />
 
-        <TextView
-            style="?attr/editTextLabelStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/field_separator_margin"
-            android:text="City" />
+            <co.omise.android.ui.OmiseEditText
+                android:id="@id/edit_street1"
+                style="?android:attr/editTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:lines="1"
+                android:nextFocusForward="@id/edit_city" />
 
-        <co.omise.android.ui.OmiseEditText
-            android:id="@id/edit_city"
-            style="?android:attr/editTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:lines="1"
-            android:nextFocusForward="@id/edit_state" />
+            <TextView
+                android:id="@id/text_street1_error"
+                style="?attr/editTextErrorStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                tools:text="Invalid input" />
 
-        <TextView
-            android:id="@id/text_city_error"
-            style="?attr/editTextErrorStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xsmall_margin"
-            tools:text="Invalid input" />
+            <TextView
+                style="?attr/editTextLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_separator_margin"
+                android:text="@string/label_city" />
 
-        <TextView
-            style="?attr/editTextLabelStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/field_separator_margin"
-            android:text="State" />
+            <co.omise.android.ui.OmiseEditText
+                android:id="@id/edit_city"
+                style="?android:attr/editTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:lines="1"
+                android:nextFocusForward="@id/edit_state" />
 
-        <co.omise.android.ui.OmiseEditText
-            android:id="@id/edit_state"
-            style="?android:attr/editTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:lines="1"
-            android:nextFocusForward="@id/edit_postal_code" />
+            <TextView
+                android:id="@id/text_city_error"
+                style="?attr/editTextErrorStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                tools:text="Invalid input" />
 
-        <TextView
-            android:id="@id/text_state_error"
-            style="?attr/editTextErrorStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xsmall_margin"
-            tools:text="Invalid input" />
+            <TextView
+                style="?attr/editTextLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_separator_margin"
+                android:text="@string/label_state" />
 
-        <TextView
-            style="?attr/editTextLabelStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/field_separator_margin"
-            android:text="Zip code / Postal code" />
+            <co.omise.android.ui.OmiseEditText
+                android:id="@id/edit_state"
+                style="?android:attr/editTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:lines="1"
+                android:nextFocusForward="@id/edit_postal_code" />
 
-        <co.omise.android.ui.OmiseEditText
-            android:id="@id/edit_postal_code"
-            style="?android:attr/editTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:lines="1" />
+            <TextView
+                android:id="@id/text_state_error"
+                style="?attr/editTextErrorStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                tools:text="Invalid input" />
 
-        <TextView
-            android:id="@id/text_postal_code_error"
-            style="?attr/editTextErrorStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xsmall_margin"
-            tools:text="Invalid input" />
+            <TextView
+                style="?attr/editTextLabelStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_separator_margin"
+                android:text="@string/label_postal_code" />
+
+            <co.omise.android.ui.OmiseEditText
+                android:id="@id/edit_postal_code"
+                style="?android:attr/editTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:lines="1" />
+
+            <TextView
+                android:id="@id/text_postal_code_error"
+                style="?attr/editTextErrorStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                tools:text="Invalid input" />
+
+        </LinearLayout>
 
         <Button
             android:id="@id/button_submit"

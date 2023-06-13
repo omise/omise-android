@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import co.omise.android.CardNumber
@@ -22,6 +23,7 @@ import co.omise.android.models.CardParam
 import co.omise.android.models.CountryInfo
 import co.omise.android.models.Token
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_credit_card.billing_address_container
 import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
 import kotlinx.android.synthetic.main.activity_credit_card.button_submit
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
@@ -76,11 +78,9 @@ class CreditCardActivity : OmiseActivity() {
 
     private val securityCodeTooltipButton: ImageButton by lazy { button_security_code_tooltip }
 
-    private val avsCountries = listOf(
-        CountryInfo(name = "United States of America", code = "US"),
-        CountryInfo(name = "United Kingdom of Great Britain and Northern Ireland", code = "GB"),
-        CountryInfo(name = "Canada", code = "CA"),
-    )
+    private val billingAddressContainer: LinearLayout by lazy { billing_address_container }
+
+    private val avsCountries = CountryInfo.ALL.filter { listOf("US", "GB", "CA").contains(it.code) }
 
     private val editTexts: Map<OmiseEditText, TextView> by lazy {
         mapOf(
@@ -95,22 +95,13 @@ class CreditCardActivity : OmiseActivity() {
             postalCodeEdit to postalCodeErrorText
         )
     }
-    private val billingAddressEditTexts: Map<OmiseEditText, TextView> by lazy {
-        mapOf(
-            countryEdit to countryErrorText,
-            streetEdit to street1ErrorText,
-            cityEdit to cityErrorText,
-            stateEdit to stateErrorText,
-            postalCodeEdit to postalCodeErrorText
-        )
-    }
 
     private var selectedCountry: CountryInfo? = null
         set(value) {
             field = value
             value?.let {
                 countryEdit.setText(it.displayName)
-                invalidateForm()
+                invalidateBillingAddressForm()
             }
         }
 
@@ -135,7 +126,7 @@ class CreditCardActivity : OmiseActivity() {
                     } catch (e: InputValidationException.InvalidInputException) {
                         errorText.text = editText.getErrorMessage()
                     } catch (e: InputValidationException.EmptyInputException) {
-                        errorText.text = null
+                        errorText.text = getString(R.string.error_required, getString(R.string.label_country))
                     }
                 } else {
                     errorText.text = null
@@ -160,7 +151,7 @@ class CreditCardActivity : OmiseActivity() {
     private fun initialize() {
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
-        invalidateForm()
+        invalidateBillingAddressForm()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -265,11 +256,8 @@ class CreditCardActivity : OmiseActivity() {
         dialog.show(supportFragmentManager, null)
     }
 
-    private fun invalidateForm() {
-        billingAddressEditTexts.filterNot { it.key == countryEdit }.forEach { (key, value) ->
-            val isVisible = selectedCountry != null && avsCountries.contains(selectedCountry)
-            key.visibility = if (isVisible) View.VISIBLE else View.GONE
-            value.visibility = if (isVisible) View.VISIBLE else View.GONE
-        }
+    private fun invalidateBillingAddressForm() {
+        val isBillingAddressRequired = selectedCountry != null && avsCountries.contains(selectedCountry)
+        billingAddressContainer.visibility = if (isBillingAddressRequired) View.VISIBLE else View.GONE
     }
 }
