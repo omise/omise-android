@@ -19,6 +19,7 @@ import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.APIError
+import co.omise.android.models.Capability
 import co.omise.android.models.CardParam
 import co.omise.android.models.CountryInfo
 import co.omise.android.models.Token
@@ -148,8 +149,6 @@ class CreditCardActivity : OmiseActivity() {
             }
             editText.setOnAfterTextChangeListener(::updateSubmitButton)
         }
-
-        selectedCountry = CountryInfo.ALL.find { it.code == Locale.getDefault().country }
     }
 
     private fun EditText.getErrorMessage(): String? {
@@ -170,6 +169,22 @@ class CreditCardActivity : OmiseActivity() {
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
         invalidateBillingAddressForm()
+
+        getCapability()
+    }
+
+    private fun getCapability() {
+        val getCapabilityRequest = Capability.GetCapabilitiesRequestBuilder().build()
+        Client(pKey).send(getCapabilityRequest, object : RequestListener<Capability> {
+            override fun onRequestSucceed(model: Capability) {
+                val countryCode = model.country ?: Locale.getDefault().country
+                selectedCountry = CountryInfo.ALL.find { it.code == countryCode }
+            }
+
+            override fun onRequestFailed(throwable: Throwable) {
+                Snackbar.make(scrollView, throwable.message.toString(), Snackbar.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,31 +202,6 @@ class CreditCardActivity : OmiseActivity() {
         super.onBackPressed()
     }
 
-    private inner class CreateTokenRequestListener : RequestListener<Token> {
-
-        override fun onRequestSucceed(model: Token) {
-            val data = Intent()
-            data.putExtra(EXTRA_TOKEN, model.id)
-            data.putExtra(EXTRA_TOKEN_OBJECT, model)
-            data.putExtra(EXTRA_CARD_OBJECT, model.card)
-
-            setResult(Activity.RESULT_OK, data)
-            finish()
-        }
-
-        override fun onRequestFailed(throwable: Throwable) {
-            enableForm()
-
-            val message = when (throwable) {
-                is IOError -> getString(R.string.error_io, throwable.message)
-                is APIError -> throwable.getMessageFromResources(resources)
-                else -> getString(R.string.error_unknown, throwable.message)
-            }
-
-            Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
-        }
-    }
-
     private fun disableForm() {
         setFormEnabled(false)
     }
@@ -226,6 +216,8 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun submit() {
+        disableForm()
+
         val cardParam = CardParam(
             name = cardNameEdit.cardName,
             number = cardNumberEdit.cardNumber,
@@ -239,27 +231,38 @@ class CreditCardActivity : OmiseActivity() {
             postalCode = postalCodeEdit.text.toString(),
         )
 
-        val request =
-            Token.CreateTokenRequestBuilder(cardParam).build()
+        val request = Token.CreateTokenRequestBuilder(cardParam).build()
 
-        disableForm()
+        Client(pKey).send(request, object : RequestListener<Token> {
+            override fun onRequestSucceed(model: Token) {
+                val data = Intent()
+                data.putExtra(EXTRA_TOKEN, model.id)
+                data.putExtra(EXTRA_TOKEN_OBJECT, model)
+                data.putExtra(EXTRA_CARD_OBJECT, model.card)
 
-        val listener = CreateTokenRequestListener()
-        try {
-            Client(pKey).send(request, listener)
-        } catch (ex: Exception) {
-            listener.onRequestFailed(ex)
-        }
+                setResult(Activity.RESULT_OK, data)
+                finish()
+            }
+
+            override fun onRequestFailed(throwable: Throwable) {
+                enableForm()
+
+                val message = when (throwable) {
+                    is IOError -> getString(R.string.error_io, throwable.message)
+                    is APIError -> throwable.getMessageFromResources(resources)
+                    else -> getString(R.string.error_unknown, throwable.message)
+                }
+
+                Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun updateSubmitButton() {
         val isFormValid = editTexts.filterKeys {
-            if (!isBillingAddressRequired())
-                !billingAddressEditTexts.contains(it)
+            if (!isBillingAddressRequired()) !billingAddressEditTexts.contains(it)
             else true
-        }
-            .map { (editText, _) -> editText.isValid }
-            .reduce { acc, b -> acc && b }
+        }.map { (editText, _) -> editText.isValid }.reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }
 
