@@ -253,8 +253,11 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun updateSubmitButton() {
-        val fields = if (isBillingAddressRequired()) editTexts else editTexts.filterKeys { !billingAddressEditTexts.contains(it) }
-        val isFormValid = fields
+        val isFormValid = editTexts.filterKeys {
+            if (!isBillingAddressRequired())
+                !billingAddressEditTexts.contains(it)
+            else true
+        }
             .map { (editText, _) -> editText.isValid }
             .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
