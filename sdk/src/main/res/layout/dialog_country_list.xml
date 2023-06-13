@@ -19,13 +19,13 @@
 
     <TextView
         android:id="@+id/title_text"
-        style="@style/OmiseBodyTitle"
+        android:textAppearance="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_margin="@dimen/medium_padding"
         android:layout_toStartOf="@id/close_button"
-        android:text="Select cardholder country" />
+        android:text="@string/label_country" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/country_list"
