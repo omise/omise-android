@@ -53,7 +53,7 @@ import java.util.Locale
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
  */
-open class CreditCardActivity : OmiseActivity() {
+class CreditCardActivity : OmiseActivity() {
 
     private lateinit var pKey: String
     private lateinit var client: Client

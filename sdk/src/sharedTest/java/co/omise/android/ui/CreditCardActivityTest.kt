@@ -3,6 +3,7 @@ package co.omise.android.ui
 import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.Espresso.onView
@@ -15,6 +16,9 @@ import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.hasFocus
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -28,9 +32,11 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.shadows.ShadowDialog
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityTest {
@@ -60,6 +66,42 @@ class CreditCardActivityTest {
     }
 
     @Test
+    fun form_validBillingAddressForm() {
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        val dialog = ShadowDialog.getLatestDialog()
+        assertTrue(dialog.isShowing)
+
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<RecyclerView.ViewHolder>(
+                    hasDescendant(withText("United States of America")),
+                    click()
+                )
+            )
+        onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
+        onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
+        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("New York"))
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeNumberText("14145"), pressImeActionButton())
+
+        onView(withId(R.id.edit_card_number)).check(matches(withText("4242 4242 4242 4242")))
+        onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
+        onView(withId(R.id.edit_expiry_date)).check(matches(withText("12/34")))
+        onView(withId(R.id.edit_security_code)).check(matches(withText("123")))
+        onView(withId(R.id.edit_country)).check(matches(withText("United States of America")))
+        onView(withId(R.id.edit_street1)).check(matches(withText("311 Sanders Hill Rd")))
+        onView(withId(R.id.edit_city)).check(matches(withText("Strykersville")))
+        onView(withId(R.id.edit_state)).check(matches(withText("New York")))
+        onView(withId(R.id.edit_postal_code)).check(matches(withText("14145")))
+        onView(withId(R.id.button_submit)).check(matches(isEnabled()))
+    }
+
+    @Test
     fun form_invalidForm() {
         onView(withId(R.id.edit_card_number)).perform(typeText("1234567890"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
@@ -70,6 +112,26 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
         onView(withId(R.id.edit_expiry_date)).check(matches(withText("12/34")))
         onView(withId(R.id.edit_security_code)).check(matches(withText("123")))
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun form_invalidBillingAddressForm() {
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        val dialog = ShadowDialog.getLatestDialog()
+        assertTrue(dialog.isShowing)
+
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText("United States of America")), click())
+            )
+
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
 
@@ -114,14 +176,14 @@ class CreditCardActivityTest {
 }
 
 private fun typeNumberText(numberText: String): ViewAction =
-        object : ViewAction {
-            override fun getDescription(): String = "Type number text: $numberText"
+    object : ViewAction {
+        override fun getDescription(): String = "Type number text: $numberText"
 
-            override fun getConstraints(): Matcher<View> =
-                    allOf(isDisplayed(), isAssignableFrom(OmiseEditText::class.java))
+        override fun getConstraints(): Matcher<View> =
+            allOf(isDisplayed(), isAssignableFrom(OmiseEditText::class.java))
 
-            override fun perform(uiController: UiController?, view: View?) {
-                val editText = view as? OmiseEditText ?: return
-                numberText.forEach { editText.append(it.toString()) }
-            }
+        override fun perform(uiController: UiController?, view: View?) {
+            val editText = view as? OmiseEditText ?: return
+            numberText.forEach { editText.append(it.toString()) }
         }
+    }
