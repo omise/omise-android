@@ -1,5 +1,10 @@
 # CHANGE LOG
 
+## v4.9.0
+* **CHANGED:** Updated Android Gradle plugin to version 7.4.2
+* **CHANGED:** Updated Kotlin to version 1.7.10
+* **CHANGED:** Updated 3DS SDK to version 1.0.0-alpha12
+
 ## v4.8.0
 * **REMOVED:** Removed support for SCB and KTB Internet Banking payment method
 
