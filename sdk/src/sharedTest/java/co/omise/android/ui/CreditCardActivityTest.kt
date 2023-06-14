@@ -5,7 +5,7 @@ import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.core.app.ActivityScenario.launchActivityForResult
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
@@ -32,11 +32,9 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.shadows.ShadowDialog
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityTest {
@@ -48,7 +46,7 @@ class CreditCardActivityTest {
 
     @Before
     fun setUp() {
-        scenario = launch(intent)
+        scenario = launchActivityForResult(intent)
     }
 
     @Test
@@ -62,6 +60,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
         onView(withId(R.id.edit_expiry_date)).check(matches(withText("12/34")))
         onView(withId(R.id.edit_security_code)).check(matches(withText("123")))
+        onView(withId(R.id.billing_address_container)).check(matches(not(isDisplayed())))
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
     }
 
@@ -72,10 +71,6 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-
-        val dialog = ShadowDialog.getLatestDialog()
-        assertTrue(dialog.isShowing)
-
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -112,6 +107,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
         onView(withId(R.id.edit_expiry_date)).check(matches(withText("12/34")))
         onView(withId(R.id.edit_security_code)).check(matches(withText("123")))
+        onView(withId(R.id.billing_address_container)).check(matches(not(isDisplayed())))
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
 
@@ -122,10 +118,6 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-
-        val dialog = ShadowDialog.getLatestDialog()
-        assertTrue(dialog.isShowing)
-
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(

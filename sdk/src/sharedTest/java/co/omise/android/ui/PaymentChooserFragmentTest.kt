@@ -3,10 +3,12 @@ package co.omise.android.ui
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName
@@ -20,16 +22,16 @@ import co.omise.android.models.Source
 import co.omise.android.models.SupportedEcontext
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 
 @RunWith(AndroidJUnit4::class)
@@ -98,7 +100,7 @@ class PaymentChooserFragmentTest {
         intending(hasComponent(hasClassName(TestFragmentActivity::class.java.name)))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, Intent()))
 
-        scenario = ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+        scenario = ActivityScenario.launchActivityForResult(TestFragmentActivity::class.java).onActivity {
             it.startActivityForResult(Intent(it, TestFragmentActivity::class.java), 0)
             it.replaceFragment(fragment)
         }
@@ -123,7 +125,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
 
-        onView(withId(R.id.recycler_view)).perform(swipeUp())
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.scrollToPosition<ViewHolder>(15))
 
         assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
         assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
