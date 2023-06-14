@@ -46,15 +46,17 @@ import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_erro
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_state_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_street1_error
+import org.jetbrains.annotations.TestOnly
 import java.io.IOError
 import java.util.Locale
 
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
  */
-class CreditCardActivity : OmiseActivity() {
+open class CreditCardActivity : OmiseActivity() {
 
     private lateinit var pKey: String
+    private lateinit var client: Client
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
     private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
     private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
@@ -168,14 +170,21 @@ class CreditCardActivity : OmiseActivity() {
     private fun initialize() {
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        client = Client(pKey)
+
         invalidateBillingAddressForm()
 
         getCapability()
     }
 
+    @TestOnly
+    fun setClient(client: Client) {
+        this.client = client
+    }
+
     private fun getCapability() {
         val getCapabilityRequest = Capability.GetCapabilitiesRequestBuilder().build()
-        Client(pKey).send(getCapabilityRequest, object : RequestListener<Capability> {
+        client.send(getCapabilityRequest, object : RequestListener<Capability> {
             override fun onRequestSucceed(model: Capability) {
                 val countryCode = model.country ?: Locale.getDefault().country
                 selectedCountry = CountryInfo.ALL.find { it.code == countryCode }
@@ -233,7 +242,7 @@ class CreditCardActivity : OmiseActivity() {
 
         val request = Token.CreateTokenRequestBuilder(cardParam).build()
 
-        Client(pKey).send(request, object : RequestListener<Token> {
+        client.send(request, object : RequestListener<Token> {
             override fun onRequestSucceed(model: Token) {
                 val data = Intent()
                 data.putExtra(EXTRA_TOKEN, model.id)
