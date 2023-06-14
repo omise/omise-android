@@ -6,6 +6,7 @@ name: Maven Package
 #on:
 #  release:
 #    types: [created]
+on: [pull_request]
 
 jobs:
   publish:
