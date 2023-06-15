@@ -114,7 +114,6 @@ class CreditCardActivity : OmiseActivity() {
         set(value) {
             field = value
             value?.let {
-                countryEdit.setText(it.name)
                 invalidateBillingAddressForm()
             }
         }
@@ -127,7 +126,9 @@ class CreditCardActivity : OmiseActivity() {
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
 
-        client = Client(pKey)
+        if (!this::client.isInitialized) {
+            client = Client(pKey)
+        }
 
         initialize()
     }
@@ -295,6 +296,7 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun invalidateBillingAddressForm() {
+        countryEdit.setText(selectedCountry?.name)
         billingAddressContainer.visibility = if (isBillingAddressRequired()) View.VISIBLE else View.GONE
         billingAddressEditTexts.forEach { (editText, errorText) ->
             if (editText != countryEdit) {
