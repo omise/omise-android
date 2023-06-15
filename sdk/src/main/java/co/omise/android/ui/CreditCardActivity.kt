@@ -84,6 +84,10 @@ class CreditCardActivity : OmiseActivity() {
 
     private val billingAddressContainer: LinearLayout by lazy { billing_address_container }
 
+    /**
+     * Target countries that supports AVS or the Address Verification System.
+     * @see [link](https://www.omise.co/How-to-improve-my-authorization-rate-for-US-UK-and-Canadian-cardholders)
+     */
     private val avsCountries = CountryInfo.ALL.filter { listOf("US", "GB", "CA").contains(it.code) }
 
     private val editTexts: Map<OmiseEditText, TextView> by lazy {
