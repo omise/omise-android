@@ -285,7 +285,7 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun showCountryDropdownDialog() {
-        val dialog = CountryListDialogFragment.newInstant()
+        val dialog = CountryListDialogFragment()
         dialog.listener = object : CountryListDialogFragment.CountryListDialogListener {
             override fun onCountrySelected(country: CountryInfo) {
                 selectedCountry = country

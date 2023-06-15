@@ -20,25 +20,17 @@ import java.text.Collator
  * the security code and where it is found on the card.
  */
 class CountryListDialogFragment : DialogFragment() {
-
     interface CountryListDialogListener {
         fun onCountrySelected(country: CountryInfo)
     }
 
     private val listView: RecyclerView by lazy { country_list }
     private val closeButton: ImageButton by lazy { close_button }
-    private var selectedCountry: CountryInfo? = null
 
     var listener: CountryListDialogListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        selectedCountry = arguments?.getParcelable(EXTRA_SELECTED_COUNTRY)
-    }
-
     override fun getTheme(): Int {
-        return R.style.OmiseDialogTheme
+        return R.style.OmiseFullScreenDialogTheme
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,19 +54,5 @@ class CountryListDialogFragment : DialogFragment() {
     private fun onCountryClick(country: CountryInfo) {
         listener?.onCountrySelected(country)
         dismiss()
-    }
-
-    companion object {
-        const val EXTRA_SELECTED_COUNTRY = "CountryDropdownDialogFragment.SelectedCountry"
-
-        fun newInstant(selectedCountry: CountryInfo? = null): CountryListDialogFragment {
-            val argument = Bundle()
-            argument.putParcelable(EXTRA_SELECTED_COUNTRY, selectedCountry)
-
-            val dialogFragment = CountryListDialogFragment()
-            dialogFragment.arguments = argument
-
-            return dialogFragment
-        }
     }
 }
