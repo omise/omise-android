@@ -18,6 +18,7 @@ import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
+import co.omise.android.extensions.textOrNull
 import co.omise.android.models.APIError
 import co.omise.android.models.Capability
 import co.omise.android.models.CardParam
@@ -123,8 +124,30 @@ class CreditCardActivity : OmiseActivity() {
 
         setContentView(R.layout.activity_credit_card)
 
-        initialize()
+        require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
+        pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
 
+        client = Client(pKey)
+
+        initialize()
+    }
+
+    private fun EditText.getErrorMessage(): String? {
+        return when (this) {
+            cardNumberEdit -> getString(R.string.error_invalid_card_number)
+            cardNameEdit -> getString(R.string.error_invalid_card_name)
+            expiryDateEdit -> getString(R.string.error_invalid_expiration_date)
+            securityCodeEdit -> getString(R.string.error_invalid_security_code)
+            street1Edit -> getString(R.string.error_required_street1)
+            cityEdit -> getString(R.string.error_required_city)
+            stateEdit -> getString(R.string.error_required_state)
+            postalCodeEdit -> getString(R.string.error_required_postal_code)
+            else -> null
+        }
+    }
+
+    @TestOnly
+    fun initialize() {
         setTitle(R.string.default_form_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         submitButton.setOnClickListener(::submit)
@@ -151,26 +174,6 @@ class CreditCardActivity : OmiseActivity() {
             }
             editText.setOnAfterTextChangeListener(::updateSubmitButton)
         }
-    }
-
-    private fun EditText.getErrorMessage(): String? {
-        return when (this) {
-            cardNumberEdit -> getString(R.string.error_invalid_card_number)
-            cardNameEdit -> getString(R.string.error_invalid_card_name)
-            expiryDateEdit -> getString(R.string.error_invalid_expiration_date)
-            securityCodeEdit -> getString(R.string.error_invalid_security_code)
-            street1Edit -> getString(R.string.error_required_street1)
-            cityEdit -> getString(R.string.error_required_city)
-            stateEdit -> getString(R.string.error_required_state)
-            postalCodeEdit -> getString(R.string.error_required_postal_code)
-            else -> null
-        }
-    }
-
-    private fun initialize() {
-        require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
-        pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
-        client = Client(pKey)
 
         invalidateBillingAddressForm()
 
@@ -234,10 +237,10 @@ class CreditCardActivity : OmiseActivity() {
             expirationYear = expiryDateEdit.expiryYear,
             securityCode = securityCodeEdit.securityCode,
             country = selectedCountry?.code,
-            street1 = street1Edit.text.toString(),
-            city = cityEdit.text.toString(),
-            state = stateEdit.text.toString(),
-            postalCode = postalCodeEdit.text.toString(),
+            street1 = street1Edit.textOrNull?.toString(),
+            city = cityEdit.textOrNull?.toString(),
+            state = stateEdit.textOrNull?.toString(),
+            postalCode = postalCodeEdit.textOrNull?.toString(),
         )
 
         val request = Token.CreateTokenRequestBuilder(cardParam).build()

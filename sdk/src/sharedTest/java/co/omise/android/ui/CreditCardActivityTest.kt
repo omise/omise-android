@@ -3,7 +3,7 @@ package co.omise.android.ui
 import android.app.Activity.RESULT_CANCELED
 import android.content.Intent
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launchActivityForResult
 import androidx.test.espresso.Espresso.onView
@@ -28,13 +28,28 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import co.omise.android.R
+import co.omise.android.api.Client
+import co.omise.android.api.Request
+import co.omise.android.api.RequestListener
+import co.omise.android.models.Capability
+import co.omise.android.models.CardParam
+import co.omise.android.models.Token
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.whenever
+import org.robolectric.shadows.ShadowDialog
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityTest {
@@ -44,9 +59,26 @@ class CreditCardActivityTest {
         putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
     }
 
+    private val mockClient: Client = mock()
+
     @Before
     fun setUp() {
+        whenever(mockClient.send(any<Request<Capability>>(), any())).doAnswer { invocation ->
+            val callback = invocation.getArgument<RequestListener<Capability>>(1)
+            callback.onRequestSucceed(Capability(country = "TH"))
+            return@doAnswer
+        }
+
         scenario = launchActivityForResult(intent)
+        scenario.onActivity {
+            it.setClient(mockClient)
+            it.initialize()
+        }
+    }
+
+    @After
+    fun tearDown() {
+        reset(mockClient)
     }
 
     @Test
@@ -60,6 +92,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
         onView(withId(R.id.edit_expiry_date)).check(matches(withText("12/34")))
         onView(withId(R.id.edit_security_code)).check(matches(withText("123")))
+        onView(withId(R.id.edit_country)).check(matches(withText("Thailand")))
         onView(withId(R.id.billing_address_container)).check(matches(not(isDisplayed())))
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
     }
@@ -71,13 +104,14 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        val dialog = ShadowDialog.getLatestDialog()
+        assertTrue(dialog.isShowing)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<RecyclerView.ViewHolder>(
-                    hasDescendant(withText("United States of America")),
-                    click()
-                )
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
             )
         onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
         onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
@@ -107,7 +141,6 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
         onView(withId(R.id.edit_expiry_date)).check(matches(withText("12/34")))
         onView(withId(R.id.edit_security_code)).check(matches(withText("123")))
-        onView(withId(R.id.billing_address_container)).check(matches(not(isDisplayed())))
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
 
@@ -118,10 +151,14 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        val dialog = ShadowDialog.getLatestDialog()
+        assertTrue(dialog.isShowing)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
             )
 
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
@@ -146,6 +183,11 @@ class CreditCardActivityTest {
 
     @Test
     fun submitForm_disableFormWhenPressSubmit() {
+        whenever(mockClient.send<Token>(any(), any())).doAnswer { invocation ->
+            val callback = invocation.getArgument<RequestListener<Token>>(1)
+            callback.onRequestSucceed(Token())
+            return@doAnswer
+        }
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
@@ -157,6 +199,76 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).check(matches(not(isEnabled())))
         onView(withId(R.id.edit_security_code)).check(matches(not(isEnabled())))
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun submitForm_verifyRequestBody() {
+        val tokenRequestCaptor = argumentCaptor<Request<Token>>()
+        whenever(mockClient.send(tokenRequestCaptor.capture(), any())).doAnswer { invocation ->
+            val callback = invocation.getArgument<RequestListener<Token>>(1)
+            callback.onRequestSucceed(Token())
+            return@doAnswer
+        }
+
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
+        onView(withId(R.id.button_submit)).perform(scrollTo(), click())
+
+        assertEquals(
+            CardParam(
+                number = "4242424242424242",
+                name = "John Doe",
+                expirationMonth = 12,
+                expirationYear = 2034,
+                securityCode = "123",
+                country = "TH",
+            ),
+            (tokenRequestCaptor.firstValue.builder as Token.CreateTokenRequestBuilder).card
+        )
+    }
+
+    @Test
+    fun submitForm_verifyRequestBodyWithBillingAddress() {
+        val tokenRequestCaptor = argumentCaptor<Request<Token>>()
+        whenever(mockClient.send(tokenRequestCaptor.capture(), any())).doAnswer { invocation ->
+            val callback = invocation.getArgument<RequestListener<Token>>(1)
+            callback.onRequestSucceed(Token())
+            return@doAnswer
+        }
+
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+            )
+        onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
+        onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
+        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("New York"))
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeNumberText("14145"), pressImeActionButton())
+        onView(withId(R.id.button_submit)).perform(scrollTo(), click())
+
+        assertEquals(
+            CardParam(
+                number = "4242424242424242",
+                name = "John Doe",
+                expirationMonth = 12,
+                expirationYear = 2034,
+                securityCode = "123",
+                country = "US",
+                state = "New York",
+                city = "Strykersville",
+                street1 = "311 Sanders Hill Rd",
+                postalCode = "14145",
+            ),
+            (tokenRequestCaptor.firstValue.builder as Token.CreateTokenRequestBuilder).card
+        )
     }
 
     @Test

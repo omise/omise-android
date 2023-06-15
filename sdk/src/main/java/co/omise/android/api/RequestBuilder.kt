@@ -26,7 +26,7 @@ abstract class RequestBuilder<T : Model> {
      * @return built [Request] of type [Model].
      */
     fun build(): Request<T> {
-        return Request(method(), path(), payload(), type())
+        return Request(method(), path(), payload(), type(), this)
     }
 
     /**
