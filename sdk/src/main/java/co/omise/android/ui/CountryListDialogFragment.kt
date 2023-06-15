@@ -16,10 +16,12 @@ import kotlinx.android.synthetic.main.dialog_country_list.country_list
 import java.text.Collator
 
 /**
- * CountryDropdownDialogFragment is a UI class to show the user
- * the security code and where it is found on the card.
+ * [CountryListDialogFragment] provides a dialog for selecting a country.
  */
 class CountryListDialogFragment : DialogFragment() {
+    /**
+    * The interface to receive [CountryInfo] object after selecting a country.
+    */
     interface CountryListDialogListener {
         fun onCountrySelected(country: CountryInfo)
     }
