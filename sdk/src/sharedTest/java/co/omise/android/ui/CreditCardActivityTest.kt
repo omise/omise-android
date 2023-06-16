@@ -1,7 +1,10 @@
 package co.omise.android.ui
 
+import android.app.Activity
 import android.app.Activity.RESULT_CANCELED
+import android.app.Application
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.core.app.ActivityScenario
@@ -39,9 +42,7 @@ import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -58,26 +59,41 @@ class CreditCardActivityTest {
     private val intent = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
         putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
     }
+    private val application = (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as Application)
+    private val activityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            (activity as? CreditCardActivity)?.setClient(mockClient)
+        }
 
+        override fun onActivityStarted(activity: Activity) {}
+
+        override fun onActivityResumed(activity: Activity) {}
+
+        override fun onActivityPaused(activity: Activity) {}
+
+        override fun onActivityStopped(activity: Activity) {}
+
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+
+        override fun onActivityDestroyed(activity: Activity) {}
+    }
     private val mockClient: Client = mock()
 
     @Before
     fun setUp() {
+        application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
         whenever(mockClient.send(any<Request<Capability>>(), any())).doAnswer { invocation ->
             val callback = invocation.getArgument<RequestListener<Capability>>(1)
             callback.onRequestSucceed(Capability(country = "TH"))
         }
 
         scenario = launchActivityForResult(intent)
-        scenario.onActivity {
-            it.setClient(mockClient)
-            it.initialize()
-        }
     }
 
     @After
     fun tearDown() {
         reset(mockClient)
+        application.unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks)
     }
 
     @Test
@@ -221,7 +237,6 @@ class CreditCardActivityTest {
     }
 
     @Test
-    @Ignore("Due to flaky test need to fix setting up Client")
     fun submitForm_verifyRequestBodyWithBillingAddress() {
         val tokenRequestCaptor = argumentCaptor<Request<Token>>()
         whenever(mockClient.send(tokenRequestCaptor.capture(), any())).doAnswer { invocation ->
