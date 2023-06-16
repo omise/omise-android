@@ -151,8 +151,7 @@ class CreditCardActivity : OmiseActivity() {
         }
     }
 
-    @TestOnly
-    fun initialize() {
+    private fun initialize() {
         setTitle(R.string.default_form_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         submitButton.setOnClickListener(::submit)
