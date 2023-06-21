@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import co.omise.android.R
 import co.omise.android.models.CountryInfo
-import kotlinx.android.synthetic.main.dialog_country_list.close_button
 import kotlinx.android.synthetic.main.dialog_country_list.country_list
+import kotlinx.android.synthetic.main.dialog_country_list.toolbar_country_list
 import java.text.Collator
 
 /**
@@ -20,14 +20,14 @@ import java.text.Collator
  */
 class CountryListDialogFragment : DialogFragment() {
     /**
-    * The interface to receive [CountryInfo] object after selecting a country.
-    */
+     * The interface to receive [CountryInfo] object after selecting a country.
+     */
     interface CountryListDialogListener {
         fun onCountrySelected(country: CountryInfo)
     }
 
     private val listView: RecyclerView by lazy { country_list }
-    private val closeButton: ImageButton by lazy { close_button }
+    private val toolbar: Toolbar by lazy { toolbar_country_list }
 
     var listener: CountryListDialogListener? = null
 
@@ -43,8 +43,12 @@ class CountryListDialogFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        closeButton.setOnClickListener { dismiss() }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.close_menu -> dismiss()
+            }
+            true
+        }
 
         val adapter = CountryListAdapter(::onCountryClick)
         listView.adapter = adapter
