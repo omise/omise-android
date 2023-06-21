@@ -79,7 +79,7 @@ class CountryListDialogFragmentTest {
             dialog.show(it.supportFragmentManager, null)
         }
 
-        onView(withId(R.id.close_button))
+        onView(withId(R.id.close_menu))
             .inRoot(isDialog())
             .perform(click())
 
