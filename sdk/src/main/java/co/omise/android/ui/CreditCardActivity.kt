@@ -127,7 +127,7 @@ class CreditCardActivity : OmiseActivity() {
 
         setContentView(R.layout.activity_credit_card)
 
-        require(intent.hasExtra(EXTRA_PKEY)) { "Could not found ${::EXTRA_PKEY.name}." }
+        require(intent.hasExtra(EXTRA_PKEY)) { "Could not find ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
 
         if (!this::client.isInitialized) {
