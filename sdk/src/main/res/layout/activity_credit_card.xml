@@ -289,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
                 android:imeOptions="actionDone"
-                android:inputType="number"
+                android:inputType="text"
                 android:lines="1" />
 
             <TextView
