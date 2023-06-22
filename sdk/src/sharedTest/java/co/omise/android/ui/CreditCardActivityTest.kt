@@ -157,7 +157,7 @@ class CreditCardActivityTest {
     }
 
     @Test
-    fun form_invalidBillingAddressForm() {
+    fun form_invalidFormIfBillingAddressFieldsAreNotProvided() {
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
@@ -167,10 +167,111 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
             )
 
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun form_invalidFormIfPostalCodeIsNotProvided() {
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+            )
+        onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("125 Harbour Dr"))
+        onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("St. John's"))
+        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("Newfoundland and Labrador"))
+
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun form_invalidFormIfStateIsNotProvided() {
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+            )
+        onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("125 Harbour Dr"))
+        onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("St. John's"))
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("A1C 6N6"))
+
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun form_invalidFormIfStreet1AndCityAreNotProvided() {
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+            )
+        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("Newfoundland and Labrador"))
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("A1C 6N6"))
+
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun postTalCode_canTypeAlphabet() {
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+            )
+
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("BN1 1EE"))
+
+        onView(withId(R.id.edit_postal_code)).check(matches(withText("BN1 1EE")))
+    }
+
+    @Test
+    fun postTalCode_canTypeStartWithZero() {
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+            )
+
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("000022"))
+
+        onView(withId(R.id.edit_postal_code)).check(matches(withText("000022")))
+    }
+
+    @Test
+    fun state_canTypeWhitespacesApostrophesPeriod() {
+        onView(withId(R.id.edit_country)).perform(scrollTo(), click())
+        onView(withId(R.id.country_list))
+            .inRoot(isDialog())
+            .perform(
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+            )
+
+        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("St. John's,"))
+
+        onView(withId(R.id.edit_state)).check(matches(withText("St. John's,")))
     }
 
     @Test
