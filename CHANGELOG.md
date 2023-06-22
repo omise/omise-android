@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+## v4.10.0
+* **ADDED:** Supported billing address for credit card form
+
 ## v4.9.0
 * **CHANGED:** Updated Android Gradle plugin to version 7.4.2
 * **CHANGED:** Updated Kotlin to version 1.7.10
