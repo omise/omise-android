@@ -122,7 +122,7 @@
     <string name="label_billing">Billing address (optional)</string>
     <string name="label_street">Street</string>
     <string name="label_postal">Postal code</string>
-    <string name="label_city">City</string>
+    <string name="label_city">市</string>
     <string name="label_country_code">Country code</string>
     <string name="label_billing_shipping">My billing and shipping address are the same</string>
     <string name="error_invalid_address">Address cannot be empty or country code is invalid</string>
