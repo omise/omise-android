@@ -240,13 +240,16 @@ public class CheckoutActivity extends AppCompatActivity {
             if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                 Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
                 snackbar.setText(source.getId()).show();
+                Log.d(TAG, "source: " + source.getId());
             } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
                 Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
                 snackbar.setText(token.getId()).show();
+                Log.d(TAG, "token: " + token.getId());
             }
         } else if (requestCode == CREDIT_CARD_REQUEST_CODE) {
             Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
             snackbar.setText(token.getId()).show();
+            Log.d(TAG, "token: " + token.getId());
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
