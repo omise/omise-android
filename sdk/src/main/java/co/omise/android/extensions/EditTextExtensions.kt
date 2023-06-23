@@ -42,3 +42,8 @@ fun EditText.setOnAfterTextChangeListener(action: () -> Unit) {
         }
     })
 }
+
+val EditText.textOrNull: Editable?
+    get() {
+        return this.text.ifBlank { null }
+    }

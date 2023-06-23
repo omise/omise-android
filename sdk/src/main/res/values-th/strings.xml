@@ -12,6 +12,10 @@
     <string name="error_invalid_security_code">หมายเลข CVV ไม่ถูกต้อง</string>
     <string name="error_invalid">%1$sไม่ถูกต้อง</string>
     <string name="error_required">กรุณากรอก%1$s</string>
+    <string name="error_required_street1">ต้องระบุที่อยู่</string>
+    <string name="error_required_city">ต้องระบุเมือง</string>
+    <string name="error_required_state">ต้องระบุเขต</string>
+    <string name="error_required_postal_code">ต้องระบุรหัสไปรษณีย์</string>
 
     <string name="error_api_authentication_failure">การยืนยันตัวตนของร้านค้าไม่ถูกต้อง</string>
     <string name="error_api_invalid_card_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
@@ -26,6 +30,10 @@
     <string name="label_security_code">รหัสหลังบัตร</string>
     <string name="menu_card_io">ถ่ายรูปบัตร</string>
     <string name="title_authorizing_payment">กำลังอนุมัติวงเงิน</string>
+    <string name="label_country">ประเทศหรือภูมิภาค</string>
+    <string name="label_address">ที่อยู่</string>
+    <string name="label_state">เขต</string>
+    <string name="label_postal_code">รหัสไปรษณีย์</string>
 
     <string name="cvv_tooltip_3_digits">หมายเลข 3 หลักด้านหลังบัตร</string>
     <string name="cvv_tooltip_4_digits">หมายเลข 4 หลักบนหน้าบัตร</string>

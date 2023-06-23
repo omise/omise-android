@@ -69,7 +69,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_payment_chooser, menu)
+        inflater.inflate(R.menu.menu_toolbar, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

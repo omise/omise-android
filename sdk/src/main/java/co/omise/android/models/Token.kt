@@ -9,7 +9,6 @@ import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import org.joda.time.DateTime
 import java.io.IOException
-import kotlin.jvm.Throws
 
 /**
  * Represents Token object and contains its [RequestBuilder].
@@ -19,26 +18,26 @@ import kotlin.jvm.Throws
 @Parcelize
 @TypeParceler<ChargeStatus, ChargeStatusParceler>()
 data class Token(
-        val used: Boolean = false,
-        val card: Card? = null,
-        @field:JsonProperty("charge_status")
-        val chargeStatus: ChargeStatus = ChargeStatus.Unknown,
-        override var modelObject: String? = null,
-        override var id: String? = null,
-        override var livemode: Boolean = false,
-        override var location: String? = null,
-        override var created: DateTime? = null,
-        override var deleted: Boolean = false
+    val used: Boolean = false,
+    val card: Card? = null,
+    @field:JsonProperty("charge_status")
+    val chargeStatus: ChargeStatus = ChargeStatus.Unknown,
+    override var modelObject: String? = null,
+    override var id: String? = null,
+    override var livemode: Boolean = false,
+    override var location: String? = null,
+    override var created: DateTime? = null,
+    override var deleted: Boolean = false
 ) : Model {
 
     /**
      * The [RequestBuilder] class for creating a Token.
      */
     class CreateTokenRequestBuilder(
-            @field:JsonProperty("card")
-            val card: CardParam? = null,
-            @field:JsonProperty("tokenization")
-            val tokenization: TokenizationParam? = null,
+        @field:JsonProperty("card")
+        val card: CardParam? = null,
+        @field:JsonProperty("tokenization")
+        val tokenization: TokenizationParam? = null,
     ) : RequestBuilder<Token>() {
         override fun path(): HttpUrl {
             return buildUrl(Endpoint.VAULT, "tokens")

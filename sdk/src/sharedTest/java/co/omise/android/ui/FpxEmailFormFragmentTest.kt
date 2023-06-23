@@ -11,13 +11,14 @@ import co.omise.android.models.Bank
 import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.doReturn
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 
 
 @RunWith(AndroidJUnit4::class)

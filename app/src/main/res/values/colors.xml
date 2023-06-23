@@ -8,5 +8,5 @@
 
     <color name="button_text_default">#B3000000</color>
     <color name="button_text_pressed">#4D000000</color>
-    <color name="button_text_disabled">#CCFFFFFF</color>
+    <color name="button_text_disabled">#33000000</color>
 </resources>

@@ -244,14 +244,17 @@ class CheckoutActivity : AppCompatActivity() {
                 if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                     val source = data.getParcelableExtra<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
                     snackbar.setText(source?.id ?: "No source object.").show()
+                    Log.d(TAG, "source: ${source?.id}")
                 } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
                     val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
                     snackbar.setText(token?.id ?: "No token object.").show()
+                    Log.d(TAG, "token: ${token?.id}")
                 }
             }
             CREDIT_CARD_REQUEST_CODE -> {
                 val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
                 snackbar.setText(token?.id ?: "No token object.").show()
+                Log.d(TAG, "token: ${token?.id}")
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)

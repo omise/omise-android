@@ -14,6 +14,10 @@
     <string name="error_invalid_phone_number">Phone number is invalid</string>
     <string name="error_invalid">%1$s is invalid</string>
     <string name="error_required">%1$s is required</string>
+    <string name="error_required_street1">Address is required</string>
+    <string name="error_required_city">City is required</string>
+    <string name="error_required_state">State is required</string>
+    <string name="error_required_postal_code">Zip code / Postal code is required</string>
 
     <string name="error_api_authentication_failure">Authentication failure</string>
     <string name="error_api_invalid_card_invalid_card_number">Invalid card number</string>
@@ -46,6 +50,11 @@
     <string name="label_email">Email</string>
     <string name="label_phone_number">Phone</string>
     <string name="label_security_code">Security code</string>
+    <string name="label_country">Country or region</string>
+    <string name="label_address">Address</string>
+    <string name="label_state">State</string>
+    <string name="label_postal_code">Zip code / Postal code</string>
+
     <string name="menu_card_io">Scan from Camera</string>
     <string name="title_authorizing_payment">Authorizing Payment</string>
     <string name="title_convenience_store">Convenience Store</string>

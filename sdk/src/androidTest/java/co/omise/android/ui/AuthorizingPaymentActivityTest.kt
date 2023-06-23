@@ -44,10 +44,10 @@ import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZIN
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.doNothing
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.instanceOf

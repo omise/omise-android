@@ -23,6 +23,8 @@ data class Capability(
         var tokenizationMethods: List<String>? = null,
         @field:JsonProperty("zero_interest_installments")
         val zeroInterestInstallments: Boolean = false,
+        @field:JsonProperty
+        val country: String? = null,
         override var modelObject: String? = null,
         override var id: String? = null,
         override var livemode: Boolean = false,

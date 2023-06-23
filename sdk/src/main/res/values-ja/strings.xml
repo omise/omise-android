@@ -12,6 +12,10 @@
 
     <string name="error_invalid">%1$s 無効です。</string>
     <string name="error_required">%1$s は必須です。</string>
+    <string name="error_required_street1">住所は必須です</string>
+    <string name="error_required_city">市が必要です</string>
+    <string name="error_required_state">州が必要です</string>
+    <string name="error_required_postal_code">郵便番号が必要です</string>
 
     <string name="error_api_authentication_failure">認証失敗</string>
     <string name="error_api_invalid_card_invalid_card_number">無効なカード番号</string>
@@ -26,6 +30,10 @@
     <string name="label_security_code">セキュリティコード</string>
     <string name="title_authorizing_payment">決済を認証中</string>
     <string name="menu_card_io">カードを読み取る</string>
+    <string name="label_country">国または地域</string>
+    <string name="label_address">住所</string>
+    <string name="label_state">州</string>
+    <string name="label_postal_code">郵便番号</string>
 
     <string name="cvv_tooltip_3_digits">カード裏面の3桁の番号</string>
     <string name="cvv_tooltip_4_digits">カード表面の4桁の番号</string>
@@ -114,7 +122,7 @@
     <string name="label_billing">Billing address (optional)</string>
     <string name="label_street">Street</string>
     <string name="label_postal">Postal code</string>
-    <string name="label_city">City</string>
+    <string name="label_city">市</string>
     <string name="label_country_code">Country code</string>
     <string name="label_billing_shipping">My billing and shipping address are the same</string>
     <string name="error_invalid_address">Address cannot be empty or country code is invalid</string>

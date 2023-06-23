@@ -64,7 +64,7 @@ class PaymentCreatorActivityTest {
         val creditCardIntent = Intent().apply {
             putExtra(EXTRA_TOKEN, Token())
         }
-        scenario = ActivityScenario.launch<PaymentCreatorActivity>(intent).onActivity {
+        scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
             it.performActivityResult(100, RESULT_OK, creditCardIntent)
         }
 

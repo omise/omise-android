@@ -16,14 +16,15 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class InternetBankingChooserFragmentTest {

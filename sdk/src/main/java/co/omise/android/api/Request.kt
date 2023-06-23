@@ -19,5 +19,6 @@ open class Request<T : Model>(
         internal val method: String,
         internal val url: HttpUrl,
         internal val payload: RequestBody?,
-        internal val responseType: Class<T>
+        internal val responseType: Class<T>,
+        internal val builder: RequestBuilder<T>,
 )

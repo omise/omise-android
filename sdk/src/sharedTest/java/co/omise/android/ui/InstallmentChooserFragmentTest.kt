@@ -14,8 +14,8 @@ import co.omise.android.R
 import co.omise.android.models.PaymentMethod
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
