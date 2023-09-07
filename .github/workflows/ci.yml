@@ -38,8 +38,12 @@ jobs:
           java-version: '11'
       - name: Run unit tests
         run: |
-          ./gradlew sdk:testProductionDebugUnitTest 
-          ./gradlew sdk:createProductionDebugCoverageReport
+          ./gradlew sdk:testProductionDebugUnitTest
+      - name: Create coverage report
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          script: ./gradlew sdk:createProductionDebugCoverageReport
 #        env:
 #          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
 #          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
