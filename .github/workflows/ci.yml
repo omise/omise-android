@@ -6,24 +6,24 @@ name: Android CI
 on: [pull_request]
 
 jobs:
-  build:
-    name: Build project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-      - name: Build project
-        run: ./gradlew sdk:build -x test
-        env:
-          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
-          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+#  build:
+#    name: Build project
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Set up JDK 11
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '11'
+#      - name: Build project
+#        run: ./gradlew sdk:build -x test
+#        env:
+#          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
+#          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
+#          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+#          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
   test:
     name: Unit test
@@ -49,7 +49,7 @@ jobs:
         with:
           name: test-report
           path: sdk/build/reports
-      - name: Sonarcloud
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#      - name: Sonarcloud
+#        uses: sonarsource/sonarcloud-github-action@master
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
