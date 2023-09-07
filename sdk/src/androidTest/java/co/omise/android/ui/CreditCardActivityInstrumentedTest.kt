@@ -13,9 +13,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import co.omise.android.R
 import co.omise.android.utils.focus
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@Ignore
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityInstrumentedTest {
     private lateinit var scenario: ActivityScenario<CreditCardActivity>

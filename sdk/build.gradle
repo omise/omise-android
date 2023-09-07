@@ -228,10 +228,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTe
     ]))
 }
 
-sonarqube {
+sonar {
     properties {
         property 'sonar.host.url', 'https://sonarcloud.io'
         property 'sonar.organization', 'omise'
         property 'sonar.projectKey', 'omise_omise-android'
+        property 'sonar.androidLint.reportPaths', 'build/reports/lint-results-productionDebug.xml'
     }
 }
