@@ -27,7 +27,7 @@ jobs:
 
   test:
     name: Unit test
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
         run: |
           ./gradlew sdk:testProductionDebugUnitTest
       - name: Run instrumented test
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: 31
           profile: Nexus 6
@@ -53,7 +53,7 @@ jobs:
       - name: Lint check
         run: ./gradlew sdk:lint
       - name: Create coverage report
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: 31
           profile: Nexus 6
