@@ -42,7 +42,7 @@ jobs:
       - name: Create coverage report
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 29
           script: ./gradlew sdk:createProductionDebugCoverageReport
 #        env:
 #          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
