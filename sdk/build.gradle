@@ -58,6 +58,7 @@ android {
                 }
                 jacoco {
                     includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
                 }
             }
         }
@@ -208,7 +209,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'createDebugCoverageReport']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'createProducitonDebugCoverageReport']) {
 
     reports {
         xml.enabled = true
@@ -222,7 +223,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTe
     sourceDirectories.setFrom(files([mainSrc]))
     classDirectories.setFrom(files([debugTree]))
     executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec",
+            "jacoco/testProductionDebugUnitTest.exec",
             "outputs/code-coverage/connected/*coverage.ec"
     ]))
 }
