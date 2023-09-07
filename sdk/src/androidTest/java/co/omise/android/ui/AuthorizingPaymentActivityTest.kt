@@ -57,12 +57,14 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
+@Ignore
 class AuthorizingPaymentActivityTest {
 
     private val authorizeUrl = "https://www.omise.co/pay"

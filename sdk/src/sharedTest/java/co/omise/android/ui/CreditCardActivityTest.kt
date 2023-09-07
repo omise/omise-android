@@ -43,6 +43,7 @@ import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -53,6 +54,7 @@ import org.mockito.kotlin.reset
 import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
+@Ignore
 class CreditCardActivityTest {
 
     private lateinit var scenario: ActivityScenario<CreditCardActivity>

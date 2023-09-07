@@ -210,9 +210,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn['testProductionDebugUnitTest', 'createProducitonDebugCoverageReport']
-
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'createProductionDebugCoverageReport']) {
     reports {
         xml.enabled = true
         html.enabled = true
