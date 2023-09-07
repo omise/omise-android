@@ -42,20 +42,32 @@ jobs:
       - name: Run instrumented test
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
+          profile: Nexus 6
+          arch: arm64-v8a
+          force-avd-creation: false
+          avd-name: macOS-avd-arm64-v8a-31
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: ./gradlew sdk:connectedProductionDebugAndroidTest
+      - name: Lint check
+        run: ./gradlew sdk:lint
       - name: Create coverage report
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
+          profile: Nexus 6
+          arch: arm64-v8a
+          force-avd-creation: false
+          avd-name: macOS-avd-arm64-v8a-31
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: ./gradlew sdk:createProductionDebugCoverageReport
 #        env:
 #          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
 #          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
 #          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
 #          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      - name: Lint check
-        run: ./gradlew sdk:lint
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v2
