@@ -4,6 +4,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -209,7 +210,8 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'createProducitonDebugCoverageReport']) {
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn['testProductionDebugUnitTest', 'createProducitonDebugCoverageReport']
 
     reports {
         xml.enabled = true
@@ -226,4 +228,12 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testProductionDebugUnitTe
             "jacoco/testProductionDebugUnitTest.exec",
             "outputs/code-coverage/connected/*coverage.ec"
     ]))
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'omise'
+        property 'sonar.projectKey', 'omise_omise-android'
+    }
 }
