@@ -40,7 +40,7 @@ jobs:
         run: |
           ./gradlew sdk:testProductionDebugUnitTest
       - name: Run instrumented test
-        uses: reactivecircus/android-emulator-runner@v2.27.0
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           disable-animations: true
@@ -51,7 +51,7 @@ jobs:
       - name: Lint check
         run: ./gradlew sdk:lint
       - name: Create coverage report
-        uses: reactivecircus/android-emulator-runner@v2.27.0
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           disable-animations: true
