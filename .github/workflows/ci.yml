@@ -27,7 +27,7 @@ jobs:
 
   test:
     name: Unit test
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -43,9 +43,10 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
+          arch: x86_64
           disable-animations: true
           force-avd-creation: false
-          emulator-boot-timeout: 12000
+          emulator-boot-timeout: 60000
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew sdk:connectedProductionDebugAndroidTest
       - name: Lint check
@@ -54,9 +55,10 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
+          arch: x86_64
           disable-animations: true
           force-avd-creation: false
-          emulator-boot-timeout: 12000
+          emulator-boot-timeout: 60000
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew sdk:createProductionDebugCoverageReport
 #        env:
