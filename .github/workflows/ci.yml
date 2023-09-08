@@ -43,12 +43,10 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: 31
-          profile: Nexus 6
-          arch: arm64-v8a
-          force-avd-creation: false
-          avd-name: macOS-avd-arm64-v8a-31
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          force-avd-creation: false
+          emulator-boot-timeout: 12000
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew sdk:connectedProductionDebugAndroidTest
       - name: Lint check
         run: ./gradlew sdk:lint
@@ -56,12 +54,10 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: 31
-          profile: Nexus 6
-          arch: arm64-v8a
-          force-avd-creation: false
-          avd-name: macOS-avd-arm64-v8a-31
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          force-avd-creation: false
+          emulator-boot-timeout: 12000
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew sdk:createProductionDebugCoverageReport
 #        env:
 #          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
