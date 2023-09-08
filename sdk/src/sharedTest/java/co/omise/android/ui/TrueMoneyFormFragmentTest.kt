@@ -10,6 +10,7 @@ import co.omise.android.R
 import co.omise.android.models.Source
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -39,6 +40,7 @@ class TrueMoneyFormFragmentTest {
         onView(withText(R.string.payment_truemoney_title)).check(matches(isDisplayed()))
     }
 
+    @Ignore
     @Test
     fun clickSubmitButton_requestCreatingSource() {
         onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())

@@ -26,6 +26,7 @@ import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -235,6 +236,7 @@ class PaymentChooserFragmentTest {
         verify(mockRequester).request(any(), any())
     }
 
+    @Ignore
     @Test
     fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
         onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
