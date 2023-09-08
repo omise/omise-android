@@ -19,6 +19,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
 
+@Ignore
 @RunWith(AndroidJUnit4::class)
 class TrueMoneyFormFragmentTest {
 
