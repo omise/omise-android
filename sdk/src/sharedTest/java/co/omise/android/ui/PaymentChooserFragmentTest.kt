@@ -236,7 +236,6 @@ class PaymentChooserFragmentTest {
         verify(mockRequester).request(any(), any())
     }
 
-    @Ignore
     @Test
     fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
         onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())

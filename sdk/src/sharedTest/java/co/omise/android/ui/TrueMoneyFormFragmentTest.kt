@@ -19,7 +19,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
 
-@Ignore
 @RunWith(AndroidJUnit4::class)
 class TrueMoneyFormFragmentTest {
 
@@ -41,7 +40,6 @@ class TrueMoneyFormFragmentTest {
         onView(withText(R.string.payment_truemoney_title)).check(matches(isDisplayed()))
     }
 
-    @Ignore
     @Test
     fun clickSubmitButton_requestCreatingSource() {
         onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
