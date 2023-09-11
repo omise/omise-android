@@ -60,6 +60,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
+          arch: arm64-v8a
           profile: Nexus 6
           script: echo "Generated AVD snapshot for caching."
 
@@ -70,6 +71,7 @@ jobs:
           disable-animations: true
           force-avd-creation: false
           emulator-boot-timeout: 60000
+          arch: arm64-v8a
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew sdk:connectedProductionDebugAndroidTest
@@ -81,6 +83,7 @@ jobs:
           disable-animations: true
           force-avd-creation: false
           emulator-boot-timeout: 60000
+          arch: arm64-v8a
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew sdk:createProductionDebugCoverageReport
