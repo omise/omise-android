@@ -86,7 +86,7 @@ jobs:
           arch: arm64-v8a
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew sdk:createProductionDebugCoverageReport
+          script: ./gradlew sdk:jacocoTestReport
 
       - name: Lint check
         run: ./gradlew sdk:lint
