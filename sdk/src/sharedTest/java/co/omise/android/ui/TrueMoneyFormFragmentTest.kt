@@ -42,7 +42,7 @@ class TrueMoneyFormFragmentTest {
 
     @Test
     fun clickSubmitButton_requestCreatingSource() {
-        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), closeSoftKeyboard())
 
         onView(withId(R.id.button_submit)).perform(click())
 
@@ -51,21 +51,21 @@ class TrueMoneyFormFragmentTest {
 
     @Test
     fun validInputs_enableSubmitButton() {
-        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), closeSoftKeyboard())
 
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
     }
 
     @Test
     fun invalidInputs_disableSubmitButton() {
-        onView(withId(R.id.edit_phone_number)).perform(typeText(""), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(typeText(""), closeSoftKeyboard())
 
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
 
     @Test
     fun disableForm_disableFormWhenRequestSent() {
-        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), closeSoftKeyboard())
 
         onView(withId(R.id.button_submit)).perform(click())
 
