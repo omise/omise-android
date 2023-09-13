@@ -49,6 +49,9 @@ android {
     }
 
     testOptions {
+        // It's required for Sonar
+        reportDir "${project.buildDir}/reports/coverage/androidTest/production/debug/connected"
+
         unitTests {
             animationsDisabled true
             returnDefaultValues true
@@ -210,22 +213,33 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'connectedProductionDebugAndroidTest']) {
+tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'createProductionDebugCoverageReport']) {
     reports {
         xml.required = true
         html.required = true
     }
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories.setFrom(files([mainSrc]))
-    classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-            "jacoco/testProductionDebugUnitTest.exec",
-            "outputs/code-coverage/connected/*coverage.ec"
-    ]))
+    // Main source code
+    sourceDirectories.from = file("${project.projectDir}/src/main/java")
+    classDirectories.from = files(fileTree(
+            // Generated Kotlin classes
+            dir: "${project.buildDir}/tmp/kotlin-classes/productionDebug",
+            // Exclude generated code
+            excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*'
+            ]
+    ))
+    executionData.from = fileTree(dir: project.buildDir, includes: [
+            // Execution data for unit tests
+            '**/*.exec',
+            // Execution data for instrumentation tests
+            '**/*.ec'
+    ])
 }
 
 sonar {
@@ -233,6 +247,7 @@ sonar {
         property 'sonar.host.url', 'https://sonarcloud.io'
         property 'sonar.organization', 'omise'
         property 'sonar.projectKey', 'omise_omise-android'
-        property 'sonar.androidLint.reportPaths', 'build/reports/lint-results-productionDebug.xml'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/coverage/androidTest/production/debug/connected/report.xml"
+        property 'sonar.androidLint.reportPaths', "${project.buildDir}/reports/lint-results-productionDebug.xml"
     }
 }
