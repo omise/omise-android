@@ -62,9 +62,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@Ignore("Due to switching off 3DS SDK feature, so these tests are not passed.")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@Ignore
 class AuthorizingPaymentActivityTest {
 
     private val authorizeUrl = "https://www.omise.co/pay"

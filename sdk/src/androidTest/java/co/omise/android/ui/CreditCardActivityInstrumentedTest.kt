@@ -17,7 +17,6 @@ import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@Ignore
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityInstrumentedTest {
     private lateinit var scenario: ActivityScenario<CreditCardActivity>
@@ -30,6 +29,7 @@ class CreditCardActivityInstrumentedTest {
         scenario = ActivityScenario.launch(intent)
     }
 
+    @Ignore("Flaky test, it fails when run all instrumented test but pass on individual test.")
     @Test
     fun errorMessages_showErrorMessage() {
         onView(withId(R.id.edit_card_number)).perform(typeText("42424242"), pressImeActionButton())

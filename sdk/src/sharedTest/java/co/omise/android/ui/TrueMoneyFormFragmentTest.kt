@@ -10,7 +10,6 @@ import co.omise.android.R
 import co.omise.android.models.Source
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
