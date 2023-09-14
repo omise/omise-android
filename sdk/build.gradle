@@ -243,11 +243,10 @@ tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProd
 }
 
 sonar {
-    println("build path: ${project.buildDir}")
     properties {
         property 'sonar.host.url', 'https://sonarcloud.io'
-//        property 'sonar.host.url', 'http://localhost:9000'
         property 'sonar.organization', 'omise'
+        property 'sonar.projectName', 'omise-android'
         property 'sonar.projectKey', 'omise_omise-android'
         property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/coverage/androidTest/production/debug/connected/report.xml"
         property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/testProductionDebugUnitTest"
