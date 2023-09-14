@@ -12,11 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Set up JDK 20
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '20'
+          java-version: '11'
       - name: Build project
         run: ./gradlew sdk:build -x test
 
@@ -27,11 +27,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 20
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '20'
+          java-version: '11'
 
       - name: Run unit tests
         run: |
@@ -54,11 +54,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 20
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '20'
+          java-version: '11'
 
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
@@ -110,11 +110,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 20
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '20'
+          java-version: '11'
 
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
