@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # required for SonarCloud
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
