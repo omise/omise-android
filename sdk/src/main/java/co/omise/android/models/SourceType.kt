@@ -57,6 +57,7 @@ sealed class SourceType(
         object KBank : MobileBanking("mobile_banking_kbank")
         object KTB : MobileBanking("mobile_banking_ktb")
         object Scb : MobileBanking("mobile_banking_scb")
+        object Ocbc: MobileBanking("mobile_banking_ocbc")
         data class Unknown(@JsonValue override val name: String?) : MobileBanking(name)
     }
 
@@ -103,6 +104,7 @@ sealed class SourceType(
             "mobile_banking_kbank" -> MobileBanking.KBank
             "mobile_banking_ktb" -> MobileBanking.KTB
             "mobile_banking_scb" -> MobileBanking.Scb
+            "mobile_banking_ocbc" -> MobileBanking.Ocbc
             "alipay" -> Alipay
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
             "barcode_alipay" -> BarcodeAlipay

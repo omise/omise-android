@@ -111,6 +111,7 @@
     <string name="payment_method_alipayplus_footnote">(อาลีเพย์พลัส)</string>
     <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
+    <string name="payment_method_mobile_banking_ocbc_title">OCBC</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
