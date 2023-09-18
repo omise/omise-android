@@ -34,7 +34,6 @@ class MobileBankingChooserFragmentTest {
             PaymentMethod(name = "mobile_banking_kbank"),
             PaymentMethod(name = "mobile_banking_ktb"),
             PaymentMethod(name = "mobile_banking_scb"),
-            PaymentMethod(name = "mobile_banking_ocbc"),
     )
 
     private val mockRequest = mock<PaymentCreatorRequester<Source>> {
@@ -60,7 +59,6 @@ class MobileBankingChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_kbank_title))))
         onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_ktb_title))))
         onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_scb_title))))
-        onView(withListId(R.id.recycler_view).atPosition(5)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_ocbc_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 

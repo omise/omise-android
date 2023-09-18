@@ -33,6 +33,7 @@ sealed class SourceType(
     data class Fpx(var banks : List<Bank>? = null) : SourceType("fpx")
     object RabbitLinePay : SourceType("rabbit_linepay")
     object OcbcPao : SourceType("mobile_banking_ocbc_pao")
+    object OcbcDigital : SourceType("mobile_banking_ocbc")
     object Boost: SourceType("boost")
     object ShopeePay: SourceType("shopeepay")
     object ShopeePayJumpApp: SourceType("shopeepay_jumpapp")
@@ -57,7 +58,6 @@ sealed class SourceType(
         object KBank : MobileBanking("mobile_banking_kbank")
         object KTB : MobileBanking("mobile_banking_ktb")
         object Scb : MobileBanking("mobile_banking_scb")
-        object Ocbc: MobileBanking("mobile_banking_ocbc")
         data class Unknown(@JsonValue override val name: String?) : MobileBanking(name)
     }
 
@@ -104,7 +104,6 @@ sealed class SourceType(
             "mobile_banking_kbank" -> MobileBanking.KBank
             "mobile_banking_ktb" -> MobileBanking.KTB
             "mobile_banking_scb" -> MobileBanking.Scb
-            "mobile_banking_ocbc" -> MobileBanking.Ocbc
             "alipay" -> Alipay
             "bill_payment_tesco_lotus" -> BillPaymentTescoLotus
             "barcode_alipay" -> BarcodeAlipay
@@ -132,6 +131,7 @@ sealed class SourceType(
             "touch_n_go" -> TouchNGo()
             "rabbit_linepay" -> RabbitLinePay
             "mobile_banking_ocbc_pao" -> OcbcPao
+            "mobile_banking_ocbc" -> OcbcDigital
             "boost" -> Boost
             "shopeepay" -> ShopeePay
             "shopeepay_jumpapp" -> ShopeePayJumpApp
