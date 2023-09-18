@@ -100,7 +100,7 @@
     <string name="payment_method_mobile_banking_scb_title">SCB EASY</string>
     <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
-    <string name="payment_method_mobile_banking_ocbc_title">OCBC</string>
+    <string name="payment_method_mobile_banking_ocbc_title">OCBC Digital</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
 
     <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
