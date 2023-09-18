@@ -47,6 +47,7 @@ jobs:
 
   instrumentation-test:
     name: Instrumentation test
+    # Due to Android emulator issue on Ubuntu, we use macOS instead.
     runs-on: macos-latest
     needs: build
     strategy:

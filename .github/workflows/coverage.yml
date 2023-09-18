@@ -5,6 +5,7 @@ on: [ pull_request ]
 jobs:
   coverage-report:
     name: Coverage Report
+    # Due to Android emulator issue on Ubuntu, we use macOS instead.
     runs-on: macos-latest
     strategy:
       matrix:
