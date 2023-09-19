@@ -28,8 +28,8 @@
     <string name="payment_preference_mobile_banking_bbl_key" translatable="false">mobile_banking_bbl</string>
     <string name="payment_preference_mobile_banking_kbank_key" translatable="false">mobile_banking_kbank</string>
     <string name="payment_preference_mobile_banking_ktb_key" translatable="false">mobile_banking_ktb</string>
-    <string name="payment_preference_mobile_banking_ocbc_pao_key" translatable="false">mobile_banking_ocbc_pao</string>
-    <string name="payment_preference_mobile_banking_ocbc_key" translatable="false">mobile_banking_ocbc</string>
+    <string name="payment_preference_ocbc_pao_key" translatable="false">mobile_banking_ocbc_pao</string>
+    <string name="payment_preference_ocbc_digital_key" translatable="false">mobile_banking_ocbc</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
     <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
     <string name="payment_preference_installment_bbl_key" translatable="false">installment_bbl</string>
