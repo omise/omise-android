@@ -241,7 +241,7 @@ internal sealed class PaymentMethodResource(
     )
 
     object OcbcDigital: PaymentMethodResource(
-        iconRes = R.drawable.payment_mobile_banking_ocbc,
+        iconRes = R.drawable.payment_ocbc_digital,
         titleRes = R.string.payment_method_ocbc_digital_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.OcbcDigital
