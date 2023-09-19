@@ -18,7 +18,6 @@ import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
@@ -34,7 +33,7 @@ class MobileBankingChooserFragmentTest {
             PaymentMethod(name = "mobile_banking_bbl"),
             PaymentMethod(name = "mobile_banking_kbank"),
             PaymentMethod(name = "mobile_banking_ktb"),
-            PaymentMethod(name = "mobile_banking_scb")
+            PaymentMethod(name = "mobile_banking_scb"),
     )
 
     private val mockRequest = mock<PaymentCreatorRequester<Source>> {

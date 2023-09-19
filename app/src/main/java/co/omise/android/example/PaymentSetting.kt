@@ -40,7 +40,8 @@ object PaymentSetting {
                     R.string.payment_preference_fpx_key,
                     R.string.payment_preference_gcash_key,
                     R.string.payment_preference_kakaopay_key,
-                    R.string.payment_preference_mobile_banking_ocbc_pao_key,
+                    R.string.payment_preference_ocbc_pao_key,
+                    R.string.payment_preference_ocbc_digital_key,
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
                     R.string.payment_preference_points_citi_key,
@@ -82,7 +83,8 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_mobile_banking_bbl_key) -> SourceType.MobileBanking.Bbl
                         context.getString(R.string.payment_preference_mobile_banking_kbank_key) -> SourceType.MobileBanking.KBank
                         context.getString(R.string.payment_preference_mobile_banking_ktb_key) -> SourceType.MobileBanking.KTB
-                        context.getString(R.string.payment_preference_mobile_banking_ocbc_pao_key) -> SourceType.OcbcPao
+                        context.getString(R.string.payment_preference_ocbc_pao_key) -> SourceType.OcbcPao
+                        context.getString(R.string.payment_preference_ocbc_digital_key) -> SourceType.OcbcDigital
                         context.getString(R.string.payment_preference_mobile_banking_scb_key) -> SourceType.MobileBanking.Scb
                         context.getString(R.string.payment_preference_installment_bay_key) -> SourceType.Installment.Bay
                         context.getString(R.string.payment_preference_installment_first_choice_key) -> SourceType.Installment.FirstChoice
