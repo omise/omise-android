@@ -251,6 +251,15 @@ class PaymentChooserFragmentTest {
         verify(fragment.navigation)?.navigateToMobileBankingChooser(expectedMethods)
     }
 
+    @Test
+    fun clickOcbcDigitalPaymentMethod_sendRequestToCreateSource() {
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(10))
+        onView(withListId(R.id.recycler_view).atPosition(10)).perform(click())
+
+        onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
+        verify(mockRequester).request(any(), any())
+    }
+
     private fun assertListAtIndexHasResource(index: Int, res: Int) {
         onView(withListId(R.id.recycler_view).atPosition(index)).check(matches(hasDescendant(withText(res))))
     }
