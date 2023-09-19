@@ -1,0 +1,27 @@
+<configuration>
+    <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Write Netcetera Android 3DS SDK WARN (and higher-level) messages to the logcat -->
+    <logger name="com.netcetera.threeds.sdk" level="WARN"/>
+
+    <logger name="com.netcetera.threeds.sdk" level="INFO"/>
+
+    <logger name="com.netcetera.threeds.sdk" level="ALL"/>
+
+    <!-- Write global WARN (and higher-level) messages to the logcat -->
+    <root level="WARN">
+        <appender-ref ref="LOGCAT"/>
+    </root>
+
+    <root level="INFO">
+        <appender-ref ref="LOGCAT"/>
+    </root>
+
+    <root level="ALL">
+        <appender-ref ref="LOGCAT"/>
+    </root>
+</configuration>

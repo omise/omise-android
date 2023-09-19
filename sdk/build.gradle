@@ -4,6 +4,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: 'kotlin-android-extensions'
 
+def localProperties = new Properties()
+localProperties.load(new File(rootProject.projectDir, "local.properties").newDataInputStream())
+
 android {
     compileSdkVersion compile_sdk_version
 
@@ -18,6 +21,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "NETCETERA_LICENSE_KEY", localProperties["netceteraLicenseKey"])
+            buildConfigField("String", "SCHEME_NAME", localProperties["schemeName"])
+            buildConfigField("String", "DS_ID", localProperties["dsId"])
+            buildConfigField("String", "MESSAGE_VERSION", localProperties["messageVersion"])
+            buildConfigField("String", "ACS_REF_NUMBER", localProperties["acsRefNumber"])
+            buildConfigField("String", "DS_PUBLIC_KEY", localProperties["dsPublicKey"])
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -194,6 +205,14 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
+
+    // Netcetera 3SD SDK
+    // implementation 'com.netcetera.android-3dssdk:3ds-sdk:2.3.7.4'
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation "org.slf4j:slf4j-api:1.7.36"
+    implementation 'com.github.tony19:logback-android:1.3.0-3'
+//    implementation "org.bouncycastle:bcprov-jdk15to18:1.69"
+//    implementation files("libs/3ds-sdk-2.3.7.4.aar")
 }
 
 repositories {
