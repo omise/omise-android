@@ -58,7 +58,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
                 ?: getString(R.string.title_authorizing_payment)
 
-        setupWebView()
+        if (verifier.verifyExternalURL(verifier.authorizedURL)) {
+            openExternalApp(verifier.authorizedURL)
+        } else {
+            setupWebView()
+        }
     }
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
@@ -80,7 +84,29 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
                 is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.completionEvent)
-                is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
+                is AuthenticationResult.AuthenticationFailure -> {
+                    val error = result.error
+                    when (error) {
+                        is ProtocolErrorEvent ->
+                            OmiseException(
+                                "3D Secure authorization failed: protocol error.", ProtocolException(
+                                    """
+                            errorCode=${error.errorMessage.errorCode?.value},
+                            errorDetail=${error.errorMessage.errorDetail},
+                            errorDescription=${error.errorMessage.errorDescription},
+                        """.trimIndent()
+                                )
+                            )
+
+                        is RuntimeErrorEvent ->
+                            OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(error.errorMessage))
+
+                        else ->
+                            OmiseException("3D Secure authorization failed: ${error.message}", error)
+                    }.let {
+                        finishActivityWithFailure(it)
+                    }
+                }
             }
         }
     }
@@ -93,14 +119,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                     finishActivityWithSuccessful(url)
                     true
                 } else if (verifier.verifyExternalURL(uri)) {
-                    try {
-                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        true
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                        true
-                    }
+                    openExternalApp(uri)
+                    true
                 } else {
                     false
                 }
@@ -156,6 +176,17 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
+    private fun openExternalApp(uri: Uri) {
+        try {
+            val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+            startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+        } catch (e: ActivityNotFoundException) {
+            finishActivityWithFailure(OmiseException("Cannot find activity.", e))
+        } catch (e: Exception) {
+            finishActivityWithFailure(OmiseException("Open external app failed.", e))
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
@@ -205,7 +236,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun finishActivityWithSuccessful(completionEvent: CompletionEvent) {
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value))
+            putExtra(
+                EXTRA_AUTHORIZING_PAYMENT_RESULT,
+                ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value)
+            )
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -217,22 +251,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithFailure(throwable: Throwable? = null) {
-        val exception = when (throwable) {
-            is ProtocolErrorEvent ->
-                OmiseException("3D Secure authorization failed: protocol error.", ProtocolException(
-                        """
-                            errorCode=${throwable.errorMessage.errorCode?.value},
-                            errorDetail=${throwable.errorMessage.errorDetail},
-                            errorDescription=${throwable.errorMessage.errorDescription},
-                        """.trimIndent()
-                ))
-            is RuntimeErrorEvent ->
-                OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(throwable.errorMessage))
-            else ->
-                OmiseException("3D Secure authorization failed: ${throwable?.message}", throwable)
-        }
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(exception))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, throwable?.let { Failure(it) })
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
