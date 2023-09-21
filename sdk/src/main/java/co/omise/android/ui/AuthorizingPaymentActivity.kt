@@ -179,11 +179,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private fun openDeepLink(uri: Uri) {
         try {
             val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(externalIntent)
+            startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
         } catch (e: ActivityNotFoundException) {
-            finishActivityWithFailure(OmiseException("Cannot find activity.", e))
-        } catch (e: Exception) {
-            finishActivityWithFailure(OmiseException("Open external app failed.", e))
+            finishActivityWithFailure(OmiseException("Open deep-link failed.", e))
         }
     }
 
