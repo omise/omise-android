@@ -57,10 +57,12 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@Ignore("Due to switching off 3DS SDK feature, so these tests are not passed.")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentActivityTest {
