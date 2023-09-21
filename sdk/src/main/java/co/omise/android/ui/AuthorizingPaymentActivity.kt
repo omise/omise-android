@@ -59,7 +59,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 ?: getString(R.string.title_authorizing_payment)
 
         if (verifier.verifyExternalURL(verifier.authorizedURL)) {
-            openExternalApp(verifier.authorizedURL)
+            openDeepLink(verifier.authorizedURL)
         } else {
             setupWebView()
         }
@@ -119,7 +119,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                     finishActivityWithSuccessful(url)
                     true
                 } else if (verifier.verifyExternalURL(uri)) {
-                    openExternalApp(uri)
+                    openDeepLink(uri)
                     true
                 } else {
                     false
@@ -176,10 +176,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
-    private fun openExternalApp(uri: Uri) {
+    private fun openDeepLink(uri: Uri) {
         try {
             val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-            startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+            startActivity(externalIntent)
         } catch (e: ActivityNotFoundException) {
             finishActivityWithFailure(OmiseException("Cannot find activity.", e))
         } catch (e: Exception) {

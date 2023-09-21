@@ -93,7 +93,6 @@ class AuthorizingPaymentActivityTest {
         whenever(viewModel.authentication).thenReturn(authentication)
         doNothing().whenever(viewModel).cleanup()
 
-        activityRule.launchActivity(intent)
     }
 
     @Test
@@ -227,6 +226,21 @@ class AuthorizingPaymentActivityTest {
                 .perform(webClick())
 
         onView(withText(("Test alert!"))).inRoot(isDialog()).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun openDeepLink_ifNoAppToHandleDeepLinkThenReturnFailureResult() {
+        val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, "testapp://www.omise.co/pay")
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+        }
+        activityRule.launchActivity(intent)
+
+        val actualResult = activityRule.activityResult
+        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
+
+        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)
+        assertEquals("Cannot find activity.", actualFailure?.throwable?.message)
     }
 
     private fun withUrl(url: String): Matcher<View> = object : TypeSafeMatcher<View>() {
