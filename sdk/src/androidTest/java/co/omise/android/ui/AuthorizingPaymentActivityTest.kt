@@ -25,8 +25,12 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.intercepting.SingleActivityFactory
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
@@ -55,6 +59,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Ignore
@@ -62,7 +67,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@Ignore("Due to switching off 3DS SDK feature, so these tests are not passed.")
+//@Ignore("Due to switching off 3DS SDK feature, so these tests are not passed.")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentActivityTest {
@@ -88,6 +93,8 @@ class AuthorizingPaymentActivityTest {
 
     @get:Rule
     var activityRule = ActivityTestRule(activityFactory, false, false)
+
+    val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     @Before
     fun setUp() {
@@ -231,7 +238,64 @@ class AuthorizingPaymentActivityTest {
     }
 
     @Test
-    fun openDeepLink_ifNoAppToHandleDeepLinkThenReturnFailureResult() {
+    fun openDeepLink_whenAuthorizeUriIsDeepLinkThenOpenExternalApp() {
+        val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success")
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("sampleapp://omise.co/authorize_return?result=success"))
+        }
+        activityRule.launchActivity(intent)
+
+        uiDevice.wait(Until.hasObject(By.pkg("co.omise.android.bankapp").depth(0)), 3_000)
+    }
+
+    @Test
+    fun openDeepLink_whenPressBackOnExternalAppThenReturnResult() {
+        val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success")
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("sampleapp://omise.co/authorize_return?result=success"))
+        }
+        activityRule.launchActivity(intent)
+
+        uiDevice.pressBack()
+
+        val actualResult = activityRule.activityResult
+        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
+        assertNull(actualResult.resultData)
+    }
+
+    @Test
+    fun openDeepLink_whenPressDeepLinkFromWebViewThenOpenExternalApp() {
+        activityRule.launchActivity(intent)
+        val html = """
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Test</title>
+              </head>
+              <body>
+                <a
+                  href="bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
+                  id="deepLinkButton"
+                >
+                  Open bank app
+                </a>
+              </body>
+            </html>
+        """.trimIndent()
+        loadData(html)
+
+        onWebView()
+            .withElement(findElement(Locator.ID, "deepLinkButton"))
+            .check(webMatches(getText(), containsString("Open bank app")))
+            .perform(webClick())
+
+        uiDevice.wait(Until.hasObject(By.pkg("co.omise.android.bankapp").depth(0)), 3_000)
+    }
+
+    @Test
+    fun openDeepLink_whenNoAppToHandleDeepLinkThenReturnFailureResult() {
         val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, "testapp://www.omise.co/pay")
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
