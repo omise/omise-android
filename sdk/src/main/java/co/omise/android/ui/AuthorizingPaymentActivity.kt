@@ -187,7 +187,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_EXTERNAL_CODE) {
             finishActivityWithSuccessful(data)
         }
     }
