@@ -9,7 +9,19 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
         android:theme="@style/OmiseTheme">
-        <activity android:name=".PaymentResultActivity"></activity>
+        <activity android:name=".PaymentResultActivity">
+            <intent-filter android:label="Payment Result">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="omise.co"
+                    android:path="/authorize_return"
+                    android:scheme="sampleapp" />
+            </intent-filter>
+        </activity>
         <activity android:name=".CheckoutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
