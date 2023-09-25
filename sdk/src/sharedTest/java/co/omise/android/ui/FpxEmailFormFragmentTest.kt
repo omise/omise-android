@@ -1,7 +1,6 @@
 package co.omise.android.ui
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -12,14 +11,13 @@ import co.omise.android.models.Bank
 import co.omise.android.models.Capability
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
-import org.mockito.kotlin.doReturn
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 
 @RunWith(AndroidJUnit4::class)
@@ -54,8 +52,7 @@ class FpxEmailFormFragmentTest {
     @Test
     fun clickSubmitButton_requestNavigateToBankChooser() {
         onView(withId(R.id.edit_email)).perform(typeText("example@omise.co"), pressImeActionButton())
-        closeSoftKeyboard()
-        onView(withId(R.id.button_submit)).perform(click())
+        onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
         verify(mockNavigation).navigateToFpxBankChooser(banks, "example@omise.co")
     }
