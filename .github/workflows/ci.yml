@@ -52,7 +52,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        api-level: [ 29 ]
+        api-level: [ 30 ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
