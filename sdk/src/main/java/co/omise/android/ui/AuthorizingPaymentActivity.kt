@@ -13,6 +13,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
@@ -47,7 +48,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
 
-    private lateinit var viewModel: AuthorizingPaymentViewModel
+    private val viewModel: AuthorizingPaymentViewModel by viewModels { viewModelFactory ?: AuthorizingPaymentViewModelFactory(this) }
     private var viewModelFactory: ViewModelProvider.Factory? = null
     private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
@@ -73,7 +74,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     @TestOnly
-    fun setAuthorizingPaymentViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
+    fun setViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
         this.viewModelFactory = viewModelFactory
     }
 

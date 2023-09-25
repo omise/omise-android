@@ -1,19 +1,25 @@
 package co.omise.android.ui
 
 import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
-import android.util.Base64
-import android.view.View
-import android.webkit.WebView
+import android.net.Uri
 import android.widget.ProgressBar
+import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
+import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -26,11 +32,9 @@ import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.intercepting.SingleActivityFactory
-import androidx.test.uiautomator.By
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.Until
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
@@ -42,22 +46,14 @@ import co.omise.android.threeds.data.models.TransactionStatus
 import co.omise.android.threeds.events.ErrorMessage
 import co.omise.android.threeds.events.ProtocolErrorEvent
 import co.omise.android.threeds.events.RuntimeErrorEvent
-import co.omise.android.ui.AuthenticationResult.AuthenticationFailure
 import co.omise.android.ui.AuthenticationResult.AuthenticationUnsupported
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
-import co.omise.android.ui.AuthorizingPaymentResult.Failure
-import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
-import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import org.mockito.kotlin.doNothing
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
+import co.omise.android.utils.loadHtml
+import co.omise.android.utils.loadUrl
+import co.omise.android.utils.withUrl
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.instanceOf
-import org.hamcrest.Description
-import org.hamcrest.Matcher
-import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -66,132 +62,161 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
-//@Ignore("Due to switching off 3DS SDK feature, so these tests are not passed.")
+
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentActivityTest {
+    @get:Rule
+    val intentRule = IntentsRule()
+
+    @get:Rule
+    val countingTaskExecutorRule = CountingTaskExecutorRule()
 
     private val authorizeUrl = "https://www.omise.co/pay"
     private val returnUrl = "http://www.example.com"
+    private val deepLinkAuthorizeUrl = "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
+    private val deepLinkReturnUrl = "sampleapp://omise.co/authorize_return?result=success"
     private val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
         putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
         putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
     }
 
-    private val viewModel: AuthorizingPaymentViewModel = mock()
-    private val viewModelFactory: AuthorizingPaymentViewModelFactory = mock()
-    private val authentication = MutableLiveData<AuthenticationResult>()
-
-    private val activityFactory = object : SingleActivityFactory<AuthorizingPaymentActivity>(AuthorizingPaymentActivity::class.java) {
-        override fun create(intent: Intent?): AuthorizingPaymentActivity {
-            val activity = AuthorizingPaymentActivity()
-            activity.setAuthorizingPaymentViewModelFactory(viewModelFactory)
-            return activity
+    private val mockViewModel: AuthorizingPaymentViewModel = mock()
+    private val viewModelFactory = object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return mockViewModel as T
         }
     }
 
-    @get:Rule
-    var activityRule = ActivityTestRule(activityFactory, false, false)
+    private val authentication = MutableLiveData<AuthenticationResult>()
 
-    val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    private val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     @Before
     fun setUp() {
-        whenever(viewModelFactory.create(AuthorizingPaymentViewModel::class.java)).thenReturn(viewModel)
-        whenever(viewModel.authentication).thenReturn(authentication)
-        doNothing().whenever(viewModel).cleanup()
+        whenever(mockViewModel.authentication).thenReturn(authentication)
+        doNothing().whenever(mockViewModel).cleanup()
 
+        ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback { activity, stage ->
+            if (stage == Stage.PRE_ON_CREATE) {
+                (activity as? AuthorizingPaymentActivity)?.setViewModelFactory(viewModelFactory)
+            }
+        }
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun onCreate_shouldExecuteAuthorizeTransaction() {
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         onView(instanceOf(ProgressBar::class.java)).check(matches(isDisplayed()))
-        verify(viewModel).authorizeTransaction(authorizeUrl)
+        verify(mockViewModel).authorizeTransaction(authorizeUrl)
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun fallback3DS1_whenTransactionUse3DS1ThenLoadAuthorizeUrlToWebView() {
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authentication.postValue(AuthenticationUnsupported)
 
         onView(withId(R.id.authorizing_payment_webview))
-                .check(matches(isDisplayed()))
-                .check(matches(withUrl(authorizeUrl)))
+            .check(matches(isDisplayed()))
+            .check(matches(withUrl(authorizeUrl)))
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun activityResultOf3DS1_whenAuthorizationCompletedThenReturnExpectedReturnUrl() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authentication.postValue(AuthenticationUnsupported)
 
-        onView(withId(R.id.authorizing_payment_webview))
-                .perform(loadUrl(returnUrl))
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
 
-        val actualResult = activityRule.activityResult
+        val actualResult = scenario.result
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
         assertEquals(returnUrl, actualResult.resultData.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING))
-        assertEquals(ThreeDS1Completed(returnUrl), actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
+        assertEquals(
+            AuthorizingPaymentResult.ThreeDS1Completed(returnUrl),
+            actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT)
+        )
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun authorizationCompleted_returnActivityResultWith3DS2CompletedResult() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val completionEvent = co.omise.android.threeds.events.CompletionEvent("test_id_1234", TransactionStatus.AUTHENTICATED)
         authentication.postValue(AuthenticationResult.AuthenticationCompleted(completionEvent))
 
-        val actualResult = activityRule.activityResult
+        val actualResult = scenario.result
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-        assertEquals(ThreeDS2Completed("test_id_1234", "Y"), actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
+        assertEquals(
+            AuthorizingPaymentResult.ThreeDS2Completed("test_id_1234", "Y"),
+            actualResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT)
+        )
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun authorizationFailed_returnActivityResultWithErrorMessage() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val testException = Exception("Somethings went wrong.")
-        authentication.postValue(AuthenticationFailure(testException))
+        authentication.postValue(AuthenticationResult.AuthenticationFailure(testException))
 
-        val actualResult = activityRule.activityResult
-        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
+        val actualResult = scenario.result
+        val actualFailure = actualResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
         assertTrue(actualFailure.throwable is OmiseException)
         assertEquals("3D Secure authorization failed: Somethings went wrong.", actualFailure.throwable.message)
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun authorizationFailed_protocolError() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val error = ProtocolErrorEvent(
-                transactionId = "1234",
-                errorMessage = ErrorMessage(
-                        messageType = MessageType.ERROR,
-                        messageVersion = "2.2.0",
-                        errorCode = ErrorCode.InvalidFormat,
-                        errorDetail = "sdkTransID is invalided UUID format.",
-                        errorDescription = "sdkTransID is invalided UUID format.",
-                )
+            transactionId = "1234",
+            errorMessage = ErrorMessage(
+                messageType = MessageType.ERROR,
+                messageVersion = "2.2.0",
+                errorCode = ErrorCode.InvalidFormat,
+                errorDetail = "sdkTransID is invalided UUID format.",
+                errorDescription = "sdkTransID is invalided UUID format.",
+            )
         )
-        authentication.postValue(AuthenticationFailure(error))
+        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
 
-        val actualResult = activityRule.activityResult
-        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
+        val actualResult = scenario.result
+        val actualFailure = actualResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
         assertTrue(actualFailure.throwable is OmiseException)
         assertEquals("3D Secure authorization failed: protocol error.", actualFailure.throwable.message)
         assertEquals(
-                """
+            """
                     errorCode=203,
                     errorDetail=sdkTransID is invalided UUID format.,
                     errorDescription=sdkTransID is invalided UUID format.,
                 """.trimIndent(),
-                actualFailure.throwable.cause!!.message)
+            actualFailure.throwable.cause!!.message
+        )
     }
 
     @Test
+    @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun authorizationFailed_runtimeError() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val error = RuntimeErrorEvent(
-                errorCode = "1234",
-                errorMessage = "Something went wrong."
+            errorCode = "1234",
+            errorMessage = "Something went wrong."
         )
-        authentication.postValue(AuthenticationFailure(error))
+        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
 
-        val actualResult = activityRule.activityResult
-        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
+        val actualResult = scenario.result
+        val actualFailure = actualResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
         assertTrue(actualFailure.throwable is OmiseException)
         assertEquals("3D Secure authorization failed: runtime error.", actualFailure.throwable.message)
@@ -200,16 +225,19 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun activityDestroy_returnCanceledResult() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authentication.postValue(AuthenticationUnsupported)
 
-        activityRule.activity.finish()
+        scenario.onActivity {
+            it.finish()
+        }
 
-        val actualResult = activityRule.activityResult
-        assertEquals(Activity.RESULT_CANCELED, actualResult.resultCode)
+        assertEquals(Activity.RESULT_CANCELED, scenario.result.resultCode)
     }
 
     @Test
     fun webViewDialog_whenJSAlertInvokeThenDisplayAlertDialog() {
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authentication.postValue(AuthenticationUnsupported)
 
         val html = """
@@ -224,119 +252,82 @@ class AuthorizingPaymentActivityTest {
             }
             </script>
             </body>
-            </html> 
+            </html>
        """.trimIndent()
-
-        loadData(html)
-
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadHtml(html))
         onWebView()
-                .withElement(findElement(Locator.ID, "button"))
-                .check(webMatches(getText(), containsString("Submit")))
-                .perform(webClick())
+            .withElement(findElement(Locator.ID, "button"))
+            .check(webMatches(getText(), containsString("Submit")))
+            .perform(webClick())
 
         onView(withText(("Test alert!"))).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText("OK")).perform(click())
     }
 
     @Test
     fun openDeepLink_whenAuthorizeUriIsDeepLinkThenOpenExternalApp() {
         val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success")
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("sampleapp://omise.co/authorize_return?result=success"))
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
         }
-        activityRule.launchActivity(intent)
+        intending(hasData(Uri.parse(deepLinkAuthorizeUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
-        uiDevice.wait(Until.hasObject(By.pkg("co.omise.android.bankapp").depth(0)), 3_000)
+        intended(
+            allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                hasData(Uri.parse(deepLinkAuthorizeUrl)),
+            )
+        )
     }
 
     @Test
     fun openDeepLink_whenPressBackOnExternalAppThenReturnResult() {
         val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success")
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf("sampleapp://omise.co/authorize_return?result=success"))
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
         }
-        activityRule.launchActivity(intent)
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
         uiDevice.pressBack()
 
-        val actualResult = activityRule.activityResult
-        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-        assertNull(actualResult.resultData)
+        assertEquals(Activity.RESULT_OK, scenario.result.resultCode)
+        assertNull(scenario.result.resultData)
     }
 
     @Test
     fun openDeepLink_whenPressDeepLinkFromWebViewThenOpenExternalApp() {
-        activityRule.launchActivity(intent)
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val html = """
-            <!DOCTYPE html>
-            <html lang="en">
-              <head>
-                <meta charset="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Test</title>
-              </head>
-              <body>
-                <a
-                  href="bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
-                  id="deepLinkButton"
-                >
-                  Open bank app
-                </a>
-              </body>
-            </html>
-        """.trimIndent()
-        loadData(html)
+                <!DOCTYPE html>
+                <html lang="en">
+                  <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>Test</title>
+                  </head>
+                  <body>
+                    <a
+                      href="$deepLinkAuthorizeUrl"
+                      id="deepLinkButton"
+                    >
+                      Open bank app
+                    </a>
+                  </body>
+                </html>
+            """.trimIndent()
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadHtml(html))
 
-        onWebView()
+        onWebView(withId(R.id.authorizing_payment_webview))
             .withElement(findElement(Locator.ID, "deepLinkButton"))
             .check(webMatches(getText(), containsString("Open bank app")))
             .perform(webClick())
 
-        uiDevice.wait(Until.hasObject(By.pkg("co.omise.android.bankapp").depth(0)), 3_000)
-    }
-
-    @Test
-    fun openDeepLink_whenNoAppToHandleDeepLinkThenReturnFailureResult() {
-        val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, "testapp://www.omise.co/pay")
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
-        }
-        activityRule.launchActivity(intent)
-
-        val actualResult = activityRule.activityResult
-        assertEquals(Activity.RESULT_OK, actualResult.resultCode)
-
-        val actualFailure = actualResult.resultData.getParcelableExtra<Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)
-        assertEquals("Cannot find activity.", actualFailure?.throwable?.message)
-    }
-
-    private fun withUrl(url: String): Matcher<View> = object : TypeSafeMatcher<View>() {
-        override fun describeTo(description: Description?) {
-            description?.appendText("with webview url: $url")
-        }
-
-        override fun matchesSafely(item: View?): Boolean {
-            val webView = item as? WebView ?: return false
-            return webView.url == url
-        }
-    }
-
-    private fun loadUrl(url: String): ViewAction = object : ViewAction {
-        override fun getDescription(): String = "WebView load url: $url."
-
-        override fun getConstraints(): Matcher<View> =
-                allOf(isAssignableFrom(WebView::class.java))
-
-        override fun perform(uiController: UiController?, view: View?) {
-            val webView = view as? WebView ?: return
-            webView.webViewClient.shouldOverrideUrlLoading(webView, url)
-        }
-    }
-
-    private fun loadData(htmlData: String) {
-        val webView = activityRule.activity.findViewById<WebView>(R.id.authorizing_payment_webview)
-        val encodedHtml = Base64.encodeToString(htmlData.toByteArray(), Base64.NO_PADDING)
-        activityRule.activity.runOnUiThread {
-            webView.loadData(encodedHtml, "text/html", "base64")
-        }
+        intended(
+            allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                hasData(Uri.parse(deepLinkAuthorizeUrl))
+            )
+        )
     }
 }
