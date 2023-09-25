@@ -1,6 +1,7 @@
 package co.omise.android.ui
 
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -53,6 +54,7 @@ class FpxEmailFormFragmentTest {
     @Test
     fun clickSubmitButton_requestNavigateToBankChooser() {
         onView(withId(R.id.edit_email)).perform(typeText("example@omise.co"), pressImeActionButton())
+        closeSoftKeyboard()
         onView(withId(R.id.button_submit)).perform(click())
 
         verify(mockNavigation).navigateToFpxBankChooser(banks, "example@omise.co")
