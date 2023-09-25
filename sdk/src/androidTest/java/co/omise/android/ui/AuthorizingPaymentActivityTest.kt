@@ -287,6 +287,7 @@ class AuthorizingPaymentActivityTest {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
         }
+        intending(hasData(Uri.parse(deepLinkAuthorizeUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
         uiDevice.pressBack()
