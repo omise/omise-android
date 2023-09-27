@@ -2,6 +2,7 @@ package co.omise.android.models
 
 import android.os.Parcelable
 import co.omise.android.api.RequestBuilder
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import okhttp3.HttpUrl
@@ -10,6 +11,7 @@ import okhttp3.RequestBody
 import org.joda.time.DateTime
 import java.io.IOException
 
+// TODO: Change fields to non-nullable and remove default value after adding jackson-module-kotlin
 @Parcelize
 internal data class Authentication(
     val status: AuthenticationStatus = AuthenticationStatus.FAILED,
@@ -37,9 +39,11 @@ internal data class Authentication(
         CHALLENGE("challenge")
     }
 
+    // TODO: Change fields to non-nullable and remove default value after adding jackson-module-kotlin
     @Parcelize
     data class AReq(val sdkReferenceNumber: String? = null) : Parcelable
 
+    // TODO: Change fields to non-nullable and remove default value after adding jackson-module-kotlin
     @Parcelize
     data class ARes(
         val messageVersion: String? = null,
@@ -50,11 +54,14 @@ internal data class Authentication(
     ) : Parcelable
 
     class AuthenticationRequestBuilder(
+        @JsonIgnore
         val authorizeUrl: String,
         @field:JsonProperty("areq")
         val areq: AReq,
         @field:JsonProperty("device_info")
-        val deviceInfo: String,
+        // TODO: Change type to String after adding authorize endpoint has been changed.
+        // val deviceInfo: String,
+        val deviceInfo: Map<String, Any>,
         @field:JsonProperty("device_type")
         val deviceType: String = "Android",
     ) : RequestBuilder<Authentication>() {
@@ -77,10 +84,18 @@ internal data class Authentication(
         }
 
         data class AReq(
-            val sdkAppID: String? = null,
-            val sdkEphemPubKey: String? = null,
-            val sdkTransID: String? = null,
-            val sdkMaxTimeout: Int? = null
+            val sdkAppID: String,
+            val sdkEphemPubKey: SdkEphemPubKey,
+            val sdkTransID: String,
+            val sdkMaxTimeout: Int,
+        )
+
+        // TODO: Change fields to non-nullable and remove default value after adding jackson-module-kotlin
+        data class SdkEphemPubKey(
+            val kty: String? = null,
+            val x: String? = null,
+            val y: String? = null,
+            val crv: String? = null,
         )
     }
 }

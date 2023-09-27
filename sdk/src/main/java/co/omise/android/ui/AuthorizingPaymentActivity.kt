@@ -67,43 +67,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         } else {
             val authorizeUrl = intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING) ?: ""
             viewModel.initialize3DSTransaction()
-            viewModel.sendAuthenticationRequest(authorizeUrl)
-
-            viewModel.authenticationStatus.observe(this) {
-                when (it) {
-                    Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(null)
-                    Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure()
-                    Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
-                    Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
-                }
-            }
-
-            viewModel.isLoading.observe(this) {
-                if (it) {
-                    viewModel.transaction.getProgressView(this).showProgress()
-                } else {
-                    viewModel.transaction.getProgressView(this).hideProgress()
-                }
-            }
-
-            viewModel.transactionStatus.observe(this) {
-                Log.d("AuthorizingPayment", "transactionStatus: $it")
-                when (it) {
-                    "Y" -> finishActivityWithSuccessful(null)
-                    "N" -> finishActivityWithFailure()
-                    else -> finishActivityWithFailure()
-                }
-            }
-            // TODO: display webview if 3DS v2 is not supported
-            //setupWebView()
+            viewModel.sendAuthorizeRequest(authorizeUrl)
         }
-    }
 
-    private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
-        if (viewModelFactory == null) {
-            viewModelFactory = AuthorizingPaymentViewModelFactory(this)
-        }
-        return viewModelFactory ?: throw IllegalArgumentException("viewModelFactory must not be null.")
+        observeData()
     }
 
     @TestOnly
@@ -141,6 +108,32 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                         finishActivityWithFailure(it)
                     }
                 }
+            }
+        }
+
+        viewModel.authenticationStatus.observe(this) {
+            when (it) {
+                Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(null)
+                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure()
+                Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
+                Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
+            }
+        }
+
+        viewModel.isLoading.observe(this) {
+            if (it) {
+                viewModel.transaction.getProgressView(this).showProgress()
+            } else {
+                viewModel.transaction.getProgressView(this).hideProgress()
+            }
+        }
+
+        viewModel.transactionStatus.observe(this) {
+            Log.d("AuthorizingPayment", "transactionStatus: $it")
+            when (it) {
+                "Y" -> finishActivityWithSuccessful(null)
+                "N" -> finishActivityWithFailure()
+                else -> finishActivityWithFailure()
             }
         }
     }
