@@ -13,6 +13,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
@@ -47,7 +48,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
 
-    private lateinit var viewModel: AuthorizingPaymentViewModel
+    private val viewModel: AuthorizingPaymentViewModel by viewModels { viewModelFactory ?: AuthorizingPaymentViewModelFactory(this) }
     private var viewModelFactory: ViewModelProvider.Factory? = null
     private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
@@ -58,7 +59,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
                 ?: getString(R.string.title_authorizing_payment)
 
-        setupWebView()
+        if (verifier.verifyExternalURL(verifier.authorizedURL)) {
+            openDeepLink(verifier.authorizedURL)
+        } else {
+            setupWebView()
+        }
     }
 
     private fun getAuthorizingPaymentViewModelFactory(): ViewModelProvider.Factory {
@@ -69,7 +74,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     @TestOnly
-    fun setAuthorizingPaymentViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
+    fun setViewModelFactory(viewModelFactory: ViewModelProvider.Factory) {
         this.viewModelFactory = viewModelFactory
     }
 
@@ -80,7 +85,29 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
                 is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.completionEvent)
-                is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
+                is AuthenticationResult.AuthenticationFailure -> {
+                    val error = result.error
+                    when (error) {
+                        is ProtocolErrorEvent ->
+                            OmiseException(
+                                "3D Secure authorization failed: protocol error.", ProtocolException(
+                                    """
+                            errorCode=${error.errorMessage.errorCode?.value},
+                            errorDetail=${error.errorMessage.errorDetail},
+                            errorDescription=${error.errorMessage.errorDescription},
+                        """.trimIndent()
+                                )
+                            )
+
+                        is RuntimeErrorEvent ->
+                            OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(error.errorMessage))
+
+                        else ->
+                            OmiseException("3D Secure authorization failed: ${error.message}", error)
+                    }.let {
+                        finishActivityWithFailure(it)
+                    }
+                }
             }
         }
     }
@@ -93,14 +120,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                     finishActivityWithSuccessful(url)
                     true
                 } else if (verifier.verifyExternalURL(uri)) {
-                    try {
-                        val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
-                        true
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                        true
-                    }
+                    openDeepLink(uri)
+                    true
                 } else {
                     false
                 }
@@ -156,9 +177,18 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
+    private fun openDeepLink(uri: Uri) {
+        try {
+            val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+            startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+        } catch (e: ActivityNotFoundException) {
+            finishActivityWithFailure(OmiseException("Open deep-link failed.", e))
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_EXTERNAL_CODE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_EXTERNAL_CODE) {
             finishActivityWithSuccessful(data)
         }
     }
@@ -205,7 +235,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun finishActivityWithSuccessful(completionEvent: CompletionEvent) {
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value))
+            putExtra(
+                EXTRA_AUTHORIZING_PAYMENT_RESULT,
+                ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value)
+            )
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -217,22 +250,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithFailure(throwable: Throwable? = null) {
-        val exception = when (throwable) {
-            is ProtocolErrorEvent ->
-                OmiseException("3D Secure authorization failed: protocol error.", ProtocolException(
-                        """
-                            errorCode=${throwable.errorMessage.errorCode?.value},
-                            errorDetail=${throwable.errorMessage.errorDetail},
-                            errorDescription=${throwable.errorMessage.errorDescription},
-                        """.trimIndent()
-                ))
-            is RuntimeErrorEvent ->
-                OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(throwable.errorMessage))
-            else ->
-                OmiseException("3D Secure authorization failed: ${throwable?.message}", throwable)
-        }
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(exception))
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, throwable?.let { Failure(it) })
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

@@ -160,6 +160,7 @@ dependencies {
     implementation("co.omise:threeds-android:$omise_threeds_sdk_version") {
         exclude module: 'asm'
     }
+    implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
@@ -198,6 +199,7 @@ dependencies {
     androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
     androidTestImplementation "org.robolectric:annotations:$robolectric_version"
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "androidx.test:rules:$test_version"
     androidTestImplementation "androidx.test:runner:$test_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
@@ -205,6 +207,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
     androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
 }
 
