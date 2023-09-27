@@ -1,7 +1,10 @@
 package co.omise.android.ui
 
+import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.test.platform.app.InstrumentationRegistry
+import co.omise.android.api.Client
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.data.models.TransactionStatus
 import co.omise.android.threeds.events.CompletionEvent
@@ -24,12 +27,14 @@ import org.junit.Test
 class AuthorizingPaymentViewModelTest {
 
     private val threeDS: ThreeDS = mock()
+    private val client: Client = mock()
+    private val application: Application = mock()
     private val sdkTransID = "skts_test_1234"
 
     private val authorizeUrl = "https://www.omise.co/pay"
     private val testDispatcher = TestCoroutineDispatcher()
     private val testCoroutineScope = TestCoroutineScope(testDispatcher)
-    private val viewModel = spy(AuthorizingPaymentViewModel(threeDS))
+    private val viewModel = spy(AuthorizingPaymentViewModel(threeDS, application, client))
     private val observer: Observer<AuthenticationResult> = mock()
 
     @get:Rule

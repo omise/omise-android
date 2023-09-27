@@ -12,7 +12,9 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import co.omise.android.BuildConfig
 import co.omise.android.R
+import co.omise.android.api.Client
 import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.models.Authentication
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.ThreeDSListener
 import co.omise.android.threeds.core.ThreeDSConfig
@@ -29,16 +31,12 @@ import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiv
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
-import okhttp3.Call
-import okhttp3.Callback
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
 import org.jetbrains.annotations.TestOnly
-import org.json.JSONObject
-import java.io.IOException
 import java.util.Collections
 import java.util.Locale
 
@@ -47,20 +45,22 @@ private const val TAG = "AuthorizingPaymentVM"
 
 internal class AuthorizingPaymentViewModelFactory(private val activity: Activity) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        // TODO: Remove this
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         val threeDS = ThreeDS(activity)
-        return AuthorizingPaymentViewModel(threeDS, activity.application) as T
+        val client = Client("")
+        return AuthorizingPaymentViewModel(threeDS, activity.application, client) as T
     }
 }
 
-internal class AuthorizingPaymentViewModel(private val threeDS: ThreeDS, private val application: Application) :
+internal class AuthorizingPaymentViewModel(private val threeDS: ThreeDS, private val application: Application, val client: Client) :
     AndroidViewModel(application), ThreeDSListener {
 
     private val _authentication = MutableLiveData<AuthenticationResult>()
     val authentication: LiveData<AuthenticationResult> = _authentication
 
-    private val _authenticationResponse = MutableLiveData<JSONObject>()
-    val authenticationStatus: LiveData<String> = _authenticationResponse.map { it.getString("status") }
+    private val _authenticationResponse = MutableLiveData<Authentication>()
+    val authenticationStatus: LiveData<Authentication.AuthenticationStatus> = _authenticationResponse.map { it.status }
 
     private val _transactionStatus = MutableLiveData<String>()
     val transactionStatus: LiveData<String> = _transactionStatus
@@ -140,38 +140,63 @@ internal class AuthorizingPaymentViewModel(private val threeDS: ThreeDS, private
 
             val client = OkHttpClient();
 
-            client.newCall(authenticationRequest).enqueue(object : Callback {
-                override fun onResponse(call: Call, response: Response) {
-                    response.body?.string()?.let { JSONObject(it) }?.let {
-                        Log.d(TAG, "${it.toString()}")
-                        _authenticationResponse.postValue(it)
-                        _isLoading.postValue(false)
-                    }
-                }
-
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.e(TAG, "Error sending authentication request", e)
-                    _isLoading.postValue(false)
-                }
-            })
+//            client.newCall(authenticationRequest).enqueue(object : Callback {
+//                override fun onResponse(call: Call, response: Response) {
+//                    response.body?.string()?.let { JSONObject(it) }?.let {
+//                        Log.d(TAG, "${it.toString()}")
+//                        _authenticationResponse.postValue(it)
+//                        _isLoading.postValue(false)
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call, e: IOException) {
+//                    Log.e(TAG, "Error sending authentication request", e)
+//                    _isLoading.postValue(false)
+//                }
+//            })
         } catch (e: SDKRuntimeException) {
             // TODO: fallback to authorize with webview
             Log.e(TAG, "Error sending authentication request", e)
         }
     }
 
+    fun sendAuthorizeRequest(authorizeUrl: String) = coroutineScope.launch {
+        val authenticationRequestParameters = transaction.authenticationRequestParameters
+        val request = Authentication.AuthenticationRequestBuilder(
+            authorizeUrl = authorizeUrl,
+            areq = Authentication.AuthenticationRequestBuilder.AReq(
+                sdkAppID = authenticationRequestParameters.sdkAppID,
+                sdkEphemPubKey = authenticationRequestParameters.sdkEphemeralPublicKey,
+                sdkTransID = authenticationRequestParameters.sdkTransactionID,
+                sdkMaxTimeout = 5,
+            ),
+            deviceInfo = """
+               {"DV":"1.6","DD":{"A006":"http:\/\/gsm.lge.com\/html\/gsm\/Nexus5-M3.xml","A007":"GoldfishNexus","A008":"us","A009":"310260","A010":"T-Mobile","A011":"10","A012":"1","A013":"1","A014":"us","A015":"310260","A016":"T-Mobile","A018":"5","A019":"Voicemail","A020":"+15557654321","A021":"true","A022":"false","A023":"false","A024":"true","A025":"true","A026":"true","A027":"false","A033":"false","A039":"02:00:00:00:00:00","A040":[],"A041":"true","A042":"goldfish_arm64","A043":"unknown","A044":"google","A045":"emu64a","A046":"TE1A.220922.012","A047":"google\/sdk_gphone64_arm64\/emu64a:13\/TE1A.220922.012\/9302419:user\/release-keys","A048":"ranchu","A049":"TE1A.220922.012","A050":"Google","A051":"sdk_gphone64_arm64","A052":"1.0.0.0","A054":[],"A055":["arm64-v8a"],"A056":"release-keys","A057":"1668654818000","A058":"user","A059":"android-build","A060":"REL","A061":"9302419","A062":"0","A063":"33","A064":"2022-11-05","A065":"false","A066":"false","A067":"true","A068":"http:\/\/www.google.com http:\/\/www.google.co.uk","A069":"76cc5517ef4e17fd","A070":"true","A071":"com.google.android.inputmethod.latin\/com.android.inputmethod.latin.LatinIME","A072":"true","A074":["com.google.android.inputmethod.latin","com.android.inputmethod.latin.LatinIME:com.google.android.tts","com.google.android.apps.speech.tts.googletts.settings.asr.voiceime.VoiceInputMethodService"],"A077":"true","A078":"false","A084":"true","A085":"cell,bluetooth,wifi,nfc,wimax","A086":"false","A087":"1","A088":"true","A089":"true","A090":"true","A093":"1","A094":"1","A095":"true","A097":"false","A099":"true","A103":"false","A104":"true","A105":"2","A106":"1","A107":"true","A108":"422","A109":"content:\/\/media\/internal\/audio\/media\/161?title=Pixie%20Dust&canonical=1","A110":"111","A111":"content:\/\/media\/internal\/audio\/media\/50?title=Flutey%20Phone&canonical=1","A112":"102","A113":"false","A114":"2147483647","A115":"true","A116":"false","A117":"false","A118":"false","A119":"false","A121":"0","A122":"false","A123":"false","A124":"false","A125":["android.ext.services.ExtServicesApplication","com.fime.emvco3ds.sdk.FimeApp","com.android.providers.media.MediaApplication","com.google.android.finsky.application.classic.ClassicApplication","com.android.nfc.NfcApplication","com.android.permissioncontroller.PermissionControllerApplication","com.google.android.setupwizard.SetupWizardApplication","com.android.se.SEApplication","com.google.android.apps.wellbeing.Wellbeing_Application","com.google.android.apps.docs.drive.DriveApplication","org.chromium.android_webview.nonembedded.WebViewApkApplication","org.chromium.chrome.browser.base.SplitChromeApplication","com.android.packageinstaller.PackageInstallerApplication","co.g.App","com.google.android.apps.speech.tts.googletts.GoogleTTSRoot_Application","com.android.managedprovisioning.ManagedProvisioningApplication","com.google.android.gms.common.app.GmsApplication","com.android.settings.SettingsApplication","com.android.phone.PhoneApp","com.android.systemui.SystemUIApplication","com.android.bluetooth.btservice.AdapterApp"],"A127":"88","A128":"19","A129":"mounted","A130":"789","A131":"2.75","A132":"440","A133":"2.75","A134":"72","A135":"72","A136":"6228115456","A137":"Mozilla\/5.0 (Linux; Android 13; sdk_gphone64_arm64 Build\/TE1A.220922.012; wv) AppleWebKit\/537.36 (KHTML, like Gecko) Version\/4.0 Chrome\/103.0.5060.71 Mobile Safari\/537.36","A138":"1","A139":"T-Mobile - US","A141":"1","A142":"T-Mobile - US","A143":"1","A145":"1","A146":"false","A149":[],"A150":"false","A151":"false","A152":"false","C001":"Android","C002":"Google||sdk_gphone64_arm64","C003":"Android TIRAMISU 13 API 33","C004":"13","C005":"en-US","C006":"420","C008":"1080x2214","C009":"sdk_gphone64_arm64","C010":"10.0.2.16","C013":"com.fime.emvco3ds.sdk.referenceapp","C014":"b8d20388-d177-4bf8-9d3b-ccf1f9cc56c0","C015":"1.0.0-alpha12","C016":"3DS_LOA_SDK_PPFU_020100_00007","C017":"20230830082957","C018":"4ae4af56-be8c-44fb-be06-4a99582307b7"},"DPNA":{"A001":"RE03","A002":"RE03","A003":"RE04","A004":"RE04","A005":"RE03","A017":"RE03","A028":"RE03","A029":"RE03","A030":"RE03","A031":"RE03","A032":"RE03","A034":"RE03","A035":"RE03","A036":"RE03","A037":"RE02","A038":"RE03","A053":"RE04","A073":"RE04","A075":"RE04","A076":"RE03","A079":"RE02","A080":"RE04","A081":"RE04","A082":"RE04","A083":"RE04","A091":"RE04","A092":"RE04","A096":"RE04","A098":"RE02","A100":"RE04","A101":"RE04","A102":"RE04","A120":"RE04","A126":"RE04","A140":"RE03","A147":"RE03","A148":"RE03","A153":"RE02","A154":"RE02","A155":"RE02","C011":"RE03","C012":"RE03"},"SW":["SW04"]} 
+            """.trimIndent()
+        ).build()
+
+        try {
+            _isLoading.postValue(true)
+            val authentication = client.send(request)
+            _authenticationResponse.postValue(authentication)
+        } catch (e: Exception) {
+            // TODO: fallback to authorize with webview
+            Log.e(TAG, "Error sending authentication request", e)
+        } finally {
+            _isLoading.postValue(false)
+        }
+    }
+
     fun doChallenge(activity: Activity) {
-        val json = _authenticationResponse.value ?: return
-        val areqJson = json.getJSONObject("areq")
-        val aresJson = json.getJSONObject("ares")
+        val ares = _authenticationResponse.value?.ares ?: return
         val challengeParameters = ChallengeParameters().apply {
-            set3DSServerTransactionID(aresJson.getString("threeDSServerTransID"))
-            acsTransactionID = aresJson.getString("acsTransID")
+            set3DSServerTransactionID(ares.threeDSServerTransID)
+            acsTransactionID = ares.acsTransID
             // TODO : check if where to get the sdkReferenceNumber value
 //            acsRefNumber = areqJson.getString("sdkReferenceNumber")
 //            acsRefNumber = viewModel.transaction.authenticationRequestParameters.sdkReferenceNumber
             acsRefNumber = BuildConfig.ACS_REF_NUMBER
-            acsSignedContent = aresJson.getString("acsSignedContent")
+            acsSignedContent = ares.acsSignedContent
         }
 
         Log.d(TAG, "challengeParameters.asRefNumber: ${challengeParameters.acsRefNumber}")

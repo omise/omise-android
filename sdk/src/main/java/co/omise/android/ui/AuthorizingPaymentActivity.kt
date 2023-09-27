@@ -26,6 +26,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL
 import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.models.Authentication
 import co.omise.android.threeds.challenge.ProgressView
 import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
@@ -34,11 +35,8 @@ import co.omise.android.threeds.events.RuntimeErrorEvent
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
-import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
-import org.json.JSONObject
 import java.net.ProtocolException
 
 /**
@@ -66,15 +64,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         val authorizeUrl = intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING) ?: ""
         viewModel.initialize3DSTransaction()
-        viewModel.sendAuthenticationRequest(authorizeUrl)
+        viewModel.sendAuthorizeRequest(authorizeUrl)
 
         viewModel.authenticationStatus.observe(this) {
             when (it) {
-                "success" -> finishActivityWithSuccessful(null)
-                "challenge" -> viewModel.doChallenge(this)
-                "challenge_v1" -> setupWebView()
-                "failed" -> finishActivityWithFailure()
-                else -> Log.d("AuthorizingPayment", "Unhandled status: $it")
+                Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(null)
+                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure()
+                Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
+                Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
             }
         }
 
