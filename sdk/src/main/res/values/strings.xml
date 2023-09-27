@@ -100,6 +100,7 @@
     <string name="payment_method_mobile_banking_scb_title">SCB EASY</string>
     <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
+    <string name="payment_method_ocbc_digital_title">OCBC Digital</string>
     <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
 
     <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
@@ -132,7 +133,7 @@
     <string name="payment_method_grabpay_title" translatable="false">Grab</string>
     <string name="payment_method_grabpay_rms_title" translatable="false">GrabPay</string>
     <string name="payment_method_grabpay_footnote" translatable="false">(GrabPay and PayLater)</string>
-    <string name="payment_method_paypay_title">PayPay</string>
+    <string name="payment_method_paypay_title" translatable="false">PayPay</string>
     <string name="payment_method_atome_title">Atome</string>
     <string name="label_name">Name (optional)</string>
     <string name="label_email_optional">Email (optional)</string>

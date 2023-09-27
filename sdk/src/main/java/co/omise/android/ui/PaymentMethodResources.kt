@@ -240,6 +240,13 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.OcbcPao
     )
 
+    object OcbcDigital: PaymentMethodResource(
+        iconRes = R.drawable.payment_ocbc_digital,
+        titleRes = R.string.payment_method_ocbc_digital_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.OcbcDigital
+    )
+
     object Boost : PaymentMethodResource(
         iconRes = R.drawable.payment_boost,
         titleRes = R.string.payment_method_boots_title,
@@ -487,7 +494,6 @@ internal sealed class MobileBankingResource(
             indicatorIconRes = R.drawable.ic_redirect,
             sourceType = SourceType.MobileBanking.Scb
     )
-
 }
 
 internal class FpxResource(

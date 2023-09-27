@@ -33,6 +33,7 @@ sealed class SourceType(
     data class Fpx(var banks : List<Bank>? = null) : SourceType("fpx")
     object RabbitLinePay : SourceType("rabbit_linepay")
     object OcbcPao : SourceType("mobile_banking_ocbc_pao")
+    object OcbcDigital : SourceType("mobile_banking_ocbc")
     object Boost: SourceType("boost")
     object ShopeePay: SourceType("shopeepay")
     object ShopeePayJumpApp: SourceType("shopeepay_jumpapp")
@@ -130,6 +131,7 @@ sealed class SourceType(
             "touch_n_go" -> TouchNGo()
             "rabbit_linepay" -> RabbitLinePay
             "mobile_banking_ocbc_pao" -> OcbcPao
+            "mobile_banking_ocbc" -> OcbcDigital
             "boost" -> Boost
             "shopeepay" -> ShopeePay
             "shopeepay_jumpapp" -> ShopeePayJumpApp

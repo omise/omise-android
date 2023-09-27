@@ -72,6 +72,7 @@
             app:key="@string/payment_preference_mobile_banking_scb_key"
             app:title="@string/payment_preference_mobile_banking_scb_title" />
 
+
         <CheckBoxPreference
             app:defaultValue="true"
             app:key="@string/payment_preference_installment_bay_key"
@@ -189,9 +190,14 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
-            app:key="@string/payment_preference_mobile_banking_ocbc_pao_key"
-            app:title="@string/payment_preference_mobile_banking_ocbc_pao_title" />
-            
+            app:key="@string/payment_preference_ocbc_pao_key"
+            app:title="@string/payment_preference_ocbc_pao_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="@string/payment_preference_ocbc_digital_key"
+            app:title="@string/payment_preference_ocbc_digital_title" />
+
         <CheckBoxPreference
             app:defaultValue="true"
             app:key="@string/payment_preference_boost_key"

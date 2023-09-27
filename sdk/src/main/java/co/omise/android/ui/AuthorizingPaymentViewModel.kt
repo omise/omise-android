@@ -46,7 +46,7 @@ import java.util.Locale
 private const val TAG = "AuthorizingPaymentVM"
 
 internal class AuthorizingPaymentViewModelFactory(private val activity: Activity) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
         val threeDS = ThreeDS(activity)
         return AuthorizingPaymentViewModel(threeDS, activity.application) as T

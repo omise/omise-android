@@ -45,6 +45,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.TouchNGo,
             PaymentMethodResource.RabbitLinepay,
             PaymentMethodResource.OcbcPao,
+            PaymentMethodResource.OcbcDigital,
             PaymentMethodResource.Boost,
             PaymentMethodResource.ShopeePay,
             PaymentMethodResource.ShopeePayJumpApp,
