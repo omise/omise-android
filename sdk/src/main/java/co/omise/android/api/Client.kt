@@ -6,6 +6,7 @@ import co.omise.android.models.Model
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -70,6 +71,9 @@ class Client(publicKey: String) {
 
         return builder
                 .addInterceptor(Configurer(config))
+                .addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                })
                 .connectionSpecs(listOf(spec))
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()

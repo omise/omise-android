@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.JsPromptResult
@@ -20,24 +19,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
-import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.AuthorizingPaymentConfig
-import co.omise.android.models.Authentication
 import co.omise.android.threeds.challenge.ProgressView
 import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
-import co.omise.android.threeds.events.ProtocolErrorEvent
-import co.omise.android.threeds.events.RuntimeErrorEvent
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
-import java.net.ProtocolException
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -51,7 +45,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
 
-    private val viewModel: AuthorizingPaymentViewModel by viewModels { viewModelFactory ?: AuthorizingPaymentViewModelFactory(this) }
+    private val viewModel: AuthorizingPaymentViewModel by viewModels {
+        viewModelFactory ?: AuthorizingPaymentViewModelFactory(
+            this,
+            verifier
+        )
+    }
     private var viewModelFactory: ViewModelProvider.Factory? = null
     private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
@@ -64,10 +63,6 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         if (verifier.verifyExternalURL(verifier.authorizedURL)) {
             openDeepLink(verifier.authorizedURL)
-        } else {
-            val authorizeUrl = intent.getStringExtra(EXTRA_AUTHORIZED_URLSTRING) ?: ""
-            viewModel.initialize3DSTransaction()
-            viewModel.sendAuthorizeRequest(authorizeUrl)
         }
 
         observeData()
@@ -79,61 +74,22 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.authentication.observe(this) { result ->
-            progressDialog.dismiss()
+        viewModel.authenticationResult.observe(this) { result ->
 
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
-                is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.completionEvent)
-                is AuthenticationResult.AuthenticationFailure -> {
-                    val error = result.error
-                    when (error) {
-                        is ProtocolErrorEvent ->
-                            OmiseException(
-                                "3D Secure authorization failed: protocol error.", ProtocolException(
-                                    """
-                            errorCode=${error.errorMessage.errorCode?.value},
-                            errorDetail=${error.errorMessage.errorDetail},
-                            errorDescription=${error.errorMessage.errorDescription},
-                        """.trimIndent()
-                                )
-                            )
-
-                        is RuntimeErrorEvent ->
-                            OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(error.errorMessage))
-
-                        else ->
-                            OmiseException("3D Secure authorization failed: ${error.message}", error)
-                    }.let {
-                        finishActivityWithFailure(it)
-                    }
-                }
-            }
-        }
-
-        viewModel.authenticationStatus.observe(this) {
-            when (it) {
-                Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(null)
-                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure()
-                Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
-                Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
+                AuthenticationResult.AuthenticationChallenge -> viewModel.doChallenge(this)
+                is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(null) // TODO: return transaction status
+                is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
             }
         }
 
         viewModel.isLoading.observe(this) {
+            val progressView = viewModel.getTransaction().getProgressView(this)
             if (it) {
-                viewModel.transaction.getProgressView(this).showProgress()
+                progressView.showProgress()
             } else {
-                viewModel.transaction.getProgressView(this).hideProgress()
-            }
-        }
-
-        viewModel.transactionStatus.observe(this) {
-            Log.d("AuthorizingPayment", "transactionStatus: $it")
-            when (it) {
-                "Y" -> finishActivityWithSuccessful(null)
-                "N" -> finishActivityWithFailure()
-                else -> finishActivityWithFailure()
+                progressView.hideProgress()
             }
         }
     }

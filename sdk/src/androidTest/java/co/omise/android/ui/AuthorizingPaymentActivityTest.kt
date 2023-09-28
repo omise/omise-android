@@ -99,7 +99,7 @@ class AuthorizingPaymentActivityTest {
 
     @Before
     fun setUp() {
-        whenever(mockViewModel.authentication).thenReturn(authentication)
+        whenever(mockViewModel.authenticationResult).thenReturn(authentication)
         doNothing().whenever(mockViewModel).cleanup()
 
         ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback { activity, stage ->
