@@ -15,6 +15,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
+/**
+ * Encapsulates the [ThreeDS2Service] to allow for easier testing.
+ */
 internal class ThreeDS2ServiceWrapper(private val context: Context, private val threeDS2Service: ThreeDS2Service) {
     lateinit var transaction: Transaction
         private set
