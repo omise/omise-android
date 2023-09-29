@@ -75,7 +75,6 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.authenticationResult.observe(this) { result ->
-
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
                 AuthenticationResult.AuthenticationChallenge -> viewModel.doChallenge(this)

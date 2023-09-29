@@ -93,13 +93,15 @@ class AuthorizingPaymentActivityTest {
         }
     }
 
-    private val authentication = MutableLiveData<AuthenticationResult>()
+    private val authenticationResult = MutableLiveData<AuthenticationResult>()
+    private val isLoading = MutableLiveData<Boolean>()
 
     private val uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     @Before
     fun setUp() {
-        whenever(mockViewModel.authenticationResult).thenReturn(authentication)
+        whenever(mockViewModel.authenticationResult).thenReturn(authenticationResult)
+        whenever(mockViewModel.isLoading).thenReturn(isLoading)
         doNothing().whenever(mockViewModel).cleanup()
 
         ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback { activity, stage ->
@@ -121,7 +123,7 @@ class AuthorizingPaymentActivityTest {
     @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun fallback3DS1_whenTransactionUse3DS1ThenLoadAuthorizeUrlToWebView() {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        authentication.postValue(AuthenticationUnsupported)
+        authenticationResult.postValue(AuthenticationUnsupported)
 
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
@@ -132,7 +134,7 @@ class AuthorizingPaymentActivityTest {
     @Ignore("Due to switching off 3DS SDK feature, so this test is not valid")
     fun activityResultOf3DS1_whenAuthorizationCompletedThenReturnExpectedReturnUrl() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        authentication.postValue(AuthenticationUnsupported)
+        authenticationResult.postValue(AuthenticationUnsupported)
 
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
 
@@ -150,7 +152,7 @@ class AuthorizingPaymentActivityTest {
     fun authorizationCompleted_returnActivityResultWith3DS2CompletedResult() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val completionEvent = co.omise.android.threeds.events.CompletionEvent("test_id_1234", TransactionStatus.AUTHENTICATED)
-        authentication.postValue(AuthenticationResult.AuthenticationCompleted(completionEvent))
+        authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(co.omise.android.ui.TransactionStatus.AUTHENTICATED))
 
         val actualResult = scenario.result
         assertEquals(Activity.RESULT_OK, actualResult.resultCode)
@@ -165,7 +167,7 @@ class AuthorizingPaymentActivityTest {
     fun authorizationFailed_returnActivityResultWithErrorMessage() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val testException = Exception("Somethings went wrong.")
-        authentication.postValue(AuthenticationResult.AuthenticationFailure(testException))
+        authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(testException))
 
         val actualResult = scenario.result
         val actualFailure = actualResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
@@ -188,7 +190,7 @@ class AuthorizingPaymentActivityTest {
                 errorDescription = "sdkTransID is invalided UUID format.",
             )
         )
-        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+        authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(error))
 
         val actualResult = scenario.result
         val actualFailure = actualResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
@@ -213,7 +215,7 @@ class AuthorizingPaymentActivityTest {
             errorCode = "1234",
             errorMessage = "Something went wrong."
         )
-        authentication.postValue(AuthenticationResult.AuthenticationFailure(error))
+        authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(error))
 
         val actualResult = scenario.result
         val actualFailure = actualResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)!!
@@ -226,7 +228,7 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun activityDestroy_returnCanceledResult() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        authentication.postValue(AuthenticationUnsupported)
+        authenticationResult.postValue(AuthenticationUnsupported)
 
         scenario.onActivity {
             it.finish()
@@ -238,7 +240,7 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun webViewDialog_whenJSAlertInvokeThenDisplayAlertDialog() {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        authentication.postValue(AuthenticationUnsupported)
+        authenticationResult.postValue(AuthenticationUnsupported)
 
         val html = """
             <!DOCTYPE html>
@@ -299,6 +301,8 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun openDeepLink_whenPressDeepLinkFromWebViewThenOpenExternalApp() {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        authenticationResult.postValue(AuthenticationUnsupported)
+
         val html = """
                 <!DOCTYPE html>
                 <html lang="en">

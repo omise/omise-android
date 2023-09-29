@@ -21,6 +21,8 @@ import com.netcetera.threeds.sdk.ThreeDS2ServiceInstance
 import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
@@ -45,7 +47,8 @@ internal class AuthorizingPaymentViewModel(
     private val client: Client,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val threeDS2Service: ThreeDS2ServiceWrapper,
-) : ViewModel() {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : ViewModel(), ChallengeStatusReceiver {
 
     private val _authenticationResult = MutableLiveData<AuthenticationResult>()
     val authenticationResult: LiveData<AuthenticationResult> = _authenticationResult
@@ -56,10 +59,18 @@ internal class AuthorizingPaymentViewModel(
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             if (!urlVerifier.verifyExternalURL()) {
-                threeDS2Service.initialize()
-                sendAuthenticationRequest()
+                threeDS2Service.initialize().fold(
+                    onSuccess = {
+                        sendAuthenticationRequest()
+                    },
+                    onFailure = {
+                        _authenticationResult.postValue(
+                            AuthenticationResult.AuthenticationFailure(OmiseException("3DS2 initialization failed", it))
+                        )
+                    }
+                )
             }
         }
     }
@@ -104,7 +115,7 @@ internal class AuthorizingPaymentViewModel(
 
                 Authentication.AuthenticationStatus.FAILED -> {
                     transaction.close()
-                    _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.NOT_AUTHENTICATED))
+                    _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Authentication failed")))
                 }
 
                 Authentication.AuthenticationStatus.CHALLENGE_V1 -> {
@@ -120,7 +131,7 @@ internal class AuthorizingPaymentViewModel(
             }
         } catch (e: Exception) {
             transaction.close()
-            _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("authentication failed", e)))
+            _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Authentication failed", e)))
         } finally {
             _isLoading.postValue(false)
         }
@@ -136,37 +147,11 @@ internal class AuthorizingPaymentViewModel(
             acsSignedContent = ares.acsSignedContent
         }
 
-        val receiver = object : ChallengeStatusReceiver {
-            override fun completed(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.CompletionEvent?) {
-                when (event?.transactionStatus) {
-                    "Y" -> _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.AUTHENTICATED))
-                    "N" -> _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.NOT_AUTHENTICATED))
-                    else -> _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge completed with unknown status: ${event?.transactionStatus}")))
-                }
-            }
-
-            override fun cancelled() {
-                _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge cancelled")))
-            }
-
-            override fun timedout() {
-                _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge timedout")))
-            }
-
-            override fun protocolError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.ProtocolErrorEvent?) {
-                _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge protocol error")))
-            }
-
-            override fun runtimeError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.RuntimeErrorEvent?) {
-                _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge runtime error")))
-            }
-        }
-
         try {
-            threeDS2Service.doChallenge(activity, challengeParameters, receiver, 5)
+            threeDS2Service.doChallenge(activity, challengeParameters, this, 5)
         } catch (e: Exception) {
             Log.e("AuthorizingPayment", "Error to do challenge", e)
-            _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("challenge failed", e)))
+            _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge failed", e)))
         }
     }
 
@@ -174,14 +159,42 @@ internal class AuthorizingPaymentViewModel(
         return threeDS2Service.transaction
     }
 
+    // TODO: Remove this after removing Omise's 3DS SDK.
     fun cleanup() {
         viewModelScope.cancel()
         threeDS.cleanup()
     }
 
+    // TODO: Remove this after removing Omise's 3DS SDK.
     fun authorizeTransaction(authorizedUrl: String) {
         threeDS.authorizeTransaction(authorizedUrl)
     }
+
+    /** [ChallengeStatusReceiver] implementation. */
+    override fun completed(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.CompletionEvent?) {
+        when (event?.transactionStatus) {
+            "Y" -> _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.AUTHENTICATED))
+            "N" -> _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.NOT_AUTHENTICATED))
+            else -> _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge completed with unknown status: ${event?.transactionStatus}")))
+        }
+    }
+
+    override fun cancelled() {
+        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge cancelled")))
+    }
+
+    override fun timedout() {
+        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge timedout")))
+    }
+
+    override fun protocolError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.ProtocolErrorEvent?) {
+        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge protocol error")))
+    }
+
+    override fun runtimeError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.RuntimeErrorEvent?) {
+        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge runtime error")))
+    }
+    /** End of [ChallengeStatusReceiver] implementation. */
 }
 
 sealed class AuthenticationResult {

@@ -2,29 +2,24 @@ package co.omise.android
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import com.netcetera.threeds.sdk.api.ThreeDS2Service
 import com.netcetera.threeds.sdk.api.configparameters.builder.ConfigurationBuilder
 import com.netcetera.threeds.sdk.api.configparameters.builder.SchemeConfiguration
-import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.exceptions.SDKAlreadyInitializedException
-import com.netcetera.threeds.sdk.api.exceptions.SDKNotInitializedException
-import com.netcetera.threeds.sdk.api.exceptions.SDKRuntimeException
-import com.netcetera.threeds.sdk.api.transaction.AuthenticationRequestParameters
 import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
 import java.util.Collections
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
-private const val TAG = "ThreeDS2ServiceWrapper"
-
-class ThreeDS2ServiceWrapper(private val context: Context, private val threeDS2Service: ThreeDS2Service) {
+internal class ThreeDS2ServiceWrapper(private val context: Context, private val threeDS2Service: ThreeDS2Service) {
     lateinit var transaction: Transaction
         private set
 
-    fun initialize() {
+    suspend fun initialize() = suspendCoroutine<Result<Unit>> { continuation ->
         try {
             // scheme from netcetera simulator
             val schemeConfig = SchemeConfiguration.newSchemeConfiguration(BuildConfig.SCHEME_NAME)
@@ -34,20 +29,19 @@ class ThreeDS2ServiceWrapper(private val context: Context, private val threeDS2S
                 .encryptionPublicKey(BuildConfig.DS_PUBLIC_KEY)
                 .rootPublicKey(BuildConfig.DS_PUBLIC_KEY)
                 .build()
-
-
             val configParameters = ConfigurationBuilder()
                 .license(BuildConfig.NETCETERA_LICENSE_KEY)
                 .configureScheme(schemeConfig)
                 .build()
-
             val locale = getLocale()
             val uiCustomization = UiCustomization()
             threeDS2Service.initialize(context, configParameters, locale, uiCustomization)
+            continuation.resume(Result.success(Unit))
         } catch (e: Exception) {
-            // Throw error if it not SDKAlreadyInitializedException
-            if (e !is SDKAlreadyInitializedException) {
-                throw e
+            if (e is SDKAlreadyInitializedException) {
+                continuation.resume(Result.success(Unit))
+            } else {
+                continuation.resume(Result.failure(e))
             }
         }
     }
