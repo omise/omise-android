@@ -50,13 +50,21 @@ internal class AuthorizingPaymentViewModel(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), ChallengeStatusReceiver {
 
-    private val _authenticationResult = MutableLiveData<AuthenticationResult>()
-    val authenticationResult: LiveData<AuthenticationResult> = _authenticationResult
+    /** The [Authentication.AuthenticationStatus] of the authentication request. */
+    private val _authenticationStatus = MutableLiveData<Authentication.AuthenticationStatus>()
+    val authenticationStatus: LiveData<Authentication.AuthenticationStatus> = _authenticationStatus
+
+    /** The [TransactionStatus] of the challenge process. */
+    private val _transactionStatus = MutableLiveData<TransactionStatus>()
+    val transactionStatus: LiveData<TransactionStatus> = _transactionStatus
 
     private val _authenticationResponse = MutableLiveData<Authentication>()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _error = MutableLiveData<OmiseException>()
+    val error: LiveData<OmiseException> = _error
 
     init {
         viewModelScope.launch(dispatcher) {
@@ -66,9 +74,7 @@ internal class AuthorizingPaymentViewModel(
                         sendAuthenticationRequest()
                     },
                     onFailure = {
-                        _authenticationResult.postValue(
-                            AuthenticationResult.AuthenticationFailure(OmiseException("3DS2 initialization failed", it))
-                        )
+                        _error.postValue(OmiseException("3DS2 initialization failed", it))
                     }
                 )
             }
@@ -106,32 +112,14 @@ internal class AuthorizingPaymentViewModel(
         try {
             _isLoading.postValue(true)
             val authentication = client.send(request)
-
-            when (authentication.status) {
-                Authentication.AuthenticationStatus.SUCCESS -> {
-                    transaction.close()
-                    _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.AUTHENTICATED))
-                }
-
-                Authentication.AuthenticationStatus.FAILED -> {
-                    transaction.close()
-                    _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Authentication failed")))
-                }
-
-                Authentication.AuthenticationStatus.CHALLENGE_V1 -> {
-                    transaction.close()
-                    _authenticationResult.postValue(AuthenticationResult.AuthenticationUnsupported)
-                }
-
-                Authentication.AuthenticationStatus.CHALLENGE -> {
-                    // Do not close the transaction here, because it needs to do challenge.
-                    _authenticationResponse.postValue(authentication)
-                    _authenticationResult.postValue(AuthenticationResult.AuthenticationChallenge)
-                }
+            if (authentication.status != Authentication.AuthenticationStatus.CHALLENGE) {
+                transaction.close()
             }
+            _authenticationResponse.postValue(authentication)
+            _authenticationStatus.postValue(authentication.status)
         } catch (e: Exception) {
             transaction.close()
-            _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Authentication failed", e)))
+            _error.postValue(OmiseException("Authentication failed", e))
         } finally {
             _isLoading.postValue(false)
         }
@@ -150,8 +138,7 @@ internal class AuthorizingPaymentViewModel(
         try {
             threeDS2Service.doChallenge(activity, challengeParameters, this, 5)
         } catch (e: Exception) {
-            Log.e("AuthorizingPayment", "Error to do challenge", e)
-            _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge failed", e)))
+            _error.postValue(OmiseException("Challenge failed", e))
         }
     }
 
@@ -173,41 +160,26 @@ internal class AuthorizingPaymentViewModel(
     /** [ChallengeStatusReceiver] implementation. */
     override fun completed(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.CompletionEvent?) {
         when (event?.transactionStatus) {
-            "Y" -> _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.AUTHENTICATED))
-            "N" -> _authenticationResult.postValue(AuthenticationResult.AuthenticationCompleted(TransactionStatus.NOT_AUTHENTICATED))
-            else -> _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge completed with unknown status: ${event?.transactionStatus}")))
+            "Y" -> _transactionStatus.postValue(TransactionStatus.AUTHENTICATED)
+            "N" -> _transactionStatus.postValue(TransactionStatus.NOT_AUTHENTICATED)
+            else -> _error.postValue(OmiseException("Challenge completed with unknown status: ${event?.transactionStatus}"))
         }
     }
 
     override fun cancelled() {
-        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge cancelled")))
+        _error.postValue(OmiseException("Challenge cancelled"))
     }
 
     override fun timedout() {
-        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge timedout")))
+        _error.postValue(OmiseException("Challenge timedout"))
     }
 
     override fun protocolError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.ProtocolErrorEvent?) {
-        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge protocol error")))
+        _error.postValue(OmiseException("Challenge protocol error"))
     }
 
     override fun runtimeError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.RuntimeErrorEvent?) {
-        _authenticationResult.postValue(AuthenticationResult.AuthenticationFailure(OmiseException("Challenge runtime error")))
+        _error.postValue(OmiseException("Challenge runtime error"))
     }
     /** End of [ChallengeStatusReceiver] implementation. */
-}
-
-sealed class AuthenticationResult {
-    object AuthenticationUnsupported : AuthenticationResult()
-
-    object AuthenticationChallenge : AuthenticationResult()
-
-    data class AuthenticationCompleted(val transactionStatus: TransactionStatus) : AuthenticationResult()
-
-    data class AuthenticationFailure(val error: Throwable) : AuthenticationResult()
-}
-
-enum class TransactionStatus {
-    AUTHENTICATED,
-    NOT_AUTHENTICATED,
 }

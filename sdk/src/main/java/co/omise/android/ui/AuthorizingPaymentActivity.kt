@@ -24,6 +24,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL
 import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.models.Authentication
 import co.omise.android.threeds.challenge.ProgressView
 import co.omise.android.threeds.core.ThreeDSConfig
 import co.omise.android.threeds.events.CompletionEvent
@@ -74,12 +75,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        viewModel.authenticationResult.observe(this) { result ->
+        viewModel.authenticationStatus.observe(this) { result ->
             when (result) {
-                AuthenticationResult.AuthenticationUnsupported -> setupWebView()
-                AuthenticationResult.AuthenticationChallenge -> viewModel.doChallenge(this)
-                is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(null) // TODO: return transaction status
-                is AuthenticationResult.AuthenticationFailure -> finishActivityWithFailure(result.error)
+                Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(TransactionStatus.AUTHENTICATED)
+                Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
+                Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
+                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure(OmiseException("Authentication failed."))
             }
         }
 
@@ -90,6 +91,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             } else {
                 progressView.hideProgress()
             }
+        }
+
+        viewModel.error.observe(this) {
+            finishActivityWithFailure(it)
+        }
+
+        viewModel.transactionStatus.observe(this) {
+            finishActivityWithSuccessful(it)
         }
     }
 
@@ -192,7 +201,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finishActivityWithFailure()
+        finishActivityWithSuccessful(null)
     }
 
     private fun setupWebView() {
@@ -220,11 +229,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun finishActivityWithSuccessful(completionEvent: CompletionEvent) {
+    private fun finishActivityWithSuccessful(status: TransactionStatus) {
         val resultIntent = Intent().apply {
             putExtra(
                 EXTRA_AUTHORIZING_PAYMENT_RESULT,
-                ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value)
+                ThreeDS2Completed(status)
             )
         }
         setResult(Activity.RESULT_OK, resultIntent)
@@ -236,9 +245,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun finishActivityWithFailure(throwable: Throwable? = null) {
+    private fun finishActivityWithFailure(throwable: Throwable) {
         val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, throwable?.let { Failure(it) })
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

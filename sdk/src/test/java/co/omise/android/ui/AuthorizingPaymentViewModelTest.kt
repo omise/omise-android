@@ -2,10 +2,12 @@ package co.omise.android.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import co.omise.android.AuthorizingPaymentURLVerifier
+import co.omise.android.OmiseException
 import co.omise.android.ThreeDS2ServiceWrapper
 import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.models.Authentication
+import co.omise.android.models.Authentication.AuthenticationStatus
 import co.omise.android.threeds.ThreeDS
 import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.exceptions.SDKRuntimeException
@@ -25,7 +27,6 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
@@ -77,7 +78,7 @@ class AuthorizingPaymentViewModelTest {
     }
 
     @Test
-    fun initialize3DS_whenInitialize3DS2ServiceFailedThenSetErrorResult() = runTest {
+    fun initialize3DS_whenInitialize3DS2ServiceFailedThenSetError() = runTest {
         threeDS2Service.stub {
             onBlocking { initialize() } doReturn Result.failure(InvalidInputException("Something went wrong."))
         }
@@ -85,76 +86,70 @@ class AuthorizingPaymentViewModelTest {
 
         verify(threeDS2Service).initialize()
         verify(client, never()).send(any<Request<Authentication>>())
-        assertEquals(
-            "3DS2 initialization failed",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals("3DS2 initialization failed", (viewModel.error.value as OmiseException).message)
     }
 
     @Test
-    fun sendAuthenticationRequest_whenResponseIsSuccessThenSetSuccessResult() = runTest {
+    fun sendAuthenticationRequest_whenResponseIsSuccessThenSetSuccessStatus() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(
-                status = Authentication.AuthenticationStatus.SUCCESS
+                status = AuthenticationStatus.SUCCESS
             )
         }
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
-        assertEquals(AuthenticationResult.AuthenticationCompleted(TransactionStatus.AUTHENTICATED), viewModel.authenticationResult.value)
+        assertEquals(AuthenticationStatus.SUCCESS, viewModel.authenticationStatus.value)
     }
 
     @Test
-    fun sendAuthenticationRequest_whenResponseIsChallengeThenSetChallengeResult() = runTest {
+    fun sendAuthenticationRequest_whenResponseIsChallengeThenSetChallengeStatus() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(
-                status = Authentication.AuthenticationStatus.CHALLENGE
+                status = AuthenticationStatus.CHALLENGE
             )
         }
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction, never()).close()
-        assertEquals(AuthenticationResult.AuthenticationChallenge, viewModel.authenticationResult.value)
+        assertEquals(AuthenticationStatus.CHALLENGE, viewModel.authenticationStatus.value)
     }
 
     @Test
-    fun sendAuthenticationRequest_whenResponseIsChallengeV1ThenSetUnsupportedResult() = runTest {
+    fun sendAuthenticationRequest_whenResponseIsChallengeV1ThenSetChallengeV1Status() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(
-                status = Authentication.AuthenticationStatus.CHALLENGE_V1
+                status = AuthenticationStatus.CHALLENGE_V1
             )
         }
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
-        assertEquals(AuthenticationResult.AuthenticationUnsupported, viewModel.authenticationResult.value)
+        assertEquals(AuthenticationStatus.CHALLENGE_V1, viewModel.authenticationStatus.value)
     }
 
     @Test
-    fun sendAuthenticationRequest_whenResponseIsFailedThenSetFailureResult() = runTest {
+    fun sendAuthenticationRequest_whenResponseIsFailedThenSetFailedStatus() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(
-                status = Authentication.AuthenticationStatus.FAILED
+                status = AuthenticationStatus.FAILED
             )
         }
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
-        assertEquals(
-            "Authentication failed",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals(AuthenticationStatus.FAILED, viewModel.authenticationStatus.value)
     }
 
     @Test
     fun doChallenge_shouldExecuteDoChallenge() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(
-                status = Authentication.AuthenticationStatus.CHALLENGE,
+                status = AuthenticationStatus.CHALLENGE,
                 ares = Authentication.ARes(
                     messageVersion = "2.2.0",
                     threeDSServerTransID = UUID.randomUUID().toString(),
@@ -172,10 +167,10 @@ class AuthorizingPaymentViewModelTest {
     }
 
     @Test
-    fun doChallenge_whenItThrowErrorThenSetFailureResult() = runTest {
+    fun doChallenge_whenItThrowErrorThenSetError() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(
-                status = Authentication.AuthenticationStatus.CHALLENGE,
+                status = AuthenticationStatus.CHALLENGE,
                 ares = Authentication.ARes(
                     messageVersion = "2.2.0",
                     threeDSServerTransID = UUID.randomUUID().toString(),
@@ -190,93 +185,72 @@ class AuthorizingPaymentViewModelTest {
 
         viewModel.doChallenge(mock())
 
-        assertEquals(
-            "Challenge failed",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals("Challenge failed", (viewModel.error.value as OmiseException).message)
     }
 
     @Test
-    fun completed_whenReceivedTransactionStatusYThenSetCompletedResult() {
+    fun completed_whenReceivedTransactionStatusYThenSetAuthenticatedStatus() {
         val completionEvent = CompletionEvent(UUID.randomUUID().toString(), "Y")
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.completed(completionEvent)
 
-        assertEquals(AuthenticationResult.AuthenticationCompleted(TransactionStatus.AUTHENTICATED), viewModel.authenticationResult.value)
+        assertEquals(TransactionStatus.AUTHENTICATED, viewModel.transactionStatus.value)
     }
 
     @Test
-    fun completed_whenReceivedTransactionStatusNThenSetCompletedResult() {
+    fun completed_whenReceivedTransactionStatusNThenSetNotAuthenticatedStatus() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.completed(CompletionEvent(UUID.randomUUID().toString(), "N"))
 
-        assertEquals(
-            AuthenticationResult.AuthenticationCompleted(TransactionStatus.NOT_AUTHENTICATED),
-            viewModel.authenticationResult.value
-        )
+        assertEquals(TransactionStatus.NOT_AUTHENTICATED, viewModel.transactionStatus.value)
     }
 
     @Test
-    fun completed_whenReceivedUnknownTransactionStatusThenSetFailureResult() {
+    fun completed_whenReceivedUnknownTransactionStatusThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.completed(CompletionEvent(UUID.randomUUID().toString(), "unknown"))
 
-        assertEquals(
-            "Challenge completed with unknown status: unknown",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals("Challenge completed with unknown status: unknown", (viewModel.error.value as OmiseException).message)
     }
 
     @Test
-    fun cancelled_whenReceivedCancelledEventThenSetFailureResult() {
+    fun cancelled_whenReceivedCancelledEventThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.cancelled()
 
-        assertEquals(
-            "Challenge cancelled",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals("Challenge cancelled", (viewModel.error.value as OmiseException).message)
     }
 
     @Test
-    fun timedout_whenReceivedTimedoutEventThenSetFailureResult() {
+    fun timedout_whenReceivedTimedoutEventThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.timedout()
 
-        assertEquals(
-            "Challenge timedout",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals("Challenge timedout", (viewModel.error.value as OmiseException).message)
     }
 
     @Test
-    fun protocolError_whenReceivedProtocolErrorEventThenSetFailureResult() {
+    fun protocolError_whenReceivedProtocolErrorEventThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.protocolError(
             ProtocolErrorEvent(UUID.randomUUID().toString(), ErrorMessage(null, null, null, null, null, null, null))
         )
 
-        assertEquals(
-            "Challenge protocol error",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals("Challenge protocol error", (viewModel.error.value as OmiseException).message)
     }
 
     @Test
-    fun runtimeError_whenReceivedRuntimeErrorEventThenSetFailureResult() {
+    fun runtimeError_whenReceivedRuntimeErrorEventThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.runtimeError(RuntimeErrorEvent(null, null))
 
-        assertEquals(
-            "Challenge runtime error",
-            (viewModel.authenticationResult.value as AuthenticationResult.AuthenticationFailure).error.message
-        )
+        assertEquals( "Challenge runtime error",(viewModel.error.value as OmiseException).message)
     }
 }

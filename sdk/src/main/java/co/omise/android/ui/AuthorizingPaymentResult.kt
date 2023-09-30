@@ -17,11 +17,10 @@ sealed class AuthorizingPaymentResult : Parcelable {
 
     /**
      * The completion result that authorized with the 3D Secure version 2.
-     * @param sdkTransID SDK transaction ID.
-     * @param transStatus the transaction status that received from ACS. Y=Authentication successful, N=Not Authenticated.
+     * @param status the [TransactionStatus] of the authorization.
      */
     @Parcelize
-    data class ThreeDS2Completed(val sdkTransID: String, val transStatus: String) : AuthorizingPaymentResult()
+    data class ThreeDS2Completed(val status: TransactionStatus) : AuthorizingPaymentResult()
 
     /**
      * The failure result that occurred from the authorizing process.
@@ -29,4 +28,9 @@ sealed class AuthorizingPaymentResult : Parcelable {
      */
     @Parcelize
     data class Failure(val throwable: Throwable) : AuthorizingPaymentResult()
+}
+
+enum class TransactionStatus {
+    AUTHENTICATED,
+    NOT_AUTHENTICATED,
 }
