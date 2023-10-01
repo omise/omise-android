@@ -20,7 +20,7 @@ sealed class AuthorizingPaymentResult : Parcelable {
      * @param status the [TransactionStatus] of the authorization.
      */
     @Parcelize
-    data class ThreeDS2Completed(val status: TransactionStatus) : AuthorizingPaymentResult()
+    data class ThreeDS2Completed(val transStatus: TransactionStatus) : AuthorizingPaymentResult()
 
     /**
      * The failure result that occurred from the authorizing process.
