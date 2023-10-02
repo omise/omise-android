@@ -22,6 +22,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -116,6 +117,7 @@ class AuthorizingPaymentViewModelTest {
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction, never()).close()
+        assertTrue(viewModel.isLoading.value!!)
         assertEquals(AuthenticationStatus.CHALLENGE, viewModel.authenticationStatus.value)
     }
 

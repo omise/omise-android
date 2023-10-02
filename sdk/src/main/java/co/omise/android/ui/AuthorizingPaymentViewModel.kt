@@ -67,6 +67,7 @@ internal class AuthorizingPaymentViewModel(
     val error: LiveData<OmiseException> = _error
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, e ->
+        _isLoading.postValue(false)
         threeDS2Service.transaction.close()
         if (e is OmiseException) {
             _error.postValue(e)
@@ -122,16 +123,23 @@ internal class AuthorizingPaymentViewModel(
         try {
             _isLoading.postValue(true)
             val authentication = client.send(request)
+
+            // Reccomended by Netcetera's 3DS SDK.
+            // If the challenge flow is required
+            // - Do not close the transaction
+            // - Do not hide the progress view
+            // See https://3dss.netcetera.com/3dssdk/doc/2.7.0/android-sdk-api#processing-screen
             if (authentication.status != Authentication.AuthenticationStatus.CHALLENGE) {
+                _isLoading.postValue(false)
                 transaction.close()
             }
+
             _authenticationResponse.postValue(authentication)
             _authenticationStatus.postValue(authentication.status)
         } catch (e: Exception) {
+            _isLoading.postValue(false)
             transaction.close()
             _error.postValue(OmiseException("Authentication failed", e))
-        } finally {
-            _isLoading.postValue(false)
         }
     }
 
