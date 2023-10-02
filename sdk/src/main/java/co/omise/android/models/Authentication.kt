@@ -53,21 +53,38 @@ internal data class Authentication(
         val acsSignedContent: String? = null,
     ) : Parcelable
 
-    class AuthenticationRequestBuilder(
+    class AuthenticationRequestBuilder : RequestBuilder<Authentication>() {
         @JsonIgnore
-        val authorizeUrl: String,
-        @field:JsonProperty("areq")
-        val areq: AReq,
-        @field:JsonProperty("device_info")
+        private var authorizeUrl: String? = null
+
+        @JsonProperty("areq")
+        private var areq: AReq? = null
+
+        @JsonProperty("device_info")
         // TODO: Change type to String after adding authorize endpoint has been changed.
         // val deviceInfo: String,
-        val deviceInfo: Map<String, Any>,
-        @field:JsonProperty("device_type")
-        val deviceType: String = "Android",
-    ) : RequestBuilder<Authentication>() {
+        private var deviceInfo: Map<String, Any>? = null
+
+        @JsonProperty("device_type")
+        private val deviceType: String = "Android"
+
+        fun authorizeUrl(authorizeUrl: String): AuthenticationRequestBuilder {
+            this.authorizeUrl = authorizeUrl
+            return this
+        }
+
+        fun areq(areq: AReq): AuthenticationRequestBuilder {
+            this.areq = areq
+            return this
+        }
+
+        fun deviceInfo(deviceInfo: Map<String, Any>): AuthenticationRequestBuilder {
+            this.deviceInfo = deviceInfo
+            return this
+        }
 
         override fun path(): HttpUrl {
-            return authorizeUrl.toHttpUrl()
+            return authorizeUrl?.toHttpUrl() ?: throw IllegalArgumentException("authorizeUrl is required.")
         }
 
         @Throws(IOException::class)
