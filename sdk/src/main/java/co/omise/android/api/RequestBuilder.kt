@@ -1,5 +1,6 @@
 package co.omise.android.api
 
+import co.omise.android.models.APIError
 import co.omise.android.models.Model
 import co.omise.android.models.Serializer
 import okhttp3.HttpUrl
@@ -26,7 +27,7 @@ abstract class RequestBuilder<T : Model> {
      * @return built [Request] of type [Model].
      */
     fun build(): Request<T> {
-        return Request(method(), path(), payload(), type(), this)
+        return Request(method(), path(), payload(), type(), errorType(), this)
     }
 
     /**
@@ -65,6 +66,13 @@ abstract class RequestBuilder<T : Model> {
      */
     protected abstract fun type(): Class<T>
 
+    /**
+     * Abstract method that needs to be implemented by all children of this class to
+     * provide error type.
+     *
+     * @return Class type of error.
+     */
+    open fun errorType(): Class<Error> = APIError::class.java as Class<Error>
 
     /**
      * Builds and returns a valid [HttpUrl] pointing to the given [Endpoint]'s host

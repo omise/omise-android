@@ -44,7 +44,7 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
             val key = endpoint?.authenticationKey(config)
             var builder = request.newBuilder()
                 .addHeader("User-Agent", config.userAgent())
-                .addHeader("Authorization", Credentials.basic(key ?: "", ""))
+                .addHeader("Authorization", Credentials.basic(key ?: "", "x"))
 
             if (apiVersion.isNotEmpty()) {
                 builder = builder.addHeader("Omise-Version", apiVersion)

@@ -22,6 +22,7 @@ import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -66,8 +67,16 @@ internal class AuthorizingPaymentViewModel(
     private val _error = MutableLiveData<OmiseException>()
     val error: LiveData<OmiseException> = _error
 
+    private var transaction: Transaction? = null
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Log.e("AuthorizingPaymentVM", "CoroutineExceptionHandler got $exception")
+        threeDS2Service.transaction.close()
+        _error.postValue(OmiseException("CoroutineExceptionHandler got $exception"))
+    }
+
     init {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(dispatcher + coroutineExceptionHandler) {
             if (!urlVerifier.verifyExternalURL()) {
                 threeDS2Service.initialize().fold(
                     onSuccess = {
@@ -86,7 +95,7 @@ internal class AuthorizingPaymentViewModel(
         val directoryServerId = BuildConfig.DS_ID
         val messageVersion = BuildConfig.MESSAGE_VERSION
         val transaction = threeDS2Service.createTransaction(directoryServerId, messageVersion)
-
+        this.transaction = transaction
         val authenticationRequestParameters = transaction.authenticationRequestParameters
         val request = Authentication.AuthenticationRequestBuilder(
             authorizeUrl = urlVerifier.authorizedURLString,

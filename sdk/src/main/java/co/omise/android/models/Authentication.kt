@@ -83,6 +83,10 @@ internal data class Authentication(
             return Authentication::class.java
         }
 
+        override fun errorType(): Class<Error> {
+            return AuthenticationAPIError::class.java as Class<Error>
+        }
+
         data class AReq(
             val sdkAppID: String,
             val sdkEphemPubKey: SdkEphemPubKey,

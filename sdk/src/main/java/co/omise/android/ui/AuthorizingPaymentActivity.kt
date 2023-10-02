@@ -85,11 +85,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
 
         viewModel.isLoading.observe(this) {
-            val progressView = viewModel.getTransaction().getProgressView(this)
             if (it) {
-                progressView.showProgress()
+//                viewModel.getTransaction().getProgressView(this).showProgress()
             } else {
-                progressView.hideProgress()
+//                viewModel.getTransaction().getProgressView(this).hideProgress()
             }
         }
 
