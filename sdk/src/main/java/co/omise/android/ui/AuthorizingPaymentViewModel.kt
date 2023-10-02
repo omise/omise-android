@@ -1,7 +1,6 @@
 package co.omise.android.ui
 
 import android.app.Activity
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -67,12 +66,13 @@ internal class AuthorizingPaymentViewModel(
     private val _error = MutableLiveData<OmiseException>()
     val error: LiveData<OmiseException> = _error
 
-    private var transaction: Transaction? = null
-
-    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e("AuthorizingPaymentVM", "CoroutineExceptionHandler got $exception")
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, e ->
         threeDS2Service.transaction.close()
-        _error.postValue(OmiseException("CoroutineExceptionHandler got $exception"))
+        if (e is OmiseException) {
+            _error.postValue(e)
+        } else {
+            _error.postValue(OmiseException("Authentication failed.", e))
+        }
     }
 
     init {
@@ -95,7 +95,6 @@ internal class AuthorizingPaymentViewModel(
         val directoryServerId = BuildConfig.DS_ID
         val messageVersion = BuildConfig.MESSAGE_VERSION
         val transaction = threeDS2Service.createTransaction(directoryServerId, messageVersion)
-        this.transaction = transaction
         val authenticationRequestParameters = transaction.authenticationRequestParameters
         val request = Authentication.AuthenticationRequestBuilder(
             authorizeUrl = urlVerifier.authorizedURLString,
@@ -159,11 +158,6 @@ internal class AuthorizingPaymentViewModel(
     fun cleanup() {
         viewModelScope.cancel()
         threeDS.cleanup()
-    }
-
-    // TODO: Remove this after removing Omise's 3DS SDK.
-    fun authorizeTransaction(authorizedUrl: String) {
-        threeDS.authorizeTransaction(authorizedUrl)
     }
 
     /** [ChallengeStatusReceiver] implementation. */

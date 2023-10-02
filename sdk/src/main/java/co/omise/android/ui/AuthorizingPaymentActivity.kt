@@ -86,9 +86,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         viewModel.isLoading.observe(this) {
             if (it) {
-//                viewModel.getTransaction().getProgressView(this).showProgress()
+                viewModel.getTransaction().getProgressView(this).showProgress()
             } else {
-//                viewModel.getTransaction().getProgressView(this).hideProgress()
+                viewModel.getTransaction().getProgressView(this).hideProgress()
             }
         }
 

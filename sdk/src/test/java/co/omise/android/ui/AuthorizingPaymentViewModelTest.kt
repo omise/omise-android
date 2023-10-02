@@ -8,6 +8,7 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.models.Authentication
 import co.omise.android.models.Authentication.AuthenticationStatus
+import co.omise.android.models.AuthenticationAPIError
 import co.omise.android.threeds.ThreeDS
 import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.exceptions.SDKRuntimeException
@@ -62,6 +63,7 @@ class AuthorizingPaymentViewModelTest {
     fun setUp() {
         whenever(urlVerifier.authorizedURLString).thenReturn("https://www.omise.co/pay")
         whenever(urlVerifier.verifyExternalURL()).thenReturn(false)
+        whenever(threeDS2Service.transaction).thenReturn(transaction)
         whenever(threeDS2Service.createTransaction(any(), any())).thenReturn(transaction)
         threeDS2Service.stub {
             onBlocking { initialize() } doReturn Result.success(Unit)
@@ -143,6 +145,21 @@ class AuthorizingPaymentViewModelTest {
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
         assertEquals(AuthenticationStatus.FAILED, viewModel.authenticationStatus.value)
+    }
+
+    @Test
+    fun sendAuthenticationRequest_whenThrowErrorThenSetFailedStatus() = runTest {
+        client.stub {
+            onBlocking { send(any<Request<Authentication>>()) } doThrow AuthenticationAPIError(
+                status = AuthenticationStatus.FAILED,
+                message = "Something went wrong."
+            )
+        }
+        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+
+        verify(client).send(any<Request<Authentication>>())
+        verify(transaction).close()
+        assertEquals("Authentication failed.", viewModel.error.value?.message)
     }
 
     @Test
@@ -239,7 +256,17 @@ class AuthorizingPaymentViewModelTest {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.protocolError(
-            ProtocolErrorEvent(UUID.randomUUID().toString(), ErrorMessage(null, null, null, null, null, null, null))
+            ProtocolErrorEvent(
+                UUID.randomUUID().toString(), ErrorMessage(
+                    UUID.randomUUID().toString(),   // transactionID
+                    "203",                          // errorCode
+                    "Invalid data",                 // errorDescription
+                    "dsURL",                        // errorDetail
+                    "A",                            // errorComponent
+                    "CReq",                         // errorMessageType
+                    "2.2.0"                         // messageVersionNumber
+                )
+            )
         )
 
         assertEquals("Challenge protocol error", (viewModel.error.value as OmiseException).message)
@@ -249,8 +276,13 @@ class AuthorizingPaymentViewModelTest {
     fun runtimeError_whenReceivedRuntimeErrorEventThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
 
-        viewModel.runtimeError(RuntimeErrorEvent(null, null))
+        viewModel.runtimeError(
+            RuntimeErrorEvent(
+                "402",                      // errorCode
+                "Challenge runtime error"   // errorMessage
+            )
+        )
 
-        assertEquals( "Challenge runtime error",(viewModel.error.value as OmiseException).message)
+        assertEquals("Challenge runtime error", (viewModel.error.value as OmiseException).message)
     }
 }
