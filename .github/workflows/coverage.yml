@@ -55,6 +55,7 @@ jobs:
           force-avd-creation: false
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          # TODO: Remove `touch local.properties` command line once the BuildConfig props are removed from the SDK.
           script: |
             touch local.properties
             ./gradlew sdk:jacocoTestReport sdk:sonar
