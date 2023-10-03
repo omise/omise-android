@@ -1,4 +1,8 @@
-# CHANGE LOG
+# CHANGELOG
+
+## v4.11.0
+* **ADDED:** Supported OCBC Digital payment method
+* **ADDED:** Supported authorize payment through the external app in the `AuthorizingPaymentActivity`
 
 ## v4.10.0
 * **ADDED:** Supported billing address for credit card form
