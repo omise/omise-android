@@ -18,7 +18,10 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
       - name: Build project
-        run: ./gradlew sdk:build -x test
+        # TODO: Remove `touch local.properties` command line once the BuildConfig props are removed from the SDK.
+        run: |
+          touch local.properties
+          ./gradlew sdk:build -x test
 
   unit-test:
     name: Unit test
@@ -35,7 +38,9 @@ jobs:
           java-version: '17'
 
       - name: Run unit tests
+        # TODO: Remove `touch local.properties` command line once the BuildConfig props are removed from the SDK.
         run: |
+          touch local.properties
           ./gradlew sdk:testProductionDebugUnitTest
 
       - name: Upload test report
@@ -94,7 +99,10 @@ jobs:
           force-avd-creation: false
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew sdk:connectedProductionDebugAndroidTest
+          # TODO: Remove `touch local.properties` command line once the BuildConfig props are removed from the SDK.
+          script: |
+            touch local.properties
+            ./gradlew sdk:connectedProductionDebugAndroidTest
 
       - name: Upload test report
         if: always()

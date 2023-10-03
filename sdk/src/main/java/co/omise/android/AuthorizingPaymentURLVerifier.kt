@@ -78,4 +78,13 @@ class AuthorizingPaymentURLVerifier {
                 uri.scheme != "https" &&
                 uri.scheme != "about"
     }
+
+    /**
+     * Checks if the [authorizedURL] is external or not.
+     *
+     * @return true if the [authorizedURL] is external, false otherwise.
+     */
+    fun verifyExternalURL(): Boolean {
+        return verifyExternalURL(authorizedURL)
+    }
 }

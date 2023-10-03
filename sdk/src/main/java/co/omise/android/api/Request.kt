@@ -14,11 +14,13 @@ import okhttp3.RequestBody
  * @param url API URL.
  * @param payload Additional optional data to be sent with the Request.
  * @param responseType Response class type.
+ * @param errorType Error class type.
  */
 open class Request<T : Model>(
         internal val method: String,
         internal val url: HttpUrl,
         internal val payload: RequestBody?,
         internal val responseType: Class<T>,
+        internal val errorType: Class<Error>,
         internal val builder: RequestBuilder<T>,
 )

@@ -2,7 +2,6 @@ package co.omise.android.api
 
 import android.os.Handler
 import co.omise.android.api.exceptions.RedirectionException
-import co.omise.android.models.APIError
 import co.omise.android.models.Model
 import co.omise.android.models.Serializer
 import okhttp3.Call
@@ -40,7 +39,9 @@ internal class Invocation<T : Model>(
                             .method(request.method, request.payload)
                             .url(request.url)
                             .build(),
-                    request.responseType)
+                    request.responseType,
+                    request.errorType
+                )
 
             processCall(call)
         } catch (e: IOException) {
@@ -61,7 +62,7 @@ internal class Invocation<T : Model>(
         when (response.code) {
             in 200..299 -> didSucceed(serializer.deserialize(stream, call.clazz))
             in 300..399 -> didFail(RedirectionException())
-            else -> didFail(serializer.deserialize(stream, APIError::class.java))
+            else -> didFail(serializer.deserialize(stream, call.errorClazz))
         }
     }
 
@@ -84,7 +85,8 @@ internal class Invocation<T : Model>(
  */
 class TypedCall(
         private val call: Call,
-        val clazz: Class<Model>
+        val clazz: Class<Model>,
+        val errorClazz: Class<Error>
 ) {
 
     fun execute(): Response {
@@ -93,6 +95,6 @@ class TypedCall(
 }
 
 @Suppress("UNCHECKED_CAST")
-fun OkHttpClient.newTypedCall(okRequest: Request, clazz: Class<*>): TypedCall {
-    return TypedCall(newCall(okRequest), clazz as Class<Model>)
+fun OkHttpClient.newTypedCall(okRequest: Request, clazz: Class<*>, errorClazz: Class<Error>): TypedCall {
+    return TypedCall(newCall(okRequest), clazz as Class<Model>, errorClazz)
 }
