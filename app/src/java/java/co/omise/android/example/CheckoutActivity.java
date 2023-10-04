@@ -18,8 +18,18 @@ import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
 import co.omise.android.config.AuthorizingPaymentConfig;
+import co.omise.android.config.ButtonCustomization;
+import co.omise.android.config.ButtonCustomizationBuilder;
+import co.omise.android.config.ButtonType;
+import co.omise.android.config.LabelCustomization;
+import co.omise.android.config.LabelCustomizationBuilder;
+import co.omise.android.config.TextBoxCustomization;
+import co.omise.android.config.TextBoxCustomizationBuilder;
 import co.omise.android.config.ThreeDSConfig;
+import co.omise.android.config.ToolbarCustomization;
+import co.omise.android.config.ToolbarCustomizationBuilder;
 import co.omise.android.config.UiCustomization;
+import co.omise.android.config.UiCustomizationBuilder;
 import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
@@ -134,45 +144,64 @@ public class CheckoutActivity extends AppCompatActivity {
      * This should be call before start the {@link AuthorizingPaymentActivity}.
      */
     private void initializeAuthoringPaymentConfig() {
-        UiCustomization uiCustomization = new UiCustomization.Builder()
-                .labelCustomization(new UiCustomization.LabelCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Regular.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(16)
-                        .headingTextColor("#000000")
-                        .headingTextFontName("fonts/RobotoMono-Bold.ttf")
-                        .headingTextFontSize(20)
-                        .build())
-                .textBoxCustomization(new UiCustomization.TextBoxCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Regular.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(16)
-                        .borderWidth(1)
-                        .cornerRadius(4)
-                        .borderColor("#1A56F0")
-                        .build())
-                .toolbarCustomization(new UiCustomization.ToolbarCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Bold.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(20)
-                        .backgroundColor("#FFFFFF")
-                        .headerText("Secure Checkout")
-                        .buttonText("Close")
-                        .build())
-                .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, new UiCustomization.ButtonCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Bold.ttf")
-                        .textFontColor("#FFFFFF")
-                        .textFontSize(20)
-                        .backgroundColor("#1A56F0")
-                        .cornerRadius(4)
-                        .build())
-                .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, new UiCustomization.ButtonCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Bold.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(20)
-                        .backgroundColor("#FFFFFF")
-                        .cornerRadius(4)
-                        .build())
+        LabelCustomization labelCustomization = new LabelCustomizationBuilder()
+                .headingDarkTextColor("#000000")
+                .headingTextColor("#000000")
+                .headingTextFontName("fonts/RobotoMono-Bold.ttf")
+                .headingTextFontSize(20)
+                .textFontName("fonts/RobotoMono-Regular.ttf")
+                .textColor("#000000")
+                .textFontSize(16)
+                .build();
+
+        TextBoxCustomization textBoxCustomization = new TextBoxCustomizationBuilder()
+                .textFontName("fonts/RobotoMono-Regular.ttf")
+                .textColor("#000000")
+                .textFontSize(16)
+                .borderWidth(1)
+                .cornerRadius(4)
+                .borderColor("#1A56F0")
+                .build();
+
+        ToolbarCustomization toolbarCustomization = new ToolbarCustomizationBuilder()
+                .textFontName("fonts/RobotoMono-Bold.ttf")
+                .textColor("#000000")
+                .textFontSize(20)
+                .backgroundColor("#FFFFFF")
+                .headText("Secure Checkout")
+                .buttonText("Close")
+                .build();
+
+        ButtonCustomization primaryButtonCustomization = new ButtonCustomizationBuilder()
+                .textFontName("fonts/RobotoMono-Bold.ttf")
+                .textColor("#000000")
+                .textFontSize(20)
+                .backgroundColor("#FFFFFF")
+                .cornerRadius(4)
+                .darkTextColor("#000000")
+                .darkBackgroundColor("#FFFFFF")
+                .build();
+
+        ButtonCustomization secondaryButtonCustomization = new ButtonCustomizationBuilder()
+                .textFontName("fonts/RobotoMono-Bold.ttf")
+                .textColor("#000000")
+                .textFontSize(20)
+                .backgroundColor("#FFFFFF")
+                .darkTextColor("#000000")
+                .darkBackgroundColor("#FFFFFF")
+                .cornerRadius(4)
+                .build();
+
+        UiCustomization uiCustomization = new UiCustomizationBuilder()
+                .labelCustomization(labelCustomization)
+                .textBoxCustomization(textBoxCustomization)
+                .toolbarCustomization(toolbarCustomization)
+                .buttonCustomization(ButtonType.SUBMIT, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.CONTINUE, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.NEXT, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.OPEN_OOB_APP, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.RESEND, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.CANCEL, secondaryButtonCustomization)
                 .build();
 
         ThreeDSConfig threeDSConfig = new ThreeDSConfig.Builder()

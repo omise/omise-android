@@ -13,8 +13,13 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
 import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.config.ButtonCustomizationBuilder
+import co.omise.android.config.ButtonType
+import co.omise.android.config.LabelCustomizationBuilder
+import co.omise.android.config.TextBoxCustomizationBuilder
 import co.omise.android.config.ThreeDSConfig
-import co.omise.android.config.UiCustomization
+import co.omise.android.config.ToolbarCustomizationBuilder
+import co.omise.android.config.UiCustomizationBuilder
 import co.omise.android.models.Amount
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
@@ -69,8 +74,8 @@ class CheckoutActivity : AppCompatActivity() {
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
         authorizeUrlButton.setOnClickListener {
-            AuthorizingPaymentDialog.showAuthorizingPaymentDialog(this) {authorizeUrl, returnUrl ->
-               startAuthoringPaymentActivity(authorizeUrl, returnUrl)
+            AuthorizingPaymentDialog.showAuthorizingPaymentDialog(this) { authorizeUrl, returnUrl ->
+                startAuthoringPaymentActivity(authorizeUrl, returnUrl)
             }
         }
 
@@ -131,7 +136,7 @@ class CheckoutActivity : AppCompatActivity() {
      */
 
     private fun initializeAuthoringPaymentConfig() {
-        val labelCustomization = UiCustomization.LabelCustomization.LabelCustomizationBuilder()
+        val labelCustomization = LabelCustomizationBuilder()
             .headingDarkTextColor("#000000")
             .headingTextColor("#000000")
             .headingTextFontName("fonts/RobotoMono-Bold.ttf")
@@ -141,7 +146,7 @@ class CheckoutActivity : AppCompatActivity() {
             .textFontSize(16)
             .build()
 
-        val textBoxCustomization = UiCustomization.TextBoxCustomization.TextBoxCustomizationBuilder()
+        val textBoxCustomization = TextBoxCustomizationBuilder()
             .textFontName("fonts/RobotoMono-Regular.ttf")
             .textColor("#000000")
             .textFontSize(16)
@@ -150,7 +155,7 @@ class CheckoutActivity : AppCompatActivity() {
             .borderColor("#1A56F0")
             .build()
 
-        val toolbarCustomization = UiCustomization.ToolbarCustomization.ToolbarCustomizationBuilder()
+        val toolbarCustomization = ToolbarCustomizationBuilder()
             .textFontName("fonts/RobotoMono-Bold.ttf")
             .textColor("#000000")
             .textFontSize(20)
@@ -159,49 +164,55 @@ class CheckoutActivity : AppCompatActivity() {
             .buttonText("Close")
             .build()
 
-        val primaryButtonCustomization = UiCustomization.ButtonCustomization.ButtonCustomizationBuilder()
+        val primaryButtonCustomization = ButtonCustomizationBuilder()
             .textFontName("fonts/RobotoMono-Bold.ttf")
-            .textColor("#000000")
             .textFontSize(20)
-            .backgroundColor("#FFFFFF")
             .cornerRadius(4)
+            .textColor("#000000")
+            .backgroundColor("#FFFFFF")
+            .darkTextColor("#000000")
+            .darkBackgroundColor("#FFFFFF")
             .build()
 
-        val secondaryButtonCustomization = UiCustomization.ButtonCustomization.ButtonCustomizationBuilder()
+        val secondaryButtonCustomization = ButtonCustomizationBuilder()
             .textFontName("fonts/RobotoMono-Bold.ttf")
-            .textColor("#000000")
             .textFontSize(20)
-            .backgroundColor("#FFFFFF")
             .cornerRadius(4)
+            .textColor("#000000")
+            .backgroundColor("#FFFFFF")
+            .darkTextColor("#000000")
+            .darkBackgroundColor("#FFFFFF")
             .build()
 
-        val uiCustomization = UiCustomization.UiCustomizationBuilder()
+        val uiCustomization = UiCustomizationBuilder()
             .labelCustomization(labelCustomization)
             .textBoxCustomization(textBoxCustomization)
             .toolbarCustomization(toolbarCustomization)
-            .buttonCustomization(UiCustomization.ButtonType.SUBMIT, primaryButtonCustomization)
-            .buttonCustomization(UiCustomization.ButtonType.CONTINUE, primaryButtonCustomization)
-            .buttonCustomization(UiCustomization.ButtonType.NEXT, primaryButtonCustomization)
-            .buttonCustomization(UiCustomization.ButtonType.OPEN_OOB_APP, primaryButtonCustomization)
-            .buttonCustomization(UiCustomization.ButtonType.RESEND, primaryButtonCustomization)
-            .buttonCustomization(UiCustomization.ButtonType.CANCEL, secondaryButtonCustomization)
+            .buttonCustomization(ButtonType.SUBMIT, primaryButtonCustomization)
+            .buttonCustomization(ButtonType.CONTINUE, primaryButtonCustomization)
+            .buttonCustomization(ButtonType.NEXT, primaryButtonCustomization)
+            .buttonCustomization(ButtonType.OPEN_OOB_APP, primaryButtonCustomization)
+            .buttonCustomization(ButtonType.RESEND, primaryButtonCustomization)
+            .buttonCustomization(ButtonType.CANCEL, secondaryButtonCustomization)
             .build()
 
         val threeDSConfig = ThreeDSConfig.Builder()
-                .uiCustomization(uiCustomization)
-                .timeout(5)
-                .build()
+            .uiCustomization(uiCustomization)
+            .timeout(5)
+            .build()
         val authPaymentConfig = AuthorizingPaymentConfig.Builder()
-                .threeDSConfig(threeDSConfig)
-                .build()
+            .threeDSConfig(threeDSConfig)
+            .build()
         AuthorizingPaymentConfig.initialize(authPaymentConfig)
     }
 
     private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {
-        Log.d(TAG, """
+        Log.d(
+            TAG, """
             authorizeUrl=$authorizeUrl
             returnUrl=$returnUrl
-        """.trimIndent())
+        """.trimIndent()
+        )
         Intent(this, AuthorizingPaymentActivity::class.java).run {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
@@ -250,12 +261,14 @@ class CheckoutActivity : AppCompatActivity() {
                             Log.e(TAG, throwable.message, throwable.cause)
                             throwable.message ?: "Unknown error."
                         }
+
                         null -> "Not found the authorization result."
                     }
                     Log.d(TAG, resultMessage)
                     snackbar.setText(resultMessage).show()
                 }
             }
+
             PAYMENT_CREATOR_REQUEST_CODE -> {
                 if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                     val source = data.getParcelableExtra<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
@@ -267,11 +280,13 @@ class CheckoutActivity : AppCompatActivity() {
                     Log.d(TAG, "token: ${token?.id}")
                 }
             }
+
             CREDIT_CARD_REQUEST_CODE -> {
                 val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
                 snackbar.setText(token?.id ?: "No token object.").show()
                 Log.d(TAG, "token: ${token?.id}")
             }
+
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)
             }
