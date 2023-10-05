@@ -56,7 +56,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
 
-        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization.headerText
+        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
             ?: getString(R.string.title_authorizing_payment)
 
         if (verifier.verifyExternalURL(verifier.authorizedURL)) {

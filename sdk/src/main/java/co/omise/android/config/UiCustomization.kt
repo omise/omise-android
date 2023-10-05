@@ -28,10 +28,15 @@ data class UiCustomization internal constructor(
  * Builder for building [UiCustomization] data.
  */
 class UiCustomizationBuilder {
+    private var supportDarkMode: Boolean? = null
     private var labelCustomization: LabelCustomization? = null
     private var toolbarCustomization: ToolbarCustomization? = null
     private var textBoxCustomization: TextBoxCustomization? = null
     private var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
+
+    fun supportDarkMode(supportDarkMode: Boolean): UiCustomizationBuilder = apply {
+        this@UiCustomizationBuilder.supportDarkMode = supportDarkMode
+    }
 
     /**
      * Set the label customization.
@@ -78,6 +83,7 @@ class UiCustomizationBuilder {
      */
     fun build(): UiCustomization {
         val uiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+            this@UiCustomizationBuilder.supportDarkMode?.let { this.supportDarkMode(it) }
             this@UiCustomizationBuilder.labelCustomization?.let { this.labelCustomization = it.labelCustomization }
             this@UiCustomizationBuilder.toolbarCustomization?.let { this.toolbarCustomization = it.toolbarCustomization }
             this@UiCustomizationBuilder.textBoxCustomization?.let { this.textBoxCustomization = it.textBoxCustomization }

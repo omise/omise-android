@@ -21,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 internal class ThreeDS2ServiceWrapper(
     private val context: Context,
     private val threeDS2Service: ThreeDS2Service,
-    private val uiCustomization: UiCustomization = UiCustomization(),
+    private val uiCustomization: UiCustomization,
 ) {
     lateinit var transaction: Transaction
         private set
