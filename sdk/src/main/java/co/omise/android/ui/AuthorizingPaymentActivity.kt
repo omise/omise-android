@@ -23,11 +23,8 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_RETURNED_U
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL_CODE
 import co.omise.android.OmiseException
 import co.omise.android.R
-import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.config.UiCustomization
 import co.omise.android.models.Authentication
-import co.omise.android.threeds.challenge.ProgressView
-import co.omise.android.threeds.core.ThreeDSConfig
-import co.omise.android.threeds.events.CompletionEvent
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
@@ -42,24 +39,24 @@ import org.jetbrains.annotations.TestOnly
  */
 class AuthorizingPaymentActivity : AppCompatActivity() {
 
-    private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
+    private val uiCustomization: UiCustomization by lazy { intent.getParcelableExtra(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
         viewModelFactory ?: AuthorizingPaymentViewModelFactory(
-            this,
-            verifier
+            activity = this,
+            urlVerifier = verifier,
+            uiCustomization = uiCustomization,
         )
     }
     private var viewModelFactory: ViewModelProvider.Factory? = null
-    private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
 
-        supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
+        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization.headerText
             ?: getString(R.string.title_authorizing_payment)
 
         if (verifier.verifyExternalURL(verifier.authorizedURL)) {
@@ -258,5 +255,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
          * [AuthorizingPaymentResult] intent result from [AuthorizingPaymentActivity].
          */
         const val EXTRA_AUTHORIZING_PAYMENT_RESULT = "OmiseActivity.authorizingPaymentResult"
+
+        /**
+         * [co.omise.android.config.UiCustomization] intent extra for [AuthorizingPaymentActivity] to configure the UI in the challenge flow.
+         * This is an optional parameter. If not provided, the default UI will be used.
+         */
+        const val EXTRA_UI_CUSTOMIZATION = "OmiseActivity.uiCustomization"
     }
 }

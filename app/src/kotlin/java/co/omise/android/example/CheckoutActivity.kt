@@ -12,12 +12,10 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
-import co.omise.android.config.AuthorizingPaymentConfig
 import co.omise.android.config.ButtonCustomizationBuilder
 import co.omise.android.config.ButtonType
 import co.omise.android.config.LabelCustomizationBuilder
 import co.omise.android.config.TextBoxCustomizationBuilder
-import co.omise.android.config.ThreeDSConfig
 import co.omise.android.config.ToolbarCustomizationBuilder
 import co.omise.android.config.UiCustomizationBuilder
 import co.omise.android.models.Amount
@@ -25,6 +23,7 @@ import co.omise.android.models.Capability
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.AuthorizingPaymentActivity
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_UI_CUSTOMIZATION
 import co.omise.android.ui.AuthorizingPaymentResult
 import co.omise.android.ui.CreditCardActivity
 import co.omise.android.ui.OmiseActivity
@@ -67,7 +66,7 @@ class CheckoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
 
-        initializeAuthoringPaymentConfig()
+//        initializeAuthoringPaymentConfig()
 
         supportActionBar?.title = getString(R.string.activity_checkout)
 
@@ -130,12 +129,7 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Here's the sample of initializing 3D Secure 2.
-     * This should be call before start the [AuthorizingPaymentActivity].
-     */
-
-    private fun initializeAuthoringPaymentConfig() {
+    private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {
         val labelCustomization = LabelCustomizationBuilder()
             .headingDarkTextColor("#000000")
             .headingTextColor("#000000")
@@ -196,17 +190,6 @@ class CheckoutActivity : AppCompatActivity() {
             .buttonCustomization(ButtonType.CANCEL, secondaryButtonCustomization)
             .build()
 
-        val threeDSConfig = ThreeDSConfig.Builder()
-            .uiCustomization(uiCustomization)
-            .timeout(5)
-            .build()
-        val authPaymentConfig = AuthorizingPaymentConfig.Builder()
-            .threeDSConfig(threeDSConfig)
-            .build()
-        AuthorizingPaymentConfig.initialize(authPaymentConfig)
-    }
-
-    private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {
         Log.d(
             TAG, """
             authorizeUrl=$authorizeUrl
@@ -216,6 +199,7 @@ class CheckoutActivity : AppCompatActivity() {
         Intent(this, AuthorizingPaymentActivity::class.java).run {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization)
             startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
         }
     }

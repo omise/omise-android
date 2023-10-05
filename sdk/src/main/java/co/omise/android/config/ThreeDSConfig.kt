@@ -55,7 +55,8 @@ class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.and
          * @return [ThreeDSConfig]
          */
         fun build(): ThreeDSConfig {
-            return ThreeDSConfig(co.omise.android.threeds.core.ThreeDSConfig(uiCustomization.uiCustomization, timeout))
+            TODO("The below is not compatible with Netcetera's 3DS SDK.")
+            // return ThreeDSConfig(co.omise.android.threeds.core.ThreeDSConfig(uiCustomization.uiCustomization, timeout))
         }
     }
 }

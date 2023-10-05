@@ -9,7 +9,6 @@ import co.omise.android.api.Request
 import co.omise.android.models.Authentication
 import co.omise.android.models.Authentication.AuthenticationStatus
 import co.omise.android.models.AuthenticationAPIError
-import co.omise.android.threeds.ThreeDS
 import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.exceptions.SDKRuntimeException
 import com.netcetera.threeds.sdk.api.transaction.AuthenticationRequestParameters
@@ -43,7 +42,6 @@ class AuthorizingPaymentViewModelTest {
     @get:Rule
     val instanceExecutor = InstantTaskExecutorRule()
 
-    private val threeDS: ThreeDS = mock()
     private val client: Client = mock()
     private val urlVerifier: AuthorizingPaymentURLVerifier = mock()
     private val threeDS2Service: ThreeDS2ServiceWrapper = mock()
@@ -74,7 +72,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun initialize3DS_shouldInitialize3DS2ServiceAndSendAuthenticationRequest() = runTest {
-        AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(threeDS2Service).initialize()
         verify(client).send(any<Request<Authentication>>())
@@ -85,7 +83,7 @@ class AuthorizingPaymentViewModelTest {
         threeDS2Service.stub {
             onBlocking { initialize() } doReturn Result.failure(InvalidInputException("Something went wrong."))
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(threeDS2Service).initialize()
         verify(client, never()).send(any<Request<Authentication>>())
@@ -99,7 +97,7 @@ class AuthorizingPaymentViewModelTest {
                 status = AuthenticationStatus.SUCCESS
             )
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
@@ -113,7 +111,7 @@ class AuthorizingPaymentViewModelTest {
                 status = AuthenticationStatus.CHALLENGE
             )
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction, never()).close()
@@ -128,7 +126,7 @@ class AuthorizingPaymentViewModelTest {
                 status = AuthenticationStatus.CHALLENGE_V1
             )
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
@@ -142,7 +140,7 @@ class AuthorizingPaymentViewModelTest {
                 status = AuthenticationStatus.FAILED
             )
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
@@ -157,7 +155,7 @@ class AuthorizingPaymentViewModelTest {
                 message = "Something went wrong."
             )
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
@@ -178,7 +176,7 @@ class AuthorizingPaymentViewModelTest {
                 )
             )
         }
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.doChallenge(mock())
 
@@ -200,7 +198,7 @@ class AuthorizingPaymentViewModelTest {
             )
         }
         whenever(threeDS2Service.doChallenge(any(), any(), any(), any())).doThrow(SDKRuntimeException("Something went wrong.", null))
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.doChallenge(mock())
 
@@ -210,7 +208,7 @@ class AuthorizingPaymentViewModelTest {
     @Test
     fun completed_whenReceivedTransactionStatusYThenSetAuthenticatedStatus() {
         val completionEvent = CompletionEvent(UUID.randomUUID().toString(), "Y")
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.completed(completionEvent)
 
@@ -219,7 +217,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun completed_whenReceivedTransactionStatusNThenSetNotAuthenticatedStatus() {
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.completed(CompletionEvent(UUID.randomUUID().toString(), "N"))
 
@@ -228,7 +226,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun completed_whenReceivedUnknownTransactionStatusThenSetError() {
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.completed(CompletionEvent(UUID.randomUUID().toString(), "unknown"))
 
@@ -237,7 +235,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun cancelled_whenReceivedCancelledEventThenSetError() {
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.cancelled()
 
@@ -246,7 +244,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun timedout_whenReceivedTimedoutEventThenSetError() {
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.timedout()
 
@@ -255,7 +253,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun protocolError_whenReceivedProtocolErrorEventThenSetError() {
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.protocolError(
             ProtocolErrorEvent(
@@ -276,7 +274,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun runtimeError_whenReceivedRuntimeErrorEventThenSetError() {
-        val viewModel = AuthorizingPaymentViewModel(threeDS, client, urlVerifier, threeDS2Service, testDispatcher)
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
 
         viewModel.runtimeError(
             RuntimeErrorEvent(

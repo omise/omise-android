@@ -1,5 +1,8 @@
 package co.omise.android.config
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 
 abstract class CustomizationBuilder<T> {
     protected var textFontSize: Int? = null
@@ -12,7 +15,10 @@ abstract class CustomizationBuilder<T> {
 /**
  * configuration for the challenge screen.
  */
-data class UiCustomization internal constructor(internal val uiCustomization: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization) {
+@Parcelize
+data class UiCustomization internal constructor(
+    internal val uiCustomization: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
+) : Parcelable {
     companion object {
         val default = UiCustomization(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization())
     }
@@ -72,10 +78,10 @@ class UiCustomizationBuilder {
      */
     fun build(): UiCustomization {
         val uiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
-            labelCustomization?.let { this.labelCustomization = it }
-            toolbarCustomization?.let { this.toolbarCustomization = it }
-            textBoxCustomization?.let { this.textBoxCustomization = it }
-            buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+            this@UiCustomizationBuilder.labelCustomization?.let { this.labelCustomization = it.labelCustomization }
+            this@UiCustomizationBuilder.toolbarCustomization?.let { this.toolbarCustomization = it.toolbarCustomization }
+            this@UiCustomizationBuilder.textBoxCustomization?.let { this.textBoxCustomization = it.textBoxCustomization }
+            this@UiCustomizationBuilder.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
                 this.setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
             }
         }
@@ -86,7 +92,10 @@ class UiCustomizationBuilder {
 /**
  * Configuration for label customization.
  */
-data class LabelCustomization internal constructor(internal val labelCustomization: com.netcetera.threeds.sdk.api.ui.logic.LabelCustomization)
+@Parcelize
+data class LabelCustomization internal constructor(
+    internal val labelCustomization: com.netcetera.threeds.sdk.api.ui.logic.LabelCustomization
+) : Parcelable
 
 class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
     private var headingTextColor: String? = null
@@ -128,9 +137,10 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
 /**
  * Configuration for Text box customization.
  */
+@Parcelize
 data class TextBoxCustomization internal constructor(
     internal val textBoxCustomization: com.netcetera.threeds.sdk.api.ui.logic.TextBoxCustomization
-)
+) : Parcelable
 
 class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>() {
     private var borderWidth: Int? = null
@@ -150,14 +160,14 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
     override fun build(): TextBoxCustomization {
         return TextBoxCustomization(
             com.netcetera.threeds.sdk.api.ui.logic.TextBoxCustomization().apply {
-                borderWidth.let { this.borderWidth = it }
-                borderColor?.let { this.borderColor = it }
-                cornerRadius.let { this.cornerRadius = it }
-                darkBorderColor?.let { this.darkBorderColor = it }
-                textColor?.let { this.textColor = it }
-                textFontSize.let { this.textFontSize = it }
-                textFontName?.let { this.textFontName = it }
-                darkTextColor?.let { this.darkTextColor = it }
+                this@TextBoxCustomizationBuilder.borderWidth?.let { this.borderWidth = it }
+                this@TextBoxCustomizationBuilder.borderColor?.let { this.borderColor = it }
+                this@TextBoxCustomizationBuilder.cornerRadius?.let { this.cornerRadius = it }
+                this@TextBoxCustomizationBuilder.darkBorderColor?.let { this.darkBorderColor = it }
+                this@TextBoxCustomizationBuilder.textColor?.let { this.textColor = it }
+                this@TextBoxCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
+                this@TextBoxCustomizationBuilder.textFontName?.let { this.textFontName = it }
+                this@TextBoxCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }
@@ -166,7 +176,10 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
 /**
  * Configuration for Toolbar customization.
  */
-data class ToolbarCustomization internal constructor(internal val toolbarCustomization: com.netcetera.threeds.sdk.api.ui.logic.ToolbarCustomization)
+@Parcelize
+data class ToolbarCustomization internal constructor(
+    internal val toolbarCustomization: com.netcetera.threeds.sdk.api.ui.logic.ToolbarCustomization
+) : Parcelable
 
 class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>() {
     private var headText: String? = null
@@ -188,14 +201,14 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
     override fun build(): ToolbarCustomization {
         return ToolbarCustomization(
             com.netcetera.threeds.sdk.api.ui.logic.ToolbarCustomization().apply {
-                headText?.let { this.headerText = it }
-                buttonText?.let { this.buttonText = it }
-                backgroundColor?.let { this.backgroundColor = it }
-                darkBackgroundColor?.let { this.darkBackgroundColor = it }
-                textColor?.let { this.textColor = it }
-                textFontSize.let { this.textFontSize = it }
-                textFontName?.let { this.textFontName = it }
-                darkTextColor?.let { this.darkTextColor = it }
+                this@ToolbarCustomizationBuilder.headText?.let { this.headerText = it }
+                this@ToolbarCustomizationBuilder.buttonText?.let { this.buttonText = it }
+                this@ToolbarCustomizationBuilder.backgroundColor?.let { this.backgroundColor = it }
+                this@ToolbarCustomizationBuilder.darkBackgroundColor?.let { this.darkBackgroundColor = it }
+                this@ToolbarCustomizationBuilder.textColor?.let { this.textColor = it }
+                this@ToolbarCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
+                this@ToolbarCustomizationBuilder.textFontName?.let { this.textFontName = it }
+                this@ToolbarCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }
@@ -210,13 +223,16 @@ enum class ButtonType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustom
     NEXT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.NEXT),
     CANCEL(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.CANCEL),
     RESEND(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.RESEND),
-    OPEN_OOB_APP(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP);
+    OPEN_OOB_APP(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP)
 }
 
 /**
  * Configuration for button customization.
  */
-data class ButtonCustomization internal constructor(internal val buttonCustomization: com.netcetera.threeds.sdk.api.ui.logic.ButtonCustomization)
+@Parcelize
+data class ButtonCustomization internal constructor(
+    internal val buttonCustomization: com.netcetera.threeds.sdk.api.ui.logic.ButtonCustomization
+) : Parcelable
 
 class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
     private var cornerRadius: Int? = null
@@ -236,13 +252,13 @@ class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
     override fun build(): ButtonCustomization {
         return ButtonCustomization(
             com.netcetera.threeds.sdk.api.ui.logic.ButtonCustomization().apply {
-                cornerRadius.let { this.cornerRadius = it }
-                backgroundColor?.let { this.backgroundColor = it }
-                darkBackgroundColor?.let { this.darkBackgroundColor = it }
-                textColor?.let { this.textColor = it }
-                textFontSize.let { this.textFontSize = it }
-                textFontName?.let { this.textFontName = it }
-                darkTextColor?.let { this.darkTextColor = it }
+                this@ButtonCustomizationBuilder.cornerRadius?.let { this.cornerRadius = it }
+                this@ButtonCustomizationBuilder.backgroundColor?.let { this.backgroundColor = it }
+                this@ButtonCustomizationBuilder.darkBackgroundColor?.let { this.darkBackgroundColor = it }
+                this@ButtonCustomizationBuilder.textColor?.let { this.textColor = it }
+                this@ButtonCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
+                this@ButtonCustomizationBuilder.textFontName?.let { this.textFontName = it }
+                this@ButtonCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }
