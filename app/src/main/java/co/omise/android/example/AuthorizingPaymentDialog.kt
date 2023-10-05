@@ -20,7 +20,6 @@ class AuthorizingPaymentDialog {
                 }
 
                 hint = "Authorize URL"
-                setText("https://3dsms.staging-omise.co/payments/pay2_5xaujsv7zh2miq3tki0/authorize")
             }
             val returnUrlEditText = EditText(context).apply {
                 layoutParams = LinearLayout.LayoutParams(
