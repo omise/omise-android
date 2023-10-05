@@ -53,7 +53,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 
 
@@ -92,7 +91,6 @@ class AuthorizingPaymentActivityTest {
         whenever(mockViewModel.isLoading).thenReturn(isLoading)
         whenever(mockViewModel.error).thenReturn(error)
         whenever(mockViewModel.transactionStatus).thenReturn(transactionStatus)
-        doNothing().whenever(mockViewModel).cleanup()
 
         interceptActivityLifecycle { activity, _ ->
             (activity as? AuthorizingPaymentActivity)?.setViewModelFactory(viewModelFactory)
