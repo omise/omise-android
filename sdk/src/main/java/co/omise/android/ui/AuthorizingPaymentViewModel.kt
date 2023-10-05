@@ -64,7 +64,7 @@ internal class AuthorizingPaymentViewModel(
     val error: LiveData<OmiseException> = _error
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, e ->
-//        _isLoading.postValue(false)
+        _isLoading.postValue(false)
         threeDS2Service.transaction.close()
         if (e is OmiseException) {
             _error.postValue(e)
