@@ -85,10 +85,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
 
         viewModel.isLoading.observe(this) {
+            // Closing transaction will also hide the progress view.
+            // So, we only show the progress view.
             if (it) {
                 viewModel.getTransaction().getProgressView(this).showProgress()
-            } else {
-                viewModel.getTransaction().getProgressView(this).hideProgress()
             }
         }
 
