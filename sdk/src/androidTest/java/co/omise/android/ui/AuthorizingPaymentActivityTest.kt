@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
+import android.view.WindowManager
 import android.widget.ProgressBar
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -330,5 +331,13 @@ class AuthorizingPaymentActivityTest {
                 hasData(Uri.parse(deepLinkAuthorizeUrl))
             )
         )
+    }
+
+    @Test
+    fun flagSecure_activityShouldContainFlagSecureInAttributes() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        scenario.onActivity {
+            assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 }
