@@ -44,10 +44,8 @@ import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.internal.stubbing.answers.AnswersWithDelay
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
@@ -295,12 +293,8 @@ class CreditCardActivityTest {
     }
 
     @Test
-    @Ignore("Test failed")
     fun submitForm_disableFormWhenPressSubmit() {
-        whenever(mockClient.send<Token>(any(), any())).doAnswer { invocation ->
-            val callback = invocation.getArgument<RequestListener<Token>>(1)
-            callback.onRequestSucceed(Token())
-        }
+        whenever(mockClient.send<Token>(any(), any())).doAnswer {}
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
