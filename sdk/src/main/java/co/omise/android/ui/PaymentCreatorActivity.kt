@@ -3,7 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.WindowManager
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
@@ -64,6 +64,7 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         setContentView(R.layout.activity_payment_creator)
 
         initialize()
