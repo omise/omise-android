@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
+import androidx.arch.core.executor.testing.CountingTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -44,6 +46,8 @@ import co.omise.android.utils.interceptActivityLifecycle
 import co.omise.android.utils.loadHtml
 import co.omise.android.utils.loadUrl
 import co.omise.android.utils.withUrl
+import com.netcetera.threeds.sdk.api.transaction.Transaction
+import com.netcetera.threeds.sdk.api.ui.ProgressView
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertEquals
@@ -52,9 +56,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.verify
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
+import java.util.concurrent.TimeUnit
 
 
 @LargeTest
@@ -62,6 +70,9 @@ import org.mockito.kotlin.whenever
 class AuthorizingPaymentActivityTest {
     @get:Rule
     val intentRule = IntentsRule()
+
+    @get:Rule
+    val countingTaskExecutorRule = CountingTaskExecutorRule()
 
     private val authorizeUrl = "https://www.omise.co/pay"
     private val returnUrl = "http://www.example.com"
@@ -72,6 +83,8 @@ class AuthorizingPaymentActivityTest {
         putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
     }
 
+    private val transaction: Transaction = mock()
+    private val progressView: ProgressView = mock()
     private val mockViewModel: AuthorizingPaymentViewModel = mock()
     private val viewModelFactory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -92,6 +105,8 @@ class AuthorizingPaymentActivityTest {
         whenever(mockViewModel.isLoading).thenReturn(isLoading)
         whenever(mockViewModel.error).thenReturn(error)
         whenever(mockViewModel.transactionStatus).thenReturn(transactionStatus)
+        whenever(mockViewModel.getTransaction()).thenReturn(transaction)
+        whenever(transaction.getProgressView(any())).thenReturn(progressView)
         doNothing().whenever(mockViewModel).cleanup()
 
         interceptActivityLifecycle { activity, _ ->
@@ -305,5 +320,27 @@ class AuthorizingPaymentActivityTest {
                 hasData(Uri.parse(deepLinkAuthorizeUrl))
             )
         )
+    }
+
+    @Test
+    fun progressView_whenLoadingIsTrueThenShowProgressView() {
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+
+        isLoading.postValue(true)
+        countingTaskExecutorRule.drainTasks(3, TimeUnit.SECONDS)
+
+        verify(progressView).showProgress()
+    }
+
+    @Test
+    fun progressView_whenLoadingIsFalseThenDoNothing() {
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+
+        isLoading.postValue(false)
+        countingTaskExecutorRule.drainTasks(3, TimeUnit.SECONDS)
+
+        // Closing the transaction will also hide the progress view. So we don't need to call hideProgress() here.
+        verify(progressView, never()).showProgress()
+        verify(progressView, never()).hideProgress()
     }
 }
