@@ -161,7 +161,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .textColor("#000000")
                 .textFontSize(20)
                 .backgroundColor("#FFFFFF")
-                .headText("Secure Checkout")
+                .headerText("Secure Checkout")
                 .buttonText("Close")
                 .darkBackgroundColor("#262626")
                 .darkTextColor("#FFFFFF")

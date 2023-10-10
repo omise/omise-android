@@ -303,7 +303,7 @@ data class ToolbarCustomization internal constructor(
  * Builder for building [ToolbarCustomization] data.
  */
 class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>() {
-    private var headText: String? = null
+    private var headerText: String? = null
     private var buttonText: String? = null
     private var backgroundColor: String? = null
     private var darkBackgroundColor: String? = null
@@ -311,9 +311,9 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
     /**
      * Set the heading text.
      *
-     * @param headText Heading text.
+     * @param headerText Heading text.
      */
-    fun headText(headText: String): ToolbarCustomizationBuilder = apply { this.headText = headText }
+    fun headerText(headerText: String): ToolbarCustomizationBuilder = apply { this.headerText = headerText }
 
     /**
      * Set the button text.
@@ -373,7 +373,7 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
     override fun build(): ToolbarCustomization {
         return ToolbarCustomization(
             com.netcetera.threeds.sdk.api.ui.logic.ToolbarCustomization().apply {
-                this@ToolbarCustomizationBuilder.headText?.let { this.headerText = it }
+                this@ToolbarCustomizationBuilder.headerText?.let { this.headerText = it }
                 this@ToolbarCustomizationBuilder.buttonText?.let { this.buttonText = it }
                 this@ToolbarCustomizationBuilder.backgroundColor?.let { this.backgroundColor = it }
                 this@ToolbarCustomizationBuilder.darkBackgroundColor?.let { this.darkBackgroundColor = it }
