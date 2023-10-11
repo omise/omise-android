@@ -55,7 +55,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+
+        if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, false)) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+
         setContentView(R.layout.activity_authorizing_payment)
 
         supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
