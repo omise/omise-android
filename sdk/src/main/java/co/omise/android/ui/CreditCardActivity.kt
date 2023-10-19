@@ -126,7 +126,7 @@ class CreditCardActivity : OmiseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (intent.getBooleanExtra(EXTRA_IS_SECURE, false)) {
+        if (intent.getBooleanExtra(EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 

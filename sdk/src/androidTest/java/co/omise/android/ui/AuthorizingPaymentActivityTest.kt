@@ -335,19 +335,19 @@ class AuthorizingPaymentActivityTest {
     }
 
     @Test
-    fun flagSecure_whenSetParameterThenAttributesMustContainFlagSecure() {
-        intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, true)
+    fun flagSecure_whenParameterIsFalseThenAttributesMustNotContainFlagSecure() {
+        intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, false)
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         scenario.onActivity {
-            assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+            assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 
     @Test
-    fun flagSecure_whenNotSetParameterThenAttributesMustNotContainFlagSecure() {
+    fun flagSecure_whenParameterNotSetThenAttributesMustContainFlagSecure() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         scenario.onActivity {
-            assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+            assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 }

@@ -523,7 +523,7 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 
 ## Protecting screenshot and screen recording
 
-To protect **Omise Android SDK** from being screenshot and screen recording, you can pass this `OmiseActivity.EXTRA_IS_SECURE` extra data to `true` when starting these activities `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`. By default it is `false`.
+By default, **Omise Android SDK** protects the screen from being screenshot and screen recording, if you want to disable this feature you can pass this `OmiseActivity.EXTRA_IS_SECURE` extra data to `false` when starting these activities `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
 
 ```kotlin
 

@@ -66,7 +66,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (intent.getBooleanExtra(EXTRA_IS_SECURE, false)) {
+        if (intent.getBooleanExtra(EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
@@ -207,7 +207,7 @@ private class PaymentCreatorNavigationImpl(
     override fun navigateToCreditCardForm() {
         val intent = Intent(activity, CreditCardActivity::class.java).apply {
             putExtra(EXTRA_PKEY, pkey)
-            putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, false))
+            putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
         }
         activity.startActivityForResult(intent, requestCode)
     }

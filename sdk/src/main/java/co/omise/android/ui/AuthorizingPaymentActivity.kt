@@ -56,7 +56,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, false)) {
+        if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
