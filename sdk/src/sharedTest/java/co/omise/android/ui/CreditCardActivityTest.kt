@@ -43,6 +43,7 @@ import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -385,10 +386,19 @@ class CreditCardActivityTest {
 
 
     @Test
-    fun flagSecure_activityShouldContainFlagSecureInAttributes() {
+    fun flagSecure_whenSetParameterThenAttributesMustContainFlagSecure() {
+        intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, true)
         val scenario = launchActivityForResult<CreditCardActivity>(intent)
         scenario.onActivity {
             assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
+    @Test
+    fun flagSecure_whenNotSetParameterThenAttributesMustNotContainFlagSecure() {
+        val scenario = launchActivityForResult<CreditCardActivity>(intent)
+        scenario.onActivity {
+            assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 }

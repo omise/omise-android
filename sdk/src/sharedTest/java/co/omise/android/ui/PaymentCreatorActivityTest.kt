@@ -18,7 +18,9 @@ import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
+import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,10 +74,19 @@ class PaymentCreatorActivityTest {
     }
 
     @Test
-    fun flagSecure_activityShouldContainFlagSecureInAttributes() {
+    fun flagSecure_whenSetParameterThenAttributesMustContainFlagSecure() {
+        intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, true)
         val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
         scenario.onActivity {
             assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
+    @Test
+    fun flagSecure_whenNotSetParameterThenAttributesMustNotContainFlagSecure() {
+        val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
+        scenario.onActivity {
+            assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
 }
