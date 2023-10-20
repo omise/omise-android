@@ -2,6 +2,7 @@ package co.omise.android.ui
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.view.WindowManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -9,7 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -17,7 +18,9 @@ import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
+import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,9 +29,8 @@ import org.junit.runner.RunWith
 class PaymentCreatorActivityTest {
 
     @get:Rule
-    val intentRule = IntentsTestRule<TestFragmentActivity>(TestFragmentActivity::class.java)
+    val intentRule = IntentsRule()
 
-    private lateinit var scenario: ActivityScenario<PaymentCreatorActivity>
     private val capability = Capability()
     private val intent = Intent(
             ApplicationProvider.getApplicationContext(),
@@ -42,7 +44,7 @@ class PaymentCreatorActivityTest {
 
     @Test
     fun initialActivity_collectExtrasIntent() {
-        scenario = ActivityScenario.launch(intent)
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
 
         onView(withId(R.id.payment_creator_container)).check(matches(isDisplayed()))
     }
@@ -50,7 +52,7 @@ class PaymentCreatorActivityTest {
     @Test
     fun navigateToCreditCardForm_startCreditCartActivity() {
         var activity: PaymentCreatorActivity? = null
-        scenario = ActivityScenario.launch<PaymentCreatorActivity>(intent).onActivity {
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
             activity = it
         }
 
@@ -64,10 +66,27 @@ class PaymentCreatorActivityTest {
         val creditCardIntent = Intent().apply {
             putExtra(EXTRA_TOKEN, Token())
         }
-        scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+        val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
             it.performActivityResult(100, RESULT_OK, creditCardIntent)
         }
 
         assertEquals(RESULT_OK, scenario.result.resultCode)
+    }
+
+    @Test
+    fun flagSecure_whenParameterIsFalseThenAttributesMustNotContainFlagSecure() {
+        intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, false)
+        val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
+        scenario.onActivity {
+            assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
+    @Test
+    fun flagSecure_whenParameterNotSetThenAttributesMustContainFlagSecure() {
+        val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
+        scenario.onActivity {
+            assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 }
