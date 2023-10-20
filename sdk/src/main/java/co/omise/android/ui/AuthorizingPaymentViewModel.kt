@@ -11,11 +11,9 @@ import co.omise.android.BuildConfig
 import co.omise.android.OmiseException
 import co.omise.android.ThreeDS2ServiceWrapper
 import co.omise.android.api.Client
-import co.omise.android.config.AuthorizingPaymentConfig
+import co.omise.android.config.UiCustomization
 import co.omise.android.models.Authentication
 import co.omise.android.models.Serializer
-import co.omise.android.threeds.ThreeDS
-import co.omise.android.threeds.core.ThreeDSConfig
 import com.netcetera.threeds.sdk.ThreeDS2ServiceInstance
 import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
@@ -23,27 +21,26 @@ import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiv
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 
 internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
-    private val urlVerifier
-    : AuthorizingPaymentURLVerifier
+    private val urlVerifier: AuthorizingPaymentURLVerifier,
+    private val uiCustomization: UiCustomization,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        // TODO: Remove this after replacing with Netcetera's 3DS SDK.
-        ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
-        val threeDS = ThreeDS(activity)
         val client = Client("")
-        val wrapper = ThreeDS2ServiceWrapper(activity.application, ThreeDS2ServiceInstance.get())
-        return AuthorizingPaymentViewModel(threeDS, client, urlVerifier, wrapper) as T
+        val wrapper = ThreeDS2ServiceWrapper(
+            context = activity.application,
+            threeDS2Service = ThreeDS2ServiceInstance.get(),
+            uiCustomization = uiCustomization.uiCustomization,
+        )
+        return AuthorizingPaymentViewModel(client, urlVerifier, wrapper) as T
     }
 }
 
 internal class AuthorizingPaymentViewModel(
-    private val threeDS: ThreeDS,
     private val client: Client,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val threeDS2Service: ThreeDS2ServiceWrapper,
@@ -124,7 +121,7 @@ internal class AuthorizingPaymentViewModel(
             _isLoading.postValue(true)
             val authentication = client.send(request)
 
-            // Reccomended by Netcetera's 3DS SDK.
+            // Recommended by Netcetera's 3DS SDK.
             // If the challenge flow is required
             // - Do not close the transaction
             // - Do not hide the progress view
@@ -162,12 +159,6 @@ internal class AuthorizingPaymentViewModel(
 
     fun getTransaction(): Transaction {
         return threeDS2Service.transaction
-    }
-
-    // TODO: Remove this after removing Omise's 3DS SDK.
-    fun cleanup() {
-        viewModelScope.cancel()
-        threeDS.cleanup()
     }
 
     /** [ChallengeStatusReceiver] implementation. */

@@ -5,7 +5,6 @@ import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -60,7 +59,6 @@ import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
-import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
@@ -107,7 +105,6 @@ class AuthorizingPaymentActivityTest {
         whenever(mockViewModel.transactionStatus).thenReturn(transactionStatus)
         whenever(mockViewModel.getTransaction()).thenReturn(transaction)
         whenever(transaction.getProgressView(any())).thenReturn(progressView)
-        doNothing().whenever(mockViewModel).cleanup()
 
         interceptActivityLifecycle { activity, _ ->
             (activity as? AuthorizingPaymentActivity)?.setViewModelFactory(viewModelFactory)

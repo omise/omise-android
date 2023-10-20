@@ -17,15 +17,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
-import co.omise.android.config.AuthorizingPaymentConfig;
-import co.omise.android.config.ThreeDSConfig;
+import co.omise.android.config.ButtonCustomization;
+import co.omise.android.config.ButtonCustomizationBuilder;
+import co.omise.android.config.ButtonType;
+import co.omise.android.config.LabelCustomization;
+import co.omise.android.config.LabelCustomizationBuilder;
+import co.omise.android.config.TextBoxCustomization;
+import co.omise.android.config.TextBoxCustomizationBuilder;
+import co.omise.android.config.ToolbarCustomization;
+import co.omise.android.config.ToolbarCustomizationBuilder;
 import co.omise.android.config.UiCustomization;
+import co.omise.android.config.UiCustomizationBuilder;
 import co.omise.android.models.Amount;
 import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
 import co.omise.android.models.Token;
-import co.omise.android.ui.AuthorizingPaymentResult;
 import co.omise.android.ui.AuthorizingPaymentActivity;
+import co.omise.android.ui.AuthorizingPaymentResult;
 import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
@@ -34,6 +42,7 @@ import kotlin.text.StringsKt;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
+import static co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_UI_CUSTOMIZATION;
 
 public class CheckoutActivity extends AppCompatActivity {
 
@@ -60,8 +69,6 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-
-        initializeAuthoringPaymentConfig();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -129,66 +136,74 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
     }
 
-    /**
-     * Here's the sample of initializing 3D Secure 2.
-     * This should be call before start the {@link AuthorizingPaymentActivity}.
-     */
-    private void initializeAuthoringPaymentConfig() {
-        UiCustomization uiCustomization = new UiCustomization.Builder()
-                .labelCustomization(new UiCustomization.LabelCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Regular.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(16)
-                        .headingTextColor("#000000")
-                        .headingTextFontName("fonts/RobotoMono-Bold.ttf")
-                        .headingTextFontSize(20)
-                        .build())
-                .textBoxCustomization(new UiCustomization.TextBoxCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Regular.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(16)
-                        .borderWidth(1)
-                        .cornerRadius(4)
-                        .borderColor("#1A56F0")
-                        .build())
-                .toolbarCustomization(new UiCustomization.ToolbarCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Bold.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(20)
-                        .backgroundColor("#FFFFFF")
-                        .headerText("Secure Checkout")
-                        .buttonText("Close")
-                        .build())
-                .buttonCustomization(UiCustomization.ButtonType.SUBMIT_BUTTON, new UiCustomization.ButtonCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Bold.ttf")
-                        .textFontColor("#FFFFFF")
-                        .textFontSize(20)
-                        .backgroundColor("#1A56F0")
-                        .cornerRadius(4)
-                        .build())
-                .buttonCustomization(UiCustomization.ButtonType.RESEND_BUTTON, new UiCustomization.ButtonCustomization.Builder()
-                        .textFontName("fonts/RobotoMono-Bold.ttf")
-                        .textFontColor("#000000")
-                        .textFontSize(20)
-                        .backgroundColor("#FFFFFF")
-                        .cornerRadius(4)
-                        .build())
-                .build();
-
-        ThreeDSConfig threeDSConfig = new ThreeDSConfig.Builder()
-                .uiCustomization(uiCustomization)
-                .timeout(5)
-                .build();
-        AuthorizingPaymentConfig authPaymentConfig = new AuthorizingPaymentConfig.Builder()
-                .threeDSConfig(threeDSConfig)
-                .build();
-        AuthorizingPaymentConfig.initialize(authPaymentConfig);
-    }
-
     private Unit startAuthoringPaymentActivity(String authorizeUrl, String returnUrl) {
+        LabelCustomization labelCustomization = new LabelCustomizationBuilder()
+                .headingDarkTextColor("#FFFFFF")
+                .headingTextColor("#000000")
+                .headingTextFontName("roboto_mono")
+                .headingTextFontSize(20)
+                .textFontName("roboto_mono")
+                .textColor("#000000")
+                .textFontSize(16)
+                .build();
+
+        TextBoxCustomization textBoxCustomization = new TextBoxCustomizationBuilder()
+                .textFontName("font/roboto_mono_regular.ttf")
+                .textColor("#000000")
+                .textFontSize(16)
+                .borderWidth(1)
+                .cornerRadius(4)
+                .borderColor("#1A56F0")
+                .build();
+
+        ToolbarCustomization toolbarCustomization = new ToolbarCustomizationBuilder()
+                .textFontName("font/roboto_mono_bold.ttf")
+                .textColor("#000000")
+                .textFontSize(20)
+                .backgroundColor("#FFFFFF")
+                .headerText("Secure Checkout")
+                .buttonText("Close")
+                .darkBackgroundColor("#262626")
+                .darkTextColor("#FFFFFF")
+                .build();
+
+        ButtonCustomization primaryButtonCustomization = new ButtonCustomizationBuilder()
+                .textFontName("font/roboto_mono_bold.ttf")
+                .textFontSize(20)
+                .cornerRadius(4)
+                .textColor("#FFFFFF")
+                .backgroundColor("#1A56F0")
+                .darkTextColor("#FFFFFF")
+                .darkBackgroundColor("#4777F3")
+                .build();
+
+        ButtonCustomization secondaryButtonCustomization = new ButtonCustomizationBuilder()
+                .textFontName("font/roboto_mono_bold.ttf")
+                .textFontSize(20)
+                .cornerRadius(4)
+                .textColor("#1A56F0")
+                .backgroundColor("#FFFFFF")
+                .darkTextColor("#1E1E1E")
+                .darkBackgroundColor("#FFFFFF")
+                .build();
+
+        UiCustomization uiCustomization = new UiCustomizationBuilder()
+                .supportDarkMode(true)
+                .labelCustomization(labelCustomization)
+                .textBoxCustomization(textBoxCustomization)
+                .toolbarCustomization(toolbarCustomization)
+                .buttonCustomization(ButtonType.SUBMIT, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.CONTINUE, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.NEXT, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.OPEN_OOB_APP, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.RESEND, primaryButtonCustomization)
+                .buttonCustomization(ButtonType.CANCEL, secondaryButtonCustomization)
+                .build();
+
         Intent intent = new Intent(this, AuthorizingPaymentActivity.class);
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl);
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
+        intent.putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization);
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
         return Unit.INSTANCE;
     }

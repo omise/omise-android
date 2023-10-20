@@ -18,7 +18,11 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Encapsulates the [ThreeDS2Service] to allow for easier testing.
  */
-internal class ThreeDS2ServiceWrapper(private val context: Context, private val threeDS2Service: ThreeDS2Service) {
+internal class ThreeDS2ServiceWrapper(
+    private val context: Context,
+    private val threeDS2Service: ThreeDS2Service,
+    private val uiCustomization: UiCustomization,
+) {
     lateinit var transaction: Transaction
         private set
 
@@ -37,7 +41,6 @@ internal class ThreeDS2ServiceWrapper(private val context: Context, private val 
                 .configureScheme(schemeConfig)
                 .build()
             val locale = getLocale()
-            val uiCustomization = UiCustomization()
             threeDS2Service.initialize(context, configParameters, locale, uiCustomization)
             continuation.resume(Result.success(Unit))
         } catch (e: Exception) {
