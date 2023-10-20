@@ -523,7 +523,7 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 
 ## Protecting screenshot and screen recording
 
-By default, **Omise Android SDK** protects the screen from being screenshot and screen recording, if you want to disable this feature you can pass this `OmiseActivity.EXTRA_IS_SECURE` extra data to `false` when starting these activities `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
+**Omise Android SDK** comes with built-in protection against screenshoot and screen recording. If you wish to disable this feature, you can pass `OmiseActivity.EXTRA_IS_SECURE` with a value of `false` when starting the following activities: `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
 
 ## Contributing
 
