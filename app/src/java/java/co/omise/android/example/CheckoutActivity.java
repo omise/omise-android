@@ -230,6 +230,11 @@ public class CheckoutActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // custom result code when web view is closed
+        if (resultCode == AuthorizingPaymentActivity.WEBVIEW_CLOSED_RESULT_CODE) {
+            snackbar.setText(R.string.webview_closed).show();
+            return;
+        }
         if (resultCode == RESULT_CANCELED) {
             snackbar.setText(R.string.payment_cancelled).show();
             return;
