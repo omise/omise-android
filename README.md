@@ -70,7 +70,7 @@ private fun showCreditCardForm() {
 Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
 
 After the end-user completes entering credit card information, the activity result
-callback will be called, handle it as follows:
+callback will be called; handle it as follows:
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -171,7 +171,7 @@ client.send(request, object : RequestListener<Token>{
 ```
 
 The `Client` class will automatically dispatch the network call on an internal background
-thread and will call listener methods on the thread that initially calls the `send`
+thread, and will call listener methods on the thread that initially calls the `send`
 method.
 
 ### Payment Creator activity
@@ -211,7 +211,7 @@ Declare a `capability` variable as a `Capability` object and pass it as the valu
 
 There are two options to retrieve the Capability object. 
 
-1. You can retrieve the Capability object from your account's capabilities through the [Capability](#retrieve-capabilities). 
+1. You can retrieve the Capability object from your account's capabilities through the [Retrieve Capabilities](#retrieve-capabilities) function. 
 
 2. Or you can create a `Capability` object to create your own capabilities using the helper function `Capability.create()`.  
 
