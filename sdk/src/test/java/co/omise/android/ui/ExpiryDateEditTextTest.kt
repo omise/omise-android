@@ -48,6 +48,15 @@ class ExpiryDateEditTextTest {
         assertEquals(Unit, editText.validate())
     }
 
+    @Test
+    fun validate_ignoreSpecialCharactersInput() {
+        "*,.".forEach { editText.append(it.toString()) }
+
+        assertEquals("", editText.text.toString())
+        "1234".forEach { editText.append(it.toString()) } // 12/34
+        assertEquals("12/34", editText.text.toString())
+    }
+
     @Test(expected = InputValidationException.EmptyInputException::class)
     fun validate_emptyValue() {
         "".forEach { editText.append(it.toString()) }

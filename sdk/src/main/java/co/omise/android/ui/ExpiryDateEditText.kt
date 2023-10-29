@@ -9,6 +9,8 @@ import android.util.AttributeSet
 import co.omise.android.extensions.disableOptions
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * ExpiryDateEditText is a custom EditText for credit card expiration date field. This EditText
@@ -37,7 +39,7 @@ class ExpiryDateEditText : OmiseEditText {
         addTextChangedListener(textWatcher)
         disableOptions()
         filters = arrayOf(InputFilter.LengthFilter(MAX_CHARS))
-        inputType = InputType.TYPE_CLASS_PHONE
+        inputType = InputType.TYPE_CLASS_NUMBER
     }
 
     override fun onSelectionChanged(selStart: Int, selEnd: Int) {
@@ -72,6 +74,15 @@ class ExpiryDateEditText : OmiseEditText {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (s == null || s.length > MAX_CHARS) return
+
+            // Define a regular expression pattern to match non-numeric characters and DATE_SEPARATOR
+            val pattern: Pattern = Pattern.compile("[^0-9" + Pattern.quote(DATE_SEPARATOR) + "]")
+
+            // Use a Matcher to find any non-numeric characters in the string
+            val matcher: Matcher = pattern.matcher(s)
+            if(matcher.find()){
+                return
+            }
 
             // On deleting
             if (s.length < beforeChangedText.length) {
