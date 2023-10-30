@@ -102,7 +102,7 @@ class CreditCardActivityTest {
     fun form_validForm() {
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), pressImeActionButton())
 
         onView(withId(R.id.edit_card_number)).check(matches(withText("4242 4242 4242 4242")))
@@ -118,7 +118,7 @@ class CreditCardActivityTest {
     fun form_validBillingAddressForm() {
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
 
@@ -148,7 +148,7 @@ class CreditCardActivityTest {
     fun form_invalidForm() {
         onView(withId(R.id.edit_card_number)).perform(typeText("1234567890"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), pressImeActionButton())
 
         onView(withId(R.id.edit_card_number)).check(matches(withText("1234 5678 90")))
@@ -298,7 +298,7 @@ class CreditCardActivityTest {
         whenever(mockClient.send<Token>(any(), any())).doAnswer {}
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
         onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
@@ -319,7 +319,7 @@ class CreditCardActivityTest {
 
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
         onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
@@ -346,7 +346,7 @@ class CreditCardActivityTest {
 
         onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
         onView(withId(R.id.country_list))
