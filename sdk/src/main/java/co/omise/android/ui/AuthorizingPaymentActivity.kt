@@ -56,21 +56,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
-
-        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
-            ?: getString(R.string.title_authorizing_payment)
-
-        val authUrl = verifier.authorizedURLString
-        // check for legacy payments that require web view
-        if (authUrl.endsWith("/pay")) {
-            setupWebView()
-        } else {
-            // Check if the URL needs to be opened externally
-            if (verifier.verifyExternalURL(verifier.authorizedURL)) {
-                openDeepLink(verifier.authorizedURL)
-            }
-            observeData()
-        }
+        setupActionBarTitle()
+        handlePaymentAuthorization()
     }
 
     @TestOnly
@@ -185,6 +172,25 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupActionBarTitle() {
+        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
+            ?: getString(R.string.title_authorizing_payment)
+    }
+
+    private fun handlePaymentAuthorization() {
+        val authUrlString = verifier.authorizedURLString
+        val authUrl=verifier.authorizedURL
+        // check for legacy payments that require web view
+        if (authUrlString.endsWith("/pay")) {
+            setupWebView()
+        } else {
+            // Check if the URL needs to be opened externally
+            if (verifier.verifyExternalURL(authUrl)) {
+                openDeepLink(authUrl)
+            }
+            observeData()
+        }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE) {
