@@ -523,6 +523,10 @@ If you enable ProGuard, then add these rules in your ProGuard file.
 -keep class com.nimbusds.jose.** { *; }
 ```
 
+## Protecting screenshot and screen recording
+
+**Omise Android SDK** comes with built-in protection against screenshoot and screen recording. If you wish to disable this feature, you can pass `OmiseActivity.EXTRA_IS_SECURE` with a value of `false` when starting the following activities: `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
+
 ## Contributing
 
 Pull requests and bug fixes are welcome. For larger scope of work, please pop on to our [forum](https://forum.omise.co) to discuss first.

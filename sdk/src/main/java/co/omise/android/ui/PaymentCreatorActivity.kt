@@ -3,7 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.WindowManager
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
@@ -18,6 +18,7 @@ import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CURRENCY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_MERCHANT_ID
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
@@ -64,6 +65,11 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (intent.getBooleanExtra(EXTRA_IS_SECURE, true)) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+
         setContentView(R.layout.activity_payment_creator)
 
         initialize()
@@ -201,6 +207,7 @@ private class PaymentCreatorNavigationImpl(
     override fun navigateToCreditCardForm() {
         val intent = Intent(activity, CreditCardActivity::class.java).apply {
             putExtra(EXTRA_PKEY, pkey)
+            putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
         }
         activity.startActivityForResult(intent, requestCode)
     }
