@@ -42,6 +42,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.getParcelableExtra(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
+    private var isWebViewSetup = false
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
         viewModelFactory ?: AuthorizingPaymentViewModelFactory(
@@ -55,15 +56,8 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorizing_payment)
-
-        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
-            ?: getString(R.string.title_authorizing_payment)
-
-        if (verifier.verifyExternalURL(verifier.authorizedURL)) {
-            openDeepLink(verifier.authorizedURL)
-        }
-
-        observeData()
+        setupActionBarTitle()
+        handlePaymentAuthorization()
     }
 
     @TestOnly
@@ -178,6 +172,25 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupActionBarTitle() {
+        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
+            ?: getString(R.string.title_authorizing_payment)
+    }
+
+    private fun handlePaymentAuthorization() {
+        val authUrlString = verifier.authorizedURLString
+        val authUrl=verifier.authorizedURL
+        // check for legacy payments that require web view
+        if (authUrlString.endsWith("/pay")) {
+            setupWebView()
+        } else {
+            // Check if the URL needs to be opened externally
+            if (verifier.verifyExternalURL(authUrl)) {
+                openDeepLink(authUrl)
+            }
+            observeData()
+        }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE) {
@@ -201,6 +214,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun setupWebView() {
+        isWebViewSetup = true
         setupWebViewClient()
         with(webView.settings) {
             javaScriptEnabled = true
@@ -237,7 +251,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithSuccessful(data: Intent?) {
-        setResult(Activity.RESULT_OK, data)
+        setResult(if (isWebViewSetup) AuthorizingPaymentActivity.WEBVIEW_CLOSED_RESULT_CODE else Activity.RESULT_OK, data)
         finish()
     }
 
@@ -261,5 +275,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
          * This is an optional parameter. If not provided, the default UI will be used.
          */
         const val EXTRA_UI_CUSTOMIZATION = "OmiseActivity.uiCustomization"
+
+        /**
+         * A new result code that is not in the default Activity values to indicate that the web view has been closed after the authorization url has been opened using web view
+         */
+        const val WEBVIEW_CLOSED_RESULT_CODE = 5
     }
 }
