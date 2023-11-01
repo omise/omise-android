@@ -80,14 +80,6 @@ class CreditCardActivityTest {
         override fun onActivityDestroyed(activity: Activity) {}
     }
     private val mockClient: Client = mock()
-    private fun waitMilliseconds(delay: Long) {
-        try {
-            Thread.sleep(delay)
-        } catch (e: InterruptedException) {
-            // Handle the exception if needed
-            Thread.currentThread().interrupt()
-        }
-    }
 
     @Before
     fun setUp() {
@@ -129,8 +121,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -174,8 +165,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -192,8 +182,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -213,8 +202,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -234,8 +222,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
+
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -250,8 +237,6 @@ class CreditCardActivityTest {
     @Test
     fun postTalCode_canTypeAlphabet() {
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -266,8 +251,6 @@ class CreditCardActivityTest {
     @Test
     fun postTalCode_canTypeStartWithZero() {
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -282,8 +265,6 @@ class CreditCardActivityTest {
     @Test
     fun state_canTypeWhitespacesApostrophesPeriod() {
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
@@ -368,8 +349,6 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), closeSoftKeyboard())
         onView(withId(R.id.edit_country)).perform(scrollTo(), click())
-        // Add a delay before interacting with the dialog
-        waitMilliseconds(2000)
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
