@@ -215,8 +215,38 @@ repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
-
+// Use locally to generate full report
+// TODO: Fix flaky tests so that this can be used in CI to reflect full coverage
 tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    // Main source code
+    sourceDirectories.from = file("${project.projectDir}/src/main/java")
+    classDirectories.from = files(fileTree(
+            // Generated Kotlin classes
+            dir: "${project.buildDir}/tmp/kotlin-classes/productionDebug",
+            // Exclude generated code
+            excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*'
+            ]
+    ))
+    executionData.from = fileTree(dir: project.buildDir, includes: [
+            // Execution data for unit tests
+            '**/*.exec',
+            // Execution data for instrumentation tests
+            '**/*.ec'
+    ])
+}
+// Use in CI to coverage generate report without instrumentation testing
+tasks.create(name: 'jacocoUnitTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint']) {
     reports {
         xml.required = true
         html.required = true
