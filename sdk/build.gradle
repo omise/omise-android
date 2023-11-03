@@ -271,7 +271,7 @@ tasks.create(name: 'jacocoUnitTestReport', type: JacocoReport, dependsOn: ['test
             // Execution data for unit tests
             '**/*.exec',
             // Execution data for instrumentation tests
-            '**/*.ec'
+            // '**/*.ec' // Removed to exclude instrumentation tests
     ])
 }
 
