@@ -56,7 +56,18 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Run unit tests
+        # Switch to jacocoTestReport when instrumentation flakiness is fixed
+        run: ./gradlew sdk:jacocoUnitTestReport
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: sdk/build/reports
+
+      - name: Run Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # Switch to jacocoTestReport when instrumentation flakiness is fixed
-        run: ./gradlew sdk:jacocoUnitTestReport sdk:sonar
+        run: ./gradlew sdk:sonar
+
