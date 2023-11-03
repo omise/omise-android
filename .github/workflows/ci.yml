@@ -58,4 +58,6 @@ jobs:
       - name: Run unit tests
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sdk:jacocoUnitTestReport sdk:sonar
+        # Remove sdk:createProductionDebugCoverageReport -x connectedProductionDebugAndroidTest
+        # and switch to jacocoTestReport when instrumentation flakiness is fixed
+        run: ./gradlew sdk:jacocoUnitTestReport sdk:createProductionDebugCoverageReport -x connectedProductionDebugAndroidTest sdk:sonar
