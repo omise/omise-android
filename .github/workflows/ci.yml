@@ -56,6 +56,8 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Run unit tests
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # Switch to jacocoTestReport when instrumentation flakiness is fixed
         run: ./gradlew sdk:jacocoUnitTestReport sdk:sonar
 
