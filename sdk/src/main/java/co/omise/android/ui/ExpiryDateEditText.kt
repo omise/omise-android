@@ -72,8 +72,8 @@ class ExpiryDateEditText : OmiseEditText {
             beforeChangedText = s.toString()
         }
 
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (s == null || s.length > MAX_CHARS || containsNonNumericOrSeparator(s)) {
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            if (s.length > MAX_CHARS || containsNonNumericOrSeparator(s)) {
                 return
             }
 
