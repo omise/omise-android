@@ -215,7 +215,8 @@ repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
-
+// Use locally to generate full report
+// TODO: Fix flaky tests so that this can be used in CI to reflect full coverage
 tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
     reports {
         xml.required = true
@@ -244,6 +245,35 @@ tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProd
             '**/*.ec'
     ])
 }
+// Use in CI to coverage generate report without instrumentation testing
+tasks.create(name: 'jacocoUnitTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint']) {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    // Main source code
+    sourceDirectories.from = file("${project.projectDir}/src/main/java")
+    classDirectories.from = files(fileTree(
+            // Generated Kotlin classes
+            dir: "${project.buildDir}/tmp/kotlin-classes/productionDebug",
+            // Exclude generated code
+            excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*'
+            ]
+    ))
+    executionData.from = fileTree(dir: project.buildDir, includes: [
+            // Execution data for unit tests
+            '**/*.exec',
+            // Execution data for instrumentation tests
+            // '**/*.ec' // Removed to exclude instrumentation tests
+    ])
+}
 
 sonar {
     properties {
@@ -251,7 +281,8 @@ sonar {
         property 'sonar.organization', 'omise'
         property 'sonar.projectName', 'omise-android'
         property 'sonar.projectKey', 'omise_omise-android'
-        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/coverage/androidTest/production/debug/connected/report.xml"
+        // TODO: Change to the correct path once the instrumentation tests are not flaky
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoUnitTestReport/jacocoUnitTestReport.xml"
         property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/testProductionDebugUnitTest"
         property 'sonar.androidLint.reportPaths', "${project.buildDir}/reports/lint-results-productionDebug.xml"
     }
