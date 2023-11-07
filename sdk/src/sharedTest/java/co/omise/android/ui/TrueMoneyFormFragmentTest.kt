@@ -10,7 +10,6 @@ import co.omise.android.R
 import co.omise.android.models.Source
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -63,7 +62,6 @@ class TrueMoneyFormFragmentTest {
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
 
-    @Ignore("Flaky test, it fails when run instrumented test on coverage workflow")
     @Test
     fun disableForm_disableFormWhenRequestSent() {
         onView(withId(R.id.edit_phone_number)).perform(typeText("0812345678"), closeSoftKeyboard())

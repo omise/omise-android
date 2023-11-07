@@ -57,20 +57,6 @@ class ExpiryDateEditTextTest {
         assertEquals("12/34", editText.text.toString())
     }
 
-    @Test
-    fun inputLengthExceedsMaxChars() {
-        val s = "123456" // 6 characters, assuming MAX_CHARS is 5
-        s.forEach { editText.append(it.toString()) }
-        assertEquals("12/34", editText.text.toString()) // assuming that exceeding chars will not be appended
-    }
-
-    @Test
-    fun inputContainsNonNumericOrSeparator() {
-        val s = "12ab" // 'ab' are non-numeric characters
-        s.forEach { editText.append(it.toString()) }
-        assertEquals("12/", editText.text.toString()) // assuming that non-numeric characters are not appended
-    }
-
     @Test(expected = InputValidationException.EmptyInputException::class)
     fun validate_emptyValue() {
         "".forEach { editText.append(it.toString()) }
