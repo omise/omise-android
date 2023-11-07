@@ -37,7 +37,7 @@ class ExpiryDateEditText : OmiseEditText {
         addTextChangedListener(textWatcher)
         disableOptions()
         filters = arrayOf(InputFilter.LengthFilter(MAX_CHARS))
-        inputType = InputType.TYPE_CLASS_PHONE
+        inputType = InputType.TYPE_CLASS_NUMBER
     }
 
     override fun onSelectionChanged(selStart: Int, selEnd: Int) {
@@ -70,8 +70,7 @@ class ExpiryDateEditText : OmiseEditText {
             beforeChangedText = s.toString()
         }
 
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (s == null || s.length > MAX_CHARS) return
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
             // On deleting
             if (s.length < beforeChangedText.length) {
