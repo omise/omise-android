@@ -23,6 +23,12 @@ abstract class OmiseActivity : AppCompatActivity() {
         const val EXTRA_TOKEN = "OmiseActivity.token"
         const val EXTRA_TOKEN_OBJECT = "OmiseActivity.tokenObject"
         const val EXTRA_CARD_OBJECT = "OmiseActivity.cardObject"
+
+        /**
+         * Applies [android.view.WindowManager.LayoutParams.FLAG_SECURE] to the activity.
+         * This will prevent the activity from being captured by screenshots and video recordings.
+         */
+        const val EXTRA_IS_SECURE = "OmiseActivity.isSecure"
     }
 
     @VisibleForTesting

@@ -1,25 +1,25 @@
-# Omise Android SDK
+# Opn Payments Android SDK
 
 [![](https://img.shields.io/maven-central/v/co.omise/omise-android.svg?style=flat-square)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22co.omise%22%20AND%20a%3A%22omise-android%22)
-[![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@omise.co)
+[![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@opn.ooo)
 [![Android CI](https://github.com/omise/omise-android/workflows/Android%20CI/badge.svg)](https://github.com/omise/omise-android/actions)
 
-Omise is a payment service provider currently operating in Thailand. Omise provides a set of clean APIs
+Opn Payments is a payment service provider currently operating in Thailand. Opn Payments provides a set of clean APIs
 that help merchants of any size accept credit cards online.
 
-Omise Android SDK provides Android bindings for the Omise [Token](https://www.omise.co/tokens-api)
-and [Source](https://www.omise.co/sources-api) API as well as components for entering credit card information.
+Opn Payments Android SDK provides Android bindings for the Opn Payments [Token](https://docs.opn.ooo/tokens-api)
+and [Source](https://docs.opn.ooo/sources-api) API, as well as components for entering credit card information.
 
 ## Requirements
 
-* Public key. [Register for an Omise account](https://dashboard.omise.co/signup) to obtain your API keys.
+* Public key. [Register for an Opn Payments account](https://dashboard.omise.co/signup) to obtain your API keys.
 * Android 5.0+ (API 21) target or higher.
 * Android Studio and Gradle build system.
 
 ## Merchant Compliance
 
 **Card data should never transit through your server. We recommend that you follow our guide on how to safely
-[collect credit information](https://www.omise.co/collecting-card-information).**
+[collect credit information](https://docs.opn.ooo/collecting-card-information).**
 
 To be authorized to create tokens server-side you must have a currently valid PCI-DSS
 Attestation of Compliance (AoC) delivered by a certified QSA Auditor.
@@ -29,7 +29,7 @@ having to go through your server.
 
 ## Installation
 
-Add the following line to your project's build.gradle file inside the `dependencies`
+Add the following line to your project's `build.gradle` file inside the `dependencies`
 block:
 
 ```gradle
@@ -43,7 +43,7 @@ implementation 'co.omise:omise-android:4.+'
 The simplest way to use this SDK is to integrate the provided `CreditCardActivity`
 directly into your application. This activity contains a pre-made credit form and will
 automatically [tokenize credit card
-information](https://www.omise.co/security-best-practices) for you.
+information](https://docs.opn.ooo/security-best-practices) for you.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -67,10 +67,10 @@ private fun showCreditCardForm() {
 }
 ```
 
-Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
 
 After the end-user completes entering credit card information, the activity result
-callback will be called, handle it like so:
+callback will be called; handle it as follows:
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -91,16 +91,16 @@ A number of results are returned from the activity. You can obtain them from the
 resulting `Intent` with the following code:
 
 * `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
-  this if you only needs the ID and not   the card data.
+  this if you only need the ID and not the card data.
 * `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
-  object returned from the Omise API.
+  object returned from the Opn Payments API.
 * `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
-  which is part of the `Token` object returned from the Omise API.
+  that is part of the `Token` object returned from the Opn Payments API.
 
 ### Custom Credit Card Form
 
 If you need to build your own credit card form, components inside `CreditCardActivity`
-can be used on their own. For example, the `CreditCardEditText` can be used in XML in this way:
+can be used on their own. For example, the `CreditCardEditText` can be used in XML as demonstrated:
 
 ```xml
 <co.omise.android.ui.CreditCardEditText
@@ -109,7 +109,7 @@ can be used on their own. For example, the `CreditCardEditText` can be used in X
 ```
 
 This component provides automatic spacing into groups of 4 digits as the user inputs their credit card number.
-Additionally the following utility classes are available from the SDK:
+Additionally, the following utility classes are available from the SDK:
 
 * `co.omise.android.ui.CreditCardEditText` - The `CreditCardEditText` class provides utility
    methods for validating and formatting credit card numbers.
@@ -123,7 +123,7 @@ Additionally the following utility classes are available from the SDK:
 ### Manual Tokenization
 
 If you have built your own credit card or Google Pay form, you can use the SDK to manually tokenize the
-card. First build the `Client` and supply your public key this way:
+card. First build the `Client` and supply your public key as follows:
 
 ```kotlin
 private val client = Client("pkey_test_123")
@@ -156,7 +156,7 @@ val tokenizationParam = TokenizationParam(
 val request = Token.CreateTokenRequestBuilder(tokenization = tokenizationParam).build()
 ```
 
-And then send the request using the `client` you have constructed earlier:
+And then send the request using the `client` that you have constructed earlier:
 
 ```kotlin
 client.send(request, object : RequestListener<Token>{
@@ -171,14 +171,14 @@ client.send(request, object : RequestListener<Token>{
 ```
 
 The `Client` class will automatically dispatch the network call on an internal background
-thread and will call listener methods on the thread that initially calls the `send`
+thread, and will call listener methods on the thread that initially calls the `send`
 method.
 
 ### Payment Creator activity
-Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity` 
+Another way to use the Opn Payments Android SDK is to integrate the `PaymentCreatorActivity` 
 to allow users to create a payment source from the list of sources available for the account.
 
-To use it, first declare the availability of the activity in your AndroidManifest.xml file as follows:
+To use it, first declare the availability of the activity in your `AndroidManifest.xml` file as follows:
 
 ```xml
 <activity
@@ -205,13 +205,13 @@ private fun showPaymentCreatorActivity() {
 }
 ```
 
-Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
 
 Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way, the `PaymentCreatorActivity` will display the payment methods contained in the `Capability` object.  
 
-There are 2 options to retrieve the Capability object. 
+There are two options to retrieve the Capability object. 
 
-1. You can retrieve the Capability object from your account's capabilities through the [Capability](#retrieve-capabilities). 
+1. You can retrieve the Capability object from your account's capabilities through the [Retrieve Capabilities](#retrieve-capabilities) function. 
 
 2. Or you can create a `Capability` object to create your own capabilities using the helper function `Capability.create()`.  
 
@@ -226,7 +226,7 @@ There are 2 options to retrieve the Capability object.
 
     > **Note**
     > Ensure you are adding payment methods supported by the account. 
-    > If not, you won't be able to create a source to continue the payment process..
+    > If not, you won't be able to create a source to continue the payment process.
 
 After the end user selects and creates a payment source, the activity result callback will be called; handle it as follows:
 
@@ -257,7 +257,7 @@ Two different results that could be returned are:
 
 ### Google Pay activity
 
-We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will automatically [tokenize the Google Pay token](https://www.omise.co/security-best-practices) for you.
+We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will automatically [tokenize the Google Pay token](https://docs.opn.ooo/security-best-practices) for you.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -295,10 +295,10 @@ override fun navigateToGooglePayForm() {
 }
 ```
 
-- Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
+- Replace the `OMISE_PKEY` with your Opn Payments public key obtained from our dashboard.
 - Replace the `amount` with the amount you want to charge with, in subunits.
 - Replace the `currency` with your currency in the ISO 4217 format.
-- Replace the `cardBrands` with the list from our [capability api](https://www.omise.co/capability-api) or leave blank to use default values.
+- Replace the `cardBrands` with the list from our [capability api](https://docs.opn.ooo/capability-api) or leave blank to use default values.
 - Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode).
 - Set the `googlepayRequestBillingAddress` to `true` if you want to attach the cardholder's name and billing address to the token.
 - When the cardholder's billing address is requested, set the `googlepayRequestPhoneNumber` to `true` to also attach the cardholder's phone number to the token.
@@ -311,21 +311,21 @@ resulting `Intent` with the following code:
 * `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
   this if you only need the ID and not the card data.
 * `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
-  object returned from the Omise API.
+  object returned from the Opn Payments API.
 * `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
-  which is part of the `Token` object returned from the Omise API.
+  that is part of the `Token` object returned from the Opn Payments API.
 
 #### Use your own activity
 
 You can use your own activity if you prefer to. We recommend that you follow [Google's tutorial and guidelines](https://developers.google.com/pay/api/android/overview) and make sure
 that you follow their [brand guidelines](https://developers.google.com/pay/api/android/guides/brand-guidelines) as well.
 
-You can make use of our Google Pay request builder `request/GooglePay.kt`, which will include request builders you can use to request the Google Pay token.
+You can make use of our Google Pay request builder `request/GooglePay.kt`, which includes request builders that you can use to request the Google Pay token.
 Configurations to the builders are modifiable through the class' constructor to suit your needs. However, you are also welcome to make your own integration and call
 our tokens builder yourself.
 
 ### Creating a source
-If you need to create a payment source on your own and use it outside of the provided SDK context, you can do follow these steps. First build the Client and supply your public key in this manner:
+If you need to create a payment source on your own and use it outside the provided SDK context, follow these steps. First build the Client and supply your public key in this manner:
 
 ```kotlin
 private val client = Client("pkey_test_123")
@@ -358,7 +358,7 @@ client.send(request, object : RequestListener<Source>{
 })
 ```
 
-The `Client` class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
+The `Client` class will automatically dispatch the network call on an internal background thread, and will call listener methods on the thread that initially calls the send method.
 
 ### Retrieve Capabilities
 You can retrieve all of your capabilities and available payment sources through the SDK in the following manner.
@@ -375,7 +375,7 @@ Then construct the Capability request:
 val request = Capability.GetCapabilitiesRequestBuilder().build()
 ```
 
-And then send the request using the client we constructed earlier:
+And then send the request using the client that you constructed earlier:
 
 ```kotlin
 client.send(request, object : RequestListener<Capability> {
@@ -389,7 +389,7 @@ client.send(request, object : RequestListener<Capability> {
 })
 ```
 
-The `Client` class will automatically dispatch the network call on an internal background thread and will call listener methods on the thread that initially calls the send method.
+The `Client` class will automatically dispatch the network call on an internal background thread, and will call listener methods on the thread that initially calls the send method.
 
 ### Theme customization
 If you wish to customize the elements on the `CreditCardActivity` in order to
@@ -458,7 +458,9 @@ style.xml
 ```
 
 ## Authorizing Payment
-Some payment methods require the customer to authorize the payment via an authorization URL. This includes the [3-D Secure verification](https://www.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://www.omise.co/offsite-payment), [Alipay](https://www.omise.co/alipay), etc. Omise Android SDK provides a built in class to handle the authorization.
+Some payment methods require the customer to authorize the payment via an authorization URL. This includes the [3-D Secure verification](https://docs.opn.ooo/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.opn.ooo/internet-banking), [Alipay](https://docs.opn.ooo/alipay), etc. Opn Payments Android SDK provides a built in class to handle the authorization.
+
+On payment methods that require opening the external app (e.g. mobile banking app) to authorize the transaction, set the *return_uri* to a **deeplink** or **applink** to be able to open the merchant app. Else, after the card holder completes authorizing the transaction on the external app, the flow redirects to the normal link in the *return_uri* and opens it on the browser app, and therefore results in the payment not being completed.
 
 
 ### Authorizing Payment activity
@@ -472,7 +474,7 @@ file as follows:
   android:theme="@style/OmiseTheme" />
 ```
 
-Then in your activity, declare the method that will start this activity this way:
+Then in your activity, declare the method that will start this activity as follows:
 
 ```kotlin
 private fun showAuthorizingPaymentForm() {
@@ -486,7 +488,7 @@ private fun showAuthorizingPaymentForm() {
 Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge and the array of string `EXPECTED_URL_PATTERNS` with the expected pattern of redirected URLs array.
 
 After the end-user completes the authorizing payment process, the activity result
-callback will be called, handle it in this manner:
+callback will be called. Handle it in this manner:
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -500,7 +502,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 ### Authorizing Payment via an external app
 
-Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user would like to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However merchant developers must handle the `Intent` callback by themselves.
+Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user needs to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However merchant developers must handle the `Intent` callback by themselves.
 
 ### 3D Secure 2
 
@@ -508,7 +510,7 @@ To support 3D Secure 2, you can check out the [3D Secure guide](docs/3d-secure-v
 
 ## ProGuard Rules
 
-If you enable ProGuard, then add this rules in your ProGuard file.
+If you enable ProGuard, then add these rules in your ProGuard file.
 
 ```ProGuard
 -dontwarn okio.**
@@ -520,6 +522,10 @@ If you enable ProGuard, then add this rules in your ProGuard file.
 -keep class co.omise.android.** { *; }
 -keep class com.nimbusds.jose.** { *; }
 ```
+
+## Protecting screenshot and screen recording
+
+**Omise Android SDK** comes with built-in protection against screenshoot and screen recording. If you wish to disable this feature, you can pass `OmiseActivity.EXTRA_IS_SECURE` with a value of `false` when starting the following activities: `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
 
 ## Contributing
 
