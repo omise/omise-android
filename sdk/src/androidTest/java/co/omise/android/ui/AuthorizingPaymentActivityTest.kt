@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
+import android.view.WindowManager
 import android.widget.ProgressBar
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -55,6 +56,7 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -330,5 +332,22 @@ class AuthorizingPaymentActivityTest {
                 hasData(Uri.parse(deepLinkAuthorizeUrl))
             )
         )
+    }
+
+    @Test
+    fun flagSecure_whenParameterIsFalseThenAttributesMustNotContainFlagSecure() {
+        intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, false)
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        scenario.onActivity {
+            assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+
+    @Test
+    fun flagSecure_whenParameterNotSetThenAttributesMustContainFlagSecure() {
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        scenario.onActivity {
+            assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 }
