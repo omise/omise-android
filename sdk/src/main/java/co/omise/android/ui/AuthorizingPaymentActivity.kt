@@ -265,8 +265,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         val resultIntent = Intent().apply {
             putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
         }
-        setResult(Activity.RESULT_OK, resultIntent)
-        finish()
+        if(throwable.message == "3DS2 initialization failed"){
+            setupWebView()
+        }else{
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        }
     }
 
 
