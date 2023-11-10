@@ -265,9 +265,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         val resultIntent = Intent().apply {
             putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
         }
-        if(arrayOf("Challenge protocol error","Challenge runtime error","3DS2 initialization failed").contains(throwable.message)){
+        if (arrayOf("Challenge protocol error","Challenge runtime error","3DS2 initialization failed").contains(throwable.message)) {
             setupWebView()
-        }else{
+        } else {
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
