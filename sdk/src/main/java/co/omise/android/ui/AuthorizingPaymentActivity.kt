@@ -43,6 +43,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.getParcelableExtra(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
+    private lateinit var threeDSRequestorAppURL: String
     private var isWebViewSetup = false
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
@@ -50,12 +51,19 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             activity = this,
             urlVerifier = verifier,
             uiCustomization = uiCustomization,
+            passedThreeDSRequestorAppURL = threeDSRequestorAppURL
         )
     }
     private var viewModelFactory: ViewModelProvider.Factory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
+            ?: run {
+                finishActivityWithFailure(OmiseException("The threeDSRequestorAppURL must be provided in the intent."))
+                return
+            }
 
         if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
@@ -286,5 +294,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
          * A new result code that is not in the default Activity values to indicate that the web view has been closed after the authorization url has been opened using web view
          */
         const val WEBVIEW_CLOSED_RESULT_CODE = 5
+
+        /**
+         * The threeDSRequestorAppURL of the host app. This parameter will be used to allow the external app flows to redirect back to the merchant app (OOB flow)
+         */
+        const val EXTRA_THREE_DS_REQUESTOR_APP_URL = "OmiseActivity.threeDSRequestorAppURL"
     }
 }
