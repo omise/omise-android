@@ -24,6 +24,7 @@ import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.AuthorizingPaymentActivity
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_UI_CUSTOMIZATION
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_THREE_DS_REQUESTOR_APP_URL
 import co.omise.android.ui.AuthorizingPaymentResult
 import co.omise.android.ui.CreditCardActivity
 import co.omise.android.ui.OmiseActivity
@@ -201,6 +202,10 @@ class CheckoutActivity : AppCompatActivity() {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
             putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization)
+            putExtra(
+                EXTRA_THREE_DS_REQUESTOR_APP_URL,
+                "sampleapp://omise.co/authorize_return"
+            )
             startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
         }
     }
@@ -225,6 +230,13 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        // custom result code when web view is closed
+        if (resultCode == AuthorizingPaymentActivity.WEBVIEW_CLOSED_RESULT_CODE) {
+            snackbar.setText(R.string.webview_closed).show()
+            return
+        }
+
         if (resultCode == RESULT_CANCELED) {
             snackbar.setText(R.string.payment_cancelled).show()
             return
