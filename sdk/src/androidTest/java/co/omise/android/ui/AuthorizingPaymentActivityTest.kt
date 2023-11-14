@@ -73,6 +73,7 @@ class AuthorizingPaymentActivityTest {
     val countingTaskExecutorRule = CountingTaskExecutorRule()
 
     private val authorizeUrl = "https://www.omise.co/pay"
+    private val nonLegacyAuthorizeUrl = "https://www.omise.co/authorize"
     private val returnUrl = "http://www.example.com"
     private val deepLinkAuthorizeUrl = "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
     private val deepLinkReturnUrl = "sampleapp://omise.co/authorize_return?result=success"
@@ -119,6 +120,63 @@ class AuthorizingPaymentActivityTest {
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
             .check(matches(withUrl(authorizeUrl)))
+    }
+
+    @Test
+    fun fallbackToWebView_whenOmiseExceptionIsProtocolError() {
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        val testException = OmiseException("Challenge protocol error")
+        error.postValue(testException)
+        onView(withId(R.id.authorizing_payment_webview))
+            .check(matches(isDisplayed()))
+            .check(matches(withUrl(nonLegacyAuthorizeUrl)))
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
+        // return initial value
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+    }
+
+    @Test
+    fun fallbackToWebView_whenOmiseExceptionIsChallengeRuntimeError() {
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        val testException = OmiseException("Challenge runtime error")
+        error.postValue(testException)
+        onView(withId(R.id.authorizing_payment_webview))
+            .check(matches(isDisplayed()))
+            .check(matches(withUrl(nonLegacyAuthorizeUrl)))
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
+        // return initial value
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+    }
+
+    @Test
+    fun fallbackToWebView_whenOmiseExceptionIs3DS2InitializationFailed() {
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        val testException = OmiseException("3DS2 initialization failed")
+        error.postValue(testException)
+        onView(withId(R.id.authorizing_payment_webview))
+            .check(matches(isDisplayed()))
+            .check(matches(withUrl(nonLegacyAuthorizeUrl)))
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
+        // return initial value
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+    }
+
+    @Test
+    fun shouldNotFallbackToWebView_whenOmiseExceptionIsNotTheTargetException() {
+        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
+
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
+
+        val activityResult = scenario.result
+        // Due to issue BadParcelableException: ClassNotFoundException when unmarshalling.
+        // To workaround this it needs to set classloader explicitly https://github.com/android/android-test/issues/733
+        activityResult.resultData.setExtrasClassLoader(this::class.java.classLoader)
+        assertEquals(Activity.RESULT_OK, activityResult.resultCode)
     }
 
     @Test
