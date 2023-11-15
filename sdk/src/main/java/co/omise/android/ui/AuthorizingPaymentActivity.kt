@@ -59,18 +59,17 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
-            ?: run {
-                finishActivityWithFailure(OmiseException("The threeDSRequestorAppURL must be provided in the intent."))
-                return
-            }
-
         if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
         setContentView(R.layout.activity_authorizing_payment)
         setupActionBarTitle()
+        threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
+            ?: run {
+                finishActivityWithFailure(OmiseException("The threeDSRequestorAppURL must be provided in the intent"))
+                return
+            }
         handlePaymentAuthorization()
     }
 
