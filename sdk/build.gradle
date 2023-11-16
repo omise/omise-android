@@ -7,7 +7,6 @@ apply plugin: 'jacoco'
 apply plugin: 'org.sonarqube'
 
 def localProperties = new Properties()
-localProperties.load(new File(rootProject.projectDir, "local.properties").newDataInputStream())
 
 android {
     compileSdkVersion compile_sdk_version
@@ -19,12 +18,12 @@ android {
         versionName omise_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
-        buildConfigField "String", "NETCETERA_LICENSE_KEY", localProperties["netceteraLicenseKey"] ?: "\"\""
-        buildConfigField "String", "SCHEME_NAME", localProperties["schemeName"] ?: "\"\""
-        buildConfigField "String", "DS_ID", localProperties["dsId"] ?: "\"\""
-        buildConfigField "String", "MESSAGE_VERSION", localProperties["messageVersion"] ?: "\"\""
-        buildConfigField "String", "ACS_REF_NUMBER", localProperties["acsRefNumber"] ?: "\"\""
-        buildConfigField "String", "DS_PUBLIC_KEY", localProperties["dsPublicKey"] ?: "\"\""
+        buildConfigField "String", "NETCETERA_LICENSE_KEY", "\"${System.getenv('NETCETERA_LICENSE_KEY')}\""
+        buildConfigField "String", "SCHEME_NAME", "\"${System.getenv('SCHEME_NAME')}\""
+        buildConfigField "String", "DS_ID", "\"${System.getenv('DS_ID')}\""
+        buildConfigField "String", "MESSAGE_VERSION", "\"${System.getenv('MESSAGE_VERSION')}\""
+        buildConfigField "String", "ACS_REF_NUMBER", "\"${System.getenv('ACS_REF_NUMBER')}\""
+        buildConfigField "String", "DS_PUBLIC_KEY", "\"${System.getenv('DS_PUBLIC_KEY')}\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
     }
 
