@@ -87,7 +87,7 @@ class AuthorizingPaymentViewModelTest {
 
         verify(threeDS2Service).initialize()
         verify(client, never()).send(any<Request<Authentication>>())
-        assertEquals("3DS2 initialization failed", (viewModel.error.value as OmiseException).message)
+        assertEquals(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value, (viewModel.error.value as OmiseException).message)
     }
 
     @Test
@@ -159,7 +159,7 @@ class AuthorizingPaymentViewModelTest {
 
         verify(client).send(any<Request<Authentication>>())
         verify(transaction).close()
-        assertEquals("Authentication failed.", viewModel.error.value?.message)
+        assertEquals(AuthenticationStatus.FAILED.message, viewModel.error.value?.message)
     }
 
     @Test
@@ -202,7 +202,7 @@ class AuthorizingPaymentViewModelTest {
 
         viewModel.doChallenge(mock())
 
-        assertEquals("Challenge failed", (viewModel.error.value as OmiseException).message)
+        assertEquals(ChallengeStatus.FAILED.value, (viewModel.error.value as OmiseException).message)
     }
 
     @Test
@@ -227,10 +227,10 @@ class AuthorizingPaymentViewModelTest {
     @Test
     fun completed_whenReceivedUnknownTransactionStatusThenSetError() {
         val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, testDispatcher)
+        val unKnownStatus = "unknown"
+        viewModel.completed(CompletionEvent(UUID.randomUUID().toString(), unKnownStatus))
 
-        viewModel.completed(CompletionEvent(UUID.randomUUID().toString(), "unknown"))
-
-        assertEquals("Challenge completed with unknown status: unknown", (viewModel.error.value as OmiseException).message)
+        assertEquals(ChallengeStatus.COMPLETED_WITH_UNKNOWN_STATUS.includeUnknownTransactionStatusWithError(unKnownStatus), (viewModel.error.value as OmiseException).message)
     }
 
     @Test
@@ -239,7 +239,7 @@ class AuthorizingPaymentViewModelTest {
 
         viewModel.cancelled()
 
-        assertEquals("Challenge cancelled", (viewModel.error.value as OmiseException).message)
+        assertEquals(ChallengeStatus.CANCELLED.value, (viewModel.error.value as OmiseException).message)
     }
 
     @Test
@@ -248,7 +248,7 @@ class AuthorizingPaymentViewModelTest {
 
         viewModel.timedout()
 
-        assertEquals("Challenge timedout", (viewModel.error.value as OmiseException).message)
+        assertEquals(ChallengeStatus.TIMED_OUT.value, (viewModel.error.value as OmiseException).message)
     }
 
     @Test
@@ -269,7 +269,7 @@ class AuthorizingPaymentViewModelTest {
             )
         )
 
-        assertEquals("Challenge protocol error", (viewModel.error.value as OmiseException).message)
+        assertEquals(ChallengeStatus.PROTOCOL_ERROR.value, (viewModel.error.value as OmiseException).message)
     }
 
     @Test
@@ -283,6 +283,6 @@ class AuthorizingPaymentViewModelTest {
             )
         )
 
-        assertEquals("Challenge runtime error", (viewModel.error.value as OmiseException).message)
+        assertEquals(ChallengeStatus.RUNTIME_ERROR.value, (viewModel.error.value as OmiseException).message)
     }
 }

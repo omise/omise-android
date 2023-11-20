@@ -126,7 +126,7 @@ class AuthorizingPaymentActivityTest {
     fun fallbackToWebView_whenOmiseExceptionIsProtocolError() {
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        val testException = OmiseException("Challenge protocol error")
+        val testException = OmiseException(ChallengeStatus.PROTOCOL_ERROR.value)
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
@@ -140,7 +140,7 @@ class AuthorizingPaymentActivityTest {
     fun fallbackToWebView_whenOmiseExceptionIsChallengeRuntimeError() {
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        val testException = OmiseException("Challenge runtime error")
+        val testException = OmiseException(ChallengeStatus.RUNTIME_ERROR.value)
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
@@ -154,7 +154,7 @@ class AuthorizingPaymentActivityTest {
     fun fallbackToWebView_whenOmiseExceptionIs3DS2InitializationFailed() {
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        val testException = OmiseException("3DS2 initialization failed")
+        val testException = OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value)
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
@@ -246,7 +246,7 @@ class AuthorizingPaymentActivityTest {
         activityResult.resultData.setExtrasClassLoader(this::class.java.classLoader)
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
-            "Authentication failed.",
+            AuthenticationStatus.FAILED.message,
             (activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT) as? AuthorizingPaymentResult.Failure)?.throwable?.message
         )
     }
@@ -254,14 +254,15 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun returnActivityResult_whenHasErrorThenReturnFailureResult() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        val testException = OmiseException("Somethings went wrong.")
+        val randomError = "Somethings went wrong."
+        val testException = OmiseException(randomError)
         error.postValue(testException)
 
         val activityResult = scenario.result
         activityResult.resultData.setExtrasClassLoader(this::class.java.classLoader)
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
-            "Somethings went wrong.",
+            randomError,
             activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)?.throwable?.message
         )
     }
