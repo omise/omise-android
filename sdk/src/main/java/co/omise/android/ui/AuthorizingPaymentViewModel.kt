@@ -204,7 +204,7 @@ enum class ChallengeStatus(val value: String) {
 }
 
 enum class OmiseSDKError(val value: String) {
-    OPEN_DEEP_LINK_FAILED("Open deep-link failed"),
+    OPEN_DEEP_LINK_FAILED("Open deep link failed"),
     THREE_DS2_INITIALIZATION_FAILED("3DS2 initialization failed"),
 }
 
