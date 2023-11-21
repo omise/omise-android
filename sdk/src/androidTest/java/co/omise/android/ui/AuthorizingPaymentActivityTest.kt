@@ -254,7 +254,7 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun returnActivityResult_whenHasErrorThenReturnFailureResult() {
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        val randomError = "Somethings went wrong."
+        val randomError = "Somethings went wrong"
         val testException = OmiseException(randomError)
         error.postValue(testException)
 
