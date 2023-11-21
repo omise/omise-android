@@ -192,7 +192,7 @@ enum class ChallengeStatus(val value: String) {
     RUNTIME_ERROR("Challenge runtime error"),
     PROTOCOL_ERROR("Challenge protocol error"),
     FAILED("Challenge failed"),
-    TIMED_OUT("Challenge timedout"),
+    TIMED_OUT("Challenge timed out"),
     CANCELLED("Challenge cancelled"),
     COMPLETED_WITH_UNKNOWN_STATUS("Challenge completed with unknown status");
 
