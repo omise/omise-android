@@ -187,7 +187,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun handlePaymentAuthorization() {
         val authUrlString = verifier.authorizedURLString
-        val authUrl=verifier.authorizedURL
+        val authUrl = verifier.authorizedURL
         // check for legacy payments that require web view
         if (authUrlString.endsWith("/pay")) {
             setupWebView()
@@ -267,7 +267,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         val resultIntent = Intent().apply {
             putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
         }
-        if (arrayOf(ChallengeStatus.PROTOCOL_ERROR.value, ChallengeStatus.RUNTIME_ERROR.value, OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value).contains(throwable.message)) {
+        if (arrayOf(
+                ChallengeStatus.PROTOCOL_ERROR.value,
+                ChallengeStatus.RUNTIME_ERROR.value,
+                OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value
+            ).contains(throwable.message)
+        ) {
             setupWebView()
         } else {
             setResult(Activity.RESULT_OK, resultIntent)
