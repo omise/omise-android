@@ -7,7 +7,6 @@ import co.omise.android.models.Model
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
-import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
