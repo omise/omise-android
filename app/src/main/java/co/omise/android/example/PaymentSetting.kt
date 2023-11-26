@@ -101,7 +101,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_paynow_key) -> SourceType.PayNow
                         context.getString(R.string.payment_preference_promptpay_key) -> SourceType.PromptPay
                         context.getString(R.string.payment_preference_points_citi_key) -> SourceType.PointsCiti
-                        context.getString(R.string.payment_preference_truemoney_key) -> SourceType.TrueMoney
+                        context.getString(R.string.payment_preference_truemoney_key) -> SourceType.TrueMoneyJumpApp
                         context.getString(R.string.payment_preference_alipay_hk_key) -> SourceType.AlipayHk
                         context.getString(R.string.payment_preference_alipay_cn_key) -> SourceType.AlipayCn
                         context.getString(R.string.payment_preference_dana_key) -> SourceType.Dana

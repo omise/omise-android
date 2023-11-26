@@ -29,6 +29,14 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                                     else -> items.add(PaymentMethodResource.TouchNGo)
                                 }
                             }
+
+                            //when TrueMoneyJumpApp is available will use it instead of TrueMoney Wallet normal flow
+                            is SourceType.TrueMoneyJumpApp ->{
+                                // if TrueMoney is not in the list of items then thr list is not modified
+                                items.remove(PaymentMethodResource.TrueMoney)
+                                items.add(PaymentMethodResource.TrueMoneyJumpApp)
+                            }
+
                             //when ShopeepayJumpApp is available will use is instead of ShopeePay normal flow
                             is SourceType.ShopeePayJumpApp ->{
                                 // if ShopeePay is not in the list items list will got no modify
@@ -161,6 +169,13 @@ internal sealed class PaymentMethodResource(
             titleRes = R.string.payment_truemoney_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.TrueMoney
+    )
+
+    object TrueMoneyJumpApp : PaymentMethodResource(
+        iconRes = R.drawable.payment_truemoney,
+        titleRes = R.string.payment_truemoney_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.TrueMoneyJumpApp
     )
 
     object Fpx : PaymentMethodResource(

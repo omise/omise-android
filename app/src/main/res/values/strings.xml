@@ -101,7 +101,7 @@
     <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>
     <string name="payment_preference_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
     <string name="payment_preference_touch_n_go_title" translatable="false">Touch \'n Go eWallet</string>
-    <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
+    <string name="payment_preference_truemoney_title" translatable="false">TrueMoney</string>
     <string name="payment_preference_googlepay_title" translatable="false">Google Pay</string>
     <string name="payment_preference_boost_title" translatable="false">Boost</string>
     <string name="payment_preference_shopeepay_title" translatable="false">ShopeePay</string>

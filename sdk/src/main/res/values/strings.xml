@@ -108,7 +108,7 @@
     <string name="payment_method_promptpay_title">PromptPay</string>
     <string name="payment_method_paynow_title">PayNow</string>
     <string name="payment_method_points_citi_title">Pay with Citi Rewards Points</string>
-    <string name="payment_truemoney_title">TrueMoney Wallet</string>
+    <string name="payment_truemoney_title">TrueMoney</string>
     <string name="truemoney_info_text">Please input the mobile number connected to your TrueMoney Wallet account</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(Optional) Please input your email to receive transaction confirmation from FPX</string>

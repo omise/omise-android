@@ -95,7 +95,7 @@
     <string name="payment_method_promptpay_title">プロンプトペイ</string>
     <string name="payment_method_paynow_title">PayNow</string>
     <string name="payment_method_points_citi_title">Citi Rewardsポイント</string>
-    <string name="payment_truemoney_title">TrueMoneyウォレット</string>
+    <string name="payment_truemoney_title">TrueMoney</string>
     <string name="truemoney_info_text">TrueMoney ウォレットアカウントに登録されている携帯電話番号を入力してください</string>
     <string name="payment_method_fpx_title">FPX</string>
     <string name="fpx_info_text">(任意) メールアドレスを入力し、FPXからの取引確認メールを受信します</string>
