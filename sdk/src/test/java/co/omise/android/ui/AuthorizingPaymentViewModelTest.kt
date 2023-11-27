@@ -164,6 +164,25 @@ class AuthorizingPaymentViewModelTest {
     }
 
     @Test
+    fun createThreeDSRequestorAppURL_should_add_transactionId_query_param()= runTest {
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, threeDSRequestorAppURL,testDispatcher)
+        val sdkTransactionId = "123"
+        val updatedUrl = viewModel.createThreeDSRequestorAppURL(sdkTransactionId)
+        val expectedUrl = "$threeDSRequestorAppURL?transID=$sdkTransactionId"
+        assertEquals(updatedUrl,expectedUrl)
+    }
+
+    @Test
+    fun createThreeDSRequestorAppURL_should_not_ignore_already_existing_query_params()= runTest {
+        val urlWithParams = "$threeDSRequestorAppURL?param=value"
+        val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, urlWithParams,testDispatcher)
+        val sdkTransactionId = "123"
+        val updatedUrl = viewModel.createThreeDSRequestorAppURL(sdkTransactionId)
+        val expectedUrl = "$urlWithParams&transID=$sdkTransactionId"
+        assertEquals(updatedUrl,expectedUrl)
+    }
+
+    @Test
     fun doChallenge_shouldExecuteDoChallenge() = runTest {
         client.stub {
             onBlocking { send(any<Request<Authentication>>()) } doReturn Authentication(

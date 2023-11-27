@@ -142,11 +142,18 @@ internal class AuthorizingPaymentViewModel(
         }
     }
 
+    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String {
+        // Check if the URL already contains a query string
+        val separator = if (passedThreeDSRequestorAppURL.contains("?")) "&" else "?"
+        // Append the transaction ID to the URL
+        return "$passedThreeDSRequestorAppURL${separator}transID=${sdkTransID}"
+    }
+
     fun doChallenge(activity: Activity) {
         val ares = _authenticationResponse.value?.ares ?: return
         val challengeParameters = ChallengeParameters().apply {
             set3DSServerTransactionID(ares.threeDSServerTransID)
-            setThreeDSRequestorAppURL("${passedThreeDSRequestorAppURL}?transID=${ares.sdkTransID}")
+            setThreeDSRequestorAppURL(createThreeDSRequestorAppURL(ares.sdkTransID))
             acsTransactionID = ares.acsTransID
             // TODO : check if where to get the sdkReferenceNumber value
             acsRefNumber = BuildConfig.ACS_REF_NUMBER
