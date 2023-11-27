@@ -84,7 +84,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(TransactionStatus.AUTHENTICATED)
                 Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
                 Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
-                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure(OmiseException("Authentication failed."))
+                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure(OmiseException(
+                    Authentication.AuthenticationStatus.FAILED.message!!
+                ))
             }
         }
 
@@ -181,7 +183,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             val externalIntent = Intent(Intent.ACTION_VIEW, uri)
             startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
         } catch (e: ActivityNotFoundException) {
-            finishActivityWithFailure(OmiseException("Open deep-link failed.", e))
+            finishActivityWithFailure(OmiseException(OmiseSDKError.OPEN_DEEP_LINK_FAILED.value, e))
         }
     }
 
@@ -192,7 +194,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun handlePaymentAuthorization() {
         val authUrlString = verifier.authorizedURLString
-        val authUrl=verifier.authorizedURL
+        val authUrl = verifier.authorizedURL
         // check for legacy payments that require web view
         if (authUrlString.endsWith("/pay")) {
             setupWebView()
@@ -272,7 +274,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         val resultIntent = Intent().apply {
             putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
         }
-        if (arrayOf("Challenge protocol error", "Challenge runtime error", "3DS2 initialization failed").contains(throwable.message)) {
+        if (arrayOf(
+                ChallengeStatus.PROTOCOL_ERROR.value,
+                ChallengeStatus.RUNTIME_ERROR.value,
+                OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value
+            ).contains(throwable.message)
+        ) {
             setupWebView()
         } else {
             setResult(Activity.RESULT_OK, resultIntent)

@@ -1,6 +1,8 @@
 name: Android CI
 
-on: push
+on:
+  push:
+  pull_request:
 
 jobs:
   build:
@@ -27,6 +29,14 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build project
+        env:
+          NETCETERA_LICENSE_KEY: ${{ secrets.NETCETERA_LICENSE_KEY }}
+          SCHEME_NAME: ${{ secrets.SCHEME_NAME }}
+          DS_ID: ${{ secrets.DS_ID }}
+          MESSAGE_VERSION: ${{ secrets.MESSAGE_VERSION }}
+          ACS_REF_NUMBER: ${{ secrets.ACS_REF_NUMBER }}
+          DS_PUBLIC_KEY: ${{ secrets.DS_PUBLIC_KEY }}
+
         run: ./gradlew sdk:build -x test
 
   unit-test:
