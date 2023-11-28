@@ -34,7 +34,6 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                             // When TrueMoneyJumpApp is available in capability response, prefer it over legacy TrueMoney.
                             // When legacy TrueMoney is available in capability response without TrueMoneyJumpApp use it.
                             is SourceType.TrueMoneyJumpApp ->{
-                                // if TrueMoney is not in the list of items then thr list is not modified
                                 items.remove(PaymentMethodResource.TrueMoney)
                                 items.add(PaymentMethodResource.TrueMoneyJumpApp)
                             }
