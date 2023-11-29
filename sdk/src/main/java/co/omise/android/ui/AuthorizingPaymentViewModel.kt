@@ -28,6 +28,7 @@ internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val uiCustomization: UiCustomization,
+    private  val passedThreeDSRequestorAppURL: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val client = Client("")
@@ -36,7 +37,7 @@ internal class AuthorizingPaymentViewModelFactory(
             threeDS2Service = ThreeDS2ServiceInstance.get(),
             uiCustomization = uiCustomization.uiCustomization,
         )
-        return AuthorizingPaymentViewModel(client, urlVerifier, wrapper) as T
+        return AuthorizingPaymentViewModel(client, urlVerifier, wrapper,passedThreeDSRequestorAppURL) as T
     }
 }
 
@@ -44,6 +45,7 @@ internal class AuthorizingPaymentViewModel(
     private val client: Client,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val threeDS2Service: ThreeDS2ServiceWrapper,
+    private  val passedThreeDSRequestorAppURL: String,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), ChallengeStatusReceiver {
 
@@ -140,10 +142,18 @@ internal class AuthorizingPaymentViewModel(
         }
     }
 
+    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String {
+        // Check if the URL already contains a query string
+        val separator = if (passedThreeDSRequestorAppURL.contains("?")) "&" else "?"
+        // Append the transaction ID to the URL
+        return "$passedThreeDSRequestorAppURL${separator}transID=${sdkTransID}"
+    }
+
     fun doChallenge(activity: Activity) {
         val ares = _authenticationResponse.value?.ares ?: return
         val challengeParameters = ChallengeParameters().apply {
             set3DSServerTransactionID(ares.threeDSServerTransID)
+            setThreeDSRequestorAppURL(createThreeDSRequestorAppURL(ares.sdkTransID))
             acsTransactionID = ares.acsTransID
             // TODO : check if where to get the sdkReferenceNumber value
             acsRefNumber = BuildConfig.ACS_REF_NUMBER

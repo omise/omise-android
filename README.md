@@ -478,10 +478,15 @@ Then in your activity, declare the method that will start this activity as follo
 
 ```kotlin
 private fun showAuthorizingPaymentForm() {
-    val intent = Intent(this, AuthorizingPaymentActivity::class.java)
-    intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, AUTHORIZED_URL)
-    intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, EXPECTED_URL_PATTERNS)
-    startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
+    Intent(this, AuthorizingPaymentActivity::class.java).run {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            putExtra(
+                EXTRA_THREE_DS_REQUESTOR_APP_URL,
+                "sampleapp://omise.co/authorize_return"
+            )
+            startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
+        }
 }
 ```
 
