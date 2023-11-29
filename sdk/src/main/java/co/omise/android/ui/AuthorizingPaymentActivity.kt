@@ -43,6 +43,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.getParcelableExtra(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
+    private lateinit var threeDSRequestorAppURL: String
     private var isWebViewSetup = false
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
@@ -50,6 +51,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             activity = this,
             urlVerifier = verifier,
             uiCustomization = uiCustomization,
+            passedThreeDSRequestorAppURL = threeDSRequestorAppURL
         )
     }
     private var viewModelFactory: ViewModelProvider.Factory? = null
@@ -63,6 +65,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_authorizing_payment)
         setupActionBarTitle()
+        threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
+            ?: run {
+                finishActivityWithFailure(OmiseException("The threeDSRequestorAppURL must be provided in the intent"))
+                return
+            }
         handlePaymentAuthorization()
     }
 
@@ -77,7 +84,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(TransactionStatus.AUTHENTICATED)
                 Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
                 Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
-                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure(OmiseException("Authentication failed."))
+                Authentication.AuthenticationStatus.FAILED -> finishActivityWithFailure(OmiseException(
+                    Authentication.AuthenticationStatus.FAILED.message!!
+                ))
             }
         }
 
@@ -174,7 +183,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             val externalIntent = Intent(Intent.ACTION_VIEW, uri)
             startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
         } catch (e: ActivityNotFoundException) {
-            finishActivityWithFailure(OmiseException("Open deep-link failed.", e))
+            finishActivityWithFailure(OmiseException(OmiseSDKError.OPEN_DEEP_LINK_FAILED.value, e))
         }
     }
 
@@ -185,7 +194,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     private fun handlePaymentAuthorization() {
         val authUrlString = verifier.authorizedURLString
-        val authUrl=verifier.authorizedURL
+        val authUrl = verifier.authorizedURL
         // check for legacy payments that require web view
         if (authUrlString.endsWith("/pay")) {
             setupWebView()
@@ -265,7 +274,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         val resultIntent = Intent().apply {
             putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
         }
-        if (arrayOf("Challenge protocol error", "Challenge runtime error", "3DS2 initialization failed").contains(throwable.message)) {
+        if (arrayOf(
+                ChallengeStatus.PROTOCOL_ERROR.value,
+                ChallengeStatus.RUNTIME_ERROR.value,
+                OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value
+            ).contains(throwable.message)
+        ) {
             setupWebView()
         } else {
             setResult(Activity.RESULT_OK, resultIntent)
@@ -290,5 +304,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
          * A new result code that is not in the default Activity values to indicate that the web view has been closed after the authorization url has been opened using web view
          */
         const val WEBVIEW_CLOSED_RESULT_CODE = 5
+
+        /**
+         * The threeDSRequestorAppURL of the host app. This parameter will be used to allow the external app flows to redirect back to the merchant app (OOB flow)
+         */
+        const val EXTRA_THREE_DS_REQUESTOR_APP_URL = "OmiseActivity.threeDSRequestorAppURL"
     }
 }

@@ -25,12 +25,12 @@ internal data class Authentication(
     override val deleted: Boolean = false,
 ) : Model {
 
-    enum class AuthenticationStatus(val value: String) {
+    enum class AuthenticationStatus(val value: String, val message: String? = null) {
         @JsonProperty("success")
         SUCCESS("success"),
 
         @JsonProperty("failed")
-        FAILED("failed"),
+        FAILED("failed","Authentication failed"),
 
         @JsonProperty("challenge_v1")
         CHALLENGE_V1("challenge_v1"),

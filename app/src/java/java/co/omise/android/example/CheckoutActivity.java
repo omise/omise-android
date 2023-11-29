@@ -42,6 +42,7 @@ import kotlin.text.StringsKt;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
+import static co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_THREE_DS_REQUESTOR_APP_URL;
 import static co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_UI_CUSTOMIZATION;
 
 public class CheckoutActivity extends AppCompatActivity {
@@ -204,6 +205,7 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl);
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
         intent.putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization);
+        intent.putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, "sampleapp://omise.co/authorize_return");
         startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
         return Unit.INSTANCE;
     }

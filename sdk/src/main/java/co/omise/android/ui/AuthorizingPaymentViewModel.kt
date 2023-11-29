@@ -28,6 +28,7 @@ internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val uiCustomization: UiCustomization,
+    private  val passedThreeDSRequestorAppURL: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val client = Client("")
@@ -36,7 +37,7 @@ internal class AuthorizingPaymentViewModelFactory(
             threeDS2Service = ThreeDS2ServiceInstance.get(),
             uiCustomization = uiCustomization.uiCustomization,
         )
-        return AuthorizingPaymentViewModel(client, urlVerifier, wrapper) as T
+        return AuthorizingPaymentViewModel(client, urlVerifier, wrapper,passedThreeDSRequestorAppURL) as T
     }
 }
 
@@ -44,6 +45,7 @@ internal class AuthorizingPaymentViewModel(
     private val client: Client,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val threeDS2Service: ThreeDS2ServiceWrapper,
+    private  val passedThreeDSRequestorAppURL: String,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), ChallengeStatusReceiver {
 
@@ -69,7 +71,7 @@ internal class AuthorizingPaymentViewModel(
         if (e is OmiseException) {
             _error.postValue(e)
         } else {
-            _error.postValue(OmiseException("Authentication failed.", e))
+            _error.postValue(OmiseException(Authentication.AuthenticationStatus.FAILED.message!!, e))
         }
     }
 
@@ -81,7 +83,7 @@ internal class AuthorizingPaymentViewModel(
                         sendAuthenticationRequest()
                     },
                     onFailure = {
-                        _error.postValue(OmiseException("3DS2 initialization failed", it))
+                        _error.postValue(OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value, it))
                     }
                 )
             }
@@ -136,14 +138,22 @@ internal class AuthorizingPaymentViewModel(
         } catch (e: Exception) {
             _isLoading.postValue(false)
             transaction.close()
-            _error.postValue(OmiseException("Authentication failed", e))
+            _error.postValue(OmiseException(Authentication.AuthenticationStatus.FAILED.message!!, e))
         }
+    }
+
+    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String {
+        // Check if the URL already contains a query string
+        val separator = if (passedThreeDSRequestorAppURL.contains("?")) "&" else "?"
+        // Append the transaction ID to the URL
+        return "$passedThreeDSRequestorAppURL${separator}transID=${sdkTransID}"
     }
 
     fun doChallenge(activity: Activity) {
         val ares = _authenticationResponse.value?.ares ?: return
         val challengeParameters = ChallengeParameters().apply {
             set3DSServerTransactionID(ares.threeDSServerTransID)
+            setThreeDSRequestorAppURL(createThreeDSRequestorAppURL(ares.sdkTransID))
             acsTransactionID = ares.acsTransID
             // TODO : check if where to get the sdkReferenceNumber value
             acsRefNumber = BuildConfig.ACS_REF_NUMBER
@@ -153,7 +163,7 @@ internal class AuthorizingPaymentViewModel(
         try {
             threeDS2Service.doChallenge(activity, challengeParameters, this, 5)
         } catch (e: Exception) {
-            _error.postValue(OmiseException("Challenge failed", e))
+            _error.postValue(OmiseException(ChallengeStatus.FAILED.value, e))
         }
     }
 
@@ -166,24 +176,45 @@ internal class AuthorizingPaymentViewModel(
         when (event?.transactionStatus) {
             "Y" -> _transactionStatus.postValue(TransactionStatus.AUTHENTICATED)
             "N" -> _transactionStatus.postValue(TransactionStatus.NOT_AUTHENTICATED)
-            else -> _error.postValue(OmiseException("Challenge completed with unknown status: ${event?.transactionStatus}"))
+            else -> _error.postValue(OmiseException(ChallengeStatus.COMPLETED_WITH_UNKNOWN_STATUS.includeUnknownTransactionStatusWithError(event?.transactionStatus)))
         }
     }
 
     override fun cancelled() {
-        _error.postValue(OmiseException("Challenge cancelled"))
+        _error.postValue(OmiseException(ChallengeStatus.CANCELLED.value))
     }
 
     override fun timedout() {
-        _error.postValue(OmiseException("Challenge timedout"))
+        _error.postValue(OmiseException(ChallengeStatus.TIMED_OUT.value))
     }
 
     override fun protocolError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.ProtocolErrorEvent?) {
-        _error.postValue(OmiseException("Challenge protocol error"))
+        _error.postValue(OmiseException(ChallengeStatus.PROTOCOL_ERROR.value))
     }
 
     override fun runtimeError(event: com.netcetera.threeds.sdk.api.transaction.challenge.events.RuntimeErrorEvent?) {
-        _error.postValue(OmiseException("Challenge runtime error"))
+        _error.postValue(OmiseException(ChallengeStatus.RUNTIME_ERROR.value))
     }
     /** End of [ChallengeStatusReceiver] implementation. */
 }
+
+enum class ChallengeStatus(val value: String) {
+    RUNTIME_ERROR("Challenge runtime error"),
+    PROTOCOL_ERROR("Challenge protocol error"),
+    FAILED("Challenge failed"),
+    TIMED_OUT("Challenge timed out"),
+    CANCELLED("Challenge cancelled"),
+    COMPLETED_WITH_UNKNOWN_STATUS("Challenge completed with unknown status");
+
+
+    // Custom constructor to include the transaction status in the error message when the transaction status is unknown
+    fun includeUnknownTransactionStatusWithError(transactionStatus: String?): String {
+        return "Challenge completed with unknown status: $transactionStatus"
+    }
+}
+
+enum class OmiseSDKError(val value: String) {
+    OPEN_DEEP_LINK_FAILED("Open deep link failed"),
+    THREE_DS2_INITIALIZATION_FAILED("3DS2 initialization failed"),
+}
+

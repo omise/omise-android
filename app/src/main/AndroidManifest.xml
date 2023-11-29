@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
         android:theme="@style/OmiseTheme">
-        <activity android:name=".PaymentResultActivity">
+        <activity android:name=".PaymentResultActivity" android:launchMode="singleTask" android:exported="true">
             <intent-filter android:label="Payment Result">
                 <action android:name="android.intent.action.VIEW" />
 
