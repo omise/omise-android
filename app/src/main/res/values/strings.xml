@@ -50,6 +50,7 @@
     <string name="payment_preference_points_citi_key" translatable="false">points_citi</string>
     <string name="payment_preference_touch_n_go_key" translatable="false">touch_n_go</string>
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
+    <string name="payment_preference_truemoney_jumpapp_key" translatable="false">truemoney_jumpapp</string>
     <string name="payment_preference_googlepay_key" translatable="false">googlepay</string>
     <string name="payment_preference_rabbit_linepay_key" translatable="false">rabbit_linepay</string>
     <string name="payment_preference_boost_key" translatable="false">boost</string>
@@ -102,6 +103,7 @@
     <string name="payment_preference_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
     <string name="payment_preference_touch_n_go_title" translatable="false">Touch \'n Go eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>
+    <string name="payment_preference_truemoney_jumpapp_title" translatable="false">TrueMoney</string>
     <string name="payment_preference_googlepay_title" translatable="false">Google Pay</string>
     <string name="payment_preference_boost_title" translatable="false">Boost</string>
     <string name="payment_preference_shopeepay_title" translatable="false">ShopeePay</string>
