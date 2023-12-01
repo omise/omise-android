@@ -19,6 +19,7 @@ android {
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         buildConfigField "String", "NETCETERA_LICENSE_KEY", "\"${System.getenv('NETCETERA_LICENSE_KEY')}\""
+        buildConfigField "String", "NETCETERA_API_KEY", "\"${System.getenv('NETCETERA_API_KEY')}\""
         buildConfigField "String", "SCHEME_NAME", "\"${System.getenv('SCHEME_NAME')}\""
         buildConfigField "String", "DS_ID", "\"${System.getenv('DS_ID')}\""
         buildConfigField "String", "MESSAGE_VERSION", "\"${System.getenv('MESSAGE_VERSION')}\""
@@ -179,6 +180,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
+    // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.69'
 
     debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
         exclude group: 'androidx.test', module: 'core'

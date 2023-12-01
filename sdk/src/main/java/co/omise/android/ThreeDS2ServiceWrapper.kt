@@ -2,6 +2,7 @@ package co.omise.android
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.netcetera.threeds.sdk.api.ThreeDS2Service
 import com.netcetera.threeds.sdk.api.configparameters.builder.ConfigurationBuilder
 import com.netcetera.threeds.sdk.api.configparameters.builder.SchemeConfiguration
@@ -36,8 +37,9 @@ internal class ThreeDS2ServiceWrapper(
                 .encryptionPublicKey(BuildConfig.DS_PUBLIC_KEY)
                 .rootPublicKey(BuildConfig.DS_PUBLIC_KEY)
                 .build()
+            Log.d("New api key",BuildConfig.NETCETERA_API_KEY)
             val configParameters = ConfigurationBuilder()
-                .license(BuildConfig.NETCETERA_LICENSE_KEY)
+                .apiKey(BuildConfig.NETCETERA_API_KEY)
                 .configureScheme(schemeConfig)
                 .build()
             val locale = getLocale()

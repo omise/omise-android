@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file("3ds-sdk-2.3.7.4.aar"))
+artifacts.add("default", file("3ds-sdk-2.4.0.0.aar"))
