@@ -18,7 +18,6 @@ android {
         versionName omise_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
-        buildConfigField "String", "NETCETERA_LICENSE_KEY", "\"${System.getenv('NETCETERA_LICENSE_KEY')}\""
         buildConfigField "String", "NETCETERA_API_KEY", "\"${System.getenv('NETCETERA_API_KEY')}\""
         buildConfigField "String", "SCHEME_NAME", "\"${System.getenv('SCHEME_NAME')}\""
         buildConfigField "String", "DS_ID", "\"${System.getenv('DS_ID')}\""
