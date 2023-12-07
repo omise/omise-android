@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V4.13.0
+* **ADDED:** Support new source type `truemoney_jumpapp`
+
 ## V4.12.0
 * **ADDED:** Prevent screenshot and screen recording in `AuthorizingPaymentActivity`, `PaymentCreatorActivity` and `CreditCardActivity` as default behavior
 * **FIXED:** Fix app crash when non numeric characters characters are entered in expiry date field for credit cards
