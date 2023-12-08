@@ -102,9 +102,9 @@ class UiCustomizationBuilder {
 
         val uiCustomizationMap = hashMapOf<com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType, com.netcetera.threeds.sdk.api.ui.logic.UiCustomization>()
         uiCustomizationMap.apply {
-            put(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DEFAULT,defaultUiCustomization)
-            put(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DARK,darkUiCustomization)
-            put(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.MONOCHROME,monoChromeUiCustomization)
+            put(UiCustomizationType.DEFAULT.value,defaultUiCustomization)
+            put(UiCustomizationType.DARK.value,darkUiCustomization)
+            put(UiCustomizationType.MONOCHROME.value,monoChromeUiCustomization)
         }
 
         return UiCustomization(uiCustomizationMap)
@@ -355,6 +355,15 @@ enum class ButtonType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustom
     RESEND(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.RESEND),
     OPEN_OOB_APP(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP),
     ADD_CH(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.ADD_CH)
+}
+
+/**
+ * Type of UiCustomization in the challenge screen.
+ */
+enum class UiCustomizationType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType) {
+    DEFAULT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DEFAULT),
+    DARK(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DARK),
+    MONOCHROME(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.MONOCHROME),
 }
 
 /**
