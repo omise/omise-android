@@ -360,7 +360,7 @@ enum class ButtonType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustom
 /**
  * Type of UiCustomization in the challenge screen.
  */
-enum class UiCustomizationType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType) {
+internal enum class UiCustomizationType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType) {
     DEFAULT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DEFAULT),
     DARK(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DARK),
     MONOCHROME(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.MONOCHROME),
