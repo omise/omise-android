@@ -8,7 +8,6 @@ abstract class CustomizationBuilder<T> {
     protected var textFontSize: Int? = null
     protected var textColor: String? = null
     protected var textFontName: String? = null
-    protected var darkTextColor: String? = null
     abstract fun build(): T
 }
 
@@ -17,67 +16,54 @@ abstract class CustomizationBuilder<T> {
  */
 @Parcelize
 data class UiCustomization internal constructor(
-    internal val uiCustomization: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
+    internal val uiCustomizationMap: Map<com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType, com.netcetera.threeds.sdk.api.ui.logic.UiCustomization>
 ) : Parcelable {
     companion object {
-        val default = UiCustomization(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization())
+        val default = UiCustomization(emptyMap())
     }
 }
+
+data class ThemeConfig(
+    var labelCustomization: LabelCustomization? = null,
+    var toolbarCustomization: ToolbarCustomization? = null,
+    var textBoxCustomization: TextBoxCustomization? = null,
+    var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
+)
 
 /**
  * Builder for building [UiCustomization] data.
  */
 class UiCustomizationBuilder {
-    private var supportDarkMode: Boolean? = null
-    private var labelCustomization: LabelCustomization? = null
-    private var toolbarCustomization: ToolbarCustomization? = null
-    private var textBoxCustomization: TextBoxCustomization? = null
-    private var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
+
+    private var defaultThemeConfig = ThemeConfig()
+    private var darkThemeConfig = ThemeConfig()
+    private var monoChromeThemeConfig = ThemeConfig()
 
     /**
-     * Set whether the UI should support dark mode.
+     * Set the default theme.
      *
-     * @param supportDarkMode True if the UI should support dark mode, false otherwise.
+     * @param themeConfig [ThemeConfig] data.
      */
-    fun supportDarkMode(supportDarkMode: Boolean): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.supportDarkMode = supportDarkMode
+    fun setDefaultTheme(themeConfig: ThemeConfig): UiCustomizationBuilder = apply {
+        this@UiCustomizationBuilder.defaultThemeConfig = themeConfig
     }
 
     /**
-     * Set the label customization.
+     * Set the dark theme.
      *
-     * @param labelCustomization [LabelCustomization] data.
+     * @param themeConfig [ThemeConfig] data.
      */
-    fun labelCustomization(labelCustomization: LabelCustomization): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.labelCustomization = labelCustomization
+    fun setDarkTheme(themeConfig: ThemeConfig): UiCustomizationBuilder = apply {
+        this@UiCustomizationBuilder.darkThemeConfig = themeConfig
     }
 
     /**
-     * Set the text box customization.
+     * Set the monoChrome theme.
      *
-     * @param textBoxCustomization [TextBoxCustomization] data.
+     * @param themeConfig [ThemeConfig] data.
      */
-    fun textBoxCustomization(textBoxCustomization: TextBoxCustomization): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.textBoxCustomization = textBoxCustomization
-    }
-
-    /**
-     * Set the toolbar customization.
-     *
-     * @param toolbarCustomization [ToolbarCustomization] data.
-     */
-    fun toolbarCustomization(toolbarCustomization: ToolbarCustomization): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.toolbarCustomization = toolbarCustomization
-    }
-
-    /**
-     * Set the button customization for the particular button.
-     *
-     * @param buttonType [ButtonType] type of button.
-     * @param buttonCustomization [ButtonCustomization] data.
-     */
-    fun buttonCustomization(buttonType: ButtonType, buttonCustomization: ButtonCustomization): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.buttonCustomizations[buttonType] = buttonCustomization
+    fun setMonoChromeTheme(themeConfig: ThemeConfig): UiCustomizationBuilder = apply {
+        this@UiCustomizationBuilder.monoChromeThemeConfig = themeConfig
     }
 
 
@@ -87,16 +73,41 @@ class UiCustomizationBuilder {
      * @return [UiCustomization]
      */
     fun build(): UiCustomization {
-        val uiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
-            this@UiCustomizationBuilder.supportDarkMode?.let { this.supportDarkMode(it) }
-            this@UiCustomizationBuilder.labelCustomization?.let { this.labelCustomization = it.labelCustomization }
-            this@UiCustomizationBuilder.toolbarCustomization?.let { this.toolbarCustomization = it.toolbarCustomization }
-            this@UiCustomizationBuilder.textBoxCustomization?.let { this.textBoxCustomization = it.textBoxCustomization }
-            this@UiCustomizationBuilder.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
-                this.setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
+        val defaultUiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+            defaultThemeConfig.labelCustomization?.let { labelCustomization = it.labelCustomization }
+            defaultThemeConfig.toolbarCustomization?.let { toolbarCustomization = it.toolbarCustomization }
+            defaultThemeConfig.textBoxCustomization?.let { textBoxCustomization = it.textBoxCustomization }
+            defaultThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+                setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
             }
         }
-        return UiCustomization(uiCustomization)
+
+        val darkUiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+            darkThemeConfig.labelCustomization?.let { labelCustomization = it.labelCustomization }
+            darkThemeConfig.toolbarCustomization?.let { toolbarCustomization = it.toolbarCustomization }
+            darkThemeConfig.textBoxCustomization?.let { textBoxCustomization = it.textBoxCustomization }
+            darkThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+                setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
+            }
+        }
+
+        val monoChromeUiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+            monoChromeThemeConfig.labelCustomization?.let { labelCustomization = it.labelCustomization }
+            monoChromeThemeConfig.toolbarCustomization?.let { toolbarCustomization = it.toolbarCustomization }
+            monoChromeThemeConfig.textBoxCustomization?.let { textBoxCustomization = it.textBoxCustomization }
+            monoChromeThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+                setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
+            }
+        }
+
+        val uiCustomizationMap = hashMapOf<com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType, com.netcetera.threeds.sdk.api.ui.logic.UiCustomization>()
+        uiCustomizationMap.apply {
+            put(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DEFAULT,defaultUiCustomization)
+            put(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DARK,darkUiCustomization)
+            put(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.MONOCHROME,monoChromeUiCustomization)
+        }
+
+        return UiCustomization(uiCustomizationMap)
     }
 }
 
@@ -115,7 +126,6 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
     private var headingTextColor: String? = null
     private var headingTextFontName: String? = null
     private var headingTextFontSize: Int? = null
-    private var headingDarkTextColor: String? = null
 
     /**
      * Set the heading text color.
@@ -141,14 +151,6 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
         apply { this.headingTextFontSize = headingTextFontSize }
 
     /**
-     * Set the heading dark text color.
-     *
-     * @param headingDarkTextColor Color in hex format.
-     */
-    fun headingDarkTextColor(headingDarkTextColor: String): LabelCustomizationBuilder =
-        apply { this.headingDarkTextColor = headingDarkTextColor }
-
-    /**
      * Set the text color.
      *
      * @param textColor Color in hex format.
@@ -170,13 +172,6 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
     fun textFontName(textFontName: String): LabelCustomizationBuilder = apply { this.textFontName = textFontName }
 
     /**
-     * Set the dark text color.
-     *
-     * @param darkTextColor Color in hex format.
-     */
-    fun darkTextColor(darkTextColor: String): LabelCustomizationBuilder = apply { this.darkTextColor = darkTextColor }
-
-    /**
      * Create an instance of [LabelCustomization].
      *
      * @return [LabelCustomization]
@@ -187,11 +182,9 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
                 this@LabelCustomizationBuilder.headingTextColor?.let { this.headingTextColor = it }
                 this@LabelCustomizationBuilder.headingTextFontName?.let { this.headingTextFontName = it }
                 this@LabelCustomizationBuilder.headingTextFontSize?.let { this.headingTextFontSize = it }
-                this@LabelCustomizationBuilder.headingDarkTextColor?.let { this.headingDarkTextColor = it }
                 this@LabelCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@LabelCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@LabelCustomizationBuilder.textFontName?.let { this.textFontName = it }
-                this@LabelCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }
@@ -212,7 +205,6 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
     private var borderWidth: Int? = null
     private var borderColor: String? = null
     private var cornerRadius: Int? = null
-    private var darkBorderColor: String? = null
 
     /**
      * Set the border width.
@@ -236,13 +228,6 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
     fun cornerRadius(cornerRadius: Int): TextBoxCustomizationBuilder = apply { this.cornerRadius = cornerRadius }
 
     /**
-     * Set the dark border color.
-     *
-     * @param darkBorderColor Color in hex format.
-     */
-    fun darkBorderColor(darkBorderColor: String): TextBoxCustomizationBuilder = apply { this.darkBorderColor = darkBorderColor }
-
-    /**
      * Set the text color.
      *
      * @param textColor Color in hex format.
@@ -264,13 +249,6 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
     fun textFontName(textFontName: String): TextBoxCustomizationBuilder = apply { this.textFontName = textFontName }
 
     /**
-     * Set the dark text color.
-     *
-     * @param darkTextColor Color in hex format.
-     */
-    fun darkTextColor(darkTextColor: String): TextBoxCustomizationBuilder = apply { this.darkTextColor = darkTextColor }
-
-    /**
      * Create an instance of [TextBoxCustomization].
      *
      * @return [TextBoxCustomization]
@@ -281,11 +259,9 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
                 this@TextBoxCustomizationBuilder.borderWidth?.let { this.borderWidth = it }
                 this@TextBoxCustomizationBuilder.borderColor?.let { this.borderColor = it }
                 this@TextBoxCustomizationBuilder.cornerRadius?.let { this.cornerRadius = it }
-                this@TextBoxCustomizationBuilder.darkBorderColor?.let { this.darkBorderColor = it }
                 this@TextBoxCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@TextBoxCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@TextBoxCustomizationBuilder.textFontName?.let { this.textFontName = it }
-                this@TextBoxCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }
@@ -306,7 +282,6 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
     private var headerText: String? = null
     private var buttonText: String? = null
     private var backgroundColor: String? = null
-    private var darkBackgroundColor: String? = null
 
     /**
      * Set the heading text.
@@ -330,14 +305,6 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
     fun backgroundColor(backgroundColor: String): ToolbarCustomizationBuilder = apply { this.backgroundColor = backgroundColor }
 
     /**
-     * Set the dark background color.
-     *
-     * @param darkBackgroundColor Color in hex format.
-     */
-    fun darkBackgroundColor(darkBackgroundColor: String): ToolbarCustomizationBuilder =
-        apply { this.darkBackgroundColor = darkBackgroundColor }
-
-    /**
      * Set the text color.
      *
      * @param textColor Color in hex format.
@@ -359,13 +326,6 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
     fun textFontName(textFontName: String): ToolbarCustomizationBuilder = apply { this.textFontName = textFontName }
 
     /**
-     * Set the dark text color.
-     *
-     * @param darkTextColor Color in hex format.
-     */
-    fun darkTextColor(darkTextColor: String): ToolbarCustomizationBuilder = apply { this.darkTextColor = darkTextColor }
-
-    /**
      * Create an instance of [ToolbarCustomization].
      *
      * @return [ToolbarCustomization]
@@ -376,11 +336,9 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
                 this@ToolbarCustomizationBuilder.headerText?.let { this.headerText = it }
                 this@ToolbarCustomizationBuilder.buttonText?.let { this.buttonText = it }
                 this@ToolbarCustomizationBuilder.backgroundColor?.let { this.backgroundColor = it }
-                this@ToolbarCustomizationBuilder.darkBackgroundColor?.let { this.darkBackgroundColor = it }
                 this@ToolbarCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@ToolbarCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@ToolbarCustomizationBuilder.textFontName?.let { this.textFontName = it }
-                this@ToolbarCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }
@@ -395,7 +353,8 @@ enum class ButtonType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustom
     NEXT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.NEXT),
     CANCEL(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.CANCEL),
     RESEND(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.RESEND),
-    OPEN_OOB_APP(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP)
+    OPEN_OOB_APP(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP),
+    ADD_CH(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.ADD_CH)
 }
 
 /**
@@ -412,7 +371,6 @@ data class ButtonCustomization internal constructor(
 class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
     private var cornerRadius: Int? = null
     private var backgroundColor: String? = null
-    private var darkBackgroundColor: String? = null
 
     /**
      * Set the corner radius.
@@ -427,14 +385,6 @@ class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
      * @param backgroundColor Color in hex format.
      */
     fun backgroundColor(backgroundColor: String): ButtonCustomizationBuilder = apply { this.backgroundColor = backgroundColor }
-
-    /**
-     * Set the dark background color.
-     *
-     * @param darkBackgroundColor Color in hex format.
-     */
-    fun darkBackgroundColor(darkBackgroundColor: String): ButtonCustomizationBuilder =
-        apply { this.darkBackgroundColor = darkBackgroundColor }
 
     /**
      * Set the text color.
@@ -458,13 +408,6 @@ class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
     fun textFontName(textFontName: String): ButtonCustomizationBuilder = apply { this.textFontName = textFontName }
 
     /**
-     * Set the dark text color.
-     *
-     * @param darkTextColor Color in hex format.
-     */
-    fun darkTextColor(darkTextColor: String): ButtonCustomizationBuilder = apply { this.darkTextColor = darkTextColor }
-
-    /**
      * Create an instance of [ButtonCustomization].
      *
      * @return [ButtonCustomization]
@@ -474,11 +417,9 @@ class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
             com.netcetera.threeds.sdk.api.ui.logic.ButtonCustomization().apply {
                 this@ButtonCustomizationBuilder.cornerRadius?.let { this.cornerRadius = it }
                 this@ButtonCustomizationBuilder.backgroundColor?.let { this.backgroundColor = it }
-                this@ButtonCustomizationBuilder.darkBackgroundColor?.let { this.darkBackgroundColor = it }
                 this@ButtonCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@ButtonCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@ButtonCustomizationBuilder.textFontName?.let { this.textFontName = it }
-                this@ButtonCustomizationBuilder.darkTextColor?.let { this.darkTextColor = it }
             }
         )
     }

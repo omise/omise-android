@@ -21,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 internal class ThreeDS2ServiceWrapper(
     private val context: Context,
     private val threeDS2Service: ThreeDS2Service,
-    private val uiCustomization: UiCustomization,
+    private val uiCustomizationMap: Map<UiCustomization.UiCustomizationType, UiCustomization>,
 ) {
     lateinit var transaction: Transaction
         private set
@@ -41,8 +41,16 @@ internal class ThreeDS2ServiceWrapper(
                 .configureScheme(schemeConfig)
                 .build()
             val locale = getLocale()
-            threeDS2Service.initialize(context, configParameters, locale, uiCustomization)
-            continuation.resume(Result.success(Unit))
+            threeDS2Service.initialize(context, configParameters, locale, uiCustomizationMap,object :
+                ThreeDS2Service.InitializationCallback {
+                override fun onCompleted() {
+                    continuation.resume(Result.success(Unit))
+                }
+
+                override fun onError(throwable: Throwable) {
+                    throw throwable;
+                }
+            })
         } catch (e: Exception) {
             if (e is SDKAlreadyInitializedException) {
                 continuation.resume(Result.success(Unit))

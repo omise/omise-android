@@ -12,10 +12,12 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
+import co.omise.android.config.ButtonCustomization
 import co.omise.android.config.ButtonCustomizationBuilder
 import co.omise.android.config.ButtonType
 import co.omise.android.config.LabelCustomizationBuilder
 import co.omise.android.config.TextBoxCustomizationBuilder
+import co.omise.android.config.ThemeConfig
 import co.omise.android.config.ToolbarCustomizationBuilder
 import co.omise.android.config.UiCustomizationBuilder
 import co.omise.android.models.Amount
@@ -41,7 +43,7 @@ class CheckoutActivity : AppCompatActivity() {
     companion object {
 
         private const val TAG = "CheckoutActivity"
-        private const val PUBLIC_KEY = "[PUBLIC_KEY]"
+        private const val PUBLIC_KEY = "pkey_5xjdtti64j5cwzxa9xo"
         private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
         private const val GOOGLEPAY_REQUEST_BILLING_ADDRESS = false
         private const val GOOGLEPAY_REQUEST_PHONE_NUMBER = false
@@ -130,7 +132,6 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {
         val labelCustomization = LabelCustomizationBuilder()
-            .headingDarkTextColor("#FFFFFF")
             .headingTextColor("#000000")
             .headingTextFontName("roboto_mono")
             .headingTextFontSize(20)
@@ -155,8 +156,6 @@ class CheckoutActivity : AppCompatActivity() {
             .backgroundColor("#FFFFFF")
             .headerText("Secure Checkout")
             .buttonText("Close")
-            .darkBackgroundColor("#262626")
-            .darkTextColor("#FFFFFF")
             .build()
 
         val primaryButtonCustomization = ButtonCustomizationBuilder()
@@ -165,8 +164,6 @@ class CheckoutActivity : AppCompatActivity() {
             .cornerRadius(4)
             .textColor("#FFFFFF")
             .backgroundColor("#1A56F0")
-            .darkTextColor("#FFFFFF")
-            .darkBackgroundColor("#4777F3")
             .build()
 
         val secondaryButtonCustomization = ButtonCustomizationBuilder()
@@ -175,21 +172,28 @@ class CheckoutActivity : AppCompatActivity() {
             .cornerRadius(4)
             .textColor("#1A56F0")
             .backgroundColor("#FFFFFF")
-            .darkTextColor("#1E1E1E")
-            .darkBackgroundColor("#FFFFFF")
             .build()
+        val buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
+        buttonCustomizations[ButtonType.SUBMIT] = primaryButtonCustomization
+        buttonCustomizations[ButtonType.CONTINUE] = primaryButtonCustomization
+        buttonCustomizations[ButtonType.NEXT] = primaryButtonCustomization
+        buttonCustomizations[ButtonType.OPEN_OOB_APP] = primaryButtonCustomization
+        buttonCustomizations[ButtonType.ADD_CH] = primaryButtonCustomization
+        buttonCustomizations[ButtonType.RESEND] = secondaryButtonCustomization
+        buttonCustomizations[ButtonType.CANCEL] = secondaryButtonCustomization
+
 
         val uiCustomization = UiCustomizationBuilder()
-            .supportDarkMode(true)
-            .labelCustomization(labelCustomization)
-            .textBoxCustomization(textBoxCustomization)
-            .toolbarCustomization(toolbarCustomization)
-            .buttonCustomization(ButtonType.SUBMIT, primaryButtonCustomization)
-            .buttonCustomization(ButtonType.CONTINUE, primaryButtonCustomization)
-            .buttonCustomization(ButtonType.NEXT, primaryButtonCustomization)
-            .buttonCustomization(ButtonType.OPEN_OOB_APP, primaryButtonCustomization)
-            .buttonCustomization(ButtonType.RESEND, secondaryButtonCustomization)
-            .buttonCustomization(ButtonType.CANCEL, secondaryButtonCustomization)
+            .setDefaultTheme(ThemeConfig(
+                labelCustomization,
+                toolbarCustomization,
+                textBoxCustomization,
+                buttonCustomizations
+            ))
+            .setDarkTheme(ThemeConfig(
+              buttonCustomizations =   buttonCustomizations
+            ))
+            .setMonoChromeTheme(ThemeConfig())
             .build()
 
         Log.d(

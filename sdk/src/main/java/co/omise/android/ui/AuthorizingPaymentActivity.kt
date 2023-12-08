@@ -188,7 +188,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun setupActionBarTitle() {
-        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
+        supportActionBar?.title = uiCustomization.uiCustomizationMap[com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DEFAULT]?.toolbarCustomization?.headerText
             ?: getString(R.string.title_authorizing_payment)
     }
 
