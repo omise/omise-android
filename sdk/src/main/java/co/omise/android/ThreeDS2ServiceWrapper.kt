@@ -41,7 +41,7 @@ internal class ThreeDS2ServiceWrapper(
                 .configureScheme(schemeConfig)
                 .build()
             val locale = getLocale()
-            threeDS2Service.initialize(context, configParameters, locale, uiCustomizationMap,object :
+            threeDS2Service.initialize(context, configParameters, locale, uiCustomizationMap, object :
                 ThreeDS2Service.InitializationCallback {
                 override fun onCompleted() {
                     continuation.resume(Result.success(Unit))
