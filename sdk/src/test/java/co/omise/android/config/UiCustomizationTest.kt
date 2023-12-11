@@ -1,6 +1,7 @@
 package co.omise.android.config
 
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
+import co.omise.android.config.UiCustomization as OmiseSdkUiCustomization
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -147,6 +148,38 @@ class UiCustomizationTest {
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
             uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.ADD_CH)
+        )
+        // validate empty theme
+        val emptyThemeConfig = ThemeConfig()
+        val emptyUiCustomization = UiCustomizationBuilder()
+            .setDefaultTheme(
+                emptyThemeConfig
+            ).setDarkTheme(
+                emptyThemeConfig
+            ).setMonoChromeTheme(
+                emptyThemeConfig
+            )
+            .build()
+        assertEquals(
+            null,
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.labelCustomization
+        )
+        assertEquals(
+            null,
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.toolbarCustomization
+        )
+        assertEquals(
+            null,
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.textBoxCustomization
+        )
+        assertEquals(
+            null,
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.ADD_CH)
+        )
+        // validate default values
+        assertEquals(
+            emptyMap<UiCustomization.UiCustomizationType, UiCustomization>(),
+            OmiseSdkUiCustomization.default.uiCustomizationMap
         )
     }
 
