@@ -21,6 +21,7 @@ sealed class SourceType(
     object BarcodeAlipay : SourceType("barcode_alipay")
     object Econtext : SourceType("econtext")
     object TrueMoney : SourceType("truemoney")
+    object TrueMoneyJumpApp : SourceType("truemoney_jumpapp")
     object PointsCiti : SourceType("points_citi")
     object PayNow : SourceType("paynow")
     object PromptPay : SourceType("promptpay")
@@ -110,6 +111,7 @@ sealed class SourceType(
             "econtext" -> Econtext
             "fpx" -> Fpx()
             "truemoney" -> TrueMoney
+            "truemoney_jumpapp" -> TrueMoneyJumpApp
             "installment_bay" -> Installment.Bay
             "installment_first_choice" -> Installment.FirstChoice
             "installment_bbl" -> Installment.Bbl

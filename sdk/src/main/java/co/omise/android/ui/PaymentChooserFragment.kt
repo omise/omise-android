@@ -33,6 +33,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
             PaymentMethodResource.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
             PaymentMethodResource.TrueMoney -> navigation.navigateToTrueMoneyForm()
+            PaymentMethodResource.TrueMoneyJumpApp,
             PaymentMethodResource.TescoLotus,
             PaymentMethodResource.Alipay,
             PaymentMethodResource.PayNow,

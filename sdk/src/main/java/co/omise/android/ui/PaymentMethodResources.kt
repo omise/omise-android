@@ -29,6 +29,15 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                                     else -> items.add(PaymentMethodResource.TouchNGo)
                                 }
                             }
+
+                            // TrueMoneyJumpApp replaces legacy TrueMoney. 
+                            // When TrueMoneyJumpApp is available in capability response, prefer it over legacy TrueMoney.
+                            // When legacy TrueMoney is available in capability response without TrueMoneyJumpApp use it.
+                            is SourceType.TrueMoneyJumpApp ->{
+                                items.remove(PaymentMethodResource.TrueMoney)
+                                items.add(PaymentMethodResource.TrueMoneyJumpApp)
+                            }
+
                             //when ShopeepayJumpApp is available will use is instead of ShopeePay normal flow
                             is SourceType.ShopeePayJumpApp ->{
                                 // if ShopeePay is not in the list items list will got no modify
@@ -161,6 +170,13 @@ internal sealed class PaymentMethodResource(
             titleRes = R.string.payment_truemoney_title,
             indicatorIconRes = R.drawable.ic_next,
             sourceType = SourceType.TrueMoney
+    )
+
+    object TrueMoneyJumpApp : PaymentMethodResource(
+        iconRes = R.drawable.payment_truemoney,
+        titleRes = R.string.payment_truemoney_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.TrueMoneyJumpApp
     )
 
     object Fpx : PaymentMethodResource(

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## V4.13.0
+* **ADDED:** Support new source type `truemoney_jumpapp`
+
+## V4.12.0
+* **ADDED:** Prevent screenshot and screen recording in `AuthorizingPaymentActivity`, `PaymentCreatorActivity` and `CreditCardActivity` as default behavior
+* **FIXED:** Fix app crash when non numeric characters characters are entered in expiry date field for credit cards
+* **CHANGED:** Add new logo for OCBC payment method
+
 ## v4.11.0
 * **ADDED:** Supported OCBC Digital payment method
 * **ADDED:** Supported authorize payment through the external app in the `AuthorizingPaymentActivity`
