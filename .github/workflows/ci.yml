@@ -36,6 +36,7 @@ jobs:
           MESSAGE_VERSION: ${{ secrets.MESSAGE_VERSION }}
           ACS_REF_NUMBER: ${{ secrets.ACS_REF_NUMBER }}
           DS_PUBLIC_KEY: ${{ secrets.DS_PUBLIC_KEY }}
+          NETCETERA_API_KEY: ${{ secrets.NETCETERA_API_KEY }}
 
         run: ./gradlew sdk:build -x test
 

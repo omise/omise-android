@@ -24,6 +24,7 @@ import co.omise.android.config.LabelCustomization;
 import co.omise.android.config.LabelCustomizationBuilder;
 import co.omise.android.config.TextBoxCustomization;
 import co.omise.android.config.TextBoxCustomizationBuilder;
+import co.omise.android.config.ThemeConfig;
 import co.omise.android.config.ToolbarCustomization;
 import co.omise.android.config.ToolbarCustomizationBuilder;
 import co.omise.android.config.UiCustomization;
@@ -44,6 +45,9 @@ import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_UR
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
 import static co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_THREE_DS_REQUESTOR_APP_URL;
 import static co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_UI_CUSTOMIZATION;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckoutActivity extends AppCompatActivity {
 
@@ -139,7 +143,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private Unit startAuthoringPaymentActivity(String authorizeUrl, String returnUrl) {
         LabelCustomization labelCustomization = new LabelCustomizationBuilder()
-                .headingDarkTextColor("#FFFFFF")
                 .headingTextColor("#000000")
                 .headingTextFontName("roboto_mono")
                 .headingTextFontSize(20)
@@ -164,8 +167,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 .backgroundColor("#FFFFFF")
                 .headerText("Secure Checkout")
                 .buttonText("Close")
-                .darkBackgroundColor("#262626")
-                .darkTextColor("#FFFFFF")
                 .build();
 
         ButtonCustomization primaryButtonCustomization = new ButtonCustomizationBuilder()
@@ -174,8 +175,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 .cornerRadius(4)
                 .textColor("#FFFFFF")
                 .backgroundColor("#1A56F0")
-                .darkTextColor("#FFFFFF")
-                .darkBackgroundColor("#4777F3")
                 .build();
 
         ButtonCustomization secondaryButtonCustomization = new ButtonCustomizationBuilder()
@@ -184,21 +183,28 @@ public class CheckoutActivity extends AppCompatActivity {
                 .cornerRadius(4)
                 .textColor("#1A56F0")
                 .backgroundColor("#FFFFFF")
-                .darkTextColor("#1E1E1E")
-                .darkBackgroundColor("#FFFFFF")
                 .build();
+        Map<ButtonType, ButtonCustomization> buttonCustomizations = new HashMap<>();
+        buttonCustomizations.put(ButtonType.SUBMIT, primaryButtonCustomization);
+        buttonCustomizations.put(ButtonType.CONTINUE, primaryButtonCustomization);
+        buttonCustomizations.put(ButtonType.NEXT, primaryButtonCustomization);
+        buttonCustomizations.put(ButtonType.OPEN_OOB_APP, primaryButtonCustomization);
+        buttonCustomizations.put(ButtonType.ADD_CH, primaryButtonCustomization);
+        buttonCustomizations.put(ButtonType.RESEND, secondaryButtonCustomization);
+        buttonCustomizations.put(ButtonType.CANCEL, secondaryButtonCustomization);
+
+        ThemeConfig darkThemeConfig = new ThemeConfig();
+        darkThemeConfig.setButtonCustomizations(buttonCustomizations);
 
         UiCustomization uiCustomization = new UiCustomizationBuilder()
-                .supportDarkMode(true)
-                .labelCustomization(labelCustomization)
-                .textBoxCustomization(textBoxCustomization)
-                .toolbarCustomization(toolbarCustomization)
-                .buttonCustomization(ButtonType.SUBMIT, primaryButtonCustomization)
-                .buttonCustomization(ButtonType.CONTINUE, primaryButtonCustomization)
-                .buttonCustomization(ButtonType.NEXT, primaryButtonCustomization)
-                .buttonCustomization(ButtonType.OPEN_OOB_APP, primaryButtonCustomization)
-                .buttonCustomization(ButtonType.RESEND, primaryButtonCustomization)
-                .buttonCustomization(ButtonType.CANCEL, secondaryButtonCustomization)
+                .setDefaultTheme(new ThemeConfig(
+                        labelCustomization,
+                        toolbarCustomization,
+                        textBoxCustomization,
+                        buttonCustomizations
+                ))
+                .setDarkTheme(darkThemeConfig)
+                .setMonoChromeTheme(new ThemeConfig())
                 .build();
 
         Intent intent = new Intent(this, AuthorizingPaymentActivity.class);

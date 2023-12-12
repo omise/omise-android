@@ -35,7 +35,7 @@ internal class AuthorizingPaymentViewModelFactory(
         val wrapper = ThreeDS2ServiceWrapper(
             context = activity.application,
             threeDS2Service = ThreeDS2ServiceInstance.get(),
-            uiCustomization = uiCustomization.uiCustomization,
+            uiCustomizationMap = uiCustomization.uiCustomizationMap,
         )
         return AuthorizingPaymentViewModel(client, urlVerifier, wrapper,passedThreeDSRequestorAppURL) as T
     }

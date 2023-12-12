@@ -25,6 +25,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.REQUEST_EXTERNAL
 import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.UiCustomization
+import co.omise.android.config.UiCustomizationType
 import co.omise.android.models.Authentication
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
@@ -188,7 +189,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun setupActionBarTitle() {
-        supportActionBar?.title = uiCustomization.uiCustomization.toolbarCustomization?.headerText
+        supportActionBar?.title = uiCustomization.uiCustomizationMap[UiCustomizationType.DEFAULT.value]?.toolbarCustomization?.headerText
             ?: getString(R.string.title_authorizing_payment)
     }
 
