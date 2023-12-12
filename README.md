@@ -492,6 +492,24 @@ private fun showAuthorizingPaymentForm() {
 
 Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge and the array of string `EXPECTED_URL_PATTERNS` with the expected pattern of redirected URLs array.
 
+If you want to customize the title of the authorizing payment activity you must use theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
+```kotlin
+val toolbarCustomization = ToolbarCustomizationBuilder()
+            .textFontName("font/roboto_mono_bold.ttf")
+            .textColor("#000000")
+            .textFontSize(20)
+            .backgroundColor("#FFFFFF")
+            .headerText("Secure Checkout")
+            .buttonText("Close")
+            .build()
+            
+            val uiCustomization = UiCustomizationBuilder()
+            .setDefaultTheme(ThemeConfig(
+                toolbarCustomization = toolbarCustomization,
+            ))
+            .build()
+```
+
 After the end-user completes the authorizing payment process, the activity result
 callback will be called. Handle it in this manner:
 
