@@ -26,6 +26,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Run ktlint
+        run: ./gradlew sdk:ktlintCheck
+
       - name: Build project
         run: ./gradlew sdk:build -x test
 
