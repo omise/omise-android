@@ -3,7 +3,11 @@ package co.omise.android.ui
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import co.omise.android.R
-import co.omise.android.models.*
+import co.omise.android.models.BackendType
+import co.omise.android.models.Capability
+import co.omise.android.models.SourceType
+import co.omise.android.models.TokenizationMethod
+import co.omise.android.models.backendType
 
 internal val Capability.paymentMethodResources: List<PaymentMethodResource>
     get() {
@@ -35,9 +39,9 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                                 )
                             is SourceType.TouchNGo -> {
                                 when (paymentMethod.provider) {
-                                    PaymentMethodResource.ALIPAY_PlUS_PROVIDER ->
+                                    PaymentMethodResource.ALIPAY_PLUS_PROVIDER ->
                                         items.add(
-                                            PaymentMethodResource.TouchNGo_Alipay,
+                                            PaymentMethodResource.TouchNGoAlipay,
                                         )
                                     else -> items.add(PaymentMethodResource.TouchNGo)
                                 }
@@ -61,7 +65,7 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                                 when (paymentMethod.provider) {
                                     PaymentMethodResource.RMS_PROVIDER ->
                                         items.add(
-                                            PaymentMethodResource.GrabPay_RMS,
+                                            PaymentMethodResource.GrabPayRMS,
                                         )
                                     else -> items.add(PaymentMethodResource.GrabPay)
                                 }
@@ -251,7 +255,7 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.TouchNGo(),
     )
 
-    object TouchNGo_Alipay : PaymentMethodResource(
+    object TouchNGoAlipay : PaymentMethodResource(
         iconRes = R.drawable.payment_touch_n_go,
         titleRes = R.string.payment_method_touch_n_go_title,
         subtitleRes = R.string.payment_method_alipayplus_footnote,
@@ -330,7 +334,7 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.GrabPay(),
     )
 
-    object GrabPay_RMS : PaymentMethodResource(
+    object GrabPayRMS : PaymentMethodResource(
         iconRes = R.drawable.payment_grabpay,
         titleRes = R.string.payment_method_grabpay_rms_title,
         indicatorIconRes = R.drawable.ic_redirect,
@@ -352,7 +356,7 @@ internal sealed class PaymentMethodResource(
     )
 
     companion object {
-        const val ALIPAY_PlUS_PROVIDER = "Alipay_plus"
+        const val ALIPAY_PLUS_PROVIDER = "Alipay_plus"
         const val RMS_PROVIDER = "RMS"
         val all: List<PaymentMethodResource>
             get() = PaymentMethodResource::class.nestedClasses.mapNotNull { it.objectInstance as? PaymentMethodResource }

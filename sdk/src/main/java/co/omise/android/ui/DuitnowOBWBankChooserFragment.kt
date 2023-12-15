@@ -2,7 +2,9 @@ package co.omise.android.ui
 
 import android.os.Bundle
 import co.omise.android.R
-import co.omise.android.models.*
+import co.omise.android.models.Bank
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
 
 /**
  * DuitNowOBWBankChooserFragment is the UI class, extended from base [OmiseListFragment] to show available

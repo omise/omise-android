@@ -11,8 +11,29 @@ import android.widget.CheckBox
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
-import co.omise.android.models.*
-import kotlinx.android.synthetic.main.fragment_atome_form.*
+import co.omise.android.models.Billing
+import co.omise.android.models.Item
+import co.omise.android.models.Shipping
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import kotlinx.android.synthetic.main.fragment_atome_form.billing_address
+import kotlinx.android.synthetic.main.fragment_atome_form.button_submit
+import kotlinx.android.synthetic.main.fragment_atome_form.checkbox_billing_shipping
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_billing_city
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_billing_country
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_billing_postal
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_billing_street
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_email
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_full_name
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_phone_number
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_shipping_city
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_shipping_country
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_shipping_postal
+import kotlinx.android.synthetic.main.fragment_atome_form.edit_shipping_street
+import kotlinx.android.synthetic.main.fragment_atome_form.text_atome_email_error
+import kotlinx.android.synthetic.main.fragment_atome_form.text_billing_address_error
+import kotlinx.android.synthetic.main.fragment_atome_form.text_phone_number_error
+import kotlinx.android.synthetic.main.fragment_atome_form.text_shipping_address_error
 
 /**
  * AtomeFormFragment is the UI class for handling all Atome payment methods.

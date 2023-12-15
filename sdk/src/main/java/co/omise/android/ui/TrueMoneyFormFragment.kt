@@ -11,7 +11,9 @@ import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
-import kotlinx.android.synthetic.main.fragment_true_money_form.*
+import kotlinx.android.synthetic.main.fragment_true_money_form.button_submit
+import kotlinx.android.synthetic.main.fragment_true_money_form.edit_phone_number
+import kotlinx.android.synthetic.main.fragment_true_money_form.text_phone_number_error
 
 /**
  * TrueMoneyFormFragment is the UI class for handling TrueMoney payment method.

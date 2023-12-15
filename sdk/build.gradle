@@ -294,5 +294,4 @@ sonar {
             reporter "checkstyle"
         }
     }
-
 }

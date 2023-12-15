@@ -6,7 +6,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import co.omise.android.R
-import co.omise.android.models.*
+import co.omise.android.models.Capability
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import co.omise.android.models.SupportedEcontext
+import co.omise.android.models.installmentMethods
+import co.omise.android.models.internetBankingMethods
+import co.omise.android.models.mobileBankingMethods
 
 /**
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
@@ -28,7 +34,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
             PaymentMethodResource.InternetBankings -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
             PaymentMethodResource.MobileBankings -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
-            PaymentMethodResource.ConvenienceStore -> navigation.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+            PaymentMethodResource.ConvenienceStore ->
+                navigation.navigateToEContextForm(
+                    SupportedEcontext.ConvenienceStore,
+                )
             PaymentMethodResource.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
             PaymentMethodResource.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
             PaymentMethodResource.TrueMoney -> navigation.navigateToTrueMoneyForm()
@@ -54,8 +63,8 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.GrabPay,
             PaymentMethodResource.PayPay,
             PaymentMethodResource.PointsCiti,
-            PaymentMethodResource.GrabPay_RMS,
-            PaymentMethodResource.TouchNGo_Alipay,
+            PaymentMethodResource.GrabPayRMS,
+            PaymentMethodResource.TouchNGoAlipay,
             -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()

@@ -11,7 +11,14 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
-import co.omise.android.models.*
+import co.omise.android.models.APIError
+import co.omise.android.models.Bank
+import co.omise.android.models.Capability
+import co.omise.android.models.Model
+import co.omise.android.models.PaymentMethod
+import co.omise.android.models.Source
+import co.omise.android.models.SupportedEcontext
+import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AMOUNT
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CARD_BRANDS
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CURRENCY
@@ -22,7 +29,7 @@ import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_payment_creator.*
+import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
 import java.io.IOError
 
 /**

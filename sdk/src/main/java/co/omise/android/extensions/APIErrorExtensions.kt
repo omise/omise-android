@@ -4,7 +4,7 @@ import android.content.res.Resources
 import co.omise.android.R
 import co.omise.android.models.APIError
 import co.omise.android.models.Amount
-import java.util.*
+import java.util.Locale
 
 fun APIError.getMessageFromResources(res: Resources): String =
     when (errorCode) {

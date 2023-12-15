@@ -9,7 +9,8 @@ import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
-import kotlinx.android.synthetic.main.fragment_fpx_email_form.*
+import kotlinx.android.synthetic.main.fragment_fpx_email_form.button_submit
+import kotlinx.android.synthetic.main.fragment_fpx_email_form.edit_email
 
 /**
  * FpxEmailFormFragment is the UI class to show an email form for FPX payments.

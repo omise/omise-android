@@ -20,7 +20,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
 
     class Builder {
         private var uiCustomization: UiCustomization = default
-        private var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
+        private var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> =
+            mutableMapOf()
 
         /**
          * Set the label customization.
@@ -88,7 +89,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
                             uiCustomization.uiCustomization.copy(
                                 buttonCustomizations =
                                     buttonCustomizations.map {
-                                        co.omise.android.threeds.customization.ButtonType.buttonTypeOf(it.key.value) to it.value.buttonCustomization
+                                        co.omise.android.threeds.customization.ButtonType.buttonTypeOf(it.key.value) to
+                                            it.value.buttonCustomization
                                     }.toMap(),
                             ),
                     )
@@ -130,7 +132,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
         internal val labelCustomization: co.omise.android.threeds.customization.LabelCustomization,
     ) {
         class Builder {
-            private var labelCustomization = co.omise.android.threeds.customization.LabelCustomization()
+            private var labelCustomization =
+                co.omise.android.threeds.customization.LabelCustomization()
 
             /**
              * Set the text font for texts.
@@ -210,7 +213,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
         internal val textBoxCustomization: co.omise.android.threeds.customization.TextBoxCustomization,
     ) {
         class Builder {
-            private var textBoxCustomization = co.omise.android.threeds.customization.TextBoxCustomization()
+            private var textBoxCustomization =
+                co.omise.android.threeds.customization.TextBoxCustomization()
 
             /**
              * Set the text font for the text box.
@@ -290,7 +294,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
         internal val toolbarCustomization: co.omise.android.threeds.customization.ToolbarCustomization,
     ) {
         class Builder {
-            private var toolbarCustomization = co.omise.android.threeds.customization.ToolbarCustomization()
+            private var toolbarCustomization =
+                co.omise.android.threeds.customization.ToolbarCustomization()
 
             /**
              * Set the text font for the toolbar's title and cancel button.
@@ -381,7 +386,8 @@ data class UiCustomization internal constructor(internal val uiCustomization: co
         internal val buttonCustomization: co.omise.android.threeds.customization.ButtonCustomization,
     ) {
         class Builder {
-            private var buttonCustomization = co.omise.android.threeds.customization.ButtonCustomization()
+            private var buttonCustomization =
+                co.omise.android.threeds.customization.ButtonCustomization()
 
             /**
              * Set the text font for the toolbar's title and cancel button.

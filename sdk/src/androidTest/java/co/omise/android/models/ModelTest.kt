@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import java.util.Objects
 
 @RunWith(AndroidJUnit4::class)
 class ModelTest : SDKTest() {

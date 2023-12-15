@@ -17,8 +17,12 @@ import co.omise.android.models.Token
 import co.omise.android.models.TokenizationParam
 import co.omise.android.request.GooglePay
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.wallet.*
-import kotlinx.android.synthetic.main.activity_google_pay.*
+import com.google.android.gms.wallet.AutoResolveHelper
+import com.google.android.gms.wallet.IsReadyToPayRequest
+import com.google.android.gms.wallet.PaymentData
+import com.google.android.gms.wallet.PaymentDataRequest
+import com.google.android.gms.wallet.PaymentsClient
+import kotlinx.android.synthetic.main.activity_google_pay.googlePayButton
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOError
@@ -50,7 +54,16 @@ class GooglePayActivity : AppCompatActivity() {
         setTitle(R.string.googlepay)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        googlePay = GooglePay(pKey, cardNetworks, price, currencyCode, merchantId, requestBillingAddress, requestPhoneNumber)
+        googlePay =
+            GooglePay(
+                pKey,
+                cardNetworks,
+                price,
+                currencyCode,
+                merchantId,
+                requestBillingAddress,
+                requestPhoneNumber,
+            )
         paymentsClient = googlePay.createPaymentsClient(this)
         possiblyShowGooglePayButton()
 
@@ -58,7 +71,10 @@ class GooglePayActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        pKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
+        pKey =
+            requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) {
+                "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null."
+            }
         cardNetworks =
             requireNotNull(intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)) {
                 "${OmiseActivity.Companion::EXTRA_CARD_BRANDS.name} must not be null."

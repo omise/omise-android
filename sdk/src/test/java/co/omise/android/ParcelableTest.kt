@@ -3,7 +3,14 @@ package co.omise.android
 import android.os.Bundle
 import android.os.Parcel
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import co.omise.android.models.*
+import co.omise.android.models.Capability
+import co.omise.android.models.Card
+import co.omise.android.models.FlowType
+import co.omise.android.models.Model
+import co.omise.android.models.PaymentMethod
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import co.omise.android.models.Token
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals

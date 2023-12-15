@@ -16,7 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.omise.android.R
-import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.fragment_list.no_data_text
+import kotlinx.android.synthetic.main.fragment_list.recycler_view
 
 /**
  * OmiseListFragment is the base class for all list-based UI classes.
@@ -68,12 +69,14 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     }
 }
 
-class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListItemClickListener?) : RecyclerView.Adapter<OmiseItemViewHolder>() {
+class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListItemClickListener?) :
+    RecyclerView.Adapter<OmiseItemViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): OmiseItemViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return OmiseItemViewHolder(itemView, listener)
     }
 
@@ -88,7 +91,8 @@ class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListIte
     }
 }
 
-class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListener?) : RecyclerView.ViewHolder(view) {
+class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListener?) :
+    RecyclerView.ViewHolder(view) {
     fun bind(item: OmiseListItem) {
         val listItemView = view.findViewById<LinearLayout>(R.id.list_item_view)
         val optionImage = view.findViewById<ImageView>(R.id.image_item_icon)
@@ -148,7 +152,8 @@ interface OmiseListItemClickListener {
 }
 
 private class OmiseItemDecoration(val context: Context) : RecyclerView.ItemDecoration() {
-    private val divider: Drawable? = AppCompatResources.getDrawable(context, R.drawable.item_decoration)
+    private val divider: Drawable? =
+        AppCompatResources.getDrawable(context, R.drawable.item_decoration)
 
     override fun onDrawOver(
         c: Canvas,

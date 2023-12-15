@@ -46,9 +46,15 @@ import java.net.ProtocolException
 class AuthorizingPaymentActivity : AppCompatActivity() {
     private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
-    private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
+    private val verifier: AuthorizingPaymentURLVerifier by lazy {
+        AuthorizingPaymentURLVerifier(
+            intent,
+        )
+    }
 
-    private val viewModel: AuthorizingPaymentViewModel by viewModels { viewModelFactory ?: AuthorizingPaymentViewModelFactory(this) }
+    private val viewModel: AuthorizingPaymentViewModel by viewModels {
+        viewModelFactory ?: AuthorizingPaymentViewModelFactory(this)
+    }
     private var viewModelFactory: ViewModelProvider.Factory? = null
     private val threeDSConfig: ThreeDSConfig by lazy { AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig }
 
@@ -89,7 +95,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
             when (result) {
                 AuthenticationResult.AuthenticationUnsupported -> setupWebView()
-                is AuthenticationResult.AuthenticationCompleted -> finishActivityWithSuccessful(result.completionEvent)
+                is AuthenticationResult.AuthenticationCompleted ->
+                    finishActivityWithSuccessful(
+                        result.completionEvent,
+                    )
+
                 is AuthenticationResult.AuthenticationFailure -> {
                     val error = result.error
                     when (error) {
@@ -106,10 +116,16 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                             )
 
                         is RuntimeErrorEvent ->
-                            OmiseException("3D Secure authorization failed: runtime error.", RuntimeException(error.errorMessage))
+                            OmiseException(
+                                "3D Secure authorization failed: runtime error.",
+                                RuntimeException(error.errorMessage),
+                            )
 
                         else ->
-                            OmiseException("3D Secure authorization failed: ${error.message}", error)
+                            OmiseException(
+                                "3D Secure authorization failed: ${error.message}",
+                                error,
+                            )
                     }.let {
                         finishActivityWithFailure(it)
                     }
@@ -177,7 +193,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 ): Boolean {
                     val promptLayout =
                         LinearLayout(this@AuthorizingPaymentActivity).apply {
-                            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                            layoutParams =
+                                LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                )
                             orientation = LinearLayout.VERTICAL
                         }
 
@@ -198,7 +218,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                     AlertDialog.Builder(this@AuthorizingPaymentActivity)
                         .setView(promptLayout)
                         .setMessage(message)
-                        .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm(promptEditText.text.toString()) }
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                            result?.confirm(
+                                promptEditText.text.toString(),
+                            )
+                        }
                         .setNegativeButton(android.R.string.cancel) { _, _ -> result?.cancel() }
                         .setOnCancelListener { result?.cancel() }
                         .show()
@@ -273,7 +297,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             Intent().apply {
                 putExtra(
                     EXTRA_AUTHORIZING_PAYMENT_RESULT,
-                    ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value),
+                    ThreeDS2Completed(
+                        completionEvent.sdkTransactionId,
+                        completionEvent.transactionStatus.value,
+                    ),
                 )
             }
         setResult(Activity.RESULT_OK, resultIntent)
