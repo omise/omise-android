@@ -65,7 +65,7 @@ class ExpiryDateEditText : OmiseEditText {
             //Do nothing
         }
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             text?.let { cursorPosition = it.length - selectionStart }
             beforeChangedText = s.toString()
         }
