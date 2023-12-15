@@ -8,7 +8,6 @@ import android.widget.Button
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
-import co.omise.android.models.Bank
 import co.omise.android.models.Source
 import kotlinx.android.synthetic.main.fragment_fpx_email_form.*
 
@@ -16,7 +15,6 @@ import kotlinx.android.synthetic.main.fragment_fpx_email_form.*
  * FpxEmailFormFragment is the UI class to show an email form for FPX payments.
  */
 internal class FpxEmailFormFragment : OmiseFragment() {
-
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
 
@@ -24,8 +22,11 @@ internal class FpxEmailFormFragment : OmiseFragment() {
     private val submitButton: Button by lazy { button_submit }
     private val allowedEmailFormat = "\\A[\\w+\\-.]+@[a-z\\d\\-.]+\\.[a-z]{2,}\\z"
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         return inflater.inflate(R.layout.fragment_fpx_email_form, container, false)
     }
 

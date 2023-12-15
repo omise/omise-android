@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
  * OmiseFragment is the base class for all other fragments in the SDK.
  */
 abstract class OmiseFragment : Fragment() {
-
     var title: String? = null
 
     protected val actionBar: ActionBar?
@@ -28,7 +27,10 @@ abstract class OmiseFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater,
+    ) {
         menu.clear()
     }
 
@@ -42,7 +44,10 @@ abstract class OmiseFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    protected fun setAllViewsEnabled(view: View, isEnabled: Boolean) {
+    protected fun setAllViewsEnabled(
+        view: View,
+        isEnabled: Boolean,
+    ) {
         view.isEnabled = isEnabled
         if (view is ViewGroup) {
             for (index in 0 until view.childCount) {

@@ -8,14 +8,15 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
-
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
-
     fun atPosition(position: Int): Matcher<View> {
         return atPositionOnView(position, -1)
     }
 
-    fun atPositionOnView(position: Int, targetViewId: Int): Matcher<View> {
+    fun atPositionOnView(
+        position: Int,
+        targetViewId: Int,
+    ): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
             var resources: Resources? = null
             var childView: View? = null
@@ -23,18 +24,18 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
             override fun describeTo(description: Description) {
                 var idDescription = recyclerViewId.toString()
                 if (this.resources != null) {
-                    idDescription = try {
-                        this.resources!!.getResourceName(recyclerViewId)
-                    } catch (var4: Resources.NotFoundException) {
-                        "$recyclerViewId (resource name not found)"
-                    }
+                    idDescription =
+                        try {
+                            this.resources!!.getResourceName(recyclerViewId)
+                        } catch (var4: Resources.NotFoundException) {
+                            "$recyclerViewId (resource name not found)"
+                        }
                 }
 
                 description.appendText("RecyclerView with id: $idDescription at position: $position")
             }
 
             public override fun matchesSafely(view: View): Boolean {
-
                 this.resources = view.resources
 
                 if (childView == null) {
@@ -58,4 +59,6 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
     }
 }
 
-fun withListId(@IdRes recyclerViewId: Int): RecyclerViewMatcher = RecyclerViewMatcher(recyclerViewId)
+fun withListId(
+    @IdRes recyclerViewId: Int,
+): RecyclerViewMatcher = RecyclerViewMatcher(recyclerViewId)

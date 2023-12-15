@@ -12,34 +12,35 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ParcelableTest {
-
     @Parcelize
     data class Dummy(
-            override var modelObject: String?,
-            override var id: String?,
-            override var livemode: Boolean,
-            override var location: String?,
-            override var created: DateTime?,
-            override var deleted: Boolean
+        override var modelObject: String?,
+        override var id: String?,
+        override var livemode: Boolean,
+        override var location: String?,
+        override var created: DateTime?,
+        override var deleted: Boolean,
     ) : Model
 
     @Test
     fun modelParceling_success() {
-        val model = Dummy(
+        val model =
+            Dummy(
                 "object",
                 "id",
                 true,
                 "here",
                 DateTime.parse("2015-05-20T04:57:36Z"),
-                false
-        )
+                false,
+            )
 
         assertObjectParceling(model)
     }
 
     @Test
     fun sourceParceling_success() {
-        val source = Source(
+        val source =
+            Source(
                 type = SourceType.TrueMoney,
                 flow = FlowType.Redirect,
                 amount = 4200000L,
@@ -47,15 +48,16 @@ class ParcelableTest {
                 storeId = "ID",
                 name = "JOHN DOE",
                 email = "a@bc.om",
-                phoneNumber = "123434523413"
-        )
+                phoneNumber = "123434523413",
+            )
 
         assertObjectParceling(source)
     }
 
     @Test
     fun tokenParceling_success() {
-        val card = Card(
+        val card =
+            Card(
                 name = "John Doe",
                 country = "Thailand",
                 city = "Bangkok",
@@ -63,28 +65,35 @@ class ParcelableTest {
                 lastDigits = "1234",
                 bank = "kbank",
                 expirationMonth = 11,
-                expirationYear = 22)
-        val token = Token(
+                expirationYear = 22,
+            )
+        val token =
+            Token(
                 false,
-                card)
+                card,
+            )
 
         assertObjectParceling(token)
     }
 
     @Test
     fun capabilityParceling_success() {
-        val paymentMethodList: List<PaymentMethod> = (1..10).map {
-            PaymentMethod(
+        val paymentMethodList: List<PaymentMethod> =
+            (1..10).map {
+                PaymentMethod(
                     "Method no: $it",
                     listOf("thb, usd, myr, sgd, jpy"),
                     listOf("VISA", "MASTER", "LASER"),
-                    listOf(1, 2, 4, 6))
-        }
-        val capability = Capability(
+                    listOf(1, 2, 4, 6),
+                )
+            }
+        val capability =
+            Capability(
                 mutableListOf("a", "b", "c", "d"),
                 paymentMethodList as MutableList<PaymentMethod>?,
                 null,
-                false)
+                false,
+            )
 
         assertObjectParceling(capability)
     }

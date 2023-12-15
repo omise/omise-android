@@ -19,7 +19,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SecurityCodeTooltipDialogFragmentInstrumentedTest {
-
     @Test
     @Ignore("This test case only pass when run individual. Needs to figure out on run all instrumented test.")
     fun closeButton_dismissDialog() {

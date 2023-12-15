@@ -13,13 +13,12 @@ import co.omise.android.models.backendType
  * available Internet Banking options list for the user to choose from.
  */
 internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankingResource>() {
-
     private val allowedBanks: List<SourceType.InternetBanking> by lazy {
         val args = arguments ?: return@lazy emptyList<SourceType.InternetBanking>()
         val paymentMethods = args.getParcelableArray(EXTRA_INTERNET_BANKING_METHODS) as Array<PaymentMethod>
         return@lazy paymentMethods
-                .filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
-                .map { (it.backendType as BackendType.Source).sourceType as SourceType.InternetBanking }
+            .filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.InternetBanking }
+            .map { (it.backendType as BackendType.Source).sourceType as SourceType.InternetBanking }
     }
 
     var requester: PaymentCreatorRequester<Source>? = null
@@ -51,10 +50,11 @@ internal class InternetBankingChooserFragment : OmiseListFragment<InternetBankin
         private const val EXTRA_INTERNET_BANKING_METHODS = "InternetBankingChooserFragment.internetBankingMethods"
 
         fun newInstance(availableBanks: List<PaymentMethod>) =
-                InternetBankingChooserFragment().apply {
-                    arguments = Bundle().apply {
+            InternetBankingChooserFragment().apply {
+                arguments =
+                    Bundle().apply {
                         putParcelableArray(EXTRA_INTERNET_BANKING_METHODS, availableBanks.toTypedArray())
                     }
-                }
+            }
     }
 }

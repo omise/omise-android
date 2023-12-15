@@ -2,14 +2,12 @@ package co.omise.android.ui
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -25,20 +23,26 @@ import kotlinx.android.synthetic.main.fragment_list.*
  */
 abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
+
     abstract fun listItems(): List<T>
 
     protected val noDataText: TextView by lazy { no_data_text }
     private val recyclerView: RecyclerView by lazy { recycler_view }
 
-    private val onClickListener = object : OmiseListItemClickListener {
-        override fun onClick(item: OmiseListItem) {
-            onListItemClicked(item as T)
+    private val onClickListener =
+        object : OmiseListItemClickListener {
+            override fun onClick(item: OmiseListItem) {
+                onListItemClicked(item as T)
+            }
         }
-    }
 
     private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), onClickListener) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
@@ -65,22 +69,26 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
 }
 
 class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListItemClickListener?) : RecyclerView.Adapter<OmiseItemViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OmiseItemViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): OmiseItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return OmiseItemViewHolder(itemView, listener)
     }
 
     override fun getItemCount(): Int = list.size
 
-    override fun onBindViewHolder(holder: OmiseItemViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: OmiseItemViewHolder,
+        position: Int,
+    ) {
         val option = list[position]
         holder.bind(option)
     }
 }
 
 class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListener?) : RecyclerView.ViewHolder(view) {
-
     fun bind(item: OmiseListItem) {
         val listItemView = view.findViewById<LinearLayout>(R.id.list_item_view)
         val optionImage = view.findViewById<ImageView>(R.id.image_item_icon)
@@ -141,7 +149,12 @@ interface OmiseListItemClickListener {
 
 private class OmiseItemDecoration(val context: Context) : RecyclerView.ItemDecoration() {
     private val divider: Drawable? = AppCompatResources.getDrawable(context, R.drawable.item_decoration)
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+
+    override fun onDrawOver(
+        c: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+    ) {
         val divider = divider ?: return
 
         val childCount = parent.childCount
@@ -166,7 +179,12 @@ private class OmiseItemDecoration(val context: Context) : RecyclerView.ItemDecor
         }
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+    ) {
         super.getItemOffsets(outRect, view, parent, state)
 
         val divider = divider ?: return

@@ -20,7 +20,8 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        title = InstallmentResource.all
+        title =
+            InstallmentResource.all
                 .find { it.sourceType == (installment?.backendType as BackendType.Source).sourceType }
                 ?.let { item -> item.titleRes?.let { getString(it) } ?: title }
         setHasOptionsMenu(true)
@@ -28,20 +29,21 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     override fun listItems(): List<InstallmentTermResource> {
         return installment
-                ?.installmentTerms
-                .orEmpty()
-                .map {
-                    InstallmentTermResource(
-                            title = with(it) {
-                                if (this > 1) {
-                                    getString(R.string.payment_method_installment_term_months_title, this)
-                                } else {
-                                    getString(R.string.payment_method_installment_term_month_title, this)
-                                }
-                            },
-                            installmentTerm = it
-                    )
-                }
+            ?.installmentTerms
+            .orEmpty()
+            .map {
+                InstallmentTermResource(
+                    title =
+                        with(it) {
+                            if (this > 1) {
+                                getString(R.string.payment_method_installment_term_months_title, this)
+                            } else {
+                                getString(R.string.payment_method_installment_term_month_title, this)
+                            }
+                        },
+                    installmentTerm = it,
+                )
+            }
     }
 
     override fun onListItemClicked(item: InstallmentTermResource) {
@@ -49,7 +51,8 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType ?: return
 
         view?.let { setAllViewsEnabled(it, false) }
-        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType)
+        val request =
+            Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType)
                 .installmentTerm(item.installmentTerm)
                 .zeroInterestInstallments(req.capability.zeroInterestInstallments)
                 .build()
@@ -60,11 +63,13 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     companion object {
         private const val EXTRA_INSTALLMENT = "InstallmentTermChooserFragment.installment"
+
         fun newInstance(installment: PaymentMethod) =
-                InstallmentTermChooserFragment().apply {
-                    arguments = Bundle().apply {
+            InstallmentTermChooserFragment().apply {
+                arguments =
+                    Bundle().apply {
                         putParcelable(EXTRA_INSTALLMENT, installment)
                     }
-                }
+            }
     }
 }

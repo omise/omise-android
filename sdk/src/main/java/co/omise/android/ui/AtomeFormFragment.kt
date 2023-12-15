@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_atome_form.*
  * AtomeFormFragment is the UI class for handling all Atome payment methods.
  */
 class AtomeFormFragment : OmiseFragment() {
-
     var requester: PaymentCreatorRequester<Source>? = null
 
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
@@ -43,7 +42,11 @@ class AtomeFormFragment : OmiseFragment() {
     private val checkBoxBillingShipping by lazy { checkbox_billing_shipping }
     private val submitButton: Button by lazy { button_submit }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         return inflater.inflate(R.layout.fragment_atome_form, container, false)
     }
 
@@ -129,10 +132,11 @@ class AtomeFormFragment : OmiseFragment() {
 
     private fun updateShippingAddressErrorText(hasFocus: Boolean) {
         if (hasFocus || (
-                    shippingStreetEdit.isValid &&
-                            shippingPostalEdit.isValid &&
-                            shippingCityEdit.isValid &&
-                            isCountryCodeValid(shippingCountryEdit))
+                shippingStreetEdit.isValid &&
+                    shippingPostalEdit.isValid &&
+                    shippingCityEdit.isValid &&
+                    isCountryCodeValid(shippingCountryEdit)
+            )
         ) {
             with(shippingAddressErrorText) {
                 text = ""
@@ -188,12 +192,12 @@ class AtomeFormFragment : OmiseFragment() {
 
     private fun updateSubmitButton() {
         submitButton.isEnabled = (emailEdit.text?.isEmpty() == true || isEmailValid(emailEdit)) &&
-                isPhoneNumberValid(phoneNumberEdit) &&
-                shippingStreetEdit.isValid &&
-                shippingPostalEdit.isValid &&
-                shippingCityEdit.isValid &&
-                isCountryCodeValid(shippingCountryEdit) &&
-                (billingCityEdit.text?.isEmpty() == true || isCountryCodeValid(billingCountryEdit))
+            isPhoneNumberValid(phoneNumberEdit) &&
+            shippingStreetEdit.isValid &&
+            shippingPostalEdit.isValid &&
+            shippingCityEdit.isValid &&
+            isCountryCodeValid(shippingCountryEdit) &&
+            (billingCityEdit.text?.isEmpty() == true || isCountryCodeValid(billingCountryEdit))
     }
 
     private fun submitForm() {
@@ -218,8 +222,8 @@ class AtomeFormFragment : OmiseFragment() {
                 street1 = shippingStreet,
                 postalCode = shippingPostal,
                 city = shippingCity,
-                country = shippingCountry
-            )
+                country = shippingCountry,
+            ),
         ).items(
             listOf(
                 Item(
@@ -231,8 +235,8 @@ class AtomeFormFragment : OmiseFragment() {
                     "www.kan.com/product/shoes",
                     "www.kan.com/product/shoes/image",
                     "Gucci",
-                )
-            )
+                ),
+            ),
         )
 
         if (!checkBoxBillingShipping.isChecked) {
@@ -241,8 +245,8 @@ class AtomeFormFragment : OmiseFragment() {
                     street1 = billingStreetEdit.text?.toString()?.trim().orEmpty(),
                     postalCode = billingPostalEdit.text?.toString()?.trim().orEmpty(),
                     city = billingCityEdit.text?.toString()?.trim().orEmpty(),
-                    country = billingCountryEdit.text?.toString()?.trim().orEmpty()
-                )
+                    country = billingCountryEdit.text?.toString()?.trim().orEmpty(),
+                ),
             )
         } else {
             requestBuilder.billing(
@@ -250,8 +254,8 @@ class AtomeFormFragment : OmiseFragment() {
                     street1 = shippingStreet,
                     postalCode = shippingPostal,
                     city = shippingCity,
-                    country = shippingCountry
-                )
+                    country = shippingCountry,
+                ),
             )
         }
 

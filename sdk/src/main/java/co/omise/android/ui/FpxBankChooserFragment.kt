@@ -11,7 +11,6 @@ import co.omise.android.models.SourceType
  * available FPX bank options list for the user to choose from.
  */
 internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
-
     var requester: PaymentCreatorRequester<Source>? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -29,7 +28,8 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
 
         view?.let { setAllViewsEnabled(it, false) }
 
-        val request = Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.Fpx())
+        val request =
+            Source.CreateSourceRequestBuilder(req.amount, req.currency, SourceType.Fpx())
                 .email(email)
                 .bank(bankCode)
                 .build()
@@ -45,10 +45,11 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
 
         return capabilityBanks.map {
             FpxResource(
-                    iconRes = FpxResource.getBankImageFromCode(it.code),
-                    title = it.name,
-                    bankCode = it.code,
-                    enabled = it.active)
+                iconRes = FpxResource.getBankImageFromCode(it.code),
+                title = it.name,
+                bankCode = it.code,
+                enabled = it.active,
+            )
         }
     }
 
@@ -56,12 +57,15 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
         private const val FPX_EMAIL = "FpxBankChooserFragment.email"
         private const val FPX_BANKS = "FpxBankChooserFragment.banks"
 
-        fun newInstance(banks: List<Bank>?, email: String) =
-                FpxBankChooserFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelableArray(FPX_BANKS, banks?.toTypedArray())
-                        putString(FPX_EMAIL, email)
-                    }
+        fun newInstance(
+            banks: List<Bank>?,
+            email: String,
+        ) = FpxBankChooserFragment().apply {
+            arguments =
+                Bundle().apply {
+                    putParcelableArray(FPX_BANKS, banks?.toTypedArray())
+                    putString(FPX_EMAIL, email)
                 }
+        }
     }
 }

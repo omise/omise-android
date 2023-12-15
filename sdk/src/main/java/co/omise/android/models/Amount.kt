@@ -7,12 +7,12 @@ package co.omise.android.models
  * @param currency The specified currency.
  */
 data class Amount(val amount: Long, val currency: String) {
-
     val localAmount: Double
-        get() = when (currency.toLowerCase()) {
-            "jpy" -> amount.toDouble()
-            else -> amount / 100.0
-        }
+        get() =
+            when (currency.toLowerCase()) {
+                "jpy" -> amount.toDouble()
+                else -> amount / 100.0
+            }
 
     fun toAmountString(): String {
         return "$localAmount ${currency.toUpperCase()}"
@@ -23,14 +23,17 @@ data class Amount(val amount: Long, val currency: String) {
     }
 
     companion object {
-
         @JvmStatic
-        fun fromLocalAmount(localAMount: Double, currency: String): Amount {
-            val subunitAmount = if (currency == "jpy") {
-                localAMount.toLong()
-            } else {
-                (localAMount*100).toLong()
-            }
+        fun fromLocalAmount(
+            localAMount: Double,
+            currency: String,
+        ): Amount {
+            val subunitAmount =
+                if (currency == "jpy") {
+                    localAMount.toLong()
+                } else {
+                    (localAMount * 100).toLong()
+                }
             return Amount(subunitAmount, currency)
         }
     }

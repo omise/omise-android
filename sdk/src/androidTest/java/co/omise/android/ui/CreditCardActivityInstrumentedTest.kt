@@ -20,9 +20,10 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityInstrumentedTest {
     private lateinit var scenario: ActivityScenario<CreditCardActivity>
-    private val intent = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-        putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-    }
+    private val intent =
+        Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+        }
 
     @Before
     fun setUp() {
@@ -36,11 +37,9 @@ class CreditCardActivityInstrumentedTest {
 
         onView(withId(R.id.text_card_number_error)).check(matches(withText(R.string.error_invalid_card_number)))
 
-
         onView(withId(R.id.edit_expiry_date)).perform(typeText("123"), pressImeActionButton())
 
         onView(withId(R.id.text_expiry_date_error)).check(matches(withText(R.string.error_invalid_expiration_date)))
-
 
         onView(withId(R.id.edit_security_code)).perform(typeText("12"))
         onView(withId(R.id.edit_expiry_date)).perform(focus())

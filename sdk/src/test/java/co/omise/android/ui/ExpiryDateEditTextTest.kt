@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ExpiryDateEditTextTest {
-
     private val editText = ExpiryDateEditText(ApplicationProvider.getApplicationContext())
 
     @Test

@@ -4,7 +4,6 @@ package co.omise.android.config
  * Configuration for authorizing payment process.
  */
 class AuthorizingPaymentConfig private constructor(internal val threeDSConfig: ThreeDSConfig) {
-
     companion object {
         private var instance: AuthorizingPaymentConfig? = null
         private var default: AuthorizingPaymentConfig = Builder().threeDSConfig(ThreeDSConfig.default).build()
@@ -46,9 +45,10 @@ class AuthorizingPaymentConfig private constructor(internal val threeDSConfig: T
          *
          * @param threeDSConfig The 3DS config
          */
-        fun threeDSConfig(threeDSConfig: ThreeDSConfig): Builder = apply {
-            this.threeDSConfig = threeDSConfig
-        }
+        fun threeDSConfig(threeDSConfig: ThreeDSConfig): Builder =
+            apply {
+                this.threeDSConfig = threeDSConfig
+            }
 
         /**
          * Create an instance of [AuthorizingPaymentConfig].

@@ -56,7 +56,6 @@ import java.util.Locale
  * CreditCardActivity is the UI class for taking credit card information input from the user.
  */
 class CreditCardActivity : OmiseActivity() {
-
     private lateinit var pKey: String
     private lateinit var client: Client
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
@@ -101,7 +100,7 @@ class CreditCardActivity : OmiseActivity() {
             street1Edit to street1ErrorText,
             cityEdit to cityErrorText,
             stateEdit to stateErrorText,
-            postalCodeEdit to postalCodeErrorText
+            postalCodeEdit to postalCodeErrorText,
         )
     }
 
@@ -111,7 +110,7 @@ class CreditCardActivity : OmiseActivity() {
             street1Edit to street1ErrorText,
             cityEdit to cityErrorText,
             stateEdit to stateErrorText,
-            postalCodeEdit to postalCodeErrorText
+            postalCodeEdit to postalCodeErrorText,
         )
     }
 
@@ -196,16 +195,19 @@ class CreditCardActivity : OmiseActivity() {
 
     private fun getCapability() {
         val getCapabilityRequest = Capability.GetCapabilitiesRequestBuilder().build()
-        client.send(getCapabilityRequest, object : RequestListener<Capability> {
-            override fun onRequestSucceed(model: Capability) {
-                val countryCode = model.country ?: Locale.getDefault().country
-                selectedCountry = CountryInfo.ALL.find { it.code == countryCode }
-            }
+        client.send(
+            getCapabilityRequest,
+            object : RequestListener<Capability> {
+                override fun onRequestSucceed(model: Capability) {
+                    val countryCode = model.country ?: Locale.getDefault().country
+                    selectedCountry = CountryInfo.ALL.find { it.code == countryCode }
+                }
 
-            override fun onRequestFailed(throwable: Throwable) {
-                Snackbar.make(scrollView, throwable.message.toString(), Snackbar.LENGTH_LONG).show()
-            }
-        })
+                override fun onRequestFailed(throwable: Throwable) {
+                    Snackbar.make(scrollView, throwable.message.toString(), Snackbar.LENGTH_LONG).show()
+                }
+            },
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -239,51 +241,60 @@ class CreditCardActivity : OmiseActivity() {
     private fun submit() {
         disableForm()
 
-        val cardParam = CardParam(
-            name = cardNameEdit.cardName,
-            number = cardNumberEdit.cardNumber,
-            expirationMonth = expiryDateEdit.expiryMonth,
-            expirationYear = expiryDateEdit.expiryYear,
-            securityCode = securityCodeEdit.securityCode,
-            country = selectedCountry?.code,
-            street1 = street1Edit.textOrNull?.toString(),
-            city = cityEdit.textOrNull?.toString(),
-            state = stateEdit.textOrNull?.toString(),
-            postalCode = postalCodeEdit.textOrNull?.toString(),
-        )
+        val cardParam =
+            CardParam(
+                name = cardNameEdit.cardName,
+                number = cardNumberEdit.cardNumber,
+                expirationMonth = expiryDateEdit.expiryMonth,
+                expirationYear = expiryDateEdit.expiryYear,
+                securityCode = securityCodeEdit.securityCode,
+                country = selectedCountry?.code,
+                street1 = street1Edit.textOrNull?.toString(),
+                city = cityEdit.textOrNull?.toString(),
+                state = stateEdit.textOrNull?.toString(),
+                postalCode = postalCodeEdit.textOrNull?.toString(),
+            )
 
         val request = Token.CreateTokenRequestBuilder(cardParam).build()
 
-        client.send(request, object : RequestListener<Token> {
-            override fun onRequestSucceed(model: Token) {
-                val data = Intent()
-                data.putExtra(EXTRA_TOKEN, model.id)
-                data.putExtra(EXTRA_TOKEN_OBJECT, model)
-                data.putExtra(EXTRA_CARD_OBJECT, model.card)
+        client.send(
+            request,
+            object : RequestListener<Token> {
+                override fun onRequestSucceed(model: Token) {
+                    val data = Intent()
+                    data.putExtra(EXTRA_TOKEN, model.id)
+                    data.putExtra(EXTRA_TOKEN_OBJECT, model)
+                    data.putExtra(EXTRA_CARD_OBJECT, model.card)
 
-                setResult(Activity.RESULT_OK, data)
-                finish()
-            }
-
-            override fun onRequestFailed(throwable: Throwable) {
-                enableForm()
-
-                val message = when (throwable) {
-                    is IOError -> getString(R.string.error_io, throwable.message)
-                    is APIError -> throwable.getMessageFromResources(resources)
-                    else -> getString(R.string.error_unknown, throwable.message)
+                    setResult(Activity.RESULT_OK, data)
+                    finish()
                 }
 
-                Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
-            }
-        })
+                override fun onRequestFailed(throwable: Throwable) {
+                    enableForm()
+
+                    val message =
+                        when (throwable) {
+                            is IOError -> getString(R.string.error_io, throwable.message)
+                            is APIError -> throwable.getMessageFromResources(resources)
+                            else -> getString(R.string.error_unknown, throwable.message)
+                        }
+
+                    Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
+                }
+            },
+        )
     }
 
     private fun updateSubmitButton() {
-        val isFormValid = editTexts.filterKeys {
-            if (!isBillingAddressRequired()) !billingAddressEditTexts.containsKey(it)
-            else true
-        }.map { (editText, _) -> editText.isValid }.reduce { acc, b -> acc && b }
+        val isFormValid =
+            editTexts.filterKeys {
+                if (!isBillingAddressRequired()) {
+                    !billingAddressEditTexts.containsKey(it)
+                } else {
+                    true
+                }
+            }.map { (editText, _) -> editText.isValid }.reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }
 
@@ -295,11 +306,12 @@ class CreditCardActivity : OmiseActivity() {
 
     private fun showCountryDropdownDialog() {
         val dialog = CountryListDialogFragment()
-        dialog.listener = object : CountryListDialogFragment.CountryListDialogListener {
-            override fun onCountrySelected(country: CountryInfo) {
-                selectedCountry = country
+        dialog.listener =
+            object : CountryListDialogFragment.CountryListDialogListener {
+                override fun onCountrySelected(country: CountryInfo) {
+                    selectedCountry = country
+                }
             }
-        }
         dialog.show(supportFragmentManager, null)
     }
 

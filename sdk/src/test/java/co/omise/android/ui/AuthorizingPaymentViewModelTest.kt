@@ -5,12 +5,6 @@ import androidx.lifecycle.Observer
 import co.omise.android.threeds.ThreeDS
 import co.omise.android.threeds.data.models.TransactionStatus
 import co.omise.android.threeds.events.CompletionEvent
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -18,11 +12,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
 class AuthorizingPaymentViewModelTest {
-
     private val threeDS: ThreeDS = mock()
     private val sdkTransID = "skts_test_1234"
 
@@ -51,7 +49,7 @@ class AuthorizingPaymentViewModelTest {
 
     @Test
     fun onCompleted_shouldExecuteObserveChargeStatus() {
-        val completionEvent = CompletionEvent(sdkTransID,TransactionStatus.AUTHENTICATED)
+        val completionEvent = CompletionEvent(sdkTransID, TransactionStatus.AUTHENTICATED)
         viewModel.onCompleted(completionEvent)
 
         assertEquals(AuthenticationResult.AuthenticationCompleted(completionEvent), viewModel.authentication.value)
@@ -69,5 +67,4 @@ class AuthorizingPaymentViewModelTest {
         viewModel.onFailure(error)
         assertEquals(AuthenticationResult.AuthenticationFailure(error), viewModel.authentication.value)
     }
-
 }

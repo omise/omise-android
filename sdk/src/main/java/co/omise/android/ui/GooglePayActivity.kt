@@ -2,20 +2,20 @@ package co.omise.android.ui
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.models.APIError
-import co.omise.android.request.GooglePay
 import co.omise.android.models.Token
 import co.omise.android.models.TokenizationParam
+import co.omise.android.request.GooglePay
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import kotlinx.android.synthetic.main.activity_google_pay.*
@@ -41,7 +41,6 @@ class GooglePayActivity : AppCompatActivity() {
      */
     private val loadPaymentDataRequestCode = 991
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_pay)
@@ -60,12 +59,30 @@ class GooglePayActivity : AppCompatActivity() {
 
     private fun initialize() {
         pKey = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_PKEY)) { "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null." }
-        cardNetworks = requireNotNull(intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)) { "${OmiseActivity.Companion::EXTRA_CARD_BRANDS.name} must not be null." }
-        price = requireNotNull(intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)) { "${OmiseActivity.Companion::EXTRA_AMOUNT.name} must not be null." }
-        currencyCode = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_CURRENCY)) { "${OmiseActivity.Companion::EXTRA_CURRENCY.name} must not be null." }
-        merchantId = requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_MERCHANT_ID.name} must not be null." }
-        requestBillingAddress = requireNotNull(intent.getBooleanExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS.name} must not be null." }
-        requestPhoneNumber = requireNotNull(intent.getBooleanExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)) { "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER.name} must not be null." }
+        cardNetworks =
+            requireNotNull(intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)) {
+                "${OmiseActivity.Companion::EXTRA_CARD_BRANDS.name} must not be null."
+            }
+        price =
+            requireNotNull(intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)) {
+                "${OmiseActivity.Companion::EXTRA_AMOUNT.name} must not be null."
+            }
+        currencyCode =
+            requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_CURRENCY)) {
+                "${OmiseActivity.Companion::EXTRA_CURRENCY.name} must not be null."
+            }
+        merchantId =
+            requireNotNull(intent.getStringExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID)) {
+                "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_MERCHANT_ID.name} must not be null."
+            }
+        requestBillingAddress =
+            requireNotNull(intent.getBooleanExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)) {
+                "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS.name} must not be null."
+            }
+        requestPhoneNumber =
+            requireNotNull(intent.getBooleanExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)) {
+                "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER.name} must not be null."
+            }
     }
 
     /**
@@ -73,9 +90,8 @@ class GooglePayActivity : AppCompatActivity() {
      * Google Pay payment button.
      *
      * @see [](https://developers.google.com/android/reference/com/google/android/gms/wallet/PaymentsClient.html.isReadyToPay
-    ) */
+     ) */
     private fun possiblyShowGooglePayButton() {
-
         val isReadyToPayJson = googlePay.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
 
@@ -88,14 +104,14 @@ class GooglePayActivity : AppCompatActivity() {
             } catch (exception: ApiException) {
                 Log.w("isReadyToPay failed", exception)
                 Toast.makeText(
-                        this,
-                        "Internal error occurred, please try a different payment method",
-                        Toast.LENGTH_LONG).show()
+                    this,
+                    "Internal error occurred, please try a different payment method",
+                    Toast.LENGTH_LONG,
+                ).show()
                 onBackPressed()
             }
         }
     }
-
 
     /**
      * If isReadyToPay returned `true`, show the button and hide the "checking" text. Otherwise,
@@ -109,9 +125,10 @@ class GooglePayActivity : AppCompatActivity() {
             googlePayButton.visibility = View.VISIBLE
         } else {
             Toast.makeText(
-                    this,
-                    "Unfortunately, Google Pay is not available on this device",
-                    Toast.LENGTH_LONG).show()
+                this,
+                "Unfortunately, Google Pay is not available on this device",
+                Toast.LENGTH_LONG,
+            ).show()
             onBackPressed()
         }
     }
@@ -131,7 +148,10 @@ class GooglePayActivity : AppCompatActivity() {
         // AutoResolveHelper to wait for the user interacting with it. Once completed,
         // onActivityResult will be called with the result.
         AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request), this, loadPaymentDataRequestCode)
+            paymentsClient.loadPaymentData(request),
+            this,
+            loadPaymentDataRequestCode,
+        )
     }
 
     /**
@@ -143,7 +163,11 @@ class GooglePayActivity : AppCompatActivity() {
      * @see [Getting a result
      * from an Activity](https://developer.android.com/training/basics/intents/result)
      */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    public override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
@@ -194,12 +218,14 @@ class GooglePayActivity : AppCompatActivity() {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
             val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
 
-            val paymentToken = paymentMethodData
+            val paymentToken =
+                paymentMethodData
                     .getJSONObject("tokenizationData")
                     .getString("token")
 
             if (requestBillingAddress) {
-                val billingAddress = paymentMethodData.getJSONObject("info")
+                val billingAddress =
+                    paymentMethodData.getJSONObject("info")
                         .getJSONObject("billingAddress")
 
                 billingName = billingAddress.getString("name")
@@ -208,17 +234,19 @@ class GooglePayActivity : AppCompatActivity() {
                 billingPostalCode = billingAddress.getString("postalCode")
                 billingState = billingAddress.getString("administrativeArea")
                 billingStreet1 = billingAddress.getString("address1")
-                billingStreet2 = listOf(
+                billingStreet2 =
+                    listOf(
                         billingAddress.getString("address2"),
-                        billingAddress.getString("address3")
-                ).filter { s -> s != "" }.joinToString(" ")
+                        billingAddress.getString("address3"),
+                    ).filter { s -> s != "" }.joinToString(" ")
 
                 if (requestPhoneNumber) {
                     billingPhoneNumber = billingAddress.getString("phoneNumber")
                 }
             }
 
-            val tokenParam = TokenizationParam(
+            val tokenParam =
+                TokenizationParam(
                     method = "googlepay",
                     data = paymentToken,
                     billingName = billingName,
@@ -228,13 +256,13 @@ class GooglePayActivity : AppCompatActivity() {
                     billingState = billingState,
                     billingStreet1 = billingStreet1,
                     billingStreet2 = billingStreet2,
-                    billingPhoneNumber = billingPhoneNumber
-            )
+                    billingPhoneNumber = billingPhoneNumber,
+                )
 
             googlePayButton.isClickable = false
 
             val request =
-                    Token.CreateTokenRequestBuilder(tokenization = tokenParam).build()
+                Token.CreateTokenRequestBuilder(tokenization = tokenParam).build()
 
             val listener = CreateTokenRequestListener()
             try {
@@ -242,7 +270,6 @@ class GooglePayActivity : AppCompatActivity() {
             } catch (ex: Exception) {
                 listener.onRequestFailed(ex)
             }
-
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString())
         }
@@ -262,7 +289,6 @@ class GooglePayActivity : AppCompatActivity() {
     }
 
     private inner class CreateTokenRequestListener : RequestListener<Token> {
-
         override fun onRequestSucceed(model: Token) {
             val data = Intent()
             data.putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
@@ -274,17 +300,18 @@ class GooglePayActivity : AppCompatActivity() {
         }
 
         override fun onRequestFailed(throwable: Throwable) {
-
-            val message = when (throwable) {
-                is IOError -> getString(R.string.error_io, throwable.message)
-                is APIError -> throwable.getMessageFromResources(resources)
-                else -> getString(R.string.error_unknown, throwable.message)
-            }
+            val message =
+                when (throwable) {
+                    is IOError -> getString(R.string.error_io, throwable.message)
+                    is APIError -> throwable.getMessageFromResources(resources)
+                    else -> getString(R.string.error_unknown, throwable.message)
+                }
 
             Toast.makeText(
-                    baseContext,
-                    message,
-                    Toast.LENGTH_LONG).show()
+                baseContext,
+                message,
+                Toast.LENGTH_LONG,
+            ).show()
             onBackPressed()
         }
     }

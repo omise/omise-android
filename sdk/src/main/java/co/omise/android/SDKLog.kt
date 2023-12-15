@@ -15,13 +15,19 @@ internal object SDKLog {
         }
     }
 
-    fun e(message: String, e: Throwable) {
+    fun e(
+        message: String,
+        e: Throwable,
+    ) {
         if (BuildConfig.DEBUG) {
             Log.e(TAG, message, e)
         }
     }
 
-    fun wtf(message: String, e: Throwable) {
+    fun wtf(
+        message: String,
+        e: Throwable,
+    ) {
         if (BuildConfig.DEBUG) {
             Log.wtf(TAG, message, e)
         }

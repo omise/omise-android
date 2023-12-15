@@ -19,28 +19,31 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-
 @RunWith(AndroidJUnit4::class)
 class FpxEmailFormFragmentTest {
-
     private val banks = listOf(Bank("affin", "Affin Bank", true))
 
-    private val paymentMethods = mutableListOf(PaymentMethod(
-            name = "fpx",
-            currencies = arrayListOf("MYR"),
-            banks = banks
-    ))
+    private val paymentMethods =
+        mutableListOf(
+            PaymentMethod(
+                name = "fpx",
+                currencies = arrayListOf("MYR"),
+                banks = banks,
+            ),
+        )
 
     private val mockNavigation: PaymentCreatorNavigation = mock()
 
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { capability }.doReturn(Capability(paymentMethods = paymentMethods))
-    }
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { capability }.doReturn(Capability(paymentMethods = paymentMethods))
+        }
 
-    private val fragment = FpxEmailFormFragment().apply {
-        requester = mockRequester
-        navigation = mockNavigation
-    }
+    private val fragment =
+        FpxEmailFormFragment().apply {
+            requester = mockRequester
+            navigation = mockNavigation
+        }
 
     @Before
     fun setup() {

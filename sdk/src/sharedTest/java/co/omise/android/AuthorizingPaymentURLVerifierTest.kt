@@ -13,15 +13,16 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentURLVerifierTest {
-
     private val TEST_AUTHORIZED_URL = "https://pay.omise.co/offsites/ofsp_test_5gfea5g4cg4trkoa4bo/pay"
     private val TEST_RETURN_URL = "http://www.example.com"
+
     @Test
     fun createInstance_createInstanceWithIntent() {
-        val intent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, TEST_AUTHORIZED_URL)
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(TEST_RETURN_URL))
-        }
+        val intent =
+            Intent().apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, TEST_AUTHORIZED_URL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(TEST_RETURN_URL))
+            }
         val verifier = AuthorizingPaymentURLVerifier(intent)
 
         assertEquals(Uri.parse(TEST_AUTHORIZED_URL), verifier.authorizedURL)
@@ -30,10 +31,11 @@ class AuthorizingPaymentURLVerifierTest {
 
     @Test
     fun createInstance_createInstanceWithAuthorizedUrlAndExpectedUrlPatterns() {
-        val verifier = AuthorizingPaymentURLVerifier(
+        val verifier =
+            AuthorizingPaymentURLVerifier(
                 Uri.parse(TEST_AUTHORIZED_URL),
-                listOf(Uri.parse(TEST_RETURN_URL))
-        )
+                listOf(Uri.parse(TEST_RETURN_URL)),
+            )
 
         assertEquals(Uri.parse(TEST_AUTHORIZED_URL), verifier.authorizedURL)
         assertEquals(listOf(Uri.parse(TEST_RETURN_URL)), verifier.expectedReturnURLPatterns)
@@ -41,26 +43,29 @@ class AuthorizingPaymentURLVerifierTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun createInstance_createInstanceWithoutAuthorizedUrl() {
-        val intent = Intent().apply {
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(TEST_RETURN_URL))
-        }
+        val intent =
+            Intent().apply {
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(TEST_RETURN_URL))
+            }
         val verifier = AuthorizingPaymentURLVerifier(intent)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun createInstance_createInstanceWithoutReturnUrls() {
-        val intent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, TEST_AUTHORIZED_URL)
-        }
+        val intent =
+            Intent().apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, TEST_AUTHORIZED_URL)
+            }
         val verifier = AuthorizingPaymentURLVerifier(intent)
     }
 
     @Test
     fun verifyURL_urlWasVerified() {
-        val verifier = AuthorizingPaymentURLVerifier(
+        val verifier =
+            AuthorizingPaymentURLVerifier(
                 Uri.parse(TEST_AUTHORIZED_URL),
-                listOf(Uri.parse(TEST_RETURN_URL))
-        )
+                listOf(Uri.parse(TEST_RETURN_URL)),
+            )
 
         val wasVerified = verifier.verifyURL(Uri.parse(TEST_RETURN_URL))
 
@@ -69,10 +74,11 @@ class AuthorizingPaymentURLVerifierTest {
 
     @Test
     fun verifyURL_urlNotMatchWithReturnUrl() {
-        val verifier = AuthorizingPaymentURLVerifier(
+        val verifier =
+            AuthorizingPaymentURLVerifier(
                 Uri.parse(TEST_AUTHORIZED_URL),
-                listOf(Uri.parse(TEST_RETURN_URL))
-        )
+                listOf(Uri.parse(TEST_RETURN_URL)),
+            )
 
         val wasVerified = verifier.verifyURL(Uri.parse("http://www.test.com"))
 
@@ -81,10 +87,11 @@ class AuthorizingPaymentURLVerifierTest {
 
     @Test
     fun verifyExternalURL_urlHasCustomScheme() {
-        val verifier = AuthorizingPaymentURLVerifier(
+        val verifier =
+            AuthorizingPaymentURLVerifier(
                 Uri.parse(TEST_AUTHORIZED_URL),
-                listOf(Uri.parse("app://test"))
-        )
+                listOf(Uri.parse("app://test")),
+            )
 
         val wasVerified = verifier.verifyExternalURL(Uri.parse("app://test"))
 
@@ -93,10 +100,11 @@ class AuthorizingPaymentURLVerifierTest {
 
     @Test
     fun verifyExternalURL_urlHasWebappScheme() {
-        val verifier = AuthorizingPaymentURLVerifier(
+        val verifier =
+            AuthorizingPaymentURLVerifier(
                 Uri.parse(TEST_AUTHORIZED_URL),
-                listOf(Uri.parse(TEST_RETURN_URL))
-        )
+                listOf(Uri.parse(TEST_RETURN_URL)),
+            )
 
         val wasVerified = verifier.verifyExternalURL(Uri.parse(TEST_RETURN_URL))
 
@@ -105,10 +113,11 @@ class AuthorizingPaymentURLVerifierTest {
 
     @Test
     fun isReady_urlWasReady() {
-        val verifier = AuthorizingPaymentURLVerifier(
+        val verifier =
+            AuthorizingPaymentURLVerifier(
                 Uri.parse(TEST_AUTHORIZED_URL),
-                listOf(Uri.parse(TEST_RETURN_URL))
-        )
+                listOf(Uri.parse(TEST_RETURN_URL)),
+            )
 
         val isReady = verifier.isReady
 

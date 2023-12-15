@@ -27,9 +27,8 @@ data class Token(
     override var livemode: Boolean = false,
     override var location: String? = null,
     override var created: DateTime? = null,
-    override var deleted: Boolean = false
+    override var deleted: Boolean = false,
 ) : Model {
-
     /**
      * The [RequestBuilder] class for creating a Token.
      */

@@ -2,7 +2,6 @@ package co.omise.android.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
 
 /**
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.AppCompatEditText
  * class performs a basic validation check on the input.
  */
 open class OmiseEditText : AppCompatEditText {
-
     val isValid: Boolean
         get() =
             try {
@@ -37,5 +35,6 @@ open class OmiseEditText : AppCompatEditText {
 
 sealed class InputValidationException : Exception() {
     object EmptyInputException : InputValidationException()
+
     object InvalidInputException : InputValidationException()
 }

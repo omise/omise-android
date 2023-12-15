@@ -16,9 +16,9 @@ import okhttp3.RequestBody
  * @param responseType Response class type.
  */
 open class Request<T : Model>(
-        internal val method: String,
-        internal val url: HttpUrl,
-        internal val payload: RequestBody?,
-        internal val responseType: Class<T>,
-        internal val builder: RequestBuilder<T>,
+    internal val method: String,
+    internal val url: HttpUrl,
+    internal val payload: RequestBody?,
+    internal val responseType: Class<T>,
+    internal val builder: RequestBuilder<T>,
 )

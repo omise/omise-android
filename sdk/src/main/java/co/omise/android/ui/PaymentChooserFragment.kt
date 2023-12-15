@@ -13,7 +13,6 @@ import co.omise.android.models.*
  * available payment method options list for the user to choose from.
  */
 internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>() {
-
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
     val capability: Capability by lazy { requireNotNull(arguments?.getParcelable(EXTRA_CAPABILITY)) { "Capability must not be null." } }
@@ -56,7 +55,8 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.PayPay,
             PaymentMethodResource.PointsCiti,
             PaymentMethodResource.GrabPay_RMS,
-            PaymentMethodResource.TouchNGo_Alipay -> item.sourceType?.let(::sendRequest)
+            PaymentMethodResource.TouchNGo_Alipay,
+            -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
             PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()
@@ -70,7 +70,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater,
+    ) {
         inflater.inflate(R.menu.menu_toolbar, menu)
     }
 
@@ -102,9 +105,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
 
         fun newInstance(capability: Capability): PaymentChooserFragment {
             return PaymentChooserFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(EXTRA_CAPABILITY, capability)
-                }
+                arguments =
+                    Bundle().apply {
+                        putParcelable(EXTRA_CAPABILITY, capability)
+                    }
             }
         }
     }

@@ -12,33 +12,34 @@ import co.omise.android.models.Bank
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class DuitNowBankChooserFragmentTest {
-
-    private val banks = listOf(
+    private val banks =
+        listOf(
             Bank("Affin Bank", "affin", true),
             Bank("AGRONet", "agro", false),
-            Bank("Alliance Bank (Personal)", "alliance", true)
-    )
+            Bank("Alliance Bank (Personal)", "alliance", true),
+        )
 
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { amount }.doReturn(40000L)
-        on { currency }.doReturn("myr")
-    }
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { amount }.doReturn(40000L)
+            on { currency }.doReturn("myr")
+        }
 
-    private val fragment = DuitNowOBWBankChooserFragment.newInstance(banks).apply {
-        requester = mockRequester
-    }
+    private val fragment =
+        DuitNowOBWBankChooserFragment.newInstance(banks).apply {
+            requester = mockRequester
+        }
 
     @Before
     fun setUp() {
@@ -63,13 +64,12 @@ class DuitNowBankChooserFragmentTest {
         onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(isEnabled()))
         onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(not(isEnabled())))
         onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(isEnabled()))
-
     }
 
     @Test
     fun clickInstallmentTerm_sendRequestToCreateSource() {
         onView(withId(R.id.recycler_view))
-                .perform(RecyclerViewActions.actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())

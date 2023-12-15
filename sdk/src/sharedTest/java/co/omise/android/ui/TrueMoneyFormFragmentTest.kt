@@ -17,18 +17,18 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-
 @RunWith(AndroidJUnit4::class)
 class TrueMoneyFormFragmentTest {
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { amount }.doReturn(40000L)
+            on { currency }.doReturn("thb")
+        }
 
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { amount }.doReturn(40000L)
-        on { currency }.doReturn("thb")
-    }
-
-    private val fragment = TrueMoneyFormFragment().apply {
-        requester = mockRequester
-    }
+    private val fragment =
+        TrueMoneyFormFragment().apply {
+            requester = mockRequester
+        }
 
     @Before
     fun setUp() {

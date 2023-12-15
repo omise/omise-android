@@ -5,8 +5,10 @@ import okhttp3.RequestBody
 import okio.Buffer
 import org.junit.Assert.assertEquals
 
-
-fun assertRequestBodyEquals(expectedJson: String, actualRequestBody: RequestBody) {
+fun assertRequestBodyEquals(
+    expectedJson: String,
+    actualRequestBody: RequestBody,
+) {
     val buffer = Buffer()
     actualRequestBody.writeTo(buffer)
     val mapper = ObjectMapper()

@@ -16,7 +16,6 @@ import java.util.GregorianCalendar
  * range.
  */
 class ExpiryDateEditText : OmiseEditText {
-
     private var cursorPosition = 0
 
     private var textWatcher = ExpiryDateTextWatcher()
@@ -40,7 +39,10 @@ class ExpiryDateEditText : OmiseEditText {
         inputType = InputType.TYPE_CLASS_NUMBER
     }
 
-    override fun onSelectionChanged(selStart: Int, selEnd: Int) {
+    override fun onSelectionChanged(
+        selStart: Int,
+        selEnd: Int,
+    ) {
         super.onSelectionChanged(selStart, selEnd)
 
         text?.let { setSelection(it.length) }
@@ -61,17 +63,27 @@ class ExpiryDateEditText : OmiseEditText {
 
     private inner class ExpiryDateTextWatcher : TextWatcher {
         var beforeChangedText: String = ""
+
         override fun afterTextChanged(s: Editable?) {
-            //Do nothing
+            // Do nothing
         }
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        override fun beforeTextChanged(
+            s: CharSequence?,
+            start: Int,
+            count: Int,
+            after: Int,
+        ) {
             text?.let { cursorPosition = it.length - selectionStart }
             beforeChangedText = s.toString()
         }
 
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
+        override fun onTextChanged(
+            s: CharSequence,
+            start: Int,
+            before: Int,
+            count: Int,
+        ) {
             // On deleting
             if (s.length < beforeChangedText.length) {
                 if (beforeChangedText[beforeChangedText.length - 1].toString() == DATE_SEPARATOR) {
@@ -122,7 +134,10 @@ class ExpiryDateEditText : OmiseEditText {
     }
 
     @Throws(IllegalArgumentException::class)
-    fun setExpiryDate(month: Int, year: Int) {
+    fun setExpiryDate(
+        month: Int,
+        year: Int,
+    ) {
         if (month < 1 || month > 12 || year < 1 || year > 99) {
             throw IllegalArgumentException("Invalid month or year.")
         }
@@ -138,7 +153,10 @@ class ExpiryDateEditText : OmiseEditText {
     }
 
     interface ExpiryDateChangeListener {
-        fun textFormatted(month: Int?, year: Int?)
+        fun textFormatted(
+            month: Int?,
+            year: Int?,
+        )
     }
 
     private fun formatString(str: String = ""): String {

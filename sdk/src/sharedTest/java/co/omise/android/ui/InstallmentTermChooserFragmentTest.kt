@@ -28,19 +28,22 @@ import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class InstallmentTermChooserFragmentTest {
-
-    private val paymentMethod = PaymentMethod(
+    private val paymentMethod =
+        PaymentMethod(
             name = "installment_bay",
-            installmentTerms = listOf(3, 4, 6, 9, 10))
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { amount }.doReturn(500000L)
-        on { currency }.doReturn("thb")
-        on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
-    }
+            installmentTerms = listOf(3, 4, 6, 9, 10),
+        )
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { amount }.doReturn(500000L)
+            on { currency }.doReturn("thb")
+            on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
+        }
 
-    private val fragment = InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
-        requester = mockRequester
-    }
+    private val fragment =
+        InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
+            requester = mockRequester
+        }
 
     @Before
     fun setUp() {
@@ -64,7 +67,7 @@ class InstallmentTermChooserFragmentTest {
     @Test
     fun clickInstallmentTerm_sendRequestToCreateSource() {
         onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
+            .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())

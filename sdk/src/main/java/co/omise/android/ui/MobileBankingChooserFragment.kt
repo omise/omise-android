@@ -13,13 +13,12 @@ import co.omise.android.models.backendType
  * available Mobile Banking options list for the user to choose from.
  */
 internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingResource>() {
-
     private val allowedBanks: List<SourceType.MobileBanking> by lazy {
         val args = arguments ?: return@lazy emptyList<SourceType.MobileBanking>()
         val paymentMethods = args.getParcelableArray(EXTRA_MOBILE_BANKING_METHODS) as Array<PaymentMethod>
         return@lazy paymentMethods
-                .filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.MobileBanking }
-                .map { (it.backendType as BackendType.Source).sourceType as SourceType.MobileBanking }
+            .filter { it.backendType is BackendType.Source && (it.backendType as BackendType.Source).sourceType is SourceType.MobileBanking }
+            .map { (it.backendType as BackendType.Source).sourceType as SourceType.MobileBanking }
     }
 
     var requester: PaymentCreatorRequester<Source>? = null
@@ -49,10 +48,11 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingRes
         private const val EXTRA_MOBILE_BANKING_METHODS = "MobileBankingChooserFragment.mobileBankingMethods"
 
         fun newInstance(availableBanks: List<PaymentMethod>) =
-                MobileBankingChooserFragment().apply {
-                    arguments = Bundle().apply {
+            MobileBankingChooserFragment().apply {
+                arguments =
+                    Bundle().apply {
                         putParcelableArray(EXTRA_MOBILE_BANKING_METHODS, availableBanks.toTypedArray())
                     }
-                }
+            }
     }
 }

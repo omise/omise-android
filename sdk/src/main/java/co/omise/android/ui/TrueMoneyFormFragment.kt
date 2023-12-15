@@ -24,8 +24,9 @@ class TrueMoneyFormFragment : OmiseFragment() {
     private val submitButton: Button by lazy { button_submit }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(R.layout.fragment_true_money_form, container, false)
     }
@@ -67,13 +68,14 @@ class TrueMoneyFormFragment : OmiseFragment() {
 
         val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
 
-        val request = Source.CreateSourceRequestBuilder(
-            requester.amount,
-            requester.currency,
-            SourceType.TrueMoney
-        )
-            .phoneNumber(phoneNumber)
-            .build()
+        val request =
+            Source.CreateSourceRequestBuilder(
+                requester.amount,
+                requester.currency,
+                SourceType.TrueMoney,
+            )
+                .phoneNumber(phoneNumber)
+                .build()
 
         view?.let { setAllViewsEnabled(it, false) }
         requester.request(request) {

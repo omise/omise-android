@@ -50,11 +50,12 @@ class CountryListDialogFragmentTest {
         var selectedCountry: CountryInfo? = null
         val expectedCountry = CountryInfo.ALL.find { it.code == "US" }
         val dialog = CountryListDialogFragment()
-        dialog.listener = object : CountryListDialogFragment.CountryListDialogListener {
-            override fun onCountrySelected(country: CountryInfo) {
-                selectedCountry = country
+        dialog.listener =
+            object : CountryListDialogFragment.CountryListDialogListener {
+                override fun onCountrySelected(country: CountryInfo) {
+                    selectedCountry = country
+                }
             }
-        }
         scenario.onActivity {
             dialog.show(it.supportFragmentManager, null)
         }
@@ -64,8 +65,8 @@ class CountryListDialogFragmentTest {
             .perform(
                 actionOnItem<ViewHolder>(
                     hasDescendant(withText(expectedCountry!!.name)),
-                    click()
-                )
+                    click(),
+                ),
             )
 
         assertEquals(expectedCountry, selectedCountry)

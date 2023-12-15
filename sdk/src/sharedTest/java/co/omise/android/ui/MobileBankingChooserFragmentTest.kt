@@ -16,36 +16,39 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class MobileBankingChooserFragmentTest {
     private lateinit var fragment: MobileBankingChooserFragment
-    private val paymentMethods = listOf(
+    private val paymentMethods =
+        listOf(
             PaymentMethod(name = "mobile_banking_bay"),
             PaymentMethod(name = "mobile_banking_bbl"),
             PaymentMethod(name = "mobile_banking_kbank"),
             PaymentMethod(name = "mobile_banking_ktb"),
             PaymentMethod(name = "mobile_banking_scb"),
-    )
+        )
 
-    private val mockRequest = mock<PaymentCreatorRequester<Source>> {
-        on { amount }.doReturn(500000L)
-        on { currency }.doReturn("thb")
-    }
+    private val mockRequest =
+        mock<PaymentCreatorRequester<Source>> {
+            on { amount }.doReturn(500000L)
+            on { currency }.doReturn("thb")
+        }
 
     @Before
     fun setUp() {
-        fragment = MobileBankingChooserFragment.newInstance(paymentMethods).apply {
-            requester = mockRequest
-        }
+        fragment =
+            MobileBankingChooserFragment.newInstance(paymentMethods).apply {
+                requester = mockRequest
+            }
         ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
             it.replaceFragment(fragment)
         }
@@ -54,18 +57,28 @@ class MobileBankingChooserFragmentTest {
 
     @Test
     fun displayAllowedBanks_showAllowedBanksFromArgument() {
-        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_bay_title))))
-        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_bbl_title))))
-        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_kbank_title))))
-        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_ktb_title))))
-        onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_scb_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(0),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_bay_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(1),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_bbl_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(2),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_kbank_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(3),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_ktb_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(4),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_mobile_banking_scb_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 
     @Test
     fun clickBank_sendRequestToCreateSource() {
         onView(withId(R.id.recycler_view))
-                .perform(RecyclerViewActions.actionOnItemAtPosition<OmiseItemViewHolder>(0, ViewActions.click()))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<OmiseItemViewHolder>(0, ViewActions.click()))
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequest).request(any(), any())
     }

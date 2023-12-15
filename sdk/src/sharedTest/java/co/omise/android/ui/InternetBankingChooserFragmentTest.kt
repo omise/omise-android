@@ -16,28 +16,29 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class InternetBankingChooserFragmentTest {
-
     private lateinit var fragment: InternetBankingChooserFragment
-    private val paymentMethods = listOf(
+    private val paymentMethods =
+        listOf(
             PaymentMethod(name = "internet_banking_bbl"),
-            PaymentMethod(name = "internet_banking_bay")
-    )
-    private val mockRequest = mock<PaymentCreatorRequester<Source>> {
-        on { amount }.doReturn(500000L)
-        on { currency }.doReturn("thb")
-    }
+            PaymentMethod(name = "internet_banking_bay"),
+        )
+    private val mockRequest =
+        mock<PaymentCreatorRequester<Source>> {
+            on { amount }.doReturn(500000L)
+            on { currency }.doReturn("thb")
+        }
 
     @Before
     fun setUp() {
@@ -48,15 +49,19 @@ class InternetBankingChooserFragmentTest {
 
     @Test
     fun displayAllowedBanks_showAllowedBanksFromArgument() {
-        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bbl_title))))
-        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bay_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(0),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bbl_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(1),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_internet_banking_bay_title))))
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
 
     @Test
     fun clickBank_sendRequestToCreateSource() {
         onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
+            .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequest).request(any(), any())

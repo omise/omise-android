@@ -44,7 +44,6 @@ import java.net.ProtocolException
  * app by default but the Intent callback needs to be handled by the implementer.
  */
 class AuthorizingPaymentActivity : AppCompatActivity() {
-
     private val progressDialog: ProgressView by lazy { ProgressView.newInstance(this) }
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
@@ -63,7 +62,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_authorizing_payment)
 
         supportActionBar?.title = threeDSConfig.uiCustomization?.toolbarCustomization?.headerText
-                ?: getString(R.string.title_authorizing_payment)
+            ?: getString(R.string.title_authorizing_payment)
 
         if (verifier.verifyExternalURL(verifier.authorizedURL)) {
             openDeepLink(verifier.authorizedURL)
@@ -96,13 +95,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                     when (error) {
                         is ProtocolErrorEvent ->
                             OmiseException(
-                                "3D Secure authorization failed: protocol error.", ProtocolException(
+                                "3D Secure authorization failed: protocol error.",
+                                ProtocolException(
                                     """
-                            errorCode=${error.errorMessage.errorCode?.value},
-                            errorDetail=${error.errorMessage.errorDetail},
-                            errorDescription=${error.errorMessage.errorDescription},
-                        """.trimIndent()
-                                )
+                                    errorCode=${error.errorMessage.errorCode?.value},
+                                    errorDetail=${error.errorMessage.errorDetail},
+                                    errorDescription=${error.errorMessage.errorDescription},
+                                    """.trimIndent(),
+                                ),
                             )
 
                         is RuntimeErrorEvent ->
@@ -119,68 +119,92 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun setupWebViewClient() {
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val uri = Uri.parse(url)
-                return if (verifier.verifyURL(uri)) {
-                    finishActivityWithSuccessful(url)
-                    true
-                } else if (verifier.verifyExternalURL(uri)) {
-                    openDeepLink(uri)
-                    true
-                } else {
-                    false
+        webView.webViewClient =
+            object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView,
+                    url: String,
+                ): Boolean {
+                    val uri = Uri.parse(url)
+                    return if (verifier.verifyURL(uri)) {
+                        finishActivityWithSuccessful(url)
+                        true
+                    } else if (verifier.verifyExternalURL(uri)) {
+                        openDeepLink(uri)
+                        true
+                    } else {
+                        false
+                    }
                 }
             }
-        }
-        webView.webChromeClient = object : WebChromeClient() {
-            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                AlertDialog.Builder(this@AuthorizingPaymentActivity)
+        webView.webChromeClient =
+            object : WebChromeClient() {
+                override fun onJsAlert(
+                    view: WebView?,
+                    url: String?,
+                    message: String?,
+                    result: JsResult?,
+                ): Boolean {
+                    AlertDialog.Builder(this@AuthorizingPaymentActivity)
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
                         .setOnCancelListener { result?.cancel() }
                         .show()
-                return true
-            }
+                    return true
+                }
 
-            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                AlertDialog.Builder(this@AuthorizingPaymentActivity)
+                override fun onJsConfirm(
+                    view: WebView?,
+                    url: String?,
+                    message: String?,
+                    result: JsResult?,
+                ): Boolean {
+                    AlertDialog.Builder(this@AuthorizingPaymentActivity)
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
                         .setNegativeButton(android.R.string.cancel) { _, _ -> result?.confirm() }
                         .setOnCancelListener { result?.cancel() }
                         .show()
-                return true
-            }
-
-            override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
-                val promptLayout = LinearLayout(this@AuthorizingPaymentActivity).apply {
-                    layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    orientation = LinearLayout.VERTICAL
+                    return true
                 }
 
-                val promptEditText = AppCompatEditText(this@AuthorizingPaymentActivity).apply {
-                    val margin = resources.getDimension(R.dimen.large_margin).toInt()
-                    layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        setMargins(margin, 0, margin, 0)
-                    }
-                    defaultValue?.let(this::setText)
-                }
-                promptLayout.addView(promptEditText)
+                override fun onJsPrompt(
+                    view: WebView?,
+                    url: String?,
+                    message: String?,
+                    defaultValue: String?,
+                    result: JsPromptResult?,
+                ): Boolean {
+                    val promptLayout =
+                        LinearLayout(this@AuthorizingPaymentActivity).apply {
+                            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                            orientation = LinearLayout.VERTICAL
+                        }
 
-                AlertDialog.Builder(this@AuthorizingPaymentActivity)
+                    val promptEditText =
+                        AppCompatEditText(this@AuthorizingPaymentActivity).apply {
+                            val margin = resources.getDimension(R.dimen.large_margin).toInt()
+                            layoutParams =
+                                LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                ).apply {
+                                    setMargins(margin, 0, margin, 0)
+                                }
+                            defaultValue?.let(this::setText)
+                        }
+                    promptLayout.addView(promptEditText)
+
+                    AlertDialog.Builder(this@AuthorizingPaymentActivity)
                         .setView(promptLayout)
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm(promptEditText.text.toString()) }
                         .setNegativeButton(android.R.string.cancel) { _, _ -> result?.cancel() }
                         .setOnCancelListener { result?.cancel() }
                         .show()
-                return true
+                    return true
+                }
             }
-        }
     }
 
     private fun openDeepLink(uri: Uri) {
@@ -192,7 +216,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE) {
             finishActivityWithSuccessful(data)
@@ -231,21 +259,23 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithSuccessful(returnedUrl: String) {
-        val resultIntent = Intent().apply {
-            putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
-        }
+        val resultIntent =
+            Intent().apply {
+                putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
+                putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
+            }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 
     private fun finishActivityWithSuccessful(completionEvent: CompletionEvent) {
-        val resultIntent = Intent().apply {
-            putExtra(
-                EXTRA_AUTHORIZING_PAYMENT_RESULT,
-                ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value)
-            )
-        }
+        val resultIntent =
+            Intent().apply {
+                putExtra(
+                    EXTRA_AUTHORIZING_PAYMENT_RESULT,
+                    ThreeDS2Completed(completionEvent.sdkTransactionId, completionEvent.transactionStatus.value),
+                )
+            }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
@@ -256,9 +286,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithFailure(throwable: Throwable? = null) {
-        val resultIntent = Intent().apply {
-            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, throwable?.let { Failure(it) })
-        }
+        val resultIntent =
+            Intent().apply {
+                putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, throwable?.let { Failure(it) })
+            }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }

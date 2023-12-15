@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import org.jetbrains.annotations.TestOnly
 
-
 internal class AuthorizingPaymentViewModelFactory(private val activity: Activity) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         ThreeDSConfig.initialize(AuthorizingPaymentConfig.get().threeDSConfig.threeDSConfig)
@@ -25,7 +24,6 @@ internal class AuthorizingPaymentViewModelFactory(private val activity: Activity
 }
 
 internal class AuthorizingPaymentViewModel(private val threeDS: ThreeDS) : ViewModel(), ThreeDSListener {
-
     private val _authentication = MutableLiveData<AuthenticationResult>()
     val authentication: LiveData<AuthenticationResult> = _authentication
 
@@ -64,6 +62,8 @@ internal class AuthorizingPaymentViewModel(private val threeDS: ThreeDS) : ViewM
 
 sealed class AuthenticationResult {
     object AuthenticationUnsupported : AuthenticationResult()
+
     data class AuthenticationCompleted(val completionEvent: CompletionEvent) : AuthenticationResult()
+
     data class AuthenticationFailure(val error: Throwable) : AuthenticationResult()
 }

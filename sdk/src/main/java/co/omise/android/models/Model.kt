@@ -18,6 +18,7 @@ interface Model : Parcelable {
     var id: String?
     var livemode: Boolean
     var location: String?
+
     @get:JsonProperty("created_at")
     var created: DateTime?
     var deleted: Boolean

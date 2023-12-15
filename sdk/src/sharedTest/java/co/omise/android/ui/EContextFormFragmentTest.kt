@@ -1,7 +1,6 @@
 package co.omise.android.ui
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
@@ -17,28 +16,29 @@ import co.omise.android.R
 import co.omise.android.models.Source
 import co.omise.android.models.SupportedEcontext
 import co.omise.android.utils.focus
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class EContextFormFragmentTest {
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { amount }.doReturn(40000L)
+            on { currency }.doReturn("jpy")
+        }
 
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { amount }.doReturn(40000L)
-        on { currency }.doReturn("jpy")
-    }
-
-    private val fragment = EContextFormFragment.newInstance(SupportedEcontext.ConvenienceStore).apply {
-        requester = mockRequester
-    }
+    private val fragment =
+        EContextFormFragment.newInstance(SupportedEcontext.ConvenienceStore).apply {
+            requester = mockRequester
+        }
 
     @Before
     fun setUp() {
@@ -66,11 +66,9 @@ class EContextFormFragmentTest {
 
         onView(withId(R.id.text_full_name_error)).check(matches(withText(R.string.error_invalid_full_name)))
 
-
         onView(withId(R.id.edit_email)).perform(focus(true), focus(false))
 
         onView(withId(R.id.text_email_error)).check(matches(withText(R.string.error_invalid_email)))
-
 
         onView(withId(R.id.edit_phone_number)).perform(focus(true), focus(false))
 
