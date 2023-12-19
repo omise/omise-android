@@ -69,7 +69,7 @@ class ExpiryDateEditText : OmiseEditText {
         }
 
         override fun beforeTextChanged(
-            s: CharSequence?,
+            s: CharSequence,
             start: Int,
             count: Int,
             after: Int,
