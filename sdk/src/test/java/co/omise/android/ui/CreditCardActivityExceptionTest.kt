@@ -11,11 +11,11 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityExceptionTest {
-
     private lateinit var scenario: ActivityScenario<CreditCardActivity>
-    private val intent = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-        putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-    }
+    private val intent =
+        Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+        }
 
     @Before
     fun setUp() {

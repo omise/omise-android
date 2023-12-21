@@ -12,8 +12,10 @@ class AuthorizingPaymentURLVerifier {
     val expectedReturnURLPatterns: List<Uri>
 
     val isReady: Boolean
-        get() = (authorizedURL.toString().isNotEmpty()
-                && expectedReturnURLPatterns.isNotEmpty())
+        get() = (
+            authorizedURL.toString().isNotEmpty() &&
+                expectedReturnURLPatterns.isNotEmpty()
+        )
 
     val authorizedURLString: String
         get() =
@@ -57,8 +59,9 @@ class AuthorizingPaymentURLVerifier {
         for (expectedReturnURLPattern in expectedReturnURLPatterns) {
             val expectedReturnPath = expectedReturnURLPattern.path ?: continue
             if (expectedReturnURLPattern.scheme.equals(uri.scheme, true) &&
-                    expectedReturnURLPattern.host.equals(uri.host, true) &&
-                    path.startsWith(expectedReturnPath)) {
+                expectedReturnURLPattern.host.equals(uri.host, true) &&
+                path.startsWith(expectedReturnPath)
+            ) {
                 return true
             }
         }
@@ -75,7 +78,7 @@ class AuthorizingPaymentURLVerifier {
      */
     fun verifyExternalURL(uri: Uri): Boolean {
         return uri.scheme != "http" &&
-                uri.scheme != "https" &&
-                uri.scheme != "about"
+            uri.scheme != "https" &&
+            uri.scheme != "about"
     }
 }

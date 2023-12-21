@@ -5,7 +5,7 @@ import co.omise.android.models.Model
 /**
  * Listener for [Request] results.
  */
-interface RequestListener<T: Model> {
+interface RequestListener<T : Model> {
     /**
      * Invoked when a [Request] succeeds.
      *

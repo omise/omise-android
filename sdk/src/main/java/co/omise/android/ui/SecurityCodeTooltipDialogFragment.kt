@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.dialog_security_code_tooltip.cvv_image
  * the security code and where it is found on the card.
  */
 class SecurityCodeTooltipDialogFragment : DialogFragment() {
-
     private val cvvImage: ImageView by lazy { cvv_image }
     private val cvvDescriptionText: TextView by lazy { cvv_description_text }
     private val closeButton: ImageButton by lazy { close_button }
@@ -33,7 +32,11 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
         cardBrand = arguments?.getParcelable(EXTRA_CARD_BRAND)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         return inflater.inflate(R.layout.dialog_security_code_tooltip, container)
     }
 

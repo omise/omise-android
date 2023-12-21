@@ -24,7 +24,6 @@ import kotlin.coroutines.suspendCoroutine
  * @see [Security Best Practices](https://www.omise.co/security-best-practices)
  */
 class Client(publicKey: String) {
-
     private var httpClient: OkHttpClient
     private val background: Executor
     private val handler = Handler()
@@ -41,25 +40,33 @@ class Client(publicKey: String) {
      * @param request  The [Request] to be sent.
      * @param listener The [RequestListener] to listen for request response.
      */
-    fun <T : Model> send(request: Request<T>, listener: RequestListener<T>) {
+    fun <T : Model> send(
+        request: Request<T>,
+        listener: RequestListener<T>,
+    ) {
         background.execute { Invocation(handler, httpClient, request, listener).invoke() }
     }
 
-    suspend fun <T : Model> send(request: Request<T>) = suspendCoroutine<T> { continuation ->
-        send(request, object : RequestListener<T> {
-            override fun onRequestSucceed(model: T) {
-                continuation.resume(model)
-            }
+    suspend fun <T : Model> send(request: Request<T>) =
+        suspendCoroutine<T> { continuation ->
+            send(
+                request,
+                object : RequestListener<T> {
+                    override fun onRequestSucceed(model: T) {
+                        continuation.resume(model)
+                    }
 
-            override fun onRequestFailed(throwable: Throwable) {
-                continuation.resumeWithException(throwable)
-            }
-        })
-    }
+                    override fun onRequestFailed(throwable: Throwable) {
+                        continuation.resumeWithException(throwable)
+                    }
+                },
+            )
+        }
 
     private fun buildHttpClient(config: Config): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        val spec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+        val spec =
+            ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .build()
 
@@ -69,9 +76,9 @@ class Client(publicKey: String) {
         }
 
         return builder
-                .addInterceptor(Configurer(config))
-                .connectionSpecs(listOf(spec))
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build()
+            .addInterceptor(Configurer(config))
+            .connectionSpecs(listOf(spec))
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
     }
 }

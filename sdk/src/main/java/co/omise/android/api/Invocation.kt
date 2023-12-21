@@ -23,24 +23,25 @@ import java.io.IOException
  * @param serializer Serializer class used to deserialize responses.
  */
 internal class Invocation<T : Model>(
-        private val replyHandler: Handler,
-        private val httpClient: OkHttpClient,
-        private val request: co.omise.android.api.Request<T>,
-        private val listener: RequestListener<T>,
-        private val serializer: Serializer = Serializer()
+    private val replyHandler: Handler,
+    private val httpClient: OkHttpClient,
+    private val request: co.omise.android.api.Request<T>,
+    private val listener: RequestListener<T>,
+    private val serializer: Serializer = Serializer(),
 ) {
-
     /**
      * Calling the Invoke function starts the Request process.
      */
     fun invoke() {
         try {
-            val call = httpClient.newTypedCall(
+            val call =
+                httpClient.newTypedCall(
                     Request.Builder()
-                            .method(request.method, request.payload)
-                            .url(request.url)
-                            .build(),
-                    request.responseType)
+                        .method(request.method, request.payload)
+                        .url(request.url)
+                        .build(),
+                    request.responseType,
+                )
 
             processCall(call)
         } catch (e: IOException) {
@@ -83,16 +84,18 @@ internal class Invocation<T : Model>(
  * @param clazz Expected response Class.
  */
 class TypedCall(
-        private val call: Call,
-        val clazz: Class<Model>
+    private val call: Call,
+    val clazz: Class<Model>,
 ) {
-
     fun execute(): Response {
         return call.execute()
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-fun OkHttpClient.newTypedCall(okRequest: Request, clazz: Class<*>): TypedCall {
+fun OkHttpClient.newTypedCall(
+    okRequest: Request,
+    clazz: Class<*>,
+): TypedCall {
     return TypedCall(newCall(okRequest), clazz as Class<Model>)
 }

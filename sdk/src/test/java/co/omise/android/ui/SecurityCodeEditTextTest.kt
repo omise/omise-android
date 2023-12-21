@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SecurityCodeEditTextTest {
-
     private val editText = SecurityCodeEditText(ApplicationProvider.getApplicationContext())
 
     @Test

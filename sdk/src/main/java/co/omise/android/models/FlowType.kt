@@ -12,11 +12,12 @@ import kotlinx.android.parcel.Parceler
  * @see [Sources API](https://www.omise.co/sources-api)
  */
 sealed class FlowType(
-        @JsonValue open val name: String?
+    @JsonValue open val name: String?,
 ) {
-
     object Redirect : FlowType("redirect")
+
     object Offline : FlowType("offline")
+
     data class Unknown(override val name: String?) : FlowType(name)
 
     companion object {
@@ -24,11 +25,11 @@ sealed class FlowType(
         @JsonCreator
         @JvmStatic
         fun creator(name: String?): FlowType =
-                when (name) {
-                    "redirect" -> Redirect
-                    "offline" -> Offline
-                    else -> Unknown(name)
-                }
+            when (name) {
+                "redirect" -> Redirect
+                "offline" -> Offline
+                else -> Unknown(name)
+            }
     }
 }
 
@@ -37,7 +38,10 @@ object FlowTypeParceler : Parceler<FlowType> {
         return FlowType.creator(parcel.readString())
     }
 
-    override fun FlowType.write(parcel: Parcel, flags: Int) {
+    override fun FlowType.write(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         parcel.writeString(name)
     }
 }

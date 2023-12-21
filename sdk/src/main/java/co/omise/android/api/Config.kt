@@ -13,10 +13,9 @@ import co.omise.android.BuildConfig
  * @see Client
  */
 class Config(
-        private val apiVersion: String = API_VERSION,
-        private val publicKey: String
+    private val apiVersion: String = API_VERSION,
+    private val publicKey: String,
 ) {
-
     private val userAgent: String
 
     init {
@@ -25,8 +24,8 @@ class Config(
 
     private fun buildUserAgent(): String {
         return "OmiseAndroid/" + BuildConfig.VERSION_NAME +
-                " Android/" + Build.VERSION.SDK_INT +
-                " Model/" + Build.MODEL
+            " Android/" + Build.VERSION.SDK_INT +
+            " Model/" + Build.MODEL
     }
 
     /**

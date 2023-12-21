@@ -56,29 +56,36 @@ import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityTest {
-
     private lateinit var scenario: ActivityScenario<CreditCardActivity>
-    private val intent = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-        putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-    }
-    private val application = (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as Application)
-    private val activityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            (activity as? CreditCardActivity)?.setClient(mockClient)
+    private val intent =
+        Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
         }
+    private val application = (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as Application)
+    private val activityLifecycleCallbacks =
+        object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityCreated(
+                activity: Activity,
+                savedInstanceState: Bundle?,
+            ) {
+                (activity as? CreditCardActivity)?.setClient(mockClient)
+            }
 
-        override fun onActivityStarted(activity: Activity) {}
+            override fun onActivityStarted(activity: Activity) {}
 
-        override fun onActivityResumed(activity: Activity) {}
+            override fun onActivityResumed(activity: Activity) {}
 
-        override fun onActivityPaused(activity: Activity) {}
+            override fun onActivityPaused(activity: Activity) {}
 
-        override fun onActivityStopped(activity: Activity) {}
+            override fun onActivityStopped(activity: Activity) {}
 
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+            override fun onActivitySaveInstanceState(
+                activity: Activity,
+                outState: Bundle,
+            ) {}
 
-        override fun onActivityDestroyed(activity: Activity) {}
-    }
+            override fun onActivityDestroyed(activity: Activity) {}
+        }
     private val mockClient: Client = mock()
 
     @Before
@@ -125,7 +132,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
         onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
         onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
@@ -169,7 +176,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click()),
             )
 
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
@@ -186,7 +193,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click()),
             )
         onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("125 Harbour Dr"))
         onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("St. John's"))
@@ -206,7 +213,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click()),
             )
         onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("125 Harbour Dr"))
         onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("St. John's"))
@@ -226,7 +233,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("Canada")), click()),
             )
         onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("Newfoundland and Labrador"))
         onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("A1C 6N6"))
@@ -240,7 +247,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
 
         onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("BN1 1EE"))
@@ -254,7 +261,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
 
         onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeText("000022"))
@@ -268,7 +275,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
 
         onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("St. John's,"))
@@ -282,11 +289,9 @@ class CreditCardActivityTest {
 
         onView(withId(R.id.edit_card_name)).check(matches(hasFocus()))
 
-
         onView(withId(R.id.edit_card_name)).perform(pressImeActionButton())
 
         onView(withId(R.id.edit_expiry_date)).check(matches(hasFocus()))
-
 
         onView(withId(R.id.edit_expiry_date)).perform(pressImeActionButton())
 
@@ -332,7 +337,7 @@ class CreditCardActivityTest {
                 securityCode = "123",
                 country = "TH",
             ),
-            (tokenRequestCaptor.firstValue.builder as Token.CreateTokenRequestBuilder).card
+            (tokenRequestCaptor.firstValue.builder as Token.CreateTokenRequestBuilder).card,
         )
     }
 
@@ -352,7 +357,7 @@ class CreditCardActivityTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click())
+                actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
         onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
         onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
@@ -373,7 +378,7 @@ class CreditCardActivityTest {
                 street1 = "311 Sanders Hill Rd",
                 postalCode = "14145",
             ),
-            (tokenRequestCaptor.firstValue.builder as Token.CreateTokenRequestBuilder).card
+            (tokenRequestCaptor.firstValue.builder as Token.CreateTokenRequestBuilder).card,
         )
     }
 
@@ -406,10 +411,12 @@ private fun typeNumberText(numberText: String): ViewAction =
     object : ViewAction {
         override fun getDescription(): String = "Type number text: $numberText"
 
-        override fun getConstraints(): Matcher<View> =
-            allOf(isDisplayed(), isAssignableFrom(OmiseEditText::class.java))
+        override fun getConstraints(): Matcher<View> = allOf(isDisplayed(), isAssignableFrom(OmiseEditText::class.java))
 
-        override fun perform(uiController: UiController?, view: View?) {
+        override fun perform(
+            uiController: UiController?,
+            view: View?,
+        ) {
             val editText = view as? OmiseEditText ?: return
             numberText.forEach { editText.append(it.toString()) }
         }

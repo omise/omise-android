@@ -35,7 +35,11 @@ class CountryListDialogFragment : DialogFragment() {
         return R.style.OmiseFullScreenDialogTheme
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         return inflater.inflate(R.layout.dialog_country_list, container)
     }
 
@@ -52,9 +56,11 @@ class CountryListDialogFragment : DialogFragment() {
 
         val adapter = CountryListAdapter(::onCountryClick)
         listView.adapter = adapter
-        adapter.submitList(CountryInfo.ALL.sortedWith { o1, o2 ->
-            Collator.getInstance().compare(o1.name, o2.name)
-        })
+        adapter.submitList(
+            CountryInfo.ALL.sortedWith { o1, o2 ->
+                Collator.getInstance().compare(o1.name, o2.name)
+            },
+        )
     }
 
     private fun onCountryClick(country: CountryInfo) {

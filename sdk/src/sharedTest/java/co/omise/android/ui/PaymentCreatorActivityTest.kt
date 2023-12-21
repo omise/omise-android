@@ -18,7 +18,6 @@ import co.omise.android.R
 import co.omise.android.models.Capability
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Rule
@@ -27,20 +26,20 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PaymentCreatorActivityTest {
-
     @get:Rule
     val intentRule = IntentsRule()
 
     private val capability = Capability()
-    private val intent = Intent(
+    private val intent =
+        Intent(
             ApplicationProvider.getApplicationContext(),
-            PaymentCreatorActivity::class.java
-    ).apply {
-        putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-        putExtra(OmiseActivity.EXTRA_AMOUNT, 50000)
-        putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
-        putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
-    }
+            PaymentCreatorActivity::class.java,
+        ).apply {
+            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+            putExtra(OmiseActivity.EXTRA_AMOUNT, 50000)
+            putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
+            putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
+        }
 
     @Test
     fun initialActivity_collectExtrasIntent() {
@@ -63,12 +62,14 @@ class PaymentCreatorActivityTest {
 
     @Test
     fun creditCardResult_resultOk() {
-        val creditCardIntent = Intent().apply {
-            putExtra(EXTRA_TOKEN, Token())
-        }
-        val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
-            it.performActivityResult(100, RESULT_OK, creditCardIntent)
-        }
+        val creditCardIntent =
+            Intent().apply {
+                putExtra(EXTRA_TOKEN, Token())
+            }
+        val scenario =
+            ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+                it.performActivityResult(100, RESULT_OK, creditCardIntent)
+            }
 
         assertEquals(RESULT_OK, scenario.result.resultCode)
     }

@@ -6,7 +6,6 @@ import androidx.annotation.IntRange
  * Configuration for 3DS2.
  */
 class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.android.threeds.core.ThreeDSConfig) {
-
     companion object {
         private var instance: ThreeDSConfig? = null
         internal val default: ThreeDSConfig = Builder().build()
@@ -36,18 +35,22 @@ class ThreeDSConfig private constructor(internal val threeDSConfig: co.omise.and
          *
          * @param uiCustomization UI customization data.
          */
-        fun uiCustomization(uiCustomization: UiCustomization): Builder = apply {
-            this.uiCustomization = uiCustomization
-        }
+        fun uiCustomization(uiCustomization: UiCustomization): Builder =
+            apply {
+                this.uiCustomization = uiCustomization
+            }
 
         /**
          * Maximum timeout for the challenge flow.
          *
          * @param timeout Timeout in minute. The acceptable timeout is 5-99 mins.
          */
-        fun timeout(@IntRange(from = 5, to = 99) timeout: Int): Builder = apply {
-            this.timeout = timeout
-        }
+        fun timeout(
+            @IntRange(from = 5, to = 99) timeout: Int,
+        ): Builder =
+            apply {
+                this.timeout = timeout
+            }
 
         /**
          * Build an instance of [ThreeDSConfig].

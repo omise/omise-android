@@ -12,20 +12,20 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class APIErrorExtensionsTest {
-
     private val resources = ApplicationProvider.getApplicationContext<Application>().resources
     private val serializer = Serializer()
 
     @Test
     fun getMessageFromResources_invalidCardNumber() {
-        val response = """
-           {
-              "object": "error",
-              "location": "https://www.omise.co/api-errors#invalid-card",
-              "code": "invalid_card",
-              "message": "number can't be blank and brand not supported (unknown)"
-            }
-        """.trimIndent()
+        val response =
+            """
+            {
+               "object": "error",
+               "location": "https://www.omise.co/api-errors#invalid-card",
+               "code": "invalid_card",
+               "message": "number can't be blank and brand not supported (unknown)"
+             }
+            """.trimIndent()
         val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
         val actualMessage = error.getMessageFromResources(resources)
@@ -35,14 +35,15 @@ class APIErrorExtensionsTest {
 
     @Test
     fun getMessageFromResources_invalidExpiryDate() {
-        val response = """
-           {
-              "object": "error",
-              "location": "https://www.omise.co/api-errors#invalid-card",
-              "code": "invalid_card",
-              "message": "expiration date cannot be in the past"
-            }
-        """.trimIndent()
+        val response =
+            """
+            {
+               "object": "error",
+               "location": "https://www.omise.co/api-errors#invalid-card",
+               "code": "invalid_card",
+               "message": "expiration date cannot be in the past"
+             }
+            """.trimIndent()
         val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
         val actualMessage = error.getMessageFromResources(resources)
@@ -52,14 +53,15 @@ class APIErrorExtensionsTest {
 
     @Test
     fun getMessageFromResources_emptyCardHolderName() {
-        val response = """
+        val response =
+            """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "name can't be blank"
             }
-        """.trimIndent()
+            """.trimIndent()
         val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
         val actualMessage = error.getMessageFromResources(resources)
@@ -69,14 +71,15 @@ class APIErrorExtensionsTest {
 
     @Test
     fun getMessageFromResources_unsupportedBrand() {
-        val response = """
+        val response =
+            """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "brand not supported (unknown)"
             }
-        """.trimIndent()
+            """.trimIndent()
         val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
         val actualMessage = error.getMessageFromResources(resources)
@@ -86,14 +89,15 @@ class APIErrorExtensionsTest {
 
     @Test
     fun getMessageFromResources_otherError() {
-        val response = """
+        val response =
+            """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#invalid-card",
               "code": "invalid_card",
               "message": "something when wrong"
             }
-        """.trimIndent()
+            """.trimIndent()
         val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
         val actualMessage = error.getMessageFromResources(resources)
@@ -103,14 +107,15 @@ class APIErrorExtensionsTest {
 
     @Test
     fun getMessageFromResources_authenticationFailure() {
-        val response = """
+        val response =
+            """
             {
               "object": "error",
               "location": "https://www.omise.co/api-errors#authentication-failure",
               "code": "authentication_failure",
               "message": "authentication failed"
             }
-        """.trimIndent()
+            """.trimIndent()
         val error = serializer.deserialize(response.byteInputStream(), APIError::class.java)
 
         val actualMessage = error.getMessageFromResources(resources)
@@ -120,13 +125,14 @@ class APIErrorExtensionsTest {
 
     @Test
     fun createInvalidCardReasons_createFromErrorMessages() {
-        val errorMessagesWithErrorReasons = listOf(
+        val errorMessagesWithErrorReasons =
+            listOf(
                 Pair("number can't be blank and brand not supported (unknown)", InvalidCardReason.InvalidCardNumber),
                 Pair("expiration date cannot be in the past", InvalidCardReason.InvalidExpirationDate),
                 Pair("name can't be blank", InvalidCardReason.EmptyCardHolderName),
                 Pair("brand not supported (unknown)", InvalidCardReason.UnsupportedBrand),
-                Pair("something when wrong", InvalidCardReason.Unknown("Something when wrong"))
-        )
+                Pair("something when wrong", InvalidCardReason.Unknown("Something when wrong")),
+            )
 
         errorMessagesWithErrorReasons.forEach {
             assertEquals(it.second, InvalidCardReason.creator(it.first))
@@ -135,7 +141,8 @@ class APIErrorExtensionsTest {
 
     @Test
     fun createBadRequestReasons_createFromErrorMessages() {
-        val errorMessagesWithErrorReasons = listOf(
+        val errorMessagesWithErrorReasons =
+            listOf(
                 Pair("amount must be at least 150", BadRequestReason.AmountIsLessThanValidAmount(150)),
                 Pair("amount must be greater than 150", BadRequestReason.AmountIsLessThanValidAmount(150)),
                 Pair("amount must be less than 50000", BadRequestReason.AmountIsGreaterThanValidAmount(50000)),
@@ -143,8 +150,8 @@ class APIErrorExtensionsTest {
                 Pair("name cannot be blank", BadRequestReason.EmptyName),
                 Pair("name is too long (maximum is 10 characters)", BadRequestReason.NameIsTooLong(10)),
                 Pair("email is in invalid format", BadRequestReason.InvalidEmail),
-                Pair("and phone_number must contain 10-11 digit characters", BadRequestReason.InvalidPhoneNumber)
-        )
+                Pair("and phone_number must contain 10-11 digit characters", BadRequestReason.InvalidPhoneNumber),
+            )
 
         errorMessagesWithErrorReasons.forEach {
             assertEquals(it.second, BadRequestReason.creator(it.first))

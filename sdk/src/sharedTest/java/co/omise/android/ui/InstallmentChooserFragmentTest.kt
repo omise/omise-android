@@ -14,16 +14,16 @@ import co.omise.android.R
 import co.omise.android.models.PaymentMethod
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
-import org.mockito.Mockito.mock
-import org.mockito.kotlin.verify
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class InstallmentChooserFragmentTest {
-
-    private val paymentMethods = listOf(
+    private val paymentMethods =
+        listOf(
             PaymentMethod(name = "installment_bay"),
             PaymentMethod(name = "installment_bbl"),
             PaymentMethod(name = "installment_mbb"),
@@ -33,12 +33,13 @@ class InstallmentChooserFragmentTest {
             PaymentMethod(name = "installment_scb"),
             PaymentMethod(name = "installment_citi"),
             PaymentMethod(name = "installment_ttb"),
-            PaymentMethod(name = "installment_uob")
-    )
+            PaymentMethod(name = "installment_uob"),
+        )
     private val mockNavigation: PaymentCreatorNavigation = mock()
-    private val fragment = InstallmentChooserFragment.newInstance(paymentMethods).apply {
-        navigation = mockNavigation
-    }
+    private val fragment =
+        InstallmentChooserFragment.newInstance(paymentMethods).apply {
+            navigation = mockNavigation
+        }
 
     @Before
     fun setUp() {
@@ -48,19 +49,39 @@ class InstallmentChooserFragmentTest {
 
     @Test
     fun displayAllowedInstallmentBanks_showAllowedInstallmentBanksFromArgument() {
-        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText(R.string.payment_method_installment_bay_title))))
-        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText(R.string.payment_method_installment_bbl_title))))
-        onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText(R.string.payment_method_installment_mbb_title))))
-        onView(withListId(R.id.recycler_view).atPosition(3)).check(matches(hasDescendant(withText(R.string.payment_method_installment_first_choice_title))))
-        onView(withListId(R.id.recycler_view).atPosition(4)).check(matches(hasDescendant(withText(R.string.payment_method_installment_kasikorn_title))))
-        onView(withListId(R.id.recycler_view).atPosition(5)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ktc_title))))
-        onView(withListId(R.id.recycler_view).atPosition(6)).check(matches(hasDescendant(withText(R.string.payment_method_installment_scb_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(0),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_bay_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(1),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_bbl_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(2),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_mbb_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(3),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_first_choice_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(4),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_kasikorn_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(5),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_ktc_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(6),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_scb_title))))
 
-        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
 
-        onView(withListId(R.id.recycler_view).atPosition(7)).check(matches(hasDescendant(withText(R.string.payment_method_installment_citi_title))))
-        onView(withListId(R.id.recycler_view).atPosition(8)).check(matches(hasDescendant(withText(R.string.payment_method_installment_ttb_title))))
-        onView(withListId(R.id.recycler_view).atPosition(9)).check(matches(hasDescendant(withText(R.string.payment_method_installment_uob_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(7),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_citi_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(8),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_ttb_title))))
+        onView(
+            withListId(R.id.recycler_view).atPosition(9),
+        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_uob_title))))
 
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }

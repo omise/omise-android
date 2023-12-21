@@ -11,7 +11,9 @@ import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
-import kotlinx.android.synthetic.main.fragment_true_money_form.*
+import kotlinx.android.synthetic.main.fragment_true_money_form.button_submit
+import kotlinx.android.synthetic.main.fragment_true_money_form.edit_phone_number
+import kotlinx.android.synthetic.main.fragment_true_money_form.text_phone_number_error
 
 /**
  * TrueMoneyFormFragment is the UI class for handling TrueMoney payment method.
@@ -24,8 +26,9 @@ class TrueMoneyFormFragment : OmiseFragment() {
     private val submitButton: Button by lazy { button_submit }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(R.layout.fragment_true_money_form, container, false)
     }
@@ -67,13 +70,14 @@ class TrueMoneyFormFragment : OmiseFragment() {
 
         val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
 
-        val request = Source.CreateSourceRequestBuilder(
-            requester.amount,
-            requester.currency,
-            SourceType.TrueMoney
-        )
-            .phoneNumber(phoneNumber)
-            .build()
+        val request =
+            Source.CreateSourceRequestBuilder(
+                requester.amount,
+                requester.currency,
+                SourceType.TrueMoney,
+            )
+                .phoneNumber(phoneNumber)
+                .build()
 
         view?.let { setAllViewsEnabled(it, false) }
         requester.request(request) {
