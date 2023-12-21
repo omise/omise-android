@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## V4.13.0
+* **ADDED:** Add kotlin linting standards using ktlint-gradle library
+* **CHANGED:** Removed nullability from text field callbacks
+* **PATCH:** Fix api call for Atome source
+
+## V4.13.0
 * **ADDED:** Support new source type `truemoney_jumpapp`
 
 ## V4.12.0
