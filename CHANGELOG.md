@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## V4.13.0
+## V4.13.1
 * **ADDED:** Add kotlin linting standards using ktlint-gradle library
 * **CHANGED:** Removed nullability from text field callbacks
 * **PATCH:** Fix api call for Atome source
