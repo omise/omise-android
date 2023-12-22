@@ -58,9 +58,31 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Run unit tests
+      - name: Create AVD and generate snapshot for caching
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master' && steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          profile: Nexus 6
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run tests and sonar
+        uses: reactivecircus/android-emulator-runner@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # Switch to jacocoTestReport when instrumentation flakiness is fixed
-        run: ./gradlew sdk:jacocoUnitTestReport sdk:sonar
+        with:
+          api-level: ${{ matrix.api-level }}
+          disable-animations: true
+          force-avd-creation: false
+          profile: Nexus 6
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        run: |
+          if [ "${{ steps.pr_target_branch.outputs.target_branch }}" == "master" ]; then
+            ./gradlew sdk:jacocoTestReport sdk:sonar
+          else
+            ./gradlew sdk:jacocoTestReport -x createProductionDebugCoverageReport sdk:sonar
+          fi
 
