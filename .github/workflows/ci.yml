@@ -94,7 +94,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    run: ./gradlew sdk:sonar
+    steps:
+      - name: Upload report
+        run: ./gradlew sdk:sonar
 
 
 
