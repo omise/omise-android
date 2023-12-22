@@ -63,13 +63,14 @@ jobs:
 
   instrumentation-tests:
     name: Instrumentation tests with coverage report
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master' && steps.avd-cache.outputs.cache-hit != 'true'
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
     runs-on: macos-latest
     strategy:
       matrix:
         api-level: [ 29 ]
     steps:
       - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
