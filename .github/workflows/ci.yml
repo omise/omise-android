@@ -34,6 +34,7 @@ jobs:
 
   unit-tests:
     name: Unit tests with coverage report
+    if: ${{ github.ref != 'refs/heads/master' }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -63,12 +64,17 @@ jobs:
 
   instrumentation-tests:
     name: Instrumentation tests with coverage report
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
+    if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: macos-latest
     strategy:
       matrix:
         api-level: [ 29 ]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # required for SonarCloud
+
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -94,9 +100,15 @@ jobs:
     name: Sonar report upload
     runs-on: ubuntu-latest
     needs: [build, unit-tests, instrumentation-tests]
+    if: ${{ (needs.unit-tests.outcome == 'skipped' && needs.instrumentation-tests.outcome == 'success') || (needs.instrumentation-tests.outcome == 'skipped' && needs.unit-tests.outcome == 'success') }}
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # required for SonarCloud
+
       - name: Upload report
         run: ./gradlew sdk:sonar
 
