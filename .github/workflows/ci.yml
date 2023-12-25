@@ -97,6 +97,20 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew sdk:jacocoTestReport
 
+  debug-info:
+    name: Debug Information
+    runs-on: ubuntu-latest
+    needs: [ build, unit-tests, instrumentation-tests ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Debug Info
+        run:
+          echo "tests outcome:
+            ${{ needs.unit-tests.outcome }}, instrumentation-tests outcome: ${{ needs.instrumentation-tests.outcome }}"
+
+
   sonar:
     name: Sonar report upload
     runs-on: ubuntu-latest
