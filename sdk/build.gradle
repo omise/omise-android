@@ -216,7 +216,7 @@ repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
-// Use locally to generate full report
+
 tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
     reports {
         xml.required = true
@@ -252,7 +252,7 @@ sonar {
         property 'sonar.organization', 'omise'
         property 'sonar.projectName', 'omise-android'
         property 'sonar.projectKey', 'omise_omise-android'
-        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/coverage/androidTest/production/debug/connected/report.xml"
         property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/testProductionDebugUnitTest"
         property 'sonar.androidLint.reportPaths', "${project.buildDir}/reports/lint-results-productionDebug.xml"
     }
