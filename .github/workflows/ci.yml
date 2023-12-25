@@ -101,6 +101,7 @@ jobs:
     name: Debug Information
     runs-on: ubuntu-latest
     needs: [ build, unit-tests, instrumentation-tests ]
+    if: always()
     strategy:
       fail-fast: false
     steps:
