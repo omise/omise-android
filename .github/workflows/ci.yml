@@ -76,6 +76,15 @@ jobs:
         with:
           fetch-depth: 0 # required for SonarCloud
 
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -110,10 +119,10 @@ jobs:
 
       - name: Debug Info - Unit tests
         run: |
-          echo "Unit Tests Outcome: ${{ needs.unit-tests.outcome }}"
+          echo "Unit Tests Outcome: ${{ needs.unit-tests.result }}"
       - name: Debug Info - Instrumentation Tests Outcome
         run: |
-          echo "Instrumentation Tests Outcome: ${{ needs.instrumentation-tests.outcome }}"
+          echo "Instrumentation Tests Outcome: ${{ needs.instrumentation-tests.result }}"
 
 
   sonar:
@@ -122,7 +131,7 @@ jobs:
     needs: [build, unit-tests, instrumentation-tests]
     strategy:
       fail-fast: false
-    if: ${{ (needs.unit-tests.outcome == 'skipped' && needs.instrumentation-tests.outcome == 'success') || (needs.instrumentation-tests.outcome == 'skipped' && needs.unit-tests.outcome == 'success') }}
+    if: ${{ (needs.unit-tests.result == 'skipped' && needs.instrumentation-tests.result == 'success') || (needs.instrumentation-tests.result == 'skipped' && needs.unit-tests.result == 'success') }}
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
