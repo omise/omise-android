@@ -131,7 +131,7 @@ jobs:
     needs: [build, unit-tests, instrumentation-tests]
     strategy:
       fail-fast: false
-    if: ${{ (needs.unit-tests.result == 'skipped' && needs.instrumentation-tests.result == 'success') || (needs.instrumentation-tests.result == 'skipped' && needs.unit-tests.result == 'success') }}
+    if: ${{ always() && ((needs.unit-tests.result == 'skipped' && needs.instrumentation-tests.result == 'success') || (needs.instrumentation-tests.result == 'skipped' && needs.unit-tests.result == 'success')) }}
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
