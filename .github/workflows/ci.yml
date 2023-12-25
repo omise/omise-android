@@ -105,10 +105,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Debug Info
+      - name: Debug Info - Unit tests
         run:
-          echo "tests outcome:
-            ${{ needs.unit-tests.outcome }}, instrumentation-tests outcome: ${{ needs.instrumentation-tests.outcome }}"
+          echo "Unit Tests Outcome: ${{ needs.unit-tests.outcome }}"
+      - name: Debug Info - Instrumentation Tests Outcome
+        run:
+          echo "Instrumentation Tests Outcome: ${{ needs.instrumentation-tests.outcome }}"
 
 
   sonar:
