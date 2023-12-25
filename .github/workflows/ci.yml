@@ -16,15 +16,8 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
 
       - name: Run ktlint
         run: ./gradlew sdk:ktlintCheck
@@ -32,7 +25,7 @@ jobs:
       - name: Build project
         run: ./gradlew sdk:build -x test
 
-  unit-tests and coverage:
+  unit-tests-and-coverage:
     name: Unit tests with coverage report
     if: ${{ github.ref != 'refs/heads/master' }}
     runs-on: ubuntu-latest
@@ -49,20 +42,13 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
 
       - name: Run unit tests
         run: ./gradlew sdk:jacocoTestReport -x createProductionDebugCoverageReport sdk:sonar
 
-  instrumentation-tests and coverage:
+  instrumentation-tests-and-coverage:
     name: Instrumentation tests with coverage report
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: macos-latest
@@ -75,6 +61,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # required for SonarCloud
+
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
 
       - name: AVD cache
         uses: actions/cache@v3
