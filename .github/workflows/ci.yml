@@ -37,7 +37,6 @@ jobs:
       - name: Run unit tests
         run: |
           ./gradlew sdk:testProductionDebugUnitTest
-
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v2
