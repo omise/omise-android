@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew sdk:jacocoTestReport -x createProductionDebugCoverageReport sdk:sonar
 
   instrumentation-unit-tests-with-coverage:
-    name: Instrumentation tests with coverage report
+    name: Instrumentation and unit tests with coverage report
     if: github.ref == 'refs/heads/master' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master')
     runs-on: macos-latest
     needs: build
@@ -64,6 +64,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # required for SonarCloud
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
