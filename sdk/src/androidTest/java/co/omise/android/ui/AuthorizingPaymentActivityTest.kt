@@ -88,11 +88,12 @@ class AuthorizingPaymentActivityTest {
     private val transaction: Transaction = mock()
     private val progressView: ProgressView = mock()
     private val mockViewModel: AuthorizingPaymentViewModel = mock()
-    private val viewModelFactory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return mockViewModel as T
+    private val viewModelFactory =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return mockViewModel as T
+            }
         }
-    }
 
     private val authenticationStatus = MutableLiveData<AuthenticationStatus>()
     private val isLoading = MutableLiveData<Boolean>()
@@ -313,7 +314,8 @@ class AuthorizingPaymentActivityTest {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
 
-        val html = """
+        val html =
+            """
             <!DOCTYPE html>
             <html>
             <body>
@@ -326,7 +328,7 @@ class AuthorizingPaymentActivityTest {
             </script>
             </body>
             </html>
-       """.trimIndent()
+            """.trimIndent()
         onView(withId(R.id.authorizing_payment_webview)).perform(loadHtml(html))
         onWebView()
             .withElement(findElement(Locator.ID, "button"))
@@ -339,10 +341,11 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun openDeepLink_whenAuthorizeUriIsDeepLinkThenOpenExternalApp() {
-        val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
+            }
         intending(hasData(Uri.parse(deepLinkAuthorizeUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
@@ -350,7 +353,7 @@ class AuthorizingPaymentActivityTest {
             allOf(
                 IntentMatchers.hasAction(Intent.ACTION_VIEW),
                 hasData(Uri.parse(deepLinkAuthorizeUrl)),
-            )
+            ),
         )
     }
 
@@ -403,8 +406,8 @@ class AuthorizingPaymentActivityTest {
         intended(
             allOf(
                 IntentMatchers.hasAction(Intent.ACTION_VIEW),
-                hasData(Uri.parse(deepLinkAuthorizeUrl))
-            )
+                hasData(Uri.parse(deepLinkAuthorizeUrl)),
+            ),
         )
     }
 

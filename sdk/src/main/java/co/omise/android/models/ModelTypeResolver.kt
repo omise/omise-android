@@ -36,11 +36,17 @@ class ModelTypeResolver : TypeIdResolverBase() {
         return idFromValueAndType(value, value::class.java)
     }
 
-    override fun idFromValueAndType(value: Any, suggestedType: Class<*>): String {
+    override fun idFromValueAndType(
+        value: Any,
+        suggestedType: Class<*>,
+    ): String {
         return reverse(getKnownTypes())[suggestedType] ?: ""
     }
 
-    override fun typeFromId(context: DatabindContext, id: String): JavaType? {
+    override fun typeFromId(
+        context: DatabindContext,
+        id: String,
+    ): JavaType? {
         val klass = getKnownTypes()[id] ?: return null
         return context.typeFactory.constructSimpleType(klass, arrayOf())
     }

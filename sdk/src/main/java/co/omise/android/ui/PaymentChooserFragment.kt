@@ -6,14 +6,19 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import co.omise.android.R
-import co.omise.android.models.*
+import co.omise.android.models.Capability
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import co.omise.android.models.SupportedEcontext
+import co.omise.android.models.installmentMethods
+import co.omise.android.models.internetBankingMethods
+import co.omise.android.models.mobileBankingMethods
 
 /**
  * PaymentChooserFragment is the UI class, extended from base [OmiseListFragment] to show
  * available payment method options list for the user to choose from.
  */
 internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>() {
-
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
     val capability: Capability by lazy { requireNotNull(arguments?.getParcelable(EXTRA_CAPABILITY)) { "Capability must not be null." } }
@@ -29,7 +34,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
             PaymentMethodResource.InternetBankings -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
             PaymentMethodResource.MobileBankings -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
-            PaymentMethodResource.ConvenienceStore -> navigation.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
+            PaymentMethodResource.ConvenienceStore ->
+                navigation.navigateToEContextForm(
+                    SupportedEcontext.ConvenienceStore,
+                )
             PaymentMethodResource.PayEasy -> navigation.navigateToEContextForm(SupportedEcontext.PayEasy)
             PaymentMethodResource.Netbanking -> navigation.navigateToEContextForm(SupportedEcontext.Netbanking)
             PaymentMethodResource.TrueMoney -> navigation.navigateToTrueMoneyForm()
@@ -55,8 +63,9 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.GrabPay,
             PaymentMethodResource.PayPay,
             PaymentMethodResource.PointsCiti,
-            PaymentMethodResource.GrabPay_RMS,
-            PaymentMethodResource.TouchNGo_Alipay -> item.sourceType?.let(::sendRequest)
+            PaymentMethodResource.GrabPayRMS,
+            PaymentMethodResource.TouchNGoAlipay,
+            -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
             PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()
@@ -70,7 +79,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater,
+    ) {
         inflater.inflate(R.menu.menu_toolbar, menu)
     }
 
@@ -102,9 +114,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
 
         fun newInstance(capability: Capability): PaymentChooserFragment {
             return PaymentChooserFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(EXTRA_CAPABILITY, capability)
-                }
+                arguments =
+                    Bundle().apply {
+                        putParcelable(EXTRA_CAPABILITY, capability)
+                    }
             }
         }
     }

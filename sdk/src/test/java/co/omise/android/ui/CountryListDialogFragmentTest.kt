@@ -1,14 +1,17 @@
 package co.omise.android.ui
 
 import android.content.Intent
-import androidx.recyclerview.widget.RecyclerView.*
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.*
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import co.omise.android.R
@@ -50,11 +53,12 @@ class CountryListDialogFragmentTest {
         var selectedCountry: CountryInfo? = null
         val expectedCountry = CountryInfo.ALL.find { it.code == "US" }
         val dialog = CountryListDialogFragment()
-        dialog.listener = object : CountryListDialogFragment.CountryListDialogListener {
-            override fun onCountrySelected(country: CountryInfo) {
-                selectedCountry = country
+        dialog.listener =
+            object : CountryListDialogFragment.CountryListDialogListener {
+                override fun onCountrySelected(country: CountryInfo) {
+                    selectedCountry = country
+                }
             }
-        }
         scenario.onActivity {
             dialog.show(it.supportFragmentManager, null)
         }
@@ -62,10 +66,10 @@ class CountryListDialogFragmentTest {
         onView(withId(R.id.country_list))
             .inRoot(isDialog())
             .perform(
-                actionOnItem<ViewHolder>(
+                actionOnItem<RecyclerView.ViewHolder>(
                     hasDescendant(withText(expectedCountry!!.name)),
-                    click()
-                )
+                    click(),
+                ),
             )
 
         assertEquals(expectedCountry, selectedCountry)

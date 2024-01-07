@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Bank(
-        var name: String? = null,
-        var code: String? = null,
-        var active: Boolean? = false,
+    var name: String? = null,
+    var code: String? = null,
+    var active: Boolean? = false,
 ) : Parcelable

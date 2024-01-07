@@ -11,13 +11,13 @@ import org.json.JSONObject
 import kotlin.jvm.Throws
 
 class GooglePay(
-        private val pKey: String,
-        private val cardNetworks: ArrayList<String>,
-        private val price: Long,
-        private val currencyCode: String,
-        merchantId: String,
-        private val requestBillingAddress: Boolean = false,
-        private val requestPhoneNumber: Boolean = false
+    private val pKey: String,
+    private val cardNetworks: ArrayList<String>,
+    private val price: Long,
+    private val currencyCode: String,
+    merchantId: String,
+    private val requestBillingAddress: Boolean = false,
+    private val requestPhoneNumber: Boolean = false,
 ) {
     private val gateway = "omise"
 
@@ -27,10 +27,11 @@ class GooglePay(
      * @return Google Pay API base request object.
      * @throws JSONException
      */
-    private val baseRequest = JSONObject().apply {
-        put("apiVersion", 2)
-        put("apiVersionMinor", 0)
-    }
+    private val baseRequest =
+        JSONObject().apply {
+            put("apiVersion", 2)
+            put("apiVersionMinor", 0)
+        }
 
     /**
      *
@@ -45,9 +46,15 @@ class GooglePay(
     private fun gatewayTokenizationSpecification(): JSONObject {
         return JSONObject().apply {
             put("type", "PAYMENT_GATEWAY")
-            put("parameters", JSONObject(mapOf(
-                    "gateway" to gateway,
-                    "gatewayMerchantId" to pKey)))
+            put(
+                "parameters",
+                JSONObject(
+                    mapOf(
+                        "gateway" to gateway,
+                        "gatewayMerchantId" to pKey,
+                    ),
+                ),
+            )
         }
     }
 
@@ -59,22 +66,25 @@ class GooglePay(
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
     private fun allowedCardNetworks(): JSONArray {
-        val networksMapping= hashMapOf(
-            "American Express" to "AMEX",
-            "JCB" to "JCB",
-            "MasterCard" to "MASTERCARD",
-            "Visa" to "VISA"
-        )
+        val networksMapping =
+            hashMapOf(
+                "American Express" to "AMEX",
+                "JCB" to "JCB",
+                "MasterCard" to "MASTERCARD",
+                "Visa" to "VISA",
+            )
 
         var newList = arrayListOf<String>()
-        if (this.cardNetworks.isNotEmpty())
-            for(network in this.cardNetworks) {
-                if (networksMapping[network] != null)
+        if (this.cardNetworks.isNotEmpty()) {
+            for (network in this.cardNetworks) {
+                if (networksMapping[network] != null) {
                     newList.add(networksMapping[network].toString())
+                }
             }
-        else
+        } else {
             // If merchant doesn't decide to use capabilities
             newList = arrayListOf("AMEX", "JCB", "MASTERCARD", "VISA")
+        }
 
         return JSONArray(newList)
     }
@@ -87,8 +97,12 @@ class GooglePay(
      * @return Allowed card authentication methods.
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
-    private val allowedCardAuthMethods = JSONArray(listOf(
-            "PAN_ONLY"))
+    private val allowedCardAuthMethods =
+        JSONArray(
+            listOf(
+                "PAN_ONLY",
+            ),
+        )
 
     /**
      * Describe your app's support for the CARD payment method.
@@ -103,16 +117,19 @@ class GooglePay(
      */
     private fun baseCardPaymentMethod(): JSONObject {
         return JSONObject().apply {
-
-            val parameters = JSONObject().apply {
-                put("allowedAuthMethods", allowedCardAuthMethods)
-                put("allowedCardNetworks", allowedCardNetworks())
-                put("billingAddressRequired", requestBillingAddress)
-                put("billingAddressParameters", JSONObject().apply {
-                    put("format", "FULL")
-                    put("phoneNumberRequired", requestPhoneNumber)
-                })
-            }
+            val parameters =
+                JSONObject().apply {
+                    put("allowedAuthMethods", allowedCardAuthMethods)
+                    put("allowedCardNetworks", allowedCardNetworks())
+                    put("billingAddressRequired", requestBillingAddress)
+                    put(
+                        "billingAddressParameters",
+                        JSONObject().apply {
+                            put("format", "FULL")
+                            put("phoneNumberRequired", requestPhoneNumber)
+                        },
+                    )
+                }
 
             put("type", "CARD")
             put("parameters", parameters)
@@ -141,7 +158,10 @@ class GooglePay(
      * @see [TransactionInfo](https://developers.google.com/pay/api/android/reference/object.TransactionInfo)
      */
     @Throws(JSONException::class)
-    private fun getTransactionInfo(price: Long, currencyCode: String): JSONObject {
+    private fun getTransactionInfo(
+        price: Long,
+        currencyCode: String,
+    ): JSONObject {
         val priceUnits = Amount(price, currencyCode).toString(2)
 
         return JSONObject().apply {
@@ -163,7 +183,6 @@ class GooglePay(
             baseRequest.apply {
                 put("allowedPaymentMethods", JSONArray().put(baseCardPaymentMethod()))
             }
-
         } catch (e: JSONException) {
             null
         }
@@ -177,7 +196,7 @@ class GooglePay(
      * @see [MerchantInfo](https://developers.google.com/pay/api/android/reference/object.MerchantInfo)
      */
     private val merchantInfo: JSONObject =
-            JSONObject().put("merchantId", merchantId)
+        JSONObject().put("merchantId", merchantId)
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the
@@ -187,10 +206,12 @@ class GooglePay(
      */
     fun createPaymentsClient(activity: Activity): PaymentsClient {
         var env = WalletConstants.ENVIRONMENT_PRODUCTION
-        if (isTestMode())
+        if (isTestMode()) {
             env = WalletConstants.ENVIRONMENT_TEST
+        }
 
-        val walletOptions = Wallet.WalletOptions.Builder()
+        val walletOptions =
+            Wallet.WalletOptions.Builder()
                 .setEnvironment(env)
                 .build()
 
@@ -219,4 +240,3 @@ class GooglePay(
         return pKey.startsWith("pkey_test_")
     }
 }
-

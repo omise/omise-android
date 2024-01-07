@@ -2,9 +2,14 @@ package co.omise.android.ui
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.Source
@@ -17,18 +22,18 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-
 @RunWith(AndroidJUnit4::class)
 class TrueMoneyFormFragmentTest {
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { amount }.doReturn(40000L)
+            on { currency }.doReturn("thb")
+        }
 
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { amount }.doReturn(40000L)
-        on { currency }.doReturn("thb")
-    }
-
-    private val fragment = TrueMoneyFormFragment().apply {
-        requester = mockRequester
-    }
+    private val fragment =
+        TrueMoneyFormFragment().apply {
+            requester = mockRequester
+        }
 
     @Before
     fun setUp() {

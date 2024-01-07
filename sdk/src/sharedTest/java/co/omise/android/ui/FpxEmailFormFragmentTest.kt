@@ -2,9 +2,15 @@ package co.omise.android.ui
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.R
 import co.omise.android.models.Bank
@@ -19,28 +25,31 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-
 @RunWith(AndroidJUnit4::class)
 class FpxEmailFormFragmentTest {
-
     private val banks = listOf(Bank("affin", "Affin Bank", true))
 
-    private val paymentMethods = mutableListOf(PaymentMethod(
-            name = "fpx",
-            currencies = arrayListOf("MYR"),
-            banks = banks
-    ))
+    private val paymentMethods =
+        mutableListOf(
+            PaymentMethod(
+                name = "fpx",
+                currencies = arrayListOf("MYR"),
+                banks = banks,
+            ),
+        )
 
     private val mockNavigation: PaymentCreatorNavigation = mock()
 
-    private val mockRequester: PaymentCreatorRequester<Source> = mock {
-        on { capability }.doReturn(Capability(paymentMethods = paymentMethods))
-    }
+    private val mockRequester: PaymentCreatorRequester<Source> =
+        mock {
+            on { capability }.doReturn(Capability(paymentMethods = paymentMethods))
+        }
 
-    private val fragment = FpxEmailFormFragment().apply {
-        requester = mockRequester
-        navigation = mockNavigation
-    }
+    private val fragment =
+        FpxEmailFormFragment().apply {
+            requester = mockRequester
+            navigation = mockNavigation
+        }
 
     @Before
     fun setup() {

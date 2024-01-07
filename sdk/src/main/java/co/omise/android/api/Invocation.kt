@@ -22,19 +22,19 @@ import java.io.IOException
  * @param serializer Serializer class used to deserialize responses.
  */
 internal class Invocation<T : Model>(
-        private val replyHandler: Handler,
-        private val httpClient: OkHttpClient,
-        private val request: co.omise.android.api.Request<T>,
-        private val listener: RequestListener<T>,
-        private val serializer: Serializer = Serializer()
+    private val replyHandler: Handler,
+    private val httpClient: OkHttpClient,
+    private val request: co.omise.android.api.Request<T>,
+    private val listener: RequestListener<T>,
+    private val serializer: Serializer = Serializer(),
 ) {
-
     /**
      * Calling the Invoke function starts the Request process.
      */
     fun invoke() {
         try {
-            val call = httpClient.newTypedCall(
+            val call =
+                httpClient.newTypedCall(
                     Request.Builder()
                             .method(request.method, request.payload)
                             .url(request.url)
@@ -88,7 +88,6 @@ class TypedCall(
         val clazz: Class<Model>,
         val errorClazz: Class<Error>
 ) {
-
     fun execute(): Response {
         return call.execute()
     }

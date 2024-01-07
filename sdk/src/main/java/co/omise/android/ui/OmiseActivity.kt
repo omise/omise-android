@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
  * OmiseActivity is the base class for all other activities in the SDK.
  */
 abstract class OmiseActivity : AppCompatActivity() {
-
     companion object {
         const val EXTRA_PKEY = "OmiseActivity.publicKey"
         const val EXTRA_SOURCE_OBJECT = "OmiseActivity.sourceObject"
@@ -32,7 +31,11 @@ abstract class OmiseActivity : AppCompatActivity() {
     }
 
     @VisibleForTesting
-    fun performActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun performActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         onActivityResult(requestCode, resultCode, data)
     }
 }

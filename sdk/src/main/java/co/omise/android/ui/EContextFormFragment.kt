@@ -11,9 +11,9 @@ import android.widget.TextView
 import co.omise.android.R
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
-import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
+import co.omise.android.models.SupportedEcontext
 import kotlinx.android.synthetic.main.fragment_econtext_form.button_submit
 import kotlinx.android.synthetic.main.fragment_econtext_form.edit_email
 import kotlinx.android.synthetic.main.fragment_econtext_form.edit_full_name
@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_econtext_form.text_phone_number_e
  * EContextFormFragment is the UI class for handling all EContext payment methods.
  */
 class EContextFormFragment : OmiseFragment() {
-
     var requester: PaymentCreatorRequester<Source>? = null
 
     private val type: SupportedEcontext? by lazy {
@@ -41,25 +40,30 @@ class EContextFormFragment : OmiseFragment() {
     private val submitButton: Button by lazy { button_submit }
     private val formInputWithErrorTexts: List<Pair<OmiseEditText, TextView>> by lazy {
         listOf(
-                Pair(fullNameEdit, fullNameErrorText),
-                Pair(emailEdit, emailErrorText),
-                Pair(phoneNumberEdit, phoneNumberErrorText)
+            Pair(fullNameEdit, fullNameErrorText),
+            Pair(emailEdit, emailErrorText),
+            Pair(phoneNumberEdit, phoneNumberErrorText),
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         return inflater.inflate(R.layout.fragment_econtext_form, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        title = when (type) {
-            SupportedEcontext.ConvenienceStore -> getString(R.string.title_convenience_store)
-            SupportedEcontext.PayEasy -> getString(R.string.title_pay_easy)
-            SupportedEcontext.Netbanking -> getString(R.string.title_netbank)
-            null -> getString(R.string.econtext_title)
-        }
+        title =
+            when (type) {
+                SupportedEcontext.ConvenienceStore -> getString(R.string.title_convenience_store)
+                SupportedEcontext.PayEasy -> getString(R.string.title_pay_easy)
+                SupportedEcontext.Netbanking -> getString(R.string.title_netbank)
+                null -> getString(R.string.econtext_title)
+            }
         setHasOptionsMenu(true)
 
         formInputWithErrorTexts.forEach {
@@ -70,7 +74,10 @@ class EContextFormFragment : OmiseFragment() {
         submitButton.setOnClickListener(::submitForm)
     }
 
-    private fun updateErrorText(view: View, hasFocus: Boolean) {
+    private fun updateErrorText(
+        view: View,
+        hasFocus: Boolean,
+    ) {
         val editText = view as OmiseEditText
         val errorText = formInputWithErrorTexts.first { it.first == editText }.second
 
@@ -80,17 +87,19 @@ class EContextFormFragment : OmiseFragment() {
             return
         }
 
-        errorText.text = when (editText) {
-            fullNameEdit -> getString(R.string.error_invalid_full_name)
-            emailEdit -> getString(R.string.error_invalid_email)
-            phoneNumberEdit -> getString(R.string.error_invalid_phone_number)
-            else -> getString(R.string.error_unknown_without_reason)
-        }
+        errorText.text =
+            when (editText) {
+                fullNameEdit -> getString(R.string.error_invalid_full_name)
+                emailEdit -> getString(R.string.error_invalid_email)
+                phoneNumberEdit -> getString(R.string.error_invalid_phone_number)
+                else -> getString(R.string.error_unknown_without_reason)
+            }
         errorText.visibility = VISIBLE
     }
 
     private fun updateSubmitButton() {
-        val isFormValid = formInputWithErrorTexts.map { it.first.isValid }
+        val isFormValid =
+            formInputWithErrorTexts.map { it.first.isValid }
                 .reduce { acc, b -> acc && b }
         submitButton.isEnabled = isFormValid
     }
@@ -102,7 +111,8 @@ class EContextFormFragment : OmiseFragment() {
         val email = emailEdit.text?.toString()?.trim().orEmpty()
         val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
 
-        val request = Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.Econtext)
+        val request =
+            Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.Econtext)
                 .name(fullName)
                 .email(email)
                 .phoneNumber(phoneNumber)
@@ -116,10 +126,13 @@ class EContextFormFragment : OmiseFragment() {
 
     companion object {
         private const val EXTRA_ECONTEXT_TYPE = "EContextFormFragment.econtextType"
-        fun newInstance(eContext: SupportedEcontext): EContextFormFragment = EContextFormFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(EXTRA_ECONTEXT_TYPE, eContext)
+
+        fun newInstance(eContext: SupportedEcontext): EContextFormFragment =
+            EContextFormFragment().apply {
+                arguments =
+                    Bundle().apply {
+                        putParcelable(EXTRA_ECONTEXT_TYPE, eContext)
+                    }
             }
-        }
     }
 }

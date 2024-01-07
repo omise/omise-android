@@ -25,7 +25,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SecurityCodeTooltipDialogFragmentTest {
-
     @Test
     fun createDialog_brandIsNull() {
         val argument = Bundle()
@@ -37,11 +36,11 @@ class SecurityCodeTooltipDialogFragmentTest {
         }
 
         onView(withId(R.id.cvv_image))
-                .inRoot(isDialog())
-                .check(matches(withImageResource(R.drawable.cvv_3_digits)))
+            .inRoot(isDialog())
+            .check(matches(withImageResource(R.drawable.cvv_3_digits)))
         onView(withId(R.id.cvv_description_text))
-                .inRoot(isDialog())
-                .check(matches(withText(R.string.cvv_tooltip_3_digits)))
+            .inRoot(isDialog())
+            .check(matches(withText(R.string.cvv_tooltip_3_digits)))
     }
 
     @Test
@@ -57,11 +56,11 @@ class SecurityCodeTooltipDialogFragmentTest {
         }
 
         onView(withId(R.id.cvv_image))
-                .inRoot(isDialog())
-                .check(matches(withImageResource(R.drawable.cvv_3_digits)))
+            .inRoot(isDialog())
+            .check(matches(withImageResource(R.drawable.cvv_3_digits)))
         onView(withId(R.id.cvv_description_text))
-                .inRoot(isDialog())
-                .check(matches(withText(R.string.cvv_tooltip_3_digits)))
+            .inRoot(isDialog())
+            .check(matches(withText(R.string.cvv_tooltip_3_digits)))
     }
 
     @Test
@@ -77,27 +76,28 @@ class SecurityCodeTooltipDialogFragmentTest {
         }
 
         onView(withId(R.id.cvv_image))
-                .inRoot(isDialog())
-                .check(matches(withImageResource(R.drawable.cvv_4_digits)))
+            .inRoot(isDialog())
+            .check(matches(withImageResource(R.drawable.cvv_4_digits)))
         onView(withId(R.id.cvv_description_text))
-                .inRoot(isDialog())
-                .check(matches(withText(R.string.cvv_tooltip_4_digits)))
+            .inRoot(isDialog())
+            .check(matches(withText(R.string.cvv_tooltip_4_digits)))
     }
 
-    private fun withImageResource(@DrawableRes imageRes: Int): Matcher<View> =
-            object : TypeSafeMatcher<View>() {
-                override fun describeTo(description: Description?) {
-                    description
-                            ?.appendText("with image from resource id:")
-                            ?.appendValue(imageRes)
-                }
-
-                override fun matchesSafely(item: View?): Boolean {
-                    val imageView = item as? ImageView ?: return false
-                    val actualBitmap = (imageView.drawable as BitmapDrawable).bitmap
-                    val expectedBitmap = BitmapFactory.decodeResource(imageView.resources, imageRes)
-                    return actualBitmap.sameAs(expectedBitmap)
-                }
-
+    private fun withImageResource(
+        @DrawableRes imageRes: Int,
+    ): Matcher<View> =
+        object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description?) {
+                description
+                    ?.appendText("with image from resource id:")
+                    ?.appendValue(imageRes)
             }
+
+            override fun matchesSafely(item: View?): Boolean {
+                val imageView = item as? ImageView ?: return false
+                val actualBitmap = (imageView.drawable as BitmapDrawable).bitmap
+                val expectedBitmap = BitmapFactory.decodeResource(imageView.resources, imageRes)
+                return actualBitmap.sameAs(expectedBitmap)
+            }
+        }
 }

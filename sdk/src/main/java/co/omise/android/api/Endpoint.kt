@@ -17,7 +17,6 @@ import java.util.HashMap
  *
  */
 abstract class Endpoint {
-
     /**
      * The scheme to use, defaults to HTTPS.
      *
@@ -45,8 +44,8 @@ abstract class Endpoint {
 
     fun buildUrl(): HttpUrl.Builder {
         return HttpUrl.Builder()
-                .scheme(scheme())
-                .host(host())
+            .scheme(scheme())
+            .host(host())
     }
 
     companion object {
@@ -54,25 +53,27 @@ abstract class Endpoint {
          * Class containing all the information the "VAULT" endpoint.
          */
         @JvmField
-        val VAULT: Endpoint = object : Endpoint() {
-            override fun host(): String = OMISE_VAULT
+        val VAULT: Endpoint =
+            object : Endpoint() {
+                override fun host(): String = OMISE_VAULT
 
-            override fun authenticationKey(config: Config): String {
-                return config.publicKey()
+                override fun authenticationKey(config: Config): String {
+                    return config.publicKey()
+                }
             }
-        }
 
         /**
          * Class containing all the information the "API" endpoint.
          */
         @JvmField
-        val API: Endpoint = object : Endpoint() {
-            override fun host(): String = OMISE_API
+        val API: Endpoint =
+            object : Endpoint() {
+                override fun host(): String = OMISE_API
 
-            override fun authenticationKey(config: Config): String {
-                return config.publicKey()
+                override fun authenticationKey(config: Config): String {
+                    return config.publicKey()
+                }
             }
-        }
 
         @JvmStatic
         val allEndpoints: List<Endpoint>

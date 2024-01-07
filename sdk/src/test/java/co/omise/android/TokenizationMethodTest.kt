@@ -9,32 +9,35 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class TokenizationMethodTest {
-
     @Test
     fun addTokenizationToPaymentMethodCapability() {
-        val paymentMethodList: List<PaymentMethod> = (1..10).map {
-            PaymentMethod(
+        val paymentMethodList: List<PaymentMethod> =
+            (1..10).map {
+                PaymentMethod(
                     "Method no: $it",
                     listOf("thb, usd, myr, sgd, jpy"),
                     listOf("VISA", "MASTER", "LASER"),
-                    listOf(1, 2, 4, 6))
-        }
-        val tokenizationMethodList: List<String> = listOf(
+                    listOf(1, 2, 4, 6),
+                )
+            }
+        val tokenizationMethodList: List<String> =
+            listOf(
                 "googlepay",
-                "kanpay"
+                "kanpay",
             )
-        val capability = Capability(
+        val capability =
+            Capability(
                 mutableListOf("a", "b", "c", "d"),
                 paymentMethodList as MutableList<PaymentMethod>?,
                 tokenizationMethodList,
-                false)
+                false,
+            )
 
-        capability.paymentMethods?.any{ it.name == "Method no: 1" }?.let { assertTrue(it) }
-        capability.paymentMethods?.any{ it.name == "googlepay" }?.let { assertTrue(it) }
-        capability.paymentMethods?.any{ it.name == "kanpay" }?.let { assertTrue(it) }
+        capability.paymentMethods?.any { it.name == "Method no: 1" }?.let { assertTrue(it) }
+        capability.paymentMethods?.any { it.name == "googlepay" }?.let { assertTrue(it) }
+        capability.paymentMethods?.any { it.name == "kanpay" }?.let { assertTrue(it) }
     }
 
     @Test
@@ -45,7 +48,6 @@ class TokenizationMethodTest {
         assertEquals(TokenizationMethod.GooglePay, gpayToken)
         assertEquals(TokenizationMethod.Card, card)
     }
-
 
     @Test
     fun cannotCreateTokenizationMethodFromInvalidName() {

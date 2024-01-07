@@ -28,6 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Run ktlint
+        run: ./gradlew sdk:ktlintCheck
+
       - name: Build project
         env:
           NETCETERA_LICENSE_KEY: ${{ secrets.NETCETERA_LICENSE_KEY }}

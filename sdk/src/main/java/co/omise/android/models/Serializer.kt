@@ -48,17 +48,25 @@ class Serializer {
     var localDateFormatter: DateTimeFormatter = ISODateTimeFormat.date()
 
     init {
-        objectMapper = ObjectMapper()
-                .registerModule(JodaModule()
-                        .addSerializer(DateTime::class.java, DateTimeSerializer()
-                                .withFormat(JacksonJodaDateFormat(dateTimeFormatter), 0)
+        objectMapper =
+            ObjectMapper()
+                .registerModule(
+                    JodaModule()
+                        .addSerializer(
+                            DateTime::class.java,
+                            DateTimeSerializer()
+                                .withFormat(JacksonJodaDateFormat(dateTimeFormatter), 0),
                         )
-                        .addSerializer(LocalDate::class.java, LocalDateSerializer()
-                                .withFormat(JacksonJodaDateFormat(localDateFormatter), 0)
-                        )
+                        .addSerializer(
+                            LocalDate::class.java,
+                            LocalDateSerializer()
+                                .withFormat(JacksonJodaDateFormat(localDateFormatter), 0),
+                        ),
                 )
-                .setDefaultPropertyInclusion(JsonInclude.Value.construct(
-                        JsonInclude.Include.ALWAYS, JsonInclude.Include.NON_NULL)
+                .setDefaultPropertyInclusion(
+                    JsonInclude.Value.construct(
+                        JsonInclude.Include.ALWAYS, JsonInclude.Include.NON_NULL,
+                    ),
                 )
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
@@ -76,7 +84,10 @@ class Serializer {
      * @throws IOException on general I/O error.
      */
     @Throws(IOException::class)
-    fun <T : Model> deserialize(input: InputStream, klass: Class<*>): T {
+    fun <T : Model> deserialize(
+        input: InputStream,
+        klass: Class<*>,
+    ): T {
         return objectMapper.readerFor(klass).readValue(input)
     }
 
@@ -90,7 +101,10 @@ class Serializer {
      * @throws IOException on general I/O error.
      */
     @Throws(IOException::class)
-    fun <T : Error> deserialize(input: InputStream, klass: Class<T>): T {
+    fun <T : Error> deserialize(
+        input: InputStream,
+        klass: Class<T>,
+    ): T {
         return objectMapper.readerFor(klass).readValue(input)
     }
 
@@ -114,7 +128,10 @@ class Serializer {
      * @throws IOException on general I/O error.
      */
     @Throws(IOException::class)
-    fun <T : Model> serializeRequestBuilder(outputStream: OutputStream, builder: RequestBuilder<T>) {
+    fun <T : Model> serializeRequestBuilder(
+        outputStream: OutputStream,
+        builder: RequestBuilder<T>,
+    ) {
         objectMapper.writerFor(builder.javaClass).writeValue(outputStream, builder)
     }
 

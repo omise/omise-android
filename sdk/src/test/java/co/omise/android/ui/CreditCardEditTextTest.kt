@@ -9,7 +9,6 @@ import org.robolectric.Robolectric.buildActivity
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardEditTextTest {
-
     private val activityController = buildActivity(Activity::class.java)
     private val editText = CreditCardEditText(activityController.get())
 

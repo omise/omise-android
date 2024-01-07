@@ -6,14 +6,15 @@ import org.junit.Test
 class TokenTest {
     @Test
     fun createToken_shouldHaveCorrectPayload() {
-        val cardParam = CardParam(
-            number = "4242424242424242",
-            name = "John Doe",
-            expirationMonth = 12,
-            expirationYear = 2034,
-            securityCode = "123",
-            country = "TH",
-        )
+        val cardParam =
+            CardParam(
+                number = "4242424242424242",
+                name = "John Doe",
+                expirationMonth = 12,
+                expirationYear = 2034,
+                securityCode = "123",
+                country = "TH",
+            )
 
         val request = Token.CreateTokenRequestBuilder(card = cardParam).build()
 
@@ -29,24 +30,26 @@ class TokenTest {
                   "country":"TH"
                }
             } 
-        """.trimIndent(), request.payload!!
+            """.trimIndent(),
+            request.payload!!,
         )
     }
 
     @Test
     fun createToken_shouldHaveCorrectPayloadIfBillingAddressParamsAreProvided() {
-        val cardParam = CardParam(
-            number = "4242424242424242",
-            name = "John Doe",
-            expirationMonth = 12,
-            expirationYear = 2034,
-            securityCode = "123",
-            country = "US",
-            state = "New York",
-            city = "Strykersville",
-            street1 = "311 Sanders Hill Rd",
-            postalCode = "14145",
-        )
+        val cardParam =
+            CardParam(
+                number = "4242424242424242",
+                name = "John Doe",
+                expirationMonth = 12,
+                expirationYear = 2034,
+                securityCode = "123",
+                country = "US",
+                state = "New York",
+                city = "Strykersville",
+                street1 = "311 Sanders Hill Rd",
+                postalCode = "14145",
+            )
 
         val request = Token.CreateTokenRequestBuilder(card = cardParam).build()
 
@@ -66,25 +69,27 @@ class TokenTest {
                   "postal_code":"14145"
                }
             } 
-        """.trimIndent(), request.payload!!
+            """.trimIndent(),
+            request.payload!!,
         )
     }
 
     @Test
     fun createToken_shouldHaveCorrectPayloadIfStreet2IsProvided() {
-        val cardParam = CardParam(
-            number = "4242424242424242",
-            name = "John Doe",
-            expirationMonth = 12,
-            expirationYear = 2034,
-            securityCode = "123",
-            country = "UK",
-            state = "Brighton and Hove",
-            city = "Brighton",
-            street1 = "4/5 Pavilion Buildings",
-            street2 = "Brighton",
-            postalCode = "BN1 1EE",
-        )
+        val cardParam =
+            CardParam(
+                number = "4242424242424242",
+                name = "John Doe",
+                expirationMonth = 12,
+                expirationYear = 2034,
+                securityCode = "123",
+                country = "UK",
+                state = "Brighton and Hove",
+                city = "Brighton",
+                street1 = "4/5 Pavilion Buildings",
+                street2 = "Brighton",
+                postalCode = "BN1 1EE",
+            )
 
         val request = Token.CreateTokenRequestBuilder(card = cardParam).build()
 
@@ -105,7 +110,8 @@ class TokenTest {
                   "postal_code":"BN1 1EE"
                }
             } 
-        """.trimIndent(), request.payload!!
+            """.trimIndent(),
+            request.payload!!,
         )
     }
 }

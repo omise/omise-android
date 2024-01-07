@@ -19,7 +19,6 @@ import co.omise.android.models.CardBrand
  * card number.
  */
 class CreditCardEditText : OmiseEditText {
-
     companion object {
         private const val CARD_NUMBER_WITH_SPACE_LENGTH = 19
         private const val SEPARATOR = " "
@@ -44,32 +43,44 @@ class CreditCardEditText : OmiseEditText {
         filters = arrayOf(InputFilter.LengthFilter(CARD_NUMBER_WITH_SPACE_LENGTH))
         inputType = InputType.TYPE_CLASS_PHONE
 
-        addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                //Do nothing
-            }
-
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                //Do nothing
-            }
-
-            override fun afterTextChanged(e: Editable) {
-                if (e.isEmpty() || e.length % 5 != 0) {
-                    return
+        addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    charSequence: CharSequence,
+                    i: Int,
+                    i1: Int,
+                    i2: Int,
+                ) {
+                    // Do nothing
                 }
 
-                val c = e[e.length - 1]
-                if (Character.isDigit(c)) {
-                    // Insert space bar
-                    e.insert(e.length - 1, SEPARATOR)
-                } else if (c == ' ') {
-                    // Delete space bar
-                    e.delete(e.length - 1, e.length)
+                override fun onTextChanged(
+                    charSequence: CharSequence,
+                    i: Int,
+                    i1: Int,
+                    i2: Int,
+                ) {
+                    // Do nothing
                 }
 
-                updateCardBrandImage()
-            }
-        })
+                override fun afterTextChanged(e: Editable) {
+                    if (e.isEmpty() || e.length % 5 != 0) {
+                        return
+                    }
+
+                    val c = e[e.length - 1]
+                    if (Character.isDigit(c)) {
+                        // Insert space bar
+                        e.insert(e.length - 1, SEPARATOR)
+                    } else if (c == ' ') {
+                        // Delete space bar
+                        e.delete(e.length - 1, e.length)
+                    }
+
+                    updateCardBrandImage()
+                }
+            },
+        )
 
         cardBrandImagePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     }

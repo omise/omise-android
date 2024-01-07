@@ -5,6 +5,7 @@ apply plugin: 'signing'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
 apply plugin: 'org.sonarqube'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
 def localProperties = new Properties()
 
@@ -296,5 +297,12 @@ sonar {
         property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoUnitTestReport/jacocoUnitTestReport.xml"
         property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/testProductionDebugUnitTest"
         property 'sonar.androidLint.reportPaths', "${project.buildDir}/reports/lint-results-productionDebug.xml"
+    }
+
+    ktlint {
+        android = true
+        reporters {
+            reporter "checkstyle"
+        }
     }
 }

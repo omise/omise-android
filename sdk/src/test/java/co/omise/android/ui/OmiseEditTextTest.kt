@@ -7,7 +7,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class OmiseEditTextTest {
-
     private val editText = OmiseEditText(ApplicationProvider.getApplicationContext())
 
     @Test(expected = InputValidationException.EmptyInputException::class)

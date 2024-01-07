@@ -9,19 +9,18 @@ import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
+import java.util.Objects
 
 @RunWith(AndroidJUnit4::class)
 class ModelTest : SDKTest() {
-
     @Parcelize
     class Dummy(
-            override var modelObject: String? = "dummy",
-            override var id: String? = "acct_4x7d2wtqnj2f4klrfsc",
-            override var livemode: Boolean = false,
-            override var location: String? = "account",
-            override var created: DateTime? = DateTime.parse("2015-05-20T04:57:36Z"),
-            override var deleted: Boolean = false
+        override var modelObject: String? = "dummy",
+        override var id: String? = "acct_4x7d2wtqnj2f4klrfsc",
+        override var livemode: Boolean = false,
+        override var location: String? = "account",
+        override var created: DateTime? = DateTime.parse("2015-05-20T04:57:36Z"),
+        override var deleted: Boolean = false,
     ) : Model, Parcelable
 
     @Test

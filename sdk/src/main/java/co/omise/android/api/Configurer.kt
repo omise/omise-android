@@ -6,7 +6,6 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 
-
 /**
  * Configurer is used in the [Client] class to handle HTTP request configuration.
  * The [Configurer.configure] function can also be used to directly configure
@@ -16,7 +15,6 @@ import okhttp3.Response
  * @param config [Config] class that contains [Client] configuration information.
  */
 class Configurer internal constructor(private val config: Config) : Interceptor {
-
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         SDKLog.d("${request.method} ${request.url.encodedPath}")
@@ -28,7 +26,6 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
     }
 
     companion object {
-
         /**
          * Configures an HTTP [Request] according to the given [Config].
          *

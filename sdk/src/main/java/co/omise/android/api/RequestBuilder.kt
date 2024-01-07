@@ -20,7 +20,6 @@ import kotlin.jvm.Throws
  * the [Client] when this request is passed to it.
  */
 abstract class RequestBuilder<T : Model> {
-
     /**
      * Builds request with all its enclosing information and payload (if available).
      *
@@ -54,7 +53,7 @@ abstract class RequestBuilder<T : Model> {
      * @return the params as a [RequestBody].
      */
     open fun payload(): RequestBody? {
-        //Has to be null as it would fail for GET requests
+        // Has to be null as it would fail for GET requests
         return null
     }
 
@@ -82,7 +81,11 @@ abstract class RequestBuilder<T : Model> {
      * @param path The base API path.
      * @return An [HttpUrl] instance.
      */
-    protected fun buildUrl(endpoint: Endpoint, path: String, vararg segments: String): HttpUrl {
+    protected fun buildUrl(
+        endpoint: Endpoint,
+        path: String,
+        vararg segments: String,
+    ): HttpUrl {
         return HttpUrlBuilder(endpoint, path, segments.asList()).build()
     }
 
@@ -106,7 +109,6 @@ abstract class RequestBuilder<T : Model> {
     }
 
     inner class HttpUrlBuilder(private val endpoint: Endpoint, private val path: String, private val segments: List<String>) {
-
         fun build(): HttpUrl {
             requireNonNull(endpoint)
             requireNonNull(path)

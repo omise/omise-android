@@ -5,8 +5,8 @@ buildscript {
         sample_app_version = '1.0'
         sample_app_code_version = 1
 
-        omise_sdk_version = '4.13.0'
-        omise_sdk_code_version = 45
+        omise_sdk_version = '4.13.1'
+        omise_sdk_code_version = 46
 
         compile_sdk_version = 30
         build_tools_version = '29.0.3'
@@ -62,6 +62,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jacoco:org.jacoco.core:$jacoco_version"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqube_version"
+        classpath 'org.jlleitschuh.gradle:ktlint-gradle:12.0.3'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

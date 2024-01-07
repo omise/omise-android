@@ -10,15 +10,20 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import co.omise.android.R
 import co.omise.android.models.CountryInfo
 
-
 internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
     ListAdapter<CountryInfo, CountryListAdapter.CountryViewHolder>(CountryDiffCallback) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): CountryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_country_item, parent, false)
         return CountryViewHolder(view, onClick)
     }
 
-    override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: CountryViewHolder,
+        position: Int,
+    ) {
         val country = getItem(position)
         holder.bind(country)
     }
@@ -43,11 +48,17 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
 }
 
 object CountryDiffCallback : DiffUtil.ItemCallback<CountryInfo>() {
-    override fun areItemsTheSame(oldItem: CountryInfo, newItem: CountryInfo): Boolean {
+    override fun areItemsTheSame(
+        oldItem: CountryInfo,
+        newItem: CountryInfo,
+    ): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: CountryInfo, newItem: CountryInfo): Boolean {
+    override fun areContentsTheSame(
+        oldItem: CountryInfo,
+        newItem: CountryInfo,
+    ): Boolean {
         return oldItem.name == newItem.name
     }
 }
