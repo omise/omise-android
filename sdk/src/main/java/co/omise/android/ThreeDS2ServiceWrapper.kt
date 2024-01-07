@@ -14,7 +14,6 @@ import java.util.Collections
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-
 /**
  * Encapsulates the [ThreeDS2Service] to allow for easier testing.
  */
@@ -26,39 +25,48 @@ internal class ThreeDS2ServiceWrapper(
     lateinit var transaction: Transaction
         private set
 
-    suspend fun initialize() = suspendCoroutine<Result<Unit>> { continuation ->
-        try {
-            // scheme from netcetera simulator
-            val schemeConfig = SchemeConfiguration.newSchemeConfiguration(BuildConfig.SCHEME_NAME)
-                .ids(Collections.singletonList(BuildConfig.DS_ID))
-                .logo(R.drawable.logo_atome.toString())
-                .logoDark(R.drawable.logo_atome.toString())
-                .encryptionPublicKey(BuildConfig.DS_PUBLIC_KEY)
-                .rootPublicKey(BuildConfig.DS_PUBLIC_KEY)
-                .build()
-            val configParameters = ConfigurationBuilder()
-                .apiKey(BuildConfig.NETCETERA_API_KEY)
-                .configureScheme(schemeConfig)
-                .build()
-            val locale = getLocale()
-            threeDS2Service.initialize(context, configParameters, locale, uiCustomizationMap, object :
-                ThreeDS2Service.InitializationCallback {
-                override fun onCompleted() {
-                    continuation.resume(Result.success(Unit))
-                }
+    suspend fun initialize() =
+        suspendCoroutine<Result<Unit>> { continuation ->
+            try {
+                // scheme from netcetera simulator
+                val schemeConfig =
+                    SchemeConfiguration.newSchemeConfiguration(BuildConfig.SCHEME_NAME)
+                        .ids(Collections.singletonList(BuildConfig.DS_ID))
+                        .logo(R.drawable.logo_atome.toString())
+                        .logoDark(R.drawable.logo_atome.toString())
+                        .encryptionPublicKey(BuildConfig.DS_PUBLIC_KEY)
+                        .rootPublicKey(BuildConfig.DS_PUBLIC_KEY)
+                        .build()
+                val configParameters =
+                    ConfigurationBuilder()
+                        .apiKey(BuildConfig.NETCETERA_API_KEY)
+                        .configureScheme(schemeConfig)
+                        .build()
+                val locale = getLocale()
+                threeDS2Service.initialize(
+                    context,
+                    configParameters,
+                    locale,
+                    uiCustomizationMap,
+                    object :
+                        ThreeDS2Service.InitializationCallback {
+                        override fun onCompleted() {
+                            continuation.resume(Result.success(Unit))
+                        }
 
-                override fun onError(throwable: Throwable) {
-                    throw throwable;
+                        override fun onError(throwable: Throwable) {
+                            throw throwable
+                        }
+                    },
+                )
+            } catch (e: Exception) {
+                if (e is SDKAlreadyInitializedException) {
+                    continuation.resume(Result.success(Unit))
+                } else {
+                    continuation.resume(Result.failure(e))
                 }
-            })
-        } catch (e: Exception) {
-            if (e is SDKAlreadyInitializedException) {
-                continuation.resume(Result.success(Unit))
-            } else {
-                continuation.resume(Result.failure(e))
             }
         }
-    }
 
     private fun getLocale(): String {
         val defaultLocale = context.resources.configuration.locale
@@ -67,12 +75,20 @@ internal class ThreeDS2ServiceWrapper(
         return "$language-$country"
     }
 
-    fun createTransaction(directoryServerId: String, messageVersion: String): Transaction {
+    fun createTransaction(
+        directoryServerId: String,
+        messageVersion: String,
+    ): Transaction {
         transaction = threeDS2Service.createTransaction(directoryServerId, messageVersion)
         return transaction
     }
 
-    fun doChallenge(activity: Activity, challengeParameters: ChallengeParameters, receiver: ChallengeStatusReceiver, maxTimeout: Int) {
+    fun doChallenge(
+        activity: Activity,
+        challengeParameters: ChallengeParameters,
+        receiver: ChallengeStatusReceiver,
+        maxTimeout: Int,
+    ) {
         transaction.doChallenge(activity, challengeParameters, receiver, maxTimeout)
     }
 }

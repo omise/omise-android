@@ -2,7 +2,6 @@ package co.omise.android.api
 
 import android.os.Build
 import android.os.Handler
-import co.omise.android.BuildConfig
 import co.omise.android.models.Model
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient

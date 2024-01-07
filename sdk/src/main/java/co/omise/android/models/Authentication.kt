@@ -24,19 +24,18 @@ internal data class Authentication(
     override val created: DateTime? = null,
     override val deleted: Boolean = false,
 ) : Model {
-
     enum class AuthenticationStatus(val value: String, val message: String? = null) {
         @JsonProperty("success")
         SUCCESS("success"),
 
         @JsonProperty("failed")
-        FAILED("failed","Authentication failed"),
+        FAILED("failed", "Authentication failed"),
 
         @JsonProperty("challenge_v1")
         CHALLENGE_V1("challenge_v1"),
 
         @JsonProperty("challenge")
-        CHALLENGE("challenge")
+        CHALLENGE("challenge"),
     }
 
     // TODO: Change fields to non-nullable and remove default value after adding jackson-module-kotlin

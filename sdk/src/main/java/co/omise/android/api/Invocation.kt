@@ -36,11 +36,11 @@ internal class Invocation<T : Model>(
             val call =
                 httpClient.newTypedCall(
                     Request.Builder()
-                            .method(request.method, request.payload)
-                            .url(request.url)
-                            .build(),
+                        .method(request.method, request.payload)
+                        .url(request.url)
+                        .build(),
                     request.responseType,
-                    request.errorType
+                    request.errorType,
                 )
 
             processCall(call)
@@ -84,9 +84,9 @@ internal class Invocation<T : Model>(
  * @param clazz Expected response Class.
  */
 class TypedCall(
-        private val call: Call,
-        val clazz: Class<Model>,
-        val errorClazz: Class<Error>
+    private val call: Call,
+    val clazz: Class<Model>,
+    val errorClazz: Class<Error>,
 ) {
     fun execute(): Response {
         return call.execute()
@@ -94,6 +94,10 @@ class TypedCall(
 }
 
 @Suppress("UNCHECKED_CAST")
-fun OkHttpClient.newTypedCall(okRequest: Request, clazz: Class<*>, errorClazz: Class<Error>): TypedCall {
+fun OkHttpClient.newTypedCall(
+    okRequest: Request,
+    clazz: Class<*>,
+    errorClazz: Class<Error>,
+): TypedCall {
     return TypedCall(newCall(okRequest), clazz as Class<Model>, errorClazz)
 }

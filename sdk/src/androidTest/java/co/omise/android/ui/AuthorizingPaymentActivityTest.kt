@@ -63,7 +63,6 @@ import org.mockito.Mockito.verify
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class AuthorizingPaymentActivityTest {
@@ -78,12 +77,13 @@ class AuthorizingPaymentActivityTest {
     private val returnUrl = "http://www.example.com"
     private val deepLinkAuthorizeUrl = "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
     private val deepLinkReturnUrl = "sampleapp://omise.co/authorize_return?result=success"
-    private  val threeDSRequestorAppURL = "sampleapp://omise.co/authorize_return"
-    private val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-        putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
-        putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
-        putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
-    }
+    private val threeDSRequestorAppURL = "sampleapp://omise.co/authorize_return"
+    private val intent =
+        Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+            putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+        }
 
     private val transaction: Transaction = mock()
     private val progressView: ProgressView = mock()
@@ -119,18 +119,20 @@ class AuthorizingPaymentActivityTest {
     @Test
     fun errorWhenThreeDSRequestorAppURLNotSet() {
         // Create an intent without setting EXTRA_THREE_DS_REQUESTOR_APP_URL
-        val intentWithoutThreeDSRequestorAppURL = Intent(
-            ApplicationProvider.getApplicationContext(),
-            AuthorizingPaymentActivity::class.java
-        ).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
-        }
+        val intentWithoutThreeDSRequestorAppURL =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                AuthorizingPaymentActivity::class.java,
+            ).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
 
         // Launch the activity
-       val scenario= ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(
-            intentWithoutThreeDSRequestorAppURL
-        )
+        val scenario =
+            ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(
+                intentWithoutThreeDSRequestorAppURL,
+            )
         val activityResult = scenario.result
         // Check if the received error is as expected
         val expectedError = OmiseException("The threeDSRequestorAppURL must be provided in the intent")
@@ -138,10 +140,12 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             expectedError.message,
-            activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)?.throwable?.message
+            activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(
+                EXTRA_AUTHORIZING_PAYMENT_RESULT,
+            )?.throwable?.message,
         )
-
     }
+
     @Test
     fun fallback3DS1_whenAuthenticationStatusIsChallengeV1ThenLoadAuthorizeUrlToWebView() {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
@@ -235,7 +239,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             ThreeDS2Completed(TransactionStatus.AUTHENTICATED),
-            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT)
+            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT),
         )
     }
 
@@ -249,7 +253,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             ThreeDS2Completed(TransactionStatus.AUTHENTICATED),
-            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT)
+            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT),
         )
     }
 
@@ -263,7 +267,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             ThreeDS2Completed(TransactionStatus.NOT_AUTHENTICATED),
-            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT)
+            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT),
         )
     }
 
@@ -277,7 +281,11 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             AuthenticationStatus.FAILED.message,
-            (activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT) as? AuthorizingPaymentResult.Failure)?.throwable?.message
+            (
+                activityResult.resultData.getParcelableExtra(
+                    EXTRA_AUTHORIZING_PAYMENT_RESULT,
+                ) as? AuthorizingPaymentResult.Failure
+            )?.throwable?.message,
         )
     }
 
@@ -293,7 +301,9 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             randomError,
-            activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(EXTRA_AUTHORIZING_PAYMENT_RESULT)?.throwable?.message
+            activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(
+                EXTRA_AUTHORIZING_PAYMENT_RESULT,
+            )?.throwable?.message,
         )
     }
 
@@ -359,11 +369,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun openDeepLink_whenPressBackOnExternalAppThenReturnResult() {
-        val intent = Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
-            putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
+            }
         intending(hasData(Uri.parse(deepLinkAuthorizeUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
@@ -378,23 +389,24 @@ class AuthorizingPaymentActivityTest {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
 
-        val html = """
-                <!DOCTYPE html>
-                <html lang="en">
-                  <head>
-                    <meta charset="UTF-8" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                    <title>Test</title>
-                  </head>
-                  <body>
-                    <a
-                      href="$deepLinkAuthorizeUrl"
-                      id="deepLinkButton"
-                    >
-                      Open bank app
-                    </a>
-                  </body>
-                </html>
+        val html =
+            """
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Test</title>
+              </head>
+              <body>
+                <a
+                  href="$deepLinkAuthorizeUrl"
+                  id="deepLinkButton"
+                >
+                  Open bank app
+                </a>
+              </body>
+            </html>
             """.trimIndent()
         onView(withId(R.id.authorizing_payment_webview)).perform(loadHtml(html))
 

@@ -1,12 +1,11 @@
 package co.omise.android.config
 
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
-import co.omise.android.config.UiCustomization as OmiseSdkUiCustomization
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-
+import co.omise.android.config.UiCustomization as OmiseSdkUiCustomization
 
 @RunWith(RobolectricTestRunner::class)
 class UiCustomizationTest {
@@ -26,173 +25,247 @@ class UiCustomizationTest {
         buttonCustomizations[ButtonType.RESEND] = secondaryButtonCustomization
         buttonCustomizations[ButtonType.CANCEL] = secondaryButtonCustomization
 
-        val uiCustomization = UiCustomizationBuilder()
-            .setDefaultTheme(
-                ThemeConfig(
-                    labelCustomization,
-                    toolbarCustomization,
-                    textBoxCustomization,
-                    buttonCustomizations
-            )
-            ).setDarkTheme(
-                ThemeConfig(
-                    labelCustomization,
-                    toolbarCustomization,
-                    textBoxCustomization,
-                    buttonCustomizations
+        val uiCustomization =
+            UiCustomizationBuilder()
+                .setDefaultTheme(
+                    ThemeConfig(
+                        labelCustomization,
+                        toolbarCustomization,
+                        textBoxCustomization,
+                        buttonCustomizations,
+                    ),
+                ).setDarkTheme(
+                    ThemeConfig(
+                        labelCustomization,
+                        toolbarCustomization,
+                        textBoxCustomization,
+                        buttonCustomizations,
+                    ),
+                ).setMonoChromeTheme(
+                    ThemeConfig(
+                        labelCustomization,
+                        toolbarCustomization,
+                        textBoxCustomization,
+                        buttonCustomizations,
+                    ),
                 )
-            ).setMonoChromeTheme(
-                ThemeConfig(
-                    labelCustomization,
-                    toolbarCustomization,
-                    textBoxCustomization,
-                    buttonCustomizations
-                )
-            )
-            .build()
+                .build()
 
         // Assert for default theme
-        assertEquals(toolbarCustomization.toolbarCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.toolbarCustomization)
-        assertEquals(labelCustomization.labelCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.labelCustomization)
-        assertEquals(textBoxCustomization.textBoxCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.textBoxCustomization)
         assertEquals(
-            primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.SUBMIT)
+            toolbarCustomization.toolbarCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.toolbarCustomization,
+        )
+        assertEquals(
+            labelCustomization.labelCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.labelCustomization,
+        )
+        assertEquals(
+            textBoxCustomization.textBoxCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.textBoxCustomization,
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.CONTINUE)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.SUBMIT,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.NEXT)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.CONTINUE,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.OPEN_OOB_APP)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.NEXT,
+            ),
+        )
+        assertEquals(
+            primaryButtonCustomization.buttonCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.OPEN_OOB_APP,
+            ),
         )
         assertEquals(
             secondaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.CANCEL)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.CANCEL,
+            ),
         )
         assertEquals(
             secondaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.RESEND)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.RESEND,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.ADD_CH)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.ADD_CH,
+            ),
         )
 
         // Assert for dark theme
-        assertEquals(toolbarCustomization.toolbarCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.toolbarCustomization)
-        assertEquals(labelCustomization.labelCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.labelCustomization)
-        assertEquals(textBoxCustomization.textBoxCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.textBoxCustomization)
         assertEquals(
-            primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.SUBMIT)
+            toolbarCustomization.toolbarCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.toolbarCustomization,
+        )
+        assertEquals(
+            labelCustomization.labelCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.labelCustomization,
+        )
+        assertEquals(
+            textBoxCustomization.textBoxCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.textBoxCustomization,
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.CONTINUE)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.SUBMIT,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.NEXT)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.CONTINUE,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.OPEN_OOB_APP)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.NEXT,
+            ),
+        )
+        assertEquals(
+            primaryButtonCustomization.buttonCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.OPEN_OOB_APP,
+            ),
         )
         assertEquals(
             secondaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.CANCEL)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.CANCEL,
+            ),
         )
         assertEquals(
             secondaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.RESEND)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.RESEND,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(UiCustomization.ButtonType.ADD_CH)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DARK]?.getButtonCustomization(
+                UiCustomization.ButtonType.ADD_CH,
+            ),
         )
 
         // Assert for monoChrome
-        assertEquals(toolbarCustomization.toolbarCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.toolbarCustomization)
-        assertEquals(labelCustomization.labelCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.labelCustomization)
-        assertEquals(textBoxCustomization.textBoxCustomization, uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.textBoxCustomization)
         assertEquals(
-            primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.SUBMIT)
+            toolbarCustomization.toolbarCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.toolbarCustomization,
+        )
+        assertEquals(
+            labelCustomization.labelCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.labelCustomization,
+        )
+        assertEquals(
+            textBoxCustomization.textBoxCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.textBoxCustomization,
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.CONTINUE)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.SUBMIT,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.NEXT)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.CONTINUE,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.OPEN_OOB_APP)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.NEXT,
+            ),
+        )
+        assertEquals(
+            primaryButtonCustomization.buttonCustomization,
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.OPEN_OOB_APP,
+            ),
         )
         assertEquals(
             secondaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.CANCEL)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.CANCEL,
+            ),
         )
         assertEquals(
             secondaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.RESEND)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.RESEND,
+            ),
         )
         assertEquals(
             primaryButtonCustomization.buttonCustomization,
-            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(UiCustomization.ButtonType.ADD_CH)
+            uiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.MONOCHROME]?.getButtonCustomization(
+                UiCustomization.ButtonType.ADD_CH,
+            ),
         )
         // validate empty theme
         val emptyThemeConfig = ThemeConfig()
-        val emptyUiCustomization = UiCustomizationBuilder()
-            .setDefaultTheme(
-                emptyThemeConfig
-            ).setDarkTheme(
-                emptyThemeConfig
-            ).setMonoChromeTheme(
-                emptyThemeConfig
-            )
-            .build()
+        val emptyUiCustomization =
+            UiCustomizationBuilder()
+                .setDefaultTheme(
+                    emptyThemeConfig,
+                ).setDarkTheme(
+                    emptyThemeConfig,
+                ).setMonoChromeTheme(
+                    emptyThemeConfig,
+                )
+                .build()
         assertEquals(
             null,
-            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.labelCustomization
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.labelCustomization,
         )
         assertEquals(
             null,
-            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.toolbarCustomization
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.toolbarCustomization,
         )
         assertEquals(
             null,
-            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.textBoxCustomization
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.textBoxCustomization,
         )
         assertEquals(
             null,
-            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(UiCustomization.ButtonType.ADD_CH)
+            emptyUiCustomization.uiCustomizationMap[UiCustomization.UiCustomizationType.DEFAULT]?.getButtonCustomization(
+                UiCustomization.ButtonType.ADD_CH,
+            ),
         )
         // validate default values
         assertEquals(
             emptyMap<UiCustomization.UiCustomizationType, UiCustomization>(),
-            OmiseSdkUiCustomization.default.uiCustomizationMap
+            OmiseSdkUiCustomization.default.uiCustomizationMap,
         )
     }
 
     @Test
     fun labelCustomization_shouldBeAbleToCreateInstanceWithBuilder() {
-        val labelCustomization = LabelCustomizationBuilder()
-            .headingTextFontSize(18)
-            .headingTextFontName("Roboto-Bold")
-            .headingTextColor("#000000")
-            .textFontSize(16)
-            .textFontName("Roboto")
-            .textColor("#000000")
-            .build()
+        val labelCustomization =
+            LabelCustomizationBuilder()
+                .headingTextFontSize(18)
+                .headingTextFontName("Roboto-Bold")
+                .headingTextColor("#000000")
+                .textFontSize(16)
+                .textFontName("Roboto")
+                .textColor("#000000")
+                .build()
 
         assertEquals(18, labelCustomization.labelCustomization.headingTextFontSize)
         assertEquals("Roboto-Bold", labelCustomization.labelCustomization.headingTextFontName)
@@ -204,14 +277,15 @@ class UiCustomizationTest {
 
     @Test
     fun textBoxCustomization_shouldBeAbleToCreateInstanceWithBuilder() {
-        val textBoxCustomization = TextBoxCustomizationBuilder()
-            .borderWidth(1)
-            .borderColor("#1A56F0")
-            .cornerRadius(4)
-            .textFontSize(16)
-            .textFontName("Roboto")
-            .textColor("#000000")
-            .build()
+        val textBoxCustomization =
+            TextBoxCustomizationBuilder()
+                .borderWidth(1)
+                .borderColor("#1A56F0")
+                .cornerRadius(4)
+                .textFontSize(16)
+                .textFontName("Roboto")
+                .textColor("#000000")
+                .build()
 
         assertEquals(1, textBoxCustomization.textBoxCustomization.borderWidth)
         assertEquals("#1A56F0", textBoxCustomization.textBoxCustomization.borderColor)
@@ -223,14 +297,15 @@ class UiCustomizationTest {
 
     @Test
     fun toolbarCustomization_shouldBeAbleToCreateInstanceWithBuilder() {
-        val toolbarCustomization = ToolbarCustomizationBuilder()
-            .headerText("Secure Checkout")
-            .buttonText("Close")
-            .backgroundColor("#FFFFFF")
-            .textFontSize(20)
-            .textFontName("Roboto")
-            .textColor("#000000")
-            .build()
+        val toolbarCustomization =
+            ToolbarCustomizationBuilder()
+                .headerText("Secure Checkout")
+                .buttonText("Close")
+                .backgroundColor("#FFFFFF")
+                .textFontSize(20)
+                .textFontName("Roboto")
+                .textColor("#000000")
+                .build()
 
         assertEquals("Secure Checkout", toolbarCustomization.toolbarCustomization.headerText)
         assertEquals("Close", toolbarCustomization.toolbarCustomization.buttonText)
@@ -242,13 +317,14 @@ class UiCustomizationTest {
 
     @Test
     fun buttonCustomization_shouldBeAbleToCreateInstanceWithBuilder() {
-        val buttonCustomization = ButtonCustomizationBuilder()
-            .cornerRadius(4)
-            .backgroundColor("#1A56F0")
-            .textFontSize(16)
-            .textFontName("Roboto")
-            .textColor("#000000")
-            .build()
+        val buttonCustomization =
+            ButtonCustomizationBuilder()
+                .cornerRadius(4)
+                .backgroundColor("#1A56F0")
+                .textFontSize(16)
+                .textFontName("Roboto")
+                .textColor("#000000")
+                .build()
 
         assertEquals(4, buttonCustomization.buttonCustomization.cornerRadius)
         assertEquals("#1A56F0", buttonCustomization.buttonCustomization.backgroundColor)

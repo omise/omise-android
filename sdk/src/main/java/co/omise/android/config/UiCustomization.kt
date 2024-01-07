@@ -3,11 +3,11 @@ package co.omise.android.config
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-
 abstract class CustomizationBuilder<T> {
     protected var textFontSize: Int? = null
     protected var textColor: String? = null
     protected var textFontName: String? = null
+
     abstract fun build(): T
 }
 
@@ -16,7 +16,10 @@ abstract class CustomizationBuilder<T> {
  */
 @Parcelize
 data class UiCustomization internal constructor(
-    internal val uiCustomizationMap: Map<com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType, com.netcetera.threeds.sdk.api.ui.logic.UiCustomization>
+    internal val uiCustomizationMap: Map<
+        com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType,
+        com.netcetera.threeds.sdk.api.ui.logic.UiCustomization,
+        >,
 ) : Parcelable {
     companion object {
         val default = UiCustomization(emptyMap())
@@ -27,14 +30,13 @@ data class ThemeConfig(
     var labelCustomization: LabelCustomization? = null,
     var toolbarCustomization: ToolbarCustomization? = null,
     var textBoxCustomization: TextBoxCustomization? = null,
-    var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf()
+    var buttonCustomizations: MutableMap<ButtonType, ButtonCustomization> = mutableMapOf(),
 )
 
 /**
  * Builder for building [UiCustomization] data.
  */
 class UiCustomizationBuilder {
-
     private var defaultThemeConfig = ThemeConfig()
     private var darkThemeConfig = ThemeConfig()
     private var monoChromeThemeConfig = ThemeConfig()
@@ -44,28 +46,30 @@ class UiCustomizationBuilder {
      *
      * @param themeConfig [ThemeConfig] data.
      */
-    fun setDefaultTheme(themeConfig: ThemeConfig): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.defaultThemeConfig = themeConfig
-    }
+    fun setDefaultTheme(themeConfig: ThemeConfig): UiCustomizationBuilder =
+        apply {
+            this@UiCustomizationBuilder.defaultThemeConfig = themeConfig
+        }
 
     /**
      * Set the dark theme.
      *
      * @param themeConfig [ThemeConfig] data.
      */
-    fun setDarkTheme(themeConfig: ThemeConfig): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.darkThemeConfig = themeConfig
-    }
+    fun setDarkTheme(themeConfig: ThemeConfig): UiCustomizationBuilder =
+        apply {
+            this@UiCustomizationBuilder.darkThemeConfig = themeConfig
+        }
 
     /**
      * Set the monoChrome theme.
      *
      * @param themeConfig [ThemeConfig] data.
      */
-    fun setMonoChromeTheme(themeConfig: ThemeConfig): UiCustomizationBuilder = apply {
-        this@UiCustomizationBuilder.monoChromeThemeConfig = themeConfig
-    }
-
+    fun setMonoChromeTheme(themeConfig: ThemeConfig): UiCustomizationBuilder =
+        apply {
+            this@UiCustomizationBuilder.monoChromeThemeConfig = themeConfig
+        }
 
     /**
      * Create an instance of [UiCustomization].
@@ -73,38 +77,72 @@ class UiCustomizationBuilder {
      * @return [UiCustomization]
      */
     fun build(): UiCustomization {
-        val defaultUiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
-            defaultThemeConfig.labelCustomization?.let { labelCustomization = it.labelCustomization }
-            defaultThemeConfig.toolbarCustomization?.let { toolbarCustomization = it.toolbarCustomization }
-            defaultThemeConfig.textBoxCustomization?.let { textBoxCustomization = it.textBoxCustomization }
-            defaultThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
-                setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
+        val defaultUiCustomization =
+            com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+                defaultThemeConfig.labelCustomization?.let {
+                    labelCustomization = it.labelCustomization
+                }
+                defaultThemeConfig.toolbarCustomization?.let {
+                    toolbarCustomization = it.toolbarCustomization
+                }
+                defaultThemeConfig.textBoxCustomization?.let {
+                    textBoxCustomization = it.textBoxCustomization
+                }
+                defaultThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+                    setButtonCustomization(
+                        buttonCustomization.buttonCustomization,
+                        buttonType.value,
+                    )
+                }
             }
-        }
 
-        val darkUiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
-            darkThemeConfig.labelCustomization?.let { labelCustomization = it.labelCustomization }
-            darkThemeConfig.toolbarCustomization?.let { toolbarCustomization = it.toolbarCustomization }
-            darkThemeConfig.textBoxCustomization?.let { textBoxCustomization = it.textBoxCustomization }
-            darkThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
-                setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
+        val darkUiCustomization =
+            com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+                darkThemeConfig.labelCustomization?.let {
+                    labelCustomization = it.labelCustomization
+                }
+                darkThemeConfig.toolbarCustomization?.let {
+                    toolbarCustomization = it.toolbarCustomization
+                }
+                darkThemeConfig.textBoxCustomization?.let {
+                    textBoxCustomization = it.textBoxCustomization
+                }
+                darkThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+                    setButtonCustomization(
+                        buttonCustomization.buttonCustomization,
+                        buttonType.value,
+                    )
+                }
             }
-        }
 
-        val monoChromeUiCustomization = com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
-            monoChromeThemeConfig.labelCustomization?.let { labelCustomization = it.labelCustomization }
-            monoChromeThemeConfig.toolbarCustomization?.let { toolbarCustomization = it.toolbarCustomization }
-            monoChromeThemeConfig.textBoxCustomization?.let { textBoxCustomization = it.textBoxCustomization }
-            monoChromeThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
-                setButtonCustomization(buttonCustomization.buttonCustomization, buttonType.value)
+        val monoChromeUiCustomization =
+            com.netcetera.threeds.sdk.api.ui.logic.UiCustomization().apply {
+                monoChromeThemeConfig.labelCustomization?.let {
+                    labelCustomization = it.labelCustomization
+                }
+                monoChromeThemeConfig.toolbarCustomization?.let {
+                    toolbarCustomization = it.toolbarCustomization
+                }
+                monoChromeThemeConfig.textBoxCustomization?.let {
+                    textBoxCustomization = it.textBoxCustomization
+                }
+                monoChromeThemeConfig.buttonCustomizations.forEach { (buttonType, buttonCustomization) ->
+                    setButtonCustomization(
+                        buttonCustomization.buttonCustomization,
+                        buttonType.value,
+                    )
+                }
             }
-        }
 
-        val uiCustomizationMap = hashMapOf<com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType, com.netcetera.threeds.sdk.api.ui.logic.UiCustomization>()
+        val uiCustomizationMap =
+            hashMapOf<
+                com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType,
+                com.netcetera.threeds.sdk.api.ui.logic.UiCustomization,
+                >()
         uiCustomizationMap.apply {
-            put(UiCustomizationType.DEFAULT.value,defaultUiCustomization)
-            put(UiCustomizationType.DARK.value,darkUiCustomization)
-            put(UiCustomizationType.MONOCHROME.value,monoChromeUiCustomization)
+            put(UiCustomizationType.DEFAULT.value, defaultUiCustomization)
+            put(UiCustomizationType.DARK.value, darkUiCustomization)
+            put(UiCustomizationType.MONOCHROME.value, monoChromeUiCustomization)
         }
 
         return UiCustomization(uiCustomizationMap)
@@ -116,7 +154,7 @@ class UiCustomizationBuilder {
  */
 @Parcelize
 data class LabelCustomization internal constructor(
-    internal val labelCustomization: com.netcetera.threeds.sdk.api.ui.logic.LabelCustomization
+    internal val labelCustomization: com.netcetera.threeds.sdk.api.ui.logic.LabelCustomization,
 ) : Parcelable
 
 /**
@@ -147,8 +185,7 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
      *
      * @param headingTextFontSize Font size in sp unit.
      */
-    fun headingTextFontSize(headingTextFontSize: Int): LabelCustomizationBuilder =
-        apply { this.headingTextFontSize = headingTextFontSize }
+    fun headingTextFontSize(headingTextFontSize: Int): LabelCustomizationBuilder = apply { this.headingTextFontSize = headingTextFontSize }
 
     /**
      * Set the text color.
@@ -180,12 +217,16 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
         return LabelCustomization(
             com.netcetera.threeds.sdk.api.ui.logic.LabelCustomization().apply {
                 this@LabelCustomizationBuilder.headingTextColor?.let { this.headingTextColor = it }
-                this@LabelCustomizationBuilder.headingTextFontName?.let { this.headingTextFontName = it }
-                this@LabelCustomizationBuilder.headingTextFontSize?.let { this.headingTextFontSize = it }
+                this@LabelCustomizationBuilder.headingTextFontName?.let {
+                    this.headingTextFontName = it
+                }
+                this@LabelCustomizationBuilder.headingTextFontSize?.let {
+                    this.headingTextFontSize = it
+                }
                 this@LabelCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@LabelCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@LabelCustomizationBuilder.textFontName?.let { this.textFontName = it }
-            }
+            },
         )
     }
 }
@@ -195,7 +236,7 @@ class LabelCustomizationBuilder : CustomizationBuilder<LabelCustomization>() {
  */
 @Parcelize
 data class TextBoxCustomization internal constructor(
-    internal val textBoxCustomization: com.netcetera.threeds.sdk.api.ui.logic.TextBoxCustomization
+    internal val textBoxCustomization: com.netcetera.threeds.sdk.api.ui.logic.TextBoxCustomization,
 ) : Parcelable
 
 /**
@@ -262,7 +303,7 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
                 this@TextBoxCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@TextBoxCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@TextBoxCustomizationBuilder.textFontName?.let { this.textFontName = it }
-            }
+            },
         )
     }
 }
@@ -272,7 +313,7 @@ class TextBoxCustomizationBuilder : CustomizationBuilder<TextBoxCustomization>()
  */
 @Parcelize
 data class ToolbarCustomization internal constructor(
-    internal val toolbarCustomization: com.netcetera.threeds.sdk.api.ui.logic.ToolbarCustomization
+    internal val toolbarCustomization: com.netcetera.threeds.sdk.api.ui.logic.ToolbarCustomization,
 ) : Parcelable
 
 /**
@@ -339,7 +380,7 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
                 this@ToolbarCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@ToolbarCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@ToolbarCustomizationBuilder.textFontName?.let { this.textFontName = it }
-            }
+            },
         )
     }
 }
@@ -350,11 +391,15 @@ class ToolbarCustomizationBuilder : CustomizationBuilder<ToolbarCustomization>()
 enum class ButtonType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType) {
     SUBMIT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.SUBMIT),
     CONTINUE(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.CONTINUE),
-    NEXT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.NEXT),
+    NEXT(
+        com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.NEXT,
+    ),
     CANCEL(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.CANCEL),
     RESEND(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.RESEND),
-    OPEN_OOB_APP(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP),
-    ADD_CH(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.ADD_CH)
+    OPEN_OOB_APP(
+        com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.OPEN_OOB_APP,
+    ),
+    ADD_CH(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.ButtonType.ADD_CH),
 }
 
 /**
@@ -362,7 +407,9 @@ enum class ButtonType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustom
  */
 internal enum class UiCustomizationType(val value: com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType) {
     DEFAULT(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DEFAULT),
-    DARK(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DARK),
+    DARK(
+        com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.DARK,
+    ),
     MONOCHROME(com.netcetera.threeds.sdk.api.ui.logic.UiCustomization.UiCustomizationType.MONOCHROME),
 }
 
@@ -371,7 +418,7 @@ internal enum class UiCustomizationType(val value: com.netcetera.threeds.sdk.api
  */
 @Parcelize
 data class ButtonCustomization internal constructor(
-    internal val buttonCustomization: com.netcetera.threeds.sdk.api.ui.logic.ButtonCustomization
+    internal val buttonCustomization: com.netcetera.threeds.sdk.api.ui.logic.ButtonCustomization,
 ) : Parcelable
 
 /**
@@ -429,7 +476,7 @@ class ButtonCustomizationBuilder : CustomizationBuilder<ButtonCustomization>() {
                 this@ButtonCustomizationBuilder.textColor?.let { this.textColor = it }
                 this@ButtonCustomizationBuilder.textFontSize?.let { this.textFontSize = it }
                 this@ButtonCustomizationBuilder.textFontName?.let { this.textFontName = it }
-            }
+            },
         )
     }
 }
