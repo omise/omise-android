@@ -554,6 +554,6 @@ If you enable ProGuard, then add these rules in your ProGuard file.
 
 Pull requests and bug fixes are welcome. For larger scope of work, please hop on to our [forum](https://forum.omise.co) to discuss first.
 
-## LICENSE
+## License
 
 MIT [See the full license text](https://github.com/omise/omise-android/blob/master/LICENSE)
