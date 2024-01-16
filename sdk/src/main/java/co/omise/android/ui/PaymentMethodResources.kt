@@ -355,6 +355,13 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.Atome,
     )
 
+    object WeChatPay : PaymentMethodResource(
+        iconRes = R.drawable.payment_atome,
+        titleRes = R.string.payment_method_wechat_pay_title,
+        indicatorIconRes = R.drawable.ic_redirect,
+        sourceType = SourceType.WeChatPay,
+    )
+
     companion object {
         const val ALIPAY_PLUS_PROVIDER = "Alipay_plus"
         const val RMS_PROVIDER = "RMS"
