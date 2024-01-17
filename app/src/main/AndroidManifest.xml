@@ -22,7 +22,7 @@
                     android:scheme="sampleapp" />
             </intent-filter>
         </activity>
-        <activity android:name=".CheckoutActivity">
+        <activity android:name=".CheckoutActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
