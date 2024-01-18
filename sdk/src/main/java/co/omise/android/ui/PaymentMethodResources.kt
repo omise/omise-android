@@ -356,7 +356,7 @@ internal sealed class PaymentMethodResource(
     )
 
     object WeChatPay : PaymentMethodResource(
-        iconRes = R.drawable.payment_atome,
+        iconRes = R.drawable.wechat_pay,
         titleRes = R.string.payment_method_wechat_pay_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.WeChatPay,
