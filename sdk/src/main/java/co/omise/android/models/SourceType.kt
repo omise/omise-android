@@ -71,6 +71,7 @@ sealed class SourceType(
     data class GrabPay(val provider: String? = null) : SourceType("grabpay")
 
     object PayPay : SourceType("paypay")
+
     object WeChatPay : SourceType("wechat_pay")
 
     data class Unknown(override val name: String?) : SourceType(name)
