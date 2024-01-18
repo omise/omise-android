@@ -60,9 +60,7 @@ internal data class Authentication(
         private var areq: AReq? = null
 
         @JsonProperty("device_info")
-        // TODO: Change type to String after adding authorize endpoint has been changed.
-        // val deviceInfo: String,
-        private var deviceInfo: Map<String, Any>? = null
+        private var deviceInfo: String? = null
 
         @JsonProperty("device_type")
         private val deviceType: String = "Android"
@@ -77,7 +75,7 @@ internal data class Authentication(
             return this
         }
 
-        fun deviceInfo(deviceInfo: Map<String, Any>): AuthenticationRequestBuilder {
+        fun deviceInfo(deviceInfo: String): AuthenticationRequestBuilder {
             this.deviceInfo = deviceInfo
             return this
         }
