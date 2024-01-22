@@ -135,6 +135,7 @@
     <string name="payment_method_grabpay_footnote" translatable="false">(GrabPay and PayLater)</string>
     <string name="payment_method_paypay_title" translatable="false">PayPay</string>
     <string name="payment_method_atome_title">Atome</string>
+    <string name="payment_method_wechat_pay_title">WeChat Pay</string>
     <string name="label_name">Name (optional)</string>
     <string name="label_email_optional">Email (optional)</string>
     <string name="label_shipping">Shipping address</string>

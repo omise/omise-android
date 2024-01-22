@@ -58,6 +58,7 @@ object PaymentSetting {
                     R.string.payment_preference_grabpay_key,
                     R.string.payment_preference_paypay_key,
                     R.string.payment_preference_atome_key,
+                    R.string.payment_preference_wechat_pay_key
             )
                     .map { context.getString(it) }
                     .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
@@ -119,6 +120,7 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_grabpay_key) -> SourceType.GrabPay()
                         context.getString(R.string.payment_preference_paypay_key) -> SourceType.PayPay
                         context.getString(R.string.payment_preference_atome_key) -> SourceType.Atome
+                        context.getString(R.string.payment_preference_wechat_pay_key) -> SourceType.WeChatPay
                         else -> null
                     }
                 }
