@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V4.14.0
+* **ADDED:** Support new source type `wechat_pay`
+
 ## V4.13.1
 * **ADDED:** Add kotlin linting standards using ktlint-gradle library
 * **CHANGED:** Removed nullability from text field callbacks
