@@ -59,8 +59,8 @@ internal data class Authentication(
         @JsonProperty("areq")
         private var areq: AReq? = null
 
-        @JsonProperty("device_info")
-        private var deviceInfo: String? = null
+         @JsonProperty("encrypted_device_info")
+        private var encryptedDeviceInfo: String? = null
 
         @JsonProperty("device_type")
         private val deviceType: String = "Android"
@@ -75,8 +75,8 @@ internal data class Authentication(
             return this
         }
 
-        fun deviceInfo(deviceInfo: String): AuthenticationRequestBuilder {
-            this.deviceInfo = deviceInfo
+        fun encryptedDeviceInfo(encryptedDeviceInfo: String): AuthenticationRequestBuilder {
+            this.encryptedDeviceInfo = encryptedDeviceInfo
             return this
         }
 

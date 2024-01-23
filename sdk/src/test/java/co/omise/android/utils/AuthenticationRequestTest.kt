@@ -1,7 +1,6 @@
 package co.omise.android.utils
 
 import co.omise.android.models.Authentication
-import co.omise.android.models.Serializer
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -25,11 +24,8 @@ class AuthenticationRequestTest {
                         sdkMaxTimeout = 5,
                     ),
                 )
-                .deviceInfo(
-                    Serializer().objectMapper.readValue(
-                        "{}",
-                        Map::class.java,
-                    ) as Map<String, Any>,
+                .encryptedDeviceInfo(
+                    "randomEncryptedDeviceInfoString"
                 )
                 .build()
 

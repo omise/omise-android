@@ -112,7 +112,7 @@ internal class AuthorizingPaymentViewModel(
                         sdkMaxTimeout = 5,
                     ),
                 )
-                .deviceInfo(
+                .encryptedDeviceInfo(
                     authenticationRequestParameters.deviceData
                 ).build()
 
