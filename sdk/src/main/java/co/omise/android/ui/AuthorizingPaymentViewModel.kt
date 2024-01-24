@@ -23,7 +23,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
@@ -113,7 +112,7 @@ internal class AuthorizingPaymentViewModel(
                     ),
                 )
                 .encryptedDeviceInfo(
-                    authenticationRequestParameters.deviceData
+                    authenticationRequestParameters.deviceData,
                 ).build()
 
         try {

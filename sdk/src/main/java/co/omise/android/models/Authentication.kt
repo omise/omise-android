@@ -59,7 +59,7 @@ internal data class Authentication(
         @JsonProperty("areq")
         private var areq: AReq? = null
 
-         @JsonProperty("encrypted_device_info")
+        @JsonProperty("encrypted_device_info")
         private var encryptedDeviceInfo: String? = null
 
         @JsonProperty("device_type")
