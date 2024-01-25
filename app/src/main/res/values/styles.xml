@@ -12,6 +12,7 @@
         <item name="materialButtonStyle">@style/SampleButton</item>
         <item name="editTextLabelStyle">@style/SampleEditTextLabel</item>
         <item name="editTextErrorStyle">@style/SampleEditTextError</item>
+        <item name="fontFamily">@font/roboto_mono</item>
     </style>
 
     <style name="SampleTextView" parent="Widget.AppCompat.TextView">

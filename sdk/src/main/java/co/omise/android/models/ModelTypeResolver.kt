@@ -27,6 +27,7 @@ class ModelTypeResolver : TypeIdResolverBase() {
             (types as HashMap<String, Class<*>>)["error"] = APIError::class.java
             (types as HashMap<String, Class<*>>)["barcode"] = Barcode::class.java
             (types as HashMap<String, Class<*>>)["document"] = Document::class.java
+            (types as HashMap<String, Class<*>>)["authentication"] = Authentication::class.java
         }
         return Collections.unmodifiableMap(types)
     }

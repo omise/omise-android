@@ -478,14 +478,37 @@ Then in your activity, declare the method that will start this activity as follo
 
 ```kotlin
 private fun showAuthorizingPaymentForm() {
-    val intent = Intent(this, AuthorizingPaymentActivity::class.java)
-    intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING, AUTHORIZED_URL)
-    intent.putExtra(AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, EXPECTED_URL_PATTERNS)
-    startActivityForResult(intent, AUTHORIZING_PAYMENT_REQUEST_CODE)
+    Intent(this, AuthorizingPaymentActivity::class.java).run {
+            putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            putExtra(
+                EXTRA_THREE_DS_REQUESTOR_APP_URL,
+                "sampleapp://omise.co/authorize_return"
+            )
+            startActivityForResult(this, AUTHORIZING_PAYMENT_REQUEST_CODE)
+        }
 }
 ```
 
 Replace the string `AUTHORIZED_URL` with the authorized URL that comes with the created charge and the array of string `EXPECTED_URL_PATTERNS` with the expected pattern of redirected URLs array.
+
+If you want to customize the title of the authorizing payment activity you must use theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
+```kotlin
+val toolbarCustomization = ToolbarCustomizationBuilder()
+            .textFontName("font/roboto_mono_bold.ttf")
+            .textColor("#000000")
+            .textFontSize(20)
+            .backgroundColor("#FFFFFF")
+            .headerText("Secure Checkout")
+            .buttonText("Close")
+            .build()
+            
+            val uiCustomization = UiCustomizationBuilder()
+            .setDefaultTheme(ThemeConfig(
+                toolbarCustomization = toolbarCustomization,
+            ))
+            .build()
+```
 
 After the end-user completes the authorizing payment process, the activity result
 callback will be called. Handle it in this manner:

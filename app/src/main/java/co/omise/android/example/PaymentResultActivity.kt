@@ -1,5 +1,6 @@
 package co.omise.android.example
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -19,5 +20,11 @@ class PaymentResultActivity : AppCompatActivity() {
         } ?: run {
             resultText.text = "No result found"
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        // Depending on your application status, handle the result from the payment app as needed
     }
 }
