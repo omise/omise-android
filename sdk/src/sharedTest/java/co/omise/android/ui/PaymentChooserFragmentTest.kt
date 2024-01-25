@@ -96,6 +96,7 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "grabpay"),
                 PaymentMethod(name = "paypay"),
                 PaymentMethod(name = "atome"),
+                PaymentMethod(name = "wechat_pay"),
             )
         val capability =
             Capability(
@@ -160,15 +161,16 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(20, R.string.payment_method_duitnow_obw_title)
         assertListAtIndexHasResource(21, R.string.payment_method_duitnow_qr_title)
 
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(26))
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(27))
 
         assertListAtIndexHasResource(22, R.string.payment_method_maybank_qr_title)
         assertListAtIndexHasResource(23, R.string.payment_method_rabbit_linepay_title)
         assertListAtIndexHasResource(24, R.string.payment_method_grabpay_footnote)
         assertListAtIndexHasResource(25, R.string.payment_method_paypay_title)
         assertListAtIndexHasResource(26, R.string.payment_method_atome_title)
+        assertListAtIndexHasResource(27, R.string.payment_method_wechat_pay_title)
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(27)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(28)))
     }
 
     @Ignore("Flaky test, it fails when run on Github Action but pass on local machine.")

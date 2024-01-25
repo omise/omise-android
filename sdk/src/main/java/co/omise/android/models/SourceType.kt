@@ -72,6 +72,8 @@ sealed class SourceType(
 
     object PayPay : SourceType("paypay")
 
+    object WeChatPay : SourceType("wechat_pay")
+
     data class Unknown(override val name: String?) : SourceType(name)
 
     sealed class InternetBanking(
@@ -200,6 +202,7 @@ sealed class SourceType(
                 "grabpay" -> GrabPay()
                 "paypay" -> PayPay
                 "atome" -> Atome
+                "wechat_pay" -> WeChatPay
                 else -> Unknown(name)
             }
     }

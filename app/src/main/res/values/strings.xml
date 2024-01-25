@@ -30,7 +30,7 @@
     <string name="payment_preference_mobile_banking_kbank_key" translatable="false">mobile_banking_kbank</string>
     <string name="payment_preference_mobile_banking_ktb_key" translatable="false">mobile_banking_ktb</string>
     <string name="payment_preference_ocbc_pao_key" translatable="false">mobile_banking_ocbc_pao</string>
-    <string name="payment_preference_ocbc_digital_key" translatable="false">mobile_banking_ocbc</string>
+<string name="payment_preference_ocbc_digital_key" translatable="false">mobile_banking_ocbc</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
     <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
     <string name="payment_preference_installment_bbl_key" translatable="false">installment_bbl</string>
@@ -62,6 +62,7 @@
     <string name="payment_preference_grabpay_key" translatable="false">grabpay</string>
     <string name="payment_preference_paypay_key" translatable="false">paypay</string>
     <string name="payment_preference_atome_key" translatable="false">atome</string>
+    <string name="payment_preference_wechat_pay_key" translatable="false">wechat_pay</string>
 
     <string name="payment_preference_payment_methods_category_title" translatable="false">Payment methods</string>
     <string name="payment_preference_is_use_capability_api_title" translatable="false">Use Capability API</string>
@@ -114,6 +115,7 @@
     <string name="payment_preference_grabpay_title" translatable="false">GrabPay</string>
     <string name="payment_preference_paypay_title" translatable="false">PayPay</string>
     <string name="payment_preference_atome_title" translatable="false">Atome</string>
+    <string name="payment_preference_wechat_pay_title" translatable="false">WeChat Pay</string>
     <string name="payment_success_but_no_result" translatable="false">Payment success but no result.</string>
     <string name="error_capability_have_not_set_yet" translatable="false">Capability have not set yet.</string>
     <string name="payment_preference_zero_interest_installments_title" translatable="false">Zero interest installments</string>

@@ -65,6 +65,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.PointsCiti,
             PaymentMethodResource.GrabPayRMS,
             PaymentMethodResource.TouchNGoAlipay,
+            PaymentMethodResource.WeChatPay,
             -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
