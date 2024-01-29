@@ -405,6 +405,7 @@ AndroidManifest.xml
 
 style.xml
 ```xml
+<resources>
     <style name="SampleTheme" parent="Theme.MaterialComponents">
         <item name="android:editTextStyle">@style/SampleEditText</item>
         <item name="materialButtonStyle">@style/SampleButton</item>
@@ -432,6 +433,8 @@ style.xml
         <item name="backgroundTint">#FFFFFFFF</item>
         <item name="android:textColor">#FF000000</item>
     </style>
+</resources>
+
 ```
 
 And if you choose to customize the item text sizes for the lists in `PaymentCreatorActivity`, you
@@ -446,6 +449,7 @@ AndroidManifest.xml
 
 style.xml
 ```xml
+<resources>
     <style name="SampleTheme" parent="Theme.MaterialComponents">
         ...
         <item name="android:itemTextAppearance">@style/SampleItemTextAppearance</item>
@@ -455,6 +459,7 @@ style.xml
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+</resources>
 ```
 
 ## Authorizing payment

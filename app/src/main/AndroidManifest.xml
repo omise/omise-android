@@ -35,7 +35,6 @@
         <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
         <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
         <activity android:name="co.omise.android.ui.GooglePayActivity" />
-        <activity android:name=".PaymentProcessingActivity" />
         <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     </application>
 

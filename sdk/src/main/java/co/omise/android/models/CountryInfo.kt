@@ -1,10 +1,14 @@
 package co.omise.android.models
 
+import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+interface Equatable {
+    override fun equals(other: Any?): Boolean
+}
 @Parcelize
-data class CountryInfo(val name: String, val code: String) : Parcelable {
+data class CountryInfo(val name: String, val code: String) : Parcelable,Equatable {
     companion object {
         val ALL =
             listOf(
@@ -257,5 +261,24 @@ data class CountryInfo(val name: String, val code: String) : Parcelable {
                 CountryInfo(name = "Zambia", code = "ZM"),
                 CountryInfo(name = "Zimbabwe", code = "ZW"),
             )
+    }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CountryInfo
+
+        return true
+    }
+
+    fun contentEquals(other: CountryInfo): Boolean {
+        return name == other.name && code == other.code
+    }
+
+    // Override hashCode for consistency with equals
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + code.hashCode()
+        return result
     }
 }

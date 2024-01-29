@@ -59,6 +59,6 @@ object CountryDiffCallback : DiffUtil.ItemCallback<CountryInfo>() {
         oldItem: CountryInfo,
         newItem: CountryInfo,
     ): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.contentEquals(newItem)
     }
 }
