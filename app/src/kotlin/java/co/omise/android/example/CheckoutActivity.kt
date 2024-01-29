@@ -20,6 +20,7 @@ import co.omise.android.config.TextBoxCustomizationBuilder
 import co.omise.android.config.ThemeConfig
 import co.omise.android.config.ToolbarCustomizationBuilder
 import co.omise.android.config.UiCustomizationBuilder
+import co.omise.android.extensions.capitalizeFirstChar
 import co.omise.android.models.Amount
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
@@ -88,7 +89,7 @@ class CheckoutActivity : AppCompatActivity() {
             }
 
             override fun onRequestFailed(throwable: Throwable) {
-                snackbar.setText(throwable.message?.capitalize().orEmpty()).show()
+                snackbar.setText(throwable.message?.capitalizeFirstChar().orEmpty()).show()
             }
         })
     }
@@ -102,7 +103,7 @@ class CheckoutActivity : AppCompatActivity() {
         }
 
         val localAmount = amountEdit.text.toString().trim().toDouble()
-        val currency = currencyEdit.text.toString().trim().toLowerCase()
+        val currency = currencyEdit.text.toString().trim().lowercase()
         val amount = Amount.fromLocalAmount(localAmount, currency)
 
         Intent(this, PaymentCreatorActivity::class.java).run {

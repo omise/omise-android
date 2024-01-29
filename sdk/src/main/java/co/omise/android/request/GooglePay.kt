@@ -167,7 +167,7 @@ class GooglePay(
         return JSONObject().apply {
             put("totalPrice", priceUnits)
             put("totalPriceStatus", "FINAL")
-            put("currencyCode", currencyCode.toUpperCase())
+            put("currencyCode", currencyCode.uppercase())
         }
     }
 

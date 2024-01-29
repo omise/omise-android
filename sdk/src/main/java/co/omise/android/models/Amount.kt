@@ -9,13 +9,13 @@ package co.omise.android.models
 data class Amount(val amount: Long, val currency: String) {
     val localAmount: Double
         get() =
-            when (currency.toLowerCase()) {
+            when (currency.lowercase()) {
                 "jpy" -> amount.toDouble()
                 else -> amount / 100.0
             }
 
     fun toAmountString(): String {
-        return "$localAmount ${currency.toUpperCase()}"
+        return "$localAmount ${currency.uppercase()}"
     }
 
     fun toString(decimalPlaces: Int): String {

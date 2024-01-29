@@ -52,7 +52,7 @@ internal class FpxEmailFormFragment : OmiseFragment() {
 
     private fun submitForm() {
         val requester = requester ?: return
-        val banks = requester.capability?.paymentMethods?.find { it.name.equals("fpx") }?.banks
+        val banks = requester.capability.paymentMethods?.find { it.name.equals("fpx") }?.banks
         val email = emailEdit.text?.toString()?.trim().orEmpty()
 
         navigation?.navigateToFpxBankChooser(banks, email)
