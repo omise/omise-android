@@ -4,7 +4,6 @@ import android.content.res.Resources
 import co.omise.android.R
 import co.omise.android.models.APIError
 import co.omise.android.models.Amount
-import java.util.Locale
 
 fun APIError.getMessageFromResources(res: Resources): String =
     when (errorCode) {
@@ -179,7 +178,7 @@ sealed class BadRequestReason {
                                 amountAtLeastValidAmountErrorMessageRegex.findAll(message)
                                     .toList()[0].groupValues
                             val validAmount = matchedResult.getOrNull(1)?.toLong()
-                            val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                            val currency = matchedResult[3].ifEmpty { null }
                             AmountIsLessThanValidAmount(validAmount, currency)
                         }
                         message.matches(amountLessThanValidAmountErrorMessageRegex) -> {
@@ -187,7 +186,7 @@ sealed class BadRequestReason {
                                 amountLessThanValidAmountErrorMessageRegex.findAll(message)
                                     .toList()[0].groupValues
                             val validAmount = matchedResult.getOrNull(1)?.toLong()
-                            val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                            val currency = matchedResult[3].ifEmpty { null }
                             AmountIsLessThanValidAmount(validAmount, currency)
                         }
                         message.matches(amountGreaterThanValidAmountErrorMessageRegex) -> {
@@ -195,7 +194,7 @@ sealed class BadRequestReason {
                                 amountGreaterThanValidAmountErrorMessageRegex.findAll(message)
                                     .toList()[0].groupValues
                             val validAmount = matchedResult.getOrNull(1)?.toLong()
-                            val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                            val currency = matchedResult[3].ifEmpty { null }
                             AmountIsGreaterThanValidAmount(validAmount, currency)
                         }
                         else -> Unknown(message.capitalizeFirstChar())

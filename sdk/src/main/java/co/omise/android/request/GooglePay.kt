@@ -9,6 +9,9 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.jvm.Throws
+import com.google.android.gms.wallet.PaymentDataRequest
+import com.google.android.gms.wallet.IsReadyToPayRequest
+import co.omise.android.models.PaymentMethod
 
 class GooglePay(
     private val pKey: String,

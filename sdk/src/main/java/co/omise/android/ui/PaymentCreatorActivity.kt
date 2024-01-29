@@ -97,7 +97,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                                 else -> getString(R.string.error_unknown, error?.message)
                             }
                         result.exceptionOrNull()?.let {
-                            snackbar.setText(message.orEmpty())
+                            snackbar.setText(message)
                             snackbar.show()
                         }
                     }
@@ -346,7 +346,7 @@ private class PaymentCreatorNavigationImpl(
          *  DuitNow OBW didn't support capability api for banks list
          *  so need to define local banks list
          */
-        var banks =
+        val banks =
             listOf(
                 Bank(name = "Affin Bank", code = "affin", active = true),
                 Bank(name = "Alliance Bank (Personal)", code = "alliance", active = true),

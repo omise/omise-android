@@ -221,14 +221,14 @@ class GooglePayActivity : AppCompatActivity() {
      */
     private fun handlePaymentSuccess(paymentData: PaymentData) {
         val paymentInformation = paymentData.toJson()
-        var billingName: String = ""
-        var billingCity: String = ""
-        var billingCountry: String = ""
-        var billingPostalCode: String = ""
-        var billingState: String = ""
-        var billingStreet1: String = ""
-        var billingStreet2: String = ""
-        var billingPhoneNumber: String = ""
+        var billingName = ""
+        var billingCity = ""
+        var billingCountry = ""
+        var billingPostalCode = ""
+        var billingState = ""
+        var billingStreet1 = ""
+        var billingStreet2 = ""
+        var billingPhoneNumber = ""
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
@@ -287,7 +287,7 @@ class GooglePayActivity : AppCompatActivity() {
                 listener.onRequestFailed(ex)
             }
         } catch (e: JSONException) {
-            Log.e("handlePaymentSuccess", "Error: " + e.toString())
+            Log.e("handlePaymentSuccess", "Error: $e")
         }
     }
 

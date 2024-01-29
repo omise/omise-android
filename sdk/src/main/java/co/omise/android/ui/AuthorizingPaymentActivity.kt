@@ -298,7 +298,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithSuccessful(data: Intent?) {
-        setResult(if (isWebViewSetup) AuthorizingPaymentActivity.WEBVIEW_CLOSED_RESULT_CODE else Activity.RESULT_OK, data)
+        setResult(if (isWebViewSetup) WEBVIEW_CLOSED_RESULT_CODE else Activity.RESULT_OK, data)
         finish()
     }
 

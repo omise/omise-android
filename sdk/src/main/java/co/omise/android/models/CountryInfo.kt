@@ -1,6 +1,5 @@
 package co.omise.android.models
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 

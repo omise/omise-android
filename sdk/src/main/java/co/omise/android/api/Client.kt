@@ -48,7 +48,7 @@ class Client(publicKey: String) {
     }
 
     suspend fun <T : Model> send(request: Request<T>) =
-        suspendCoroutine<T> { continuation ->
+        suspendCoroutine { continuation ->
             send(
                 request,
                 object : RequestListener<T> {

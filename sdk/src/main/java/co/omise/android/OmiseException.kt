@@ -3,6 +3,8 @@ package co.omise.android
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.lang.Exception
+import android.content.Intent
+
 
 /**
  * This class reserve for passing the Exception from Activity/Fragment through [Intent].

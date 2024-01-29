@@ -8,12 +8,13 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+@Suppress("SameParameterValue")
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
     fun atPosition(position: Int): Matcher<View> {
         return atPositionOnView(position, -1)
     }
 
-    fun atPositionOnView(
+    private fun atPositionOnView(
         position: Int,
         targetViewId: Int,
     ): Matcher<View> {

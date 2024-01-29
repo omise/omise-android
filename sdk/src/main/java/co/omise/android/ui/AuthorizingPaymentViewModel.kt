@@ -150,7 +150,7 @@ internal class AuthorizingPaymentViewModel(
         val challengeParameters =
             ChallengeParameters().apply {
                 set3DSServerTransactionID(ares.threeDSServerTransID)
-                setThreeDSRequestorAppURL(createThreeDSRequestorAppURL(ares.sdkTransID))
+                threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
                 // TODO : check if where to get the sdkReferenceNumber value
                 acsRefNumber = BuildConfig.ACS_REF_NUMBER

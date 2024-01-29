@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PaymentCreatorActivityExceptionTest {
     @get:Rule
-    val intentRule = IntentsTestRule<TestFragmentActivity>(TestFragmentActivity::class.java)
+    val intentRule = IntentsTestRule(TestFragmentActivity::class.java)
 
     private lateinit var scenario: ActivityScenario<PaymentCreatorActivity>
 

@@ -7,7 +7,7 @@ package co.omise.android.models
  * @param currency The specified currency.
  */
 data class Amount(val amount: Long, val currency: String) {
-    val localAmount: Double
+    private val localAmount: Double
         get() =
             when (currency.lowercase()) {
                 "jpy" -> amount.toDouble()
