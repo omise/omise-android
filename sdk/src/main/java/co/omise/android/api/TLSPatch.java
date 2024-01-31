@@ -3,7 +3,6 @@ package co.omise.android.api;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -32,11 +31,10 @@ class TLSPatch {
 
     /**
      * SSLSocketFactory implementation that enforces TLSv1.2 usage.
-     *
-     * credit: https://gist.github.com/fkrauthan/ac8624466a4dee4fd02f
+     * credit: <a href="https://gist.github.com/fkrauthan/ac8624466a4dee4fd02f">link</a>
      */
     static class TLSSocketFactory extends SSLSocketFactory {
-        private SSLSocketFactory internalSSLSocketFactory;
+        private final SSLSocketFactory internalSSLSocketFactory;
 
         public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
             SSLContext context = SSLContext.getInstance("TLS");
@@ -60,7 +58,7 @@ class TLSPatch {
         }
 
         @Override
-        public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+        public Socket createSocket(String host, int port) throws IOException {
             return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port));
         }
 
@@ -80,7 +78,7 @@ class TLSPatch {
         }
 
         private Socket enableTLSOnSocket(Socket socket) {
-            if(socket != null && (socket instanceof SSLSocket)) {
+            if((socket instanceof SSLSocket)) {
                 ((SSLSocket)socket).setEnabledProtocols(new String[] {"TLSv1.2"});
             }
             return socket;

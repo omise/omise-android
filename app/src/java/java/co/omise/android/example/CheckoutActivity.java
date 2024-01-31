@@ -12,8 +12,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
 import co.omise.android.api.Client;
 import co.omise.android.api.Request;
 import co.omise.android.api.RequestListener;
@@ -39,7 +42,6 @@ import co.omise.android.ui.CreditCardActivity;
 import co.omise.android.ui.OmiseActivity;
 import co.omise.android.ui.PaymentCreatorActivity;
 import kotlin.Unit;
-import kotlin.text.StringsKt;
 
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_AUTHORIZED_URLSTRING;
 import static co.omise.android.AuthorizingPaymentURLVerifier.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS;
@@ -48,27 +50,25 @@ import static co.omise.android.ui.AuthorizingPaymentActivity.EXTRA_UI_CUSTOMIZAT
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CheckoutActivity extends AppCompatActivity {
 
-    private static String TAG = "CheckoutActivity";
-    private static String PUBLIC_KEY = "[PUBLIC_KEY]";
-    private static String GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]";
-    private static boolean GOOGLEPAY_REQUEST_BILLING_ADDRESS = false;
-    private static boolean GOOGLEPAY_REQUEST_PHONE_NUMBER = false;
+    private static final String PUBLIC_KEY = "[PUBLIC_KEY]";
 
-    private static int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
-    private static int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
-    private static int CREDIT_CARD_REQUEST_CODE = 0x3D7;
+    private static final int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
+    private static final int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
+    private static final int CREDIT_CARD_REQUEST_CODE = 0x3D7;
 
     private EditText amountEdit;
     private EditText currencyEdit;
-    private Button choosePaymentMethodButton;
-    private Button creditCardButton;
-    private Button authorizeUrlButton;
     private Snackbar snackbar;
 
     private Capability capability;
+
+    private ActivityResultLauncher<Intent> authorizingPaymentLauncher;
+    private ActivityResultLauncher<Intent> paymentCreatorLauncher;
+    private ActivityResultLauncher<Intent> creditCardLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +82,16 @@ public class CheckoutActivity extends AppCompatActivity {
 
         amountEdit = findViewById(R.id.amount_edit);
         currencyEdit = findViewById(R.id.currency_edit);
-        choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button);
-        creditCardButton = findViewById(R.id.credit_card_button);
-        authorizeUrlButton = findViewById(R.id.authorize_url_button);
+        Button choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button);
+        Button creditCardButton = findViewById(R.id.credit_card_button);
+        Button authorizeUrlButton = findViewById(R.id.authorize_url_button);
         snackbar = Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT);
+
+        authorizingPaymentLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> handleActivityResult(AUTHORIZING_PAYMENT_REQUEST_CODE, result.getResultCode(), result.getData()));
+
+        paymentCreatorLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> handleActivityResult(PAYMENT_CREATOR_REQUEST_CODE, result.getResultCode(), result.getData()));
+
+        creditCardLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> handleActivityResult(CREDIT_CARD_REQUEST_CODE, result.getResultCode(), result.getData()));
 
         choosePaymentMethodButton.setOnClickListener(view -> choosePaymentMethod());
         creditCardButton.setOnClickListener(view -> payByCreditCard());
@@ -101,7 +107,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void onRequestFailed(@NotNull Throwable throwable) {
-                snackbar.setText(StringsKt.capitalize(throwable.getMessage())).show();
+                snackbar.setText(Objects.requireNonNull(capitalize(throwable.getMessage()))).show();
             }
         });
     }
@@ -114,7 +120,7 @@ public class CheckoutActivity extends AppCompatActivity {
             return;
         }
 
-        double localAmount = Double.valueOf(amountEdit.getText().toString().trim());
+        double localAmount = Double.parseDouble(amountEdit.getText().toString().trim());
         String currency = currencyEdit.getText().toString().trim().toLowerCase();
         Amount amount = Amount.fromLocalAmount(localAmount, currency);
 
@@ -122,8 +128,11 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
         intent.putExtra(OmiseActivity.EXTRA_AMOUNT, amount.getAmount());
         intent.putExtra(OmiseActivity.EXTRA_CURRENCY, amount.getCurrency());
+        String GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]";
         intent.putExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID, GOOGLEPAY_MERCHANT_ID);
+        boolean GOOGLEPAY_REQUEST_BILLING_ADDRESS = false;
         intent.putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, GOOGLEPAY_REQUEST_BILLING_ADDRESS);
+        boolean GOOGLEPAY_REQUEST_PHONE_NUMBER = false;
         intent.putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, GOOGLEPAY_REQUEST_PHONE_NUMBER);
 
         if (isUsedSpecificsPaymentMethods) {
@@ -132,13 +141,15 @@ public class CheckoutActivity extends AppCompatActivity {
             intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
         }
 
-        startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
+        //startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
+        paymentCreatorLauncher.launch(intent);
     }
 
     private void payByCreditCard() {
         Intent intent = new Intent(this, CreditCardActivity.class);
         intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-        startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
+        //startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
+        creditCardLauncher.launch(intent);
     }
 
     private Unit startAuthoringPaymentActivity(String authorizeUrl, String returnUrl) {
@@ -212,7 +223,8 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
         intent.putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization);
         intent.putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, "sampleapp://omise.co/authorize_return");
-        startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+        //startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+        authorizingPaymentLauncher.launch(intent);
         return Unit.INSTANCE;
     }
 
@@ -236,8 +248,7 @@ public class CheckoutActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    private void handleActivityResult(int requestCode, int resultCode, Intent data) {
         // custom result code when web view is closed
         if (resultCode == AuthorizingPaymentActivity.WEBVIEW_CLOSED_RESULT_CODE) {
             snackbar.setText(R.string.webview_closed).show();
@@ -248,6 +259,7 @@ public class CheckoutActivity extends AppCompatActivity {
             return;
         }
 
+        String TAG = "CheckoutActivity";
         if (requestCode == AUTHORIZING_PAYMENT_REQUEST_CODE) {
             AuthorizingPaymentResult paymentResult = data.getParcelableExtra(AuthorizingPaymentActivity.EXTRA_AUTHORIZING_PAYMENT_RESULT);
             String resultMessage = null;
@@ -263,23 +275,40 @@ public class CheckoutActivity extends AppCompatActivity {
                 resultMessage = "Not found the authorization result.";
             }
             Log.d(TAG, resultMessage);
-            snackbar.setText(resultMessage).show();
+            snackbar.setText(Objects.requireNonNull(resultMessage)).show();
         } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE) {
             if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                 Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
-                snackbar.setText(source.getId()).show();
+                snackbar.setText(Objects.requireNonNull(source.getId())).show();
                 Log.d(TAG, "source: " + source.getId());
             } else if (data.hasExtra(OmiseActivity.EXTRA_TOKEN)) {
                 Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
-                snackbar.setText(token.getId()).show();
+                snackbar.setText(Objects.requireNonNull(token.getId())).show();
                 Log.d(TAG, "token: " + token.getId());
             }
         } else if (requestCode == CREDIT_CARD_REQUEST_CODE) {
             Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
-            snackbar.setText(token.getId()).show();
+            snackbar.setText(Objects.requireNonNull(token.getId())).show();
             Log.d(TAG, "token: " + token.getId());
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+    /**
+     * Replaces the deprecated capitalize method.
+     *
+     * @param input The string to capitalize.
+     * @return The capitalized string.
+     */
+    public static String capitalize(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        char firstChar = input.charAt(0);
+        char capitalizedFirstChar = Character.toUpperCase(firstChar);
+
+        return capitalizedFirstChar + input.substring(1);
+    }
+
 }

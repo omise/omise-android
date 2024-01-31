@@ -71,7 +71,7 @@ public final class CardNumber {
         char[] chars = number.toCharArray();
         int[] digits = new int[chars.length];
         for (int i = 0; i < chars.length; i++) {
-            digits[i] = (int) (chars[i] - '0');
+            digits[i] = chars[i] - '0';
         }
 
         int oddSum = 0, evenSum = 0;

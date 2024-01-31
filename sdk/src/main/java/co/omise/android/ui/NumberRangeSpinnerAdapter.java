@@ -46,7 +46,7 @@ public abstract class NumberRangeSpinnerAdapter implements SpinnerAdapter {
             convertView = inflater.inflate(android.R.layout.simple_dropdown_item_1line, parent, false);
         }
 
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView textView = convertView.findViewById(android.R.id.text1);
         textView.setText(getItemDropDownLabel((Integer) getItem(position)));
 
         return convertView;
@@ -60,7 +60,7 @@ public abstract class NumberRangeSpinnerAdapter implements SpinnerAdapter {
             convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
         }
 
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView textView = convertView.findViewById(android.R.id.text1);
         textView.setText(getItemLabel((Integer) getItem(position)));
 
         return convertView;
