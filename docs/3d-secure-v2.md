@@ -20,10 +20,10 @@ To use 3DS2, the `AuthorizingPaymentConfig.initialize(config)` function must be 
 
 These are the available configurations in 3DS2.
 
-| Config | Description |
-|---|---|
-| `uiCustomization` | Configuration for UI customization in the challenge flow. |
-| `timeout` | Maximum timeout for the challenge flow. The acceptable timeout is 5-99 mins. |
+| Config            | Description                                                                  |
+|-------------------|------------------------------------------------------------------------------|
+| `uiCustomization` | Configuration for UI customization in the challenge flow.                    |
+| `timeout`         | Maximum timeout for the challenge flow. The acceptable timeout is 5-99 mins. |
 
 To use the authentication page, the Omise SDK provides the `AuthorizingPaymentActivity` for handle the authorizing payment. You can declare the `AuthorizingPaymentActivity` in your `AndroidManifest.xml` file.
 
