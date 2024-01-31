@@ -70,11 +70,6 @@ class Client(publicKey: String) {
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .build()
 
-        if (Build.VERSION.SDK_INT < 21) {
-            val trustManager = TLSPatch.systemDefaultTrustManager()
-            builder.sslSocketFactory(TLSPatch.TLSSocketFactory(), trustManager)
-        }
-
         return builder
             .addInterceptor(Configurer(config))
             .connectionSpecs(listOf(spec))
