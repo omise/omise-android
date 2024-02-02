@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableCompat
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
@@ -21,7 +23,7 @@ import co.omise.android.models.mobileBankingMethods
 internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>() {
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
-    val capability: Capability by lazy { requireNotNull(arguments?.getParcelable(EXTRA_CAPABILITY)) { "Capability must not be null." } }
+    val capability: Capability by lazy { requireNotNull(arguments?.getParcelableCompat(EXTRA_CAPABILITY)) { "Capability must not be null." } }
 
     override fun listItems(): List<PaymentMethodResource> {
         return capability.paymentMethodResources
@@ -74,8 +76,8 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         title = getString(R.string.payment_chooser_title)
         setHasOptionsMenu(true)
     }

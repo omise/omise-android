@@ -1,7 +1,9 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import android.view.View
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableArrayCompat
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
@@ -16,7 +18,7 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingRes
     private val allowedBanks: List<SourceType.MobileBanking> by lazy {
         val args = arguments ?: return@lazy emptyList<SourceType.MobileBanking>()
         val paymentMethods =
-            args.getParcelableArray(EXTRA_MOBILE_BANKING_METHODS) as Array<PaymentMethod>
+            args.getParcelableArrayCompat<PaymentMethod>(EXTRA_MOBILE_BANKING_METHODS)
         return@lazy paymentMethods
             .filter {
                 it.backendType is BackendType.Source &&
@@ -27,8 +29,8 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingRes
 
     var requester: PaymentCreatorRequester<Source>? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.mobile_banking_chooser_title)
         setHasOptionsMenu(true)

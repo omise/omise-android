@@ -54,7 +54,7 @@ import java.util.Objects;
 
 public class CheckoutActivity extends AppCompatActivity {
 
-    private static final String PUBLIC_KEY = "[PUBLIC_KEY]";
+    private static final String PUBLIC_KEY = "pkey_5xjdtti64j5cwzxa9xo";
 
     private static final int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
     private static final int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;
@@ -141,14 +141,13 @@ public class CheckoutActivity extends AppCompatActivity {
             intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
         }
 
-        //startActivityForResult(intent, PAYMENT_CREATOR_REQUEST_CODE);
         paymentCreatorLauncher.launch(intent);
     }
 
     private void payByCreditCard() {
         Intent intent = new Intent(this, CreditCardActivity.class);
         intent.putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY);
-        //startActivityForResult(intent, CREDIT_CARD_REQUEST_CODE);
+
         creditCardLauncher.launch(intent);
     }
 
@@ -223,7 +222,7 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
         intent.putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization);
         intent.putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, "sampleapp://omise.co/authorize_return");
-        //startActivityForResult(intent, CheckoutActivity.AUTHORIZING_PAYMENT_REQUEST_CODE);
+
         authorizingPaymentLauncher.launch(intent);
         return Unit.INSTANCE;
     }

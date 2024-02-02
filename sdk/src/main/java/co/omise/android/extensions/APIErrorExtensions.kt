@@ -160,13 +160,13 @@ sealed class BadRequestReason {
 
     companion object {
         private val amountAtLeastValidAmountErrorMessageRegex =
-            """amount must be at least ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+            """amount must be at least (\d+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val amountLessThanValidAmountErrorMessageRegex =
-            """amount must be greater than ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+            """amount must be greater than (\d+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val amountGreaterThanValidAmountErrorMessageRegex =
-            """amount must be less than ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+            """amount must be less than (\d+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val nameIsTooLongErrorMessageRegex =
-            """name is too long \(maximum is ([\d]+) characters\)""".toRegex()
+            """name is too long \(maximum is (\d+) characters\)""".toRegex()
 
         fun creator(message: String): BadRequestReason =
             when {

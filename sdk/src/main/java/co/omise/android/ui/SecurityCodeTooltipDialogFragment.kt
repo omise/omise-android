@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableCompat
 import co.omise.android.models.CardBrand
 import kotlinx.android.synthetic.main.dialog_security_code_tooltip.close_button
 import kotlinx.android.synthetic.main.dialog_security_code_tooltip.cvv_description_text
@@ -29,7 +30,7 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        cardBrand = arguments?.getParcelable(EXTRA_CARD_BRAND)
+        cardBrand = arguments?.getParcelableCompat(EXTRA_CARD_BRAND)
     }
 
     override fun onCreateView(
@@ -40,8 +41,8 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
         return inflater.inflate(R.layout.dialog_security_code_tooltip, container)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableCompat
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
@@ -29,7 +30,7 @@ class EContextFormFragment : OmiseFragment() {
     var requester: PaymentCreatorRequester<Source>? = null
 
     private val type: SupportedEcontext? by lazy {
-        arguments?.getParcelable(EXTRA_ECONTEXT_TYPE)
+        arguments?.getParcelableCompat(EXTRA_ECONTEXT_TYPE,SupportedEcontext::class.java)
     }
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
     private val emailEdit: OmiseEditText by lazy { edit_email }
@@ -54,8 +55,8 @@ class EContextFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_econtext_form, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         title =
             when (type) {

@@ -46,6 +46,9 @@ fun loadUrl(url: String): ViewAction =
             view: View?,
         ) {
             val webView = view as? WebView ?: return
-            webView.webViewClient.shouldOverrideUrlLoading(webView, url)
+            webView.let {
+                uiController?.loopMainThreadUntilIdle()
+                it.loadUrl(url)
+            }
         }
     }

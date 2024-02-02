@@ -22,7 +22,7 @@ abstract class OmiseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fragmentManager?.addOnBackStackChangedListener {
+        parentFragmentManager.addOnBackStackChangedListener {
             actionBar?.title = title
         }
     }

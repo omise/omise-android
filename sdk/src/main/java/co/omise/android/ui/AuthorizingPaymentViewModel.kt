@@ -29,7 +29,7 @@ internal class AuthorizingPaymentViewModelFactory(
     private val uiCustomization: UiCustomization,
     private val passedThreeDSRequestorAppURL: String,
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val client = Client("")
         val wrapper =
             ThreeDS2ServiceWrapper(

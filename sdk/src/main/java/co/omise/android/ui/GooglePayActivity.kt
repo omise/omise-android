@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -48,6 +49,9 @@ class GooglePayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_pay)
+
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         initialize()
 
@@ -124,7 +128,7 @@ class GooglePayActivity : AppCompatActivity() {
                     "Internal error occurred, please try a different payment method",
                     Toast.LENGTH_LONG,
                 ).show()
-                onBackPressed()
+                onBackPressedCallback.handleOnBackPressed()
             }
         }
     }
@@ -145,7 +149,7 @@ class GooglePayActivity : AppCompatActivity() {
                 "Unfortunately, Google Pay is not available on this device",
                 Toast.LENGTH_LONG,
             ).show()
-            onBackPressed()
+            onBackPressedCallback.handleOnBackPressed()
         }
     }
 
@@ -179,6 +183,7 @@ class GooglePayActivity : AppCompatActivity() {
      * @see [Getting a result
      * from an Activity](https://developer.android.com/training/basics/intents/result)
      */
+    // https://github.com/Adyen/adyen-android/issues/771
     public override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -195,7 +200,7 @@ class GooglePayActivity : AppCompatActivity() {
                         }
 
                     RESULT_CANCELED -> {
-                        onBackPressed()
+                        onBackPressedCallback.handleOnBackPressed()
                     }
 
                     AutoResolveHelper.RESULT_ERROR -> {
@@ -328,7 +333,7 @@ class GooglePayActivity : AppCompatActivity() {
                 message,
                 Toast.LENGTH_LONG,
             ).show()
-            onBackPressed()
+            onBackPressedCallback.handleOnBackPressed()
         }
     }
 
@@ -341,9 +346,9 @@ class GooglePayActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            setResult(RESULT_CANCELED)
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.SDKTest
+import co.omise.android.extensions.getParcelableCompat
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -29,7 +30,7 @@ class ModelTest : SDKTest() {
         val bundle = Bundle()
         bundle.putParcelable("test", dummy)
 
-        assertCorrectFields(Objects.requireNonNull(bundle.getParcelable("test")))
+        assertCorrectFields(Objects.requireNonNull(bundle.getParcelableCompat("test")))
     }
 
     private fun assertCorrectFields(dummy: Dummy) {

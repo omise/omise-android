@@ -1,7 +1,9 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import android.view.View
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableArrayCompat
 import co.omise.android.models.Bank
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
@@ -13,8 +15,8 @@ import co.omise.android.models.SourceType
 internal class DuitNowOBWBankChooserFragment : OmiseListFragment<DuitNowOBWResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_method_duitnow_obw_title)
         noDataText.text = getString(R.string.banks_no_data)
@@ -37,8 +39,8 @@ internal class DuitNowOBWBankChooserFragment : OmiseListFragment<DuitNowOBWResou
     }
 
     override fun listItems(): List<DuitNowOBWResource> {
-        val capabilityBanks =
-            arguments?.getParcelableArray(DUITNOWOBW_BANKS).orEmpty() as Array<Bank>
+        val capabilityBanks = arguments?.getParcelableArrayCompat<Bank>(DUITNOWOBW_BANKS).orEmpty()
+
 
         return capabilityBanks.map {
             DuitNowOBWResource(

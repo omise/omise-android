@@ -11,9 +11,14 @@ import android.webkit.CookieManager
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +31,7 @@ import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.UiCustomization
 import co.omise.android.config.UiCustomizationType
+import co.omise.android.extensions.parcelable
 import co.omise.android.models.Authentication
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
@@ -42,9 +48,10 @@ import org.jetbrains.annotations.TestOnly
 class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
-    private val uiCustomization: UiCustomization by lazy { intent.getParcelableExtra(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
+    private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
     private lateinit var threeDSRequestorAppURL: String
     private var isWebViewSetup = false
+    private lateinit var externalActivityLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
         viewModelFactory ?: AuthorizingPaymentViewModelFactory(
@@ -65,6 +72,22 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_authorizing_payment)
         setupActionBarTitle()
+externalActivityLauncher = registerForActivityResult(
+    ActivityResultContracts.StartActivityForResult()
+) { result: ActivityResult ->
+    handleExternalActivityResult(
+        REQUEST_EXTERNAL_CODE,
+        result.resultCode,
+        result.data
+    )
+}
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishActivityWithSuccessful(null)
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
             ?: run {
                 finishActivityWithFailure(OmiseException("The threeDSRequestorAppURL must be provided in the intent"))
@@ -84,7 +107,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(TransactionStatus.AUTHENTICATED)
                 Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
                 Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
-                Authentication.AuthenticationStatus.FAILED ->
+                Authentication.AuthenticationStatus.FAILED,null ->
                     finishActivityWithFailure(
                         OmiseException(
                             Authentication.AuthenticationStatus.FAILED.message!!,
@@ -115,11 +138,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(
                     view: WebView,
-                    url: String,
+                    request: WebResourceRequest,
                 ): Boolean {
-                    val uri = Uri.parse(url)
+                    val uri = request.url
                     return if (verifier.verifyURL(uri)) {
-                        finishActivityWithSuccessful(url)
+                        finishActivityWithSuccessful(uri.toString())
                         true
                     } else if (verifier.verifyExternalURL(uri)) {
                         openDeepLink(uri)
@@ -206,7 +229,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private fun openDeepLink(uri: Uri) {
         try {
             val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-            startActivityForResult(externalIntent, REQUEST_EXTERNAL_CODE)
+            externalActivityLauncher.launch(externalIntent)
         } catch (e: ActivityNotFoundException) {
             finishActivityWithFailure(OmiseException(OmiseSDKError.OPEN_DEEP_LINK_FAILED.value, e))
         }
@@ -232,12 +255,11 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(
+     private fun handleExternalActivityResult(
         requestCode: Int,
         resultCode: Int,
         data: Intent?,
     ) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_EXTERNAL_CODE) {
             finishActivityWithSuccessful(data)
         }
@@ -254,9 +276,6 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun onBackPressed() {
-        finishActivityWithSuccessful(null)
-    }
 
     private fun setupWebView() {
         isWebViewSetup = true

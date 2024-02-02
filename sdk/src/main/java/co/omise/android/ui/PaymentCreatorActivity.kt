@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
@@ -11,6 +14,7 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
+import co.omise.android.extensions.parcelable
 import co.omise.android.models.APIError
 import co.omise.android.models.Bank
 import co.omise.android.models.Capability
@@ -45,6 +49,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private lateinit var googlepayMerchantId: String
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
+    private lateinit var creditCardActivityResultLauncher: ActivityResultLauncher<Intent>
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private val client: Client by lazy { Client(pkey) }
@@ -66,6 +71,7 @@ class PaymentCreatorActivity : OmiseActivity() {
             googlepayRequestPhoneNumber,
             REQUEST_CREDIT_CARD,
             requester,
+            creditCardActivityResultLauncher
         )
     }
 
@@ -77,7 +83,20 @@ class PaymentCreatorActivity : OmiseActivity() {
         }
 
         setContentView(R.layout.activity_payment_creator)
+        creditCardActivityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleActivityResult(result.resultCode,result.data)
+            }
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
+                    setResult(Activity.RESULT_CANCELED)
+                    finish()
+                }
+            }
+        }
 
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initialize()
 
         navigation.navigateToPaymentChooser(capability)
@@ -117,24 +136,12 @@ class PaymentCreatorActivity : OmiseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
-            setResult(Activity.RESULT_CANCELED)
-            finish()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun onActivityResult(
-        requestCode: Int,
+    private fun handleActivityResult(
         resultCode: Int,
         data: Intent?,
     ) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CREDIT_CARD && resultCode == Activity.RESULT_OK) {
-            val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
+        if ( resultCode == Activity.RESULT_OK) {
+            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
             val intent =
                 Intent().apply {
                     putExtra(EXTRA_TOKEN, token?.id)
@@ -153,7 +160,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         pkey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
         amount = intent.getLongExtra(EXTRA_AMOUNT, 0)
         currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
-        capability = requireNotNull(intent.getParcelableExtra(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
+        capability = requireNotNull(intent.parcelable(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
         val fetchBrands: List<String>? = capability.paymentMethods?.find { it.name == "card" }?.cardBrands
         cardBrands = if (fetchBrands != null) fetchBrands as ArrayList<String> else arrayListOf()
         googlepayMerchantId = intent.getStringExtra(EXTRA_GOOGLEPAY_MERCHANT_ID) ?: "[GOOGLEPAY_MERCHANT_ID]"
@@ -210,6 +217,7 @@ private class PaymentCreatorNavigationImpl(
     private var googlepayRequestPhoneNumber: Boolean,
     private val requestCode: Int,
     private val requester: PaymentCreatorRequester<Source>,
+    private var activityLauncher: ActivityResultLauncher<Intent>
 ) : PaymentCreatorNavigation {
     companion object {
         const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
@@ -239,7 +247,7 @@ private class PaymentCreatorNavigationImpl(
                 putExtra(EXTRA_PKEY, pkey)
                 putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
             }
-        activity.startActivityForResult(intent, requestCode)
+        activityLauncher.launch(intent)
     }
 
     override fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>) {
@@ -338,7 +346,7 @@ private class PaymentCreatorNavigationImpl(
                 putExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, googlepayRequestBillingAddress)
                 putExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
             }
-        activity.startActivityForResult(intent, requestCode)
+        activityLauncher.launch(intent)
     }
 
     override fun navigateToDuitNowOBWBankChooser() {

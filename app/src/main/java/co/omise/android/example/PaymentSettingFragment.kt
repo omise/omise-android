@@ -1,6 +1,7 @@
 package co.omise.android.example
 
 import android.os.Bundle
+import android.view.View
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -12,8 +13,8 @@ class PaymentSettingFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preference_payment_setting, rootKey)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         activity?.setTitle(R.string.activity_payment_setting)
 
