@@ -141,6 +141,7 @@ class CreditCardActivity : OmiseActivity() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 setResult(RESULT_CANCELED)
+                finish()
             }
         }
 
