@@ -30,7 +30,7 @@ class EContextFormFragment : OmiseFragment() {
     var requester: PaymentCreatorRequester<Source>? = null
 
     private val type: SupportedEcontext? by lazy {
-        arguments?.getParcelableCompat(EXTRA_ECONTEXT_TYPE, SupportedEcontext::class.java)
+        arguments?.getParcelableCompat<SupportedEcontext>(EXTRA_ECONTEXT_TYPE)
     }
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
     private val emailEdit: OmiseEditText by lazy { edit_email }
