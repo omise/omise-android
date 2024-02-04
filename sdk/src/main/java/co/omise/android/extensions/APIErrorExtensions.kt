@@ -11,8 +11,11 @@ fun APIError.getMessageFromResources(res: Resources): String =
         is APIErrorCode.BadRequest -> getMessageWhenBadRequest(res)
         APIErrorCode.AuthenticationFailure -> res.getString(R.string.error_api_authentication_failure)
         APIErrorCode.ServiceNotFound -> res.getString(R.string.error_api_service_not_found)
-        else -> res.getString(R.string.error_required,
-            message?.capitalizeFirstChar())
+        else ->
+            res.getString(
+                R.string.error_required,
+                message?.capitalizeFirstChar(),
+            )
     }
 
 fun APIError.getMessageWhenInvalidCard(res: Resources): String {
@@ -26,7 +29,7 @@ fun APIError.getMessageWhenInvalidCard(res: Resources): String {
             else ->
                 res.getString(
                     R.string.error_required,
-                    message?.capitalizeFirstChar() ,
+                    message?.capitalizeFirstChar(),
                 )
         }
     }

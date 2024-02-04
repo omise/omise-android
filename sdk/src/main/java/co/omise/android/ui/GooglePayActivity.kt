@@ -50,7 +50,6 @@ class GooglePayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_pay)
 
-
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         initialize()
@@ -174,6 +173,8 @@ class GooglePayActivity : AppCompatActivity() {
         )
     }
 
+    // can't move from deprecated onActivityResult due to https://github.com/Adyen/adyen-android/issues/771
+
     /**
      * Handle a resolved activity from the Google Pay payment sheet.
      *
@@ -183,7 +184,6 @@ class GooglePayActivity : AppCompatActivity() {
      * @see [Getting a result
      * from an Activity](https://developer.android.com/training/basics/intents/result)
      */
-    // https://github.com/Adyen/adyen-android/issues/771
     public override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -346,10 +346,12 @@ class GooglePayActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            setResult(RESULT_CANCELED)
-            finish()
+
+    private val onBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
         }
-    }
 }

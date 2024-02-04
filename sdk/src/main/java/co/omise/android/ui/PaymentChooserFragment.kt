@@ -23,7 +23,11 @@ import co.omise.android.models.mobileBankingMethods
 internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>() {
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
-    val capability: Capability by lazy { requireNotNull(arguments?.getParcelableCompat(EXTRA_CAPABILITY)) { "Capability must not be null." } }
+    val capability: Capability by lazy {
+        requireNotNull(
+            arguments?.getParcelableCompat(EXTRA_CAPABILITY),
+        ) { "Capability must not be null." }
+    }
 
     override fun listItems(): List<PaymentMethodResource> {
         return capability.paymentMethodResources
@@ -76,7 +80,10 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         title = getString(R.string.payment_chooser_title)
         setHasOptionsMenu(true)

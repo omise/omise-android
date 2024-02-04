@@ -30,7 +30,7 @@ class EContextFormFragment : OmiseFragment() {
     var requester: PaymentCreatorRequester<Source>? = null
 
     private val type: SupportedEcontext? by lazy {
-        arguments?.getParcelableCompat(EXTRA_ECONTEXT_TYPE,SupportedEcontext::class.java)
+        arguments?.getParcelableCompat(EXTRA_ECONTEXT_TYPE, SupportedEcontext::class.java)
     }
     private val fullNameEdit: OmiseEditText by lazy { edit_full_name }
     private val emailEdit: OmiseEditText by lazy { edit_email }
@@ -55,7 +55,10 @@ class EContextFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_econtext_form, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         title =

@@ -79,14 +79,15 @@ class PaymentCreatorActivity : OmiseActivity() {
 
         setContentView(R.layout.activity_payment_creator)
 
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
-                    setResult(Activity.RESULT_CANCELED)
-                    finish()
+        val onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
+                        setResult(Activity.RESULT_CANCELED)
+                        finish()
+                    }
                 }
             }
-        }
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initialize()
@@ -128,6 +129,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         }
     }
 
+    // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,

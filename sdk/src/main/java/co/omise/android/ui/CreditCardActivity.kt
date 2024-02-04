@@ -138,12 +138,13 @@ class CreditCardActivity : OmiseActivity() {
         if (!this::client.isInitialized) {
             client = Client(pKey)
         }
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                setResult(RESULT_CANCELED)
-                finish()
+        val onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    setResult(RESULT_CANCELED)
+                    finish()
+                }
             }
-        }
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
@@ -228,7 +229,6 @@ class CreditCardActivity : OmiseActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     private fun disableForm() {
         setFormEnabled(false)

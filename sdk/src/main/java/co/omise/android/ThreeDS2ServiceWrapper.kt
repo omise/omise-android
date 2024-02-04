@@ -70,12 +70,13 @@ internal class ThreeDS2ServiceWrapper(
         }
 
     private fun getLocale(): String {
-        val defaultLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            context.resources.configuration.locale
-        }
+        val defaultLocale =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales[0]
+            } else {
+                @Suppress("DEPRECATION")
+                context.resources.configuration.locale
+            }
         val language = defaultLocale.language
         val country = defaultLocale.country
         return "$language-$country"

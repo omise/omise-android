@@ -2,6 +2,9 @@ package co.omise.android.request
 
 import android.app.Activity
 import co.omise.android.models.Amount
+import co.omise.android.models.PaymentMethod
+import com.google.android.gms.wallet.IsReadyToPayRequest
+import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
 import com.google.android.gms.wallet.WalletConstants
@@ -9,9 +12,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import kotlin.jvm.Throws
-import com.google.android.gms.wallet.PaymentDataRequest
-import com.google.android.gms.wallet.IsReadyToPayRequest
-import co.omise.android.models.PaymentMethod
 
 class GooglePay(
     private val pKey: String,

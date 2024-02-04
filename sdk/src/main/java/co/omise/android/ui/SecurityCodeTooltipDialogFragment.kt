@@ -41,7 +41,10 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
         return inflater.inflate(R.layout.dialog_security_code_tooltip, container)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

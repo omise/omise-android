@@ -26,7 +26,10 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
     }
     var navigation: PaymentCreatorNavigation? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.installments_title)

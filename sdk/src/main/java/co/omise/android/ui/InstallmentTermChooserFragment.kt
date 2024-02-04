@@ -20,7 +20,10 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         arguments?.getParcelableCompat<PaymentMethod>(EXTRA_INSTALLMENT)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         title =
             InstallmentResource.all

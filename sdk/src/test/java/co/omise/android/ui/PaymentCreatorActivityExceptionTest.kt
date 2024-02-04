@@ -9,8 +9,8 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PaymentCreatorActivityExceptionTest {
-
     private lateinit var scenario: ActivityScenario<PaymentCreatorActivity>
+
     @Test(expected = IllegalArgumentException::class)
     fun initialActivity_missExtrasIntent() {
         val noExtrasIntent = Intent(ApplicationProvider.getApplicationContext(), PaymentCreatorActivity::class.java)

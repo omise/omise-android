@@ -70,7 +70,10 @@ class AtomeFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_atome_form, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)

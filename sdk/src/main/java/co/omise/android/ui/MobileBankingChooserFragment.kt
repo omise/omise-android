@@ -29,7 +29,10 @@ internal class MobileBankingChooserFragment : OmiseListFragment<MobileBankingRes
 
     var requester: PaymentCreatorRequester<Source>? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.mobile_banking_chooser_title)

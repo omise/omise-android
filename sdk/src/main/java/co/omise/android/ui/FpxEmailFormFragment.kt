@@ -31,7 +31,10 @@ internal class FpxEmailFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_fpx_email_form, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_method_fpx_title)

@@ -15,7 +15,10 @@ import co.omise.android.models.SourceType
 internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_method_fpx_title)

@@ -72,20 +72,22 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_authorizing_payment)
         setupActionBarTitle()
-externalActivityLauncher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult()
-) { result: ActivityResult ->
-    handleExternalActivityResult(
-        REQUEST_EXTERNAL_CODE,
-        result.resultCode,
-        result.data
-    )
-}
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finishActivityWithSuccessful(null)
+        externalActivityLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result: ActivityResult ->
+                handleExternalActivityResult(
+                    REQUEST_EXTERNAL_CODE,
+                    result.resultCode,
+                    result.data,
+                )
             }
-        }
+        val onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    finishActivityWithSuccessful(null)
+                }
+            }
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
@@ -107,7 +109,7 @@ externalActivityLauncher = registerForActivityResult(
                 Authentication.AuthenticationStatus.SUCCESS -> finishActivityWithSuccessful(TransactionStatus.AUTHENTICATED)
                 Authentication.AuthenticationStatus.CHALLENGE_V1 -> setupWebView()
                 Authentication.AuthenticationStatus.CHALLENGE -> viewModel.doChallenge(this)
-                Authentication.AuthenticationStatus.FAILED,null ->
+                Authentication.AuthenticationStatus.FAILED, null ->
                     finishActivityWithFailure(
                         OmiseException(
                             Authentication.AuthenticationStatus.FAILED.message!!,
@@ -255,7 +257,7 @@ externalActivityLauncher = registerForActivityResult(
         }
     }
 
-     private fun handleExternalActivityResult(
+    private fun handleExternalActivityResult(
         requestCode: Int,
         resultCode: Int,
         data: Intent?,
@@ -275,7 +277,6 @@ externalActivityLauncher = registerForActivityResult(
 
         super.onDestroy()
     }
-
 
     private fun setupWebView() {
         isWebViewSetup = true

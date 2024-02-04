@@ -15,7 +15,10 @@ import co.omise.android.models.SourceType
 internal class DuitNowOBWBankChooserFragment : OmiseListFragment<DuitNowOBWResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_method_duitnow_obw_title)
@@ -40,7 +43,6 @@ internal class DuitNowOBWBankChooserFragment : OmiseListFragment<DuitNowOBWResou
 
     override fun listItems(): List<DuitNowOBWResource> {
         val capabilityBanks = arguments?.getParcelableArrayCompat<Bank>(DUITNOWOBW_BANKS).orEmpty()
-
 
         return capabilityBanks.map {
             DuitNowOBWResource(
