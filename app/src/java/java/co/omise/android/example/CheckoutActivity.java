@@ -54,7 +54,7 @@ import java.util.Objects;
 
 public class CheckoutActivity extends AppCompatActivity {
 
-    private static final String PUBLIC_KEY = "pkey_5xjdtti64j5cwzxa9xo";
+    private static final String PUBLIC_KEY = "[PUBLIC_KEY]";
 
     private static final int AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5;
     private static final int PAYMENT_CREATOR_REQUEST_CODE = 0x3D6;

@@ -55,7 +55,7 @@ class CheckoutActivity : AppCompatActivity() {
     companion object {
 
         private const val TAG = "CheckoutActivity"
-        private const val PUBLIC_KEY = "pkey_5xjdtti64j5cwzxa9xo"
+        private const val PUBLIC_KEY = "[PUBLIC_KEY]"
         private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
         private const val GOOGLEPAY_REQUEST_BILLING_ADDRESS = false
         private const val GOOGLEPAY_REQUEST_PHONE_NUMBER = false
