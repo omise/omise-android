@@ -232,7 +232,7 @@ repositories {
 }
 // Use locally to generate full report
 // TODO: Fix flaky tests so that this can be used in CI to reflect full coverage
-tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
+tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['compileProductionDebugAndroidTestJavaWithJavac','generateProductionDebugAndroidTestBuildConfig','checkProductionDebugAndroidTestAarMetadata','mergeProductionDebugAndroidTestResources','processProductionDebugAndroidTestManifest','testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
     reports {
         xml.required = true
         html.required = true
