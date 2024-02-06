@@ -77,7 +77,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     private var capability: Capability? = null
 
-    private lateinit var  authorizingPaymentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var authorizingPaymentLauncher: ActivityResultLauncher<Intent>
     private lateinit var paymentCreatorLauncher: ActivityResultLauncher<Intent>
     private lateinit var creditCardLauncher: ActivityResultLauncher<Intent>
 
