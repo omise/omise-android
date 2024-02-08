@@ -29,7 +29,7 @@ class ModelTypeResolver : TypeIdResolverBase() {
             (types as HashMap<String, Class<*>>)["document"] = Document::class.java
             (types as HashMap<String, Class<*>>)["authentication"] = Authentication::class.java
         }
-        return Collections.unmodifiableMap(types!! as MutableMap<out String, out Class<*>>)
+        return Collections.unmodifiableMap(types as MutableMap<out String, out Class<*>>)
     }
 
     override fun idFromValue(value: Any): String {
