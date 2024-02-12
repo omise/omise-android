@@ -82,7 +82,6 @@
     <string name="payment_method_internet_banking_bay_title">アユタヤ銀行</string>
     <string name="payment_method_internet_banking_bbl_title">バンコク銀行</string>
     <string name="payment_method_mobile_banking_scb_title">SCB EASY</string>
-    <string name="payment_method_installment_citi_title">シティバンク</string>
     <string name="payment_method_installment_ttb_title">TMBタナチャート銀行</string>
     <string name="payment_method_installment_uob_title">ユナイテッド・オーバーシーズ銀行</string>
     <string name="payment_method_internet_banking_title">インターネットバンク</string>

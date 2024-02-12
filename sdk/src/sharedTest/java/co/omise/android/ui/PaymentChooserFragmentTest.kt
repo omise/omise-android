@@ -63,7 +63,6 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "installment_scb"),
-                PaymentMethod(name = "installment_citi"),
                 PaymentMethod(name = "installment_ttb"),
                 PaymentMethod(name = "installment_uob"),
                 PaymentMethod(name = "internet_banking_bay"),
@@ -199,7 +198,6 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_kbank"),
                 PaymentMethod(name = "installment_ktc"),
                 PaymentMethod(name = "installment_scb"),
-                PaymentMethod(name = "installment_citi"),
                 PaymentMethod(name = "installment_ttb"),
                 PaymentMethod(name = "installment_uob"),
             )

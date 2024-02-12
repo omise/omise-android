@@ -89,7 +89,6 @@
     <string name="payment_method_installment_first_choice_title">Krungsri First Choice</string>
     <string name="payment_method_installment_ktc_title">KTC</string>
     <string name="payment_method_installment_scb_title">Siam Commercial Bank</string>
-    <string name="payment_method_installment_citi_title">Citibank</string>
     <string name="payment_method_installment_ttb_title">TMBThanachart Bank</string>
     <string name="payment_method_installment_uob_title">United Overseas Bank</string>
     <string name="payment_method_installment_term_month_title">%d month</string>

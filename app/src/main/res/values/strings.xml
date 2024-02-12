@@ -36,7 +36,6 @@
     <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
     <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
     <string name="payment_preference_installment_scb_key" translatable="false">installment_scb</string>
-    <string name="payment_preference_installment_citi_key" translatable="false">installment_citi</string>
     <string name="payment_preference_installment_ttb_key" translatable="false">installment_ttb</string>
     <string name="payment_preference_installment_uob_key" translatable="false">installment_uob</string>
     <string name="payment_preference_dana_key" translatable="false">dana</string>
@@ -88,7 +87,6 @@
     <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
-    <string name="payment_preference_installment_citi_title" translatable="false">Citi - Installment</string>
     <string name="payment_preference_installment_ttb_title" translatable="false">TMBThanachart - Installment</string>
     <string name="payment_preference_installment_uob_title" translatable="false">UOB - Installment</string>
     <string name="payment_preference_dana_title" translatable="false">DANA</string>

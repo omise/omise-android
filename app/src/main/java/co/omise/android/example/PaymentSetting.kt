@@ -28,7 +28,6 @@ object PaymentSetting {
                     R.string.payment_preference_installment_ktc_key,
                     R.string.payment_preference_installment_kbank_key,
                     R.string.payment_preference_installment_scb_key,
-                    R.string.payment_preference_installment_citi_key,
                     R.string.payment_preference_installment_ttb_key,
                     R.string.payment_preference_installment_uob_key,
                     R.string.payment_preference_alipay_key,
@@ -93,7 +92,6 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_installment_ktc_key) -> SourceType.Installment.Ktc
                         context.getString(R.string.payment_preference_installment_kbank_key) -> SourceType.Installment.KBank
                         context.getString(R.string.payment_preference_installment_scb_key) -> SourceType.Installment.Scb
-                        context.getString(R.string.payment_preference_installment_citi_key) -> SourceType.Installment.Citi
                         context.getString(R.string.payment_preference_installment_ttb_key) -> SourceType.Installment.Ttb
                         context.getString(R.string.payment_preference_installment_uob_key) -> SourceType.Installment.Uob
                         context.getString(R.string.payment_preference_econtext_key) -> SourceType.Econtext
