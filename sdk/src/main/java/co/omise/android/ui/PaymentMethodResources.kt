@@ -560,7 +560,7 @@ internal class FpxResource(
                 "kfh" -> R.drawable.payment_kfh
                 "maybank2e" -> R.drawable.payment_maybank
                 "maybank2u" -> R.drawable.payment_maybank
-                "ocbc" -> R.drawable.payment_ocbc
+                "ocbc" -> R.drawable.payment_ocbc_digital
                 "public" -> R.drawable.payment_publicbank
                 "rhb" -> R.drawable.payment_rhb
                 "sc" -> R.drawable.payment_sc
@@ -597,7 +597,7 @@ internal class DuitNowOBWResource(
                 "hsbc" -> R.drawable.payment_hsbc
                 "kfh" -> R.drawable.payment_kfh
                 "maybank2u" -> R.drawable.payment_maybank
-                "ocbc" -> R.drawable.payment_ocbc
+                "ocbc" -> R.drawable.payment_ocbc_digital
                 "public" -> R.drawable.payment_publicbank
                 "rhb" -> R.drawable.payment_rhb
                 "sc" -> R.drawable.payment_sc
