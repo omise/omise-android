@@ -33,8 +33,11 @@ class TrueMoneyFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_true_money_form, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_truemoney_title)
         setHasOptionsMenu(true)

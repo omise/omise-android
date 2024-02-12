@@ -1,7 +1,9 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import android.view.View
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableCompat
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
@@ -15,11 +17,14 @@ import co.omise.android.models.backendType
 internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
     private val installment: PaymentMethod? by lazy {
-        arguments?.getParcelable(EXTRA_INSTALLMENT)
+        arguments?.getParcelableCompat<PaymentMethod>(EXTRA_INSTALLMENT)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
         title =
             InstallmentResource.all
                 .find { it.sourceType == (installment?.backendType as BackendType.Source).sourceType }

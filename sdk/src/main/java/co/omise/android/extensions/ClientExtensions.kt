@@ -16,7 +16,7 @@ import kotlinx.coroutines.withTimeout
  * This is an utility function for observing the token until the charge status changes.
  *
  * @param id Token ID.
- * @param listener [RequestListener] the callback to be invoked when charnge staus changed or request failed.
+ * @param listener [RequestListener] the callback to be invoked when charge status changed or request failed.
  * @param interval time interval in millisecond.
  * @param timeout maximum timeout in millisecond.
  */
@@ -56,12 +56,12 @@ private suspend fun retrieveToken(
     client: Client,
     tokenID: String,
 ): Token? {
-    try {
+    return try {
         val request = Token.GetTokenRequestBuilder(tokenID).build()
-        return client.send(request)
+        client.send(request)
     } catch (e: APIError) {
         if (e.code == "search_unavailable") {
-            return null
+            null
         } else {
             throw e
         }

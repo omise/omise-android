@@ -43,7 +43,7 @@ data class Token(
         }
 
         @Throws(IOException::class)
-        override fun payload(): RequestBody? {
+        override fun payload(): RequestBody {
             return serialize()
         }
 

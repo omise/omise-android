@@ -31,8 +31,11 @@ internal class FpxEmailFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_fpx_email_form, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_method_fpx_title)
         setHasOptionsMenu(true)
@@ -52,7 +55,7 @@ internal class FpxEmailFormFragment : OmiseFragment() {
 
     private fun submitForm() {
         val requester = requester ?: return
-        val banks = requester.capability?.paymentMethods?.find { it.name.equals("fpx") }?.banks
+        val banks = requester.capability.paymentMethods?.find { it.name.equals("fpx") }?.banks
         val email = emailEdit.text?.toString()?.trim().orEmpty()
 
         navigation?.navigateToFpxBankChooser(banks, email)

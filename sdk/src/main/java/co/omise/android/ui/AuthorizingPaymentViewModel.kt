@@ -29,7 +29,7 @@ internal class AuthorizingPaymentViewModelFactory(
     private val uiCustomization: UiCustomization,
     private val passedThreeDSRequestorAppURL: String,
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val client = Client("")
         val wrapper =
             ThreeDS2ServiceWrapper(
@@ -150,7 +150,7 @@ internal class AuthorizingPaymentViewModel(
         val challengeParameters =
             ChallengeParameters().apply {
                 set3DSServerTransactionID(ares.threeDSServerTransID)
-                setThreeDSRequestorAppURL(createThreeDSRequestorAppURL(ares.sdkTransID))
+                threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
                 // TODO : check if where to get the sdkReferenceNumber value
                 acsRefNumber = BuildConfig.ACS_REF_NUMBER

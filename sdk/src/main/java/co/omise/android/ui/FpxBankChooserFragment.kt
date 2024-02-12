@@ -1,7 +1,9 @@
 package co.omise.android.ui
 
 import android.os.Bundle
+import android.view.View
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableArrayCompat
 import co.omise.android.models.Bank
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
@@ -13,8 +15,11 @@ import co.omise.android.models.SourceType
 internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.payment_method_fpx_title)
         noDataText.text = getString(R.string.banks_no_data)
@@ -41,7 +46,7 @@ internal class FpxBankChooserFragment : OmiseListFragment<FpxResource>() {
     }
 
     override fun listItems(): List<FpxResource> {
-        val capabilityBanks = arguments?.getParcelableArray(FPX_BANKS).orEmpty() as Array<Bank>
+        val capabilityBanks = arguments?.getParcelableArrayCompat<Bank>(FPX_BANKS).orEmpty()
 
         return capabilityBanks.map {
             FpxResource(

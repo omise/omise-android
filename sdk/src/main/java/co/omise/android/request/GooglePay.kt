@@ -2,6 +2,9 @@ package co.omise.android.request
 
 import android.app.Activity
 import co.omise.android.models.Amount
+import co.omise.android.models.PaymentMethod
+import com.google.android.gms.wallet.IsReadyToPayRequest
+import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
 import com.google.android.gms.wallet.WalletConstants
@@ -167,7 +170,7 @@ class GooglePay(
         return JSONObject().apply {
             put("totalPrice", priceUnits)
             put("totalPriceStatus", "FINAL")
-            put("currencyCode", currencyCode.toUpperCase())
+            put("currencyCode", currencyCode.uppercase())
         }
     }
 

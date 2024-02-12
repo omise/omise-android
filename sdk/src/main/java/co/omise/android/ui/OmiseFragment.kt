@@ -16,13 +16,13 @@ import androidx.fragment.app.Fragment
 abstract class OmiseFragment : Fragment() {
     var title: String? = null
 
-    protected val actionBar: ActionBar?
+    private val actionBar: ActionBar?
         get() = (activity as? AppCompatActivity)?.supportActionBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fragmentManager?.addOnBackStackChangedListener {
+        parentFragmentManager.addOnBackStackChangedListener {
             actionBar?.title = title
         }
     }

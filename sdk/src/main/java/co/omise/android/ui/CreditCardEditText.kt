@@ -30,7 +30,7 @@ class CreditCardEditText : OmiseEditText {
     val cardNumber: String
         get() = text.toString().trim().replace(SEPARATOR, "")
 
-    val cardBrand: CardBrand?
+    private val cardBrand: CardBrand?
         get() = CardNumber.brand(cardNumber)
 
     constructor(context: Context) : super(context)

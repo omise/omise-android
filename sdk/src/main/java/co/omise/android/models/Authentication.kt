@@ -63,6 +63,7 @@ internal data class Authentication(
         private var encryptedDeviceInfo: String? = null
 
         @JsonProperty("device_type")
+        @Suppress("UNUSED")
         private val deviceType: String = "Android"
 
         fun authorizeUrl(authorizeUrl: String): AuthenticationRequestBuilder {
@@ -85,7 +86,7 @@ internal data class Authentication(
         }
 
         @Throws(IOException::class)
-        override fun payload(): RequestBody? {
+        override fun payload(): RequestBody {
             return serialize()
         }
 

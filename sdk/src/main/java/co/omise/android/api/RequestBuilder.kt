@@ -6,6 +6,7 @@ import co.omise.android.models.Serializer
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.Objects.requireNonNull
@@ -101,7 +102,7 @@ abstract class RequestBuilder<T : Model> {
     protected fun serialize(): RequestBody {
         val stream = ByteArrayOutputStream(4096)
         serializer().serializeRequestBuilder(stream, this)
-        return RequestBody.create(JSON_MEDIA_TYPE, stream.toByteArray())
+        return stream.toByteArray().toRequestBody(JSON_MEDIA_TYPE)
     }
 
     private fun serializer(): Serializer {

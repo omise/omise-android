@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
@@ -11,6 +12,7 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
+import co.omise.android.extensions.parcelable
 import co.omise.android.models.APIError
 import co.omise.android.models.Bank
 import co.omise.android.models.Capability
@@ -71,13 +73,23 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (intent.getBooleanExtra(EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
         setContentView(R.layout.activity_payment_creator)
 
+        val onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
+                        setResult(Activity.RESULT_CANCELED)
+                        finish()
+                    }
+                }
+            }
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initialize()
 
         navigation.navigateToPaymentChooser(capability)
@@ -97,7 +109,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                                 else -> getString(R.string.error_unknown, error?.message)
                             }
                         result.exceptionOrNull()?.let {
-                            snackbar.setText(message.orEmpty())
+                            snackbar.setText(message)
                             snackbar.show()
                         }
                     }
@@ -117,15 +129,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
-            setResult(Activity.RESULT_CANCELED)
-            finish()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
+    // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -134,7 +138,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CREDIT_CARD && resultCode == Activity.RESULT_OK) {
-            val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
+            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
             val intent =
                 Intent().apply {
                     putExtra(EXTRA_TOKEN, token?.id)
@@ -153,7 +157,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         pkey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
         amount = intent.getLongExtra(EXTRA_AMOUNT, 0)
         currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
-        capability = requireNotNull(intent.getParcelableExtra(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
+        capability = requireNotNull(intent.parcelable(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
         val fetchBrands: List<String>? = capability.paymentMethods?.find { it.name == "card" }?.cardBrands
         cardBrands = if (fetchBrands != null) fetchBrands as ArrayList<String> else arrayListOf()
         googlepayMerchantId = intent.getStringExtra(EXTRA_GOOGLEPAY_MERCHANT_ID) ?: "[GOOGLEPAY_MERCHANT_ID]"
@@ -346,7 +350,7 @@ private class PaymentCreatorNavigationImpl(
          *  DuitNow OBW didn't support capability api for banks list
          *  so need to define local banks list
          */
-        var banks =
+        val banks =
             listOf(
                 Bank(name = "Affin Bank", code = "affin", active = true),
                 Bank(name = "Alliance Bank (Personal)", code = "alliance", active = true),

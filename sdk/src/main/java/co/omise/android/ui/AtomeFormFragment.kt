@@ -53,7 +53,6 @@ class AtomeFormFragment : OmiseFragment() {
     private val shippingCountryEdit by lazy { edit_shipping_country }
     private val shippingAddressErrorText by lazy { text_shipping_address_error }
 
-    private val billingAddressView by lazy { billing_address }
     private val billingStreetEdit by lazy { edit_billing_street }
     private val billingPostalEdit by lazy { edit_billing_postal }
     private val billingCityEdit by lazy { edit_billing_city }
@@ -71,8 +70,11 @@ class AtomeFormFragment : OmiseFragment() {
         return inflater.inflate(R.layout.fragment_atome_form, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)
 

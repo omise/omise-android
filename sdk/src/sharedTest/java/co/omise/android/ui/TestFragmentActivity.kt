@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import co.omise.android.R
 
 class TestFragmentActivity : AppCompatActivity() {
-    var activityResult: Instrumentation.ActivityResult? = null
+    private var activityResult: Instrumentation.ActivityResult? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?,

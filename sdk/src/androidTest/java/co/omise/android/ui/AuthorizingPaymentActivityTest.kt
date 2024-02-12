@@ -37,6 +37,7 @@ import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
 import co.omise.android.OmiseException
 import co.omise.android.R
+import co.omise.android.extensions.parcelable
 import co.omise.android.models.Authentication.AuthenticationStatus
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_THREE_DS_REQUESTOR_APP_URL
@@ -90,7 +91,7 @@ class AuthorizingPaymentActivityTest {
     private val mockViewModel: AuthorizingPaymentViewModel = mock()
     private val viewModelFactory =
         object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return mockViewModel as T
             }
         }
@@ -140,7 +141,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             expectedError.message,
-            activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(
+            activityResult.resultData.parcelable<AuthorizingPaymentResult.Failure>(
                 EXTRA_AUTHORIZING_PAYMENT_RESULT,
             )?.throwable?.message,
         )
@@ -226,7 +227,7 @@ class AuthorizingPaymentActivityTest {
         activityResult.resultData.setExtrasClassLoader(this::class.java.classLoader)
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(returnUrl, activityResult.resultData.getStringExtra(AuthorizingPaymentURLVerifier.EXTRA_RETURNED_URLSTRING))
-        assertEquals(ThreeDS1Completed(returnUrl), activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT))
+        assertEquals(ThreeDS1Completed(returnUrl), activityResult.resultData.parcelable(EXTRA_AUTHORIZING_PAYMENT_RESULT))
     }
 
     @Test
@@ -239,7 +240,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             ThreeDS2Completed(TransactionStatus.AUTHENTICATED),
-            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT),
+            activityResult.resultData.parcelable(EXTRA_AUTHORIZING_PAYMENT_RESULT),
         )
     }
 
@@ -253,7 +254,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             ThreeDS2Completed(TransactionStatus.AUTHENTICATED),
-            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT),
+            activityResult.resultData.parcelable(EXTRA_AUTHORIZING_PAYMENT_RESULT),
         )
     }
 
@@ -267,7 +268,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             ThreeDS2Completed(TransactionStatus.NOT_AUTHENTICATED),
-            activityResult.resultData.getParcelableExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT),
+            activityResult.resultData.parcelable(EXTRA_AUTHORIZING_PAYMENT_RESULT),
         )
     }
 
@@ -282,7 +283,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(
             AuthenticationStatus.FAILED.message,
             (
-                activityResult.resultData.getParcelableExtra(
+                activityResult.resultData.parcelable(
                     EXTRA_AUTHORIZING_PAYMENT_RESULT,
                 ) as? AuthorizingPaymentResult.Failure
             )?.throwable?.message,
@@ -301,7 +302,7 @@ class AuthorizingPaymentActivityTest {
         assertEquals(Activity.RESULT_OK, activityResult.resultCode)
         assertEquals(
             randomError,
-            activityResult.resultData.getParcelableExtra<AuthorizingPaymentResult.Failure>(
+            activityResult.resultData.parcelable<AuthorizingPaymentResult.Failure>(
                 EXTRA_AUTHORIZING_PAYMENT_RESULT,
             )?.throwable?.message,
         )
