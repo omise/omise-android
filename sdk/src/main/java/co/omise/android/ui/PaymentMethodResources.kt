@@ -270,7 +270,6 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.RabbitLinePay,
     )
 
-
     object OcbcDigital : PaymentMethodResource(
         iconRes = R.drawable.payment_ocbc_digital,
         titleRes = R.string.payment_method_ocbc_digital_title,
