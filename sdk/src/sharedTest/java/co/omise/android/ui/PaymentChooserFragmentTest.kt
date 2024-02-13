@@ -136,39 +136,38 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
         assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
 
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(15))
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(14))
 
-        assertListAtIndexHasResource(9, R.string.payment_method_mobile_banking_ocbc_pao_title)
-        assertListAtIndexHasResource(10, R.string.payment_method_ocbc_digital_title)
-        assertListAtIndexHasResource(11, R.string.payment_method_alipay_cn_title)
-        assertListAtIndexHasResource(12, R.string.payment_method_alipay_hk_title)
-        assertListAtIndexHasResource(13, R.string.payment_method_dana_title)
-        assertListAtIndexHasResource(14, R.string.payment_method_gcash_title)
-        assertListAtIndexHasResource(15, R.string.payment_method_kakaopay_title)
+        assertListAtIndexHasResource(9, R.string.payment_method_ocbc_digital_title)
+        assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
+        assertListAtIndexHasResource(11, R.string.payment_method_alipay_hk_title)
+        assertListAtIndexHasResource(12, R.string.payment_method_dana_title)
+        assertListAtIndexHasResource(13, R.string.payment_method_gcash_title)
+        assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
 
         for (i in 11..14) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(21))
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(20))
 
-        assertListAtIndexHasResource(16, R.string.payment_method_touch_n_go_title)
-        assertListAtIndexHasResource(17, R.string.payment_method_boots_title)
-        assertListAtIndexHasResource(18, R.string.payment_method_shopeepay_title)
-        assertListAtIndexHasResource(19, R.string.payment_truemoney_title)
-        assertListAtIndexHasResource(20, R.string.payment_method_duitnow_obw_title)
-        assertListAtIndexHasResource(21, R.string.payment_method_duitnow_qr_title)
+        assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
+        assertListAtIndexHasResource(16, R.string.payment_method_boots_title)
+        assertListAtIndexHasResource(17, R.string.payment_method_shopeepay_title)
+        assertListAtIndexHasResource(18, R.string.payment_truemoney_title)
+        assertListAtIndexHasResource(19, R.string.payment_method_duitnow_obw_title)
+        assertListAtIndexHasResource(20, R.string.payment_method_duitnow_qr_title)
 
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(27))
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(26))
 
-        assertListAtIndexHasResource(22, R.string.payment_method_maybank_qr_title)
-        assertListAtIndexHasResource(23, R.string.payment_method_rabbit_linepay_title)
-        assertListAtIndexHasResource(24, R.string.payment_method_grabpay_footnote)
-        assertListAtIndexHasResource(25, R.string.payment_method_paypay_title)
-        assertListAtIndexHasResource(26, R.string.payment_method_atome_title)
-        assertListAtIndexHasResource(27, R.string.payment_method_wechat_pay_title)
+        assertListAtIndexHasResource(21, R.string.payment_method_maybank_qr_title)
+        assertListAtIndexHasResource(22, R.string.payment_method_rabbit_linepay_title)
+        assertListAtIndexHasResource(23, R.string.payment_method_grabpay_footnote)
+        assertListAtIndexHasResource(24, R.string.payment_method_paypay_title)
+        assertListAtIndexHasResource(25, R.string.payment_method_atome_title)
+        assertListAtIndexHasResource(26, R.string.payment_method_wechat_pay_title)
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(28)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(27)))
     }
 
     @Ignore("Flaky test, it fails when run on Github Action but pass on local machine.")
