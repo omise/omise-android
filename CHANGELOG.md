@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V4.15.0
+* **REMOVED:** Remove obsolete `ocbc_pao` and `installment_citi`
+
 ## V4.14.0
 * **ADDED:** Support new source type `wechat_pay`
 
