@@ -50,8 +50,6 @@ sealed class SourceType(
 
     object RabbitLinePay : SourceType("rabbit_linepay")
 
-    object OcbcPao : SourceType("mobile_banking_ocbc_pao")
-
     object OcbcDigital : SourceType("mobile_banking_ocbc")
 
     object Boost : SourceType("boost")
@@ -123,8 +121,6 @@ sealed class SourceType(
 
         object Scb : Installment("installment_scb")
 
-        object Citi : Installment("installment_citi")
-
         object Ttb : Installment("installment_ttb")
 
         object Uob : Installment("installment_uob")
@@ -143,7 +139,6 @@ sealed class SourceType(
                     Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                     KBank -> listOf(3, 4, 6, 10)
                     Scb -> listOf(3, 4, 6, 9, 10)
-                    Citi -> listOf(4, 5, 6, 7, 8, 9, 10)
                     Ttb -> listOf(3, 4, 6, 10, 12)
                     Uob -> listOf(3, 4, 6, 10)
                     is Unknown -> emptyList()
@@ -178,7 +173,6 @@ sealed class SourceType(
                 "installment_ktc" -> Installment.Ktc
                 "installment_kbank" -> Installment.KBank
                 "installment_scb" -> Installment.Scb
-                "installment_citi" -> Installment.Citi
                 "installment_ttb" -> Installment.Ttb
                 "installment_uob" -> Installment.Uob
                 "points_citi" -> PointsCiti
@@ -191,7 +185,6 @@ sealed class SourceType(
                 "kakaopay" -> Kakaopay
                 "touch_n_go" -> TouchNGo()
                 "rabbit_linepay" -> RabbitLinePay
-                "mobile_banking_ocbc_pao" -> OcbcPao
                 "mobile_banking_ocbc" -> OcbcDigital
                 "boost" -> Boost
                 "shopeepay" -> ShopeePay
@@ -240,7 +233,6 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.KBank,
             SourceType.PointsCiti,
             SourceType.Installment.Scb,
-            SourceType.Installment.Citi,
             SourceType.Installment.Ttb,
             SourceType.Installment.Uob,
             SourceType.Atome,

@@ -78,7 +78,6 @@
     <string name="payment_method_installment_kasikorn_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_installment_ktc_title">เคทีซี</string>
     <string name="payment_method_installment_scb_title">ธนาคารไทยพาณิชย์</string>
-    <string name="payment_method_installment_citi_title">ธนาคารซิตี้แบงก์์</string>
     <string name="payment_method_installment_ttb_title">ธนาคารทีเอ็มบีธนชาต</string>
     <string name="payment_method_installment_uob_title">ธนาคารยูโอบี</string>
     <string name="payment_method_installments_title">ผ่อนชำระ</string>
@@ -112,7 +111,6 @@
     <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
     <string name="payment_method_ocbc_digital_title">OCBC Digital</string>
-    <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
     <string name="googlepay">Google Pay</string>

@@ -31,7 +31,6 @@ class InstallmentChooserFragmentTest {
             PaymentMethod(name = "installment_kbank"),
             PaymentMethod(name = "installment_ktc"),
             PaymentMethod(name = "installment_scb"),
-            PaymentMethod(name = "installment_citi"),
             PaymentMethod(name = "installment_ttb"),
             PaymentMethod(name = "installment_uob"),
         )
@@ -75,12 +74,9 @@ class InstallmentChooserFragmentTest {
 
         onView(
             withListId(R.id.recycler_view).atPosition(7),
-        ).check(matches(hasDescendant(withText(R.string.payment_method_installment_citi_title))))
-        onView(
-            withListId(R.id.recycler_view).atPosition(8),
         ).check(matches(hasDescendant(withText(R.string.payment_method_installment_ttb_title))))
         onView(
-            withListId(R.id.recycler_view).atPosition(9),
+            withListId(R.id.recycler_view).atPosition(8),
         ).check(matches(hasDescendant(withText(R.string.payment_method_installment_uob_title))))
 
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))

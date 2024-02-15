@@ -270,13 +270,6 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.RabbitLinePay,
     )
 
-    object OcbcPao : PaymentMethodResource(
-        iconRes = R.drawable.payment_ocbc_pao,
-        titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.OcbcPao,
-    )
-
     object OcbcDigital : PaymentMethodResource(
         iconRes = R.drawable.payment_ocbc_digital,
         titleRes = R.string.payment_method_ocbc_digital_title,
@@ -432,13 +425,6 @@ internal sealed class InstallmentResource(
         sourceType = SourceType.Installment.Scb,
     )
 
-    object Citi : InstallmentResource(
-        iconRes = R.drawable.payment_citi,
-        titleRes = R.string.payment_method_installment_citi_title,
-        indicatorIconRes = R.drawable.ic_next,
-        sourceType = SourceType.Installment.Citi,
-    )
-
     object Ttb : InstallmentResource(
         iconRes = R.drawable.payment_ttb,
         titleRes = R.string.payment_method_installment_ttb_title,
@@ -566,7 +552,7 @@ internal class FpxResource(
                 "kfh" -> R.drawable.payment_kfh
                 "maybank2e" -> R.drawable.payment_maybank
                 "maybank2u" -> R.drawable.payment_maybank
-                "ocbc" -> R.drawable.payment_ocbc
+                "ocbc" -> R.drawable.payment_ocbc_digital
                 "public" -> R.drawable.payment_publicbank
                 "rhb" -> R.drawable.payment_rhb
                 "sc" -> R.drawable.payment_sc
@@ -603,7 +589,7 @@ internal class DuitNowOBWResource(
                 "hsbc" -> R.drawable.payment_hsbc
                 "kfh" -> R.drawable.payment_kfh
                 "maybank2u" -> R.drawable.payment_maybank
-                "ocbc" -> R.drawable.payment_ocbc
+                "ocbc" -> R.drawable.payment_ocbc_digital
                 "public" -> R.drawable.payment_publicbank
                 "rhb" -> R.drawable.payment_rhb
                 "sc" -> R.drawable.payment_sc
