@@ -4,6 +4,7 @@ import NetceteraConfig
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.util.Base64
 import com.netcetera.threeds.sdk.api.ThreeDS2Service
 import com.netcetera.threeds.sdk.api.configparameters.builder.ConfigurationBuilder
 import com.netcetera.threeds.sdk.api.configparameters.builder.SchemeConfiguration
@@ -12,7 +13,6 @@ import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
-import android.util.Base64
 import java.security.MessageDigest
 import java.util.Collections
 import javax.crypto.Cipher
@@ -66,7 +66,7 @@ internal class ThreeDS2ServiceWrapper(
             try {
                 // Decrypt the Netcetera api key
                 val encryptionKey = hash512(netceteraConfig.directoryServerId!!).copyOf(32)
-                val encryptedKey = Base64.decode(netceteraConfig.key,Base64.DEFAULT)
+                val encryptedKey = Base64.decode(netceteraConfig.key, Base64.DEFAULT)
                 val decryptedNetceteraApiKey = String(aesDecrypt(encryptedKey, encryptionKey), Charsets.UTF_8)
                 // Format the certificate
                 val formattedCert = formatPemCertificate(netceteraConfig.deviceInfoEncryptionCertPem!!)

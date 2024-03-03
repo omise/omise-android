@@ -112,7 +112,7 @@ internal class AuthorizingPaymentViewModel(
             URL(configEndPoint)
             return configEndPoint
         } catch (e: Exception) {
-            throw InvalidInputException("Invalid URL: $authUrl",e)
+            throw InvalidInputException("Invalid URL: $authUrl", e)
         }
     }
 
