@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 
 internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
@@ -99,19 +100,24 @@ internal class AuthorizingPaymentViewModel(
     }
 
     // Use the authorize_uri to create the config url
-    private fun createNetceteraConfigUrl(authUrl: String): String {
+    fun createNetceteraConfigUrl(authUrl: String): String {
         try {
+            // Check if the authUrl is valid
+            URL(authUrl)
             val base = Uri.parse(authUrl).buildUpon().clearQuery().build()
             val parts = base.toString().split('/').toMutableList()
             parts[parts.lastIndex] = "config"
-            return parts.joinToString("/")
+            val configEndPoint = parts.joinToString("/")
+            // check that the generated url is valid
+            URL(configEndPoint)
+            return configEndPoint
         } catch (e: Exception) {
-            throw InvalidInputException("Invalid URL: $authUrl")
+            throw InvalidInputException("Invalid URL: $authUrl",e)
         }
     }
 
     private suspend fun sendAuthenticationRequest(netceteraConfig: NetceteraConfig) {
-        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId, netceteraConfig.messageVersion)
+        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion)
         val authenticationRequestParameters = transaction.authenticationRequestParameters
         val request =
             Authentication.AuthenticationRequestBuilder()

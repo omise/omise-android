@@ -9,12 +9,12 @@ import org.joda.time.DateTime
 
 @Parcelize
 internal data class NetceteraConfig(
-    @field:JsonProperty("identifier") val identifier: String = "",
-    @field:JsonProperty("device_info_encryption_alg") val deviceInfoEncryptionAlg: String = "",
-    @field:JsonProperty("device_info_encryption_enc") val deviceInfoEncryptionEnc: String = "",
-    @field:JsonProperty("device_info_encryption_cert_pem") val deviceInfoEncryptionCertPem: String = "",
-    @field:JsonProperty("directory_server_id") val directoryServerId: String = "",
-    @field:JsonProperty("key") val key: String = "",
+    @field:JsonProperty("identifier") val identifier: String? = null,
+    @field:JsonProperty("device_info_encryption_alg") val deviceInfoEncryptionAlg: String? = null,
+    @field:JsonProperty("device_info_encryption_enc") val deviceInfoEncryptionEnc: String? = null,
+    @field:JsonProperty("device_info_encryption_cert_pem") val deviceInfoEncryptionCertPem: String? = null,
+    @field:JsonProperty("directory_server_id") val directoryServerId: String? = null,
+    @field:JsonProperty("key") val key: String? = null,
     @field:JsonProperty("message_version") val messageVersion: String = BuildConfig.MESSAGE_VERSION,
     override val modelObject: String? = null,
     override val id: String? = null,

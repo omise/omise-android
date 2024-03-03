@@ -41,7 +41,7 @@ internal class ThreeDS2ServiceWrapper(
     // Decrypts the encrypted data using the decryption key and AES/CTR/NoPadding cipher
     fun aesDecrypt(
         ciphertext: ByteArray,
-        key: ByteArray,
+        key: ByteArray?,
     ): ByteArray {
         val cipher = Cipher.getInstance("AES/CTR/NoPadding")
         val keySpec = SecretKeySpec(key, "AES")
@@ -65,11 +65,11 @@ internal class ThreeDS2ServiceWrapper(
         suspendCoroutine<Result<Unit>> { continuation ->
             try {
                 // Decrypt the Netcetera api key
-                val encryptionKey = hash512(netceteraConfig.directoryServerId).copyOf(32)
+                val encryptionKey = hash512(netceteraConfig.directoryServerId!!).copyOf(32)
                 val encryptedKey = Base64.decode(netceteraConfig.key,Base64.DEFAULT)
                 val decryptedNetceteraApiKey = String(aesDecrypt(encryptedKey, encryptionKey), Charsets.UTF_8)
                 // Format the certificate
-                val formattedCert = formatPemCertificate(netceteraConfig.deviceInfoEncryptionCertPem)
+                val formattedCert = formatPemCertificate(netceteraConfig.deviceInfoEncryptionCertPem!!)
                 // scheme from Netcetera simulator
                 val schemeConfig =
                     SchemeConfiguration.newSchemeConfiguration(netceteraConfig.identifier)
