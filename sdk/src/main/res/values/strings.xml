@@ -37,7 +37,7 @@
     <string name="error_api_bad_request_invalid_phone_number">The customer phone number is invalid</string>
     <string name="error_api_bad_request_name_is_too_long_with_valid_length">The customer name exceeds the %d character limit</string>
     <string name="error_api_bad_request_name_is_too_long_without_valid_length">The customer name is too long</string>
-    <string name="error_api_bad_request_type_not_supported">The source type is not supported by this account</string>
+    <string name="error_api_bad_request_source_type_not_supported">The source type is not supported by this account</string>
 
     <string name="error_api_service_not_found">Service not found</string>
 
