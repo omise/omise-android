@@ -65,7 +65,7 @@
     <string name="error_api_bad_request_invalid_phone_number">หมายเลขโทรศัพท์ผู้ซื้อไม่ถูกต้อง</string>
     <string name="error_api_bad_request_name_is_too_long_with_valid_length">ชื่อผู้ซื้อยาวกว่า %d ตัวอักษร</string>
     <string name="error_api_bad_request_name_is_too_long_without_valid_length">ชื่อผู้ซื้อยาวเกินจำนวนตัวอักษรที่กำหนด</string>
-    <string name="error_api_bad_request_type_not_supported">บัญชีผู้ใช้นี้ไม่รองรับ source ที่ระบุ</string>
+    <string name="error_api_bad_request_source_type_not_supported">บัญชีผู้ใช้นี้ไม่รองรับ source ที่ระบุ</string>
     <string name="button_next">ถัดไป</string>
     <string name="error_unknown_without_reason">พบข้อขัดข้อง</string>
     <string name="payment_method_alipay_title">อาลีเพย์ (ออนไลน์)</string>
