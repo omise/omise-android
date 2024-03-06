@@ -32,30 +32,6 @@ internal class ThreeDS2ServiceWrapper(
     lateinit var transaction: Transaction
         private set
 
-    // Computes SHA-512 hash of a string
-    private fun hash512(data: String): ByteArray {
-        val hasher = MessageDigest.getInstance("SHA-512")
-        return hasher.digest(data.toByteArray(Charsets.UTF_8))
-    }
-
-    // Decrypts the encrypted data using the decryption key and AES/CTR/NoPadding cipher
-    private fun aesDecrypt(
-        ciphertext: ByteArray,
-        key: ByteArray?,
-    ): ByteArray {
-        val cipher = Cipher.getInstance("AES/CTR/NoPadding")
-        val keySpec = SecretKeySpec(key, "AES")
-
-        // Extract IV from the ciphertext
-        val iv = ciphertext.copyOfRange(0, 16)
-        val ivParameterSpec = IvParameterSpec(iv)
-
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParameterSpec)
-
-        // Decrypt ciphertext (excluding IV)
-        return cipher.doFinal(ciphertext.copyOfRange(16, ciphertext.size))
-    }
-
     // Format the PEM certificate to be parsable by Netcetera
     private fun formatPemCertificate(input: String): String {
         return input.replace("-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").replace("\r\n", "")
@@ -65,9 +41,9 @@ internal class ThreeDS2ServiceWrapper(
         suspendCoroutine<Result<Unit>> { continuation ->
             try {
                 // Decrypt the Netcetera api key
-                val encryptionKey = hash512(netceteraConfig.directoryServerId!!).copyOf(32)
+                val encryptionKey = EncryptionUtils.hash512(netceteraConfig.directoryServerId!!).copyOf(32)
                 val encryptedKey = Base64.decode(netceteraConfig.key, Base64.DEFAULT)
-                val decryptedNetceteraApiKey = String(aesDecrypt(encryptedKey, encryptionKey), Charsets.UTF_8)
+                val decryptedNetceteraApiKey = String(EncryptionUtils.aesDecrypt(encryptedKey, encryptionKey), Charsets.UTF_8)
                 // Format the certificate
                 val formattedCert = formatPemCertificate(netceteraConfig.deviceInfoEncryptionCertPem!!)
                 // scheme from Netcetera simulator
