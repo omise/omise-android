@@ -6,7 +6,6 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 object EncryptionUtils {
-
     // Computes SHA-512 hash of a string
     fun hash512(data: String): ByteArray {
         val hasher = MessageDigest.getInstance("SHA-512")
