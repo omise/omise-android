@@ -33,13 +33,13 @@ internal class ThreeDS2ServiceWrapper(
         private set
 
     // Computes SHA-512 hash of a string
-    fun hash512(data: String): ByteArray {
+    private fun hash512(data: String): ByteArray {
         val hasher = MessageDigest.getInstance("SHA-512")
         return hasher.digest(data.toByteArray(Charsets.UTF_8))
     }
 
     // Decrypts the encrypted data using the decryption key and AES/CTR/NoPadding cipher
-    fun aesDecrypt(
+    private fun aesDecrypt(
         ciphertext: ByteArray,
         key: ByteArray?,
     ): ByteArray {
