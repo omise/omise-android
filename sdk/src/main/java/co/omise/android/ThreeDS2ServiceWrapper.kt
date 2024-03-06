@@ -13,11 +13,7 @@ import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
-import java.security.MessageDigest
 import java.util.Collections
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.SecretKeySpec
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
