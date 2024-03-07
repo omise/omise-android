@@ -1,6 +1,8 @@
 package co.omise.android.ui
 
+import NetceteraConfig
 import android.app.Activity
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +17,7 @@ import co.omise.android.config.UiCustomization
 import co.omise.android.models.Authentication
 import co.omise.android.models.Serializer
 import com.netcetera.threeds.sdk.ThreeDS2ServiceInstance
+import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
@@ -22,6 +25,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 
 internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
@@ -78,9 +82,14 @@ internal class AuthorizingPaymentViewModel(
     init {
         viewModelScope.launch(dispatcher + coroutineExceptionHandler) {
             if (!urlVerifier.verifyExternalURL()) {
-                threeDS2Service.initialize().fold(
+                // get the configuration from API
+                val configUrl = createNetceteraConfigUrl(urlVerifier.authorizedURLString)
+                // No body params so we just need to perform a GET on the config url
+                val request = NetceteraConfig.NetceteraConfigRequestBuilder().configUrl(configUrl).build()
+                val netceteraConfig = client.send(request)
+                threeDS2Service.initialize(netceteraConfig).fold(
                     onSuccess = {
-                        sendAuthenticationRequest()
+                        sendAuthenticationRequest(netceteraConfig)
                     },
                     onFailure = {
                         _error.postValue(OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value, it))
@@ -90,11 +99,25 @@ internal class AuthorizingPaymentViewModel(
         }
     }
 
-    private suspend fun sendAuthenticationRequest() {
-        // TODO: Replace this with real data
-        val directoryServerId = BuildConfig.DS_ID
-        val messageVersion = BuildConfig.MESSAGE_VERSION
-        val transaction = threeDS2Service.createTransaction(directoryServerId, messageVersion)
+    // Use the authorize_uri to create the config url
+    fun createNetceteraConfigUrl(authUrl: String): String {
+        try {
+            // Check if the authUrl is valid
+            URL(authUrl)
+            val base = Uri.parse(authUrl).buildUpon().clearQuery().build()
+            val parts = base.toString().split('/').toMutableList()
+            parts[parts.lastIndex] = "config"
+            val configEndPoint = parts.joinToString("/")
+            // check that the generated url is valid
+            URL(configEndPoint)
+            return configEndPoint
+        } catch (e: Exception) {
+            throw InvalidInputException("Invalid URL: $authUrl", e)
+        }
+    }
+
+    private suspend fun sendAuthenticationRequest(netceteraConfig: NetceteraConfig) {
+        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion)
         val authenticationRequestParameters = transaction.authenticationRequestParameters
         val request =
             Authentication.AuthenticationRequestBuilder()

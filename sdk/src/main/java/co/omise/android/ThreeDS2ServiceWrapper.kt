@@ -1,8 +1,10 @@
 package co.omise.android
 
+import NetceteraConfig
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.util.Base64
 import com.netcetera.threeds.sdk.api.ThreeDS2Service
 import com.netcetera.threeds.sdk.api.configparameters.builder.ConfigurationBuilder
 import com.netcetera.threeds.sdk.api.configparameters.builder.SchemeConfiguration
@@ -26,21 +28,32 @@ internal class ThreeDS2ServiceWrapper(
     lateinit var transaction: Transaction
         private set
 
-    suspend fun initialize() =
+    // Format the PEM certificate to be parsable by Netcetera
+    private fun formatPemCertificate(input: String): String {
+        return input.replace("-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").replace("\r\n", "")
+    }
+
+    suspend fun initialize(netceteraConfig: NetceteraConfig) =
         suspendCoroutine<Result<Unit>> { continuation ->
             try {
-                // scheme from netcetera simulator
+                // Decrypt the Netcetera api key
+                val encryptionKey = EncryptionUtils.hash512(netceteraConfig.directoryServerId!!).copyOf(32)
+                val encryptedKey = Base64.decode(netceteraConfig.key, Base64.DEFAULT)
+                val decryptedNetceteraApiKey = String(EncryptionUtils.aesDecrypt(encryptedKey, encryptionKey), Charsets.UTF_8)
+                // Format the certificate
+                val formattedCert = formatPemCertificate(netceteraConfig.deviceInfoEncryptionCertPem!!)
+                // scheme from Netcetera simulator
                 val schemeConfig =
-                    SchemeConfiguration.newSchemeConfiguration(BuildConfig.SCHEME_NAME)
-                        .ids(Collections.singletonList(BuildConfig.DS_ID))
+                    SchemeConfiguration.newSchemeConfiguration(netceteraConfig.identifier)
+                        .ids(Collections.singletonList(netceteraConfig.directoryServerId))
                         .logo(R.drawable.logo_atome.toString())
                         .logoDark(R.drawable.logo_atome.toString())
-                        .encryptionPublicKey(BuildConfig.DS_PUBLIC_KEY)
-                        .rootPublicKey(BuildConfig.DS_PUBLIC_KEY)
+                        .encryptionPublicKey(formattedCert)
+                        .rootPublicKey(formattedCert)
                         .build()
                 val configParameters =
                     ConfigurationBuilder()
-                        .apiKey(BuildConfig.NETCETERA_API_KEY)
+                        .apiKey(decryptedNetceteraApiKey)
                         .configureScheme(schemeConfig)
                         .build()
                 val locale = getLocale()
