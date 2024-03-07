@@ -10,6 +10,11 @@ that help merchants of any size accept cards online.
 Opn Payments Android SDK provides Android bindings for the Opn Payments [Token](https://docs.opn.ooo/tokens-api)
 and [Source](https://docs.opn.ooo/sources-api) API, as well as components for entering credit card information.
 
+## Security Warning
+
+**Please do NOT use Omise Android SDK versions less than 3.0.0, as they are outdated and have security vulnerabilities.**
+
+
 ## Requirements
 
 * Public key. [Register for an Opn Payments account](https://dashboard.omise.co/signup) to obtain your API keys.
