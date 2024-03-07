@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V4.15.1
+* **PATCH:** Fix error message for `installment_mbb`
+
 ## V4.15.0
 * **REMOVED:** Remove obsolete `ocbc_pao` and `installment_citi`
 
