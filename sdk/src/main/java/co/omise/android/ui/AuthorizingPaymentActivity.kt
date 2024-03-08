@@ -242,18 +242,34 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             ?: getString(R.string.title_authorizing_payment)
     }
 
+    private fun createMapFromQueryString(queryString: String): Map<String, String> {
+        val keyValuePairs = queryString.split("&").map { it.split("=") }
+        val resultMap = mutableMapOf<String, String>()
+
+        for (pair in keyValuePairs) {
+            if (pair.size == 2) {
+                val key = pair[0]
+                val value = pair[1]
+                resultMap[key] = value
+            }
+        }
+
+        return resultMap
+    }
+
     private fun handlePaymentAuthorization() {
-        val authUrlString = verifier.authorizedURLString
         val authUrl = verifier.authorizedURL
         // check for legacy payments that require web view
-        if (authUrlString.endsWith("/pay")) {
-            setupWebView()
-        } else {
+        val queryParams = createMapFromQueryString(authUrl.query ?: "")
+        val isAcs = queryParams["acs"] == "true"
+        if (isAcs) {
             // Check if the URL needs to be opened externally
             if (verifier.verifyExternalURL(authUrl)) {
                 openDeepLink(authUrl)
             }
             observeData()
+        } else {
+            setupWebView()
         }
     }
 
