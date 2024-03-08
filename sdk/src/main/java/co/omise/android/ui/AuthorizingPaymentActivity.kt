@@ -38,7 +38,6 @@ import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
 import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
-import java.net.URL
 
 /**
  * AuthorizingPaymentActivity is an experimental helper UI class in the SDK that would help
@@ -257,6 +256,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         return resultMap
     }
+
     private fun handlePaymentAuthorization() {
         val authUrl = verifier.authorizedURL
         // check for legacy payments that require web view
