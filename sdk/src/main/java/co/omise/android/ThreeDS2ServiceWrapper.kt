@@ -46,8 +46,8 @@ internal class ThreeDS2ServiceWrapper(
                 val schemeConfig =
                     SchemeConfiguration.newSchemeConfiguration(netceteraConfig.identifier)
                         .ids(Collections.singletonList(netceteraConfig.directoryServerId))
-                        .logo(R.drawable.logo_atome.toString())
-                        .logoDark(R.drawable.logo_atome.toString())
+                        .logo(R.drawable.netcetera_logo.toString())
+                        .logoDark(R.drawable.netcetera_logo.toString())
                         .encryptionPublicKey(formattedCert)
                         .rootPublicKey(formattedCert)
                         .build()
