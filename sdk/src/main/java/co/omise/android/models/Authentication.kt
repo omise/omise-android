@@ -50,6 +50,7 @@ internal data class Authentication(
         val acsTransID: String? = null,
         val sdkTransID: String? = null,
         val acsSignedContent: String? = null,
+        val acsReferenceNumber: String? = null
     ) : Parcelable
 
     class AuthenticationRequestBuilder : RequestBuilder<Authentication>() {

@@ -60,6 +60,7 @@ class AuthorizingPaymentViewModelTest {
             """-----BEGIN CERTIFICATE-----\r\nMIIDbzCCAlegAwIBAgIJANp1aztd\r\n-----END CERTIFICATE-----""",
             "TestId",
             "N2OZnlR1fDizs2SO5ukLnmaCupBaHcA=",
+            "2.2.0"
         )
     private val threeDSRequestorAppURL = "sampleapp://omise.co/authorize_return"
 
@@ -240,6 +241,7 @@ class AuthorizingPaymentViewModelTest {
                             acsTransID = UUID.randomUUID().toString(),
                             sdkTransID = UUID.randomUUID().toString(),
                             acsSignedContent = "acsSignedContent",
+                            acsReferenceNumber = "3DS_LOA_ACS"
                         ),
                 ),
             )
@@ -263,6 +265,7 @@ class AuthorizingPaymentViewModelTest {
                             acsTransID = UUID.randomUUID().toString(),
                             sdkTransID = UUID.randomUUID().toString(),
                             acsSignedContent = "acsSignedContent",
+                            acsReferenceNumber = "3DS_LOA_ACS"
                         ),
                 ),
             )

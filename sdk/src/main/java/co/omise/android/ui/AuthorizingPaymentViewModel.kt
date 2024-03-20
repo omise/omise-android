@@ -117,7 +117,7 @@ internal class AuthorizingPaymentViewModel(
     }
 
     private suspend fun sendAuthenticationRequest(netceteraConfig: NetceteraConfig) {
-        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion)
+        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion!!)
         val authenticationRequestParameters = transaction.authenticationRequestParameters
         val request =
             Authentication.AuthenticationRequestBuilder()
@@ -176,7 +176,7 @@ internal class AuthorizingPaymentViewModel(
                 threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
                 // TODO : check if where to get the sdkReferenceNumber value
-                acsRefNumber = BuildConfig.ACS_REF_NUMBER
+                acsRefNumber = ares.acsReferenceNumber
                 acsSignedContent = ares.acsSignedContent
             }
 
