@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import co.omise.android.AuthorizingPaymentURLVerifier
-import co.omise.android.BuildConfig
 import co.omise.android.OmiseException
 import co.omise.android.ThreeDS2ServiceWrapper
 import co.omise.android.api.Client

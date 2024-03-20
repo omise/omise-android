@@ -1,4 +1,3 @@
-import co.omise.android.BuildConfig
 import co.omise.android.api.RequestBuilder
 import co.omise.android.models.Model
 import com.fasterxml.jackson.annotation.JsonProperty
