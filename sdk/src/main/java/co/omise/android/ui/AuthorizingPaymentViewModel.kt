@@ -174,7 +174,6 @@ internal class AuthorizingPaymentViewModel(
                 set3DSServerTransactionID(ares.threeDSServerTransID)
                 threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
-                // TODO : check if where to get the sdkReferenceNumber value
                 acsRefNumber = ares.acsReferenceNumber
                 acsSignedContent = ares.acsSignedContent
             }
