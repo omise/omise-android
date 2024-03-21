@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import co.omise.android.AuthorizingPaymentURLVerifier
-import co.omise.android.BuildConfig
 import co.omise.android.OmiseException
 import co.omise.android.ThreeDS2ServiceWrapper
 import co.omise.android.api.Client
@@ -117,7 +116,7 @@ internal class AuthorizingPaymentViewModel(
     }
 
     private suspend fun sendAuthenticationRequest(netceteraConfig: NetceteraConfig) {
-        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion)
+        val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion!!)
         val authenticationRequestParameters = transaction.authenticationRequestParameters
         val request =
             Authentication.AuthenticationRequestBuilder()
@@ -175,8 +174,7 @@ internal class AuthorizingPaymentViewModel(
                 set3DSServerTransactionID(ares.threeDSServerTransID)
                 threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
-                // TODO : check if where to get the sdkReferenceNumber value
-                acsRefNumber = BuildConfig.ACS_REF_NUMBER
+                acsRefNumber = ares.acsReferenceNumber
                 acsSignedContent = ares.acsSignedContent
             }
 

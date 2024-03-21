@@ -1,4 +1,3 @@
-import co.omise.android.BuildConfig
 import co.omise.android.api.RequestBuilder
 import co.omise.android.models.Model
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -15,7 +14,7 @@ internal data class NetceteraConfig(
     @field:JsonProperty("device_info_encryption_cert_pem") val deviceInfoEncryptionCertPem: String? = null,
     @field:JsonProperty("directory_server_id") val directoryServerId: String? = null,
     @field:JsonProperty("key") val key: String? = null,
-    @field:JsonProperty("message_version") val messageVersion: String = BuildConfig.MESSAGE_VERSION,
+    @field:JsonProperty("messageVersion") val messageVersion: String? = null,
     override val modelObject: String? = null,
     override val id: String? = null,
     override val livemode: Boolean = false,
