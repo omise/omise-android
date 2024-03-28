@@ -366,7 +366,7 @@ resulting `Intent` with the following code:
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
   that is part of the `Token` object returned from the Opn Payments API.
 
-#### Use your activity
+#### Using your activity
 
 You can use your activity if you prefer. We recommend that you follow [Google's tutorial and guidelines](https://developers.google.com/pay/api/android/overview) and make sure
 that you follow their [brand guidelines](https://developers.google.com/pay/api/android/guides/brand-guidelines) as well.
@@ -412,7 +412,7 @@ client.send(request, object : RequestListener<Source>{
 
 The `Client` class will automatically dispatch the network call on an internal background thread and call listener methods on the thread that initially calls the `send` method.
 
-### Retrieve capabilities
+### Retrieving capabilities
 
 You can retrieve your capabilities and available payment sources through the SDK in the following manner.
 
@@ -444,7 +444,7 @@ client.send(request, object : RequestListener<Capability> {
 
 The `Client` class will automatically dispatch the network call on an internal background thread and call listener methods on the thread that initially calls the `send` method.
 
-### Theme customization
+### Customizing themes
 
 If you wish to customize the elements on the `CreditCardActivity` to
 match your application's branding, you can do so by overriding the following styles
