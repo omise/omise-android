@@ -8,7 +8,8 @@ Opn Payments is a payment service provider currently operating in Thailand. Opn 
 that help merchants of any size accept cards online.
 
 Opn Payments Android SDK provides Android bindings for the Opn Payments [Token](https://docs.opn.ooo/tokens-api)
-and [Source](https://docs.opn.ooo/sources-api) API, as well as components for entering credit card information.
+and [Source](https://docs.opn.ooo/sources-api) API and components for entering credit card information.
+
 
 ## Requirements
 
@@ -21,16 +22,16 @@ and [Source](https://docs.opn.ooo/sources-api) API, as well as components for en
 **Card data should never transit through your server. We recommend that you follow our guide on how to safely
 [collect credit information](https://docs.opn.ooo/collecting-card-information).**
 
-To be authorized to create tokens server-side you must have a currently valid PCI-DSS
+
+To be authorized to create tokens server-side, you must have a currently valid PCI-DSS
 Attestation of Compliance (AoC) delivered by a certified QSA Auditor.
 
-This SDK provides the means to tokenize card data on end-user mobile phone without the data
+This SDK provides the means to tokenize card data on an end-user mobile phone without the data
 having to go through your server.
 
 ## Notice
 
-The minimum supported version of the SDK is 4.3.1. Please do not use any versions below that number as you will
-be exposing yourself to security vulnerabilities,bugs and unexpected behaviors.
+Use SDK version 4.3.1 or higher for your app's security and performance. Any versions below this will pose severe risks of security vulnerabilities, bugs, and unexpected behaviors. Upgrade to the latest supported SDK version to avoid these risks and ensure the best user experience.
 
 ## Installation
 
@@ -59,7 +60,7 @@ file as follows:
   android:theme="@style/OmiseTheme" />
 ```
 
-Then in your activity, declare the method that will start this activity. Launching the activity depends on what version of android/AGP you are using. Here is a simple example using `registerForActivityResult`:
+Then, in your activity, declare the method that will start this activity. Launching the activity depends on which version of Android/AGP you are using. Here is a simple example using `registerForActivityResult`:
 
 ```kotlin
 private val OMISE_PKEY: String = "pkey_test_123"
@@ -90,7 +91,7 @@ private fun payByCreditCard() {
 ```
 
 Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
-The `handleActivityResult` function will be discussed in the section below.
+We discuss the `handleActivityResult` function in the following section.
 
 After the end-user completes entering credit card information, the activity result
 callback will be called; handle it as follows:
@@ -106,13 +107,13 @@ callback will be called; handle it as follows:
 ```
 
 Unless you are working on a project with specific backward compatibility requirements,
-it's recommended to use `registerForActivityResult` for handling activity results in your Android apps.
+we recommend using `registerForActivityResult` to handle activity results in your Android apps.
 You can then attach a function to handle the activity result inside the `registerForActivityResult`.
-You do not need to explicitly set the `requestCode` in your handle function but for simplicity it is included here.
-You can have a specific function for each `intent` that you launch and that function will handle the specific
+You do not need to set the `requestCode` explicitly in your handle function, but it is included here for simplicity.
+You can have a specific function for each `intent` that you launch, and that function will handle the particular
 result logic of that intent without the need for the request code.
 
-A number of results are returned from the activity. You can obtain them from the
+Several results are returned from the activity. You can obtain them from the
 resulting `Intent` with the following code:
 
 - `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
@@ -122,13 +123,13 @@ resulting `Intent` with the following code:
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
   that is part of the `Token` object returned from the Opn Payments API.
 
-The `getParcelableExtra(key)` function is deprecated and no more recommended to be used. We advise you to
-create your custom function to retrieve the necessary info as different android versions may require you to
-account for backwards compatibility.
+The `getParcelableExtra(key)` function is deprecated and no longer recommended to be used. We advise you to
+create your custom function to retrieve the necessary information, as different Android versions may require you to
+account for backward compatibility.
 
 ### Custom card form
 
-If you need to build your own card form, components inside `CreditCardActivity`
+If you need to build your card form, components inside `CreditCardActivity`
 can be used on their own. For example, the `CreditCardEditText` can be used in XML as demonstrated:
 
 ```xml
@@ -151,14 +152,14 @@ Additionally, the following utility classes are available from the SDK:
 
 ### Manual tokenization
 
-If you have built your own card or Google Pay form, you can use the SDK to manually tokenize the
-card. First build the `Client` and supply your public key as follows:
+If you have built your card or Google Pay form, you can use the SDK to tokenize the
+card manually. First, build the `Client` and supply your public key as follows:
 
 ```kotlin
 private val client = Client("pkey_test_123")
 ```
 
-Then construct the token request with values from your custom form:
+Then, construct the token request with values from your custom form:
 
 ```kotlin
 // Sample builder for credit card
@@ -185,7 +186,7 @@ val tokenizationParam = TokenizationParam(
 val request = Token.CreateTokenRequestBuilder(tokenization = tokenizationParam).build()
 ```
 
-And then send the request using the `client` that you have constructed earlier:
+Then send the request using the `client` that you have constructed earlier:
 
 ```kotlin
 client.send(request, object : RequestListener<Token>{
@@ -216,7 +217,7 @@ To use it, first declare the availability of the activity in your `AndroidManife
   android:theme="@style/OmiseTheme" />
 ```
 
-Then in your activity, declare the method that will start this activity, as follows:
+Then in your activity, declare the method that will start this activity as follows:
 
 ```kotlin
 private val OMISE_PKEY: String = "pkey_test_123"
@@ -243,7 +244,7 @@ private fun showPaymentCreatorActivity() {
         putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
         putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
-        // you can retrieve your account's capabilities through the SDK (will be explained below)
+        //You can retrieve your account's capabilities through the SDK (will be explained below)
         putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
 
         paymentCreatorLauncher.launch(this)
@@ -253,13 +254,13 @@ private fun showPaymentCreatorActivity() {
 
 Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
 
-Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way, the `PaymentCreatorActivity` will display the payment methods contained in the `Capability` object.
+Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way, the `PaymentCreatorActivity` will display the payment methods in the `Capability` object.
 
 There are two options to retrieve the Capability object.
 
 1. You can retrieve the Capability object from your account's capabilities through the [Retrieve Capabilities](#retrieve-capabilities) function.
 
-2. Or you can create a `Capability` object to create your own capabilities using the helper function `Capability.create()`.
+2. You can also create a `Capability` object to create your own capabilities using the helper function `Capability.create()`.
 
    **Here is the sample:**
 
@@ -346,16 +347,16 @@ override fun navigateToGooglePayForm() {
 ```
 
 - Replace the `OMISE_PKEY` with your Opn Payments public key obtained from our dashboard.
-- Replace the `amount` with the amount you want to charge with, in subunits.
+- Replace the `amount` with the amount you want to charge in subunits.
 - Replace the `currency` with your currency in the ISO 4217 format.
-- Replace the `cardBrands` with the list from our [capability api](https://docs.opn.ooo/capability-api) or leave blank to use default values.
+- Replace the `cardBrands` with the list from our [capability API](https://docs.opn.ooo/capability-api) or leave it blank to use default values.
 - Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode).
-- Set the `googlepayRequestBillingAddress` to `true` if you want to attach the cardholder's name and billing address to the token.
+- Set the `googlepayRequestBillingAddress` to `true` to attach the cardholder's name and billing address to the token.
 - When the cardholder's billing address is requested, set the `googlepayRequestPhoneNumber` to `true` to also attach the cardholder's phone number to the token.
 
 #### Return values
 
-A number of results are returned from the activity. You can obtain them from the
+Several results are returned from the activity. You can obtain them from the
 resulting `Intent` with the following code:
 
 - `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
@@ -365,24 +366,24 @@ resulting `Intent` with the following code:
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
   that is part of the `Token` object returned from the Opn Payments API.
 
-#### Use your own activity
+#### Use your activity
 
-You can use your own activity if you prefer. We recommend that you follow [Google's tutorial and guidelines](https://developers.google.com/pay/api/android/overview) and make sure
+You can use your activity if you prefer. We recommend that you follow [Google's tutorial and guidelines](https://developers.google.com/pay/api/android/overview) and make sure
 that you follow their [brand guidelines](https://developers.google.com/pay/api/android/guides/brand-guidelines) as well.
 
-You can make use of our Google Pay request builder `request/GooglePay.kt`, which includes request builders that you can use to request the Google Pay token.
-Configurations to the builders are modifiable through the class' constructor to suit your needs. However, you are also welcome to make your own integration and call
+You can use our Google Pay request builder `request/GooglePay.kt`, which includes request builders that you can use to request the Google Pay token.
+Configurations for the builders are modifiable through the `class` constructor to suit your needs. However, you are also welcome to make your own integration and call
 our tokens builder yourself.
 
 ### Creating a source
 
-If you need to create a payment source on your own and use it outside the provided SDK context, follow these steps. First build the Client and supply your public key in this manner:
+If you need to create a payment source and use it outside the provided SDK context, follow these steps. First, build the Client and supply your public key in this manner:
 
 ```kotlin
 private val client = Client("pkey_test_123")
 ```
 
-Then construct the Source request:
+Then, construct the Source request:
 
 ```kotlin
 val request = Source.CreateSourceRequestBuilder(25000L, "thb", SourceType.Installment.Bay)
@@ -395,7 +396,7 @@ val request = Source.CreateSourceRequestBuilder(25000L, "thb", SourceType.Instal
       .build()
 ```
 
-And then send the request using the `Client` you have constructed earlier. You will get a `Source` object in response:
+Then, send the request using the `Client` you have constructed earlier. You will get a `Source` object in response:
 
 ```kotlin
 client.send(request, object : RequestListener<Source>{
@@ -409,11 +410,11 @@ client.send(request, object : RequestListener<Source>{
 })
 ```
 
-The `Client` class will automatically dispatch the network call on an internal background thread, and will call listener methods on the thread that initially calls the `send` method.
+The `Client` class will automatically dispatch the network call on an internal background thread and call listener methods on the thread that initially calls the `send` method.
 
 ### Retrieve capabilities
 
-You can retrieve all of your capabilities and available payment sources through the SDK in the following manner.
+You can retrieve your capabilities and available payment sources through the SDK in the following manner.
 
 First build the Client and supply your public key this way:
 
@@ -421,7 +422,7 @@ First build the Client and supply your public key this way:
 private val client = Client("pkey_test_123")
 ```
 
-Then construct the `Capability` request:
+Then, construct the `Capability` request:
 
 ```kotlin
 val request = Capability.GetCapabilitiesRequestBuilder().build()
@@ -441,7 +442,7 @@ client.send(request, object : RequestListener<Capability> {
 })
 ```
 
-The `Client` class will automatically dispatch the network call on an internal background thread, and will call listener methods on the thread that initially calls the `send` method.
+The `Client` class will automatically dispatch the network call on an internal background thread and call listener methods on the thread that initially calls the `send` method.
 
 ### Theme customization
 
@@ -523,8 +524,8 @@ style.xml
 
 Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.opn.ooo/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.opn.ooo/internet-banking), [Alipay](https://docs.opn.ooo/alipay), etc. Opn Payments Android SDK provides a built in class to handle the authorization.
 
-On payment methods that require opening the external app (e.g. mobile banking app) to authorize the transaction, set the _return_uri_ to a **deeplink** or **applink** to be able to open the merchant app. Else, after the card holder completes authorizing the transaction on the external app, the flow redirects to the normal link in the _return_uri_ and opens it on the browser app, and therefore results in the payment not being completed.
-Some authorize URLs will be processed using the in-app browser flow and others will be processed using the native flow from the SDK (3DS v2) and all of this is automatically handled by the SDK.
+On payment methods that require opening the external app (e.g., mobile banking app) to authorize the transaction, set the _return_uri_ to a **deep link** or **app link** to be able to open the merchant app. Otherwise, after the cardholder authorizes the transaction on the external app, the flow redirects to the normal link in the _return_uri_, and opens it on the browser app, resulting in the payment not being completed.
+Some authorized URLs will be processed using the in-app browser flow, and others will be processed using the native flow from the SDK (3DS v2), and the SDK automatically handles all of this.
 
 ### Authorizing payment activity
 
@@ -555,8 +556,8 @@ private fun startAuthoringPaymentActivity() {
 ```
 
 Replace the string `EXTRA_AUTHORIZED_URLSTRING` with the authorized URL that comes with the created charge and the array of string `EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS` with the expected pattern of redirected URLs array.
-The `EXTRA_UI_CUSTOMIZATION` parameter is used to customize the UI in the built in 3DS in app flow in the SDK and during the challenge flow.
-If you want to customize the title of the authorizing payment activity you must use theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
+The `EXTRA_UI_CUSTOMIZATION` parameter is used to customize the UI in the built-in 3DS in-app flow in the SDK and during the challenge flow.
+If you want to customize the title of the authorizing payment activity, you must use theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
 
 ```kotlin
 val toolbarCustomization = ToolbarCustomizationBuilder()
@@ -578,7 +579,7 @@ val toolbarCustomization = ToolbarCustomizationBuilder()
 You can check out the [UiCustomization](/sdk/src/main/java/co/omise/android/config/UiCustomization.kt) class to see customizable UI elements in the challenge flow.
 
 After the end-user completes the payment authorization process, the activity result
-callback will be and you will receive different responses based on how the transaction was processed
+callback will be sent, and you will receive different responses based on how the transaction was processed
 and which flow it used. Handle it in this manner:
 
 ```kotlin
@@ -625,7 +626,7 @@ You can check out the sample implementation in the [CheckoutActivity](./app/src/
 
 ### Observing charge status in the token
 
-This is a utility function for observing the token until its charge status changes. You can use this function for checking the charge status after the payment authorization process completes.
+The following utility function observes the token until its charge status changes. You can use it to check the charge status after the payment authorization process is completed.
 
 ```kotlin
 val client = Client("pkey_test_1234")
@@ -642,11 +643,11 @@ client.observeTokenUntilChargeStatusChanged("tokn_test_1234", object: RequestLis
 
 ### Authorizing payment via an external app
 
-Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user needs to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However merchant developers must handle the `Intent` callback by themselves.
+Some request methods allow the user to authorize the payment with an external app, for example Alipay. When a user needs to authorize the payment with an external app, `AuthorizingPaymentActivity` will automatically open an external app. However, merchant developers must handle the `Intent` callback themselves.
 
 ## ProGuard rules
 
-If you enable ProGuard, then add these rules in your ProGuard file.
+If you enable ProGuard, then add these rules to your ProGuard file.
 
 ```ProGuard
 -dontwarn okio.**
@@ -661,7 +662,7 @@ If you enable ProGuard, then add these rules in your ProGuard file.
 
 ## Protecting screenshot and screen recording
 
-**Omise Android SDK** comes with built-in protection against screenshot and screen recording. If you wish to disable this feature, you can pass `OmiseActivity.EXTRA_IS_SECURE` with a value of `false` when starting the following activities: `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
+**Omise Android SDK** has built-in protection against screenshots and screen recording. To turn off this feature, you can pass `OmiseActivity.EXTRA_IS_SECURE` with a value of `false` when starting the following activities: `CreditCardActivity`, `PaymentCreatorActivity`, and `AuthorizingPaymentActivity`.
 
 ## Contributing
 
