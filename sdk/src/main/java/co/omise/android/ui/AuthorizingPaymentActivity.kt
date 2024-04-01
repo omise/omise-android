@@ -347,7 +347,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
                 ChallengeStatus.PROTOCOL_ERROR.value,
                 ChallengeStatus.RUNTIME_ERROR.value,
                 OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value,
-                OmiseSDKError.UNABLE_TO_GET_CONFIGS.value
+                OmiseSDKError.UNABLE_TO_GET_CONFIGS.value,
             ).contains(throwable.message)
         ) {
             setupWebView()
