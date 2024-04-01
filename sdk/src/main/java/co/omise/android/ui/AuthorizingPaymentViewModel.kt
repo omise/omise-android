@@ -81,19 +81,19 @@ internal class AuthorizingPaymentViewModel(
     init {
         viewModelScope.launch(dispatcher + coroutineExceptionHandler) {
             if (!urlVerifier.verifyExternalURL()) {
-                // get the configuration from API
-                val configUrl = createNetceteraConfigUrl(urlVerifier.authorizedURLString)
-                // No body params so we just need to perform a GET on the config url
-                val request = NetceteraConfig.NetceteraConfigRequestBuilder().configUrl(configUrl).build()
-                val netceteraConfig = client.send(request)
-                threeDS2Service.initialize(netceteraConfig).fold(
-                    onSuccess = {
-                        sendAuthenticationRequest(netceteraConfig)
-                    },
-                    onFailure = {
-                        _error.postValue(OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value, it))
-                    },
-                )
+
+                val netceteraConfig = getConfigs()
+
+                if(netceteraConfig != null){
+                    threeDS2Service.initialize(netceteraConfig).fold(
+                        onSuccess = {
+                            sendAuthenticationRequest(netceteraConfig)
+                        },
+                        onFailure = {
+                            _error.postValue(OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value, it))
+                        },
+                    )
+                }
             }
         }
     }
@@ -114,7 +114,20 @@ internal class AuthorizingPaymentViewModel(
             throw InvalidInputException("Invalid URL: $authUrl", e)
         }
     }
-
+private suspend fun getConfigs():NetceteraConfig?{
+    var netceteraConfig : NetceteraConfig? = null
+    try {
+        // create the config endpoint url
+        val configUrl = createNetceteraConfigUrl(urlVerifier.authorizedURLString)
+        // No body params so we just need to perform a GET on the config url
+        val request = NetceteraConfig.NetceteraConfigRequestBuilder().configUrl(configUrl).build()
+        // get the configuration from API
+        netceteraConfig = client.send(request)
+    }catch (e:Exception){
+        _error.postValue(OmiseException(OmiseSDKError.UNABLE_TO_GET_CONFIGS.value, e))
+    }
+    return  netceteraConfig
+}
     private suspend fun sendAuthenticationRequest(netceteraConfig: NetceteraConfig) {
         val transaction = threeDS2Service.createTransaction(netceteraConfig.directoryServerId!!, netceteraConfig.messageVersion!!)
         val authenticationRequestParameters = transaction.authenticationRequestParameters
@@ -239,4 +252,5 @@ enum class ChallengeStatus(val value: String) {
 enum class OmiseSDKError(val value: String) {
     OPEN_DEEP_LINK_FAILED("Open deep link failed"),
     THREE_DS2_INITIALIZATION_FAILED("3DS2 initialization failed"),
+    UNABLE_TO_GET_CONFIGS("Unable to get configs, can't initialize 3DS2 SDK"),
 }
