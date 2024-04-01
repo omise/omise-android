@@ -1,8 +1,8 @@
 package co.omise.android.ui
 
 import NetceteraConfig
+import ThreeDSConfigProvider
 import android.app.Activity
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +16,6 @@ import co.omise.android.config.UiCustomization
 import co.omise.android.models.Authentication
 import co.omise.android.models.Serializer
 import com.netcetera.threeds.sdk.ThreeDS2ServiceInstance
-import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.transaction.Transaction
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeParameters
 import com.netcetera.threeds.sdk.api.transaction.challenge.ChallengeStatusReceiver
@@ -24,7 +23,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.URL
 
 internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
@@ -51,6 +49,9 @@ internal class AuthorizingPaymentViewModel(
     private val passedThreeDSRequestorAppURL: String,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), ChallengeStatusReceiver {
+    // Instantiate ThreeDSConfigProvider
+    private val configProvider = ThreeDSConfigProvider(urlVerifier, client)
+
     /** The [Authentication.AuthenticationStatus] of the authentication request. */
     private val _authenticationStatus = MutableLiveData<Authentication.AuthenticationStatus>()
     val authenticationStatus: LiveData<Authentication.AuthenticationStatus> = _authenticationStatus
@@ -82,12 +83,17 @@ internal class AuthorizingPaymentViewModel(
         viewModelScope.launch(dispatcher + coroutineExceptionHandler) {
             if (!urlVerifier.verifyExternalURL()) {
 
-                val netceteraConfig = getConfigs()
+                var threeDSConfig: NetceteraConfig? = null
+                try {
+                    threeDSConfig = configProvider.getThreeDSConfigs()
+                } catch (e: Exception) {
+                    _error.postValue(OmiseException(OmiseSDKError.UNABLE_TO_GET_CONFIGS.value, e))
+                }
 
-                if (netceteraConfig != null) {
-                    threeDS2Service.initialize(netceteraConfig).fold(
+                if (threeDSConfig != null) {
+                    threeDS2Service.initialize(threeDSConfig).fold(
                         onSuccess = {
-                            sendAuthenticationRequest(netceteraConfig)
+                            sendAuthenticationRequest(threeDSConfig)
                         },
                         onFailure = {
                             _error.postValue(OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value, it))
@@ -96,38 +102,6 @@ internal class AuthorizingPaymentViewModel(
                 }
             }
         }
-    }
-
-    // Use the authorize_uri to create the config url
-    fun createNetceteraConfigUrl(authUrl: String): String {
-        try {
-            // Check if the authUrl is valid
-            URL(authUrl)
-            val base = Uri.parse(authUrl).buildUpon().clearQuery().build()
-            val parts = base.toString().split('/').toMutableList()
-            parts[parts.lastIndex] = "config"
-            val configEndPoint = parts.joinToString("/")
-            // check that the generated url is valid
-            URL(configEndPoint)
-            return configEndPoint
-        } catch (e: Exception) {
-            throw InvalidInputException("Invalid URL: $authUrl", e)
-        }
-    }
-
-    private suspend fun getConfigs(): NetceteraConfig? {
-        var netceteraConfig: NetceteraConfig? = null
-        try {
-            // create the config endpoint url
-            val configUrl = createNetceteraConfigUrl(urlVerifier.authorizedURLString)
-            // No body params so we just need to perform a GET on the config url
-            val request = NetceteraConfig.NetceteraConfigRequestBuilder().configUrl(configUrl).build()
-            // get the configuration from API
-            netceteraConfig = client.send(request)
-        } catch (e: Exception) {
-            _error.postValue(OmiseException(OmiseSDKError.UNABLE_TO_GET_CONFIGS.value, e))
-        }
-        return netceteraConfig
     }
 
     private suspend fun sendAuthenticationRequest(netceteraConfig: NetceteraConfig) {
