@@ -10,7 +10,6 @@ that help merchants of any size accept cards online.
 Opn Payments Android SDK provides Android bindings for the Opn Payments [Token](https://docs.opn.ooo/tokens-api)
 and [Source](https://docs.opn.ooo/sources-api) API and components for entering credit card information.
 
-
 ## Requirements
 
 - Public key. [Register for an Opn Payments account](https://dashboard.omise.co/signup) to obtain your API keys.
@@ -22,7 +21,6 @@ and [Source](https://docs.opn.ooo/sources-api) API and components for entering c
 **Card data should never transit through your server. We recommend that you follow our guide on how to safely
 [collect credit information](https://docs.opn.ooo/collecting-card-information).**
 
-
 To be authorized to create tokens server-side, you must have a currently valid PCI-DSS
 Attestation of Compliance (AoC) delivered by a certified QSA Auditor.
 
@@ -31,7 +29,7 @@ having to go through your server.
 
 ## Notice
 
-Use SDK version 4.3.1 or higher for your app's security and performance. Any versions below this will pose severe risks of security vulnerabilities, bugs, and unexpected behaviors. Upgrade to the latest supported SDK version to avoid these risks and ensure the best user experience.
+Use SDK version `4.3.1` or higher for your app's security and performance. Any versions below this will pose severe risks of security vulnerabilities, bugs, and unexpected behaviors. Upgrade to the latest supported SDK version to avoid these risks and ensure the best user experience.
 
 ## Installation
 
@@ -522,7 +520,7 @@ style.xml
 
 ## Authorizing payment
 
-Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.opn.ooo/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.opn.ooo/internet-banking), [Alipay](https://docs.opn.ooo/alipay), etc. Opn Payments Android SDK provides a built in class to handle the authorization.
+Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.opn.ooo/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.opn.ooo/internet-banking), [Mobile Banking SCB](https://docs.opn.ooo/mobile-banking-scb), etc. Opn Payments Android SDK provides a built-in class to handle the authorization.
 
 On payment methods that require opening the external app (e.g., mobile banking app) to authorize the transaction, set the _return_uri_ to a **deep link** or **app link** to be able to open the merchant app. Otherwise, after the cardholder authorizes the transaction on the external app, the flow redirects to the normal link in the _return_uri_, and opens it on the browser app, resulting in the payment not being completed.
 Some authorized URLs will be processed using the in-app browser flow, and others will be processed using the native flow from the SDK (3DS v2), and the SDK automatically handles all of this.
@@ -556,8 +554,8 @@ private fun startAuthoringPaymentActivity() {
 ```
 
 Replace the string `EXTRA_AUTHORIZED_URLSTRING` with the authorized URL that comes with the created charge and the array of string `EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS` with the expected pattern of redirected URLs array.
-The `EXTRA_UI_CUSTOMIZATION` parameter is used to customize the UI in the built-in 3DS in-app flow in the SDK and during the challenge flow.
-If you want to customize the title of the authorizing payment activity, you must use theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
+The `EXTRA_UI_CUSTOMIZATION` parameter is used to customize the UI of the built-in 3DS SDK during the 3DS challenge flow.
+If you want to customize the title of the authorizing payment activity, you must use the theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
 
 ```kotlin
 val toolbarCustomization = ToolbarCustomizationBuilder()
@@ -613,7 +611,7 @@ and which flow it used. Handle it in this manner:
                         throwable.message ?: "Unknown error."
                     }
 
-                    null -> "Not found the authorization result."
+                    null -> "Authorization result not found"
                 }
                 Log.d(TAG, resultMessage)
                 snackbar.setText(resultMessage).show()
@@ -622,6 +620,7 @@ and which flow it used. Handle it in this manner:
     }
 }
 ```
+
 You can check out the sample implementation in the [CheckoutActivity](./app/src/kotlin/java/co/omise/android/example/CheckoutActivity.kt) class in the sample app.
 
 ### Observing charge status in the token
