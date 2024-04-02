@@ -23,7 +23,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -87,27 +86,6 @@ class AuthorizingPaymentViewModelTest {
         }
         whenever(transaction.authenticationRequestParameters).thenReturn(authenticationParams)
     }
-
-    @Test
-    fun createConfigUrlShouldReturnExpectedUrl() =
-        runTest {
-            val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, threeDSRequestorAppURL, testDispatcher)
-            val createdConfigUrl = viewModel.createNetceteraConfigUrl("https://example.com/payments/id/authorize")
-            val expectedUrl = "https://example.com/payments/id/config"
-            assertEquals(expectedUrl, createdConfigUrl)
-        }
-
-    @Test
-    fun createConfigUrlShouldReturnErrorWhenInvalidUrl() =
-        runTest {
-            val viewModel = AuthorizingPaymentViewModel(client, urlVerifier, threeDS2Service, threeDSRequestorAppURL, testDispatcher)
-            val invalidUrl = "invalid-url"
-            val exception =
-                assertThrows(InvalidInputException::class.java) {
-                    viewModel.createNetceteraConfigUrl(invalidUrl)
-                }
-            assertEquals("Invalid URL: $invalidUrl", exception.message)
-        }
 
     @Test
     fun initialize3DS_shouldInitialize3DS2ServiceAndSendAuthenticationRequest() =
