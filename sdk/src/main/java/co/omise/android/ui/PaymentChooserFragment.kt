@@ -61,7 +61,6 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             PaymentMethodResource.MaybankQR,
             PaymentMethodResource.GrabPay,
             PaymentMethodResource.PayPay,
-            PaymentMethodResource.PointsCiti,
             PaymentMethodResource.GrabPayRMS,
             PaymentMethodResource.TouchNGoAlipay,
             PaymentMethodResource.WeChatPay,

@@ -28,8 +28,6 @@ sealed class SourceType(
 
     object TrueMoneyJumpApp : SourceType("truemoney_jumpapp")
 
-    object PointsCiti : SourceType("points_citi")
-
     object PayNow : SourceType("paynow")
 
     object PromptPay : SourceType("promptpay")
@@ -175,7 +173,6 @@ sealed class SourceType(
                 "installment_scb" -> Installment.Scb
                 "installment_ttb" -> Installment.Ttb
                 "installment_uob" -> Installment.Uob
-                "points_citi" -> PointsCiti
                 "paynow" -> PayNow
                 "promptpay" -> PromptPay
                 "alipay_cn" -> AlipayCn
@@ -231,7 +228,6 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Mbb,
             SourceType.Installment.Ktc,
             SourceType.Installment.KBank,
-            SourceType.PointsCiti,
             SourceType.Installment.Scb,
             SourceType.Installment.Ttb,
             SourceType.Installment.Uob,
