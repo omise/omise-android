@@ -42,7 +42,6 @@ object PaymentSetting {
                     R.string.payment_preference_ocbc_digital_key,
                     R.string.payment_preference_paynow_key,
                     R.string.payment_preference_promptpay_key,
-                    R.string.payment_preference_points_citi_key,
                     R.string.payment_preference_rabbit_linepay_key,
                     R.string.payment_preference_touch_n_go_key,
                     R.string.payment_preference_truemoney_key,
@@ -98,7 +97,6 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_fpx_key) -> SourceType.Fpx()
                         context.getString(R.string.payment_preference_paynow_key) -> SourceType.PayNow
                         context.getString(R.string.payment_preference_promptpay_key) -> SourceType.PromptPay
-                        context.getString(R.string.payment_preference_points_citi_key) -> SourceType.PointsCiti
                         context.getString(R.string.payment_preference_truemoney_key) -> SourceType.TrueMoney
                         context.getString(R.string.payment_preference_truemoney_jumpapp_key) -> SourceType.TrueMoneyJumpApp
                         context.getString(R.string.payment_preference_alipay_hk_key) -> SourceType.AlipayHk

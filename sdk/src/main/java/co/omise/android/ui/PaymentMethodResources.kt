@@ -179,13 +179,6 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.PayNow,
     )
 
-    object PointsCiti : PaymentMethodResource(
-        iconRes = R.drawable.payment_points_citi,
-        titleRes = R.string.payment_method_points_citi_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.PointsCiti,
-    )
-
     object TrueMoney : PaymentMethodResource(
         iconRes = R.drawable.payment_truemoney,
         titleRes = R.string.payment_truemoney_title,
