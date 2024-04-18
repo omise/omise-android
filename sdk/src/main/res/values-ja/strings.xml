@@ -45,6 +45,7 @@
     <string name="label_full_name">氏名</string>
     <string name="label_phone_number">電話</string>
     <string name="installments_title">分割払い</string>
+    <string name="installments_amount_lower_than_monthly_limit">月々のお支払いが銀行の最低金額以下</string>
     <string name="internet_banking_chooser_title">インターネットバンク</string>
     <string name="mobile_banking_chooser_title">モバイルバンキング</string>
     <string name="payment_chooser_title">決済方法</string>

@@ -45,6 +45,7 @@
     <string name="label_full_name">ชื่อ-สกุล</string>
     <string name="label_phone_number">โทร.</string>
     <string name="installments_title">ผ่อนชำระ</string>
+    <string name="installments_amount_lower_than_monthly_limit">ยอดชำระต่อเดือนต่ำกว่าจำนวนขั้นต่ำที่ธนาคารกำหนด</string>
     <string name="internet_banking_chooser_title">อินเทอร์เน็ตแบงก์กิ้ง</string>
     <string name="mobile_banking_chooser_title">โมบายแบงก์กิ้ง</string>
     <string name="payment_chooser_title">ช่องทางชำระเงิน</string>

@@ -66,6 +66,7 @@ class PaymentCreatorActivity : OmiseActivity() {
             googlepayRequestPhoneNumber,
             REQUEST_CREDIT_CARD,
             requester,
+            capability
         )
     }
 
@@ -210,6 +211,7 @@ private class PaymentCreatorNavigationImpl(
     private var googlepayRequestPhoneNumber: Boolean,
     private val requestCode: Int,
     private val requester: PaymentCreatorRequester<Source>,
+    private val capability: Capability
 ) : PaymentCreatorNavigation {
     companion object {
         const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
@@ -260,7 +262,7 @@ private class PaymentCreatorNavigationImpl(
 
     override fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>) {
         val fragment =
-            InstallmentChooserFragment.newInstance(allowedInstalls).apply {
+            InstallmentChooserFragment.newInstance(allowedInstalls, amount,capability.limits?.installmentAmount?.min?: 0).apply {
                 navigation = this@PaymentCreatorNavigationImpl
             }
         addFragmentToBackStack(fragment)
@@ -268,7 +270,7 @@ private class PaymentCreatorNavigationImpl(
 
     override fun navigateToInstallmentTermChooser(installment: PaymentMethod) {
         val fragment =
-            InstallmentTermChooserFragment.newInstance(installment).apply {
+            InstallmentTermChooserFragment.newInstance(installment,capability.zeroInterestInstallments).apply {
                 requester = this@PaymentCreatorNavigationImpl.requester
             }
         addFragmentToBackStack(fragment)

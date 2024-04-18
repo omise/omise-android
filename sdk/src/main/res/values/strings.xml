@@ -69,6 +69,7 @@
     <string name="internet_banking_chooser_title">Internet Banking</string>
     <string name="mobile_banking_chooser_title">Mobile Banking</string>
     <string name="installments_title">Installments</string>
+    <string name="installments_amount_lower_than_monthly_limit">Amount is lower than the monthly minimum payment amount</string>
     <string name="econtext_title">econtext</string>
     <string name="menu_title_close">Close</string>
 
