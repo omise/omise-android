@@ -363,7 +363,7 @@ internal sealed class InstallmentResource(
     @StringRes override val subtitleRes: Int? = null,
     @DrawableRes override val indicatorIconRes: Int,
     val sourceType: SourceType,
-    override var enabled: Boolean? = true
+    override var enabled: Boolean? = true,
 ) : OmiseListItem {
     companion object {
         val all: List<InstallmentResource>

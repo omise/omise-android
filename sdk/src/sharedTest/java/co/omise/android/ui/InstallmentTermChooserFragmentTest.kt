@@ -18,7 +18,6 @@ import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
 import org.hamcrest.CoreMatchers.not
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -41,10 +40,9 @@ class InstallmentTermChooserFragmentTest {
         }
 
     private var fragment =
-        InstallmentTermChooserFragment.newInstance(paymentMethod,true).apply {
+        InstallmentTermChooserFragment.newInstance(paymentMethod, true).apply {
             requester = mockRequester
         }
-
 
     @Test
     fun displayAllowedInstallmentTerms_showAllowedInstallmentTermsFromArgument() {
@@ -69,7 +67,7 @@ class InstallmentTermChooserFragmentTest {
                 on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
             }
         fragment =
-            InstallmentTermChooserFragment.newInstance(paymentMethod,true).apply {
+            InstallmentTermChooserFragment.newInstance(paymentMethod, true).apply {
                 requester = mockRequester
             }
         ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {

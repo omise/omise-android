@@ -87,7 +87,7 @@ data class Capability(
             return Capability(
                 paymentMethods = paymentMethods,
                 zeroInterestInstallments = zeroInterestInstallments,
-                limits = Limits(InstallmentAmount(200000L))
+                limits = Limits(InstallmentAmount(200000L)),
             )
         }
     }

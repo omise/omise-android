@@ -39,7 +39,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
 
         title = getString(R.string.installments_title)
         setHasOptionsMenu(true)
-        if(requestedInstallmentAmount < capabilityInstallmentAmount){
+        if (requestedInstallmentAmount < capabilityInstallmentAmount) {
             addNoBanksSupportedMessage()
         }
     }
@@ -53,6 +53,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
             }
         }
     }
+
     private fun addNoBanksSupportedMessage() {
         val noBanksMessageLayOut = view?.findViewById<LinearLayout>(R.id.message_layout)
         noBanksMessageLayOut?.visibility = View.VISIBLE
@@ -68,14 +69,17 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
         private const val EXTRA_REQUESTED_INSTALLMENT_AMOUNT = "InstallmentChooserFragment.requestedInstallmentAmount"
         private const val EXTRA_CAPABILITY_INSTALLMENT_AMOUNT = "InstallmentChooserFragment.capabilityInstallmentAmount"
 
-        fun newInstance(availableBanks: List<PaymentMethod>, requestedInstallmentAmount: Long, capabilityInstallmentAmount: Long) =
-            InstallmentChooserFragment().apply {
-                arguments =
-                    Bundle().apply {
-                        putParcelableArray(EXTRA_INSTALLMENT_METHODS, availableBanks.toTypedArray())
-                        putLong(EXTRA_REQUESTED_INSTALLMENT_AMOUNT, requestedInstallmentAmount)
-                        putLong(EXTRA_CAPABILITY_INSTALLMENT_AMOUNT, capabilityInstallmentAmount)
-                    }
-            }
+        fun newInstance(
+            availableBanks: List<PaymentMethod>,
+            requestedInstallmentAmount: Long,
+            capabilityInstallmentAmount: Long,
+        ) = InstallmentChooserFragment().apply {
+            arguments =
+                Bundle().apply {
+                    putParcelableArray(EXTRA_INSTALLMENT_METHODS, availableBanks.toTypedArray())
+                    putLong(EXTRA_REQUESTED_INSTALLMENT_AMOUNT, requestedInstallmentAmount)
+                    putLong(EXTRA_CAPABILITY_INSTALLMENT_AMOUNT, capabilityInstallmentAmount)
+                }
+        }
     }
 }

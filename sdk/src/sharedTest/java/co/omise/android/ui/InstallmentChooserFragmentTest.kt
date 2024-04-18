@@ -37,7 +37,7 @@ class InstallmentChooserFragmentTest {
         )
     private val mockNavigation: PaymentCreatorNavigation = mock()
     private var fragment =
-        InstallmentChooserFragment.newInstance(paymentMethods,300000,200000).apply {
+        InstallmentChooserFragment.newInstance(paymentMethods, 300000, 200000).apply {
             navigation = mockNavigation
         }
 
@@ -100,7 +100,7 @@ class InstallmentChooserFragmentTest {
     @Test
     fun displayAllowedInstallmentBanks_showAllowedInstallmentBanksAsDisabledFromArgument() {
         fragment =
-            InstallmentChooserFragment.newInstance(paymentMethods,100000,200000).apply {
+            InstallmentChooserFragment.newInstance(paymentMethods, 100000, 200000).apply {
                 navigation = mockNavigation
             }
         ActivityScenario.launch(TestFragmentActivity::class.java).onActivity { it.replaceFragment(fragment) }
@@ -146,6 +146,7 @@ class InstallmentChooserFragmentTest {
 
         onView(withId(R.id.recycler_view)).check(matches(itemCount(paymentMethods.size)))
     }
+
     @Test
     fun clickBankInstallmentMethod_shouldNotNavigateToInstallmentTermChooserFragment() {
         ActivityScenario.launch(TestFragmentActivity::class.java).onActivity { it.replaceFragment(fragment) }
