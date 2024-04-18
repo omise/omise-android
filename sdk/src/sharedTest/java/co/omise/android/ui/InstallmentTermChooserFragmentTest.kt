@@ -33,29 +33,25 @@ class InstallmentTermChooserFragmentTest {
             name = "installment_bay",
             installmentTerms = listOf(3, 4, 6, 9, 10),
         )
-    private val mockRequester: PaymentCreatorRequester<Source> =
+    private var mockRequester: PaymentCreatorRequester<Source> =
         mock {
             on { amount }.doReturn(500000L)
             on { currency }.doReturn("thb")
             on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
         }
 
-    private val fragment =
-        InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
+    private var fragment =
+        InstallmentTermChooserFragment.newInstance(paymentMethod,true).apply {
             requester = mockRequester
         }
 
-    @Before
-    fun setUp() {
-        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
-            it.replaceFragment(fragment)
-        }
-
-        onView(withText(R.string.payment_method_installment_bay_title)).check(matches(isDisplayed()))
-    }
 
     @Test
     fun displayAllowedInstallmentTerms_showAllowedInstallmentTermsFromArgument() {
+        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+            it.replaceFragment(fragment)
+        }
+        onView(withText(R.string.payment_method_installment_bay_title)).check(matches(isDisplayed()))
         onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText("3 months"))))
         onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText("4 months"))))
         onView(withListId(R.id.recycler_view).atPosition(2)).check(matches(hasDescendant(withText("6 months"))))
@@ -65,7 +61,34 @@ class InstallmentTermChooserFragmentTest {
     }
 
     @Test
+    fun displayAllowedInstallmentTerms_showOnlyAllowedTermsForRequestedAmountFromArgument() {
+        mockRequester =
+            mock {
+                on { amount }.doReturn(200000L)
+                on { currency }.doReturn("thb")
+                on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
+            }
+        fragment =
+            InstallmentTermChooserFragment.newInstance(paymentMethod,true).apply {
+                requester = mockRequester
+            }
+        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+            it.replaceFragment(fragment)
+        }
+
+        onView(withText(R.string.payment_method_installment_bay_title)).check(matches(isDisplayed()))
+
+        onView(withListId(R.id.recycler_view).atPosition(0)).check(matches(hasDescendant(withText("3 months"))))
+        onView(withListId(R.id.recycler_view).atPosition(1)).check(matches(hasDescendant(withText("4 months"))))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(2)))
+    }
+
+    @Test
     fun clickInstallmentTerm_sendRequestToCreateSource() {
+        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+            it.replaceFragment(fragment)
+        }
+        onView(withText(R.string.payment_method_installment_bay_title)).check(matches(isDisplayed()))
         onView(withId(R.id.recycler_view))
             .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
 
