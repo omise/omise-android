@@ -23,6 +23,8 @@ data class Capability(
     var tokenizationMethods: List<String>? = null,
     @field:JsonProperty("zero_interest_installments")
     val zeroInterestInstallments: Boolean = false,
+    @field:JsonProperty("limits")
+    var limits: Limits? = null,
     @field:JsonProperty
     val country: String? = null,
     override var modelObject: String? = null,
@@ -85,6 +87,7 @@ data class Capability(
             return Capability(
                 paymentMethods = paymentMethods,
                 zeroInterestInstallments = zeroInterestInstallments,
+                limits = Limits(InstallmentAmount(200000L)),
             )
         }
     }
