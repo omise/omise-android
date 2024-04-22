@@ -36,11 +36,13 @@ class InstallmentTermChooserFragmentTest {
         mock {
             on { amount }.doReturn(500000L)
             on { currency }.doReturn("thb")
-            on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
+            on { capability }.doReturn(
+                Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList(), zeroInterestInstallments = true),
+            )
         }
 
     private var fragment =
-        InstallmentTermChooserFragment.newInstance(paymentMethod, true).apply {
+        InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
             requester = mockRequester
         }
 
@@ -64,10 +66,16 @@ class InstallmentTermChooserFragmentTest {
             mock {
                 on { amount }.doReturn(200000L)
                 on { currency }.doReturn("thb")
-                on { capability }.doReturn(Capability.create(sourceTypes = emptyList(), tokenizationMethods = emptyList()))
+                on { capability }.doReturn(
+                    Capability.create(
+                        sourceTypes = emptyList(),
+                        tokenizationMethods = emptyList(),
+                        zeroInterestInstallments = true,
+                    ),
+                )
             }
         fragment =
-            InstallmentTermChooserFragment.newInstance(paymentMethod, true).apply {
+            InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
                 requester = mockRequester
             }
         ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {

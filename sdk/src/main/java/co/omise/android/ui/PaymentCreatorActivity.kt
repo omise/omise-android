@@ -261,8 +261,10 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToInstallmentChooser(allowedInstalls: List<PaymentMethod>) {
+        val minInstallmentAmount = capability.limits?.installmentAmount?.min ?: 0
+
         val fragment =
-            InstallmentChooserFragment.newInstance(allowedInstalls, amount, capability.limits?.installmentAmount?.min ?: 0).apply {
+            InstallmentChooserFragment.newInstance(allowedInstalls, amount, minInstallmentAmount).apply {
                 navigation = this@PaymentCreatorNavigationImpl
             }
         addFragmentToBackStack(fragment)
@@ -270,7 +272,7 @@ private class PaymentCreatorNavigationImpl(
 
     override fun navigateToInstallmentTermChooser(installment: PaymentMethod) {
         val fragment =
-            InstallmentTermChooserFragment.newInstance(installment, capability.zeroInterestInstallments).apply {
+            InstallmentTermChooserFragment.newInstance(installment).apply {
                 requester = this@PaymentCreatorNavigationImpl.requester
             }
         addFragmentToBackStack(fragment)

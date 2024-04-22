@@ -19,9 +19,6 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
     private val installment: PaymentMethod? by lazy {
         arguments?.getParcelable(EXTRA_INSTALLMENT)
     }
-    private val zeroInterestInstallments: Boolean? by lazy {
-        arguments?.getBoolean(EXTRA_ZERO_INTEREST_INSTALLMENT)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -66,8 +63,9 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 val minimumAmount = minimumInstallmentAmountPerType[sourceType]
                 val req = requester
                 val amount = req!!.amount
+                val zeroInterestInstallments = req.capability.zeroInterestInstallments
                 var interestAmount = 0.0
-                if (zeroInterestInstallments == false) {
+                if (!zeroInterestInstallments) {
                     val rate = interestRatePerType[sourceType] ?: 0.0
                     interestAmount = amount.toDouble() * rate
                 }
@@ -106,16 +104,13 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
 
     companion object {
         private const val EXTRA_INSTALLMENT = "InstallmentTermChooserFragment.installment"
-        private const val EXTRA_ZERO_INTEREST_INSTALLMENT = "InstallmentTermChooserFragment.zeroInterestInstallments"
 
-        fun newInstance(
-            installment: PaymentMethod,
-            zeroInterestInstallments: Boolean,
-        ) = InstallmentTermChooserFragment().apply {
-            arguments =
-                Bundle().apply {
-                    putParcelable(EXTRA_INSTALLMENT, installment)
-                }
-        }
+        fun newInstance(installment: PaymentMethod) =
+            InstallmentTermChooserFragment().apply {
+                arguments =
+                    Bundle().apply {
+                        putParcelable(EXTRA_INSTALLMENT, installment)
+                    }
+            }
     }
 }
