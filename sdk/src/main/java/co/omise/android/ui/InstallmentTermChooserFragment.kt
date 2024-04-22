@@ -71,7 +71,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                     val rate = interestRatePerType[sourceType] ?: 0.0
                     interestAmount = amount.toDouble() * rate
                 }
-                val installmentAmountPerMonth = (amount / term) + interestAmount
+                val installmentAmountPerMonth = (amount + interestAmount) / term
                 minimumAmount == null || installmentAmountPerMonth >= minimumAmount.amount
             }
             .map { term ->
