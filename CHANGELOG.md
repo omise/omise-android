@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## V4.16.1
+* **REMOVED:** Remove obsolete `points_citi`
+* **ADDED:** Added installment terms calculations
+
 ## V4.15.1
 * **PATCH:** Fix error message for `installment_mbb`
 
