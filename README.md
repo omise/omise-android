@@ -544,6 +544,7 @@ private fun startAuthoringPaymentActivity() {
             putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
             putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
             putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization)
+           // optional
             putExtra(
                 EXTRA_THREE_DS_REQUESTOR_APP_URL,
                 "sampleapp://omise.co/authorize_return"

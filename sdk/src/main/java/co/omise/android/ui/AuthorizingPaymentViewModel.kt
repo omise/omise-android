@@ -28,7 +28,7 @@ internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val uiCustomization: UiCustomization,
-    private val passedThreeDSRequestorAppURL: String,
+    private val passedThreeDSRequestorAppURL: String?,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val client = Client("")
@@ -46,7 +46,7 @@ internal class AuthorizingPaymentViewModel(
     private val client: Client,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val threeDS2Service: ThreeDS2ServiceWrapper,
-    private val passedThreeDSRequestorAppURL: String,
+    private val passedThreeDSRequestorAppURL: String?,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), ChallengeStatusReceiver {
     // Instantiate ThreeDSConfigProvider
@@ -149,7 +149,10 @@ internal class AuthorizingPaymentViewModel(
         }
     }
 
-    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String {
+    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String? {
+        if (passedThreeDSRequestorAppURL == null) {
+            return null
+        }
         // Check if the URL already contains a query string
         val separator = if (passedThreeDSRequestorAppURL.contains("?")) "&" else "?"
         // Append the transaction ID to the URL

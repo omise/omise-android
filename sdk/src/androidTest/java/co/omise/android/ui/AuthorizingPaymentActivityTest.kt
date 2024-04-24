@@ -118,36 +118,6 @@ class AuthorizingPaymentActivityTest {
     }
 
     @Test
-    fun errorWhenThreeDSRequestorAppURLNotSet() {
-        // Create an intent without setting EXTRA_THREE_DS_REQUESTOR_APP_URL
-        val intentWithoutThreeDSRequestorAppURL =
-            Intent(
-                ApplicationProvider.getApplicationContext(),
-                AuthorizingPaymentActivity::class.java,
-            ).apply {
-                putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
-                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
-            }
-
-        // Launch the activity
-        val scenario =
-            ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(
-                intentWithoutThreeDSRequestorAppURL,
-            )
-        val activityResult = scenario.result
-        // Check if the received error is as expected
-        val expectedError = OmiseException("The threeDSRequestorAppURL must be provided in the intent")
-        activityResult.resultData.setExtrasClassLoader(this::class.java.classLoader)
-        assertEquals(Activity.RESULT_OK, activityResult.resultCode)
-        assertEquals(
-            expectedError.message,
-            activityResult.resultData.parcelable<AuthorizingPaymentResult.Failure>(
-                EXTRA_AUTHORIZING_PAYMENT_RESULT,
-            )?.throwable?.message,
-        )
-    }
-
-    @Test
     fun fallback3DS1_whenAuthenticationStatusIsChallengeV1ThenLoadAuthorizeUrlToWebView() {
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
