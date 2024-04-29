@@ -164,6 +164,10 @@ internal class AuthorizingPaymentViewModel(
         val challengeParameters =
             ChallengeParameters().apply {
                 set3DSServerTransactionID(ares.threeDSServerTransID)
+                // optional
+                // Starting from EMV 3DS Spec 2.2.0, 3DS SDK allows requestor app to be called by authentication app
+                // for OOB authentication completion. Requestor app must define its URL and provide it to SDK;
+                // inclusion in challenge params is optional and incompatible versions are ignored.
                 threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
                 acsRefNumber = ares.acsReferenceNumber

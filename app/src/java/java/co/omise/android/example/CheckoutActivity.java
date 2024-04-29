@@ -222,6 +222,8 @@ public class CheckoutActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, new String[]{returnUrl});
         intent.putExtra(EXTRA_UI_CUSTOMIZATION, uiCustomization);
         // optional
+        // Starting from EMV 3DS Spec 2.2.0, 3DS SDK allows requestor app to be called by authentication app
+        // for OOB authentication completion. Requestor app must define its URL and provide it to SDK;
         intent.putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, "sampleapp://omise.co/authorize_return");
 
         authorizingPaymentLauncher.launch(intent);
