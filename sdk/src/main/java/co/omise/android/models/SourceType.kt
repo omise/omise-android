@@ -115,6 +115,8 @@ sealed class SourceType(
 
         object Ktc : Installment("installment_ktc")
 
+        object KtcWlb : Installment("installment_wlb_ktc")
+
         object KBank : Installment("installment_kbank")
 
         object Scb : Installment("installment_scb")
@@ -135,6 +137,7 @@ sealed class SourceType(
                     Bbl -> listOf(4, 6, 8, 9, 10)
                     Mbb -> listOf(6, 12, 18, 24)
                     Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
+                    KtcWlb -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                     KBank -> listOf(3, 4, 6, 10)
                     Scb -> listOf(3, 4, 6, 9, 10)
                     Ttb -> listOf(3, 4, 6, 10, 12)
@@ -169,6 +172,7 @@ sealed class SourceType(
                 "installment_bbl" -> Installment.Bbl
                 "installment_mbb" -> Installment.Mbb
                 "installment_ktc" -> Installment.Ktc
+                "installment_wlb_ktc" -> Installment.KtcWlb
                 "installment_kbank" -> Installment.KBank
                 "installment_scb" -> Installment.Scb
                 "installment_ttb" -> Installment.Ttb
@@ -227,6 +231,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Bbl,
             SourceType.Installment.Mbb,
             SourceType.Installment.Ktc,
+            SourceType.Installment.KtcWlb,
             SourceType.Installment.KBank,
             SourceType.Installment.Scb,
             SourceType.Installment.Ttb,

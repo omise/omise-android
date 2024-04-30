@@ -15,16 +15,21 @@ import android.widget.TextView
 import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.api.Client
+import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.extensions.textOrNull
 import co.omise.android.models.APIError
+import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
 import co.omise.android.models.CardParam
 import co.omise.android.models.CountryInfo
+import co.omise.android.models.PaymentMethod
+import co.omise.android.models.Source
 import co.omise.android.models.Token
+import co.omise.android.models.backendType
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_credit_card.billing_address_container
 import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
@@ -238,6 +243,19 @@ class CreditCardActivity : OmiseActivity() {
         submitButton.isEnabled = enabled
     }
 
+    private fun handleRequestFailed(throwable: Throwable) {
+        enableForm()
+
+        val message =
+            when (throwable) {
+                is IOError -> getString(R.string.error_io, throwable.message)
+                is APIError -> throwable.getMessageFromResources(resources)
+                else -> getString(R.string.error_unknown, throwable.message)
+            }
+
+        Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
+    }
+
     private fun submit() {
         disableForm()
 
@@ -256,7 +274,31 @@ class CreditCardActivity : OmiseActivity() {
             )
 
         val request = Token.CreateTokenRequestBuilder(cardParam).build()
+        val installmentTerms = intent.getIntExtra(EXTRA_SELECTED_INSTALLMENTS_TERM, 0)
+        // check if the user is coming from a WLB installment
+        var sourceRequest: Request<Source>? = null
+        if (installmentTerms != 0) {
+            // create a source request
+            val amount = requireNotNull(intent.getLongExtra(EXTRA_AMOUNT, 0)) { "${::EXTRA_AMOUNT.name} must not be null." }
 
+            val currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
+            val paymentMethod =
+                requireNotNull(
+                    intent.getParcelableExtra<PaymentMethod>(EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD),
+                ) {
+                    "${::EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD.name} must not be null."
+                }
+            val sourceType = (paymentMethod.backendType as? BackendType.Source)?.sourceType ?: return
+            val capability =
+                requireNotNull(
+                    intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY),
+                ) { "${::EXTRA_CAPABILITY.name} must not be null." }
+            sourceRequest =
+                Source.CreateSourceRequestBuilder(amount, currency, sourceType)
+                    .installmentTerm(installmentTerms)
+                    .zeroInterestInstallments(capability.zeroInterestInstallments)
+                    .build()
+        }
         client.send(
             request,
             object : RequestListener<Token> {
@@ -265,22 +307,30 @@ class CreditCardActivity : OmiseActivity() {
                     data.putExtra(EXTRA_TOKEN, model.id)
                     data.putExtra(EXTRA_TOKEN_OBJECT, model)
                     data.putExtra(EXTRA_CARD_OBJECT, model.card)
+                    if (sourceRequest == null) {
+                        setResult(Activity.RESULT_OK, data)
+                        finish()
+                    } else {
+                        // create source request
+                        client.send(
+                            sourceRequest,
+                            object : RequestListener<Source> {
+                                override fun onRequestSucceed(model: Source) {
+                                    data.putExtra(EXTRA_SOURCE_OBJECT, model)
+                                    setResult(Activity.RESULT_OK, data)
+                                    finish()
+                                }
 
-                    setResult(Activity.RESULT_OK, data)
-                    finish()
+                                override fun onRequestFailed(throwable: Throwable) {
+                                    handleRequestFailed(throwable)
+                                }
+                            },
+                        )
+                    }
                 }
 
                 override fun onRequestFailed(throwable: Throwable) {
-                    enableForm()
-
-                    val message =
-                        when (throwable) {
-                            is IOError -> getString(R.string.error_io, throwable.message)
-                            is APIError -> throwable.getMessageFromResources(resources)
-                            else -> getString(R.string.error_unknown, throwable.message)
-                        }
-
-                    Snackbar.make(scrollView, message, Snackbar.LENGTH_LONG).show()
+                    handleRequestFailed(throwable)
                 }
             },
         )

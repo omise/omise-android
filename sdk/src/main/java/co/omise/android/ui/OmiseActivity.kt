@@ -13,6 +13,8 @@ abstract class OmiseActivity : AppCompatActivity() {
         const val EXTRA_SOURCE_OBJECT = "OmiseActivity.sourceObject"
         const val EXTRA_AMOUNT = "OmiseActivity.amount"
         const val EXTRA_CURRENCY = "OmiseActivity.currency"
+        const val EXTRA_SELECTED_INSTALLMENTS_TERM = "OmiseActivity.selectedInstallmentsTerm"
+        const val EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD = "OmiseActivity.selectedInstallmentsPaymentMethod"
         const val EXTRA_CAPABILITY = "OmiseActivity.capability"
         const val EXTRA_CARD_BRANDS = "OmiseActivity.cardBrands"
         const val EXTRA_GOOGLEPAY_MERCHANT_ID = "OmiseActivity.googlepayMerchantId"

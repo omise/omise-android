@@ -241,7 +241,15 @@ class CheckoutActivity : AppCompatActivity() {
                 }
             }
             PAYMENT_CREATOR_REQUEST_CODE -> {
-                if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
+                // if the payment method requires both source and token then you will receive both objects
+                // otherwise one object will be received
+                if(data.hasExtra(OmiseActivity.EXTRA_TOKEN) && data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)){
+                    val source = data.getParcelableExtra<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
+                    val token = data.getParcelableExtra<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
+                    snackbar.setText((source?.id ?: "No source object.") + "/" + (token?.id ?: "No token object.")).show()
+                    Log.d(TAG, "source: ${source?.id}")
+                    Log.d(TAG, "token: ${token?.id}")
+                } else if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                     val source = data.getParcelableExtra<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
                     snackbar.setText(source?.id ?: "No source object.").show()
                     Log.d(TAG, "source: ${source?.id}")
