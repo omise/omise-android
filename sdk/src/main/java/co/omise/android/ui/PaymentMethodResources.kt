@@ -179,13 +179,6 @@ internal sealed class PaymentMethodResource(
         sourceType = SourceType.PayNow,
     )
 
-    object PointsCiti : PaymentMethodResource(
-        iconRes = R.drawable.payment_points_citi,
-        titleRes = R.string.payment_method_points_citi_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.PointsCiti,
-    )
-
     object TrueMoney : PaymentMethodResource(
         iconRes = R.drawable.payment_truemoney,
         titleRes = R.string.payment_truemoney_title,
@@ -268,13 +261,6 @@ internal sealed class PaymentMethodResource(
         titleRes = R.string.payment_method_rabbit_linepay_title,
         indicatorIconRes = R.drawable.ic_redirect,
         sourceType = SourceType.RabbitLinePay,
-    )
-
-    object OcbcPao : PaymentMethodResource(
-        iconRes = R.drawable.payment_ocbc_pao,
-        titleRes = R.string.payment_method_mobile_banking_ocbc_pao_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.OcbcPao,
     )
 
     object OcbcDigital : PaymentMethodResource(
@@ -377,6 +363,7 @@ internal sealed class InstallmentResource(
     @StringRes override val subtitleRes: Int? = null,
     @DrawableRes override val indicatorIconRes: Int,
     val sourceType: SourceType,
+    override var enabled: Boolean? = true,
 ) : OmiseListItem {
     companion object {
         val all: List<InstallmentResource>
@@ -430,13 +417,6 @@ internal sealed class InstallmentResource(
         titleRes = R.string.payment_method_installment_scb_title,
         indicatorIconRes = R.drawable.ic_next,
         sourceType = SourceType.Installment.Scb,
-    )
-
-    object Citi : InstallmentResource(
-        iconRes = R.drawable.payment_citi,
-        titleRes = R.string.payment_method_installment_citi_title,
-        indicatorIconRes = R.drawable.ic_next,
-        sourceType = SourceType.Installment.Citi,
     )
 
     object Ttb : InstallmentResource(

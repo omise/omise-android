@@ -5,8 +5,8 @@ buildscript {
         sample_app_version = '1.0'
         sample_app_code_version = 1
 
-        omise_sdk_version = '4.14.0'
-        omise_sdk_code_version = 47
+        omise_sdk_version = '4.16.1'
+        omise_sdk_code_version = 48
 
         compile_sdk_version = 34
         build_tools_version = '29.0.3'

@@ -1,7 +1,21 @@
 # CHANGELOG
 
+## V4.16.1
+
+- **REMOVED:** Remove obsolete `points_citi`
+- **ADDED:** Added installment terms calculations
+
+## V4.15.1
+
+- **PATCH:** Fix error message for `installment_mbb`
+
+## V4.15.0
+
+- **REMOVED:** Remove obsolete `ocbc_pao` and `installment_citi`
+
 ## V4.14.0
-* **ADDED:** Support new source type `wechat_pay`
+
+- **ADDED:** Support new source type `wechat_pay`
 
 ## V4.13.1
 

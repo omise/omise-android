@@ -29,7 +29,6 @@
     <string name="payment_preference_mobile_banking_bbl_key" translatable="false">mobile_banking_bbl</string>
     <string name="payment_preference_mobile_banking_kbank_key" translatable="false">mobile_banking_kbank</string>
     <string name="payment_preference_mobile_banking_ktb_key" translatable="false">mobile_banking_ktb</string>
-    <string name="payment_preference_ocbc_pao_key" translatable="false">mobile_banking_ocbc_pao</string>
 <string name="payment_preference_ocbc_digital_key" translatable="false">mobile_banking_ocbc</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
     <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
@@ -38,7 +37,6 @@
     <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
     <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
     <string name="payment_preference_installment_scb_key" translatable="false">installment_scb</string>
-    <string name="payment_preference_installment_citi_key" translatable="false">installment_citi</string>
     <string name="payment_preference_installment_ttb_key" translatable="false">installment_ttb</string>
     <string name="payment_preference_installment_uob_key" translatable="false">installment_uob</string>
     <string name="payment_preference_dana_key" translatable="false">dana</string>
@@ -48,7 +46,6 @@
     <string name="payment_preference_kakaopay_key" translatable="false">kakaopay</string>
     <string name="payment_preference_paynow_key" translatable="false">paynow</string>
     <string name="payment_preference_promptpay_key" translatable="false">promptpay</string>
-    <string name="payment_preference_points_citi_key" translatable="false">points_citi</string>
     <string name="payment_preference_touch_n_go_key" translatable="false">touch_n_go</string>
     <string name="payment_preference_truemoney_key" translatable="false">truemoney</string>
     <string name="payment_preference_truemoney_jumpapp_key" translatable="false">truemoney_jumpapp</string>
@@ -76,7 +73,6 @@
     <string name="payment_preference_mobile_banking_scb_title" translatable="false">SCB - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_kbank_title" translatable="false">KBANK - Mobile Banking</string>
     <string name="payment_preference_mobile_banking_ktb_title" translatable="false">KTB - Mobile Banking</string>
-    <string name="payment_preference_ocbc_pao_title" translatable="false">OCBC Pay Anyone</string>
     <string name="payment_preference_ocbc_digital_title" translatable="false">OCBC Digital</string>
     <string name="payment_preference_internet_banking_bay_title" translatable="false">BAY - Internet Banking</string>
     <string name="payment_preference_internet_banking_bbl_title" translatable="false">BBL - Internet Banking</string>
@@ -91,7 +87,6 @@
     <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
-    <string name="payment_preference_installment_citi_title" translatable="false">Citi - Installment</string>
     <string name="payment_preference_installment_ttb_title" translatable="false">TMBThanachart - Installment</string>
     <string name="payment_preference_installment_uob_title" translatable="false">UOB - Installment</string>
     <string name="payment_preference_dana_title" translatable="false">DANA</string>
@@ -101,7 +96,6 @@
     <string name="payment_preference_kakaopay_title" translatable="false">Kakao Pay</string>
     <string name="payment_preference_paynow_title" translatable="false">PayNow</string>
     <string name="payment_preference_promptpay_title" translatable="false">PromptPay</string>
-    <string name="payment_preference_points_citi_title" translatable="false">Pay with Citi Reward Points</string>
     <string name="payment_preference_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
     <string name="payment_preference_touch_n_go_title" translatable="false">Touch \'n Go eWallet</string>
     <string name="payment_preference_truemoney_title" translatable="false">TrueMoney Wallet</string>

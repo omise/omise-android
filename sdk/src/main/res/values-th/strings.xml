@@ -45,6 +45,7 @@
     <string name="label_full_name">ชื่อ-สกุล</string>
     <string name="label_phone_number">โทร.</string>
     <string name="installments_title">ผ่อนชำระ</string>
+    <string name="installments_amount_lower_than_monthly_limit">ยอดชำระต่อเดือนต่ำกว่าจำนวนขั้นต่ำที่ธนาคารกำหนด</string>
     <string name="internet_banking_chooser_title">อินเทอร์เน็ตแบงก์กิ้ง</string>
     <string name="mobile_banking_chooser_title">โมบายแบงก์กิ้ง</string>
     <string name="payment_chooser_title">ช่องทางชำระเงิน</string>
@@ -65,7 +66,7 @@
     <string name="error_api_bad_request_invalid_phone_number">หมายเลขโทรศัพท์ผู้ซื้อไม่ถูกต้อง</string>
     <string name="error_api_bad_request_name_is_too_long_with_valid_length">ชื่อผู้ซื้อยาวกว่า %d ตัวอักษร</string>
     <string name="error_api_bad_request_name_is_too_long_without_valid_length">ชื่อผู้ซื้อยาวเกินจำนวนตัวอักษรที่กำหนด</string>
-    <string name="error_api_bad_request_type_not_supported">บัญชีผู้ใช้นี้ไม่รองรับ source ที่ระบุ</string>
+    <string name="error_api_bad_request_source_type_not_supported">บัญชีผู้ใช้นี้ไม่รองรับ source ที่ระบุ</string>
     <string name="button_next">ถัดไป</string>
     <string name="error_unknown_without_reason">พบข้อขัดข้อง</string>
     <string name="payment_method_alipay_title">อาลีเพย์ (ออนไลน์)</string>
@@ -78,7 +79,6 @@
     <string name="payment_method_installment_kasikorn_title">ธนาคารกสิกรไทย</string>
     <string name="payment_method_installment_ktc_title">เคทีซี</string>
     <string name="payment_method_installment_scb_title">ธนาคารไทยพาณิชย์</string>
-    <string name="payment_method_installment_citi_title">ธนาคารซิตี้แบงก์์</string>
     <string name="payment_method_installment_ttb_title">ธนาคารทีเอ็มบีธนชาต</string>
     <string name="payment_method_installment_uob_title">ธนาคารยูโอบี</string>
     <string name="payment_method_installments_title">ผ่อนชำระ</string>
@@ -94,7 +94,6 @@
     <string name="payment_method_installment_term_months_title">%d เดือน</string>
     <string name="payment_method_promptpay_title">พร้อมเพย์</string>
     <string name="payment_method_paynow_title">เพย์นาว</string>
-    <string name="payment_method_points_citi_title">ชำระด้วยคะแนนซิตี้รีวอร์ด</string>
     <string name="payment_truemoney_title">ทรูมันนี่</string>
     <string name="truemoney_info_text">กรุณากรอกหมายเลขโทรศัพท์ที่ผูกกับบัญชีทรูมันนี่วอลเล็ท</string>
     <string name="payment_method_fpx_title">FPX</string>
@@ -112,7 +111,6 @@
     <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
     <string name="payment_method_ocbc_digital_title">OCBC Digital</string>
-    <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
     <string name="payment_method_mobile_banking_bay_title">KMA</string>
     <string name="payment_method_mobile_banking_bbl_title">Bualuang mBanking</string>
     <string name="googlepay">Google Pay</string>

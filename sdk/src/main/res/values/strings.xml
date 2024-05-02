@@ -37,7 +37,7 @@
     <string name="error_api_bad_request_invalid_phone_number">The customer phone number is invalid</string>
     <string name="error_api_bad_request_name_is_too_long_with_valid_length">The customer name exceeds the %d character limit</string>
     <string name="error_api_bad_request_name_is_too_long_without_valid_length">The customer name is too long</string>
-    <string name="error_api_bad_request_type_not_supported">The source type is not supported by this account</string>
+    <string name="error_api_bad_request_source_type_not_supported">The source type is not supported by this account</string>
 
     <string name="error_api_service_not_found">Service not found</string>
 
@@ -69,6 +69,7 @@
     <string name="internet_banking_chooser_title">Internet Banking</string>
     <string name="mobile_banking_chooser_title">Mobile Banking</string>
     <string name="installments_title">Installments</string>
+    <string name="installments_amount_lower_than_monthly_limit">Amount is lower than the monthly minimum payment amount</string>
     <string name="econtext_title">econtext</string>
     <string name="menu_title_close">Close</string>
 
@@ -89,7 +90,6 @@
     <string name="payment_method_installment_first_choice_title">Krungsri First Choice</string>
     <string name="payment_method_installment_ktc_title">KTC</string>
     <string name="payment_method_installment_scb_title">Siam Commercial Bank</string>
-    <string name="payment_method_installment_citi_title">Citibank</string>
     <string name="payment_method_installment_ttb_title">TMBThanachart Bank</string>
     <string name="payment_method_installment_uob_title">United Overseas Bank</string>
     <string name="payment_method_installment_term_month_title">%d month</string>
@@ -101,13 +101,11 @@
     <string name="payment_method_mobile_banking_kbank_title">K PLUS</string>
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
     <string name="payment_method_ocbc_digital_title">OCBC Digital</string>
-    <string name="payment_method_mobile_banking_ocbc_pao_title">OCBC Pay Anyone</string>
 
     <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
     <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>
     <string name="payment_method_promptpay_title">PromptPay</string>
     <string name="payment_method_paynow_title">PayNow</string>
-    <string name="payment_method_points_citi_title">Pay with Citi Rewards Points</string>
     <string name="payment_truemoney_title">TrueMoney</string>
     <string name="truemoney_info_text">Please input the mobile number connected to your TrueMoney Wallet account</string>
     <string name="payment_method_fpx_title">FPX</string>

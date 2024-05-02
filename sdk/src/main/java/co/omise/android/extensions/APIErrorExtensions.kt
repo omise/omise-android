@@ -68,7 +68,7 @@ fun APIError.getMessageWhenBadRequest(res: Resources): String {
             BadRequestReason.InvalidName -> res.getString(R.string.error_api_bad_request_invalid_name)
             BadRequestReason.InvalidEmail -> res.getString(R.string.error_api_bad_request_invalid_email)
             BadRequestReason.InvalidPhoneNumber -> res.getString(R.string.error_api_bad_request_invalid_phone_number)
-            BadRequestReason.TypeNotSupported -> res.getString(R.string.error_api_bad_request_type_not_supported)
+            BadRequestReason.SourceTypeNotSupported -> res.getString(R.string.error_api_bad_request_source_type_not_supported)
             BadRequestReason.CurrencyNotSupported -> res.getString(R.string.error_api_bad_request_currency_not_supported)
             else -> message ?: res.getString(R.string.error_unknown_without_reason)
         }
@@ -155,7 +155,7 @@ sealed class BadRequestReason {
 
     object InvalidPhoneNumber : BadRequestReason()
 
-    object TypeNotSupported : BadRequestReason()
+    object SourceTypeNotSupported : BadRequestReason()
 
     object CurrencyNotSupported : BadRequestReason()
 
@@ -202,7 +202,7 @@ sealed class BadRequestReason {
                         }
                         else -> Unknown(message.capitalizeFirstChar())
                     }
-                message.isContains("type") -> TypeNotSupported
+                message.isContains("source type") -> SourceTypeNotSupported
                 message.isContains("currency") -> CurrencyNotSupported
                 message.isContains("name") && message.isContains("blank") -> EmptyName
                 message.startsWith("name is too long") -> {

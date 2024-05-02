@@ -2,6 +2,7 @@ package co.omise.android.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import co.omise.android.R
 import co.omise.android.extensions.getParcelableArrayCompat
 import co.omise.android.models.BackendType
@@ -17,6 +18,14 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
     private val paymentMethods: List<PaymentMethod> by lazy {
         val args = arguments ?: return@lazy emptyList<PaymentMethod>()
         return@lazy (args.getParcelableArrayCompat<PaymentMethod>(EXTRA_INSTALLMENT_METHODS)).toList()
+    }
+    private val requestedInstallmentAmount: Long by lazy {
+        val args = arguments ?: return@lazy 0
+        return@lazy (args.getLong(EXTRA_REQUESTED_INSTALLMENT_AMOUNT))
+    }
+    private val capabilityInstallmentAmount: Long by lazy {
+        val args = arguments ?: return@lazy 0
+        return@lazy (args.getLong(EXTRA_CAPABILITY_INSTALLMENT_AMOUNT))
     }
     private val allowedInstallments: List<SourceType.Installment> by lazy {
         return@lazy paymentMethods.filter {
@@ -34,10 +43,24 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
 
         title = getString(R.string.installments_title)
         setHasOptionsMenu(true)
+        if (requestedInstallmentAmount < capabilityInstallmentAmount) {
+            addNoBanksSupportedMessage()
+        }
     }
 
     override fun listItems(): List<InstallmentResource> {
-        return allowedInstallments.installmentResources
+        return allowedInstallments.installmentResources.map { resource ->
+            resource.apply {
+                // disable the bank installment payment method if the amount is below the required amount
+                enabled =
+                    requestedInstallmentAmount >= capabilityInstallmentAmount
+            }
+        }
+    }
+
+    private fun addNoBanksSupportedMessage() {
+        val noBanksMessageLayOut = view?.findViewById<LinearLayout>(R.id.message_layout)
+        noBanksMessageLayOut?.visibility = View.VISIBLE
     }
 
     override fun onListItemClicked(item: InstallmentResource) {
@@ -47,13 +70,20 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
 
     companion object {
         private const val EXTRA_INSTALLMENT_METHODS = "InstallmentChooserFragment.installmentMethods"
+        private const val EXTRA_REQUESTED_INSTALLMENT_AMOUNT = "InstallmentChooserFragment.requestedInstallmentAmount"
+        private const val EXTRA_CAPABILITY_INSTALLMENT_AMOUNT = "InstallmentChooserFragment.capabilityInstallmentAmount"
 
-        fun newInstance(availableBanks: List<PaymentMethod>) =
-            InstallmentChooserFragment().apply {
-                arguments =
-                    Bundle().apply {
-                        putParcelableArray(EXTRA_INSTALLMENT_METHODS, availableBanks.toTypedArray())
-                    }
-            }
+        fun newInstance(
+            availableBanks: List<PaymentMethod>,
+            requestedInstallmentAmount: Long,
+            capabilityInstallmentAmount: Long,
+        ) = InstallmentChooserFragment().apply {
+            arguments =
+                Bundle().apply {
+                    putParcelableArray(EXTRA_INSTALLMENT_METHODS, availableBanks.toTypedArray())
+                    putLong(EXTRA_REQUESTED_INSTALLMENT_AMOUNT, requestedInstallmentAmount)
+                    putLong(EXTRA_CAPABILITY_INSTALLMENT_AMOUNT, capabilityInstallmentAmount)
+                }
+        }
     }
 }
