@@ -133,6 +133,19 @@ class PaymentCreatorActivity : OmiseActivity() {
         data: Intent?,
     ) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CREDIT_CARD_WITH_SOURCE && resultCode == Activity.RESULT_OK) {
+            val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
+            val source = data?.getParcelableExtra<Source>(EXTRA_SOURCE_OBJECT)
+            val intent =
+                Intent().apply {
+                    putExtra(EXTRA_TOKEN, token?.id)
+                    putExtra(EXTRA_TOKEN_OBJECT, token)
+                    putExtra(EXTRA_CARD_OBJECT, token?.card)
+                    putExtra(EXTRA_SOURCE_OBJECT, source)
+                }
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
 
         if (requestCode == REQUEST_CREDIT_CARD && resultCode == Activity.RESULT_OK) {
             val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
@@ -164,6 +177,10 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     companion object {
         const val REQUEST_CREDIT_CARD = 100
+
+        // Used for payment methods that require both token and source to be created and the
+        // credit card activity is responsible for creating both source and token
+        const val REQUEST_CREDIT_CARD_WITH_SOURCE = 101
     }
 }
 

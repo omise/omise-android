@@ -412,6 +412,13 @@ internal sealed class InstallmentResource(
         sourceType = SourceType.Installment.Ktc,
     )
 
+    object KtcWlb : InstallmentResource(
+        iconRes = R.drawable.payment_ktc,
+        titleRes = R.string.payment_method_installment_ktc_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.KtcWlb,
+    )
+
     object Scb : InstallmentResource(
         iconRes = R.drawable.payment_scb,
         titleRes = R.string.payment_method_installment_scb_title,

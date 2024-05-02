@@ -45,11 +45,26 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
     }
 
     override fun listItems(): List<InstallmentResource> {
-        return allowedInstallments.installmentResources.map { resource ->
-            resource.apply {
-                // disable the bank installment payment method if the amount is below the required amount
-                enabled =
-                    requestedInstallmentAmount >= capabilityInstallmentAmount
+        // Check if both KtcWlb and Ktc are present in the list of sources
+        val containsKtcWlbAndKtc =
+            allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.KtcWlb } &&
+                allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.Ktc }
+
+        return if (containsKtcWlbAndKtc) {
+            // If both KtcWlb and Ktc are present, filter out the Ktc resource
+            allowedInstallments.installmentResources.filterNot { it.sourceType == SourceType.Installment.Ktc }
+                .map { resource ->
+                    resource.apply {
+                        // Disable the bank installment payment method if the amount is below the required amount
+                        enabled = requestedInstallmentAmount >= capabilityInstallmentAmount
+                    }
+                }
+        } else {
+            allowedInstallments.installmentResources.map { resource ->
+                resource.apply {
+                    // Disable the bank installment payment method if the amount is below the required amount
+                    enabled = requestedInstallmentAmount >= capabilityInstallmentAmount
+                }
             }
         }
     }

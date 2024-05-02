@@ -237,7 +237,15 @@ public class CheckoutActivity extends AppCompatActivity {
             Log.d(TAG, resultMessage);
             snackbar.setText(resultMessage).show();
         } else if (requestCode == PAYMENT_CREATOR_REQUEST_CODE) {
-            if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
+            if(data.hasExtra(OmiseActivity.EXTRA_TOKEN) && data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)){
+                // if the payment method requires both source and token then you will receive both objects
+                // otherwise one object will be received
+                Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
+                        Token token = data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT);
+                        snackbar.setText((source != null ? source.getId() : "No source object.") + "/" + (token != null ? token.getId() : "No token object.")).show();
+                Log.d(TAG, "source: ${source?.id}");
+                Log.d(TAG, "token: ${token?.id}");
+            } else if (data.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT)) {
                 Source source = data.getParcelableExtra(OmiseActivity.EXTRA_SOURCE_OBJECT);
                 snackbar.setText(source.getId()).show();
                 Log.d(TAG, "source: " + source.getId());
