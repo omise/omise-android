@@ -5,6 +5,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
@@ -18,16 +22,19 @@ import co.omise.android.models.Source
 import co.omise.android.utils.itemCount
 import co.omise.android.utils.withListId
 import org.hamcrest.CoreMatchers.not
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class InstallmentTermChooserFragmentTest {
-    private val paymentMethod =
+    private var paymentMethod =
         PaymentMethod(
             name = "installment_bay",
             installmentTerms = listOf(3, 4, 6, 9, 10),
@@ -45,6 +52,16 @@ class InstallmentTermChooserFragmentTest {
         InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
             requester = mockRequester
         }
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
 
     @Test
     fun displayAllowedInstallmentTerms_showAllowedInstallmentTermsFromArgument() {
@@ -90,7 +107,7 @@ class InstallmentTermChooserFragmentTest {
     }
 
     @Test
-    fun clickInstallmentTerm_sendRequestToCreateSource() {
+    fun clickInstallmentTerm_sendRequestToCreateSourceIfNoTokenRequired() {
         ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
             it.replaceFragment(fragment)
         }
@@ -100,5 +117,31 @@ class InstallmentTermChooserFragmentTest {
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())
+    }
+
+    @Test
+    fun clickInstallmentTerm_opensCreditCardScreenWhenNeeded() {
+        // required for wlb installments
+        paymentMethod =
+            PaymentMethod(
+                name = "installment_wlb_ktc",
+                installmentTerms = listOf(3, 4, 5, 6, 7, 8, 9, 10),
+            )
+
+        fragment =
+            InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
+                requester = mockRequester
+            }
+        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+            it.replaceFragment(fragment)
+        }
+        onView(withText(R.string.payment_method_installment_ktc_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<OmiseItemViewHolder>(0, click()))
+
+        verify(mockRequester, never()).request(any(), any())
+        // check that the credit card activity is displayed
+        intended(hasComponent(CreditCardActivity::class.java.name))
+        intended(hasExtraWithKey(OmiseActivity.EXTRA_SELECTED_INSTALLMENTS_TERM))
     }
 }

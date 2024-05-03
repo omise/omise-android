@@ -14,6 +14,11 @@ and [Source](https://docs.opn.ooo/sources-api) API and components for entering c
 
 **Please do NOT use Omise Android SDK versions less than 3.0.0, as they are outdated and have security vulnerabilities.**
 
+## Security Warning
+
+**Please do NOT use Omise Android SDK versions less than 3.0.0, as they are outdated and have security vulnerabilities.**
+
+
 ## Requirements
 
 - Public key. [Register for an Opn Payments account](https://dashboard.omise.co/signup) to obtain your API keys.

@@ -1,5 +1,6 @@
 package co.omise.android.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import co.omise.android.R
@@ -10,6 +11,7 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
+import co.omise.android.ui.PaymentCreatorActivity.Companion.REQUEST_CREDIT_CARD_WITH_SOURCE
 
 /**
  * InstallmentTermChooserFragment is the UI class, extended from base [OmiseListFragment] to show
@@ -43,6 +45,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 SourceType.Installment.Bbl to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.Mbb to Amount.fromLocalAmount(83.33, currency),
                 SourceType.Installment.Ktc to Amount.fromLocalAmount(300.0, currency),
+                SourceType.Installment.KtcWlb to Amount.fromLocalAmount(300.0, currency),
                 SourceType.Installment.KBank to Amount.fromLocalAmount(300.0, currency),
                 SourceType.Installment.Scb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.Ttb to Amount.fromLocalAmount(500.0, currency),
@@ -55,16 +58,19 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 SourceType.Installment.Bbl to 0.0074,
                 SourceType.Installment.Mbb to 0.0,
                 SourceType.Installment.Ktc to 0.0074,
+                SourceType.Installment.KtcWlb to 0.0074,
                 SourceType.Installment.KBank to 0.0065,
                 SourceType.Installment.Scb to 0.0074,
                 SourceType.Installment.Ttb to 0.008,
                 SourceType.Installment.Uob to 0.0064,
             )
+        val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType!!
+        // White label installments require token and source
+        val requiresTokenRequest = sourceType.toString().lowercase().contains("wlb")
         return installment
             ?.installmentTerms
             .orEmpty()
             .filter { term ->
-                val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType
                 val minimumAmount = minimumInstallmentAmountPerType[sourceType]
                 val req = requester
                 val amount = req!!.amount
@@ -88,22 +94,46 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                             }
                         },
                     installmentTerm = term,
+                    indicatorIconRes = if (requiresTokenRequest) R.drawable.ic_next else R.drawable.ic_redirect,
                 )
             }
     }
 
     override fun onListItemClicked(item: InstallmentTermResource) {
         val req = requester ?: return
-        val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType ?: return
+        val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType!!
+        // White label installments require token and source
+        val requiresTokenRequest = sourceType.toString().lowercase().contains("wlb")
 
-        view?.let { setAllViewsEnabled(it, false) }
-        val request =
-            Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType)
-                .installmentTerm(item.installmentTerm)
-                .zeroInterestInstallments(req.capability.zeroInterestInstallments)
-                .build()
-        requester?.request(request) {
-            view?.let { setAllViewsEnabled(it, true) }
+        if (requiresTokenRequest) {
+            // navigate to credit card screen
+            val intent =
+                Intent(activity, CreditCardActivity::class.java).apply {
+                    putExtra(OmiseActivity.EXTRA_PKEY, activity?.intent?.getStringExtra(OmiseActivity.EXTRA_PKEY))
+                    putExtra(
+                        OmiseActivity.EXTRA_IS_SECURE,
+                        activity?.intent?.getBooleanExtra(
+                            OmiseActivity.EXTRA_IS_SECURE,
+                            true,
+                        ),
+                    )
+                    putExtra(OmiseActivity.EXTRA_SELECTED_INSTALLMENTS_TERM, item.installmentTerm)
+                    putExtra(OmiseActivity.EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD, installment)
+                    putExtra(OmiseActivity.EXTRA_CURRENCY, req.currency)
+                    putExtra(OmiseActivity.EXTRA_CAPABILITY, req.capability)
+                    putExtra(OmiseActivity.EXTRA_AMOUNT, req.amount)
+                }
+            activity?.startActivityForResult(intent, REQUEST_CREDIT_CARD_WITH_SOURCE)
+        } else {
+            view?.let { setAllViewsEnabled(it, false) }
+            val request =
+                Source.CreateSourceRequestBuilder(req.amount, req.currency, sourceType)
+                    .installmentTerm(item.installmentTerm)
+                    .zeroInterestInstallments(req.capability.zeroInterestInstallments)
+                    .build()
+            requester?.request(request) {
+                view?.let { setAllViewsEnabled(it, true) }
+            }
         }
     }
 
