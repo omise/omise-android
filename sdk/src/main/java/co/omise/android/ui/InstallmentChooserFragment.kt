@@ -52,7 +52,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
         // Check if both KtcWlb and Ktc are present in the list of sources
         val containsKtcWlbAndKtc =
             allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.KtcWlb } &&
-                    allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.Ktc }
+                allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.Ktc }
 
         return if (containsKtcWlbAndKtc) {
             // If both KtcWlb and Ktc are present, filter out the Ktc resource
