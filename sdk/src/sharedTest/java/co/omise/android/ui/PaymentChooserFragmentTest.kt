@@ -158,7 +158,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(19, R.string.payment_method_duitnow_obw_title)
         assertListAtIndexHasResource(20, R.string.payment_method_duitnow_qr_title)
 
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(27))
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(26))
 
         assertListAtIndexHasResource(21, R.string.payment_method_maybank_qr_title)
         assertListAtIndexHasResource(22, R.string.payment_method_rabbit_linepay_title)
@@ -167,7 +167,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(25, R.string.payment_method_atome_title)
         assertListAtIndexHasResource(26, R.string.payment_method_wechat_pay_title)
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(28)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(27)))
     }
 
     @Ignore("Flaky test, it fails when run on Github Action but pass on local machine.")
