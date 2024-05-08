@@ -49,7 +49,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
-    private var threeDSRequestorAppURL: String? = null
+    private lateinit var threeDSRequestorAppURL: String
     private var isWebViewSetup = false
     private lateinit var externalActivityLauncher: ActivityResultLauncher<Intent>
 
@@ -91,7 +91,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         threeDSRequestorAppURL = intent.getStringExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL)
-
+            ?: run {
+                finishActivityWithFailure(OmiseException("The threeDSRequestorAppURL must be provided in the intent"))
+                return
+            }
         handlePaymentAuthorization()
     }
 
