@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V4.17.1
+* **ADDED:** Implemented new source `installment_wlb_ktc`
+
 ## V4.16.1
 
 - **REMOVED:** Remove obsolete `points_citi`
