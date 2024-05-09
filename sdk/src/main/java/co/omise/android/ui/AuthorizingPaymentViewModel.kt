@@ -28,7 +28,7 @@ internal class AuthorizingPaymentViewModelFactory(
     private val activity: Activity,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val uiCustomization: UiCustomization,
-    private val passedThreeDSRequestorAppURL: String?,
+    private val passedThreeDSRequestorAppURL: String,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val client = Client("")
@@ -46,7 +46,7 @@ internal class AuthorizingPaymentViewModel(
     private val client: Client,
     private val urlVerifier: AuthorizingPaymentURLVerifier,
     private val threeDS2Service: ThreeDS2ServiceWrapper,
-    private val passedThreeDSRequestorAppURL: String?,
+    private val passedThreeDSRequestorAppURL: String,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), ChallengeStatusReceiver {
     // Instantiate ThreeDSConfigProvider
@@ -149,10 +149,7 @@ internal class AuthorizingPaymentViewModel(
         }
     }
 
-    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String? {
-        if (passedThreeDSRequestorAppURL == null) {
-            return null
-        }
+    internal fun createThreeDSRequestorAppURL(sdkTransID: String?): String {
         // Check if the URL already contains a query string
         val separator = if (passedThreeDSRequestorAppURL.contains("?")) "&" else "?"
         // Append the transaction ID to the URL
@@ -164,10 +161,6 @@ internal class AuthorizingPaymentViewModel(
         val challengeParameters =
             ChallengeParameters().apply {
                 set3DSServerTransactionID(ares.threeDSServerTransID)
-                // optional
-                // Starting from EMV 3DS Spec 2.2.0, 3DS SDK allows requestor app to be called by authentication app
-                // for OOB authentication completion. Requestor app must define its URL and provide it to SDK;
-                // inclusion in challenge params is optional and incompatible versions are ignored.
                 threeDSRequestorAppURL = createThreeDSRequestorAppURL(ares.sdkTransID)
                 acsTransactionID = ares.acsTransID
                 acsRefNumber = ares.acsReferenceNumber
