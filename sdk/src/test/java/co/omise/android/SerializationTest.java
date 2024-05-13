@@ -53,7 +53,7 @@ public class SerializationTest extends OmiseTest {
         }
 
         for (Map.Entry<String, MapDifference.ValueDifference<Object>> entry : differences.entriesDiffering().entrySet()) {
-            Object expected = entry.getValue().leftValue();
+            Object expected =  entry.getValue().leftValue();
             Object actual = entry.getValue().rightValue();
 
             // nested maps
@@ -77,14 +77,14 @@ public class SerializationTest extends OmiseTest {
                 assertNull(prefix + "." + entry.getKey(), actual);
             } else {
                 assertNotNull(prefix + "." + entry.getKey(), actual);
+                assertEquals(prefix + "." + entry.getKey() + " has mismatched value.", expected.getClass(), actual.getClass());
             }
 
-            assertEquals(prefix + "." + entry.getKey() + " has mismatched value.", expected.getClass(), actual.getClass());
             assertEquals(prefix + "." + entry.getKey() + " has mismatched value.", expected, actual);
         }
     }
 
-    private String objectJsonName(Class klass) {
+    private String objectJsonName(Class<?> klass) {
         if (Objects.equal(klass, CardBrand.class)) {
             return "/data/objects/card_brand_object.json";
         } else if (Objects.equal(klass, PaymentMethod.class)) {

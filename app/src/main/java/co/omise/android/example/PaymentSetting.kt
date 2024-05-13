@@ -58,9 +58,9 @@ object PaymentSetting {
                     R.string.payment_preference_atome_key,
                     R.string.payment_preference_wechat_pay_key
             )
-                    .map { context.getString(it) }
-                    .map { Pair(it, PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)) }
-                    .toMap()
+                    .map { context.getString(it) }.associateWith {
+                PreferenceManager.getDefaultSharedPreferences(context).getBoolean(it, false)
+            }
 
     @JvmStatic
     fun isUsedSpecificsPaymentMethods(context: Context): Boolean =

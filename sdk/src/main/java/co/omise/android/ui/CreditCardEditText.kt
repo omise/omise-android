@@ -30,7 +30,7 @@ class CreditCardEditText : OmiseEditText {
     val cardNumber: String
         get() = text.toString().trim().replace(SEPARATOR, "")
 
-    val cardBrand: CardBrand?
+    private val cardBrand: CardBrand?
         get() = CardNumber.brand(cardNumber)
 
     constructor(context: Context) : super(context)
@@ -85,12 +85,12 @@ class CreditCardEditText : OmiseEditText {
         cardBrandImagePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         cardBrandImage?.let {
             val imageLeftPosition = width.toFloat() - it.width - paddingRight
             val imageTopPosition = (height - it.height) / 2f
-            canvas?.drawBitmap(it, imageLeftPosition, imageTopPosition, cardBrandImagePaint)
+            canvas.drawBitmap(it, imageLeftPosition, imageTopPosition, cardBrandImagePaint)
         }
     }
 

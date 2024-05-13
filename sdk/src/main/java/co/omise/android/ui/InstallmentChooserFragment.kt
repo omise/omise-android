@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import co.omise.android.R
+import co.omise.android.extensions.getParcelableArrayCompat
 import co.omise.android.models.BackendType
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.SourceType
@@ -16,7 +17,7 @@ import co.omise.android.models.backendType
 internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResource>() {
     private val paymentMethods: List<PaymentMethod> by lazy {
         val args = arguments ?: return@lazy emptyList<PaymentMethod>()
-        return@lazy (args.getParcelableArray(EXTRA_INSTALLMENT_METHODS) as Array<PaymentMethod>).toList()
+        return@lazy (args.getParcelableArrayCompat<PaymentMethod>(EXTRA_INSTALLMENT_METHODS)).toList()
     }
     private val requestedInstallmentAmount: Long by lazy {
         val args = arguments ?: return@lazy 0
@@ -34,8 +35,11 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
     }
     var navigation: PaymentCreatorNavigation? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
 
         title = getString(R.string.installments_title)
         setHasOptionsMenu(true)

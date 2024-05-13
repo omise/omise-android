@@ -3,14 +3,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion compile_sdk_version
 
     defaultConfig {
-        applicationId "co.omise.android.example"
+        namespace "co.omise.android.example"
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
         versionCode sample_app_code_version
         versionName sample_app_version
+        compileSdk compile_sdk_version
     }
 
     buildTypes {
@@ -20,7 +20,8 @@ android {
         }
     }
 
-    flavorDimensions "language", "mode"
+    flavorDimensions += "language"
+    flavorDimensions += "mode"
 
     productFlavors {
         java {

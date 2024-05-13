@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -142,6 +143,15 @@ class CreditCardActivity : OmiseActivity() {
         if (!this::client.isInitialized) {
             client = Client(pKey)
         }
+        val onBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    setResult(RESULT_CANCELED)
+                    finish()
+                }
+            }
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         initialize()
     }
@@ -223,11 +233,6 @@ class CreditCardActivity : OmiseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
     }
 
     private fun disableForm() {

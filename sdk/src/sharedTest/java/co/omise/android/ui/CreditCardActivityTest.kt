@@ -392,7 +392,7 @@ class CreditCardActivityTest {
     @Test
     fun flagSecure_whenParameterIsFalseThenAttributesMustNotContainFlagSecure() {
         intent.putExtra(OmiseActivity.EXTRA_IS_SECURE, false)
-        val scenario = ActivityScenario.launchActivityForResult<CreditCardActivity>(intent)
+        val scenario = launchActivityForResult<CreditCardActivity>(intent)
         scenario.onActivity {
             assertNotEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
@@ -400,7 +400,7 @@ class CreditCardActivityTest {
 
     @Test
     fun flagSecure_whenParameterNotSetThenAttributesMustContainFlagSecure() {
-        val scenario = ActivityScenario.launchActivityForResult<CreditCardActivity>(intent)
+        val scenario = launchActivityForResult<CreditCardActivity>(intent)
         scenario.onActivity {
             assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }

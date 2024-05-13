@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
@@ -48,6 +49,8 @@ class GooglePayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_pay)
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         initialize()
 
@@ -124,7 +127,7 @@ class GooglePayActivity : AppCompatActivity() {
                     "Internal error occurred, please try a different payment method",
                     Toast.LENGTH_LONG,
                 ).show()
-                onBackPressed()
+                onBackPressedCallback.handleOnBackPressed()
             }
         }
     }
@@ -145,7 +148,7 @@ class GooglePayActivity : AppCompatActivity() {
                 "Unfortunately, Google Pay is not available on this device",
                 Toast.LENGTH_LONG,
             ).show()
-            onBackPressed()
+            onBackPressedCallback.handleOnBackPressed()
         }
     }
 
@@ -169,6 +172,8 @@ class GooglePayActivity : AppCompatActivity() {
             loadPaymentDataRequestCode,
         )
     }
+
+    // can't move from deprecated onActivityResult due to https://github.com/Adyen/adyen-android/issues/771
 
     /**
      * Handle a resolved activity from the Google Pay payment sheet.
@@ -195,7 +200,7 @@ class GooglePayActivity : AppCompatActivity() {
                         }
 
                     RESULT_CANCELED -> {
-                        onBackPressed()
+                        onBackPressedCallback.handleOnBackPressed()
                     }
 
                     AutoResolveHelper.RESULT_ERROR -> {
@@ -221,14 +226,14 @@ class GooglePayActivity : AppCompatActivity() {
      */
     private fun handlePaymentSuccess(paymentData: PaymentData) {
         val paymentInformation = paymentData.toJson()
-        var billingName: String = ""
-        var billingCity: String = ""
-        var billingCountry: String = ""
-        var billingPostalCode: String = ""
-        var billingState: String = ""
-        var billingStreet1: String = ""
-        var billingStreet2: String = ""
-        var billingPhoneNumber: String = ""
+        var billingName = ""
+        var billingCity = ""
+        var billingCountry = ""
+        var billingPostalCode = ""
+        var billingState = ""
+        var billingStreet1 = ""
+        var billingStreet2 = ""
+        var billingPhoneNumber = ""
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
@@ -287,7 +292,7 @@ class GooglePayActivity : AppCompatActivity() {
                 listener.onRequestFailed(ex)
             }
         } catch (e: JSONException) {
-            Log.e("handlePaymentSuccess", "Error: " + e.toString())
+            Log.e("handlePaymentSuccess", "Error: $e")
         }
     }
 
@@ -328,7 +333,7 @@ class GooglePayActivity : AppCompatActivity() {
                 message,
                 Toast.LENGTH_LONG,
             ).show()
-            onBackPressed()
+            onBackPressedCallback.handleOnBackPressed()
         }
     }
 
@@ -342,8 +347,11 @@ class GooglePayActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        setResult(RESULT_CANCELED)
-        super.onBackPressed()
-    }
+    private val onBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        }
 }

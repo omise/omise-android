@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "areq": {
+    "sdkReferenceNumber": "sdkRef123456"
+  },
+  "ares": {
+    "messageVersion": "2.2.0",
+    "threeDSServerTransID": "8a880dc0-d2d2-4067-bcb1-b08d1690b26e",
+    "acsTransID": "d7c1ee99-9478-44a6-b1f2-391e29c6b340",
+    "sdkTransID": "b2385523-a66c-4907-ac3c-91848e8c0067",
+    "acsSignedContent": null,
+    "acsURL": null
+  },
+  "creq": null
+}

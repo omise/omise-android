@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.omise.android.example">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="false"
@@ -9,7 +10,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
         android:theme="@style/OmiseTheme">
-        <activity android:name=".PaymentResultActivity">
+        <activity android:name=".PaymentResultActivity" android:launchMode="singleTask" android:exported="true">
             <intent-filter android:label="Payment Result">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -22,7 +23,7 @@
                     android:scheme="sampleapp" />
             </intent-filter>
         </activity>
-        <activity android:name=".CheckoutActivity">
+        <activity android:name=".CheckoutActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,10 +37,7 @@
         <activity android:name="co.omise.android.ui.AuthorizingPaymentActivity" />
         <activity android:name="co.omise.android.ui.PaymentCreatorActivity" />
         <activity android:name="co.omise.android.ui.GooglePayActivity" />
-        <activity android:name=".PaymentProcessingActivity" />
         <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

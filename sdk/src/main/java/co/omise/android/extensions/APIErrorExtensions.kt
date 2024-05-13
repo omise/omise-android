@@ -4,7 +4,6 @@ import android.content.res.Resources
 import co.omise.android.R
 import co.omise.android.models.APIError
 import co.omise.android.models.Amount
-import java.util.Locale
 
 fun APIError.getMessageFromResources(res: Resources): String =
     when (errorCode) {
@@ -12,7 +11,11 @@ fun APIError.getMessageFromResources(res: Resources): String =
         is APIErrorCode.BadRequest -> getMessageWhenBadRequest(res)
         APIErrorCode.AuthenticationFailure -> res.getString(R.string.error_api_authentication_failure)
         APIErrorCode.ServiceNotFound -> res.getString(R.string.error_api_service_not_found)
-        else -> res.getString(R.string.error_required, message?.capitalize(Locale.getDefault()))
+        else ->
+            res.getString(
+                R.string.error_required,
+                message?.capitalizeFirstChar(),
+            )
     }
 
 fun APIError.getMessageWhenInvalidCard(res: Resources): String {
@@ -26,7 +29,7 @@ fun APIError.getMessageWhenInvalidCard(res: Resources): String {
             else ->
                 res.getString(
                     R.string.error_required,
-                    message?.capitalize(Locale.getDefault()),
+                    message?.capitalizeFirstChar(),
                 )
         }
     }
@@ -124,7 +127,7 @@ sealed class InvalidCardReason {
                 message.isContains("expiration") -> InvalidExpirationDate
                 message.isContains("name") -> EmptyCardHolderName
                 message.isContains("brand") -> UnsupportedBrand
-                else -> Unknown(message.capitalize())
+                else -> Unknown(message.capitalizeFirstChar())
             }
     }
 }
@@ -160,13 +163,13 @@ sealed class BadRequestReason {
 
     companion object {
         private val amountAtLeastValidAmountErrorMessageRegex =
-            """amount must be at least ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+            """amount must be at least (\d+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val amountLessThanValidAmountErrorMessageRegex =
-            """amount must be greater than ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+            """amount must be greater than (\d+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val amountGreaterThanValidAmountErrorMessageRegex =
-            """amount must be less than ([\d]+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
+            """amount must be less than (\d+)(\s)?(([a-zA-Z]{3})?)""".toRegex()
         private val nameIsTooLongErrorMessageRegex =
-            """name is too long \(maximum is ([\d]+) characters\)""".toRegex()
+            """name is too long \(maximum is (\d+) characters\)""".toRegex()
 
         fun creator(message: String): BadRequestReason =
             when {
@@ -178,7 +181,7 @@ sealed class BadRequestReason {
                                 amountAtLeastValidAmountErrorMessageRegex.findAll(message)
                                     .toList()[0].groupValues
                             val validAmount = matchedResult.getOrNull(1)?.toLong()
-                            val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                            val currency = matchedResult[3].ifEmpty { null }
                             AmountIsLessThanValidAmount(validAmount, currency)
                         }
                         message.matches(amountLessThanValidAmountErrorMessageRegex) -> {
@@ -186,7 +189,7 @@ sealed class BadRequestReason {
                                 amountLessThanValidAmountErrorMessageRegex.findAll(message)
                                     .toList()[0].groupValues
                             val validAmount = matchedResult.getOrNull(1)?.toLong()
-                            val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                            val currency = matchedResult[3].ifEmpty { null }
                             AmountIsLessThanValidAmount(validAmount, currency)
                         }
                         message.matches(amountGreaterThanValidAmountErrorMessageRegex) -> {
@@ -194,10 +197,10 @@ sealed class BadRequestReason {
                                 amountGreaterThanValidAmountErrorMessageRegex.findAll(message)
                                     .toList()[0].groupValues
                             val validAmount = matchedResult.getOrNull(1)?.toLong()
-                            val currency = if (matchedResult[3].isNotEmpty()) matchedResult[3] else null
+                            val currency = matchedResult[3].ifEmpty { null }
                             AmountIsGreaterThanValidAmount(validAmount, currency)
                         }
-                        else -> Unknown(message.capitalize())
+                        else -> Unknown(message.capitalizeFirstChar())
                     }
                 message.isContains("source type") -> SourceTypeNotSupported
                 message.isContains("currency") -> CurrencyNotSupported
@@ -210,7 +213,7 @@ sealed class BadRequestReason {
                 message.isContains("name") -> InvalidName
                 message.isContains("email") -> InvalidEmail
                 message.isContains("phone") -> InvalidPhoneNumber
-                else -> Unknown(message.capitalize())
+                else -> Unknown(message.capitalizeFirstChar())
             }
     }
 }

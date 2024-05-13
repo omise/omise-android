@@ -8,15 +8,24 @@ apply plugin: 'org.sonarqube'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
 android {
-    compileSdkVersion compile_sdk_version
-
+    buildFeatures {
+        buildConfig true
+    }
     defaultConfig {
+        namespace 'co.omise.android'
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
         versionCode omise_sdk_code_version
         versionName omise_sdk_version
+        compileSdk compile_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
+        buildConfigField "String", "NETCETERA_API_KEY", "\"${System.getenv('NETCETERA_API_KEY')}\""
+        buildConfigField "String", "SCHEME_NAME", "\"${System.getenv('SCHEME_NAME')}\""
+        buildConfigField "String", "DS_ID", "\"${System.getenv('DS_ID')}\""
+        buildConfigField "String", "MESSAGE_VERSION", "\"${System.getenv('MESSAGE_VERSION')}\""
+        buildConfigField "String", "ACS_REF_NUMBER", "\"${System.getenv('ACS_REF_NUMBER')}\""
+        buildConfigField "String", "DS_PUBLIC_KEY", "\"${System.getenv('DS_PUBLIC_KEY')}\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
     }
 
@@ -30,7 +39,7 @@ android {
         }
     }
 
-    flavorDimensions "mode"
+    flavorDimensions += "mode"
     productFlavors {
         production {
             dimension "mode"
@@ -74,6 +83,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        // issue with agp > 8 so we had to add this line https://github.com/Kotlin/kotlinx.serialization/issues/2145
+        freeCompilerArgs = ["-Xstring-concat=inline"]
     }
     android {
         sourceSets {
@@ -102,9 +113,9 @@ publishing {
                 description = 'Android SDK for Omise API'
                 url = 'https://www.omise.co'
                 withXml {
-                    def dependenciesNode = asNode().appendNode('dependencies')
+                    def dependenciesNode = asNode('').appendNode('dependencies')
                     configurations.implementation.allDependencies.each {
-                        if (it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
+                        if (it.group != null && (it.name != null || "unspecified" == it.name) && it.version != null) {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', it.group)
                             dependencyNode.appendNode('artifactId', it.name)
@@ -157,10 +168,6 @@ signing {
 }
 
 dependencies {
-//    implementation project(":3DS-ANDROID-SDK:threeds")
-    implementation("co.omise:threeds-android:$omise_threeds_sdk_version") {
-        exclude module: 'asm'
-    }
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     api "joda-time:joda-time:$joda_time_version"
@@ -176,6 +183,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
+    // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.69'
 
     debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
         exclude group: 'androidx.test', module: 'core'
@@ -210,6 +219,11 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
     androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
+    implementation project(':3ds-sdk')
+
+    // Netcetera 3SD SDK
+    implementation "org.slf4j:slf4j-api:1.7.36"
+    implementation "com.github.tony19:logback-android:1.3.0-3"
 }
 
 repositories {
@@ -247,7 +261,7 @@ tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProd
     ])
 }
 // Use in CI to coverage generate report without instrumentation testing
-tasks.create(name: 'jacocoUnitTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint']) {
+tasks.create(name: 'jacocoUnitTestReport', type: JacocoReport, dependsOn: ['compileProductionDebugAndroidTestJavaWithJavac','generateProductionDebugAndroidTestBuildConfig','checkProductionDebugAndroidTestAarMetadata','mergeProductionDebugAndroidTestResources','processProductionDebugAndroidTestManifest','testProductionDebugUnitTest', 'lint']) {
     reports {
         xml.required = true
         html.required = true

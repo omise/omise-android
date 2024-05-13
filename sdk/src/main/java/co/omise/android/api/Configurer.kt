@@ -34,20 +34,18 @@ class Configurer internal constructor(private val config: Config) : Interceptor 
          * @return A new HTTP [Request] instance with configurations from [config] applied.
          */
         @JvmStatic
-        internal fun configure(
+        fun configure(
             config: Config,
             request: Request,
         ): Request {
             val apiVersion = config.apiVersion()
-            val endpoint =
-                Endpoint.allEndpointsByHost[request.url.host]
-                    ?: throw UnsupportedOperationException("unknown endpoint: " + request.url.host)
+            val endpoint = Endpoint.allEndpointsByHost[request.url.host]
 
-            val key = endpoint.authenticationKey(config)
+            val key = endpoint?.authenticationKey(config)
             var builder =
                 request.newBuilder()
                     .addHeader("User-Agent", config.userAgent())
-                    .addHeader("Authorization", Credentials.basic(key, "x"))
+                    .addHeader("Authorization", Credentials.basic(key ?: "", "x"))
 
             if (apiVersion.isNotEmpty()) {
                 builder = builder.addHeader("Omise-Version", apiVersion)

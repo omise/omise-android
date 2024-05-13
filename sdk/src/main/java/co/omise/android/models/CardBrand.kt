@@ -27,7 +27,7 @@ data class CardBrand(
     private val pattern: Pattern = Pattern.compile("$patternStr[0-9]+")
 
     fun match(pan: String?): Boolean {
-        return if (pan == null || pan.isEmpty()) false else pattern.matcher(pan).matches()
+        return if (pan.isNullOrEmpty()) false else pattern.matcher(pan).matches()
     }
 
     fun valid(pan: String): Boolean {

@@ -2,7 +2,9 @@ package co.omise.android
 
 import android.os.Bundle
 import android.os.Parcel
+import android.os.Parcelable
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import co.omise.android.extensions.getParcelableCompat
 import co.omise.android.models.Capability
 import co.omise.android.models.Card
 import co.omise.android.models.FlowType
@@ -116,7 +118,7 @@ class ParcelableTest {
         val bundle2 = parcel.readBundle()
         bundle2!!.classLoader = model::class.java.classLoader
 
-        val finalModel = bundle2.getParcelable<T>(model::class.java.simpleName)
+        val finalModel = bundle2.getParcelableCompat<Parcelable>(model::class.java.simpleName)
         assertEquals(model, finalModel)
     }
 }

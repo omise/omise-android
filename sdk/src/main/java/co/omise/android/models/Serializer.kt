@@ -29,7 +29,7 @@ class Serializer {
      *
      * @return An [ObjectMapper] instance.
      */
-    var objectMapper: ObjectMapper
+    private var objectMapper: ObjectMapper
 
     /**
      * Returns the pre-configured  [DateTimeFormatter] used for
@@ -37,7 +37,7 @@ class Serializer {
      *
      * @return A [DateTimeFormatter] instance.
      */
-    var dateTimeFormatter: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
+    private var dateTimeFormatter: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
 
     /**
      * Returns the pre-configured [DateTimeFormatter] used for
@@ -45,7 +45,7 @@ class Serializer {
      *
      * @return A [DateTimeFormatter] instance.
      */
-    var localDateFormatter: DateTimeFormatter = ISODateTimeFormat.date()
+    private var localDateFormatter: DateTimeFormatter = ISODateTimeFormat.date()
 
     init {
         objectMapper =
