@@ -12,7 +12,10 @@ and [Source](https://docs.opn.ooo/sources-api) API and components for entering c
 
 ## Security Warning
 
-**Please do NOT use Omise Android SDK versions less than 3.0.0, as they are outdated and have security vulnerabilities.**
+<div class="notice>
+<p>
+It is imperative that you use at least the minimum recommended SDK version of `4.3.1` for security reasons. Any version below this poses severe risks of security vulnerabilities, bugs, and unexpected behaviors, which can be detrimental to your application. To avoid these risks and ensure the best user experience, it is highly recommended that you upgrade to the latest supported SDK version. Opn strongly advises the use of version `5.0.0` for superior performance and top-notch security. Don't compromise on the security and performance of your application - upgrade to the latest SDK version today.
+</p></div>
 
 ## Requirements
 
@@ -30,10 +33,6 @@ Attestation of Compliance (AoC) delivered by a certified QSA Auditor.
 
 This SDK provides the means to tokenize card data on an end-user mobile phone without the data
 having to go through your server.
-
-## Notice
-
-Use SDK version `4.3.1` or higher for your app's security and performance. Any versions below this will pose severe risks of security vulnerabilities, bugs, and unexpected behaviors. Upgrade to the latest supported SDK version to avoid these risks and ensure the best user experience.
 
 ## Installation
 
