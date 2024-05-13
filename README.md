@@ -12,7 +12,7 @@ and [Source](https://docs.opn.ooo/sources-api) API and components for entering c
 
 ## Security Warning
 
-**It is imperative that you use at least the minimum recommended SDK version of `4.3.1` for security reasons. Any version below this poses severe risks of security vulnerabilities, bugs, and unexpected behaviors, which can be detrimental to your application. To avoid these risks and ensure the best user experience, it is highly recommended that you upgrade to the latest supported SDK version. Opn strongly advises the use of version `5.0.0` for superior performance and top-notch security. Don't compromise on the security and performance of your application - upgrade to the latest SDK version today.**
+**It is imperative that you use at least the minimum recommended SDK version of `4.3.1` for security reasons. Any version below this poses severe risks of security vulnerabilities, bugs, and unexpected behaviors, which can be detrimental to your application. To avoid these risks and ensure the best user experience, it is highly recommended that you upgrade to the latest supported SDK version. Opn strongly advises the use of version `5.0.0` for superior performance and top-notch security.**
 
 ## Requirements
 
