@@ -51,6 +51,23 @@ implementation 'co.omise:omise-android:4.3.1'
 
 ## Usage
 
+### Breaking changes in version `v5.0.0`
+
+- **UI Customization Overhaul**: Introducing a new theme-based UI customization approach. Previously customized UI configurations must be updated. This offers configurations for `DefaultTheme`, `DarkTheme`, and `MonoChromeTheme`. See `CheckoutActivity.kt` in the example app for a detailed implementation.
+- **Charge Authorization**: A new parameter named `EXTRA_THREE_DS_REQUESTOR_APP_URL` has been introduced and is required for charge authorization. Ensure this parameter is passed during the start of `AuthorizingPaymentActivity` to prevent errors.
+- **Automatic Initialization**: The function `initializeAuthoringPaymentConfig()` has been removed and is no longer needed. The SDK now handles initialization automatically. Removed functions:
+
+```kotlin
+val threeDSConfig = ThreeDSConfig.Builder()
+    .uiCustomization(uiCustomization)
+    .timeout(5)
+    .build()
+val authPaymentConfig = AuthorizingPaymentConfig.Builder()
+    .threeDSConfig(threeDSConfig)
+    .build()
+AuthorizingPaymentConfig.initialize(authPaymentConfig)
+```
+
 ### Card activity
 
 The simplest way to use this SDK is to integrate the provided `CreditCardActivity`
@@ -563,6 +580,7 @@ private fun startAuthoringPaymentActivity() {
 ```
 
 Replace the string `EXTRA_AUTHORIZED_URLSTRING` with the authorized URL that comes with the created charge and the array of string `EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS` with the expected pattern of redirected URLs array.
+Replace the string `EXTRA_THREE_DS_REQUESTOR_APP_URL` with the url of your app to allow the external bank apps to navigate back to your app when required.
 The `EXTRA_UI_CUSTOMIZATION` parameter is used to customize the UI of the built-in 3DS SDK during the 3DS challenge flow.
 If you want to customize the title of the authorizing payment activity, you must use the theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
 
