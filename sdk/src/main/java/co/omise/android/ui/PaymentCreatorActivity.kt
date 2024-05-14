@@ -138,8 +138,8 @@ class PaymentCreatorActivity : OmiseActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CREDIT_CARD_WITH_SOURCE && resultCode == Activity.RESULT_OK) {
-            val token = data?.getParcelableExtra<Token>(EXTRA_TOKEN_OBJECT)
-            val source = data?.getParcelableExtra<Source>(EXTRA_SOURCE_OBJECT)
+            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
+            val source = data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
             val intent =
                 Intent().apply {
                     putExtra(EXTRA_TOKEN, token?.id)
