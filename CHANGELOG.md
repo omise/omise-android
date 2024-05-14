@@ -9,7 +9,7 @@
 * **Native 3DS Charge Authorization:** Provides more up-to-date security measures and improves the user experience. Also adds a protection layer against unauthorized card usage, reducing merchants' and customers' fraud risk.
 * **WebView Closed Callback:**  Added a new callback code named `WEBVIEW_CLOSED_RESULT_CODE` to inform integrators if the charge authorization is returning from a webView.
 ### Upgrades
-* **Gradle**: upgrade gradle version to 8.2.2
+* **Gradle**: upgrade gradle to 8.2 and AGP to 8.2.2
 * **SDK versions:** Set target and compile sdk versions to 34 and min sdk version to 21
 
 ## V4.17.1
