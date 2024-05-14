@@ -12,12 +12,7 @@ and [Source](https://docs.opn.ooo/sources-api) API and components for entering c
 
 ## Security Warning
 
-**Please do NOT use Omise Android SDK versions less than 3.0.0, as they are outdated and have security vulnerabilities.**
-
-## Security Warning
-
-**Please do NOT use Omise Android SDK versions less than 3.0.0, as they are outdated and have security vulnerabilities.**
-
+**It is imperative that you use at least the minimum recommended SDK version of `4.3.1` for security reasons. Any version below this poses severe risks of security vulnerabilities, bugs, and unexpected behaviors, which can be detrimental to your application. To avoid these risks and ensure the best user experience, it is highly recommended that you upgrade to the latest supported SDK version. Opn strongly advises the use of version `5.0.0` for superior performance and top-notch security.**
 
 ## Requirements
 
@@ -36,10 +31,6 @@ Attestation of Compliance (AoC) delivered by a certified QSA Auditor.
 This SDK provides the means to tokenize card data on an end-user mobile phone without the data
 having to go through your server.
 
-## Notice
-
-Use SDK version `4.3.1` or higher for your app's security and performance. Any versions below this will pose severe risks of security vulnerabilities, bugs, and unexpected behaviors. Upgrade to the latest supported SDK version to avoid these risks and ensure the best user experience.
-
 ## Installation
 
 Add the following line to your project's `build.gradle` file inside the `dependencies`
@@ -50,6 +41,23 @@ implementation 'co.omise:omise-android:4.3.1'
 ```
 
 ## Usage
+
+### Breaking changes in version `v5.0.0`
+
+- **UI Customization Overhaul**: Introducing a new theme-based UI customization approach. Previously customized UI configurations must be updated. This offers configurations for `DefaultTheme`, `DarkTheme`, and `MonoChromeTheme`. See `CheckoutActivity.kt` in the example app for a detailed implementation.
+- **Charge Authorization**: A new parameter named `EXTRA_THREE_DS_REQUESTOR_APP_URL` has been introduced and is required for charge authorization. Ensure this parameter is passed during the start of `AuthorizingPaymentActivity` to prevent errors.
+- **Automatic Initialization**: The function `initializeAuthoringPaymentConfig()` has been removed and is no longer needed. The SDK now handles initialization automatically. Removed functions:
+
+```kotlin
+val threeDSConfig = ThreeDSConfig.Builder()
+    .uiCustomization(uiCustomization)
+    .timeout(5)
+    .build()
+val authPaymentConfig = AuthorizingPaymentConfig.Builder()
+    .threeDSConfig(threeDSConfig)
+    .build()
+AuthorizingPaymentConfig.initialize(authPaymentConfig)
+```
 
 ### Card activity
 
@@ -563,6 +571,7 @@ private fun startAuthoringPaymentActivity() {
 ```
 
 Replace the string `EXTRA_AUTHORIZED_URLSTRING` with the authorized URL that comes with the created charge and the array of string `EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS` with the expected pattern of redirected URLs array.
+Replace the string `EXTRA_THREE_DS_REQUESTOR_APP_URL` with the url of your app to allow the external bank apps to navigate back to your app when required.
 The `EXTRA_UI_CUSTOMIZATION` parameter is used to customize the UI of the built-in 3DS SDK during the 3DS challenge flow.
 If you want to customize the title of the authorizing payment activity, you must use the theme customization and pass the `headerText` in the `toolbarCustomization` in the `DEFAULT` theme parameter:
 

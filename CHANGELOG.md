@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## V5.0.0
+### Breaking Changes
+* **UI Customization Overhaul**: Introducing a new theme-based UI customization approach. Previously customized UI configurations must be updated. This offers configurations for `DefaultTheme`, `DarkTheme`, and `MonoChromeTheme`. See `CheckoutActivity.kt` in the example app for detailed implementation.
+* **Charge Authorization**: A new parameter named `EXTRA_THREE_DS_REQUESTOR_APP_URL` has been introduced and is required for charge authorization. Ensure this parameter is passed during the start of `AuthorizingPaymentActivity` to prevent errors.
+* **Automatic Initialization**: The function `initializeAuthoringPaymentConfig()` has been removed and is no longer needed. The SDK now handles initialization automatically.
+### Enhancements
+* **Native 3DS Charge Authorization:** Provides more up-to-date security measures and improves the user experience. Also adds a protection layer against unauthorized card usage, reducing merchants' and customers' fraud risk.
+* **WebView Closed Callback:**  Added a new callback code named `WEBVIEW_CLOSED_RESULT_CODE` to inform integrators if the charge authorization is returning from a webView.
+### Upgrades
+* **Gradle**: upgrade gradle to 8.2 and AGP to 8.2.2
+* **SDK versions:** Set target and compile sdk versions to 34 and min sdk version to 21
+
 ## V4.17.1
 * **ADDED:** Implemented new source `installment_wlb_ktc`
 
