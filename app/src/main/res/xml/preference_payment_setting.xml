@@ -80,13 +80,28 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
+            app:key="@string/payment_preference_installment_bay_wlb_key"
+            app:title="@string/payment_preference_installment_bay_wlb_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/payment_preference_installment_first_choice_key"
             app:title="@string/payment_preference_installment_first_choice_title" />
 
         <CheckBoxPreference
             app:defaultValue="true"
+            app:key="@string/payment_preference_installment_first_choice_wlb_key"
+            app:title="@string/payment_preference_installment_first_choice_wlb_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/payment_preference_installment_bbl_key"
             app:title="@string/payment_preference_installment_bbl_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="@string/payment_preference_installment_bbl_wlb_key"
+            app:title="@string/payment_preference_installment_bbl_wlb_title" />
 
         <CheckBoxPreference
             app:defaultValue="true"
@@ -110,13 +125,28 @@
 
         <CheckBoxPreference
             app:defaultValue="true"
+            app:key="@string/payment_preference_installment_kbank_wlb_key"
+            app:title="@string/payment_preference_installment_kbank_wlb_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/payment_preference_installment_scb_key"
             app:title="@string/payment_preference_installment_scb_title" />
 
         <CheckBoxPreference
             app:defaultValue="true"
+            app:key="@string/payment_preference_installment_scb_wlb_key"
+            app:title="@string/payment_preference_installment_scb_wlb_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
             app:key="@string/payment_preference_installment_ttb_key"
             app:title="@string/payment_preference_installment_ttb_title" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="@string/payment_preference_installment_ttb_wlb_key"
+            app:title="@string/payment_preference_installment_ttb_wlb_title" />
 
         <CheckBoxPreference
             app:defaultValue="true"

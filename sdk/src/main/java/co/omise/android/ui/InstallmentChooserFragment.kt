@@ -49,26 +49,26 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
     }
 
     override fun listItems(): List<InstallmentResource> {
-        // Check if both KtcWlb and Ktc are present in the list of sources
-        val containsKtcWlbAndKtc =
-            allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.KtcWlb } &&
-                allowedInstallments.installmentResources.any { it.sourceType == SourceType.Installment.Ktc }
+        val filteredSources = allowedInstallments.installmentResources.toMutableList()
+        val sourceNames = allowedInstallments.installmentResources.map { it.sourceType.name }
 
-        return if (containsKtcWlbAndKtc) {
-            // If both KtcWlb and Ktc are present, filter out the Ktc resource
-            allowedInstallments.installmentResources.filterNot { it.sourceType == SourceType.Installment.Ktc }
-                .map { resource ->
-                    resource.apply {
-                        // Disable the bank installment payment method if the amount is below the required amount
-                        enabled = requestedInstallmentAmount >= capabilityInstallmentAmount
-                    }
+        allowedInstallments.installmentResources.forEach { source ->
+            // check if the source is white label installment
+            val sourceKey = source.sourceType.name!!
+            val isWlbSource = sourceKey.contains("_wlb_")
+            // if wlb then remove the source that is of the same bank but non wlb
+            if (isWlbSource) {
+                val containWlbAndNonWlb = sourceNames.contains(sourceKey.replace("_wlb_", "_"))
+                if (containWlbAndNonWlb) {
+                    // remove the non wlb source
+                    filteredSources.removeAll { it.sourceType.name == source.sourceType.name!!.replace("_wlb_", "_") }
                 }
-        } else {
-            allowedInstallments.installmentResources.map { resource ->
-                resource.apply {
-                    // Disable the bank installment payment method if the amount is below the required amount
-                    enabled = requestedInstallmentAmount >= capabilityInstallmentAmount
-                }
+            }
+        }
+
+        return filteredSources.map { resource ->
+            resource.apply {
+                enabled = requestedInstallmentAmount >= capabilityInstallmentAmount
             }
         }
     }

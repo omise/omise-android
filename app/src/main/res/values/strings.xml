@@ -31,14 +31,20 @@
     <string name="payment_preference_mobile_banking_ktb_key" translatable="false">mobile_banking_ktb</string>
 <string name="payment_preference_ocbc_digital_key" translatable="false">mobile_banking_ocbc</string>
     <string name="payment_preference_installment_bay_key" translatable="false">installment_bay</string>
+    <string name="payment_preference_installment_bay_wlb_key" translatable="false">installment_wlb_bay</string>
     <string name="payment_preference_installment_first_choice_key" translatable="false">installment_first_choice</string>
+    <string name="payment_preference_installment_first_choice_wlb_key" translatable="false">installment_wlb_first_choice</string>
     <string name="payment_preference_installment_bbl_key" translatable="false">installment_bbl</string>
+    <string name="payment_preference_installment_bbl_wlb_key" translatable="false">installment_wlb_bbl</string>
     <string name="payment_preference_installment_mbb_key" translatable="false">installment_mbb</string>
     <string name="payment_preference_installment_ktc_key" translatable="false">installment_ktc</string>
     <string name="payment_preference_installment_ktc_wlb_key" translatable="false">installment_wlb_ktc</string>
     <string name="payment_preference_installment_kbank_key" translatable="false">installment_kbank</string>
+    <string name="payment_preference_installment_kbank_wlb_key" translatable="false">installment_wlb_kbank</string>
     <string name="payment_preference_installment_scb_key" translatable="false">installment_scb</string>
+    <string name="payment_preference_installment_scb_wlb_key" translatable="false">installment_wlb_scb</string>
     <string name="payment_preference_installment_ttb_key" translatable="false">installment_ttb</string>
+    <string name="payment_preference_installment_ttb_wlb_key" translatable="false">installment_wlb_ttb</string>
     <string name="payment_preference_installment_uob_key" translatable="false">installment_uob</string>
     <string name="payment_preference_dana_key" translatable="false">dana</string>
     <string name="payment_preference_econtext_key" translatable="false">econtext</string>
@@ -82,14 +88,20 @@
     <string name="payment_preference_alipay_hk_title" translatable="false">AlipayHK</string>
     <string name="payment_preference_bill_payment_tesco_lotus_title" translatable="false">Lotus\'s Bill Payment</string>
     <string name="payment_preference_installment_bay_title" translatable="false">Krungsri - Installment</string>
+    <string name="payment_preference_installment_bay_wlb_title" translatable="false">Krungsri - Whitelabel Installment</string>
     <string name="payment_preference_installment_first_choice_title" translatable="false">First Choice - Installment</string>
+    <string name="payment_preference_installment_first_choice_wlb_title" translatable="false">First Choice - Whitelabel Installment</string>
     <string name="payment_preference_installment_bbl_title" translatable="false">BBL - Installment</string>
+    <string name="payment_preference_installment_bbl_wlb_title" translatable="false">BBL - Whitelabel Installment</string>
     <string name="payment_preference_installment_mbb_title" translatable="false">Maybank - Installment</string>
     <string name="payment_preference_installment_ktc_title" translatable="false">KTC - Installment</string>
     <string name="payment_preference_installment_ktc_wlb_title" translatable="false">KTC - Whitelabel Installment</string>
     <string name="payment_preference_installment_kbank_title" translatable="false">Kasikorn - Installment</string>
+    <string name="payment_preference_installment_kbank_wlb_title" translatable="false">Kasikorn - Whitelabel Installment</string>
     <string name="payment_preference_installment_scb_title" translatable="false">Siam Commercial - Installment</string>
+    <string name="payment_preference_installment_scb_wlb_title" translatable="false">Siam Commercial - Whitelabel Installment</string>
     <string name="payment_preference_installment_ttb_title" translatable="false">TMBThanachart - Installment</string>
+    <string name="payment_preference_installment_ttb_wlb_title" translatable="false">TMBThanachart - Whitelabel Installment</string>
     <string name="payment_preference_installment_uob_title" translatable="false">UOB - Installment</string>
     <string name="payment_preference_dana_title" translatable="false">DANA</string>
     <string name="payment_preference_econtext_title" translatable="false">econtext</string>
