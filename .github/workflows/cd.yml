@@ -26,7 +26,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew sdk:build -x test
       - name: Unit tests
-        run: ./gradlew sdk:testProductionDebugUnitTest
+        run: ./gradlew sdk:jacocoUnitTestReport
 #      - name: Publish package
 #        run: ./gradlew sdk:publish
 #        env:
