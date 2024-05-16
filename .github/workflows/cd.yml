@@ -1,8 +1,8 @@
 name: Maven Package
 
 on:
-  push:
-  pull_request:
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -64,11 +64,11 @@ jobs:
         # Switch to jacocoTestReport when instrumentation flakiness is fixed
         run: ./gradlew sdk:jacocoUnitTestReport
 
-#      - name: Publish Maven package
-#        run: ./gradlew sdk:publish
-#        env:
-#          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
-#          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
-#          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-#          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      - name: Publish Maven package
+        run: ./gradlew sdk:publish
+        env:
+          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
+          PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
