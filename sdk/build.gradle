@@ -113,7 +113,7 @@ publishing {
                 description = 'Android SDK for Omise API'
                 url = 'https://www.omise.co'
                 withXml {
-                    def dependenciesNode = asNode('').appendNode('dependencies')
+                    def dependenciesNode = asNode().appendNode('dependencies')
                     configurations.implementation.allDependencies.each {
                         if (it.group != null && (it.name != null || "unspecified" == it.name) && it.version != null) {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
