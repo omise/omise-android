@@ -377,6 +377,13 @@ internal sealed class InstallmentResource(
         sourceType = SourceType.Installment.Bbl,
     )
 
+    object BblWlb : InstallmentResource(
+        iconRes = R.drawable.payment_bbl,
+        titleRes = R.string.payment_method_installment_bbl_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.BblWlb,
+    )
+
     object Mbb : InstallmentResource(
         iconRes = R.drawable.payment_maybank,
         titleRes = R.string.payment_method_installment_mbb_title,
@@ -391,6 +398,13 @@ internal sealed class InstallmentResource(
         sourceType = SourceType.Installment.KBank,
     )
 
+    object KBankWlb : InstallmentResource(
+        iconRes = R.drawable.payment_kasikorn,
+        titleRes = R.string.payment_method_installment_kasikorn_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.KBankWlb,
+    )
+
     object Bay : InstallmentResource(
         iconRes = R.drawable.payment_bay,
         titleRes = R.string.payment_method_installment_bay_title,
@@ -398,11 +412,25 @@ internal sealed class InstallmentResource(
         sourceType = SourceType.Installment.Bay,
     )
 
+    object BayWlb : InstallmentResource(
+        iconRes = R.drawable.payment_bay,
+        titleRes = R.string.payment_method_installment_bay_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.BayWlb,
+    )
+
     object FirstChoice : InstallmentResource(
         iconRes = R.drawable.payment_first_choice,
         titleRes = R.string.payment_method_installment_first_choice_title,
         indicatorIconRes = R.drawable.ic_next,
         sourceType = SourceType.Installment.FirstChoice,
+    )
+
+    object FirstChoiceWlb : InstallmentResource(
+        iconRes = R.drawable.payment_first_choice,
+        titleRes = R.string.payment_method_installment_first_choice_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.FirstChoiceWlb,
     )
 
     object Ktc : InstallmentResource(
@@ -426,11 +454,25 @@ internal sealed class InstallmentResource(
         sourceType = SourceType.Installment.Scb,
     )
 
+    object ScbWlb : InstallmentResource(
+        iconRes = R.drawable.payment_scb,
+        titleRes = R.string.payment_method_installment_scb_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.ScbWlb,
+    )
+
     object Ttb : InstallmentResource(
         iconRes = R.drawable.payment_ttb,
         titleRes = R.string.payment_method_installment_ttb_title,
         indicatorIconRes = R.drawable.ic_next,
         sourceType = SourceType.Installment.Ttb,
+    )
+
+    object TtbWlb : InstallmentResource(
+        iconRes = R.drawable.payment_ttb,
+        titleRes = R.string.payment_method_installment_ttb_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.TtbWlb,
     )
 
     object Uob : InstallmentResource(

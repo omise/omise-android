@@ -41,32 +41,44 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         val minimumInstallmentAmountPerType =
             mapOf(
                 SourceType.Installment.Bay to Amount.fromLocalAmount(500.0, currency),
+                SourceType.Installment.BayWlb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.FirstChoice to Amount.fromLocalAmount(300.0, currency),
+                SourceType.Installment.FirstChoiceWlb to Amount.fromLocalAmount(300.0, currency),
                 SourceType.Installment.Bbl to Amount.fromLocalAmount(500.0, currency),
+                SourceType.Installment.BblWlb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.Mbb to Amount.fromLocalAmount(83.33, currency),
                 SourceType.Installment.Ktc to Amount.fromLocalAmount(300.0, currency),
                 SourceType.Installment.KtcWlb to Amount.fromLocalAmount(300.0, currency),
                 SourceType.Installment.KBank to Amount.fromLocalAmount(300.0, currency),
+                SourceType.Installment.KBankWlb to Amount.fromLocalAmount(300.0, currency),
                 SourceType.Installment.Scb to Amount.fromLocalAmount(500.0, currency),
+                SourceType.Installment.ScbWlb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.Ttb to Amount.fromLocalAmount(500.0, currency),
+                SourceType.Installment.TtbWlb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.Uob to Amount.fromLocalAmount(500.0, currency),
             )
         val interestRatePerType =
             mapOf(
                 SourceType.Installment.Bay to 0.0074,
+                SourceType.Installment.BayWlb to 0.0074,
                 SourceType.Installment.FirstChoice to 0.0116,
+                SourceType.Installment.FirstChoiceWlb to 0.0116,
                 SourceType.Installment.Bbl to 0.0074,
+                SourceType.Installment.BblWlb to 0.0074,
                 SourceType.Installment.Mbb to 0.0,
                 SourceType.Installment.Ktc to 0.0074,
                 SourceType.Installment.KtcWlb to 0.0074,
                 SourceType.Installment.KBank to 0.0065,
+                SourceType.Installment.KBankWlb to 0.0065,
                 SourceType.Installment.Scb to 0.0074,
+                SourceType.Installment.ScbWlb to 0.0074,
                 SourceType.Installment.Ttb to 0.008,
+                SourceType.Installment.TtbWlb to 0.008,
                 SourceType.Installment.Uob to 0.0064,
             )
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType!!
         // White label installments require token and source
-        val requiresTokenRequest = sourceType.toString().lowercase().contains("wlb")
+        val requiresTokenRequest = sourceType.name!!.lowercase().contains("_wlb_")
         return installment
             ?.installmentTerms
             .orEmpty()
@@ -103,7 +115,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
         val req = requester ?: return
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType!!
         // White label installments require token and source
-        val requiresTokenRequest = sourceType.toString().lowercase().contains("wlb")
+        val requiresTokenRequest = sourceType.name!!.lowercase().contains("_wlb_")
 
         if (requiresTokenRequest) {
             // navigate to credit card screen

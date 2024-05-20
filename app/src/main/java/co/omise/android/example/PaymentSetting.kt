@@ -22,14 +22,20 @@ object PaymentSetting {
                     R.string.payment_preference_mobile_banking_ktb_key,
                     R.string.payment_preference_mobile_banking_scb_key,
                     R.string.payment_preference_installment_bay_key,
+                    R.string.payment_preference_installment_bay_wlb_key,
                     R.string.payment_preference_installment_first_choice_key,
+                    R.string.payment_preference_installment_first_choice_wlb_key,
                     R.string.payment_preference_installment_bbl_key,
+                    R.string.payment_preference_installment_bbl_wlb_key,
                     R.string.payment_preference_installment_mbb_key,
                     R.string.payment_preference_installment_ktc_key,
                     R.string.payment_preference_installment_ktc_wlb_key,
                     R.string.payment_preference_installment_kbank_key,
+                    R.string.payment_preference_installment_kbank_wlb_key,
                     R.string.payment_preference_installment_scb_key,
+                    R.string.payment_preference_installment_scb_wlb_key,
                     R.string.payment_preference_installment_ttb_key,
+                    R.string.payment_preference_installment_ttb_wlb_key,
                     R.string.payment_preference_installment_uob_key,
                     R.string.payment_preference_alipay_key,
                     R.string.payment_preference_alipay_cn_key,
@@ -86,14 +92,20 @@ object PaymentSetting {
                         context.getString(R.string.payment_preference_ocbc_digital_key) -> SourceType.OcbcDigital
                         context.getString(R.string.payment_preference_mobile_banking_scb_key) -> SourceType.MobileBanking.Scb
                         context.getString(R.string.payment_preference_installment_bay_key) -> SourceType.Installment.Bay
+                        context.getString(R.string.payment_preference_installment_bay_wlb_key) -> SourceType.Installment.BayWlb
                         context.getString(R.string.payment_preference_installment_first_choice_key) -> SourceType.Installment.FirstChoice
+                        context.getString(R.string.payment_preference_installment_first_choice_wlb_key) -> SourceType.Installment.FirstChoiceWlb
                         context.getString(R.string.payment_preference_installment_bbl_key) -> SourceType.Installment.Bbl
+                        context.getString(R.string.payment_preference_installment_bbl_wlb_key) -> SourceType.Installment.BblWlb
                         context.getString(R.string.payment_preference_installment_mbb_key) -> SourceType.Installment.Mbb
                         context.getString(R.string.payment_preference_installment_ktc_key) -> SourceType.Installment.Ktc
                         context.getString(R.string.payment_preference_installment_ktc_wlb_key) -> SourceType.Installment.KtcWlb
                         context.getString(R.string.payment_preference_installment_kbank_key) -> SourceType.Installment.KBank
+                        context.getString(R.string.payment_preference_installment_kbank_wlb_key) -> SourceType.Installment.KBankWlb
                         context.getString(R.string.payment_preference_installment_scb_key) -> SourceType.Installment.Scb
+                        context.getString(R.string.payment_preference_installment_scb_wlb_key) -> SourceType.Installment.ScbWlb
                         context.getString(R.string.payment_preference_installment_ttb_key) -> SourceType.Installment.Ttb
+                        context.getString(R.string.payment_preference_installment_ttb_wlb_key) -> SourceType.Installment.TtbWlb
                         context.getString(R.string.payment_preference_installment_uob_key) -> SourceType.Installment.Uob
                         context.getString(R.string.payment_preference_econtext_key) -> SourceType.Econtext
                         context.getString(R.string.payment_preference_fpx_key) -> SourceType.Fpx()

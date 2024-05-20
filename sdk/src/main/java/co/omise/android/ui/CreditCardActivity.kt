@@ -19,6 +19,7 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
+import co.omise.android.extensions.parcelable
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.extensions.textOrNull
@@ -289,14 +290,14 @@ class CreditCardActivity : OmiseActivity() {
             val currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
             val paymentMethod =
                 requireNotNull(
-                    intent.getParcelableExtra<PaymentMethod>(EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD),
+                    intent.parcelable<PaymentMethod>(EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD),
                 ) {
                     "${::EXTRA_SELECTED_INSTALLMENTS_PAYMENT_METHOD.name} must not be null."
                 }
             val sourceType = (paymentMethod.backendType as? BackendType.Source)?.sourceType ?: return
             val capability =
                 requireNotNull(
-                    intent.getParcelableExtra<Capability>(EXTRA_CAPABILITY),
+                    intent.parcelable<Capability>(EXTRA_CAPABILITY),
                 ) { "${::EXTRA_CAPABILITY.name} must not be null." }
             sourceRequest =
                 Source.CreateSourceRequestBuilder(amount, currency, sourceType)

@@ -107,9 +107,15 @@ sealed class SourceType(
     ) : SourceType(name) {
         object Bay : Installment("installment_bay")
 
+        object BayWlb : Installment("installment_wlb_bay")
+
         object FirstChoice : Installment("installment_first_choice")
 
+        object FirstChoiceWlb : Installment("installment_wlb_first_choice")
+
         object Bbl : Installment("installment_bbl")
+
+        object BblWlb : Installment("installment_wlb_bbl")
 
         object Mbb : Installment("installment_mbb")
 
@@ -119,9 +125,15 @@ sealed class SourceType(
 
         object KBank : Installment("installment_kbank")
 
+        object KBankWlb : Installment("installment_wlb_kbank")
+
         object Scb : Installment("installment_scb")
 
+        object ScbWlb : Installment("installment_wlb_scb")
+
         object Ttb : Installment("installment_ttb")
+
+        object TtbWlb : Installment("installment_wlb_ttb")
 
         object Uob : Installment("installment_uob")
 
@@ -133,14 +145,20 @@ sealed class SourceType(
             fun availableTerms(installment: Installment): List<Int> =
                 when (installment) {
                     Bay -> listOf(3, 4, 6, 9, 10)
+                    BayWlb -> listOf(3, 4, 6, 9, 10)
                     FirstChoice -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
+                    FirstChoiceWlb -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
                     Bbl -> listOf(4, 6, 8, 9, 10)
+                    BblWlb -> listOf(4, 6, 8, 9, 10)
                     Mbb -> listOf(6, 12, 18, 24)
                     Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                     KtcWlb -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
                     KBank -> listOf(3, 4, 6, 10)
+                    KBankWlb -> listOf(3, 4, 6, 10)
                     Scb -> listOf(3, 4, 6, 9, 10)
-                    Ttb -> listOf(3, 4, 6, 10, 12)
+                    ScbWlb -> listOf(3, 4, 6, 9, 10)
+                    Ttb -> listOf(3, 4, 6, 10)
+                    TtbWlb -> listOf(3, 4, 6, 10)
                     Uob -> listOf(3, 4, 6, 10)
                     is Unknown -> emptyList()
                 }
@@ -168,14 +186,20 @@ sealed class SourceType(
                 "truemoney" -> TrueMoney
                 "truemoney_jumpapp" -> TrueMoneyJumpApp
                 "installment_bay" -> Installment.Bay
+                "installment_wlb_bay" -> Installment.BayWlb
                 "installment_first_choice" -> Installment.FirstChoice
+                "installment_wlb_first_choice" -> Installment.FirstChoiceWlb
                 "installment_bbl" -> Installment.Bbl
+                "installment_wlb_bbl" -> Installment.BblWlb
                 "installment_mbb" -> Installment.Mbb
                 "installment_ktc" -> Installment.Ktc
                 "installment_wlb_ktc" -> Installment.KtcWlb
                 "installment_kbank" -> Installment.KBank
+                "installment_wlb_kbank" -> Installment.KBankWlb
                 "installment_scb" -> Installment.Scb
+                "installment_wlb_scb" -> Installment.ScbWlb
                 "installment_ttb" -> Installment.Ttb
+                "installment_wlb_ttb" -> Installment.TtbWlb
                 "installment_uob" -> Installment.Uob
                 "paynow" -> PayNow
                 "promptpay" -> PromptPay
@@ -227,14 +251,20 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Fpx(),
             SourceType.TrueMoney,
             SourceType.Installment.Bay,
+            SourceType.Installment.BayWlb,
             SourceType.Installment.FirstChoice,
+            SourceType.Installment.FirstChoiceWlb,
             SourceType.Installment.Bbl,
+            SourceType.Installment.BblWlb,
             SourceType.Installment.Mbb,
             SourceType.Installment.Ktc,
             SourceType.Installment.KtcWlb,
             SourceType.Installment.KBank,
+            SourceType.Installment.KBankWlb,
             SourceType.Installment.Scb,
+            SourceType.Installment.ScbWlb,
             SourceType.Installment.Ttb,
+            SourceType.Installment.TtbWlb,
             SourceType.Installment.Uob,
             SourceType.Atome,
         )
