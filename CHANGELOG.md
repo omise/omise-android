@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.1.0
+* **ADDED:** Implemented new sources `installment_wlb_bay`, `installment_wlb_bbl`, `installment_wlb_first_choice`, `installment_wlb_kbank`, `installment_wlb_scb`, `installment_wlb_ttb`
+
 ## V5.0.0
 ### Breaking Changes
 * **UI Customization Overhaul**: Introducing a new theme-based UI customization approach. Previously customized UI configurations must be updated. This offers configurations for `DefaultTheme`, `DarkTheme`, and `MonoChromeTheme`. See `CheckoutActivity.kt` in the example app for detailed implementation.
