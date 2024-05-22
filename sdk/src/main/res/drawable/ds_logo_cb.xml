@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@drawable/cb_bakground" />
+  <item>
+    <vector
+      android:width="48.72dp"
+      android:height="34.7dp"
+      android:viewportWidth="48.72"
+      android:viewportHeight="34.7">
+      <path
+        android:pathData="M42,12.79a4,4 0,0 0,-0.28 -1.47,3.56 3.56,0 0,0 -0.82,-1.21 3.36,3.36 0,0 0,-1.3 -0.82,6.59 6.59,0 0,0 -1.93,-0.23H26.71v7.46H37.64a6.59,6.59 0,0 0,1.93 -0.23,3.46 3.46,0 0,0 1.3,-0.81 3.7,3.7 0,0 0,0.82 -1.22A4,4 0,0 0,42 12.79"
+        android:fillColor="#fff" />
+      <path
+        android:pathData="M42,21.91a4,4 0,0 0,-0.28 -1.47,3.7 3.7,0 0,0 -0.82,-1.22 3.33,3.33 0,0 0,-1.3 -0.81,6.59 6.59,0 0,0 -1.93,-0.23H26.71v7.46H37.64a6.59,6.59 0,0 0,1.93 -0.23,3.36 3.36,0 0,0 1.3,-0.82 3.56,3.56 0,0 0,0.82 -1.21A4,4 0,0 0,42 21.91"
+        android:fillColor="#fff" />
+      <path
+        android:pathData="M25.18,16.52c-0.35,-4.84 -3.81,-7.95 -9.2,-7.95 -5.67,0 -9.23,3.46 -9.23,8.78 0,5.49 3.7,8.79 9.23,8.79s8.85,-3.13 9.2,-8H15.86V16.52Z"
+        android:fillColor="#fff" />
+    </vector>
+  </item>
+</layer-list>

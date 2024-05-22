@@ -219,7 +219,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
     androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
-    implementation project(':3ds-sdk')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Netcetera 3SD SDK
     implementation "org.slf4j:slf4j-api:1.7.36"

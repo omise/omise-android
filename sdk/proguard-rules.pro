@@ -64,3 +64,26 @@
 -keep public class co.omise.android.** { *; }
 -keep public interface co.omise.android.** { *; }
 -keep public class * implements co.omise.android.** { *; }
+
+# Keep everyting in the Netcetera Android 3DS SDK package
+-keep public class com.netcetera.threeds.sdk.** {
+  public protected *;
+}
+-keepnames class com.netcetera.threeds.sdk.** { *; }
+
+# Don't warn about any unused code from the Netcetera Android 3DS SDK package
+-dontwarn com.netcetera.threeds.sdk.**
+
+# Keep everyting in Guardsquare Dexguard
+-keep public class com.guardsquare.dexguard.** {
+  public protected *;
+}
+
+# Keep everything from bouncycastle
+-keep class org.bouncycastle.** { *; }
+-keepnames class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**
+
+# Keep the classes from slf4j
+-keep class org.slf4j.** { *; }
+
