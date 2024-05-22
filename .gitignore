@@ -7,6 +7,8 @@
 *.iml
 *.iws
 *.jar
+# Do not ignore jar files in sdk/libs
+!sdk/libs/*.jar
 *.log
 *.war
 .DS_Store
@@ -38,4 +40,3 @@ proguard/
 tasks.xml
 workspace.xml
 .gitmodules
-3DS-ANDROID-SDK
