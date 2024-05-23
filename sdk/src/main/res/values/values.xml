@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="challenge_ui_cancel" type="id"/>
+    <item name="challenge_ui_challenge_add_label" type="id"/>
+    <item name="challenge_ui_challenge_entry_box_one_input" type="id"/>
+    <item name="challenge_ui_challenge_entry_box_one_label" type="id"/>
+    <item name="challenge_ui_challenge_entry_box_two_input" type="id"/>
+    <item name="challenge_ui_challenge_entry_box_two_label" type="id"/>
+    <item name="challenge_ui_challenge_entry_legacy_input" type="id"/>
+    <item name="challenge_ui_challenge_info_header" type="id"/>
+    <item name="challenge_ui_challenge_info_label" type="id"/>
+    <item name="challenge_ui_challenge_info_text" type="id"/>
+    <item name="challenge_ui_challenge_info_text_warning" type="id"/>
+    <item name="challenge_ui_challenge_select_info_0" type="id"/>
+    <item name="challenge_ui_challenge_select_info_1" type="id"/>
+    <item name="challenge_ui_challenge_select_info_2" type="id"/>
+    <item name="challenge_ui_challenge_select_info_3" type="id"/>
+    <item name="challenge_ui_challenge_select_info_4" type="id"/>
+    <item name="challenge_ui_challenge_select_info_5" type="id"/>
+    <item name="challenge_ui_challenge_select_info_6" type="id"/>
+    <item name="challenge_ui_challenge_select_info_7" type="id"/>
+    <item name="challenge_ui_device_binding_info_text" type="id"/>
+    <item name="challenge_ui_expand_info_label" type="id"/>
+    <item name="challenge_ui_expand_info_plus" type="id"/>
+    <item name="challenge_ui_expand_info_text" type="id"/>
+    <item name="challenge_ui_html" type="id"/>
+    <item name="challenge_ui_image_issuer" type="id"/>
+    <item name="challenge_ui_image_ps" type="id"/>
+    <item name="challenge_ui_info_continue_label" type="id"/>
+    <item name="challenge_ui_native" type="id"/>
+    <item name="challenge_ui_oob_app_label" type="id"/>
+    <item name="challenge_ui_oob_continue_label" type="id"/>
+    <item name="challenge_ui_resend_information_label" type="id"/>
+    <item name="challenge_ui_submit_authentication_label" type="id"/>
+    <item name="challenge_ui_trust_list_info_text" type="id"/>
+    <item name="challenge_ui_whitelisting_info_text" type="id"/>
+    <item name="challenge_ui_why_info_label" type="id"/>
+    <item name="challenge_ui_why_info_plus" type="id"/>
+    <item name="challenge_ui_why_info_text" type="id"/>
+    <style name="NcaThreeDsSdkDialogTheme" parent="android:style/Theme.Material.Light.Dialog.NoActionBar">
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:backgroundDimAmount">0</item>
+    <item name="android:textColorSecondary">#aaaaaa</item>
+    <item name="android:colorAccent">#8b8b8b</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">#55000000</item>
+    <item name="android:navigationBarColor">#55000000</item>
+    <item name="android:windowSoftInputMode">adjustResize</item>
+  </style>
+</resources>
