@@ -34,9 +34,9 @@ jobs:
       - name: Build project
         run: ./gradlew sdk:build -x test
 
-  unit-test:
-    name: Unit tests with coverage report
-    runs-on: ubuntu-latest
+  unit-intrumented-test:
+    name: Unit/Instrumented tests with coverage report
+    runs-on: macos-latest
     needs: build
     steps:
       - name: Checkout code
@@ -60,9 +60,35 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Run unit tests
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          profile: Nexus 6
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run unit/instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # Switch to jacocoTestReport when instrumentation flakiness is fixed
-        run: ./gradlew sdk:jacocoUnitTestReport sdk:sonar
+        with:
+          api-level: ${{ matrix.api-level }}
+          disable-animations: true
+          force-avd-creation: false
+          profile: Nexus 6
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        run: ./gradlew sdk:jacocoTestReport sdk:sonar
 
