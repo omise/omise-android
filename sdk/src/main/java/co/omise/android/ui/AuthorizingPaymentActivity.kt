@@ -3,6 +3,7 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -65,7 +66,6 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
@@ -133,6 +133,30 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         viewModel.transactionStatus.observe(this) {
             finishActivityWithSuccessful(it)
         }
+    }
+
+    // Due to the fact that the function webview.loadUrl(url) is not triggering
+    // the override shouldOverrideUrlLoading, the logic in testing is moved to
+    // onPageStarted callback which should not have an impact on the logic.
+    // More info at https://github.com/delight-im/Android-AdvancedWebView/issues/279
+    @TestOnly
+    fun setTestWebView() {
+        webView.webViewClient =
+            object : WebViewClient() {
+                override fun onPageStarted(
+                    view: WebView?,
+                    url: String?,
+                    favicon: Bitmap?,
+                ) {
+                    super.onPageStarted(view, url, favicon)
+                    val uri = Uri.parse(url)
+                    if (verifier.verifyURL(uri)) {
+                        finishActivityWithSuccessful(url!!)
+                    } else if (verifier.verifyExternalURL(uri)) {
+                        openDeepLink(uri)
+                    }
+                }
+            }
     }
 
     private fun setupWebViewClient() {

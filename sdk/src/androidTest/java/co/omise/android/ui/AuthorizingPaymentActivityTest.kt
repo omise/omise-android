@@ -41,6 +41,7 @@ import co.omise.android.extensions.parcelable
 import co.omise.android.models.Authentication.AuthenticationStatus
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_AUTHORIZING_PAYMENT_RESULT
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_THREE_DS_REQUESTOR_APP_URL
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.WEBVIEW_CLOSED_RESULT_CODE
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
 import co.omise.android.utils.interceptActivityLifecycle
@@ -73,18 +74,12 @@ class AuthorizingPaymentActivityTest {
     @get:Rule
     val countingTaskExecutorRule = CountingTaskExecutorRule()
 
-    private val authorizeUrl = "https://www.omise.co/pay"
-    private val nonLegacyAuthorizeUrl = "https://www.omise.co/authorize"
-    private val returnUrl = "http://www.example.com"
+    private val authorizeAcsUrl = "https://www.omise.co/authorize?acs=true"
+    private val authorizeNonAcsUrl = "https://www.omise.co/authorize?acs=false"
+    private val returnUrl = "https://www.example.com/complete"
     private val deepLinkAuthorizeUrl = "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
     private val deepLinkReturnUrl = "sampleapp://omise.co/authorize_return?result=success"
     private val threeDSRequestorAppURL = "sampleapp://omise.co/authorize_return"
-    private val intent =
-        Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
-            putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
-            putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
-            putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
-        }
 
     private val transaction: Transaction = mock()
     private val progressView: ProgressView = mock()
@@ -125,7 +120,7 @@ class AuthorizingPaymentActivityTest {
                 ApplicationProvider.getApplicationContext(),
                 AuthorizingPaymentActivity::class.java,
             ).apply {
-                putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeNonAcsUrl)
                 putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
             }
 
@@ -149,75 +144,83 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun fallback3DS1_whenAuthenticationStatusIsChallengeV1ThenLoadAuthorizeUrlToWebView() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
 
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-            .check(matches(withUrl(authorizeUrl)))
+            .check(matches(withUrl(authorizeAcsUrl)))
     }
 
     @Test
     fun fallbackToWebView_whenOmiseExceptionIsProtocolError() {
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val testException = OmiseException(ChallengeStatus.PROTOCOL_ERROR.value)
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-            .check(matches(withUrl(nonLegacyAuthorizeUrl)))
+            .check(matches(withUrl(authorizeAcsUrl)))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
-        // return initial value
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
     }
 
     @Test
     fun fallbackToWebView_whenOmiseExceptionIsChallengeRuntimeError() {
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val testException = OmiseException(ChallengeStatus.RUNTIME_ERROR.value)
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-            .check(matches(withUrl(nonLegacyAuthorizeUrl)))
+            .check(matches(withUrl(authorizeAcsUrl)))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
-        // return initial value
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
     }
 
     @Test
     fun fallbackToWebView_whenOmiseExceptionIs3DS2InitializationFailed() {
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val testException = OmiseException(OmiseSDKError.THREE_DS2_INITIALIZATION_FAILED.value)
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-            .check(matches(withUrl(nonLegacyAuthorizeUrl)))
+            .check(matches(withUrl(authorizeAcsUrl)))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
-        // return initial value
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeUrl)
-    }
-
-    @Test
-    fun shouldNotFallbackToWebView_whenOmiseExceptionIsNotTheTargetException() {
-        intent.putExtra(EXTRA_AUTHORIZED_URLSTRING, nonLegacyAuthorizeUrl)
-        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
-
-        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
-
-        val activityResult = scenario.result
-        // Due to issue BadParcelableException: ClassNotFoundException when unmarshalling.
-        // To workaround this it needs to set classloader explicitly https://github.com/android/android-test/issues/733
-        activityResult.resultData.setExtrasClassLoader(this::class.java.classLoader)
-        assertEquals(Activity.RESULT_OK, activityResult.resultCode)
     }
 
     @Test
     fun returnActivityResult_whenWebViewRedirectToReturnUrlThenReturnCompletedResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeNonAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
-        authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
+
+        scenario.onActivity { activity -> activity.setTestWebView() }
 
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
 
@@ -232,6 +235,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun returnActivityResult_whenAuthenticationStatusIsSuccessThenReturnCompletedResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.SUCCESS)
 
@@ -246,6 +255,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun returnActivityResult_whenTransactionStatusIsAuthenticatedThenReturnCompletedResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         transactionStatus.postValue(TransactionStatus.AUTHENTICATED)
 
@@ -260,6 +275,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun returnActivityResult_whenTransactionStatusIsNotAuthenticatedThenReturnCompletedResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         transactionStatus.postValue(TransactionStatus.NOT_AUTHENTICATED)
 
@@ -274,6 +295,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun returnActivityResult_whenAuthenticationStatusIsFailedThenReturnFailureResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.FAILED)
 
@@ -292,6 +319,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun returnActivityResult_whenHasErrorThenReturnFailureResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         val randomError = "Somethings went wrong"
         val testException = OmiseException(randomError)
@@ -310,6 +343,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun activityDestroy_returnCanceledResult() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
 
@@ -322,6 +361,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun webViewDialog_whenJSAlertInvokeThenDisplayAlertDialog() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
 
@@ -355,10 +400,15 @@ class AuthorizingPaymentActivityTest {
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
                 putExtra(EXTRA_AUTHORIZED_URLSTRING, deepLinkAuthorizeUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
                 putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(deepLinkReturnUrl))
             }
         intending(hasData(Uri.parse(deepLinkAuthorizeUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
-        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+        scenario.onActivity { activity -> activity.setTestWebView() }
+        // load the url again since the trigger is not registered on the creation of the intent due to a know issue
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(deepLinkAuthorizeUrl))
+        val activityResult = scenario.result
 
         intended(
             allOf(
@@ -381,12 +431,18 @@ class AuthorizingPaymentActivityTest {
 
         uiDevice.pressBack()
 
-        assertEquals(Activity.RESULT_OK, scenario.result.resultCode)
+        assertEquals(WEBVIEW_CLOSED_RESULT_CODE, scenario.result.resultCode)
         assertNull(scenario.result.resultData)
     }
 
     @Test
     fun openDeepLink_whenPressDeepLinkFromWebViewThenOpenExternalApp() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
         authenticationStatus.postValue(AuthenticationStatus.CHALLENGE_V1)
 
@@ -426,6 +482,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun progressView_whenLoadingIsTrueThenShowProgressView() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
         isLoading.postValue(true)
@@ -436,6 +498,12 @@ class AuthorizingPaymentActivityTest {
 
     @Test
     fun progressView_whenLoadingIsFalseThenDoNothing() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
         ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
         isLoading.postValue(false)

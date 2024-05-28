@@ -86,17 +86,6 @@ android {
         // issue with agp > 8 so we had to add this line https://github.com/Kotlin/kotlinx.serialization/issues/2145
         freeCompilerArgs = ["-Xstring-concat=inline"]
     }
-    android {
-        sourceSets {
-            String sharedTestDir = "$projectDir/src/sharedTest/java"
-            test {
-                java.srcDir sharedTestDir
-            }
-            androidTest {
-                java.srcDir sharedTestDir
-            }
-        }
-    }
 }
 
 publishing {
