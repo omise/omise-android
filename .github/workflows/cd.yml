@@ -90,7 +90,7 @@ jobs:
           force-avd-creation: false
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-        run: ./gradlew sdk:jacocoTestReport
+          script: ./gradlew sdk:jacocoTestReport
 
       - name: Publish Maven package
         run: ./gradlew sdk:publish

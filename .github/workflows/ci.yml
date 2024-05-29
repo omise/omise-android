@@ -90,5 +90,5 @@ jobs:
           force-avd-creation: false
           profile: Nexus 6
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-        run: ./gradlew sdk:jacocoTestReport sdk:sonar
+          script: ./gradlew sdk:jacocoTestReport sdk:sonar
 
