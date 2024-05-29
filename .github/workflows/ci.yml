@@ -113,6 +113,8 @@ jobs:
           disable-animations: true
           profile: Nexus One
           # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/373
+          # | Wait for emulator  20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
           script: |
             ./gradlew sdk:jacocoTestReport sdk:sonar
+            sleep 40
             pkill -f crashpad_handler
