@@ -114,3 +114,6 @@ jobs:
           profile: Nexus One
           script: ./gradlew sdk:jacocoTestReport sdk:sonar
 
+      # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/373
+      - name: Terminate crashpad_handler processes
+        run: pkill -f crashpad_handler
