@@ -36,11 +36,11 @@ jobs:
 
   unit-intrumented-test-maven-publish:
     name: Unit/Instrumented tests with coverage report
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
       matrix:
-        api-level: [ 29 ]
+        api-level: [ 33 ]
     needs: build
     steps:
       - name: Checkout code
@@ -112,12 +112,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           profile: Nexus One
-          # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/373
-          # | Wait for emulator  20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
-          script: |
-            ./gradlew sdk:jacocoTestReport sdk:sonar
-            sleep 40
-            pkill -f crashpad_handler
+          script: ./gradlew sdk:jacocoTestReport
 
       - name: Publish Maven package
         run: ./gradlew sdk:publish
