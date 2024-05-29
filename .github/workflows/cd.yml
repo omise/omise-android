@@ -37,6 +37,9 @@ jobs:
   unit-intrumented-test-maven-publish:
     name: Unit/Instrumented tests and Publish Maven package
     runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [ 33 ]
     needs: build
     steps:
       - name: Checkout code
