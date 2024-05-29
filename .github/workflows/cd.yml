@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew sdk:build -x test
 
   unit-intrumented-test-maven-publish:
-    name: Unit/Instrumented tests with coverage report
+    name: Unit/Instrumented tests with maven publish
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
