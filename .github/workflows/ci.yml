@@ -112,8 +112,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           profile: Nexus One
-          script: ./gradlew sdk:jacocoTestReport sdk:sonar
-
-      # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/373
-      - name: Terminate crashpad_handler processes
-        run: pkill -f crashpad_handler
+          script: |
+            ./gradlew sdk:jacocoTestReport sdk:sonar
+          # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/373
+            pkill -f crashpad_handler
