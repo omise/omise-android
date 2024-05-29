@@ -285,8 +285,7 @@ sonar {
         property 'sonar.organization', 'omise'
         property 'sonar.projectName', 'omise-android'
         property 'sonar.projectKey', 'omise_omise-android'
-        // TODO: Change to the correct path once the instrumentation tests are not flaky
-        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoUnitTestReport/jacocoUnitTestReport.xml"
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/testProductionDebugUnitTest"
         property 'sonar.androidLint.reportPaths', "${project.buildDir}/reports/lint-results-productionDebug.xml"
     }
