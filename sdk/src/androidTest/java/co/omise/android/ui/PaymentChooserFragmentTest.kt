@@ -251,6 +251,7 @@ class PaymentChooserFragmentTest {
 
     @Test
     fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(8))
         onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
 
         val expectedMethods =

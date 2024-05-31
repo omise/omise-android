@@ -411,7 +411,13 @@ private fun typeNumberText(numberText: String): ViewAction =
     object : ViewAction {
         override fun getDescription(): String = "Type number text: $numberText"
 
-        override fun getConstraints(): Matcher<View> = allOf(isDisplayed(), isAssignableFrom(OmiseEditText::class.java))
+        override fun getConstraints(): Matcher<View> =
+            allOf(
+                isDisplayed(),
+                isAssignableFrom(
+                    OmiseEditText::class.java,
+                ),
+            )
 
         override fun perform(
             uiController: UiController?,

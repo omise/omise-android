@@ -34,9 +34,13 @@ jobs:
       - name: Build project
         run: ./gradlew sdk:build -x test
 
-  unit-test-maven-publish:
-    name: Unit test and Publish Maven package
+  unit-intrumented-test-maven-publish:
+    name: Unit/Instrumented tests with maven publish
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        api-level: [ 33 ]
     needs: build
     steps:
       - name: Checkout code
@@ -50,6 +54,12 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -60,9 +70,49 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Run unit tests
-        # Switch to jacocoTestReport when instrumentation flakiness is fixed
-        run: ./gradlew sdk:jacocoUnitTestReport
+      - name: Determine emulator target
+        id: determine-target
+        run: |
+          TARGET="google_apis"
+          if [[ ${{ matrix.api-level }} -ge 34 ]]; then
+            TARGET="aosp_atd"
+          fi
+          echo "TARGET=$TARGET" >> $GITHUB_OUTPUT
+
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ steps.determine-target.outputs.TARGET }}
+          arch: x86_64
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run unit/instrumented tests
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ steps.determine-target.outputs.TARGET }}
+          arch: x86_64
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          profile: Nexus One
+          script: ./gradlew sdk:jacocoTestReport
 
       - name: Publish Maven package
         run: ./gradlew sdk:publish

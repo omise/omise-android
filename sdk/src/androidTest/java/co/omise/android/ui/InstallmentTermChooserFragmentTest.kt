@@ -1,6 +1,8 @@
 package co.omise.android.ui
 
+import android.content.Intent
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -132,7 +134,12 @@ class InstallmentTermChooserFragmentTest {
             InstallmentTermChooserFragment.newInstance(paymentMethod).apply {
                 requester = mockRequester
             }
-        ActivityScenario.launch(TestFragmentActivity::class.java).onActivity {
+        // Create an Intent with the required data to open credit card Activity
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), TestFragmentActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_1234")
+            }
+        ActivityScenario.launch<TestFragmentActivity>(intent).onActivity {
             it.replaceFragment(fragment)
         }
         onView(withText(R.string.payment_method_installment_ktc_title)).check(matches(isDisplayed()))

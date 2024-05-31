@@ -86,17 +86,6 @@ android {
         // issue with agp > 8 so we had to add this line https://github.com/Kotlin/kotlinx.serialization/issues/2145
         freeCompilerArgs = ["-Xstring-concat=inline"]
     }
-    android {
-        sourceSets {
-            String sharedTestDir = "$projectDir/src/sharedTest/java"
-            test {
-                java.srcDir sharedTestDir
-            }
-            androidTest {
-                java.srcDir sharedTestDir
-            }
-        }
-    }
 }
 
 publishing {
@@ -296,8 +285,7 @@ sonar {
         property 'sonar.organization', 'omise'
         property 'sonar.projectName', 'omise-android'
         property 'sonar.projectKey', 'omise_omise-android'
-        // TODO: Change to the correct path once the instrumentation tests are not flaky
-        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoUnitTestReport/jacocoUnitTestReport.xml"
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
         property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/testProductionDebugUnitTest"
         property 'sonar.androidLint.reportPaths', "${project.buildDir}/reports/lint-results-productionDebug.xml"
     }
