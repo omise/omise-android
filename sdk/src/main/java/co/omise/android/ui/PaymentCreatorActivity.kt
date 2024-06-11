@@ -226,14 +226,14 @@ class PaymentCreatorActivity : OmiseActivity() {
             val selectedTokenizationMethods = merchantPassedCapabilities.tokenizationMethods
             if (selectedPaymentMethods != null) {
                 filteredPaymentMethods =
-                    capability.paymentMethods!!.filter { capMethod ->
+                    capability.paymentMethods?.filter { capMethod ->
                         selectedPaymentMethods.map { it.name }.contains(capMethod.name)
                     }
-                capability.paymentMethods = filteredPaymentMethods.toMutableList()
+                capability.paymentMethods = filteredPaymentMethods?.toMutableList()
             }
             if (selectedTokenizationMethods != null) {
                 filteredTokenizationMethods =
-                    capability.tokenizationMethods!!.filter {
+                    capability.tokenizationMethods?.filter {
                         selectedTokenizationMethods.contains(it)
                     }
                 capability.tokenizationMethods = filteredTokenizationMethods
