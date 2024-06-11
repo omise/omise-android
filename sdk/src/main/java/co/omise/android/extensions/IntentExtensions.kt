@@ -14,3 +14,12 @@ internal inline fun <reified T : Parcelable> Intent.parcelable(key: String?): T?
             getParcelableExtra(key)
                 as? T
     }
+internal inline fun <reified T : Parcelable?> Intent.parcelableNullable(key: String?): T? =
+    when {
+        // https://stackoverflow.com/questions/72571804/getserializableextra-and-getparcelableextra-are-deprecated-what-is-the-alternat/73543350#73543350
+        SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getParcelableExtra(key, T::class.java)
+        else ->
+            @Suppress("DEPRECATION")
+            getParcelableExtra(key)
+                    as? T
+    }

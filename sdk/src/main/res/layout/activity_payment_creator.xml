@@ -4,5 +4,26 @@
     android:id="@+id/payment_creator_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PaymentCreatorActivity" />
+    tools:context=".ui.PaymentCreatorActivity">
 
+    <!-- Progress Bar for loading -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:progress="100"
+        />
+
+    <!-- Error message TextView -->
+    <TextView
+        android:id="@+id/errorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text=""
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+</FrameLayout>

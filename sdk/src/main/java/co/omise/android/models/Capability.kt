@@ -22,7 +22,7 @@ data class Capability(
     @field:JsonProperty("tokenization_methods")
     var tokenizationMethods: List<String>? = null,
     @field:JsonProperty("zero_interest_installments")
-    val zeroInterestInstallments: Boolean = false,
+    var zeroInterestInstallments: Boolean = false,
     @field:JsonProperty("limits")
     var limits: Limits? = null,
     @field:JsonProperty

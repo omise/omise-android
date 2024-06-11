@@ -140,29 +140,6 @@ sealed class SourceType(
         data class Unknown(
             @JsonValue override val name: String?,
         ) : Installment(name)
-
-        companion object {
-            fun availableTerms(installment: Installment): List<Int> =
-                when (installment) {
-                    Bay -> listOf(3, 4, 6, 9, 10)
-                    BayWlb -> listOf(3, 4, 6, 9, 10)
-                    FirstChoice -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
-                    FirstChoiceWlb -> listOf(3, 4, 6, 9, 10, 12, 18, 24, 36)
-                    Bbl -> listOf(4, 6, 8, 9, 10)
-                    BblWlb -> listOf(4, 6, 8, 9, 10)
-                    Mbb -> listOf(6, 12, 18, 24)
-                    Ktc -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
-                    KtcWlb -> listOf(3, 4, 5, 6, 7, 8, 9, 10)
-                    KBank -> listOf(3, 4, 6, 10)
-                    KBankWlb -> listOf(3, 4, 6, 10)
-                    Scb -> listOf(3, 4, 6, 9, 10)
-                    ScbWlb -> listOf(3, 4, 6, 9, 10)
-                    Ttb -> listOf(3, 4, 6, 10)
-                    TtbWlb -> listOf(3, 4, 6, 10)
-                    Uob -> listOf(3, 4, 6, 10)
-                    is Unknown -> emptyList()
-                }
-        }
     }
 
     companion object {

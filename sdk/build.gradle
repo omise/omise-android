@@ -219,8 +219,7 @@ repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
-// Use locally to generate full report
-// TODO: Fix flaky tests so that this can be used in CI to reflect full coverage
+// Unit and instrumented test
 tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
     reports {
         xml.required = true
@@ -249,7 +248,7 @@ tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProd
             '**/*.ec'
     ])
 }
-// Use in CI to coverage generate report without instrumentation testing
+// Unit tests only
 tasks.create(name: 'jacocoUnitTestReport', type: JacocoReport, dependsOn: ['compileProductionDebugAndroidTestJavaWithJavac','generateProductionDebugAndroidTestBuildConfig','checkProductionDebugAndroidTestAarMetadata','mergeProductionDebugAndroidTestResources','processProductionDebugAndroidTestManifest','testProductionDebugUnitTest', 'lint']) {
     reports {
         xml.required = true
