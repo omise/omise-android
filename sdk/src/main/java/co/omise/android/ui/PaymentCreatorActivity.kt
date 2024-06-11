@@ -57,6 +57,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private lateinit var client: Client
+
     @TestOnly
     fun setClient(client: Client) {
         this.client = client
@@ -100,14 +101,16 @@ class PaymentCreatorActivity : OmiseActivity() {
 
         loadCapability()
     }
+
     // Set the menu button to close the view by the user
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if(supportFragmentManager.findFragmentById(R.id.payment_creator_container) !is PaymentChooserFragment){
+        if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) !is PaymentChooserFragment) {
             menuInflater.inflate(R.menu.menu_toolbar, menu)
             return true
         }
-        return  false
+        return false
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.close_menu -> {
@@ -125,24 +128,26 @@ class PaymentCreatorActivity : OmiseActivity() {
         errorMessage.visibility = TextView.GONE
         // Get capability
         val capabilityRequest = Capability.GetCapabilitiesRequestBuilder().build()
-        client.send(capabilityRequest, object : RequestListener<Capability> {
-            override fun onRequestSucceed(model: Capability) {
+        client.send(
+            capabilityRequest,
+            object : RequestListener<Capability> {
+                override fun onRequestSucceed(model: Capability) {
+                    updateActivityWithCapability(model)
+                    // Invalidate the options menu to trigger a refresh and hide the menu button
+                    // as new button will come from the next view
+                    invalidateOptionsMenu()
+                    // Hide loading
+                    progressBar.visibility = ProgressBar.GONE
+                }
 
-                updateActivityWithCapability(model)
-                // Invalidate the options menu to trigger a refresh and hide the menu button
-                // as new button will come from the next view
-                invalidateOptionsMenu()
-                // Hide loading
-                progressBar.visibility = ProgressBar.GONE
-            }
-
-            override fun onRequestFailed(throwable: Throwable) {
-                progressBar.visibility = ProgressBar.GONE
-                // Show the error message
-                errorMessage.text = "Unable to load payment methods"
-                errorMessage.visibility = TextView.VISIBLE
-            }
-        })
+                override fun onRequestFailed(throwable: Throwable) {
+                    progressBar.visibility = ProgressBar.GONE
+                    // Show the error message
+                    errorMessage.text = "Unable to load payment methods"
+                    errorMessage.visibility = TextView.VISIBLE
+                }
+            },
+        )
     }
 
     // Detect if the current activity is still active
@@ -154,28 +159,28 @@ class PaymentCreatorActivity : OmiseActivity() {
         capability = newCapability
         requester = PaymentCreatorRequesterImpl(client, amount, currency, newCapability)
         requester.capability = newCapability
-        navigation = PaymentCreatorNavigationImpl(
-            this,
-            pkey,
-            amount,
-            currency,
-            cardBrands,
-            googlepayMerchantId,
-            googlepayRequestBillingAddress,
-            googlepayRequestPhoneNumber,
-            REQUEST_CREDIT_CARD,
-            requester,
-            newCapability,
-        )
+        navigation =
+            PaymentCreatorNavigationImpl(
+                this,
+                pkey,
+                amount,
+                currency,
+                cardBrands,
+                googlepayMerchantId,
+                googlepayRequestBillingAddress,
+                googlepayRequestPhoneNumber,
+                REQUEST_CREDIT_CARD,
+                requester,
+                newCapability,
+            )
         capability = filterCapabilities(newCapability)
 
         // Replace the capability passed from merchant by the new capability
         intent.putExtra(EXTRA_CAPABILITY, capability)
         // Open the payment method chooser if the activity is still active
-        if(isActivityActive()){
+        if (isActivityActive()) {
             navigation.navigateToPaymentChooser(capability)
         }
-
 
         requester.listener =
             object : PaymentCreatorRequestListener {
@@ -210,40 +215,41 @@ class PaymentCreatorActivity : OmiseActivity() {
             }
         }
     }
-    // Filter the capabilities based on the merchant request and what is available in the capabilities of the merchant account
-    private fun filterCapabilities(capability:Capability):Capability{
-        val merchantPassedCapabilities = intent.parcelableNullable<Capability?>(EXTRA_CAPABILITY)
-        var filteredPaymentMethods : List<PaymentMethod>? = null
-        var filteredTokenizationMethods : List<String>? = null
 
-        if(merchantPassedCapabilities != null){
+    // Filter the capabilities based on the merchant request and what is available in the capabilities of the merchant account
+    private fun filterCapabilities(capability: Capability): Capability {
+        val merchantPassedCapabilities = intent.parcelableNullable<Capability?>(EXTRA_CAPABILITY)
+        var filteredPaymentMethods: List<PaymentMethod>? = null
+        var filteredTokenizationMethods: List<String>? = null
+
+        if (merchantPassedCapabilities != null) {
             val selectedPaymentMethods = merchantPassedCapabilities.paymentMethods
             val selectedTokenizationMethods = merchantPassedCapabilities.tokenizationMethods
-            if(selectedPaymentMethods != null){
-
-                filteredPaymentMethods = capability.paymentMethods!!.filter {capMethod->
-                    selectedPaymentMethods.map { it.name }.contains(capMethod.name)
-                }
+            if (selectedPaymentMethods != null) {
+                filteredPaymentMethods =
+                    capability.paymentMethods!!.filter { capMethod ->
+                        selectedPaymentMethods.map { it.name }.contains(capMethod.name)
+                    }
                 capability.paymentMethods = filteredPaymentMethods.toMutableList()
             }
-            if(selectedTokenizationMethods != null){
-                filteredTokenizationMethods= capability.tokenizationMethods!!.filter {
-                    selectedTokenizationMethods.contains(it)
-                }
+            if (selectedTokenizationMethods != null) {
+                filteredTokenizationMethods =
+                    capability.tokenizationMethods!!.filter {
+                        selectedTokenizationMethods.contains(it)
+                    }
                 capability.tokenizationMethods = filteredTokenizationMethods
             }
             capability.zeroInterestInstallments = merchantPassedCapabilities.zeroInterestInstallments
             // add the tokenization methods into payment methods since the SDK only shows paymentMethods
             val combinedMethods = capability.paymentMethods?.toMutableList()
-            capability.tokenizationMethods?.forEach { method->
+            capability.tokenizationMethods?.forEach { method ->
                 run {
                     combinedMethods?.add(PaymentMethod(method))
                 }
             }
             capability.paymentMethods = combinedMethods
-
         }
-        return  capability
+        return capability
     }
 
     // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
@@ -483,7 +489,7 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToDuitNowOBWBankChooser(capability: Capability) {
-       val banks = capability.paymentMethods?.find { it.name == SourceType.DuitNowOBW.name }?.banks?: emptyList()
+        val banks = capability.paymentMethods?.find { it.name == SourceType.DuitNowOBW.name }?.banks ?: emptyList()
 
         val fragment =
             DuitNowOBWBankChooserFragment.newInstance(banks).apply {

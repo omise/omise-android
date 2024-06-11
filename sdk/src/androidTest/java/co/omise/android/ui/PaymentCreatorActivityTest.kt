@@ -5,12 +5,10 @@ import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intended
@@ -27,7 +25,6 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.models.Capability
-import co.omise.android.models.PaymentMethod
 import co.omise.android.models.SourceType
 import co.omise.android.models.Token
 import co.omise.android.models.TokenizationMethod
@@ -51,12 +48,14 @@ import org.mockito.kotlin.whenever
 class PaymentCreatorActivityTest {
     @get:Rule
     val intentRule = IntentsRule()
-   // capabilities requested by the merchant
-    private val capability = Capability.create(
-        allowCreditCard = true,
-        sourceTypes = listOf(SourceType.Fpx(), SourceType.TrueMoney),
-        tokenizationMethods = listOf(TokenizationMethod.GooglePay)
-    )
+
+    // capabilities requested by the merchant
+    private val capability =
+        Capability.create(
+            allowCreditCard = true,
+            sourceTypes = listOf(SourceType.Fpx(), SourceType.TrueMoney),
+            tokenizationMethods = listOf(TokenizationMethod.GooglePay),
+        )
     private val mockClient: Client = mock()
     private val intent =
         Intent(
@@ -93,24 +92,29 @@ class PaymentCreatorActivityTest {
 
             override fun onActivityDestroyed(activity: Activity) {}
         }
+
     @Before
     fun setUp() {
         application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
         whenever(mockClient.send(any<Request<Capability>>(), any())).doAnswer { invocation ->
             val callback = invocation.getArgument<RequestListener<Capability>>(1)
             // Capabilities retrieved from api
-            callback.onRequestSucceed(Capability.create(
-                allowCreditCard = true,
-                sourceTypes = listOf(SourceType.TrueMoney,SourceType.PromptPay),
-                tokenizationMethods = listOf(TokenizationMethod.GooglePay,TokenizationMethod.Card)
-            ))
+            callback.onRequestSucceed(
+                Capability.create(
+                    allowCreditCard = true,
+                    sourceTypes = listOf(SourceType.TrueMoney, SourceType.PromptPay),
+                    tokenizationMethods = listOf(TokenizationMethod.GooglePay, TokenizationMethod.Card),
+                ),
+            )
         }
     }
+
     @After
     fun tearDown() {
         reset(mockClient)
         application.unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks)
     }
+
     @Test
     fun initialActivity_collectExtrasIntent() {
         ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
@@ -129,9 +133,9 @@ class PaymentCreatorActivityTest {
 
         intended(hasComponent(hasClassName(CreditCardActivity::class.java.name)))
     }
+
     @Test
     fun shouldShowOnlyPaymentMethodsRequestedByMerchantAndAvailableInCapability() {
-
         ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
 
         onView(
@@ -149,7 +153,6 @@ class PaymentCreatorActivityTest {
         onView(ViewMatchers.withText(R.string.payment_method_fpx_title)).check(doesNotExist())
         onView(withId(R.id.recycler_view))
             .check(matches(itemCount(3)))
-
     }
 
     @Test

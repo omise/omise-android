@@ -35,7 +35,8 @@ data class PaymentMethod(
         fun createSourceTypeMethod(sourceType: SourceType): PaymentMethod =
             PaymentMethod(
                 name = sourceType.name,
-                installmentTerms = listOf(), // empty list as it will be replaced by the actual terms from capability
+                // empty list as it will be replaced by the actual terms from capability
+                installmentTerms = listOf(),
                 banks =
                     when (sourceType) {
                         is SourceType.Fpx -> sourceType.banks
