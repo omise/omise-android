@@ -158,7 +158,6 @@ class PaymentCreatorActivity : OmiseActivity() {
     private fun updateActivityWithCapability(newCapability: Capability) {
         capability = newCapability
         requester = PaymentCreatorRequesterImpl(client, amount, currency, newCapability)
-        requester.capability = newCapability
         navigation =
             PaymentCreatorNavigationImpl(
                 this,
@@ -503,7 +502,7 @@ private class PaymentCreatorNavigationImpl(
 interface PaymentCreatorRequester<T : Model> {
     val amount: Long
     val currency: String
-    var capability: Capability
+    val capability: Capability
 
     fun request(
         request: Request<T>,
@@ -521,7 +520,7 @@ private class PaymentCreatorRequesterImpl(
     private val client: Client,
     override val amount: Long,
     override val currency: String,
-    override var capability: Capability,
+    override val capability: Capability,
 ) : PaymentCreatorRequester<Source> {
     override var listener: PaymentCreatorRequestListener? = null
 
