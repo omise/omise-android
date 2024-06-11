@@ -33,7 +33,6 @@ import co.omise.android.config.ToolbarCustomizationBuilder;
 import co.omise.android.config.UiCustomization;
 import co.omise.android.config.UiCustomizationBuilder;
 import co.omise.android.models.Amount;
-import co.omise.android.models.Capability;
 import co.omise.android.models.Source;
 import co.omise.android.models.Token;
 import co.omise.android.ui.AuthorizingPaymentActivity;
@@ -63,8 +62,6 @@ public class CheckoutActivity extends AppCompatActivity {
     private EditText amountEdit;
     private EditText currencyEdit;
     private Snackbar snackbar;
-
-    private Capability capability;
 
     private ActivityResultLauncher<Intent> authorizingPaymentLauncher;
     private ActivityResultLauncher<Intent> paymentCreatorLauncher;
@@ -97,28 +94,10 @@ public class CheckoutActivity extends AppCompatActivity {
         creditCardButton.setOnClickListener(view -> payByCreditCard());
         authorizeUrlButton.setOnClickListener(view -> AuthorizingPaymentDialog.showAuthorizingPaymentDialog(this, this::startAuthoringPaymentActivity));
 
-        Client client = new Client(PUBLIC_KEY);
-        Request<Capability> request = new Capability.GetCapabilitiesRequestBuilder().build();
-        client.send(request, new RequestListener<Capability>() {
-            @Override
-            public void onRequestSucceed(@NotNull Capability model) {
-                capability = model;
-            }
-
-            @Override
-            public void onRequestFailed(@NotNull Throwable throwable) {
-                snackbar.setText(Objects.requireNonNull(capitalize(throwable.getMessage()))).show();
-            }
-        });
     }
 
     private void choosePaymentMethod() {
         boolean isUsedSpecificsPaymentMethods = PaymentSetting.isUsedSpecificsPaymentMethods(this);
-
-        if (!isUsedSpecificsPaymentMethods && capability == null) {
-            snackbar.setText(R.string.error_capability_have_not_set_yet);
-            return;
-        }
 
         double localAmount = Double.parseDouble(amountEdit.getText().toString().trim());
         String currency = currencyEdit.getText().toString().trim().toLowerCase();
@@ -137,8 +116,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
         if (isUsedSpecificsPaymentMethods) {
             intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this));
-        } else {
-            intent.putExtra(OmiseActivity.EXTRA_CAPABILITY, capability);
         }
 
         paymentCreatorLauncher.launch(intent);
