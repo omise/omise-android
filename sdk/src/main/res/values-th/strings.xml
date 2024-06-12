@@ -5,6 +5,7 @@
     <string name="default_form_title">บัตรเครดิต</string>
     <string name="description_brand_logo">โลโก้บัตรเครดิต</string>
     <string name="error_io">ไม่สามารถเชื่อมต่ออินเตอร์เน็ทได้ กรุณาตรวจสอบและลองใหม่อีกครั้ง (%1$s)</string>
+    <string name="error_loading_payment_methods">โหลดวิธีการชำระเงินไม่สำเร็จ</string>
 
     <string name="error_invalid_card_number">หมายเลขบัตรไม่ถูกต้อง</string>
     <string name="error_invalid_card_name">ชื่อผู้ถือบัตรไม่ถูกต้อง</string>

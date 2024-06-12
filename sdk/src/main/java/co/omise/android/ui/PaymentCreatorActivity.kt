@@ -143,7 +143,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                 override fun onRequestFailed(throwable: Throwable) {
                     progressBar.visibility = ProgressBar.GONE
                     // Show the error message
-                    errorMessage.text = "Unable to load payment methods"
+                    errorMessage.text = getString(R.string.error_loading_payment_methods)
                     errorMessage.visibility = TextView.VISIBLE
                 }
             },
