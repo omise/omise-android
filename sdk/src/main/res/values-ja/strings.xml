@@ -5,6 +5,7 @@
     <string name="default_form_title">クレジットカード</string>
     <string name="description_brand_logo">カードブランドロゴ</string>
     <string name="error_io">ネットワーク通信エラー, 安定したネット環境で再度試してください. (%1$s)</string>
+    <string name="error_loading_payment_methods">決済方法を読み込むことができません</string>
     <string name="error_invalid_card_number">クレジットカード番号が無効です</string>
     <string name="error_invalid_card_name">クレジットカード所有者名が無効です</string>
     <string name="error_invalid_expiration_date">クレジットカードの有効期限が無効です</string>

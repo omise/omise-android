@@ -25,9 +25,7 @@ import co.omise.android.config.TextBoxCustomizationBuilder
 import co.omise.android.config.ThemeConfig
 import co.omise.android.config.ToolbarCustomizationBuilder
 import co.omise.android.config.UiCustomizationBuilder
-import co.omise.android.extensions.capitalizeFirstChar
 import co.omise.android.models.Amount
-import co.omise.android.models.Capability
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.AuthorizingPaymentActivity
@@ -74,8 +72,6 @@ class CheckoutActivity : AppCompatActivity() {
     private val snackbar: Snackbar by lazy {
         Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT)
     }
-
-    private var capability: Capability? = null
 
     private lateinit var authorizingPaymentLauncher: ActivityResultLauncher<Intent>
     private lateinit var paymentCreatorLauncher: ActivityResultLauncher<Intent>
@@ -125,27 +121,10 @@ class CheckoutActivity : AppCompatActivity() {
             }
         }
 
-
-        val client = Client(PUBLIC_KEY)
-        val request = Capability.GetCapabilitiesRequestBuilder().build()
-        client.send(request, object : RequestListener<Capability> {
-            override fun onRequestSucceed(model: Capability) {
-                capability = model
-            }
-
-            override fun onRequestFailed(throwable: Throwable) {
-                snackbar.setText(throwable.message?.capitalizeFirstChar().orEmpty()).show()
-            }
-        })
     }
 
     private fun choosePaymentMethod() {
         val isUsedSpecificsPaymentMethods = PaymentSetting.isUsedSpecificsPaymentMethods(this)
-
-        if (!isUsedSpecificsPaymentMethods && capability == null) {
-            snackbar.setText(getString(R.string.error_capability_have_not_set_yet))
-            return
-        }
 
         val localAmount = amountEdit.text.toString().trim().toDouble()
         val currency = currencyEdit.text.toString().trim().lowercase()
@@ -161,8 +140,6 @@ class CheckoutActivity : AppCompatActivity() {
 
             if (isUsedSpecificsPaymentMethods) {
                 putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this@CheckoutActivity))
-            } else {
-                putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
             }
 
             paymentCreatorLauncher.launch(this)

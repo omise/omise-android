@@ -5,6 +5,7 @@
     <string name="default_form_title">Credit Card</string>
     <string name="description_brand_logo">Card brand logo</string>
     <string name="error_io">Network communication error, please make sure you have a stable internet connection. (%1$s)</string>
+    <string name="error_loading_payment_methods">Unable to load payment methods</string>
     <string name="error_invalid_card_number">Credit card number is invalid</string>
     <string name="error_invalid_card_name">Card holder name is invalid</string>
     <string name="error_invalid_expiration_date">Card expiration date is invalid</string>

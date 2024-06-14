@@ -73,7 +73,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
             -> item.sourceType?.let(::sendRequest)
             PaymentMethodResource.Fpx -> navigation.navigateToFpxEmailForm()
             PaymentMethodResource.GooglePay -> navigation.navigateToGooglePayForm()
-            PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser()
+            PaymentMethodResource.DuitNowOBW -> navigation.navigateToDuitNowOBWBankChooser(capability)
             PaymentMethodResource.Atome -> navigation.navigateToAtomeForm()
         }
     }

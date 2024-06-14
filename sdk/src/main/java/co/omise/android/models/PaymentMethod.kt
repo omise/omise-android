@@ -35,11 +35,8 @@ data class PaymentMethod(
         fun createSourceTypeMethod(sourceType: SourceType): PaymentMethod =
             PaymentMethod(
                 name = sourceType.name,
-                installmentTerms =
-                    when (sourceType) {
-                        is SourceType.Installment -> SourceType.Installment.availableTerms(sourceType)
-                        else -> null
-                    },
+                // empty list as it will be replaced by the actual terms from capability
+                installmentTerms = listOf(),
                 banks =
                     when (sourceType) {
                         is SourceType.Fpx -> sourceType.banks

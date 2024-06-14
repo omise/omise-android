@@ -3,7 +3,11 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
@@ -13,12 +17,14 @@ import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.parcelable
+import co.omise.android.extensions.parcelableNullable
 import co.omise.android.models.APIError
 import co.omise.android.models.Bank
 import co.omise.android.models.Capability
 import co.omise.android.models.Model
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
+import co.omise.android.models.SourceType
 import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AMOUNT
@@ -32,6 +38,7 @@ import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
+import org.jetbrains.annotations.TestOnly
 import java.io.IOError
 
 /**
@@ -49,28 +56,20 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var googlepayRequestPhoneNumber: Boolean = false
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
-    private val client: Client by lazy { Client(pkey) }
+    private lateinit var client: Client
 
-    private val requester: PaymentCreatorRequester<Source> by lazy {
-        PaymentCreatorRequesterImpl(client, amount, currency, capability)
+    @TestOnly
+    fun setClient(client: Client) {
+        this.client = client
     }
+
+    private lateinit var requester: PaymentCreatorRequester<Source>
 
     @VisibleForTesting
-    val navigation: PaymentCreatorNavigation by lazy {
-        PaymentCreatorNavigationImpl(
-            this,
-            pkey,
-            amount,
-            currency,
-            cardBrands,
-            googlepayMerchantId,
-            googlepayRequestBillingAddress,
-            googlepayRequestPhoneNumber,
-            REQUEST_CREDIT_CARD,
-            requester,
-            capability,
-        )
-    }
+    lateinit var navigation: PaymentCreatorNavigation
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var errorMessage: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +79,13 @@ class PaymentCreatorActivity : OmiseActivity() {
 
         setContentView(R.layout.activity_payment_creator)
 
+        progressBar = findViewById(R.id.progressBar)
+        errorMessage = findViewById(R.id.errorMessage)
+        // Initially hide the ProgressBar and error message
+        progressBar.visibility = ProgressBar.GONE
+        errorMessage.visibility = TextView.GONE
+
+        title = getString(R.string.payment_chooser_title)
         val onBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -93,7 +99,87 @@ class PaymentCreatorActivity : OmiseActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initialize()
 
-        navigation.navigateToPaymentChooser(capability)
+        loadCapability()
+    }
+
+    // Set the menu button to close the view by the user
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) !is PaymentChooserFragment) {
+            menuInflater.inflate(R.menu.menu_toolbar, menu)
+            return true
+        }
+        return false
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.close_menu -> {
+                setResult(Activity.RESULT_CANCELED)
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun loadCapability() {
+        // Start loading
+        progressBar.visibility = ProgressBar.VISIBLE
+        // Hide error message
+        errorMessage.visibility = TextView.GONE
+        // Get capability
+        val capabilityRequest = Capability.GetCapabilitiesRequestBuilder().build()
+        client.send(
+            capabilityRequest,
+            object : RequestListener<Capability> {
+                override fun onRequestSucceed(model: Capability) {
+                    updateActivityWithCapability(model)
+                    // Invalidate the options menu to trigger a refresh and hide the menu button
+                    // as new button will come from the next view
+                    invalidateOptionsMenu()
+                    // Hide loading
+                    progressBar.visibility = ProgressBar.GONE
+                }
+
+                override fun onRequestFailed(throwable: Throwable) {
+                    progressBar.visibility = ProgressBar.GONE
+                    // Show the error message
+                    errorMessage.text = getString(R.string.error_loading_payment_methods)
+                    errorMessage.visibility = TextView.VISIBLE
+                }
+            },
+        )
+    }
+
+    // Detect if the current activity is still active
+    private fun isActivityActive(): Boolean {
+        return !isFinishing && !isDestroyed
+    }
+
+    private fun updateActivityWithCapability(newCapability: Capability) {
+        capability = newCapability
+        requester = PaymentCreatorRequesterImpl(client, amount, currency, newCapability)
+        navigation =
+            PaymentCreatorNavigationImpl(
+                this,
+                pkey,
+                amount,
+                currency,
+                cardBrands,
+                googlepayMerchantId,
+                googlepayRequestBillingAddress,
+                googlepayRequestPhoneNumber,
+                REQUEST_CREDIT_CARD,
+                requester,
+                newCapability,
+            )
+        capability = filterCapabilities(newCapability)
+
+        // Replace the capability passed from merchant by the new capability
+        intent.putExtra(EXTRA_CAPABILITY, capability)
+        // Open the payment method chooser if the activity is still active
+        if (isActivityActive()) {
+            navigation.navigateToPaymentChooser(capability)
+        }
 
         requester.listener =
             object : PaymentCreatorRequestListener {
@@ -116,7 +202,6 @@ class PaymentCreatorActivity : OmiseActivity() {
                     }
                 }
             }
-
         supportFragmentManager.addOnBackStackChangedListener {
             supportActionBar?.let {
                 if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
@@ -128,6 +213,42 @@ class PaymentCreatorActivity : OmiseActivity() {
                 }
             }
         }
+    }
+
+    // Filter the capabilities based on the merchant request and what is available in the capabilities of the merchant account
+    private fun filterCapabilities(capability: Capability): Capability {
+        val merchantPassedCapabilities = intent.parcelableNullable<Capability?>(EXTRA_CAPABILITY)
+        var filteredPaymentMethods: List<PaymentMethod>? = null
+        var filteredTokenizationMethods: List<String>? = null
+
+        if (merchantPassedCapabilities != null) {
+            val selectedPaymentMethods = merchantPassedCapabilities.paymentMethods
+            val selectedTokenizationMethods = merchantPassedCapabilities.tokenizationMethods
+            if (selectedPaymentMethods != null) {
+                filteredPaymentMethods =
+                    capability.paymentMethods?.filter { capMethod ->
+                        selectedPaymentMethods.map { it.name }.contains(capMethod.name)
+                    }
+                capability.paymentMethods = filteredPaymentMethods?.toMutableList()
+            }
+            if (selectedTokenizationMethods != null) {
+                filteredTokenizationMethods =
+                    capability.tokenizationMethods?.filter {
+                        selectedTokenizationMethods.contains(it)
+                    }
+                capability.tokenizationMethods = filteredTokenizationMethods
+            }
+            capability.zeroInterestInstallments = merchantPassedCapabilities.zeroInterestInstallments
+            // add the tokenization methods into payment methods since the SDK only shows paymentMethods
+            val combinedMethods = capability.paymentMethods?.toMutableList()
+            capability.tokenizationMethods?.forEach { method ->
+                run {
+                    combinedMethods?.add(PaymentMethod(method))
+                }
+            }
+            capability.paymentMethods = combinedMethods
+        }
+        return capability
     }
 
     // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
@@ -165,15 +286,15 @@ class PaymentCreatorActivity : OmiseActivity() {
     }
 
     private fun initialize() {
-        listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY, EXTRA_CAPABILITY).forEach {
+        listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY).forEach {
             require(intent.hasExtra(it)) { "Could not found $it." }
         }
         pkey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        if (!this::client.isInitialized) {
+            client = Client(pkey)
+        }
         amount = intent.getLongExtra(EXTRA_AMOUNT, 0)
         currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
-        capability = requireNotNull(intent.parcelable(EXTRA_CAPABILITY)) { "${::EXTRA_CAPABILITY.name} must not be null." }
-        val fetchBrands: List<String>? = capability.paymentMethods?.find { it.name == "card" }?.cardBrands
-        cardBrands = if (fetchBrands != null) fetchBrands as ArrayList<String> else arrayListOf()
         googlepayMerchantId = intent.getStringExtra(EXTRA_GOOGLEPAY_MERCHANT_ID) ?: "[GOOGLEPAY_MERCHANT_ID]"
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
         googlepayRequestPhoneNumber = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)
@@ -218,7 +339,7 @@ interface PaymentCreatorNavigation {
 
     fun navigateToGooglePayForm()
 
-    fun navigateToDuitNowOBWBankChooser()
+    fun navigateToDuitNowOBWBankChooser(capability: Capability)
 }
 
 private class PaymentCreatorNavigationImpl(
@@ -366,32 +487,8 @@ private class PaymentCreatorNavigationImpl(
         activity.startActivityForResult(intent, requestCode)
     }
 
-    override fun navigateToDuitNowOBWBankChooser() {
-        /**
-         *  DuitNow OBW didn't support capability api for banks list
-         *  so need to define local banks list
-         */
-        val banks =
-            listOf(
-                Bank(name = "Affin Bank", code = "affin", active = true),
-                Bank(name = "Alliance Bank (Personal)", code = "alliance", active = true),
-                Bank(name = "AGRONet", code = "agro", active = true),
-                Bank(name = "AmBank", code = "ambank", active = true),
-                Bank(name = "Bank Islam", code = "islam", active = true),
-                Bank(name = "Bank Muamalat", code = "muamalat", active = true),
-                Bank(name = "Bank Rakyat", code = "rakyat", active = true),
-                Bank(name = "BSN", code = "bsn", active = true),
-                Bank(name = "CIMB Clicks", code = "cimb", active = true),
-                Bank(name = "Hong Leong Bank", code = "hongleong", active = true),
-                Bank(name = "HSBC Bank", code = "hsbc", active = true),
-                Bank(name = "KFH", code = "kfh", active = true),
-                Bank(name = "Maybank2U", code = "maybank2u", active = true),
-                Bank(name = "OCBC Bank", code = "ocbc", active = true),
-                Bank(name = "Public Bank", code = "public", active = true),
-                Bank(name = "RHB Bank", code = "rhb", active = true),
-                Bank(name = "Standard Chartered", code = "sc", active = true),
-                Bank(name = "UOB Bank", code = "uob", active = true),
-            )
+    override fun navigateToDuitNowOBWBankChooser(capability: Capability) {
+        val banks = capability.paymentMethods?.find { it.name == SourceType.DuitNowOBW.name }?.banks ?: emptyList()
 
         val fragment =
             DuitNowOBWBankChooserFragment.newInstance(banks).apply {
