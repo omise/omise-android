@@ -10,6 +10,9 @@
             android:name="co.omise.android.ui.CreditCardActivity"
             android:theme="@style/OmiseTheme" />
         <activity
+            android:name="co.omise.android.ui.GooglePayActivity"
+            android:theme="@style/OmiseTheme" />
+        <activity
             android:name="co.omise.android.ui.PaymentCreatorActivity"
             android:theme="@style/OmiseTheme" />
         <activity
