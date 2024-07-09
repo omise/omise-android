@@ -218,20 +218,20 @@ class PaymentCreatorActivity : OmiseActivity() {
     // Filter the capabilities based on the merchant request and what is available in the capabilities of the merchant account
     private fun filterCapabilities(capability: Capability): Capability {
         val merchantPassedCapabilities = intent.parcelableNullable<Capability?>(EXTRA_CAPABILITY)
-        var filteredPaymentMethods: List<PaymentMethod>? = null
-        var filteredTokenizationMethods: List<String>? = null
-
+        val filteredPaymentMethods: List<PaymentMethod>?
+        val filteredTokenizationMethods: List<String>?
         if (merchantPassedCapabilities != null) {
             val selectedPaymentMethods = merchantPassedCapabilities.paymentMethods
             val selectedTokenizationMethods = merchantPassedCapabilities.tokenizationMethods
-            if (selectedPaymentMethods != null) {
+            val isMerchantOnlyChangingInterest = selectedPaymentMethods.isNullOrEmpty() && selectedTokenizationMethods.isNullOrEmpty()
+            if (selectedPaymentMethods != null && !isMerchantOnlyChangingInterest) {
                 filteredPaymentMethods =
                     capability.paymentMethods?.filter { capMethod ->
                         selectedPaymentMethods.map { it.name }.contains(capMethod.name)
                     }
                 capability.paymentMethods = filteredPaymentMethods?.toMutableList()
             }
-            if (selectedTokenizationMethods != null) {
+            if (selectedTokenizationMethods != null && !isMerchantOnlyChangingInterest) {
                 filteredTokenizationMethods =
                     capability.tokenizationMethods?.filter {
                         selectedTokenizationMethods.contains(it)
@@ -239,15 +239,15 @@ class PaymentCreatorActivity : OmiseActivity() {
                 capability.tokenizationMethods = filteredTokenizationMethods
             }
             capability.zeroInterestInstallments = merchantPassedCapabilities.zeroInterestInstallments
-            // add the tokenization methods into payment methods since the SDK only shows paymentMethods
-            val combinedMethods = capability.paymentMethods?.toMutableList()
-            capability.tokenizationMethods?.forEach { method ->
-                run {
-                    combinedMethods?.add(PaymentMethod(method))
-                }
-            }
-            capability.paymentMethods = combinedMethods
         }
+        // Add the tokenization methods into payment methods since the SDK only shows paymentMethods
+        val combinedMethods = capability.paymentMethods?.toMutableList()
+        capability.tokenizationMethods?.forEach { method ->
+            run {
+                combinedMethods?.add(PaymentMethod(method))
+            }
+        }
+        capability.paymentMethods = combinedMethods
         return capability
     }
 
