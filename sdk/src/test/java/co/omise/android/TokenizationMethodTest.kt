@@ -36,8 +36,8 @@ class TokenizationMethodTest {
             )
 
         capability.paymentMethods?.any { it.name == "Method no: 1" }?.let { assertTrue(it) }
-        capability.paymentMethods?.any { it.name == "googlepay" }?.let { assertTrue(it) }
-        capability.paymentMethods?.any { it.name == "kanpay" }?.let { assertTrue(it) }
+        capability.tokenizationMethods?.any { it == "googlepay" }?.let { assertTrue(it) }
+        capability.tokenizationMethods?.any { it == "kanpay" }?.let { assertTrue(it) }
     }
 
     @Test

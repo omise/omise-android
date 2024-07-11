@@ -145,11 +145,11 @@ class PaymentCreatorActivityTest {
         onView(
             withListId(R.id.recycler_view).atPosition(1),
         ).check(matches(ViewMatchers.isEnabled()))
-            .check(matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.googlepay))))
+            .check(matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.payment_truemoney_title))))
         onView(
             withListId(R.id.recycler_view).atPosition(2),
         ).check(matches(ViewMatchers.isEnabled()))
-            .check(matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.payment_truemoney_title))))
+            .check(matches(ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.googlepay))))
         onView(ViewMatchers.withText(R.string.payment_method_fpx_title)).check(doesNotExist())
         onView(withId(R.id.recycler_view))
             .check(matches(itemCount(3)))

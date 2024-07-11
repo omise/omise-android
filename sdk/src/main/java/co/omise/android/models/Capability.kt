@@ -3,7 +3,6 @@ package co.omise.android.models
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import co.omise.android.models.PaymentMethod.Companion.createSourceTypeMethod
-import co.omise.android.models.PaymentMethod.Companion.createTokenizationMethod
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import okhttp3.HttpUrl
@@ -34,20 +33,6 @@ data class Capability(
     override var created: DateTime? = null,
     override var deleted: Boolean = false,
 ) : Model {
-    init {
-        // Need to add them to payment methods as we use tokenization methods as payment methods as well
-        tokenizationMethods?.forEach {
-                tokenizationMethod ->
-            paymentMethods?.add(
-                (
-                    PaymentMethod(
-                        name = tokenizationMethod,
-                    )
-                ),
-            )
-        }
-    }
-
     /**
      * The {@link RequestBuilder} class for retrieving account Capabilities.
      */
@@ -81,13 +66,12 @@ data class Capability(
                 paymentMethods.add(PaymentMethod.createCreditCardMethod())
             }
 
-            paymentMethods.addAll(tokenizationMethods.map(::createTokenizationMethod))
             paymentMethods.addAll(sourceTypes.map(::createSourceTypeMethod))
-
             return Capability(
                 paymentMethods = paymentMethods,
                 zeroInterestInstallments = zeroInterestInstallments,
                 limits = Limits(InstallmentAmount(200000L)),
+                tokenizationMethods = tokenizationMethods.map { tokenizationMethod -> tokenizationMethod.name!! },
             )
         }
     }
