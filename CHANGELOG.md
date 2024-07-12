@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.2.0
+* **Enhancement:** Force load capabilities from api and remove hard coded values.
+
 ## V5.1.0
 * **ADDED:** Implemented new sources `installment_wlb_bay`, `installment_wlb_bbl`, `installment_wlb_first_choice`, `installment_wlb_kbank`, `installment_wlb_scb`, `installment_wlb_ttb`
 * **FIX:** Included missing 3DS sdk into Omise sdk**

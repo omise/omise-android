@@ -259,7 +259,7 @@ private fun showPaymentCreatorActivity() {
         putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
         putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
 
-        //You can retrieve your account's capabilities through the SDK (will be explained below)
+        // The SDk will automatically fetch your capabilities but you can use this EXTRA value to pass custom payment methods.
         putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
 
         paymentCreatorLauncher.launch(this)
@@ -269,7 +269,7 @@ private fun showPaymentCreatorActivity() {
 
 Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
 
-Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way, the `PaymentCreatorActivity` will display the payment methods in the `Capability` object.
+[optional] Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way you can pass custom payment methods to the payment methods list. The displayed payment methods will only be those supported by your actual capabilities that is automatically fetched by the SDK.
 
 There are two options to retrieve the Capability object.
 
@@ -285,10 +285,17 @@ There are two options to retrieve the Capability object.
            sourceTypes = listOf(SourceType.PromptPay, SourceType.TrueMoney)
    )
    ```
-
+If you want to just edit the interest you can create your capabilities like this and when the SDK detects that you did not pass any payment methods it will automatically use what is available:
+```java
+val capability = Capability.create(
+                allowCreditCard = false,
+                sourceTypes = listOf(),
+                zeroInterestInstallments = true, // or false
+            )
+```
    > **Note**
    > Ensure you are adding payment methods supported by the account.
-   > If not, you won't be able to create a source to continue the payment process.
+   > If non of the payment methods are supported by your account you will see an empty list.
 
 After the end user selects and creates a payment source, the activity result callback will be called; handle it as follows:
 
