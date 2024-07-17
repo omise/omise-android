@@ -269,7 +269,9 @@ private fun showPaymentCreatorActivity() {
 
 Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
 
-[optional] Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent`. This way you can pass custom payment methods to the payment methods list. The displayed payment methods will only be those supported by your actual capabilities that is automatically fetched by the SDK.
+The SDK will automatically fetch your capabilities, but you can use this EXTRA value to pass custom payment methods.
+
+[optional] Declare a `capability` variable as a `Capability` object and pass it as the value for the `OmiseActivity.EXTRA_CAPABILITY` key for your `Intent.` This way, you can pass custom payment methods to the payment methods list. The displayed payment methods will only be those supported by your capabilities that the SDK automatically fetches.
 
 There are two options to retrieve the Capability object.
 
@@ -285,7 +287,7 @@ There are two options to retrieve the Capability object.
            sourceTypes = listOf(SourceType.PromptPay, SourceType.TrueMoney)
    )
    ```
-If you want to just edit the interest you can create your capabilities like this and when the SDK detects that you did not pass any payment methods it will automatically use what is available:
+If you want to edit only the interest, you can create your capabilities as shown. When the SDK detects that you did not pass any payment methods, it will automatically use what is available.
 ```java
 val capability = Capability.create(
                 allowCreditCard = false,
