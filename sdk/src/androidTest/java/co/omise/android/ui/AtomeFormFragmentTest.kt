@@ -50,12 +50,12 @@ class AtomeFormFragmentTest {
     @Test
     fun validInputs_enableSubmitButton() {
         // fill required fields
-        onView(withId(R.id.edit_phone_number)).perform(scrollTo(),typeText("000"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(scrollTo(), typeText("000"), pressImeActionButton())
         // The submit button should not be enabled unless all required fields are filled
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
-        onView(withId(R.id.edit_shipping_street)).perform(scrollTo(),typeText("test"), pressImeActionButton())
+        onView(withId(R.id.edit_shipping_street)).perform(scrollTo(), typeText("test"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
-        onView(withId(R.id.edit_shipping_postal)).perform(scrollTo(),typeText("test"), pressImeActionButton())
+        onView(withId(R.id.edit_shipping_postal)).perform(scrollTo(), typeText("test"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
         onView(withId(R.id.edit_shipping_city)).perform(scrollTo()).perform(typeText("test"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
@@ -63,42 +63,42 @@ class AtomeFormFragmentTest {
         // Submit button should be enabled as all required fields have been filled
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(isEnabled()))
         // fill non required fields
-        onView(withId(R.id.edit_full_name)).perform(scrollTo(),typeText("test"), pressImeActionButton())
-        onView(withId(R.id.edit_email)).perform(scrollTo(),typeText("test@gmail.com"), pressImeActionButton())
+        onView(withId(R.id.edit_full_name)).perform(scrollTo(), typeText("test"), pressImeActionButton())
+        onView(withId(R.id.edit_email)).perform(scrollTo(), typeText("test@gmail.com"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(isEnabled()))
         // optional invalid email should disable submit button after all required fields are filled
-        onView(withId(R.id.edit_email)).perform(scrollTo(),clearText()).perform(typeText("test")).perform(pressImeActionButton())
+        onView(withId(R.id.edit_email)).perform(scrollTo(), clearText()).perform(typeText("test")).perform(pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
-        onView(withId(R.id.edit_full_name)).perform(scrollTo(),typeText("test")).perform(pressImeActionButton())
+        onView(withId(R.id.edit_full_name)).perform(scrollTo(), typeText("test")).perform(pressImeActionButton())
 
-        onView(withId(R.id.edit_email)).perform(scrollTo(),clearText()).perform(typeText("test@gmail.com")).perform(pressImeActionButton())
+        onView(withId(R.id.edit_email)).perform(scrollTo(), clearText()).perform(typeText("test@gmail.com")).perform(pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(isEnabled())).perform(
-            click()
+            click(),
         )
     }
 
     @Test
     fun invalidInputs_disableSubmitButton() {
-        onView(withId(R.id.edit_phone_number)).perform(scrollTo(),click()).perform(pressImeActionButton())
-        onView(withId(R.id.edit_email)).perform(scrollTo(),typeText("example@"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(scrollTo(), click()).perform(pressImeActionButton())
+        onView(withId(R.id.edit_email)).perform(scrollTo(), typeText("example@"), pressImeActionButton())
         onView(withId(R.id.edit_full_name)).perform(scrollTo(), click()).perform(pressImeActionButton())
         onView(withId(R.id.edit_shipping_country)).perform(scrollTo()).perform(click()).perform(pressImeActionButton())
-        onView(withId(R.id.edit_shipping_postal)).perform(scrollTo(),click()).perform(pressImeActionButton())
+        onView(withId(R.id.edit_shipping_postal)).perform(scrollTo(), click()).perform(pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
     }
 
     @Test
     fun disable_checkBox_submitForm() {
         // Fill are required fields
-        onView(withId(R.id.edit_phone_number)).perform(scrollTo(),typeText("000"), pressImeActionButton())
+        onView(withId(R.id.edit_phone_number)).perform(scrollTo(), typeText("000"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
         onView(withId(R.id.edit_shipping_street)).perform(scrollTo()).perform(typeText("test"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
-        onView(withId(R.id.edit_shipping_postal)).perform(scrollTo(),typeText("test"), pressImeActionButton())
+        onView(withId(R.id.edit_shipping_postal)).perform(scrollTo(), typeText("test"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
         onView(withId(R.id.edit_shipping_city)).perform(scrollTo()).perform(typeText("test"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(not(isEnabled())))
-        onView(withId(R.id.edit_shipping_country)).perform(scrollTo(),typeText("TH"), pressImeActionButton())
+        onView(withId(R.id.edit_shipping_country)).perform(scrollTo(), typeText("TH"), pressImeActionButton())
         // Uncheck address checkbox
         onView(withId(R.id.checkbox_billing_shipping)).perform(scrollTo(), click())
         onView(withId(R.id.edit_billing_street)).perform(scrollTo()).perform(typeText("test"), pressImeActionButton())
@@ -107,7 +107,7 @@ class AtomeFormFragmentTest {
         onView(withId(R.id.edit_billing_country)).perform(scrollTo()).perform(typeText("TH"), pressImeActionButton())
 
         onView(withId(R.id.button_submit)).perform(scrollTo()).check(matches(isEnabled())).perform(
-            click()
+            click(),
         )
     }
 }
