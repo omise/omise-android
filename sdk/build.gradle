@@ -173,7 +173,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
     // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
-    implementation 'org.bouncycastle:bcprov-jdk15to18:1.69'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.77'
 
     debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
         exclude group: 'androidx.test', module: 'core'
