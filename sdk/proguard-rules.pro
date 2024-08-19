@@ -87,3 +87,7 @@
 # Keep the classes from slf4j
 -keep class org.slf4j.** { *; }
 
+# Keep kotlin.KotlinVersion if present
+-keep class kotlin.KotlinVersion { *; }
+-dontwarn kotlin.KotlinVersion
+
