@@ -52,6 +52,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
     private lateinit var threeDSRequestorAppURL: String
     private var isWebViewSetup = false
+    private var isDeepLinkSuccOpened = false
     private lateinit var externalActivityLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
@@ -253,11 +254,12 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun openDeepLink(uri: Uri) {
-        try {
+        isDeepLinkSuccOpened = try {
             val externalIntent = Intent(Intent.ACTION_VIEW, uri)
             externalActivityLauncher.launch(externalIntent)
+            true
         } catch (e: ActivityNotFoundException) {
-            finishActivityWithFailure(OmiseException(OmiseSDKError.OPEN_DEEP_LINK_FAILED.value, e))
+            false
         }
     }
 
@@ -303,7 +305,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         data: Intent?,
     ) {
         if (requestCode == REQUEST_EXTERNAL_CODE) {
-            finishActivityWithSuccessful(data)
+            if(isDeepLinkSuccOpened){
+                finishActivityWithSuccessful(data)
+            }
         }
     }
 
