@@ -254,13 +254,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun openDeepLink(uri: Uri) {
-        isDeepLinkSuccOpened = try {
-            val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-            externalActivityLauncher.launch(externalIntent)
-            true
-        } catch (e: ActivityNotFoundException) {
-            false
-        }
+        isDeepLinkSuccOpened =
+            try {
+                val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+                externalActivityLauncher.launch(externalIntent)
+                true
+            } catch (e: ActivityNotFoundException) {
+                false
+            }
     }
 
     private fun setupActionBarTitle() {
@@ -305,9 +306,10 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         data: Intent?,
     ) {
         if (requestCode == REQUEST_EXTERNAL_CODE) {
-            if(isDeepLinkSuccOpened){
-                finishActivityWithSuccessful(data)
-            }
+            if (isDeepLinkSuccOpened)
+                {
+                    finishActivityWithSuccessful(data)
+                }
         }
     }
 
