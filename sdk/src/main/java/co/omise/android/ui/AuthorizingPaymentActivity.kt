@@ -306,7 +306,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         data: Intent?,
     ) {
         if (requestCode == REQUEST_EXTERNAL_CODE) {
-            if (isDeepLinkSuccOpened) {
+           if (requestCode == REQUEST_EXTERNAL_CODE && isDeepLinkSuccOpened) {
+               finishActivityWithSuccessful(data)
+           }
                 finishActivityWithSuccessful(data)
             }
         }
