@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+  tools:keep="
+        @drawable/ds_logo_amex,
+        @drawable/ds_logo_amex_dark,
+        @drawable/ds_logo_diners,
+        @drawable/ds_logo_mastercard,
+        @drawable/ds_logo_mastercard_dark,
+        @drawable/ds_logo_visa,
+        @drawable/ic_password_toggle_masked,
+        @drawable/ic_password_toggle_visible,
+        @drawable/cb_bakground,
+        @drawable/ds_logo_cb,
+        @drawable/ds_logo_eftpos,
+        @drawable/ds_logo_jcb,
+        @drawable/ds_logo_union,
+        @values/challenge_ui_ids
+    " />
