@@ -52,6 +52,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
     private lateinit var threeDSRequestorAppURL: String
     private var isWebViewSetup = false
+    private var isDeepLinkSuccOpened = false
     private lateinit var externalActivityLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel: AuthorizingPaymentViewModel by viewModels {
@@ -253,12 +254,14 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun openDeepLink(uri: Uri) {
-        try {
-            val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-            externalActivityLauncher.launch(externalIntent)
-        } catch (e: ActivityNotFoundException) {
-            finishActivityWithFailure(OmiseException(OmiseSDKError.OPEN_DEEP_LINK_FAILED.value, e))
-        }
+        isDeepLinkSuccOpened =
+            try {
+                val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+                externalActivityLauncher.launch(externalIntent)
+                true
+            } catch (e: ActivityNotFoundException) {
+                false
+            }
     }
 
     private fun setupActionBarTitle() {
@@ -302,7 +305,7 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         resultCode: Int,
         data: Intent?,
     ) {
-        if (requestCode == REQUEST_EXTERNAL_CODE) {
+        if (requestCode == REQUEST_EXTERNAL_CODE && isDeepLinkSuccOpened) {
             finishActivityWithSuccessful(data)
         }
     }
