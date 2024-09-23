@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.3.0
+* **Fix:** Do not auto close browser when payment app does not exist and deeplink fails to open.
+
 ## V5.2.0
 * **Enhancement:** Force load capabilities from api and remove hard coded values.
 
