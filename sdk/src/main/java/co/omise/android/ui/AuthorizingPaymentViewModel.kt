@@ -1,6 +1,5 @@
 package co.omise.android.ui
 
-import NetceteraConfig
 import ThreeDSConfigProvider
 import android.app.Activity
 import androidx.lifecycle.LiveData
@@ -14,6 +13,7 @@ import co.omise.android.ThreeDS2ServiceWrapper
 import co.omise.android.api.Client
 import co.omise.android.config.UiCustomization
 import co.omise.android.models.Authentication
+import co.omise.android.models.NetceteraConfig
 import co.omise.android.models.Serializer
 import com.netcetera.threeds.sdk.ThreeDS2ServiceInstance
 import com.netcetera.threeds.sdk.api.transaction.Transaction

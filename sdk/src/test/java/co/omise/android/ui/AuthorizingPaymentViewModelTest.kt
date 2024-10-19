@@ -1,6 +1,5 @@
 package co.omise.android.ui
 
-import NetceteraConfig
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.AuthorizingPaymentURLVerifier
@@ -11,6 +10,7 @@ import co.omise.android.api.Request
 import co.omise.android.models.Authentication
 import co.omise.android.models.Authentication.AuthenticationStatus
 import co.omise.android.models.AuthenticationAPIError
+import co.omise.android.models.NetceteraConfig
 import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import com.netcetera.threeds.sdk.api.exceptions.SDKRuntimeException
 import com.netcetera.threeds.sdk.api.transaction.AuthenticationRequestParameters
