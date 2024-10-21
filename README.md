@@ -681,7 +681,7 @@ Some request methods allow the user to authorize the payment with an external ap
 
 ## ProGuard rules
 
-If you enable ProGuard, then add these rules to your ProGuard file.
+If you enable ProGuard, then add these rules to your ProGuard file and apply any missing rules that your IDE notifies you about. 
 
 ```ProGuard
 -dontwarn okio.**
