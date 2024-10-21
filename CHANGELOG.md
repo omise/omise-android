@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.4.0
+* **Fix:** Include missing classes in proguard when pro guard is enabled to prevent SDK crashing in particular scenarios.
+
 ## V5.3.0
 * **Fix:** Do not auto close browser when payment app does not exist and deeplink fails to open.
 
