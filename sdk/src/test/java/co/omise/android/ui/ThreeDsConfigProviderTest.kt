@@ -2,6 +2,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.api.Client
 import co.omise.android.api.Request
+import co.omise.android.models.NetceteraConfig
 import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

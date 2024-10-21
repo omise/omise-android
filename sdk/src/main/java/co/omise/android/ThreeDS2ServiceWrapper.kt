@@ -1,10 +1,10 @@
 package co.omise.android
 
-import NetceteraConfig
 import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.Base64
+import co.omise.android.models.NetceteraConfig
 import com.netcetera.threeds.sdk.api.ThreeDS2Service
 import com.netcetera.threeds.sdk.api.configparameters.builder.ConfigurationBuilder
 import com.netcetera.threeds.sdk.api.configparameters.builder.SchemeConfiguration

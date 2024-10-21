@@ -1,5 +1,5 @@
+package co.omise.android.models
 import co.omise.android.api.RequestBuilder
-import co.omise.android.models.Model
 import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.android.parcel.Parcelize
 import okhttp3.HttpUrl

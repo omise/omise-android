@@ -1,6 +1,7 @@
 import android.net.Uri
 import co.omise.android.AuthorizingPaymentURLVerifier
 import co.omise.android.api.Client
+import co.omise.android.models.NetceteraConfig
 import com.netcetera.threeds.sdk.api.exceptions.InvalidInputException
 import java.net.URL
 

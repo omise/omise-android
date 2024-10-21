@@ -21,6 +21,7 @@ android {
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
+        consumerProguardFiles 'proguard-rules.pro'
     }
 
     buildTypes {
