@@ -137,6 +137,8 @@ sealed class SourceType(
 
         object Uob : Installment("installment_uob")
 
+        object UobWlb : Installment("installment_wlb_uob")
+
         data class Unknown(
             @JsonValue override val name: String?,
         ) : Installment(name)
@@ -178,6 +180,7 @@ sealed class SourceType(
                 "installment_ttb" -> Installment.Ttb
                 "installment_wlb_ttb" -> Installment.TtbWlb
                 "installment_uob" -> Installment.Uob
+                "installment_wlb_uob" -> Installment.UobWlb
                 "paynow" -> PayNow
                 "promptpay" -> PromptPay
                 "alipay_cn" -> AlipayCn
@@ -243,6 +246,7 @@ val SourceType.Companion.allElements: List<SourceType>
             SourceType.Installment.Ttb,
             SourceType.Installment.TtbWlb,
             SourceType.Installment.Uob,
+            SourceType.Installment.UobWlb,
             SourceType.Atome,
         )
 

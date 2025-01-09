@@ -481,6 +481,12 @@ internal sealed class InstallmentResource(
         indicatorIconRes = R.drawable.ic_next,
         sourceType = SourceType.Installment.Uob,
     )
+    object UobWlb : InstallmentResource(
+        iconRes = R.drawable.payment_uob,
+        titleRes = R.string.payment_method_installment_uob_title,
+        indicatorIconRes = R.drawable.ic_next,
+        sourceType = SourceType.Installment.UobWlb,
+    )
 }
 
 internal data class InstallmentTermResource(

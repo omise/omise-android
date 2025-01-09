@@ -46,6 +46,7 @@
     <string name="payment_preference_installment_ttb_key" translatable="false">installment_ttb</string>
     <string name="payment_preference_installment_ttb_wlb_key" translatable="false">installment_wlb_ttb</string>
     <string name="payment_preference_installment_uob_key" translatable="false">installment_uob</string>
+    <string name="payment_preference_installment_uob_wlb_key" translatable="false">installment_wlb_uob</string>
     <string name="payment_preference_dana_key" translatable="false">dana</string>
     <string name="payment_preference_econtext_key" translatable="false">econtext</string>
     <string name="payment_preference_fpx_key" translatable="false">fpx</string>
@@ -103,6 +104,7 @@
     <string name="payment_preference_installment_ttb_title" translatable="false">TMBThanachart - Installment</string>
     <string name="payment_preference_installment_ttb_wlb_title" translatable="false">TMBThanachart - Whitelabel Installment</string>
     <string name="payment_preference_installment_uob_title" translatable="false">UOB - Installment</string>
+    <string name="payment_preference_installment_uob_wlb_title" translatable="false">UOB - Whitelabel Installment</string>
     <string name="payment_preference_dana_title" translatable="false">DANA</string>
     <string name="payment_preference_econtext_title" translatable="false">econtext</string>
     <string name="payment_preference_fpx_title" translatable="false">FPX</string>

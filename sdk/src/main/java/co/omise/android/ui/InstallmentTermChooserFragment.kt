@@ -56,6 +56,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 SourceType.Installment.Ttb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.TtbWlb to Amount.fromLocalAmount(500.0, currency),
                 SourceType.Installment.Uob to Amount.fromLocalAmount(500.0, currency),
+                SourceType.Installment.UobWlb to Amount.fromLocalAmount(500.0, currency),
             )
         val interestRatePerType =
             mapOf(
@@ -75,6 +76,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                 SourceType.Installment.Ttb to 0.008,
                 SourceType.Installment.TtbWlb to 0.008,
                 SourceType.Installment.Uob to 0.0064,
+                SourceType.Installment.UobWlb to 0.0064,
             )
         val sourceType = (installment?.backendType as? BackendType.Source)?.sourceType!!
         // White label installments require token and source
