@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.5.0
+* **ADDED:** `installment_wlb_uob` source support.
+
 ## V5.4.0
 * **Fix:** Include missing classes in proguard when pro guard is enabled to prevent SDK crashing in particular scenarios.
 
