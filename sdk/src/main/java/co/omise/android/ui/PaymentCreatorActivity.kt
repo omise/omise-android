@@ -73,33 +73,22 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (intent.getBooleanExtra(EXTRA_IS_SECURE, true)) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
-
-        setContentView(R.layout.activity_payment_creator)
-
-        progressBar = findViewById(R.id.progressBar)
-        errorMessage = findViewById(R.id.errorMessage)
-        // Initially hide the ProgressBar and error message
-        progressBar.visibility = ProgressBar.GONE
-        errorMessage.visibility = TextView.GONE
-
-        title = getString(R.string.payment_chooser_title)
-        val onBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (supportFragmentManager.findFragmentById(R.id.payment_creator_container) is PaymentChooserFragment) {
-                        setResult(Activity.RESULT_CANCELED)
-                        finish()
-                    }
-                }
-            }
-
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initialize()
+        // Prepare arguments to pass to Flutter
+        val arguments = mapOf(
+            "pkey" to pkey,
+            "amount" to amount,
+            "currency" to currency,
+        )
 
-        loadCapability()
+        // Launch FlutterUIHostActivity with the desired route and arguments
+        FlutterUIHostActivity.launchActivity(
+            this,
+            "selectPaymentMethod",   // Flutter route or function to invoke
+            arguments                // Pass arguments as a map
+        )
+
+        finish()
     }
 
     // Set the menu button to close the view by the user

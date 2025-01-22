@@ -22,6 +22,10 @@ android {
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
         consumerProguardFiles 'proguard-rules.pro'
+        ndk {
+            // Filter for architectures supported by Flutter
+            abiFilters.addAll(["armeabi-v7a", "arm64-v8a", "x86_64"])
+        }
     }
 
     buildTypes {
@@ -208,8 +212,8 @@ dependencies {
     // Netcetera 3SD SDK
     implementation "org.slf4j:slf4j-api:1.7.36"
     implementation "com.github.tony19:logback-android:1.3.0-3"
+    implementation 'com.omise.omise_flutter_module:flutter_release:1.0'
 }
-
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
