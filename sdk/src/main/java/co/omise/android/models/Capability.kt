@@ -4,7 +4,7 @@ import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import co.omise.android.models.PaymentMethod.Companion.createSourceTypeMethod
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import okhttp3.HttpUrl
 import org.joda.time.DateTime
 

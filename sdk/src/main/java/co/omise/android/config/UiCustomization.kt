@@ -1,7 +1,7 @@
 package co.omise.android.config
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 abstract class CustomizationBuilder<T> {
     protected var textFontSize: Int? = null

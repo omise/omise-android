@@ -8,13 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.webkit.CookieManager
-import android.webkit.JsPromptResult
-import android.webkit.JsResult
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
@@ -32,12 +26,12 @@ import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.UiCustomization
 import co.omise.android.config.UiCustomizationType
+import co.omise.android.databinding.ActivityAuthorizingPaymentBinding
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Authentication
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
 
 /**
@@ -47,7 +41,9 @@ import org.jetbrains.annotations.TestOnly
  * app by default but the Intent callback needs to be handled by the implementer.
  */
 class AuthorizingPaymentActivity : AppCompatActivity() {
-    private val webView: WebView by lazy { authorizing_payment_webview }
+
+    private lateinit var binding: ActivityAuthorizingPaymentBinding
+    private val webView: WebView by lazy { binding.authorizingPaymentWebview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
     private lateinit var threeDSRequestorAppURL: String
@@ -67,11 +63,15 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enable View Binding
+        binding = ActivityAuthorizingPaymentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        setContentView(R.layout.activity_authorizing_payment)
         setupActionBarTitle()
         externalActivityLauncher =
             registerForActivityResult(
@@ -161,54 +161,41 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun setupWebViewClient() {
-        webView.webViewClient =
-            object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(
-                    view: WebView,
-                    request: WebResourceRequest,
-                ): Boolean {
-                    val uri = request.url
-                    return if (verifier.verifyURL(uri)) {
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                val uri = request.url
+                return when {
+                    verifier.verifyURL(uri) -> {
                         finishActivityWithSuccessful(uri.toString())
                         true
-                    } else if (verifier.verifyExternalURL(uri)) {
+                    }
+                    verifier.verifyExternalURL(uri) -> {
                         openDeepLink(uri)
                         true
-                    } else {
-                        false
                     }
+                    else -> false
                 }
             }
-        webView.webChromeClient =
-            object : WebChromeClient() {
-                override fun onJsAlert(
-                    view: WebView?,
-                    url: String?,
-                    message: String?,
-                    result: JsResult?,
-                ): Boolean {
-                    AlertDialog.Builder(this@AuthorizingPaymentActivity)
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
-                        .setOnCancelListener { result?.cancel() }
-                        .show()
-                    return true
-                }
+        }
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                AlertDialog.Builder(this@AuthorizingPaymentActivity)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
+                    .setOnCancelListener { result?.cancel() }
+                    .show()
+                return true
+            }
 
-                override fun onJsConfirm(
-                    view: WebView?,
-                    url: String?,
-                    message: String?,
-                    result: JsResult?,
-                ): Boolean {
-                    AlertDialog.Builder(this@AuthorizingPaymentActivity)
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
-                        .setNegativeButton(android.R.string.cancel) { _, _ -> result?.confirm() }
-                        .setOnCancelListener { result?.cancel() }
-                        .show()
-                    return true
-                }
+            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                AlertDialog.Builder(this@AuthorizingPaymentActivity)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
+                    .setNegativeButton(android.R.string.cancel) { _, _ -> result?.cancel() }
+                    .setOnCancelListener { result?.cancel() }
+                    .show()
+                return true
+            }
 
                 override fun onJsPrompt(
                     view: WebView?,
@@ -254,14 +241,13 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun openDeepLink(uri: Uri) {
-        isDeepLinkSuccOpened =
-            try {
-                val externalIntent = Intent(Intent.ACTION_VIEW, uri)
-                externalActivityLauncher.launch(externalIntent)
-                true
-            } catch (e: ActivityNotFoundException) {
-                false
-            }
+        isDeepLinkSuccOpened = try {
+            val externalIntent = Intent(Intent.ACTION_VIEW, uri)
+            externalActivityLauncher.launch(externalIntent)
+            true
+        } catch (e: ActivityNotFoundException) {
+            false
+        }
     }
 
     private fun setupActionBarTitle() {
@@ -300,24 +286,19 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleExternalActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
+    private fun handleExternalActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_EXTERNAL_CODE && isDeepLinkSuccOpened) {
             finishActivityWithSuccessful(data)
         }
     }
 
     override fun onDestroy() {
-        // Cleanup WebView
         webView.clearCache(true)
         webView.clearHistory()
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.removeAllCookies(null)
-        cookieManager.flush()
-
+        CookieManager.getInstance().apply {
+            removeAllCookies(null)
+            flush()
+        }
         super.onDestroy()
     }
 
@@ -329,33 +310,27 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
             domStorageEnabled = true
             databaseEnabled = true
         }
-
         runOnUiThread {
             if (verifier.isReady) {
-                webView.visibility = View.VISIBLE
-                webView.loadUrl(verifier.authorizedURLString)
+                binding.authorizingPaymentWebview.visibility = View.VISIBLE
+                binding.authorizingPaymentWebview.loadUrl(verifier.authorizedURLString)
             }
         }
     }
 
     private fun finishActivityWithSuccessful(returnedUrl: String) {
-        val resultIntent =
-            Intent().apply {
-                putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
-                putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
-            }
+        val resultIntent = Intent().apply {
+            putExtra(EXTRA_RETURNED_URLSTRING, returnedUrl)
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS1Completed(returnedUrl))
+        }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 
     private fun finishActivityWithSuccessful(status: TransactionStatus) {
-        val resultIntent =
-            Intent().apply {
-                putExtra(
-                    EXTRA_AUTHORIZING_PAYMENT_RESULT,
-                    ThreeDS2Completed(status),
-                )
-            }
+        val resultIntent = Intent().apply {
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(status))
+        }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
@@ -366,10 +341,9 @@ class AuthorizingPaymentActivity : AppCompatActivity() {
     }
 
     private fun finishActivityWithFailure(throwable: Throwable) {
-        val resultIntent =
-            Intent().apply {
-                putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
-            }
+        val resultIntent = Intent().apply {
+            putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, Failure(throwable))
+        }
         if (arrayOf(
                 ChallengeStatus.PROTOCOL_ERROR.value,
                 ChallengeStatus.RUNTIME_ERROR.value,

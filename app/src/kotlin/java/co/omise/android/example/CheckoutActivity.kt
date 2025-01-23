@@ -15,45 +15,25 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
-import co.omise.android.api.Client
-import co.omise.android.api.RequestListener
-import co.omise.android.config.ButtonCustomization
-import co.omise.android.config.ButtonCustomizationBuilder
-import co.omise.android.config.ButtonType
-import co.omise.android.config.LabelCustomizationBuilder
-import co.omise.android.config.TextBoxCustomizationBuilder
-import co.omise.android.config.ThemeConfig
-import co.omise.android.config.ToolbarCustomizationBuilder
-import co.omise.android.config.UiCustomizationBuilder
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_THREE_DS_REQUESTOR_APP_URL
+import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_UI_CUSTOMIZATION
+import co.omise.android.config.*
 import co.omise.android.models.Amount
 import co.omise.android.models.Source
 import co.omise.android.models.Token
-import co.omise.android.ui.AuthorizingPaymentActivity
-import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_THREE_DS_REQUESTOR_APP_URL
-import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_UI_CUSTOMIZATION
-import co.omise.android.ui.AuthorizingPaymentResult
-import co.omise.android.ui.CreditCardActivity
-import co.omise.android.ui.OmiseActivity
-import co.omise.android.ui.PaymentCreatorActivity
+import co.omise.android.ui.*
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_checkout.amount_edit
-import kotlinx.android.synthetic.main.activity_checkout.authorize_url_button
-import kotlinx.android.synthetic.main.activity_checkout.choose_payment_method_button
-import kotlinx.android.synthetic.main.activity_checkout.credit_card_button
-import kotlinx.android.synthetic.main.activity_checkout.currency_edit
 
 inline fun <reified T : Parcelable> Intent.parcelable(key: String?): T? = when {
     // https://stackoverflow.com/questions/72571804/getserializableextra-and-getparcelableextra-are-deprecated-what-is-the-alternat/73543350#73543350
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getParcelableExtra(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
-
 class CheckoutActivity : AppCompatActivity() {
 
     companion object {
-
         private const val TAG = "CheckoutActivity"
-        private const val PUBLIC_KEY = "[PUBLIC_KEY]"
+        private const val PUBLIC_KEY = "pkey_test_5tnt1gxjf6ecypmkfi8"
         private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
         private const val GOOGLEPAY_REQUEST_BILLING_ADDRESS = false
         private const val GOOGLEPAY_REQUEST_PHONE_NUMBER = false
@@ -64,14 +44,12 @@ class CheckoutActivity : AppCompatActivity() {
         private const val CREDIT_CARD_REQUEST_CODE = 0x3D7
     }
 
-    private val amountEdit: EditText by lazy { amount_edit }
-    private val currencyEdit: EditText by lazy { currency_edit }
-    private val choosePaymentMethodButton: Button by lazy { choose_payment_method_button }
-    private val creditCardButton: Button by lazy { credit_card_button }
-    private val authorizeUrlButton: Button by lazy { authorize_url_button }
-    private val snackbar: Snackbar by lazy {
-        Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT)
-    }
+    private lateinit var amountEdit: EditText
+    private lateinit var currencyEdit: EditText
+    private lateinit var choosePaymentMethodButton: Button
+    private lateinit var creditCardButton: Button
+    private lateinit var authorizeUrlButton: Button
+    private lateinit var snackbar: Snackbar
 
     private lateinit var authorizingPaymentLauncher: ActivityResultLauncher<Intent>
     private lateinit var paymentCreatorLauncher: ActivityResultLauncher<Intent>
@@ -82,36 +60,15 @@ class CheckoutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_checkout)
 
         supportActionBar?.title = getString(R.string.activity_checkout)
-        authorizingPaymentLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            handleActivityResult(
-                AUTHORIZING_PAYMENT_REQUEST_CODE,
-                result.resultCode,
-                result.data
-            )
-        }
 
-        paymentCreatorLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            handleActivityResult(
-                PAYMENT_CREATOR_REQUEST_CODE,
-                result.resultCode,
-                result.data
-            )
-        }
+        amountEdit = findViewById(R.id.amount_edit)
+        currencyEdit = findViewById(R.id.currency_edit)
+        choosePaymentMethodButton = findViewById(R.id.choose_payment_method_button)
+        creditCardButton = findViewById(R.id.credit_card_button)
+        authorizeUrlButton = findViewById(R.id.authorize_url_button)
+        snackbar = Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT)
 
-        creditCardLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            handleActivityResult(
-                CREDIT_CARD_REQUEST_CODE,
-                result.resultCode,
-                result.data
-            )
-        }
-
+        setupActivityLaunchers()
 
         choosePaymentMethodButton.setOnClickListener { choosePaymentMethod() }
         creditCardButton.setOnClickListener { payByCreditCard() }
@@ -120,7 +77,20 @@ class CheckoutActivity : AppCompatActivity() {
                 startAuthoringPaymentActivity(authorizeUrl, returnUrl)
             }
         }
+    }
 
+    private fun setupActivityLaunchers() {
+        authorizingPaymentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            handleActivityResult(AUTHORIZING_PAYMENT_REQUEST_CODE, result.resultCode, result.data)
+        }
+
+        paymentCreatorLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            handleActivityResult(PAYMENT_CREATOR_REQUEST_CODE, result.resultCode, result.data)
+        }
+
+        creditCardLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            handleActivityResult(CREDIT_CARD_REQUEST_CODE, result.resultCode, result.data)
+        }
     }
 
     private fun choosePaymentMethod() {
@@ -130,7 +100,7 @@ class CheckoutActivity : AppCompatActivity() {
         val currency = currencyEdit.text.toString().trim().lowercase()
         val amount = Amount.fromLocalAmount(localAmount, currency)
 
-        Intent(this, PaymentCreatorActivity::class.java).run {
+        val intent = Intent(this, PaymentCreatorActivity::class.java).apply {
             putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
             putExtra(OmiseActivity.EXTRA_AMOUNT, amount.amount)
             putExtra(OmiseActivity.EXTRA_CURRENCY, amount.currency)
@@ -141,17 +111,16 @@ class CheckoutActivity : AppCompatActivity() {
             if (isUsedSpecificsPaymentMethods) {
                 putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this@CheckoutActivity))
             }
-
-            paymentCreatorLauncher.launch(this)
         }
+        paymentCreatorLauncher.launch(intent)
+
     }
 
-
     private fun payByCreditCard() {
-        Intent(this, CreditCardActivity::class.java).run {
+        val intent = Intent(this, CreditCardActivity::class.java).apply {
             putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
-            creditCardLauncher.launch(this)
         }
+        creditCardLauncher.launch(intent)
     }
 
     private fun startAuthoringPaymentActivity(authorizeUrl: String, returnUrl: String) {

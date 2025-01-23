@@ -3,8 +3,8 @@ package co.omise.android.models
 import co.omise.android.api.Endpoint
 import co.omise.android.api.RequestBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.TypeParceler
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.TypeParceler
 import okhttp3.HttpUrl
 import okhttp3.RequestBody
 import org.joda.time.DateTime
