@@ -3,43 +3,9 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.WindowManager
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
-import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.Fragment
-import co.omise.android.R
-import co.omise.android.api.Client
-import co.omise.android.api.Request
-import co.omise.android.api.RequestListener
-import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.parcelable
-import co.omise.android.extensions.parcelableNullable
-import co.omise.android.models.APIError
-import co.omise.android.models.Bank
-import co.omise.android.models.Capability
-import co.omise.android.models.Model
-import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
-import co.omise.android.models.SourceType
-import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Token
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AMOUNT
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CARD_BRANDS
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CURRENCY
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_MERCHANT_ID
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
-import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
-import org.jetbrains.annotations.TestOnly
-import java.io.IOError
 
 /**
  * PaymentCreatorActivity is the parent activity that controls the navigation between
@@ -74,6 +40,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     }
 
     // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
