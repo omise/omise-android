@@ -13,7 +13,7 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.Token
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test

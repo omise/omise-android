@@ -2,7 +2,7 @@ package co.omise.android
 
 import android.content.Intent
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.lang.Exception
 
 /**

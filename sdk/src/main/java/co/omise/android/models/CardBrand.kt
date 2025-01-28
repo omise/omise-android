@@ -3,7 +3,7 @@ package co.omise.android.models
 import android.os.Parcelable
 import co.omise.android.R
 import kotlinx.android.parcel.IgnoredOnParcel
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.regex.Pattern
 
 /**

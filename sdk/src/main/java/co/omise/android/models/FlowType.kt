@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Parcel
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
-import kotlinx.android.parcel.Parceler
+import kotlinx.parcelize.Parceler
 
 /**
  * Represents Source Flow object.

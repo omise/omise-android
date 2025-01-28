@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'jacoco'
 apply plugin: 'org.sonarqube'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
@@ -10,6 +10,7 @@ apply plugin: 'org.jlleitschuh.gradle.ktlint'
 android {
     buildFeatures {
         buildConfig true
+        viewBinding true
     }
     defaultConfig {
         namespace 'co.omise.android'
@@ -51,10 +52,6 @@ android {
     lintOptions {
         abortOnError false
         disable 'InvalidPackage' // okio
-    }
-
-    androidExtensions {
-        experimental = true
     }
 
     testOptions {

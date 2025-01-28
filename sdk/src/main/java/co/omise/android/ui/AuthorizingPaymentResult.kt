@@ -1,7 +1,7 @@
 package co.omise.android.ui
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * The result from the [AuthorizingPaymentResult].
