@@ -3,6 +3,8 @@ package co.omise.android.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Source
 import co.omise.android.models.Token
@@ -19,9 +21,29 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
 
+    private lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initialize()
+        flutterActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val token = result.data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
+            val source = result.data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
+            val intent = Intent().apply {
+                token?.let {
+                    putExtra(EXTRA_TOKEN, it.id)
+                    putExtra(EXTRA_TOKEN_OBJECT, it)
+                    putExtra(EXTRA_CARD_OBJECT, it.card)
+                }
+
+                source?.let {
+                    putExtra(EXTRA_SOURCE_OBJECT, it)
+                }
+            }
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
         // Prepare arguments to pass to Flutter
         val arguments = mapOf(
             "pkey" to pkey,
@@ -31,47 +53,11 @@ class PaymentCreatorActivity : OmiseActivity() {
 
         // Launch FlutterUIHostActivity with the desired route and arguments
         FlutterUIHostActivity.launchActivity(
+            flutterActivityLauncher,
             this,
-            "selectPaymentMethod",   // Flutter route or function to invoke
-            arguments                // Pass arguments as a map
+            "selectPaymentMethod",   // Flutter function to invoke
+            arguments  // Pass arguments as a map
         )
-
-        finish()
-    }
-
-    // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CREDIT_CARD_WITH_SOURCE && resultCode == Activity.RESULT_OK) {
-            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
-            val source = data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
-            val intent =
-                Intent().apply {
-                    putExtra(EXTRA_TOKEN, token?.id)
-                    putExtra(EXTRA_TOKEN_OBJECT, token)
-                    putExtra(EXTRA_CARD_OBJECT, token?.card)
-                    putExtra(EXTRA_SOURCE_OBJECT, source)
-                }
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
-
-        if (requestCode == REQUEST_CREDIT_CARD && resultCode == Activity.RESULT_OK) {
-            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
-            val intent =
-                Intent().apply {
-                    putExtra(EXTRA_TOKEN, token?.id)
-                    putExtra(EXTRA_TOKEN_OBJECT, token)
-                    putExtra(EXTRA_CARD_OBJECT, token?.card)
-                }
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
     }
 
     private fun initialize() {
