@@ -1,4 +1,4 @@
-# Omise Payments Android SDK
+# Omise Android SDK
 
 [![](https://img.shields.io/maven-central/v/co.omise/omise-android.svg?style=flat-square)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22co.omise%22%20AND%20a%3A%22omise-android%22)
 [![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@omise.co)
@@ -7,7 +7,7 @@
 Omise Payments is a payment service provider currently operating in Thailand. Omise Payments provides a set of clean APIs
 that help merchants of any size accept cards online.
 
-Omise Payments Android SDK provides Android bindings for the Omise Payments [Token](https://docs.omise.co/tokens-api)
+Omise Android SDK provides Android bindings for the Omise Payments [Token](https://docs.omise.co/tokens-api)
 and [Source](https://docs.omise.co/sources-api) API and components for entering credit card information.
 
 ## Security Warning
@@ -221,7 +221,7 @@ method.
 
 ### Payment creator activity
 
-Another way to use the Omise Payments Android SDK is to integrate the `PaymentCreatorActivity`
+Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity`
 to allow users to create a payment source from the list of sources available for the account.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml` file as follows:
@@ -554,7 +554,7 @@ style.xml
 
 ## Authorizing payment
 
-Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.omise.co/internet-banking), [Mobile Banking SCB](https://docs.omise.co/mobile-banking-scb), etc. Omise Payments Android SDK provides a built-in class to handle the authorization.
+Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.omise.co/internet-banking), [Mobile Banking SCB](https://docs.omise.co/mobile-banking-scb), etc. Omise Android SDK provides a built-in class to handle the authorization.
 
 On payment methods that require opening the external app (e.g., mobile banking app) to authorize the transaction, set the _return_uri_ to a **deep link** or **app link** to be able to open the merchant app. Otherwise, after the cardholder authorizes the transaction on the external app, the flow redirects to the normal link in the _return_uri_, and opens it on the browser app, resulting in the payment not being completed.
 Some authorized URLs will be processed using the in-app browser flow, and others will be processed using the native flow from the SDK (3DS v2), and the SDK automatically handles all of this.
