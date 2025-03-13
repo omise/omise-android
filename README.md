@@ -4,10 +4,10 @@
 [![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@omise.co)
 [![Android CI](https://github.com/omise/omise-android/workflows/Android%20CI/badge.svg)](https://github.com/omise/omise-android/actions)
 
-Omise Payments is a payment service provider currently operating in Thailand. Omise Payments provides a set of clean APIs
+Omise is a payment service provider currently operating in Thailand. Omise provides a set of clean APIs
 that help merchants of any size accept cards online.
 
-Omise Android SDK provides Android bindings for the Omise Payments [Token](https://docs.omise.co/tokens-api)
+Omise Android SDK provides Android bindings for the Omise [Token](https://docs.omise.co/tokens-api)
 and [Source](https://docs.omise.co/sources-api) API and components for entering credit card information.
 
 ## Security Warning
@@ -16,7 +16,7 @@ and [Source](https://docs.omise.co/sources-api) API and components for entering 
 
 ## Requirements
 
-- Public key. [Register for an Omise Payments account](https://dashboard.omise.co/signup) to obtain your API keys.
+- Public key. [Register for an Omise account](https://dashboard.omise.co/signup) to obtain your API keys.
 - Android 5.0+ (API 21) target or higher.
 - Android Studio and Gradle build system.
 
@@ -105,7 +105,7 @@ private fun payByCreditCard() {
 }
 ```
 
-Replace the string `pkey_test_123` with the public key obtained from your Omise Payments dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 We discuss the `handleActivityResult` function in the following section.
 
 After the end-user completes entering credit card information, the activity result
@@ -134,9 +134,9 @@ resulting `Intent` with the following code:
 - `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
   this if you only need the ID and not the card data.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
-  object returned from the Omise Payments API.
+  object returned from the Omise API.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
-  that is part of the `Token` object returned from the Omise Payments API.
+  that is part of the `Token` object returned from the Omise API.
 
 The `getParcelableExtra(key)` function is deprecated and no longer recommended to be used. We advise you to
 create your custom function to retrieve the necessary information, as different Android versions may require you to
@@ -267,7 +267,7 @@ private fun showPaymentCreatorActivity() {
 }
 ```
 
-Replace the string `pkey_test_123` with the public key obtained from your Omise Payments dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 
 The SDK will automatically fetch your capabilities, but you can use this EXTRA value to pass custom payment methods.
 
@@ -378,7 +378,7 @@ override fun navigateToGooglePayForm() {
 }
 ```
 
-- Replace the `OMISE_PKEY` with your Omise Payments public key obtained from our dashboard.
+- Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
 - Replace the `amount` with the amount you want to charge in subunits.
 - Replace the `currency` with your currency in the ISO 4217 format.
 - Replace the `cardBrands` with the list from our [capability API](https://docs.omise.co/capability-api) or leave it blank to use default values.
@@ -394,9 +394,9 @@ resulting `Intent` with the following code:
 - `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
   this if you only need the ID and not the card data.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
-  object returned from the Omise Payments API.
+  object returned from the Omise API.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
-  that is part of the `Token` object returned from the Omise Payments API.
+  that is part of the `Token` object returned from the Omise API.
 
 #### Using your activity
 
