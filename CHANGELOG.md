@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## V5.6.0
-* **CHANGED:** Rebrand OPN Payment to Omise Payment.
+* **CHANGED:** Rebrand OPN Payment to Omise.
 * 
 ## V5.5.0
 * **ADDED:** `installment_wlb_uob` source support.
