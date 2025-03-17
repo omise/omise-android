@@ -1,29 +1,29 @@
-# Opn Payments Android SDK
+# Omise Android SDK
 
 [![](https://img.shields.io/maven-central/v/co.omise/omise-android.svg?style=flat-square)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22co.omise%22%20AND%20a%3A%22omise-android%22)
-[![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@opn.ooo)
+[![](https://img.shields.io/badge/email-support-yellow.svg?style=flat-square)](mailto:support@omise.co)
 [![Android CI](https://github.com/omise/omise-android/workflows/Android%20CI/badge.svg)](https://github.com/omise/omise-android/actions)
 
-Opn Payments is a payment service provider currently operating in Thailand. Opn Payments provides a set of clean APIs
+Omise is a payment service provider currently operating in Thailand. Omise provides a set of clean APIs
 that help merchants of any size accept cards online.
 
-Opn Payments Android SDK provides Android bindings for the Opn Payments [Token](https://docs.opn.ooo/tokens-api)
-and [Source](https://docs.opn.ooo/sources-api) API and components for entering credit card information.
+Omise Android SDK provides Android bindings for the Omise [Token](https://docs.omise.co/tokens-api)
+and [Source](https://docs.omise.co/sources-api) API and components for entering credit card information.
 
 ## Security Warning
 
-**It is imperative that you use at least the minimum recommended SDK version of `4.3.1` for security reasons. Any version below this poses severe risks of security vulnerabilities, bugs, and unexpected behaviors, which can be detrimental to your application. To avoid these risks and ensure the best user experience, it is highly recommended that you upgrade to the latest supported SDK version. Opn strongly advises the use of version `5.0.0` for superior performance and top-notch security.**
+**It is imperative that you use at least the minimum recommended SDK version of `4.3.1` for security reasons. Any version below this poses severe risks of security vulnerabilities, bugs, and unexpected behaviors, which can be detrimental to your application. To avoid these risks and ensure the best user experience, it is highly recommended that you upgrade to the latest supported SDK version. Omise strongly advises the use of version `5.0.0` for superior performance and top-notch security.**
 
 ## Requirements
 
-- Public key. [Register for an Opn Payments account](https://dashboard.omise.co/signup) to obtain your API keys.
+- Public key. [Register for an Omise account](https://dashboard.omise.co/signup) to obtain your API keys.
 - Android 5.0+ (API 21) target or higher.
 - Android Studio and Gradle build system.
 
 ## Merchant compliance
 
 **Card data should never transit through your server. We recommend that you follow our guide on how to safely
-[collect credit information](https://docs.opn.ooo/collecting-card-information).**
+[collect credit information](https://docs.omise.co/collecting-card-information).**
 
 To be authorized to create tokens server-side, you must have a currently valid PCI-DSS
 Attestation of Compliance (AoC) delivered by a certified QSA Auditor.
@@ -64,7 +64,7 @@ AuthorizingPaymentConfig.initialize(authPaymentConfig)
 The simplest way to use this SDK is to integrate the provided `CreditCardActivity`
 directly into your application. This activity contains a pre-made credit form and will
 automatically [tokenize card
-information](https://docs.opn.ooo/security-best-practices) for you.
+information](https://docs.omise.co/security-best-practices) for you.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -105,7 +105,7 @@ private fun payByCreditCard() {
 }
 ```
 
-Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 We discuss the `handleActivityResult` function in the following section.
 
 After the end-user completes entering credit card information, the activity result
@@ -134,9 +134,9 @@ resulting `Intent` with the following code:
 - `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
   this if you only need the ID and not the card data.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
-  object returned from the Opn Payments API.
+  object returned from the Omise API.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
-  that is part of the `Token` object returned from the Opn Payments API.
+  that is part of the `Token` object returned from the Omise API.
 
 The `getParcelableExtra(key)` function is deprecated and no longer recommended to be used. We advise you to
 create your custom function to retrieve the necessary information, as different Android versions may require you to
@@ -221,7 +221,7 @@ method.
 
 ### Payment creator activity
 
-Another way to use the Opn Payments Android SDK is to integrate the `PaymentCreatorActivity`
+Another way to use the Omise Android SDK is to integrate the `PaymentCreatorActivity`
 to allow users to create a payment source from the list of sources available for the account.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml` file as follows:
@@ -267,7 +267,7 @@ private fun showPaymentCreatorActivity() {
 }
 ```
 
-Replace the string `pkey_test_123` with the public key obtained from your Opn Payments dashboard.
+Replace the string `pkey_test_123` with the public key obtained from your Omise dashboard.
 
 The SDK will automatically fetch your capabilities, but you can use this EXTRA value to pass custom payment methods.
 
@@ -340,7 +340,7 @@ Two different results that could be returned are:
 
 ### Google Pay activity
 
-We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will automatically [tokenize the Google Pay token](https://docs.opn.ooo/security-best-practices) for you.
+We support GooglePay as a tokenization method in our payment gateway. This activity contains a pre-made `Pay with Google Pay` button and will automatically [tokenize the Google Pay token](https://docs.omise.co/security-best-practices) for you.
 
 To use it, first declare the availability of the activity in your `AndroidManifest.xml`
 file as follows:
@@ -378,10 +378,10 @@ override fun navigateToGooglePayForm() {
 }
 ```
 
-- Replace the `OMISE_PKEY` with your Opn Payments public key obtained from our dashboard.
+- Replace the `OMISE_PKEY` with your Omise public key obtained from our dashboard.
 - Replace the `amount` with the amount you want to charge in subunits.
 - Replace the `currency` with your currency in the ISO 4217 format.
-- Replace the `cardBrands` with the list from our [capability API](https://docs.opn.ooo/capability-api) or leave it blank to use default values.
+- Replace the `cardBrands` with the list from our [capability API](https://docs.omise.co/capability-api) or leave it blank to use default values.
 - Replace the `googlepayMerchantId` with your [Google Pay merchant ID](https://developers.google.com/pay/api/web/guides/setup) (not needed in test mode).
 - Set the `googlepayRequestBillingAddress` to `true` to attach the cardholder's name and billing address to the token.
 - When the cardholder's billing address is requested, set the `googlepayRequestPhoneNumber` to `true` to also attach the cardholder's phone number to the token.
@@ -394,9 +394,9 @@ resulting `Intent` with the following code:
 - `data.getStringExtra(OmiseActivity.EXTRA_TOKEN)` - The string ID of the token. Use
   this if you only need the ID and not the card data.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_TOKEN_OBJECT)` - The full `Token`
-  object returned from the Opn Payments API.
+  object returned from the Omise API.
 - `data.getParcelableExtra(OmiseActivity.EXTRA_CARD_OBJECT)` - The `Card` object
-  that is part of the `Token` object returned from the Opn Payments API.
+  that is part of the `Token` object returned from the Omise API.
 
 #### Using your activity
 
@@ -554,7 +554,7 @@ style.xml
 
 ## Authorizing payment
 
-Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.opn.ooo/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.opn.ooo/internet-banking), [Mobile Banking SCB](https://docs.opn.ooo/mobile-banking-scb), etc. Opn Payments Android SDK provides a built-in class to handle the authorization.
+Some payment methods require the customer to authorize the payment using an authorization URL. This includes [3-D Secure verification](https://docs.omise.co/fraud-protection#3-d-secure), [Internet Banking payment](https://docs.omise.co/internet-banking), [Mobile Banking SCB](https://docs.omise.co/mobile-banking-scb), etc. Omise Android SDK provides a built-in class to handle the authorization.
 
 On payment methods that require opening the external app (e.g., mobile banking app) to authorize the transaction, set the _return_uri_ to a **deep link** or **app link** to be able to open the merchant app. Otherwise, after the cardholder authorizes the transaction on the external app, the flow redirects to the normal link in the _return_uri_, and opens it on the browser app, resulting in the payment not being completed.
 Some authorized URLs will be processed using the in-app browser flow, and others will be processed using the native flow from the SDK (3DS v2), and the SDK automatically handles all of this.
