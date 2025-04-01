@@ -1,0 +1,123 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.prongbang.screen_protector",
+    "module": "screen_protector_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-e672b006cb34c921db85b8e2f482ed3144a4574b"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "screen_protector_profile-1.0.aar",
+          "url": "screen_protector_profile-1.0.aar",
+          "size": 3151,
+          "sha512": "e187b60d700b5e7f44ac93e46105ac357ce137281e1a73f2106ff7ac7ae977f22098a25c068eeb2cc0978246a430cbda693ebf1a57edd3e3a955931ef1536e56",
+          "sha256": "ffc3b8beeb38efc579f0314e03afdc8b61e76643ec08ffed41de1c8cfafafcc7",
+          "sha1": "bf056594a9b01f9a5ec752f885205a7e78c60c67",
+          "md5": "eb1e6a8c00462039d16967a5a7a224a5"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-e672b006cb34c921db85b8e2f482ed3144a4574b"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk7",
+          "version": {
+            "requires": "1.7.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "screen_protector_profile-1.0.aar",
+          "url": "screen_protector_profile-1.0.aar",
+          "size": 3151,
+          "sha512": "e187b60d700b5e7f44ac93e46105ac357ce137281e1a73f2106ff7ac7ae977f22098a25c068eeb2cc0978246a430cbda693ebf1a57edd3e3a955931ef1536e56",
+          "sha256": "ffc3b8beeb38efc579f0314e03afdc8b61e76643ec08ffed41de1c8cfafafcc7",
+          "sha1": "bf056594a9b01f9a5ec752f885205a7e78c60c67",
+          "md5": "eb1e6a8c00462039d16967a5a7a224a5"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "screen_protector_profile-1.0-sources.jar",
+          "url": "screen_protector_profile-1.0-sources.jar",
+          "size": 1410,
+          "sha512": "065179809df630ea71a66f33df4c4be29e52dcbf896fe4b3129742e505ecd8bf19038a6b149150ae321edf568ca67bf260fb0861b023e936321d308d9d9f982c",
+          "sha256": "5334cd3d389b31fe8847e35c47c8af67a2d63660e210f52b507266958e93ae0f",
+          "sha1": "d698d4f2e522a3e617149a14c79f2eb15b87c60d",
+          "md5": "6cd694b12c15e8dff05a159609dea637"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileJavaDocPublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "screen_protector_profile-1.0-javadoc.jar",
+          "url": "screen_protector_profile-1.0-javadoc.jar",
+          "size": 262695,
+          "sha512": "f13a22daeb1d0ad43542946cce4b3cbf03190828243f24c34f492a67a6edc95586f3f53d6fb30bce950d3ad96a58e9378c269fe8b82453f234ee51c9b734aff8",
+          "sha256": "8c87382033214d0b3161841c7d8523dfefe8cc58f7e192560532c96527d25657",
+          "sha1": "c7cc6f979b290794d2b4e1f3165ca7eb53022320",
+          "md5": "3c280892b5e46d404a327ddf9a00de78"
+        }
+      ]
+    }
+  ]
+}

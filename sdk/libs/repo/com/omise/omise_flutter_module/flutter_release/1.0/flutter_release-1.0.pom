@@ -37,6 +37,18 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>io.flutter.plugins.pay_android</groupId>
+      <artifactId>pay_android_release</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.prongbang.screen_protector</groupId>
+      <artifactId>screen_protector_release</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>io.flutter.plugins.urllauncher</groupId>
       <artifactId>url_launcher_android_release</artifactId>
       <version>1.0</version>
