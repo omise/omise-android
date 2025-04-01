@@ -70,10 +70,13 @@ class FlutterUIHostActivity : FlutterActivity() {
         }
                 MethodChannel(flutterEngine.dartExecutor, CHANNEL_NAME)
                     .setMethodCallHandler { call, result ->
-                        if (call.method == "selectPaymentMethodResult") {
-                            val resultData = call.arguments as? Map<*, *>
-                            val token = parseFromMap<Token>(resultData?.get("token") as? Map<String, Any>)
-                            val source = parseFromMap<Source>(resultData?.get("source") as? Map<String, Any>)
+                        val resultData = call.arguments as? Map<*, *>
+                        if(resultData == null){
+                            setResult(Activity.RESULT_CANCELED, intent)
+                            finish()
+                        } else if (call.method == "selectPaymentMethodResult") {
+                            val token = parseFromMap<Token>(resultData["token"] as? Map<String, Any>)
+                            val source = parseFromMap<Source>(resultData["source"] as? Map<String, Any>)
 
                             val intent = Intent().apply {
                                 token?.let {
