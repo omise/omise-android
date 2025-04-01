@@ -88,12 +88,4 @@ class PaymentCreatorActivity : OmiseActivity() {
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
         customCapability = intent.parcelable(EXTRA_CAPABILITY)
     }
-
-    companion object {
-        const val REQUEST_CREDIT_CARD = 100
-
-        // Used for payment methods that require both token and source to be created and the
-        // credit card activity is responsible for creating both source and token
-        const val REQUEST_CREDIT_CARD_WITH_SOURCE = 101
-    }
 }
