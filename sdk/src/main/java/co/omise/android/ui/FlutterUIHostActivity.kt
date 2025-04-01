@@ -74,7 +74,7 @@ class FlutterUIHostActivity : FlutterActivity() {
                         if(resultData == null){
                             setResult(Activity.RESULT_CANCELED, intent)
                             finish()
-                        } else if (call.method == "selectPaymentMethodResult") {
+                        } else  {
                             val token = parseFromMap<Token>(resultData["token"] as? Map<String, Any>)
                             val source = parseFromMap<Source>(resultData["source"] as? Map<String, Any>)
 
@@ -91,8 +91,6 @@ class FlutterUIHostActivity : FlutterActivity() {
                             }
                             setResult(Activity.RESULT_OK, intent)
                             finish()
-                        } else {
-                            result.notImplemented()
                         }
                     }
 
