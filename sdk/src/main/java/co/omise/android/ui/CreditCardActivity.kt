@@ -1,7 +1,12 @@
 package co.omise.android.ui
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import co.omise.android.extensions.parcelable
+import co.omise.android.models.Source
+import co.omise.android.models.Token
 
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
@@ -9,15 +14,41 @@ import android.view.WindowManager
 class CreditCardActivity : OmiseActivity() {
     private lateinit var pKey: String
 
+    private lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (intent.getBooleanExtra(EXTRA_IS_SECURE, true)) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
-
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not find ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        flutterActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val token = result.data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
+            val source = result.data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
+            val intent = Intent().apply {
+                token?.let {
+                    putExtra(EXTRA_TOKEN, it.id)
+                    putExtra(EXTRA_TOKEN_OBJECT, it)
+                    putExtra(EXTRA_CARD_OBJECT, it.card)
+                }
 
+                source?.let {
+                    putExtra(EXTRA_SOURCE_OBJECT, it)
+                }
+            }
+            setResult(result.resultCode, intent)
+            finish()
+        }
+        // Prepare arguments to pass to Flutter
+        val arguments = mapOf(
+            "pkey" to pKey,
+        )
+
+        // Launch FlutterUIHostActivity with the desired route and arguments
+        FlutterUIHostActivity.launchActivity(
+            flutterActivityLauncher,
+            this,
+            "openCardPage",   // Flutter function to invoke
+            arguments  // Pass arguments as a map
+        )
     }
 }

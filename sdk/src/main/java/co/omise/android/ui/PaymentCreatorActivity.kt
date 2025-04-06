@@ -1,11 +1,11 @@
 package co.omise.android.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import co.omise.android.extensions.parcelable
+import co.omise.android.models.Capability
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 
@@ -20,6 +20,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private lateinit var googlepayMerchantId: String
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
+    private var customCapability: Capability? = null
 
     private lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
 
@@ -41,7 +42,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                     putExtra(EXTRA_SOURCE_OBJECT, it)
                 }
             }
-            setResult(Activity.RESULT_OK, intent)
+            setResult(result.resultCode, intent)
             finish()
         }
         // Prepare arguments to pass to Flutter
@@ -49,6 +50,22 @@ class PaymentCreatorActivity : OmiseActivity() {
             "pkey" to pkey,
             "amount" to amount,
             "currency" to currency,
+            "selectedPaymentMethods" to customCapability?.paymentMethods?.map { it.name },
+            "selectedTokenizationMethods" to customCapability?.tokenizationMethods,
+            "googlePayMerchantId" to googlepayMerchantId,
+            "googlePayRequestBillingAddress" to googlepayRequestBillingAddress,
+            "googlePayRequestPhoneNumber" to googlepayRequestPhoneNumber,
+            // TODO: Replace hard coded data with user input once the requested data is added to the SDK
+            "atomeItems" to listOf(mapOf(
+                "sku" to "3427842",
+                "category" to "Shoes",
+                "name" to "Prada shoes",
+                "quantity" to 1,
+                "amount" to amount,
+                "item_uri" to "www.kan.com/product/shoes",
+                "image_uri" to "www.kan.com/product/shoes/image",
+                "brand" to "Gucci"
+            ))
         )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
@@ -69,14 +86,6 @@ class PaymentCreatorActivity : OmiseActivity() {
         currency = requireNotNull(intent.getStringExtra(EXTRA_CURRENCY)) { "${::EXTRA_CURRENCY.name} must not be null." }
         googlepayMerchantId = intent.getStringExtra(EXTRA_GOOGLEPAY_MERCHANT_ID) ?: "[GOOGLEPAY_MERCHANT_ID]"
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
-        googlepayRequestPhoneNumber = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)
-    }
-
-    companion object {
-        const val REQUEST_CREDIT_CARD = 100
-
-        // Used for payment methods that require both token and source to be created and the
-        // credit card activity is responsible for creating both source and token
-        const val REQUEST_CREDIT_CARD_WITH_SOURCE = 101
+        customCapability = intent.parcelable(EXTRA_CAPABILITY)
     }
 }
