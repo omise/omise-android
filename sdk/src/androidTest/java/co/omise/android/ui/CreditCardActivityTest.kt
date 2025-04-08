@@ -12,19 +12,19 @@ import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.Token
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.*
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 @RunWith(AndroidJUnit4::class)
 class CreditCardActivityTest {
-
     private lateinit var context: Context
     private lateinit var mockFlutterActivityLauncher: ActivityResultLauncher<Intent>
     private lateinit var mockActivityResultRegistry: ActivityResultRegistry
-
 
     private val publicKey = "pkey_test_123"
 
@@ -37,14 +37,11 @@ class CreditCardActivityTest {
 
     @After
     fun tearDown() {
-        verifyNoMoreInteractions(mockFlutterActivityLauncher, )
-        reset(mockFlutterActivityLauncher, )
+        verifyNoMoreInteractions(mockFlutterActivityLauncher)
+        reset(mockFlutterActivityLauncher)
     }
 
-    private fun createIntent(
-        publicKey: String = this.publicKey,
-
-    ): Intent {
+    private fun createIntent(publicKey: String = this.publicKey): Intent {
         return Intent(context, CreditCardActivity::class.java).apply {
             putExtra(OmiseActivity.EXTRA_PKEY, publicKey)
         }
@@ -62,15 +59,15 @@ class CreditCardActivityTest {
 
     @Test
     fun activityResult_processesTokenResultCorrectly() {
-        val mockToken = Token(false,null,ChargeStatus.Pending,"object","id")
+        val mockToken = Token(false, null, ChargeStatus.Pending, "object", "id")
         val mockSource = Source(SourceType.PromptPay)
-        val resultIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, mockToken)
-            putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, mockSource)
-        }
+        val resultIntent =
+            Intent().apply {
+                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, mockToken)
+                putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, mockSource)
+            }
         ActivityScenario.launchActivityForResult<CreditCardActivity>(createIntent()).onActivity {
-            it.handleFlutterResult(100,resultIntent)
+            it.handleFlutterResult(100, resultIntent)
         }
     }
-
 }

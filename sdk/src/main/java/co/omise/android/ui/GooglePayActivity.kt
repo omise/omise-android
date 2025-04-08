@@ -12,7 +12,7 @@ import co.omise.android.models.Token
 
 class GooglePayActivity : AppCompatActivity() {
     private lateinit var pKey: String
-    private  var cardNetworks: ArrayList<String>? = null
+    private var cardNetworks: ArrayList<String>? = null
     private var price: Long = 0
     private lateinit var currencyCode: String
     private lateinit var merchantId: String
@@ -22,20 +22,24 @@ class GooglePayActivity : AppCompatActivity() {
     private lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
 
     @VisibleForTesting
-    fun handleFlutterResult(resultCode: Int, data: Intent?) {
+    fun handleFlutterResult(
+        resultCode: Int,
+        data: Intent?,
+    ) {
         val token = data?.parcelable<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
         val source = data?.parcelable<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
-        val intent = Intent().apply {
-            token?.let {
-                putExtra(OmiseActivity.EXTRA_TOKEN, it.id)
-                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, it)
-                putExtra(OmiseActivity.EXTRA_CARD_OBJECT, it.card)
-            }
+        val intent =
+            Intent().apply {
+                token?.let {
+                    putExtra(OmiseActivity.EXTRA_TOKEN, it.id)
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, it)
+                    putExtra(OmiseActivity.EXTRA_CARD_OBJECT, it.card)
+                }
 
-            source?.let {
-                putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, it)
+                source?.let {
+                    putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, it)
+                }
             }
-        }
         setResult(resultCode, intent)
         finish()
     }
@@ -43,28 +47,31 @@ class GooglePayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initialize()
-        flutterActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleFlutterResult(result.resultCode, result.data)
-        }
+        flutterActivityLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleFlutterResult(result.resultCode, result.data)
+            }
         // Prepare arguments to pass to Flutter
-        val arguments = mapOf(
-            "pkey" to pKey,
-            "amount" to price,
-            "currency" to currencyCode,
-            "googlePayMerchantId" to merchantId,
-            "googlePayRequestBillingAddress" to requestBillingAddress,
-            "googlePayRequestPhoneNumber" to requestPhoneNumber,
-            "googlePayCardBrands" to cardNetworks
-        )
+        val arguments =
+            mapOf(
+                "pkey" to pKey,
+                "amount" to price,
+                "currency" to currencyCode,
+                "googlePayMerchantId" to merchantId,
+                "googlePayRequestBillingAddress" to requestBillingAddress,
+                "googlePayRequestPhoneNumber" to requestPhoneNumber,
+                "googlePayCardBrands" to cardNetworks,
+            )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
         FlutterUIHostActivity.launchActivity(
             flutterActivityLauncher,
             this,
-            "openGooglePay",   // Flutter function to invoke
-            arguments  // Pass arguments as a map
+            // Flutter function to invoke
+            "openGooglePay",
+            // Pass arguments as a map
+            arguments,
         )
-
     }
 
     private fun initialize() {
@@ -95,5 +102,4 @@ class GooglePayActivity : AppCompatActivity() {
                 "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER.name} must not be null."
             }
     }
-
 }

@@ -22,62 +22,75 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
     private var customCapability: Capability? = null
+
     @VisibleForTesting
     lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
 
     @VisibleForTesting
-    fun handleFlutterResult(resultCode: Int, data: Intent?) {
+    fun handleFlutterResult(
+        resultCode: Int,
+        data: Intent?,
+    ) {
         val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
         val source = data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
-        val intent = Intent().apply {
-            token?.let {
-                putExtra(EXTRA_TOKEN, it.id)
-                putExtra(EXTRA_TOKEN_OBJECT, it)
-                putExtra(EXTRA_CARD_OBJECT, it.card)
-            }
+        val intent =
+            Intent().apply {
+                token?.let {
+                    putExtra(EXTRA_TOKEN, it.id)
+                    putExtra(EXTRA_TOKEN_OBJECT, it)
+                    putExtra(EXTRA_CARD_OBJECT, it.card)
+                }
 
-            source?.let {
-                putExtra(EXTRA_SOURCE_OBJECT, it)
+                source?.let {
+                    putExtra(EXTRA_SOURCE_OBJECT, it)
+                }
             }
-        }
         setResult(resultCode, intent)
         finish()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initialize()
-        flutterActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleFlutterResult(result.resultCode, result.data)
-        }
+        flutterActivityLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleFlutterResult(result.resultCode, result.data)
+            }
         // Prepare arguments to pass to Flutter
-        val arguments = mapOf(
-            "pkey" to pkey,
-            "amount" to amount,
-            "currency" to currency,
-            "selectedPaymentMethods" to customCapability?.paymentMethods?.map { it.name },
-            "selectedTokenizationMethods" to customCapability?.tokenizationMethods,
-            "googlePayMerchantId" to googlepayMerchantId,
-            "googlePayRequestBillingAddress" to googlepayRequestBillingAddress,
-            "googlePayRequestPhoneNumber" to googlepayRequestPhoneNumber,
-            // TODO: Replace hard coded data with user input once the requested data is added to the SDK
-            "atomeItems" to listOf(mapOf(
-                "sku" to "3427842",
-                "category" to "Shoes",
-                "name" to "Prada shoes",
-                "quantity" to 1,
+        val arguments =
+            mapOf(
+                "pkey" to pkey,
                 "amount" to amount,
-                "item_uri" to "www.kan.com/product/shoes",
-                "image_uri" to "www.kan.com/product/shoes/image",
-                "brand" to "Gucci"
-            ))
-        )
+                "currency" to currency,
+                "selectedPaymentMethods" to customCapability?.paymentMethods?.map { it.name },
+                "selectedTokenizationMethods" to customCapability?.tokenizationMethods,
+                "googlePayMerchantId" to googlepayMerchantId,
+                "googlePayRequestBillingAddress" to googlepayRequestBillingAddress,
+                "googlePayRequestPhoneNumber" to googlepayRequestPhoneNumber,
+                // TODO: Replace hard coded data with user input once the requested data is added to the SDK
+                "atomeItems" to
+                    listOf(
+                        mapOf(
+                            "sku" to "3427842",
+                            "category" to "Shoes",
+                            "name" to "Prada shoes",
+                            "quantity" to 1,
+                            "amount" to amount,
+                            "item_uri" to "www.kan.com/product/shoes",
+                            "image_uri" to "www.kan.com/product/shoes/image",
+                            "brand" to "Gucci",
+                        ),
+                    ),
+            )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
         FlutterUIHostActivity.launchActivity(
             flutterActivityLauncher,
             this,
-            "selectPaymentMethod",   // Flutter function to invoke
-            arguments  // Pass arguments as a map
+            // Flutter function to invoke
+            "selectPaymentMethod",
+            // Pass arguments as a map
+            arguments,
         )
     }
 
@@ -92,6 +105,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
         customCapability = intent.parcelable(EXTRA_CAPABILITY)
     }
+
     companion object {
     }
 }

@@ -1,16 +1,11 @@
 package co.omise.android.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.models.Capability
 import co.omise.android.models.ChargeStatus
@@ -18,50 +13,45 @@ import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.Token
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.dart.DartExecutor
-import io.flutter.plugin.common.MethodChannel
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.*
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 @RunWith(AndroidJUnit4::class)
 class PaymentCreatorActivityTest {
-
     private lateinit var context: Context
     private lateinit var mockFlutterActivityLauncher: ActivityResultLauncher<Intent>
     private lateinit var mockActivityResultRegistry: ActivityResultRegistry
-
 
     private val publicKey = "pkey_test_123"
     private val amount = 1000L
     private val currency = "THB"
     private val googlePayMerchantId = "merchant_id_123"
-    private val capability = Capability(
-        id = "cap_test_123",
-        livemode = false,
-        location = "/capability",
-        paymentMethods = listOf(PaymentMethod("promptpay")).toMutableList(),
-        tokenizationMethods = listOf("googlepay")
-    )
+    private val capability =
+        Capability(
+            id = "cap_test_123",
+            livemode = false,
+            location = "/capability",
+            paymentMethods = listOf(PaymentMethod("promptpay")).toMutableList(),
+            tokenizationMethods = listOf("googlepay"),
+        )
 
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         mockFlutterActivityLauncher = mock()
         mockActivityResultRegistry = mock()
-
-
-
     }
 
     @After
     fun tearDown() {
-        verifyNoMoreInteractions(mockFlutterActivityLauncher, )
-        reset(mockFlutterActivityLauncher, )
+        verifyNoMoreInteractions(mockFlutterActivityLauncher)
+        reset(mockFlutterActivityLauncher)
     }
 
     private fun createIntent(
@@ -69,7 +59,7 @@ class PaymentCreatorActivityTest {
         amount: Long = this.amount,
         currency: String = this.currency,
         googlePayMerchantId: String? = this.googlePayMerchantId,
-        capability: Capability? = this.capability
+        capability: Capability? = this.capability,
     ): Intent {
         return Intent(context, PaymentCreatorActivity::class.java).apply {
             putExtra(OmiseActivity.EXTRA_PKEY, publicKey)
@@ -95,20 +85,19 @@ class PaymentCreatorActivityTest {
         }
     }
 
-
     @Test
     fun activityResult_processesTokenResultCorrectly() {
-        val mockToken = Token(false,null,ChargeStatus.Pending,"object","id")
+        val mockToken = Token(false, null, ChargeStatus.Pending, "object", "id")
         val mockSource = Source(SourceType.PromptPay)
-        val resultIntent = Intent().apply {
-            putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, mockToken)
-            putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, mockSource)
-        }
+        val resultIntent =
+            Intent().apply {
+                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, mockToken)
+                putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, mockSource)
+            }
 
         // Launch the PaymentCreatorActivity
-            ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(createIntent()).onActivity {
-                it.handleFlutterResult(100,resultIntent)
-            }
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(createIntent()).onActivity {
+            it.handleFlutterResult(100, resultIntent)
+        }
     }
-
 }
