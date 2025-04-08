@@ -16,6 +16,9 @@
             android:name="co.omise.android.ui.PaymentCreatorActivity"
             android:theme="@style/OmiseTheme" />
         <activity
+            android:name="co.omise.android.ui.FlutterUIHostActivity"
+            android:theme="@style/OmiseTheme" />
+        <activity
             android:name="co.omise.android.ui.TestFragmentActivity"
             android:theme="@style/OmiseTheme" />
     </application>

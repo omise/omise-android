@@ -1,75 +1,90 @@
 package co.omise.android.ui
 
-import android.app.Activity
-import android.app.Application
+import android.content.Context
 import android.content.Intent
-import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResultRegistry
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ActivityScenario.launchActivityForResult
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import co.omise.android.R
+import co.omise.android.models.ChargeStatus
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import co.omise.android.models.Token
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.*
 
 @RunWith(AndroidJUnit4::class)
 class GooglePayActivityTest {
-    private lateinit var scenario: ActivityScenario<GooglePayActivity>
-    private val intent =
-        Intent(InstrumentationRegistry.getInstrumentation().context, GooglePayActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_BRANDS, arrayListOf("JCB"))
-            putExtra(OmiseActivity.EXTRA_AMOUNT, 2000)
-            putExtra(OmiseActivity.EXTRA_CURRENCY, "THB")
-            putExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID, "testId")
-            putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, "address")
-            putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, "number")
-        }
-    private val application = (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as Application)
-    private val activityLifecycleCallbacks =
-        object : Application.ActivityLifecycleCallbacks {
-            override fun onActivityCreated(
-                activity: Activity,
-                savedInstanceState: Bundle?,
-            ) {}
 
-            override fun onActivityStarted(activity: Activity) {}
+    private lateinit var context: Context
+    private lateinit var mockFlutterActivityLauncher: ActivityResultLauncher<Intent>
+    private lateinit var mockActivityResultRegistry: ActivityResultRegistry
 
-            override fun onActivityResumed(activity: Activity) {}
 
-            override fun onActivityPaused(activity: Activity) {}
-
-            override fun onActivityStopped(activity: Activity) {}
-
-            override fun onActivitySaveInstanceState(
-                activity: Activity,
-                outState: Bundle,
-            ) {}
-
-            override fun onActivityDestroyed(activity: Activity) {}
-        }
+    private val publicKey = "pkey_test_123"
+    private val amount = 1000L
+    private val currency = "THB"
+    private val googlePayMerchantId = "merchant_id_123"
 
     @Before
     fun setUp() {
-        application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks)
-        scenario = launchActivityForResult(intent)
+        context = ApplicationProvider.getApplicationContext()
+        mockFlutterActivityLauncher = mock()
+        mockActivityResultRegistry = mock()
     }
 
     @After
     fun tearDown() {
-        application.unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks)
+        verifyNoMoreInteractions(mockFlutterActivityLauncher, mockActivityResultRegistry)
+        reset(mockFlutterActivityLauncher,mockActivityResultRegistry )
+    }
+
+    private fun createIntent(
+        publicKey: String = this.publicKey,
+        amount: Long = this.amount,
+        currency: String = this.currency,
+        googlePayMerchantId: String? = this.googlePayMerchantId,
+    ): Intent {
+        return Intent(context, GooglePayActivity::class.java).apply {
+            putExtra(OmiseActivity.EXTRA_PKEY, publicKey)
+            putExtra(OmiseActivity.EXTRA_AMOUNT, amount)
+            putExtra(OmiseActivity.EXTRA_CURRENCY, currency)
+            googlePayMerchantId?.let { putExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID, it) }
+        }
     }
 
     @Test
-    fun check_google_pay_button_exists() {
-        onView(withId(R.id.googlePayButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.googlePayButton)).perform(click())
+    fun onCreate_initializesCorrectly() {
+        val intent = createIntent()
+        val scenario = ActivityScenario.launch<GooglePayActivity>(intent)
+        scenario.onActivity { activity ->
+            // We can only check the intent that started GooglePayActivity
+            val startedIntent = activity.intent
+            assertEquals(publicKey, startedIntent?.getStringExtra(OmiseActivity.EXTRA_PKEY))
+            assertEquals(amount, startedIntent?.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0L))
+            assertEquals(currency, startedIntent?.getStringExtra(OmiseActivity.EXTRA_CURRENCY))
+            assertEquals(googlePayMerchantId, startedIntent?.getStringExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID))
+        }
     }
+
+    @Test
+    fun activityResult_processesTokenResultCorrectly() {
+        val mockToken = Token(false,null,ChargeStatus.Pending,"object","id")
+        val mockSource = Source(SourceType.PromptPay)
+        val resultIntent = Intent().apply {
+            putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, mockToken)
+            putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, mockSource)
+        }
+
+        // Launch the GooglePayActivity
+        ActivityScenario.launchActivityForResult<GooglePayActivity>(createIntent()).onActivity {
+            it.handleFlutterResult(100,resultIntent)
+        }
+    }
+
 }

@@ -7,16 +7,22 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.VisibleForTesting
 import co.omise.android.models.Serializer
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class FlutterUIHostActivity : FlutterActivity() {
 
     companion object {
         private const val CHANNEL_NAME = "omiseFlutterChannel"
+        @VisibleForTesting
+        var engineFlutter : FlutterEngine? = null
+        @VisibleForTesting
+        var methodChannel : MethodChannel? = null
 
         // Function to launch the Flutter Activity
         fun launchActivity(activityLauncher:  ActivityResultLauncher<Intent>,context:Context, methodName: String, arguments: Map<String, Any?>) {
@@ -46,13 +52,16 @@ class FlutterUIHostActivity : FlutterActivity() {
         // Retrieve the method name and arguments from the Intent
         val methodName = intent.getStringExtra("methodName")
         val arguments = intent.getSerializableExtra("arguments") as? HashMap<String, Any?>
-
-        val flutterEngine = this.flutterEngine
+        if(engineFlutter == null){
+            engineFlutter = this.flutterEngine
+        }
+        if(methodChannel == null){
+            methodChannel = MethodChannel(flutterEngine!!.dartExecutor, CHANNEL_NAME)
+        }
         // Invoke the Flutter method via MethodChannel
-        if (flutterEngine != null) {
         if (methodName != null && arguments != null) {
-            flutterEngine.dartExecutor.let {
-                MethodChannel(it, CHANNEL_NAME)
+
+                methodChannel!!
                     .invokeMethod(methodName, arguments, object : MethodChannel.Result {
                         override fun success(result: Any?) {
                             // The result here should not be used as its not the result form the api call after user completes the journey
@@ -66,10 +75,9 @@ class FlutterUIHostActivity : FlutterActivity() {
                             throw UnsupportedOperationException("Method $methodName is not implemented yet.")
                         }
                     })
-            }
+
         }
-                MethodChannel(flutterEngine.dartExecutor, CHANNEL_NAME)
-                    .setMethodCallHandler { call, result ->
+                methodChannel!!.setMethodCallHandler { call,_ ->
                         val resultData = call.arguments as? Map<*, *>
                         if(resultData == null){
                             setResult(Activity.RESULT_CANCELED, intent)
@@ -93,7 +101,5 @@ class FlutterUIHostActivity : FlutterActivity() {
                             finish()
                         }
                     }
-
-        }
     }
 }

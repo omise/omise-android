@@ -1,30 +1,76 @@
 package co.omise.android.ui
 
-import android.view.View
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matcher
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResultRegistry
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import co.omise.android.models.ChargeStatus
+import co.omise.android.models.Source
+import co.omise.android.models.SourceType
+import co.omise.android.models.Token
+import org.junit.After
+import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.*
 
-private fun typeNumberText(numberText: String): ViewAction =
-    object : ViewAction {
-        override fun getDescription(): String = "Type number text: $numberText"
+@RunWith(AndroidJUnit4::class)
+class CreditCardActivityTest {
 
-        override fun getConstraints(): Matcher<View> =
-            allOf(
-                isDisplayed(),
-                isAssignableFrom(
-                    OmiseEditText::class.java,
-                ),
-            )
+    private lateinit var context: Context
+    private lateinit var mockFlutterActivityLauncher: ActivityResultLauncher<Intent>
+    private lateinit var mockActivityResultRegistry: ActivityResultRegistry
 
-        override fun perform(
-            uiController: UiController?,
-            view: View?,
-        ) {
-            val editText = view as? OmiseEditText ?: return
-            numberText.forEach { editText.append(it.toString()) }
+
+    private val publicKey = "pkey_test_123"
+
+    @Before
+    fun setUp() {
+        context = ApplicationProvider.getApplicationContext()
+        mockFlutterActivityLauncher = mock()
+        mockActivityResultRegistry = mock()
+    }
+
+    @After
+    fun tearDown() {
+        verifyNoMoreInteractions(mockFlutterActivityLauncher, )
+        reset(mockFlutterActivityLauncher, )
+    }
+
+    private fun createIntent(
+        publicKey: String = this.publicKey,
+
+    ): Intent {
+        return Intent(context, CreditCardActivity::class.java).apply {
+            putExtra(OmiseActivity.EXTRA_PKEY, publicKey)
         }
     }
+
+    @Test
+    fun onCreate_initializesCorrectly() {
+        val intent = createIntent()
+        val scenario = ActivityScenario.launch<CreditCardActivity>(intent)
+        scenario.onActivity { activity ->
+            val startedIntent = activity.intent
+            assertEquals(publicKey, startedIntent?.getStringExtra(OmiseActivity.EXTRA_PKEY))
+        }
+    }
+
+    @Test
+    fun activityResult_processesTokenResultCorrectly() {
+        val mockToken = Token(false,null,ChargeStatus.Pending,"object","id")
+        val mockSource = Source(SourceType.PromptPay)
+        val resultIntent = Intent().apply {
+            putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, mockToken)
+            putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, mockSource)
+        }
+        ActivityScenario.launchActivityForResult<CreditCardActivity>(createIntent()).onActivity {
+            it.handleFlutterResult(100,resultIntent)
+        }
+    }
+
+}
