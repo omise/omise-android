@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Source
@@ -11,7 +12,7 @@ import co.omise.android.models.Token
 
 class GooglePayActivity : AppCompatActivity() {
     private lateinit var pKey: String
-    private lateinit var cardNetworks: ArrayList<String>
+    private var cardNetworks: ArrayList<String>? = null
     private var price: Long = 0
     private lateinit var currencyCode: String
     private lateinit var merchantId: String
@@ -20,13 +21,15 @@ class GooglePayActivity : AppCompatActivity() {
 
     private lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initialize()
-        flutterActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val token = result.data?.parcelable<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
-            val source = result.data?.parcelable<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
-            val intent = Intent().apply {
+    @VisibleForTesting
+    fun handleFlutterResult(
+        resultCode: Int,
+        data: Intent?,
+    ) {
+        val token = data?.parcelable<Token>(OmiseActivity.EXTRA_TOKEN_OBJECT)
+        val source = data?.parcelable<Source>(OmiseActivity.EXTRA_SOURCE_OBJECT)
+        val intent =
+            Intent().apply {
                 token?.let {
                     putExtra(OmiseActivity.EXTRA_TOKEN, it.id)
                     putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, it)
@@ -37,27 +40,38 @@ class GooglePayActivity : AppCompatActivity() {
                     putExtra(OmiseActivity.EXTRA_SOURCE_OBJECT, it)
                 }
             }
-            setResult(result.resultCode, intent)
-            finish()
-        }
+        setResult(resultCode, intent)
+        finish()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initialize()
+        flutterActivityLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleFlutterResult(result.resultCode, result.data)
+            }
         // Prepare arguments to pass to Flutter
-        val arguments = mapOf(
-            "pkey" to pKey,
-            "amount" to price,
-            "currency" to currencyCode,
-            "googlePayMerchantId" to merchantId,
-            "googlePayRequestBillingAddress" to requestBillingAddress,
-            "googlePayRequestPhoneNumber" to requestPhoneNumber,
-        )
+        val arguments =
+            mapOf(
+                "pkey" to pKey,
+                "amount" to price,
+                "currency" to currencyCode,
+                "googlePayMerchantId" to merchantId,
+                "googlePayRequestBillingAddress" to requestBillingAddress,
+                "googlePayRequestPhoneNumber" to requestPhoneNumber,
+                "googlePayCardBrands" to cardNetworks,
+            )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
         FlutterUIHostActivity.launchActivity(
             flutterActivityLauncher,
             this,
-            "openGooglePay",   // Flutter function to invoke
-            arguments  // Pass arguments as a map
+            // Flutter function to invoke
+            "openGooglePay",
+            // Pass arguments as a map
+            arguments,
         )
-
     }
 
     private fun initialize() {
@@ -66,9 +80,7 @@ class GooglePayActivity : AppCompatActivity() {
                 "${OmiseActivity.Companion::EXTRA_PKEY.name} must not be null."
             }
         cardNetworks =
-            requireNotNull(intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)) {
-                "${OmiseActivity.Companion::EXTRA_CARD_BRANDS.name} must not be null."
-            }
+            intent.getStringArrayListExtra(OmiseActivity.EXTRA_CARD_BRANDS)
         price =
             requireNotNull(intent.getLongExtra(OmiseActivity.EXTRA_AMOUNT, 0)) {
                 "${OmiseActivity.Companion::EXTRA_AMOUNT.name} must not be null."
@@ -90,5 +102,4 @@ class GooglePayActivity : AppCompatActivity() {
                 "${OmiseActivity.Companion::EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER.name} must not be null."
             }
     }
-
 }
