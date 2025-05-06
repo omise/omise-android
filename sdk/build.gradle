@@ -21,6 +21,8 @@ android {
         compileSdk compile_sdk_version
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
+        buildConfigField "String", "OMISE_PUBLIC_KEY", "\"${System.getenv("OMISE_PUBLIC_KEY") ?: ""}\""
+        buildConfigField "String", "GOOGLE_PAY_MERCHANT_ID", "\"${System.getenv("GOOGLE_PAY_MERCHANT_ID") ?: ""}\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
         consumerProguardFiles 'proguard-rules.pro'
         ndk {
