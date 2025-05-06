@@ -121,4 +121,10 @@ class FlutterUIHostActivity : FlutterActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        engineFlutter = null
+        methodChannel = null
+        super.onDestroy()
+    }
 }
