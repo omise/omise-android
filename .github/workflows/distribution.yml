@@ -3,6 +3,8 @@ name: Distribute Android App Firebase
 on:
   workflow_dispatch:
   push:
+    branches: [master]
+    tags:     ['v*']
 
 jobs:
   build:
