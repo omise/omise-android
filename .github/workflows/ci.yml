@@ -112,5 +112,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           profile: Nexus One
-          script: ./gradlew sdk:jacocoTestReport sdk:sonar
+          script: |
+            adb uninstall co.omise.android.test || true
+            ./gradlew sdk:jacocoTestReport sdk:sonar
 
