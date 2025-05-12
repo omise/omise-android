@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_AUTHORIZED_URLSTRING
 import co.omise.android.AuthorizingPaymentURLVerifier.Companion.EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS
+import co.omise.android.BuildConfig
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_THREE_DS_REQUESTOR_APP_URL
 import co.omise.android.ui.AuthorizingPaymentActivity.Companion.EXTRA_UI_CUSTOMIZATION
 import co.omise.android.config.*
@@ -32,8 +33,8 @@ class CheckoutActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CheckoutActivity"
-        private const val PUBLIC_KEY = "pkey_test_5tnt1gxjf6ecypmkfi8"
-        private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
+        private const val PUBLIC_KEY = BuildConfig.OMISE_PUBLIC_KEY
+        private const val GOOGLEPAY_MERCHANT_ID = BuildConfig.GOOGLE_PAY_MERCHANT_ID
         private const val GOOGLEPAY_REQUEST_BILLING_ADDRESS = false
         private const val GOOGLEPAY_REQUEST_PHONE_NUMBER = false
 
