@@ -82,9 +82,8 @@ class PaymentCreatorActivity : OmiseActivity() {
                             "brand" to "Gucci",
                         ),
                     ),
-                 "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production"
-
-        )
+                "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
+            )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
         FlutterUIHostActivity.launchActivity(
