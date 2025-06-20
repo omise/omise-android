@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
+import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Capability
 import co.omise.android.models.Source
@@ -81,6 +82,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                             "brand" to "Gucci",
                         ),
                     ),
+                "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
             )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
