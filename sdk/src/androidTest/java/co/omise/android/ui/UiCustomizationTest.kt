@@ -1,13 +1,18 @@
-package co.omise.android.config
+package co.omise.android.ui
 
+import co.omise.android.config.ButtonCustomization
+import co.omise.android.config.ButtonCustomizationBuilder
+import co.omise.android.config.ButtonType
+import co.omise.android.config.LabelCustomizationBuilder
+import co.omise.android.config.TextBoxCustomizationBuilder
+import co.omise.android.config.ThemeConfig
+import co.omise.android.config.ToolbarCustomizationBuilder
+import co.omise.android.config.UiCustomizationBuilder
 import com.netcetera.threeds.sdk.api.ui.logic.UiCustomization
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import co.omise.android.config.UiCustomization as OmiseSdkUiCustomization
 
-@RunWith(RobolectricTestRunner::class)
 class UiCustomizationTest {
     @Test
     fun uiCustomization_shouldBeAbleToCreateInstanceWithBuilder() {
