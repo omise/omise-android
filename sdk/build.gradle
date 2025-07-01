@@ -158,6 +158,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.google.android.material:material:$material_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$joda_time_version"
     // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
     implementation 'org.bouncycastle:bcprov-jdk15to18:1.79'
