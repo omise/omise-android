@@ -157,19 +157,9 @@ signing {
 dependencies {
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
-    api "joda-time:joda-time:$joda_time_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.google.android.material:material:$material_version"
-    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$joda_time_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation 'com.google.android.gms:play-services-wallet:19.1.0'
     // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
     implementation 'org.bouncycastle:bcprov-jdk15to18:1.79'
 
@@ -181,7 +171,7 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation "androidx.test:rules:$test_version"
-    testImplementation "androidx.test:runner:$test_version"
+    testImplementation "androidx.test:runner:$test_runner_version"
     testImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
     testImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
@@ -199,7 +189,7 @@ dependencies {
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "androidx.test:rules:$test_version"
-    androidTestImplementation "androidx.test:runner:$test_version"
+    androidTestImplementation "androidx.test:runner:$test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
