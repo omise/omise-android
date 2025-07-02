@@ -21,6 +21,8 @@ android {
         buildConfigField "int", "VERSION_CODE", "$omise_sdk_code_version"
         buildConfigField "String", "VERSION_NAME", "\"$omise_sdk_version\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
+        // Consumer proguard rules is set to avoid cluttering the consumer's pro-guard rules
+        // with rules specific to the SDK which may break the SDK if not added to the consumer's side
         consumerProguardFiles 'proguard-rules.pro'
     }
 

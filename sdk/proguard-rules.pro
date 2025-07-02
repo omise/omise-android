@@ -15,12 +15,7 @@
 
 -keepattributes *Annotation*
 
-# Preserve all public classes, and their public and protected fields and
-# methods.
-
--keep public class * {
-    public protected *;
-}
+# Do not preserve all public classes as this file as added to the consumer proguard-rules and if the rule is very broad it will affect the consumer app
 
 # Preserve all .class method names.
 
@@ -61,9 +56,10 @@
 # Your library may contain more items that need to be preserved;
 # typically classes that are dynamically created using Class.forName:
 
--keep public class co.omise.android.** { *; }
--keep public interface co.omise.android.** { *; }
--keep public class * implements co.omise.android.** { *; }
+# ===== Omise SDK Classes =====
+-keep class co.omise.android.** { public protected *; }
+-keep interface co.omise.android.** { *; }
+-keep class * implements co.omise.android.** { public protected *; }
 
 # Keep everyting in the Netcetera Android 3DS SDK package
 -keep public class com.netcetera.threeds.sdk.** {
