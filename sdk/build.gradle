@@ -130,26 +130,10 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-            def ossrhUsername = System.getenv("SONATYPE_USERNAME")
-            def ossrhPassword = System.getenv("SONATYPE_PASSWORD")
-            credentials {
-                username ossrhUsername
-                password ossrhPassword
-            }
-        }
-    }
 }
 
 signing {
-    def signingKey = System.getenv("PGP_SIGNING_KEY")
-    def signingPassword = System.getenv("PGP_SIGNING_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
+    useInMemoryPgpKeys(System.getenv("PGP_SIGNING_KEY"), System.getenv("PGP_SIGNING_PASSWORD"))
     sign publishing.publications.release
 }
 
