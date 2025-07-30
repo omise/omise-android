@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## V5.7.0
+* **Fix:** Scope down proguard rules to prevent affecting host app.
+* **Enhancement:** Support 16kb page size requirements.
+
 ## V5.6.0
 * **CHANGED:** Rebrand OPN Payment to Omise.
 * 
