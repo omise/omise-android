@@ -57,9 +57,10 @@
 # typically classes that are dynamically created using Class.forName:
 
 # ===== Omise SDK Classes =====
--keep class co.omise.android.** { public protected *; }
--keep interface co.omise.android.** { *; }
--keep class * implements co.omise.android.** { public protected *; }
+-keep public class co.omise.android.** { *; }
+-keep public interface co.omise.android.** { *; }
+-keep public class * implements co.omise.android.** { *; }
+
 
 # Keep everyting in the Netcetera Android 3DS SDK package
 -keep public class com.netcetera.threeds.sdk.** {

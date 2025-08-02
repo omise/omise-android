@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.7.1
+* **Fix:** Set ProGuard rules to preserve internal SDK classes
+
 ## V5.7.0
 * **Fix:** Scope down proguard rules to prevent affecting host app.
 * **Enhancement:** Support 16kb page size requirements.
