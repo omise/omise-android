@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
+import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Source
 import co.omise.android.models.Token
@@ -61,6 +62,8 @@ class GooglePayActivity : AppCompatActivity() {
                 "googlePayRequestBillingAddress" to requestBillingAddress,
                 "googlePayRequestPhoneNumber" to requestPhoneNumber,
                 "googlePayCardBrands" to cardNetworks,
+                // Pass the environment again since this page can be opened as a stand alone page without the need for the select payment method page
+                "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
             )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
