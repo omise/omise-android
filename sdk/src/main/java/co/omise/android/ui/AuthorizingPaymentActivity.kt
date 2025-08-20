@@ -22,7 +22,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
 import co.omise.android.AuthorizingPaymentURLVerifier
@@ -46,7 +45,7 @@ import org.jetbrains.annotations.TestOnly
  * In case the authorization needs to be handled by an external app, the SDK opens that external
  * app by default but the Intent callback needs to be handled by the implementer.
  */
-class AuthorizingPaymentActivity : AppCompatActivity() {
+class AuthorizingPaymentActivity : OmiseActivity() {
     private val webView: WebView by lazy { authorizing_payment_webview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }

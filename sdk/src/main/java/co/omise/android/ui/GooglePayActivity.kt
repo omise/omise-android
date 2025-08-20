@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
@@ -28,7 +27,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOError
 
-class GooglePayActivity : AppCompatActivity() {
+class GooglePayActivity : OmiseActivity() {
     private lateinit var pKey: String
     private lateinit var googlePay: GooglePay
     private lateinit var paymentsClient: PaymentsClient
