@@ -109,7 +109,7 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           arch: x86_64
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x2340
           disable-animations: true
           profile: pixel_9_pro
           script: ./gradlew sdk:jacocoTestReport sdk:sonar
