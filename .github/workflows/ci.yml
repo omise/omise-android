@@ -112,5 +112,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x2340
           disable-animations: true
           profile: pixel_9_pro
-          script: ./gradlew sdk:jacocoTestReport sdk:sonar
-
+          script: |
+            adb uninstall co.omise.android.test || true
+            adb uninstall co.omise.android || true
+            ./gradlew sdk:jacocoTestReport sdk:sonar
