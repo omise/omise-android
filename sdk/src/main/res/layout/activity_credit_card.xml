@@ -196,7 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/xsmall_margin"
-            android:text="@string/label_email_optional"
+            android:text="@string/label_email"
             android:visibility="gone"/>
 
         <co.omise.android.ui.OmiseEditText
