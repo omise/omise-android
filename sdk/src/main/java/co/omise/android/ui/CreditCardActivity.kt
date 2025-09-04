@@ -148,6 +148,7 @@ class CreditCardActivity : OmiseActivity() {
                 invalidateBillingAddressForm()
             }
         }
+
     private fun isEmailValid(emailEdit: OmiseEditText): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(emailEdit.text!!).matches()
     }
@@ -439,7 +440,7 @@ class CreditCardActivity : OmiseActivity() {
 
     private fun updateSubmitButton() {
         val validationResults = mutableMapOf<OmiseEditText, Boolean>()
-        
+
         editTexts.keys.forEach { editText ->
             when {
                 // Required fields (card info)
@@ -474,7 +475,7 @@ class CreditCardActivity : OmiseActivity() {
                 // Other fields that are not visible/required don't affect validation
             }
         }
-        
+
         // All included fields must be valid
         val isFormValid = validationResults.values.all { it }
         submitButton.isEnabled = isFormValid
@@ -508,9 +509,9 @@ class CreditCardActivity : OmiseActivity() {
         }
         updateSubmitButton()
     }
-    
+
     private fun cardHolderDataVisibility() {
-        if(cardHolderData.fields.contains(CardHolderDataField.EMAIL)){
+        if (cardHolderData.fields.contains(CardHolderDataField.EMAIL)) {
             emailEdit.visibility = View.VISIBLE
             emailTextTitle.visibility = View.VISIBLE
         } else {
@@ -518,8 +519,8 @@ class CreditCardActivity : OmiseActivity() {
             emailTextTitle.visibility = View.GONE
             emailErrorText.visibility = View.GONE
         }
-        
-        if(cardHolderData.fields.contains(CardHolderDataField.PHONE_NUMBER)){
+
+        if (cardHolderData.fields.contains(CardHolderDataField.PHONE_NUMBER)) {
             phoneNumberEdit.visibility = View.VISIBLE
             phoneNumberTextTitle.visibility = View.VISIBLE
         } else {

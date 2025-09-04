@@ -5,11 +5,11 @@ import kotlinx.android.parcel.Parcelize
 
 enum class CardHolderDataField {
     EMAIL,
-    PHONE_NUMBER
+    PHONE_NUMBER,
 }
 
 // Parcelable wrapper for the array/list
 @Parcelize
 data class CardHolderDataList(
-    val fields: ArrayList<CardHolderDataField>
+    val fields: ArrayList<CardHolderDataField>,
 ) : Parcelable

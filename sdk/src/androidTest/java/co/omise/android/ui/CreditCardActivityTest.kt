@@ -407,6 +407,7 @@ class CreditCardActivityTest {
             assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
+
     @Test
     fun cardHolderData_fieldsNotVisibleWhenNotRequested() {
         // Default scenario - no card holder data fields requested
@@ -415,14 +416,22 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_phone_number)).check(matches(not(isDisplayed())))
         onView(withId(R.id.text_phone_number_title)).check(matches(not(isDisplayed())))
     }
+
     @Test
     fun cardHolderData_onlyEmailFieldVisibleWhenEmailRequested() {
         // Create intent with only email field requested
-        val intentWithEmail = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(
-                CardHolderDataField.EMAIL)))
-        }
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(
+                        arrayListOf(
+                            CardHolderDataField.EMAIL,
+                        ),
+                    ),
+                )
+            }
 
         scenario = launchActivityForResult(intentWithEmail)
 
@@ -431,12 +440,14 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_phone_number)).check(matches(not(isDisplayed())))
         onView(withId(R.id.text_phone_number_title)).check(matches(not(isDisplayed())))
     }
+
     fun cardHolderData_onlyPhoneFieldVisibleWhenPhoneRequested() {
         // Create intent with only phone field requested
-        val intentWithPhone = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
 
         scenario = launchActivityForResult(intentWithPhone)
 
@@ -445,12 +456,17 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_phone_number)).check(matches(isDisplayed()))
         onView(withId(R.id.text_phone_number_title)).check(matches(isDisplayed()))
     }
+
     fun cardHolderData_bothFieldsVisibleWhenBothRequested() {
         // Create intent with both fields requested
-        val intentWithBothFields = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
 
         scenario = launchActivityForResult(intentWithBothFields)
 
@@ -459,12 +475,14 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_phone_number)).check(matches(isDisplayed()))
         onView(withId(R.id.text_phone_number_title)).check(matches(isDisplayed()))
     }
+
     fun cardHolderData_invalidEmailTriggersErrorAndDisablesButton() {
         // Create intent with email field requested
-        val intentWithEmail = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
-        }
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
 
         scenario = launchActivityForResult(intentWithEmail)
 
@@ -482,12 +500,14 @@ class CreditCardActivityTest {
         onView(withId(R.id.text_email_error)).check(matches(withText(R.string.error_invalid_email)))
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
+
     fun cardHolderData_invalidPhoneTriggersErrorAndDisablesButton() {
         // Create intent with phone field requested
-        val intentWithPhone = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
 
         scenario = launchActivityForResult(intentWithPhone)
 
@@ -505,13 +525,18 @@ class CreditCardActivityTest {
         onView(withId(R.id.text_phone_number_error)).check(matches(withText(R.string.error_invalid_phone_number)))
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
+
     @Test
     fun cardHolderData_validEmailAndPhoneEnablesButton() {
         // Create intent with both fields requested
-        val intentWithBothFields = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
 
         scenario = launchActivityForResult(intentWithBothFields)
 
@@ -528,13 +553,18 @@ class CreditCardActivityTest {
         onView(withId(R.id.text_phone_number_error)).check(matches(not(isDisplayed())))
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
     }
+
     @Test
     fun cardHolderData_emptyOptionalFieldsEnableButton() {
         // Create intent with both fields requested
-        val intentWithBothFields = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
 
         scenario = launchActivityForResult(intentWithBothFields)
 
@@ -547,12 +577,17 @@ class CreditCardActivityTest {
         // Check that button is enabled (empty optional fields are valid)
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
     }
+
     fun cardHolderData_validCardHolderDataWithInvalidCardInfoDisablesButton() {
         // Create intent with both fields requested
-        val intentWithBothFields = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
 
         scenario = launchActivityForResult(intentWithBothFields)
 
@@ -567,12 +602,14 @@ class CreditCardActivityTest {
         // Check that button is disabled due to invalid card info
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
     }
+
     fun cardHolderData_emailErrorClearsWhenGainingFocus() {
         // Create intent with email field requested
-        val intentWithEmail = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
-        }
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
 
         scenario = launchActivityForResult(intentWithEmail)
 
@@ -589,12 +626,14 @@ class CreditCardActivityTest {
         // Verify error is cleared when gaining focus
         onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))
     }
+
     fun cardHolderData_phoneErrorClearsWhenGainingFocus() {
         // Create intent with phone field requested
-        val intentWithPhone = Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-            putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
-        }
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
 
         scenario = launchActivityForResult(intentWithPhone)
 
