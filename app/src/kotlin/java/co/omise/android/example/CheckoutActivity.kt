@@ -26,6 +26,8 @@ import co.omise.android.config.ThemeConfig
 import co.omise.android.config.ToolbarCustomizationBuilder
 import co.omise.android.config.UiCustomizationBuilder
 import co.omise.android.models.Amount
+import co.omise.android.models.CardHolderDataField
+import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.AuthorizingPaymentActivity
@@ -57,6 +59,7 @@ class CheckoutActivity : AppCompatActivity() {
         private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
         private const val GOOGLEPAY_REQUEST_BILLING_ADDRESS = false
         private const val GOOGLEPAY_REQUEST_PHONE_NUMBER = false
+        private val CARD_HOLDER_DATA = CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL,CardHolderDataField.PHONE_NUMBER))
 
 
         private const val AUTHORIZING_PAYMENT_REQUEST_CODE = 0x3D5
@@ -137,6 +140,7 @@ class CheckoutActivity : AppCompatActivity() {
             putExtra(OmiseActivity.EXTRA_GOOGLEPAY_MERCHANT_ID, GOOGLEPAY_MERCHANT_ID)
             putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, GOOGLEPAY_REQUEST_BILLING_ADDRESS)
             putExtra(OmiseActivity.EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, GOOGLEPAY_REQUEST_PHONE_NUMBER)
+            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CARD_HOLDER_DATA)
 
             if (isUsedSpecificsPaymentMethods) {
                 putExtra(OmiseActivity.EXTRA_CAPABILITY, PaymentSetting.createCapabilityFromPreferences(this@CheckoutActivity))
@@ -150,6 +154,7 @@ class CheckoutActivity : AppCompatActivity() {
     private fun payByCreditCard() {
         Intent(this, CreditCardActivity::class.java).run {
             putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+            putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CARD_HOLDER_DATA)
             creditCardLauncher.launch(this)
         }
     }

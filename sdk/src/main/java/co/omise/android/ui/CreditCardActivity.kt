@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
@@ -26,6 +28,8 @@ import co.omise.android.extensions.textOrNull
 import co.omise.android.models.APIError
 import co.omise.android.models.BackendType
 import co.omise.android.models.Capability
+import co.omise.android.models.CardHolderDataField
+import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.CardParam
 import co.omise.android.models.CountryInfo
 import co.omise.android.models.PaymentMethod
@@ -40,7 +44,9 @@ import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
 import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_city
 import kotlinx.android.synthetic.main.activity_credit_card.edit_country
+import kotlinx.android.synthetic.main.activity_credit_card.edit_email
 import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
+import kotlinx.android.synthetic.main.activity_credit_card.edit_phone_number
 import kotlinx.android.synthetic.main.activity_credit_card.edit_postal_code
 import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
 import kotlinx.android.synthetic.main.activity_credit_card.edit_state
@@ -50,7 +56,11 @@ import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_city_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_country_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_email_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_email_title
 import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_phone_number_error
+import kotlinx.android.synthetic.main.activity_credit_card.text_phone_number_title
 import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
 import kotlinx.android.synthetic.main.activity_credit_card.text_state_error
@@ -64,6 +74,7 @@ import java.util.Locale
  */
 class CreditCardActivity : OmiseActivity() {
     private lateinit var pKey: String
+    private lateinit var cardHolderData: CardHolderDataList
     private lateinit var client: Client
     private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
     private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
@@ -87,6 +98,13 @@ class CreditCardActivity : OmiseActivity() {
     private val stateErrorText: TextView by lazy { text_state_error }
     private val postalCodeErrorText: TextView by lazy { text_postal_code_error }
 
+    private val emailEdit: OmiseEditText by lazy { edit_email }
+    private val emailErrorText by lazy { text_email_error }
+    private val emailTextTitle by lazy { text_email_title }
+    private val phoneNumberEdit: OmiseEditText by lazy { edit_phone_number }
+    private val phoneNumberErrorText by lazy { text_phone_number_error }
+    private val phoneNumberTextTitle by lazy { text_phone_number_title }
+
     private val securityCodeTooltipButton: ImageButton by lazy { button_security_code_tooltip }
 
     private val billingAddressContainer: LinearLayout by lazy { billing_address_container }
@@ -108,6 +126,8 @@ class CreditCardActivity : OmiseActivity() {
             cityEdit to cityErrorText,
             stateEdit to stateErrorText,
             postalCodeEdit to postalCodeErrorText,
+            emailEdit to emailErrorText,
+            phoneNumberEdit to phoneNumberErrorText,
         )
     }
 
@@ -128,6 +148,59 @@ class CreditCardActivity : OmiseActivity() {
                 invalidateBillingAddressForm()
             }
         }
+    private fun isEmailValid(emailEdit: OmiseEditText): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(emailEdit.text!!).matches()
+    }
+
+    private fun isPhoneNumberValid(phoneNumberEdit: OmiseEditText): Boolean {
+        return android.util.Patterns.PHONE.matcher(phoneNumberEdit.text!!).matches()
+    }
+
+    private fun updateEmailErrorText(hasFocus: Boolean) {
+        // Clear error when field has focus (consistent with other fields)
+        if (hasFocus) {
+            with(emailErrorText) {
+                text = ""
+                visibility = GONE
+            }
+            return
+        }
+
+        // When field loses focus, validate only if not empty
+        if (emailEdit.text?.isEmpty() == true || isEmailValid(emailEdit)) {
+            with(emailErrorText) {
+                text = ""
+                visibility = GONE
+            }
+            return
+        }
+
+        emailErrorText.visibility = VISIBLE
+        emailErrorText.text = getString(R.string.error_invalid_email)
+    }
+
+    private fun updatePhoneErrorText(hasFocus: Boolean) {
+        // Clear error when field has focus (consistent with other fields)
+        if (hasFocus) {
+            with(phoneNumberErrorText) {
+                text = ""
+                visibility = GONE
+            }
+            return
+        }
+
+        // When field loses focus, validate only if not empty
+        if (phoneNumberEdit.text?.isEmpty() == true || isPhoneNumberValid(phoneNumberEdit)) {
+            with(phoneNumberErrorText) {
+                text = ""
+                visibility = GONE
+            }
+            return
+        }
+
+        phoneNumberErrorText.visibility = VISIBLE
+        phoneNumberErrorText.text = getString(R.string.error_invalid_phone_number)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,6 +213,7 @@ class CreditCardActivity : OmiseActivity() {
 
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not find ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        cardHolderData = intent.parcelable<CardHolderDataList>(EXTRA_CARD_HOLDER_DATA) ?: CardHolderDataList(arrayListOf())
 
         if (!this::client.isInitialized) {
             client = Client(pKey)
@@ -167,6 +241,8 @@ class CreditCardActivity : OmiseActivity() {
             cityEdit -> getString(R.string.error_required_city)
             stateEdit -> getString(R.string.error_required_state)
             postalCodeEdit -> getString(R.string.error_required_postal_code)
+            emailEdit -> getString(R.string.error_invalid_email)
+            phoneNumberEdit -> getString(R.string.error_invalid_phone_number)
             else -> null
         }
     }
@@ -177,24 +253,41 @@ class CreditCardActivity : OmiseActivity() {
         submitButton.setOnClickListener(::submit)
         securityCodeTooltipButton.setOnClickListener(::showSecurityCodeTooltipDialog)
         countryEdit.setOnClickListener(::showCountryDropdownDialog)
+        cardHolderDataVisibility()
 
         editTexts.forEach { (editText, errorText) ->
             editText.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    try {
-                        editText.validate()
-                    } catch (e: InputValidationException.InvalidInputException) {
-                        errorText.text = editText.getErrorMessage()
-                    } catch (e: InputValidationException.EmptyInputException) {
-                        if (isBillingAddressRequired()) {
-                            errorText.text = editText.getErrorMessage()
-                        } else {
+                // Handle card holder data fields (email and phone) with their special logic
+                if (editText == emailEdit && cardHolderData.fields.contains(CardHolderDataField.EMAIL)) {
+                    updateEmailErrorText(hasFocus)
+                } else if (editText == phoneNumberEdit && cardHolderData.fields.contains(CardHolderDataField.PHONE_NUMBER)) {
+                    updatePhoneErrorText(hasFocus)
+                } else if (editText != emailEdit && editText != phoneNumberEdit) {
+                    // Handle regular fields - skip email and phone as they have special handling
+                    if (!hasFocus) {
+                        try {
+                            editText.validate()
                             errorText.text = null
+                            errorText.visibility = GONE
+                        } catch (e: InputValidationException.InvalidInputException) {
+                            errorText.text = editText.getErrorMessage()
+                            errorText.visibility = VISIBLE
+                        } catch (e: InputValidationException.EmptyInputException) {
+                            if (isBillingAddressRequired() && billingAddressEditTexts.containsKey(editText)) {
+                                errorText.text = editText.getErrorMessage()
+                                errorText.visibility = VISIBLE
+                            } else {
+                                errorText.text = null
+                                errorText.visibility = GONE
+                            }
                         }
+                    } else {
+                        // Clear error text when gaining focus
+                        errorText.text = null
+                        errorText.visibility = GONE
                     }
-                } else {
-                    errorText.text = null
                 }
+                updateSubmitButton()
             }
             editText.setOnAfterTextChangeListener(::updateSubmitButton)
         }
@@ -277,6 +370,8 @@ class CreditCardActivity : OmiseActivity() {
                 city = cityEdit.textOrNull?.toString(),
                 state = stateEdit.textOrNull?.toString(),
                 postalCode = postalCodeEdit.textOrNull?.toString(),
+                email = emailEdit.textOrNull?.toString(),
+                phoneNumber = phoneNumberEdit.textOrNull?.toString(),
             )
 
         val request = Token.CreateTokenRequestBuilder(cardParam).build()
@@ -343,14 +438,45 @@ class CreditCardActivity : OmiseActivity() {
     }
 
     private fun updateSubmitButton() {
-        val isFormValid =
-            editTexts.filterKeys {
-                if (!isBillingAddressRequired()) {
-                    !billingAddressEditTexts.containsKey(it)
-                } else {
-                    true
+        val validationResults = mutableMapOf<OmiseEditText, Boolean>()
+        
+        editTexts.keys.forEach { editText ->
+            when {
+                // Required fields (card info)
+                editText in listOf(cardNumberEdit, cardNameEdit, expiryDateEdit, securityCodeEdit) -> {
+                    validationResults[editText] = editText.isValid
                 }
-            }.map { (editText, _) -> editText.isValid }.reduce { acc, b -> acc && b }
+                // Billing address fields (only required for AVS countries)
+                editText in billingAddressEditTexts -> {
+                    if (isBillingAddressRequired()) {
+                        validationResults[editText] = editText.isValid
+                    }
+                    // If billing address not required, these fields don't affect validation
+                }
+                // Email field (optional but if filled must be valid)
+                editText == emailEdit && cardHolderData.fields.contains(CardHolderDataField.EMAIL) -> {
+                    val text = emailEdit.text?.toString()
+                    if (text.isNullOrEmpty()) {
+                        validationResults[editText] = true // Empty is valid (optional)
+                    } else {
+                        validationResults[editText] = isEmailValid(emailEdit)
+                    }
+                }
+                // Phone number field (optional but if filled must be valid)
+                editText == phoneNumberEdit && cardHolderData.fields.contains(CardHolderDataField.PHONE_NUMBER) -> {
+                    val text = phoneNumberEdit.text?.toString()
+                    if (text.isNullOrEmpty()) {
+                        validationResults[editText] = true // Empty is valid (optional)
+                    } else {
+                        validationResults[editText] = isPhoneNumberValid(phoneNumberEdit)
+                    }
+                }
+                // Other fields that are not visible/required don't affect validation
+            }
+        }
+        
+        // All included fields must be valid
+        val isFormValid = validationResults.values.all { it }
         submitButton.isEnabled = isFormValid
     }
 
@@ -379,6 +505,27 @@ class CreditCardActivity : OmiseActivity() {
                 editText.text = null
                 errorText.text = null
             }
+        }
+        updateSubmitButton()
+    }
+    
+    private fun cardHolderDataVisibility() {
+        if(cardHolderData.fields.contains(CardHolderDataField.EMAIL)){
+            emailEdit.visibility = View.VISIBLE
+            emailTextTitle.visibility = View.VISIBLE
+        } else {
+            emailEdit.visibility = View.GONE
+            emailTextTitle.visibility = View.GONE
+            emailErrorText.visibility = View.GONE
+        }
+        
+        if(cardHolderData.fields.contains(CardHolderDataField.PHONE_NUMBER)){
+            phoneNumberEdit.visibility = View.VISIBLE
+            phoneNumberTextTitle.visibility = View.VISIBLE
+        } else {
+            phoneNumberEdit.visibility = View.GONE
+            phoneNumberTextTitle.visibility = View.GONE
+            phoneNumberErrorText.visibility = View.GONE
         }
     }
 

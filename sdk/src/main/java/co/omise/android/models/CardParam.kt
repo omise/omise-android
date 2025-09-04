@@ -33,4 +33,6 @@ data class CardParam(
     val street2: String? = null,
     @field:JsonProperty("phone_number")
     val phoneNumber: String? = null,
+    @field:JsonProperty("email")
+    val email: String? = null,
 )
