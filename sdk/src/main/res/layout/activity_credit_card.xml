@@ -195,7 +195,7 @@
             style="?attr/editTextLabelStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xsmall_margin"
+            android:layout_marginTop="@dimen/field_separator_margin"
             android:text="@string/label_email"
             android:visibility="gone"/>
 
@@ -222,7 +222,7 @@
             style="?attr/editTextLabelStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xsmall_margin"
+            android:layout_marginTop="@dimen/field_separator_margin"
             android:text="@string/label_phone_number"
             android:visibility="gone"/>
 

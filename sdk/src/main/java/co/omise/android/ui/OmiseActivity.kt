@@ -93,6 +93,8 @@ abstract class OmiseActivity : AppCompatActivity() {
             }
             insets
         }
+        // Force immediate application of insets
+        ViewCompat.requestApplyInsets(decorView)
     }
 
     @VisibleForTesting
