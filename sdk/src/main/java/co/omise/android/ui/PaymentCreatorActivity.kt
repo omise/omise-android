@@ -303,7 +303,6 @@ class PaymentCreatorActivity : OmiseActivity() {
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
         googlepayRequestPhoneNumber = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)
         cardHolderDataList = intent.parcelable<CardHolderDataList>(EXTRA_CARD_HOLDER_DATA) ?: CardHolderDataList(arrayListOf())
-
     }
 
     companion object {
@@ -360,7 +359,7 @@ private class PaymentCreatorNavigationImpl(
     private val requestCode: Int,
     private val requester: PaymentCreatorRequester<Source>,
     private val capability: Capability,
-    private val cardHolderDataList: CardHolderDataList
+    private val cardHolderDataList: CardHolderDataList,
 ) : PaymentCreatorNavigation {
     companion object {
         const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
