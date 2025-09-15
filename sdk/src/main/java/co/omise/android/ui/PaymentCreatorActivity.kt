@@ -423,6 +423,7 @@ private class PaymentCreatorNavigationImpl(
         val fragment =
             InstallmentTermChooserFragment.newInstance(installment).apply {
                 requester = this@PaymentCreatorNavigationImpl.requester
+                cardHolderDataList = this@PaymentCreatorNavigationImpl.cardHolderDataList
             }
         addFragmentToBackStack(fragment)
     }

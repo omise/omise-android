@@ -7,10 +7,12 @@ import co.omise.android.R
 import co.omise.android.extensions.getParcelableCompat
 import co.omise.android.models.Amount
 import co.omise.android.models.BackendType
+import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.backendType
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CARD_HOLDER_DATA
 import co.omise.android.ui.PaymentCreatorActivity.Companion.REQUEST_CREDIT_CARD_WITH_SOURCE
 
 /**
@@ -20,6 +22,7 @@ import co.omise.android.ui.PaymentCreatorActivity.Companion.REQUEST_CREDIT_CARD_
  */
 internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTermResource>() {
     var requester: PaymentCreatorRequester<Source>? = null
+    var cardHolderDataList: CardHolderDataList? = null
     private val installment: PaymentMethod? by lazy {
         arguments?.getParcelableCompat<PaymentMethod>(EXTRA_INSTALLMENT)
     }
@@ -136,6 +139,7 @@ internal class InstallmentTermChooserFragment : OmiseListFragment<InstallmentTer
                     putExtra(OmiseActivity.EXTRA_CURRENCY, req.currency)
                     putExtra(OmiseActivity.EXTRA_CAPABILITY, req.capability)
                     putExtra(OmiseActivity.EXTRA_AMOUNT, req.amount)
+                    putExtra(EXTRA_CARD_HOLDER_DATA, cardHolderDataList ?: CardHolderDataList(arrayListOf()))
                 }
             activity?.startActivityForResult(intent, REQUEST_CREDIT_CARD_WITH_SOURCE)
         } else {
