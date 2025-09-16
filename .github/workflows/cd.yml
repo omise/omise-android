@@ -115,7 +115,7 @@ jobs:
           script: ./gradlew sdk:jacocoTestReport
 
       - name: Publish Maven package
-        run: ./gradlew sdk:publish
+        run: ./gradlew publishToSonatype closeStagingRepositories
         env:
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
           PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}

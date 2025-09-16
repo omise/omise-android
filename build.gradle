@@ -1,12 +1,16 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
 
-buildscript { 
+// Global group id required for nexus publish
+group 'co.omise'
+
+buildscript {
     ext {
         sample_app_version = '1.0'
         sample_app_code_version = 1
 
-        omise_sdk_version = '5.5.0'
-        omise_sdk_code_version = 55
+        omise_sdk_version = '5.7.1'
+        omise_sdk_code_version = 58
 
         compile_sdk_version = 35
         build_tools_version = '29.0.3'
@@ -58,12 +62,14 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
+
     dependencies {
         classpath "com.android.tools.build:gradle:$android_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jacoco:org.jacoco.core:$jacoco_version"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqube_version"
         classpath 'org.jlleitschuh.gradle:ktlint-gradle:12.0.3'
+        classpath "io.github.gradle-nexus:publish-plugin:2.0.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -92,4 +98,15 @@ allprojects {
 
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            username = System.getenv("SONATYPE_USERNAME")
+            password = System.getenv("SONATYPE_PASSWORD")
+        }
+    }
 }
