@@ -21,6 +21,7 @@ import co.omise.android.extensions.parcelableNullable
 import co.omise.android.models.APIError
 import co.omise.android.models.Bank
 import co.omise.android.models.Capability
+import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.Model
 import co.omise.android.models.PaymentMethod
 import co.omise.android.models.Source
@@ -29,6 +30,7 @@ import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_AMOUNT
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CARD_BRANDS
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CARD_HOLDER_DATA
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_CURRENCY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_MERCHANT_ID
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS
@@ -54,6 +56,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private lateinit var googlepayMerchantId: String
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
+    private lateinit var cardHolderDataList: CardHolderDataList
     private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
 
     private lateinit var client: Client
@@ -171,6 +174,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                 REQUEST_CREDIT_CARD,
                 requester,
                 newCapability,
+                cardHolderDataList,
             )
         capability = filterCapabilities(newCapability)
 
@@ -298,6 +302,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         googlepayMerchantId = intent.getStringExtra(EXTRA_GOOGLEPAY_MERCHANT_ID) ?: "[GOOGLEPAY_MERCHANT_ID]"
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
         googlepayRequestPhoneNumber = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, false)
+        cardHolderDataList = intent.parcelable<CardHolderDataList>(EXTRA_CARD_HOLDER_DATA) ?: CardHolderDataList(arrayListOf())
     }
 
     companion object {
@@ -354,6 +359,7 @@ private class PaymentCreatorNavigationImpl(
     private val requestCode: Int,
     private val requester: PaymentCreatorRequester<Source>,
     private val capability: Capability,
+    private val cardHolderDataList: CardHolderDataList,
 ) : PaymentCreatorNavigation {
     companion object {
         const val FRAGMENT_STACK = "PaymentCreatorNavigation.fragmentStack"
@@ -382,6 +388,7 @@ private class PaymentCreatorNavigationImpl(
             Intent(activity, CreditCardActivity::class.java).apply {
                 putExtra(EXTRA_PKEY, pkey)
                 putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
+                putExtra(EXTRA_CARD_HOLDER_DATA, cardHolderDataList)
             }
         activity.startActivityForResult(intent, requestCode)
     }
@@ -416,6 +423,7 @@ private class PaymentCreatorNavigationImpl(
         val fragment =
             InstallmentTermChooserFragment.newInstance(installment).apply {
                 requester = this@PaymentCreatorNavigationImpl.requester
+                cardHolderDataList = this@PaymentCreatorNavigationImpl.cardHolderDataList
             }
         addFragmentToBackStack(fragment)
     }

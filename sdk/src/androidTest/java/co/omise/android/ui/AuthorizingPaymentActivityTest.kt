@@ -76,6 +76,8 @@ class AuthorizingPaymentActivityTest {
 
     private val authorizeAcsUrl = "https://www.omise.co/authorize?acs=true"
     private val authorizeNonAcsUrl = "https://www.omise.co/authorize?acs=false"
+    private val authorizePasskeyUrl = "https://www.omise.co/authorize?signature=test"
+    private val authorizePasskeyWithAcsUrl = "https://www.omise.co/authorize?signature=test&acs=true"
     private val returnUrl = "https://www.example.com/complete"
     private val deepLinkAuthorizeUrl = "bankapp://omise.co/authorize?return_uri=sampleapp://omise.co/authorize_return?result=success"
     private val deepLinkReturnUrl = "sampleapp://omise.co/authorize_return?result=success"
@@ -110,6 +112,67 @@ class AuthorizingPaymentActivityTest {
         interceptActivityLifecycle { activity, _ ->
             (activity as? AuthorizingPaymentActivity)?.setViewModelFactory(viewModelFactory)
         }
+    }
+
+    @Test
+    fun passkeyFlow_whenSignatureParamExistsThenOpenNativeBrowser() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizePasskeyUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
+        intending(hasData(Uri.parse(authorizePasskeyUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+
+        val activityResult = scenario.result
+        assertEquals(Activity.RESULT_OK, activityResult.resultCode)
+
+        intended(
+            allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                hasData(Uri.parse(authorizePasskeyUrl)),
+            ),
+        )
+    }
+
+    @Test
+    fun passkeyFlow_whenSignatureParamExistsWithAcsThenPrioritizePasskey() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizePasskeyWithAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
+        intending(hasData(Uri.parse(authorizePasskeyWithAcsUrl))).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
+        val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+
+        val activityResult = scenario.result
+        assertEquals(Activity.RESULT_OK, activityResult.resultCode)
+
+        // Should open in native browser, not WebView
+        intended(
+            allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                hasData(Uri.parse(authorizePasskeyWithAcsUrl)),
+            ),
+        )
+    }
+
+    @Test
+    fun passkeyFlow_whenSignatureParamNotExistsThenFollowNormalFlow() {
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AuthorizingPaymentActivity::class.java).apply {
+                putExtra(EXTRA_AUTHORIZED_URLSTRING, authorizeNonAcsUrl)
+                putExtra(EXTRA_THREE_DS_REQUESTOR_APP_URL, threeDSRequestorAppURL)
+                putExtra(EXTRA_EXPECTED_RETURN_URLSTRING_PATTERNS, arrayOf(returnUrl))
+            }
+        ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
+
+        // Should setup WebView instead of opening native browser
+        onView(withId(R.id.authorizing_payment_webview))
+            .check(matches(isDisplayed()))
+            .check(matches(withUrl(authorizeNonAcsUrl)))
     }
 
     @Test

@@ -14,6 +14,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
@@ -36,6 +37,8 @@ import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
 import co.omise.android.models.Capability
+import co.omise.android.models.CardHolderDataField
+import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.CardParam
 import co.omise.android.models.Token
 import org.hamcrest.CoreMatchers.allOf
@@ -404,6 +407,387 @@ class CreditCardActivityTest {
         scenario.onActivity {
             assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
+    }
+
+    @Test
+    fun cardHolderData_fieldsNotVisibleWhenNotRequested() {
+        // Default scenario - no card holder data fields requested
+        onView(withId(R.id.edit_email)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.text_email_title)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.edit_phone_number)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.text_phone_number_title)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun cardHolderData_onlyEmailFieldVisibleWhenEmailRequested() {
+        // Create intent with only email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(
+                        arrayListOf(
+                            CardHolderDataField.EMAIL,
+                        ),
+                    ),
+                )
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        onView(withId(R.id.edit_email)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_email_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_phone_number)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.text_phone_number_title)).check(matches(not(isDisplayed())))
+    }
+
+    fun cardHolderData_onlyPhoneFieldVisibleWhenPhoneRequested() {
+        // Create intent with only phone field requested
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
+
+        scenario = launchActivityForResult(intentWithPhone)
+
+        onView(withId(R.id.edit_email)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.text_email_title)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.edit_phone_number)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_phone_number_title)).check(matches(isDisplayed()))
+    }
+
+    fun cardHolderData_bothFieldsVisibleWhenBothRequested() {
+        // Create intent with both fields requested
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
+
+        scenario = launchActivityForResult(intentWithBothFields)
+
+        onView(withId(R.id.edit_email)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_email_title)).check(matches(isDisplayed()))
+        onView(withId(R.id.edit_phone_number)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_phone_number_title)).check(matches(isDisplayed()))
+    }
+
+    fun cardHolderData_invalidEmailTriggersErrorAndDisablesButton() {
+        // Create intent with email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        // Fill in valid card information
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+
+        // Enter invalid email and lose focus
+        onView(withId(R.id.edit_email)).perform(typeText("invalid-email"), pressImeActionButton())
+
+        // Check that error is displayed and button is disabled
+        onView(withId(R.id.text_email_error)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_email_error)).check(matches(withText(R.string.error_invalid_email)))
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    fun cardHolderData_invalidPhoneTriggersErrorAndDisablesButton() {
+        // Create intent with phone field requested
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
+
+        scenario = launchActivityForResult(intentWithPhone)
+
+        // Fill in valid card information
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+
+        // Enter invalid phone and lose focus
+        onView(withId(R.id.edit_phone_number)).perform(typeText("invalid-phone"), pressImeActionButton())
+
+        // Check that error is displayed and button is disabled
+        onView(withId(R.id.text_phone_number_error)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_phone_number_error)).check(matches(withText(R.string.error_invalid_phone_number)))
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun cardHolderData_validEmailAndPhoneEnablesButton() {
+        // Create intent with both fields requested
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
+
+        scenario = launchActivityForResult(intentWithBothFields)
+
+        // Fill in all valid information including card holder data
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_email)).perform(typeText("john.doe@example.com"))
+        onView(withId(R.id.edit_phone_number)).perform(typeText("+1234567890"), pressImeActionButton())
+
+        // Check that no errors are displayed and button is enabled
+        onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.text_phone_number_error)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.button_submit)).check(matches(isEnabled()))
+    }
+
+    @Test
+    fun cardHolderData_emptyOptionalFieldsEnableButton() {
+        // Create intent with both fields requested
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
+
+        scenario = launchActivityForResult(intentWithBothFields)
+
+        // Fill in valid card information but leave card holder fields empty
+        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), pressImeActionButton())
+
+        // Check that button is enabled (empty optional fields are valid)
+        onView(withId(R.id.button_submit)).check(matches(isEnabled()))
+    }
+
+    fun cardHolderData_validCardHolderDataWithInvalidCardInfoDisablesButton() {
+        // Create intent with both fields requested
+        val intentWithBothFields =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(
+                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
+                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
+                )
+            }
+
+        scenario = launchActivityForResult(intentWithBothFields)
+
+        // Fill in invalid card information but valid card holder data
+        onView(withId(R.id.edit_card_number)).perform(typeText("1234567890")) // Invalid card number
+        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
+        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
+        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
+        onView(withId(R.id.edit_email)).perform(typeText("john.doe@example.com"))
+        onView(withId(R.id.edit_phone_number)).perform(typeText("+1234567890"), pressImeActionButton())
+
+        // Check that button is disabled due to invalid card info
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())))
+    }
+
+    fun cardHolderData_emailErrorClearsWhenGainingFocus() {
+        // Create intent with email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        // Enter invalid email and lose focus to trigger error
+        onView(withId(R.id.edit_email)).perform(typeText("invalid-email"))
+        onView(withId(R.id.edit_card_number)).perform(click()) // Change focus to trigger validation
+
+        // Verify error is shown
+        onView(withId(R.id.text_email_error)).check(matches(isDisplayed()))
+
+        // Focus back on email field
+        onView(withId(R.id.edit_email)).perform(click())
+
+        // Verify error is cleared when gaining focus
+        onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))
+    }
+
+    fun cardHolderData_phoneErrorClearsWhenGainingFocus() {
+        // Create intent with phone field requested
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
+
+        scenario = launchActivityForResult(intentWithPhone)
+
+        // Enter invalid phone and lose focus to trigger error
+        onView(withId(R.id.edit_phone_number)).perform(typeText("invalid-phone"))
+        onView(withId(R.id.edit_card_number)).perform(click()) // Change focus to trigger validation
+
+        // Verify error is shown
+        onView(withId(R.id.text_phone_number_error)).check(matches(isDisplayed()))
+
+        // Focus back on phone field
+        onView(withId(R.id.edit_phone_number)).perform(click())
+
+        // Verify error is cleared when gaining focus
+        onView(withId(R.id.text_phone_number_error)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun cardHolderData_emailValidationShowsErrorWhenFieldLosesFocusWithInvalidEmail() {
+        // Create intent with email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        // Focus on email field, enter invalid email, then move focus away
+        onView(withId(R.id.edit_email)).perform(click(), typeText("invalid-email"))
+        onView(withId(R.id.edit_card_number)).perform(click()) // This triggers focus loss
+
+        // Verify the specific error lines are covered
+        onView(withId(R.id.text_email_error)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_email_error)).check(matches(withText(R.string.error_invalid_email)))
+    }
+
+    @Test
+    fun cardHolderData_emailValidationHidesErrorWhenFieldLosesFocusWithValidEmail() {
+        // Create intent with email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        // Focus on email field, enter valid email, then move focus away
+        onView(withId(R.id.edit_email)).perform(click(), typeText("valid@example.com"))
+        onView(withId(R.id.edit_card_number)).perform(click()) // This triggers focus loss
+
+        // Verify error is not shown (covers the empty text and GONE visibility lines)
+        onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun cardHolderData_emailValidationHidesErrorWhenFieldLosesFocusWithEmptyEmail() {
+        // Create intent with email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        // Focus on email field (leave empty), then move focus away
+        onView(withId(R.id.edit_email)).perform(click())
+        onView(withId(R.id.edit_card_number)).perform(click()) // This triggers focus loss with empty field
+
+        // Verify error is not shown (covers the isEmpty() == true branch)
+        onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun cardHolderData_phoneValidationShowsErrorWhenFieldLosesFocusWithInvalidPhone() {
+        // Create intent with phone field requested
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
+
+        scenario = launchActivityForResult(intentWithPhone)
+
+        // Focus on phone field, enter invalid phone, then move focus away
+        onView(withId(R.id.edit_phone_number)).perform(click(), typeText("invalid-phone"))
+        onView(withId(R.id.edit_card_number)).perform(click()) // This triggers focus loss
+
+        // Verify the specific error lines are covered
+        onView(withId(R.id.text_phone_number_error)).check(matches(isDisplayed()))
+        onView(withId(R.id.text_phone_number_error)).check(matches(withText(R.string.error_invalid_phone_number)))
+    }
+
+    @Test
+    fun cardHolderData_phoneValidationHidesErrorWhenFieldLosesFocusWithValidPhone() {
+        // Create intent with phone field requested
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
+
+        scenario = launchActivityForResult(intentWithPhone)
+
+        // Focus on phone field, enter valid phone, then move focus away
+        onView(withId(R.id.edit_phone_number)).perform(click(), typeText("+1234567890"))
+        onView(withId(R.id.edit_card_number)).perform(click()) // This triggers focus loss
+
+        // Verify error is not shown (covers the with(phoneNumberErrorText) block with text = "" and visibility = GONE)
+        onView(withId(R.id.text_phone_number_error)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun cardHolderData_phoneValidationHidesErrorWhenFieldLosesFocusWithEmptyPhone() {
+        // Create intent with phone field requested
+        val intentWithPhone =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.PHONE_NUMBER)))
+            }
+
+        scenario = launchActivityForResult(intentWithPhone)
+
+        // Focus on phone field (leave empty), then move focus away
+        onView(withId(R.id.edit_phone_number)).perform(click())
+        onView(withId(R.id.edit_card_number)).perform(click()) // This triggers focus loss with empty field
+
+        // Verify error is not shown (covers the phoneNumberEdit.text?.isEmpty() == true branch)
+        onView(withId(R.id.text_phone_number_error)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun cardHolderData_emailValidationCoversIsEmailValidBranch() {
+        // Create intent with email field requested
+        val intentWithEmail =
+            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
+                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
+                putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL)))
+            }
+
+        scenario = launchActivityForResult(intentWithEmail)
+
+        // First test invalid email (false branch of isEmailValid)
+        onView(withId(R.id.edit_email)).perform(click(), typeText("invalid"))
+        onView(withId(R.id.edit_card_number)).perform(click())
+        onView(withId(R.id.text_email_error)).check(matches(isDisplayed()))
+
+        // Clear and test valid email (true branch of isEmailValid)
+        onView(withId(R.id.edit_email)).perform(click(), clearText(), typeText("valid@example.com"))
+        onView(withId(R.id.edit_card_number)).perform(click())
+        onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))
     }
 }
 
