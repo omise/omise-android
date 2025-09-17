@@ -37,10 +37,76 @@ Add the following line to your project's `build.gradle` file inside the `depende
 block:
 
 ```gradle
-implementation 'co.omise:omise-android:4.3.1'
+implementation 'co.omise:omise-android:6.0.0-alpha.1'
 ```
 
 ## Usage
+
+### Breaking changes in version `v6.0.0-alpha.1`
+
+> **Important:** This is an alpha release. Please test thoroughly before using in production.
+
+- **New Activity Declaration Required**: You must declare the new Flutter UI host activity in your `AndroidManifest.xml`:
+
+```xml
+<activity android:name="co.omise.android.ui.FlutterUIHostActivity" />
+```
+
+- **Custom Form Creation Removed**: Custom card form creation is no longer supported. Public fields in the credit card form (such as card brand, card number, etc.) are no longer available.
+
+- **Joda-Time Migration**: The SDK has migrated from Joda-Time to Java-Time. This affects date and time handling:
+
+  **Required Changes:**
+
+  - Replace `joda.time.LocalDate` with `java.time.LocalDate`
+  - Replace `joda.time.YearMonth` with `java.time.YearMonth`
+  - Replace `joda.time.format.DateTimeFormatter` with `java.time.format.DateTimeFormatter`
+  - Replace `joda.time.DateTime` with `java.time.ZonedDateTime`
+  - Use `com.fasterxml.jackson.datatype.jsr310.JavaTimeModule` for time serialization and deserialization
+  - Use `com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer` as a `LocalDateTime` serializer
+
+  **Date Format Changes:**
+
+  - Previous Joda-Time format: `2024-07-01T12:46:25.000Z`
+  - Current Java-Time format: `2024-07-01T12:46:25Z` (milliseconds are omitted)
+
+  **Backward Compatibility Helper:**
+  If you need the same string format as Joda-Time, use this formatter:
+
+  ```java
+  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+  ```
+
+  For heavily dependent integrations, create a utility class:
+
+  ```java
+  public static class CustomZonedDateTime {
+      private final ZonedDateTime zonedDateTime;
+      private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+      public CustomZonedDateTime(ZonedDateTime zonedDateTime) {
+          this.zonedDateTime = zonedDateTime;
+      }
+
+      @Override
+      public String toString() {
+          return zonedDateTime.format(formatter);
+      }
+
+      public ZonedDateTime getZonedDateTime() {
+          return zonedDateTime;
+      }
+  }
+  ```
+
+  Usage example:
+
+  ```java
+  final formattedString = token.createdAt.toString(); // gives you the formatted string, ex: 2024-06-24T17:07:53.717Z
+  final zonedTime = token.createdAt.getZonedDateTime();
+  ```
+
+- **Kotlin Version Update**: The SDK now uses Kotlin 1.9.22 (upgraded from 1.7.10). You may need to update your project's Kotlin version to ensure compatibility.
 
 ### Breaking changes in version `v5.0.0`
 
@@ -143,6 +209,8 @@ create your custom function to retrieve the necessary information, as different 
 account for backward compatibility.
 
 ### Custom card form
+
+> **Note:** Custom card form creation has been removed in v6.0.0-alpha.1. This section applies only to versions prior to v6.0.0-alpha.
 
 If you need to build your card form, components inside `CreditCardActivity`
 can be used on their own. For example, the `CreditCardEditText` can be used in XML as demonstrated:
@@ -287,7 +355,9 @@ There are two options to retrieve the Capability object.
            sourceTypes = listOf(SourceType.PromptPay, SourceType.TrueMoney)
    )
    ```
-If you want to edit only the interest, you can create your capabilities as shown. When the SDK detects that you did not pass any payment methods, it will automatically use what is available.
+
+   If you want to edit only the interest, you can create your capabilities as shown. When the SDK detects that you did not pass any payment methods, it will automatically use what is available.
+
 ```java
 val capability = Capability.create(
                 allowCreditCard = false,
@@ -295,9 +365,10 @@ val capability = Capability.create(
                 zeroInterestInstallments = true, // or false
             )
 ```
-   > **Note**
-   > Ensure you are adding payment methods supported by the account.
-   > If non of the payment methods are supported by your account you will see an empty list.
+
+> **Note**
+> Ensure you are adding payment methods supported by the account.
+> If non of the payment methods are supported by your account you will see an empty list.
 
 After the end user selects and creates a payment source, the activity result callback will be called; handle it as follows:
 
@@ -681,7 +752,7 @@ Some request methods allow the user to authorize the payment with an external ap
 
 ## ProGuard rules
 
-If you enable ProGuard, then add these rules to your ProGuard file and apply any missing rules that your IDE notifies you about. 
+If you enable ProGuard, then add these rules to your ProGuard file and apply any missing rules that your IDE notifies you about.
 
 ```ProGuard
 -dontwarn okio.**
