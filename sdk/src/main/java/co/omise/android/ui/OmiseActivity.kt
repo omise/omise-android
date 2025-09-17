@@ -51,8 +51,9 @@ abstract class OmiseActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
-    override fun setContentView(layoutResID: Int) {
-        super.setContentView(layoutResID)
+    // Override the View version for View Binding support
+    override fun setContentView(view: View?) {
+        super.setContentView(view)
         setupInsetsHandling()
     }
 
@@ -92,6 +93,8 @@ abstract class OmiseActivity : AppCompatActivity() {
             }
             insets
         }
+        // Force immediate application of insets
+        ViewCompat.requestApplyInsets(decorView)
     }
 
     @VisibleForTesting
