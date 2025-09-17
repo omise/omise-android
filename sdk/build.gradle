@@ -24,6 +24,8 @@ android {
         buildConfigField "String", "OMISE_PUBLIC_KEY", "\"${System.getenv("OMISE_PUBLIC_KEY") ?: ""}\""
         buildConfigField "String", "GOOGLE_PAY_MERCHANT_ID", "\"${System.getenv("GOOGLE_PAY_MERCHANT_ID") ?: ""}\""
         testInstrumentationRunner "co.omise.android.OmiseTestRunner"
+        // Consumer proguard rules is set to avoid cluttering the consumer's pro-guard rules
+        // with rules specific to the SDK which may break the SDK if not added to the consumer's side
         consumerProguardFiles 'proguard-rules.pro'
         ndk {
             // Filter for architectures supported by Flutter
@@ -131,26 +133,10 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-            def ossrhUsername = System.getenv("SONATYPE_USERNAME")
-            def ossrhPassword = System.getenv("SONATYPE_PASSWORD")
-            credentials {
-                username ossrhUsername
-                password ossrhPassword
-            }
-        }
-    }
 }
 
 signing {
-    def signingKey = System.getenv("PGP_SIGNING_KEY")
-    def signingPassword = System.getenv("PGP_SIGNING_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
+    useInMemoryPgpKeys(System.getenv("PGP_SIGNING_KEY"), System.getenv("PGP_SIGNING_PASSWORD"))
     sign publishing.publications.release
 }
 
@@ -161,6 +147,7 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:$joda_time_version"
     // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.79'
     implementation 'org.bouncycastle:bcprov-jdk15to18:1.79'
 
     debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
@@ -186,6 +173,7 @@ dependencies {
     androidTestImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
     androidTestImplementation "org.robolectric:annotations:$robolectric_version"
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "androidx.test:rules:$test_version"

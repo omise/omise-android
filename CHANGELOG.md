@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## V5.7.1
+* **Fix:** Set ProGuard rules to preserve internal SDK classes
+
+## V5.7.0
+* **Fix:** Scope down proguard rules to prevent affecting host app.
+* **Enhancement:** Support 16kb page size requirements.
+
+## V5.6.0
+* **CHANGED:** Rebrand OPN Payment to Omise.
+* 
 ## V5.5.0
 * **ADDED:** `installment_wlb_uob` source support.
 
