@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## V6.0.0-alpha.1
+### Breaking Changes
+* **New Activity Declaration Required**: You must declare `FlutterUIHostActivity` in your `AndroidManifest.xml`
+* **Custom Form Creation Removed**: Custom card forms and public card fields are no longer available
+* **Joda-Time Migration**: Migrated from Joda-Time to Java-Time (affects date handling)
+* **Kotlin Version Update**: Updated to Kotlin 1.9.22 from 1.7.10
+
 ## V5.7.1
 * **Fix:** Set ProGuard rules to preserve internal SDK classes
 
