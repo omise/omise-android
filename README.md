@@ -407,6 +407,97 @@ You can use our Google Pay request builder `request/GooglePay.kt`, which include
 Configurations for the builders are modifiable through the `class` constructor to suit your needs. However, you are also welcome to make your own integration and call
 our tokens builder yourself.
 
+# Passkey Integration
+
+The Omise Android SDK supports Passkey authentication for enhanced security and user experience. Passkey provides a passwordless authentication method that uses biometric authentication or device PINs, making payments more secure and convenient for users.
+
+## Prerequisites
+
+Before implementing Passkey authentication:
+- Ensure your Omise account supports Passkey authentication
+- Configure your backend to handle Passkey authentication flows
+
+## Implementation
+
+### Requesting Cardholder Data
+
+To use Passkey authentication, you must request cardholder data fields (email or phone number) during the payment process. This information is required for the backend Passkey authentication setup.
+
+#### Card Activity with Passkey
+
+When using the `CreditCardActivity`, you can request cardholder data by adding the `EXTRA_CARD_HOLDER_DATA` parameter:
+
+```kotlin
+private val CARD_HOLDER_DATA = CardHolderDataList(
+    arrayListOf(
+        CardHolderDataField.EMAIL,
+        CardHolderDataField.PHONE_NUMBER
+    )
+)
+
+private fun payByCreditCardWithPasskey() {
+    Intent(this, CreditCardActivity::class.java).run {
+        putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+        putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CARD_HOLDER_DATA)
+        creditCardLauncher.launch(this)
+    }
+}
+```
+
+#### Payment Creator Activity with Passkey
+
+For the `PaymentCreatorActivity`, include the cardholder data parameter alongside your other payment configuration:
+
+```kotlin
+private val CARD_HOLDER_DATA = CardHolderDataList(
+    arrayListOf(
+        CardHolderDataField.EMAIL,
+        CardHolderDataField.PHONE_NUMBER
+    )
+)
+
+private fun showPaymentCreatorActivityWithPasskey() {
+    Intent(this, PaymentCreatorActivity::class.java).run {
+        putExtra(OmiseActivity.EXTRA_PKEY, PUBLIC_KEY)
+        putExtra(OmiseActivity.EXTRA_AMOUNT, 150000L)
+        putExtra(OmiseActivity.EXTRA_CURRENCY, "thb")
+        putExtra(OmiseActivity.EXTRA_CARD_HOLDER_DATA, CARD_HOLDER_DATA)
+        putExtra(OmiseActivity.EXTRA_CAPABILITY, capability)
+        paymentCreatorLauncher.launch(this)
+    }
+}
+```
+
+### Cardholder Data Fields
+
+The SDK supports the following cardholder data fields:
+
+- `CardHolderDataField.EMAIL` - Requests the customer's email address
+- `CardHolderDataField.PHONE_NUMBER` - Requests the customer's phone number
+
+You can request either one or both fields depending on your authentication requirements:
+
+```kotlin
+// Request only email
+private val CARD_HOLDER_DATA_EMAIL_ONLY = CardHolderDataList(
+    arrayListOf(CardHolderDataField.EMAIL)
+)
+
+// Request only phone number
+private val CARD_HOLDER_DATA_PHONE_ONLY = CardHolderDataList(
+    arrayListOf(CardHolderDataField.PHONE_NUMBER)
+)
+
+// Request both email and phone number
+private val CARD_HOLDER_DATA_BOTH = CardHolderDataList(
+    arrayListOf(
+        CardHolderDataField.EMAIL,
+        CardHolderDataField.PHONE_NUMBER
+    )
+)
+```
+---
+
 ### Creating a source
 
 If you need to create a payment source and use it outside the provided SDK context, follow these steps. First, build the Client and supply your public key in this manner:
