@@ -10,6 +10,7 @@ import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Source
 import co.omise.android.models.Token
+import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 
 class GooglePayActivity : AppCompatActivity() {
     private lateinit var pKey: String
@@ -62,6 +63,7 @@ class GooglePayActivity : AppCompatActivity() {
                 "googlePayRequestBillingAddress" to requestBillingAddress,
                 "googlePayRequestPhoneNumber" to requestPhoneNumber,
                 "googlePayCardBrands" to cardNetworks,
+                "securePaymentFlag" to intent.getBooleanExtra(EXTRA_IS_SECURE, true),
                 // Pass the environment again since this page can be opened as a stand alone page without the need for the select payment method page
                 "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
             )

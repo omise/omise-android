@@ -82,6 +82,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                             "brand" to "Gucci",
                         ),
                     ),
+                "securePaymentFlag" to intent.getBooleanExtra(EXTRA_IS_SECURE, true),
                 "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
             )
 

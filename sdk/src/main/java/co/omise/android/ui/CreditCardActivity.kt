@@ -54,6 +54,7 @@ class CreditCardActivity : OmiseActivity() {
         val arguments =
             mapOf(
                 "pkey" to pKey,
+                "securePaymentFlag" to intent.getBooleanExtra(EXTRA_IS_SECURE, true),
                 // Pass the environment again since this page can be opened as a stand alone page without the need for the select payment method page
                 "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
             )
