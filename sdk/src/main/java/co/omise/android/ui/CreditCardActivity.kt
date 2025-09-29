@@ -454,23 +454,13 @@ class CreditCardActivity : OmiseActivity() {
                     }
                     // If billing address not required, these fields don't affect validation
                 }
-                // Email field (optional but if filled must be valid)
+                // Email field (required when requested by merchant)
                 editText == emailEdit && cardHolderData.fields.contains(CardHolderDataField.EMAIL) -> {
-                    val text = emailEdit.text?.toString()
-                    if (text.isNullOrEmpty()) {
-                        validationResults[editText] = true // Empty is valid (optional)
-                    } else {
-                        validationResults[editText] = isEmailValid(emailEdit)
-                    }
+                    validationResults[editText] = isEmailValid(emailEdit)
                 }
-                // Phone number field (optional but if filled must be valid)
+                // Phone number field (required when requested by merchant)
                 editText == phoneNumberEdit && cardHolderData.fields.contains(CardHolderDataField.PHONE_NUMBER) -> {
-                    val text = phoneNumberEdit.text?.toString()
-                    if (text.isNullOrEmpty()) {
-                        validationResults[editText] = true // Empty is valid (optional)
-                    } else {
-                        validationResults[editText] = isPhoneNumberValid(phoneNumberEdit)
-                    }
+                    validationResults[editText] = isPhoneNumberValid(phoneNumberEdit)
                 }
                 // Other fields that are not visible/required don't affect validation
             }

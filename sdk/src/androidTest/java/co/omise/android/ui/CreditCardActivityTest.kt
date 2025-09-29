@@ -555,30 +555,6 @@ class CreditCardActivityTest {
         onView(withId(R.id.button_submit)).check(matches(isEnabled()))
     }
 
-    @Test
-    fun cardHolderData_emptyOptionalFieldsEnableButton() {
-        // Create intent with both fields requested
-        val intentWithBothFields =
-            Intent(InstrumentationRegistry.getInstrumentation().context, CreditCardActivity::class.java).apply {
-                putExtra(OmiseActivity.EXTRA_PKEY, "test_key1234")
-                putExtra(
-                    OmiseActivity.EXTRA_CARD_HOLDER_DATA,
-                    CardHolderDataList(arrayListOf(CardHolderDataField.EMAIL, CardHolderDataField.PHONE_NUMBER)),
-                )
-            }
-
-        scenario = launchActivityForResult(intentWithBothFields)
-
-        // Fill in valid card information but leave card holder fields empty
-        onView(withId(R.id.edit_card_number)).perform(typeText("4242424242424242"))
-        onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
-        onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
-        onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"), pressImeActionButton())
-
-        // Check that button is enabled (empty optional fields are valid)
-        onView(withId(R.id.button_submit)).check(matches(isEnabled()))
-    }
-
     fun cardHolderData_validCardHolderDataWithInvalidCardInfoDisablesButton() {
         // Create intent with both fields requested
         val intentWithBothFields =
