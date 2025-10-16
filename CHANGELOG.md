@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.8.0
+* **Added:** Support Passkey authentication flow
+
 ## V5.7.1
 * **Fix:** Set ProGuard rules to preserve internal SDK classes
 
