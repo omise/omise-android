@@ -109,10 +109,13 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           arch: x86_64
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x2340
           disable-animations: true
-          profile: Nexus One
-          script: ./gradlew sdk:jacocoTestReport
+          profile: pixel_9_pro
+          script: |
+            adb uninstall co.omise.android.test || true
+            adb uninstall co.omise.android || true
+            ./gradlew sdk:jacocoTestReport sdk:sonar
 
       - name: Publish Maven package
         run: ./gradlew publishToSonatype closeStagingRepositories
