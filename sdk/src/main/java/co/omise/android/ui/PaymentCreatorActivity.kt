@@ -9,7 +9,6 @@ import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Capability
 import co.omise.android.models.CardHolderDataList
-
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 

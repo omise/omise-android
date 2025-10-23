@@ -7,9 +7,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
+import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.Source
 import co.omise.android.models.Token
-import co.omise.android.models.CardHolderDataList
 
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
