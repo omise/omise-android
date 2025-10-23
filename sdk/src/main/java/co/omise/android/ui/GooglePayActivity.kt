@@ -5,14 +5,13 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatActivity
 import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 
-class GooglePayActivity : AppCompatActivity() {
+class GooglePayActivity : OmiseActivity() {
     private lateinit var pKey: String
     private var cardNetworks: ArrayList<String>? = null
     private var price: Long = 0

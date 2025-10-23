@@ -26,6 +26,7 @@ abstract class OmiseActivity : AppCompatActivity() {
         const val EXTRA_GOOGLEPAY_MERCHANT_ID = "OmiseActivity.googlepayMerchantId"
         const val EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS = "OmiseActivity.googlepayRequestBillingAddress"
         const val EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER = "OmiseActivity.googlepayRequestPhoneNumber"
+        const val EXTRA_CARD_HOLDER_DATA = "OmiseActivity.cardHolderData"
 
         const val EXTRA_TOKEN = "OmiseActivity.token"
         const val EXTRA_TOKEN_OBJECT = "OmiseActivity.tokenObject"

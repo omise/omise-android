@@ -7,6 +7,9 @@
 * **Joda-Time Migration**: Migrated from Joda-Time to Java-Time (affects date handling)
 * **Kotlin Version Update**: Updated to Kotlin 1.9.22 from 1.7.10
 
+## V5.8.0
+* **Added:** Support Passkey authentication flow
+
 ## V5.7.1
 * **Fix:** Set ProGuard rules to preserve internal SDK classes
 
