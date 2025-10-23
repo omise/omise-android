@@ -9,12 +9,14 @@ import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Source
 import co.omise.android.models.Token
+import co.omise.android.models.CardHolderDataList
 
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
  */
 class CreditCardActivity : OmiseActivity() {
     private lateinit var pKey: String
+    private lateinit var cardHolderData: CardHolderDataList
 
     private lateinit var flutterActivityLauncher: ActivityResultLauncher<Intent>
 
@@ -46,6 +48,7 @@ class CreditCardActivity : OmiseActivity() {
 
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not find ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }
+        cardHolderData = intent.parcelable<CardHolderDataList>(EXTRA_CARD_HOLDER_DATA) ?: CardHolderDataList(arrayListOf())
         flutterActivityLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 handleFlutterResult(result.resultCode, result.data)

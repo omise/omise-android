@@ -8,6 +8,8 @@ import androidx.annotation.VisibleForTesting
 import co.omise.android.BuildConfig
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Capability
+import co.omise.android.models.CardHolderDataList
+
 import co.omise.android.models.Source
 import co.omise.android.models.Token
 
@@ -22,6 +24,7 @@ class PaymentCreatorActivity : OmiseActivity() {
     private lateinit var googlepayMerchantId: String
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
+    private lateinit var cardHolderDataList: CardHolderDataList
     private var customCapability: Capability? = null
 
     @VisibleForTesting
@@ -107,6 +110,7 @@ class PaymentCreatorActivity : OmiseActivity() {
         googlepayMerchantId = intent.getStringExtra(EXTRA_GOOGLEPAY_MERCHANT_ID) ?: "[GOOGLEPAY_MERCHANT_ID]"
         googlepayRequestBillingAddress = intent.getBooleanExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, false)
         customCapability = intent.parcelable(EXTRA_CAPABILITY)
+        cardHolderDataList = intent.parcelable<CardHolderDataList>(EXTRA_CARD_HOLDER_DATA) ?: CardHolderDataList(arrayListOf())
     }
 
     companion object {

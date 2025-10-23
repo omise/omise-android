@@ -12,7 +12,7 @@ import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 
-class GooglePayActivity : AppCompatActivity() {
+class GooglePayActivity : OmiseActivity() {
     private lateinit var pKey: String
     private var cardNetworks: ArrayList<String>? = null
     private var price: Long = 0

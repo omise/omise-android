@@ -15,8 +15,8 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
@@ -40,7 +40,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        api-level: [ 33 ]
+        api-level: [33]
     needs: build
     steps:
       - name: Checkout code
@@ -51,8 +51,8 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
       - name: Enable KVM group perms
         run: |
@@ -109,10 +109,13 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           arch: x86_64
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x2340
           disable-animations: true
-          profile: Nexus One
-          script: ./gradlew sdk:jacocoTestReport
+          profile: pixel_9_pro
+          script: |
+            adb uninstall co.omise.android.test || true
+            adb uninstall co.omise.android || true
+            ./gradlew sdk:jacocoTestReport
 
       - name: Publish Maven package
         run: ./gradlew publishToSonatype closeStagingRepositories
@@ -121,4 +124,3 @@ jobs:
           PGP_SIGNING_PASSWORD: ${{ secrets.PGP_SIGNING_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-

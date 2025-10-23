@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.webkit.CookieManager
@@ -290,12 +291,28 @@ class AuthorizingPaymentActivity : OmiseActivity() {
         return resultMap
     }
 
+    private fun openInNativeBrowser(uri: Uri) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("PaymentAuth", "Failed to open URL in native browser: ${e.message}")
+            // Fallback to WebView on error
+            setupWebView()
+        }
+    }
+
     private fun handlePaymentAuthorization() {
         val authUrl = verifier.authorizedURL
         // check for legacy payments that require web view
         val queryParams = createMapFromQueryString(authUrl.query ?: "")
         val isAcs = queryParams["acs"] == "true"
-        if (isAcs) {
+        val isPasskey = queryParams.containsKey("signature")
+        if (isPasskey) {
+            // Open in native browser for PASSKEY signature
+            openInNativeBrowser(authUrl)
+            finishActivityWithSuccessful(null)
+        } else if (isAcs) {
             // Check if the URL needs to be opened externally
             if (verifier.verifyExternalURL(authUrl)) {
                 openDeepLink(authUrl)
