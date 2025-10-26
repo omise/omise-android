@@ -10,6 +10,7 @@ import co.omise.android.extensions.parcelable
 import co.omise.android.models.CardHolderDataList
 import co.omise.android.models.Source
 import co.omise.android.models.Token
+import co.omise.android.models.toFlutterString
 
 /**
  * CreditCardActivity is the UI class for taking credit card information input from the user.
@@ -60,6 +61,7 @@ class CreditCardActivity : OmiseActivity() {
                 "securePaymentFlag" to intent.getBooleanExtra(EXTRA_IS_SECURE, true),
                 // Pass the environment again since this page can be opened as a stand alone page without the need for the select payment method page
                 "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
+                "cardHolderData" to cardHolderData.fields.map { it.toFlutterString() }
             )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
