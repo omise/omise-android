@@ -14,7 +14,8 @@ data class CardHolderDataList(
     val fields: ArrayList<CardHolderDataField>,
 ) : Parcelable
 
-fun CardHolderDataField.toFlutterString(): String = when (this) {
-    CardHolderDataField.EMAIL -> "email"
-    CardHolderDataField.PHONE_NUMBER -> "phoneNumber"
-}
+fun CardHolderDataField.toFlutterString(): String =
+    when (this) {
+        CardHolderDataField.EMAIL -> "email"
+        CardHolderDataField.PHONE_NUMBER -> "phoneNumber"
+    }

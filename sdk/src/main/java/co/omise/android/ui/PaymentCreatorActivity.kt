@@ -87,7 +87,7 @@ class PaymentCreatorActivity : OmiseActivity() {
                     ),
                 "securePaymentFlag" to intent.getBooleanExtra(EXTRA_IS_SECURE, true),
                 "environment" to if (BuildConfig.FLAVOR.contains("staging")) "staging" else "production",
-                "cardHolderData" to cardHolderDataList.fields.map { it.toFlutterString() }
+                "cardHolderData" to cardHolderDataList.fields.map { it.toFlutterString() },
             )
 
         // Launch FlutterUIHostActivity with the desired route and arguments
