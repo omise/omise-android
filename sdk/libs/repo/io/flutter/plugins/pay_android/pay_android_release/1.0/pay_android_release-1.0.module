@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.12"
+      "version": "8.10.2"
     }
   },
   "variants": [
@@ -27,14 +27,14 @@
           "group": "io.flutter",
           "module": "flutter_embedding_release",
           "version": {
-            "requires": "1.0.0-c29809135135e262a912cf583b2c90deb9ded610"
+            "requires": "1.0.0-cf56914b326edb0ccb123ffdc60f00060bd513fa"
           }
         },
         {
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib-jdk8",
           "version": {
-            "requires": "1.9.0"
+            "requires": "1.8.22"
           }
         }
       ],
@@ -42,11 +42,11 @@
         {
           "name": "pay_android_release-1.0.aar",
           "url": "pay_android_release-1.0.aar",
-          "size": 22599,
-          "sha512": "c39a057aa0008ebef3fad11490cf2dbafcf1ee1fffe9d0620e959e74d6d291d5aa6a9abecaabbeeff85a7b03717e2b08fd26bfff502f9703b95b456aea946fb9",
-          "sha256": "b64740822e18ec79692db537dd1bffbc1db788f59b6109e3bce06b185ea41359",
-          "sha1": "620228dc565e063887af770bc7e644efb99226c1",
-          "md5": "1677fb0bdd334f2d0f91d0e307ad4914"
+          "size": 22674,
+          "sha512": "8ff2fa164a640d7ea06d25a06e435bdfa8e73df2754de8fbdb6cd2b5254cc78117978cf1aa96eb2306b53c86e6346019aed956bfeb9fa2a55fb42c9640b82d3d",
+          "sha256": "6a38e964e5698059616460c000805949682b2875e19dc9d5bda33a9f1a2a0725",
+          "sha1": "3940063e4c9ec554acabe87ae095346ea7c9dd0c",
+          "md5": "712f5b4bbad04e8c22d0d02054456c29"
         }
       ]
     },
@@ -63,7 +63,7 @@
           "group": "io.flutter",
           "module": "flutter_embedding_release",
           "version": {
-            "requires": "1.0.0-c29809135135e262a912cf583b2c90deb9ded610"
+            "requires": "1.0.0-cf56914b326edb0ccb123ffdc60f00060bd513fa"
           }
         },
         {
@@ -77,7 +77,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib-jdk8",
           "version": {
-            "requires": "1.9.0"
+            "requires": "1.8.22"
           }
         }
       ],
@@ -85,11 +85,11 @@
         {
           "name": "pay_android_release-1.0.aar",
           "url": "pay_android_release-1.0.aar",
-          "size": 22599,
-          "sha512": "c39a057aa0008ebef3fad11490cf2dbafcf1ee1fffe9d0620e959e74d6d291d5aa6a9abecaabbeeff85a7b03717e2b08fd26bfff502f9703b95b456aea946fb9",
-          "sha256": "b64740822e18ec79692db537dd1bffbc1db788f59b6109e3bce06b185ea41359",
-          "sha1": "620228dc565e063887af770bc7e644efb99226c1",
-          "md5": "1677fb0bdd334f2d0f91d0e307ad4914"
+          "size": 22674,
+          "sha512": "8ff2fa164a640d7ea06d25a06e435bdfa8e73df2754de8fbdb6cd2b5254cc78117978cf1aa96eb2306b53c86e6346019aed956bfeb9fa2a55fb42c9640b82d3d",
+          "sha256": "6a38e964e5698059616460c000805949682b2875e19dc9d5bda33a9f1a2a0725",
+          "sha1": "3940063e4c9ec554acabe87ae095346ea7c9dd0c",
+          "md5": "712f5b4bbad04e8c22d0d02054456c29"
         }
       ]
     },

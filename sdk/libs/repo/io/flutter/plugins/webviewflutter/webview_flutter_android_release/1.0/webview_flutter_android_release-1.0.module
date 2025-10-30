@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.12"
+      "version": "8.10.2"
     }
   },
   "variants": [
@@ -27,14 +27,14 @@
           "group": "io.flutter",
           "module": "flutter_embedding_release",
           "version": {
-            "requires": "1.0.0-c29809135135e262a912cf583b2c90deb9ded610"
+            "requires": "1.0.0-cf56914b326edb0ccb123ffdc60f00060bd513fa"
           }
         },
         {
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib-jdk8",
           "version": {
-            "requires": "1.9.0"
+            "requires": "1.8.22"
           }
         }
       ],
@@ -42,11 +42,11 @@
         {
           "name": "webview_flutter_android_release-1.0.aar",
           "url": "webview_flutter_android_release-1.0.aar",
-          "size": 203022,
-          "sha512": "362d070e762373fddacea82b44872b16b6cf96a7ed8b01b3001c6d776a2e99f2e36c4964f854e4c9512374339e7a71c81fd0b3827610bf43a2f497b3545d3265",
-          "sha256": "351ed7680c1bdb067acbe50177f7f2b6cc835a9c7c0e3af1ef9a05c1e3ef6a6f",
-          "sha1": "f881932e1f123128acf3a7f47ac13685e5dbfc58",
-          "md5": "c618c4dfd058249e6b83fe188a949839"
+          "size": 202792,
+          "sha512": "ea48d0d49e12db1198131644bf642bc31fbf47611240acef6531f3b603deb0e2ebf539f4ebcbb146e0b6bd1a9dfe00d4a0339f95fd74eb7559a98020e3cb6821",
+          "sha256": "738d11a4379d63b973fd1277e61a36c708b6135fa20e000c25c6738a120534cc",
+          "sha1": "70ee99a348b72665bdb804de9eecb5866185f2ee",
+          "md5": "2d92cdde7563f9d11040dda1ea972304"
         }
       ]
     },
@@ -63,7 +63,7 @@
           "group": "io.flutter",
           "module": "flutter_embedding_release",
           "version": {
-            "requires": "1.0.0-c29809135135e262a912cf583b2c90deb9ded610"
+            "requires": "1.0.0-cf56914b326edb0ccb123ffdc60f00060bd513fa"
           }
         },
         {
@@ -84,7 +84,7 @@
           "group": "org.jetbrains.kotlin",
           "module": "kotlin-stdlib-jdk8",
           "version": {
-            "requires": "1.9.0"
+            "requires": "1.8.22"
           }
         }
       ],
@@ -92,11 +92,11 @@
         {
           "name": "webview_flutter_android_release-1.0.aar",
           "url": "webview_flutter_android_release-1.0.aar",
-          "size": 203022,
-          "sha512": "362d070e762373fddacea82b44872b16b6cf96a7ed8b01b3001c6d776a2e99f2e36c4964f854e4c9512374339e7a71c81fd0b3827610bf43a2f497b3545d3265",
-          "sha256": "351ed7680c1bdb067acbe50177f7f2b6cc835a9c7c0e3af1ef9a05c1e3ef6a6f",
-          "sha1": "f881932e1f123128acf3a7f47ac13685e5dbfc58",
-          "md5": "c618c4dfd058249e6b83fe188a949839"
+          "size": 202792,
+          "sha512": "ea48d0d49e12db1198131644bf642bc31fbf47611240acef6531f3b603deb0e2ebf539f4ebcbb146e0b6bd1a9dfe00d4a0339f95fd74eb7559a98020e3cb6821",
+          "sha256": "738d11a4379d63b973fd1277e61a36c708b6135fa20e000c25c6738a120534cc",
+          "sha1": "70ee99a348b72665bdb804de9eecb5866185f2ee",
+          "md5": "2d92cdde7563f9d11040dda1ea972304"
         }
       ]
     },
@@ -132,11 +132,11 @@
         {
           "name": "webview_flutter_android_release-1.0-javadoc.jar",
           "url": "webview_flutter_android_release-1.0-javadoc.jar",
-          "size": 637918,
-          "sha512": "16d26035b0525aac9f9cd18a0dcc3630e815469ebb988fb4596b929dc7fcb180f375a9c21529b37298da0c15fdf4329cfad0a9ed2979e9bb599f6082da9fe981",
-          "sha256": "ff0f08c7a8add86eb786e8588e25858b6ae991bb5e55f0e5754b728aefefb0a9",
-          "sha1": "55226fab847a85d7fbd8bc7b0270762b85b7e114",
-          "md5": "760a1da3f7811762e32031b338d516b5"
+          "size": 638013,
+          "sha512": "a7fad4a7577278ad4b64ef1a8d104b9f653fb0d1f82e0f100f4195153fc3ec7d151c109e951481b494cd337f86c194ab7343135eefe6548f06bd958ab14b9bee",
+          "sha256": "feea4378f19aab1cb008e465864951185f6fc289997d690522831a1d314cc461",
+          "sha1": "85abdf54aaf65fe41aeba37e8ad7118df7db3bd6",
+          "md5": "9513412a59b0a826d7489853b8a25c93"
         }
       ]
     }

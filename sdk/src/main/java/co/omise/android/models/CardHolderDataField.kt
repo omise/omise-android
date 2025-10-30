@@ -1,7 +1,7 @@
 package co.omise.android.models
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 enum class CardHolderDataField {
     EMAIL,
@@ -13,3 +13,9 @@ enum class CardHolderDataField {
 data class CardHolderDataList(
     val fields: ArrayList<CardHolderDataField>,
 ) : Parcelable
+
+fun CardHolderDataField.toFlutterString(): String =
+    when (this) {
+        CardHolderDataField.EMAIL -> "email"
+        CardHolderDataField.PHONE_NUMBER -> "phoneNumber"
+    }
