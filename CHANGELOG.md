@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## V6.0.0-alpha.2
+
+* **Added:** Support Passkey authentication flow in bridging layer.
+
 ## V6.0.0-alpha.1
 ### Breaking Changes
 * **New Activity Declaration Required**: You must declare `FlutterUIHostActivity` in your `AndroidManifest.xml`
