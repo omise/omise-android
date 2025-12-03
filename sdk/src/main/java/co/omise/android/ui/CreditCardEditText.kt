@@ -3,12 +3,12 @@ package co.omise.android.ui
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
 import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
+import androidx.core.content.ContextCompat
 import co.omise.android.CardNumber
 import co.omise.android.R
 import co.omise.android.models.CardBrand
@@ -98,7 +98,7 @@ class CreditCardEditText : OmiseEditText {
                 imageLeftPosition,
                 imageTopPosition,
                 imageLeftPosition + targetWidth,
-                imageTopPosition + targetHeight
+                imageTopPosition + targetHeight,
             )
             it.draw(canvas)
         }
