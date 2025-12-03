@@ -123,7 +123,7 @@
     <string name="payment_method_touch_n_go_title">Touch ’n Go</string>
     <string name="googlepay">Google Pay</string>
     <string name="pay_with_googlepay_button_content_description" translatable="false">Pay With Google Pay</string>
-    <string name="payment_method_rabbit_linepay_title" translatable="false">Rabbit LINE Pay</string>
+    <string name="payment_method_rabbit_linepay_title" translatable="false">LINE Pay</string>
     <string name="payment_method_boots_title" translatable="false">Boost</string>
     <string name="payment_method_shopeepay_title" translatable="false">ShopeePay</string>
     <string name="payment_method_maybank_qr_title" translatable="false">Maybank QRPay</string>

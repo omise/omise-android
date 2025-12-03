@@ -35,4 +35,6 @@
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="list_item_height">64dp</dimen>
     <dimen name="list_item_small_height">48dp</dimen>
+    <dimen name="list_item_icon_size">48dp</dimen>
+    <dimen name="card_brand_icon_size">48dp</dimen>
 </resources>
