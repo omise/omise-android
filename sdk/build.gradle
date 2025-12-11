@@ -156,7 +156,7 @@ dependencies {
     // Required by Netcetera, check https://3dss.netcetera.com/3dssdk/doc/2.10.0/android-error-handling error [1322]
     implementation 'org.bouncycastle:bcprov-jdk15to18:1.79'
 
-    debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
+    testImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
         exclude group: 'androidx.test', module: 'core'
     }
 
@@ -190,6 +190,9 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
     androidTestImplementation "com.github.tmurakami:dexopener:$dexopener_version"
+    androidTestImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
+        exclude group: 'androidx.test', module: 'core'
+    }
 
     // Netcetera 3SD SDK
     implementation "org.slf4j:slf4j-api:1.7.36"
@@ -202,7 +205,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 // Unit and instrumented test
-tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint', 'createProductionDebugCoverageReport']) {
+tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProductionDebugUnitTest', 'lint']) {
     reports {
         xml.required = true
         html.required = true
@@ -224,10 +227,9 @@ tasks.create(name: 'jacocoTestReport', type: JacocoReport, dependsOn: ['testProd
             ]
     ))
     executionData.from = fileTree(dir: project.buildDir, includes: [
-            // Execution data for unit tests
-            '**/*.exec',
-            // Execution data for instrumentation tests
-            '**/*.ec'
+            // Execution data for unit tests only (no device needed)
+            '**/*.exec'
+            // Note: '**/*.ec' removed - instrumentation tests need device
     ])
 }
 // Unit tests only

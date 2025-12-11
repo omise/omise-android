@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'jacoco'
 }
 
 android {
@@ -29,6 +30,24 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+    }
+    
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
     }
 }
 

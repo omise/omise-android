@@ -101,3 +101,74 @@ nexusPublishing {
         }
     }
 }
+
+// Aggregated Jacoco report for all modules
+apply plugin: 'jacoco'
+
+task jacocoRootReport(type: JacocoReport) {
+    description = 'Generates an aggregate coverage report from all subprojects'
+    group = 'Reporting'
+    
+    reports {
+        xml.required = true
+        html.required = true
+        html.outputLocation = file("${buildDir}/reports/jacoco/jacocoRootReport/html")
+    }
+    
+    // Explicitly depend on test tasks
+    dependsOn ':sdk:testProductionDebugUnitTest'
+    dependsOn ':app:testJavaProductionDebugUnitTest'
+    dependsOn ':bankapp:testDebugUnitTest'
+    
+    // Collect source directories from all subprojects
+    sourceDirectories.from = files(subprojects.collect { project ->
+        "${project.projectDir}/src/main/java"
+    })
+    
+    // Collect class directories from all subprojects
+    classDirectories.from = files(subprojects.collect { project ->
+        [
+            fileTree(
+                dir: "${project.buildDir}/tmp/kotlin-classes/productionDebug",
+                excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*'
+                ]
+            ),
+            fileTree(
+                dir: "${project.buildDir}/tmp/kotlin-classes/javaProductionDebug",
+                excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*'
+                ]
+            ),
+            fileTree(
+                dir: "${project.buildDir}/tmp/kotlin-classes/debug",
+                excludes: [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*'
+                ]
+            )
+        ]
+    }.flatten())
+    
+    // Collect execution data from all subprojects
+    executionData.from = files(subprojects.collect { project ->
+        fileTree(
+            dir: project.buildDir,
+            includes: ['**/*.exec']
+        )
+    }.flatten())
+}

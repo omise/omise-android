@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'jacoco'
 
 android {
 
@@ -49,6 +50,24 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+    }
+    
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
     }
 }
 
