@@ -137,10 +137,10 @@ class CreditCardActivityTest {
             .perform(
                 actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
-        onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
-        onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
-        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("New York"))
-        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeNumberText("14145"), pressImeActionButton())
+        onView(withId(R.id.edit_street1)).perform(scrollTo(), click(), typeText("311 Sanders Hill Rd"))
+        onView(withId(R.id.edit_city)).perform(scrollTo(), click(), typeText("Strykersville"))
+        onView(withId(R.id.edit_state)).perform(scrollTo(), click(), typeText("New York"))
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), click(), typeNumberText("14145"), pressImeActionButton())
 
         onView(withId(R.id.edit_card_number)).check(matches(withText("4242 4242 4242 4242")))
         onView(withId(R.id.edit_card_name)).check(matches(withText("John Doe")))
@@ -362,10 +362,10 @@ class CreditCardActivityTest {
             .perform(
                 actionOnItem<ViewHolder>(hasDescendant(withText("United States of America")), click()),
             )
-        onView(withId(R.id.edit_street1)).perform(scrollTo(), typeText("311 Sanders Hill Rd"))
-        onView(withId(R.id.edit_city)).perform(scrollTo(), typeText("Strykersville"))
-        onView(withId(R.id.edit_state)).perform(scrollTo(), typeText("New York"))
-        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), typeNumberText("14145"), pressImeActionButton())
+        onView(withId(R.id.edit_street1)).perform(scrollTo(), click(), typeText("311 Sanders Hill Rd"))
+        onView(withId(R.id.edit_city)).perform(scrollTo(), click(), typeText("Strykersville"))
+        onView(withId(R.id.edit_state)).perform(scrollTo(), click(), typeText("New York"))
+        onView(withId(R.id.edit_postal_code)).perform(scrollTo(), click(), typeNumberText("14145"), pressImeActionButton())
         onView(withId(R.id.button_submit)).perform(scrollTo(), click())
 
         assertEquals(
@@ -546,8 +546,8 @@ class CreditCardActivityTest {
         onView(withId(R.id.edit_card_name)).perform(typeText("John Doe"))
         onView(withId(R.id.edit_expiry_date)).perform(typeNumberText("1234"))
         onView(withId(R.id.edit_security_code)).perform(typeNumberText("123"))
-        onView(withId(R.id.edit_email)).perform(typeText("john.doe@example.com"))
-        onView(withId(R.id.edit_phone_number)).perform(typeText("+1234567890"), pressImeActionButton())
+        onView(withId(R.id.edit_email)).perform(scrollTo(), click(), typeText("john.doe@example.com"))
+        onView(withId(R.id.edit_phone_number)).perform(scrollTo(), click(), typeText("+1234567890"), pressImeActionButton())
 
         // Check that no errors are displayed and button is enabled
         onView(withId(R.id.text_email_error)).check(matches(not(isDisplayed())))

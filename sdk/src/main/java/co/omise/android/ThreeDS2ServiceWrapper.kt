@@ -20,7 +20,7 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Encapsulates the [ThreeDS2Service] to allow for easier testing.
  */
-internal class ThreeDS2ServiceWrapper(
+internal open class ThreeDS2ServiceWrapper(
     private val context: Context,
     private val threeDS2Service: ThreeDS2Service,
     private val uiCustomizationMap: Map<UiCustomization.UiCustomizationType, UiCustomization>,
@@ -33,6 +33,35 @@ internal class ThreeDS2ServiceWrapper(
         return input.replace("-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").replace("\r\n", "")
     }
 
+    @androidx.annotation.VisibleForTesting
+    open fun createSchemeConfiguration(
+        netceteraConfig: NetceteraConfig,
+        formattedCert: String,
+    ): SchemeConfiguration? {
+        return SchemeConfiguration.newSchemeConfiguration(netceteraConfig.identifier)
+            .ids(Collections.singletonList(netceteraConfig.directoryServerId))
+            .logo(R.drawable.netcetera_logo.toString())
+            .logoDark(R.drawable.netcetera_logo.toString())
+            .encryptionPublicKey(formattedCert)
+            .rootPublicKey(formattedCert)
+            .build()
+    }
+
+    @androidx.annotation.VisibleForTesting
+    open fun createConfigParameters(
+        netceteraConfig: NetceteraConfig,
+        decryptedNetceteraApiKey: String,
+        formattedCert: String,
+    ): com.netcetera.threeds.sdk.api.configparameters.ConfigParameters {
+        val schemeConfig =
+            createSchemeConfiguration(netceteraConfig, formattedCert)
+                ?: throw IllegalStateException("SchemeConfiguration failed to create")
+        return ConfigurationBuilder()
+            .apiKey(decryptedNetceteraApiKey)
+            .configureScheme(schemeConfig)
+            .build()
+    }
+
     suspend fun initialize(netceteraConfig: NetceteraConfig) =
         suspendCoroutine<Result<Unit>> { continuation ->
             try {
@@ -42,20 +71,9 @@ internal class ThreeDS2ServiceWrapper(
                 val decryptedNetceteraApiKey = String(EncryptionUtils.aesDecrypt(encryptedKey, encryptionKey), Charsets.UTF_8)
                 // Format the certificate
                 val formattedCert = formatPemCertificate(netceteraConfig.deviceInfoEncryptionCertPem!!)
-                // scheme from Netcetera simulator
-                val schemeConfig =
-                    SchemeConfiguration.newSchemeConfiguration(netceteraConfig.identifier)
-                        .ids(Collections.singletonList(netceteraConfig.directoryServerId))
-                        .logo(R.drawable.netcetera_logo.toString())
-                        .logoDark(R.drawable.netcetera_logo.toString())
-                        .encryptionPublicKey(formattedCert)
-                        .rootPublicKey(formattedCert)
-                        .build()
-                val configParameters =
-                    ConfigurationBuilder()
-                        .apiKey(decryptedNetceteraApiKey)
-                        .configureScheme(schemeConfig)
-                        .build()
+
+                val configParameters = createConfigParameters(netceteraConfig, decryptedNetceteraApiKey, formattedCert)
+
                 val locale = getLocale()
                 threeDS2Service.initialize(
                     context,

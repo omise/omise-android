@@ -141,8 +141,8 @@ class AuthorizingPaymentActivity : OmiseActivity() {
     // onPageStarted callback which should not have an impact on the logic.
     // More info at https://github.com/delight-im/Android-AdvancedWebView/issues/279
     @TestOnly
-    fun setTestWebView() {
-        webView.webViewClient =
+    fun setTestWebView(): WebViewClient {
+        val client =
             object : WebViewClient() {
                 override fun onPageStarted(
                     view: WebView?,
@@ -158,6 +158,8 @@ class AuthorizingPaymentActivity : OmiseActivity() {
                     }
                 }
             }
+        webView.webViewClient = client
+        return client
     }
 
     private fun setupWebViewClient() {

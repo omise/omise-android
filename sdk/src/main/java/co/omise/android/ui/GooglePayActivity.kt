@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.VisibleForTesting
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
@@ -30,7 +31,10 @@ import java.io.IOError
 class GooglePayActivity : OmiseActivity() {
     private lateinit var pKey: String
     private lateinit var googlePay: GooglePay
-    private lateinit var paymentsClient: PaymentsClient
+
+    @VisibleForTesting
+    internal lateinit var paymentsClient: PaymentsClient
+
     private lateinit var cardNetworks: ArrayList<String>
     private var price: Long = 0
     private lateinit var currencyCode: String
@@ -38,12 +42,16 @@ class GooglePayActivity : OmiseActivity() {
     private var requestBillingAddress: Boolean = false
     private var requestPhoneNumber: Boolean = false
 
+    @VisibleForTesting
+    internal var client: Client? = null
+
     /**
      * Arbitrarily-picked constant integer you define to track a request for payment data activity.
      *
      * @value #LOAD_PAYMENT_DATA_REQUEST_CODE
      */
-    private val loadPaymentDataRequestCode = 991
+    @VisibleForTesting
+    internal val loadPaymentDataRequestCode = 991
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +74,11 @@ class GooglePayActivity : OmiseActivity() {
                 requestBillingAddress,
                 requestPhoneNumber,
             )
-        paymentsClient = googlePay.createPaymentsClient(this)
+
+        if (!::paymentsClient.isInitialized) {
+            paymentsClient = googlePay.createPaymentsClient(this)
+        }
+
         possiblyShowGooglePayButton()
 
         googlePayButton.setOnClickListener { requestPayment() }
@@ -109,7 +121,8 @@ class GooglePayActivity : OmiseActivity() {
      *
      * @see [](https://developers.google.com/android/reference/com/google/android/gms/wallet/PaymentsClient.html.isReadyToPay
      ) */
-    private fun possiblyShowGooglePayButton() {
+    @VisibleForTesting
+    internal fun possiblyShowGooglePayButton() {
         val isReadyToPayJson = googlePay.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
 
@@ -138,7 +151,8 @@ class GooglePayActivity : OmiseActivity() {
      *
      * @param available isReadyToPay API response.
      */
-    private fun setGooglePayAvailable(available: Boolean) {
+    @VisibleForTesting
+    internal fun setGooglePayAvailable(available: Boolean) {
         if (available) {
             googlePayButton.visibility = View.VISIBLE
         } else {
@@ -151,7 +165,8 @@ class GooglePayActivity : OmiseActivity() {
         }
     }
 
-    private fun requestPayment() {
+    @VisibleForTesting
+    internal fun requestPayment() {
         // Disables the button to prevent multiple clicks.
         googlePayButton.isClickable = false
 
@@ -223,7 +238,8 @@ class GooglePayActivity : OmiseActivity() {
      * @see [Payment
      * Data](https://developers.google.com/pay/api/android/reference/object.PaymentData)
      */
-    private fun handlePaymentSuccess(paymentData: PaymentData) {
+    @VisibleForTesting
+    internal fun handlePaymentSuccess(paymentData: PaymentData) {
         val paymentInformation = paymentData.toJson()
         var billingName = ""
         var billingCity = ""
@@ -286,7 +302,8 @@ class GooglePayActivity : OmiseActivity() {
 
             val listener = CreateTokenRequestListener()
             try {
-                Client(pKey).send(request, listener)
+                val clientToUse = client ?: Client(pKey)
+                clientToUse.send(request, listener)
             } catch (ex: Exception) {
                 listener.onRequestFailed(ex)
             }
@@ -304,11 +321,13 @@ class GooglePayActivity : OmiseActivity() {
      * @see [
      * Wallet Constants Library](https://developers.google.com/android/reference/com/google/android/gms/wallet/WalletConstants.constant-summary)
      */
-    private fun handleError(statusCode: Int) {
+    @VisibleForTesting
+    internal fun handleError(statusCode: Int) {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
 
-    private inner class CreateTokenRequestListener : RequestListener<Token> {
+    @VisibleForTesting
+    internal inner class CreateTokenRequestListener : RequestListener<Token> {
         override fun onRequestSucceed(model: Token) {
             val data = Intent()
             data.putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
@@ -346,7 +365,8 @@ class GooglePayActivity : OmiseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private val onBackPressedCallback =
+    @VisibleForTesting
+    internal val onBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 setResult(RESULT_CANCELED)
