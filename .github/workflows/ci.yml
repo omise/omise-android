@@ -43,6 +43,23 @@ jobs:
         api-level: [ 33 ]
     needs: build
     steps:
+      - name: Free Disk Space (Ubuntu)
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: Cleanup lingering processes
+        run: |
+          # Kill any process using the emulator ports to prevent "Connection refused" errors
+          sudo fuser -k 5554/tcp || true
+          adb kill-server || true
+          sudo pkill -9 qemu || true
+          sudo pkill -9 adb || true
+          # Remove any stale lock files that might prevent the emulator from starting
+          rm -rf ~/.android/avd/*.lock || true
+
       - name: Checkout code
         uses: actions/checkout@v6
         with:
@@ -59,19 +76,6 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-
-      - name: Cleanup lingering processes
-        run: |
-          adb kill-server || true
-          sudo pkill -9 qemu || true
-          sudo pkill -9 adb || true
-
-      - name: Free Disk Space (Ubuntu)
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
@@ -107,7 +111,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           arch: x86_64
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           disk-size: 6000M
