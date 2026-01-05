@@ -24,8 +24,12 @@ import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
+import co.omise.android.models.Bank
 import co.omise.android.models.Capability
+import co.omise.android.models.PaymentMethod
+import co.omise.android.models.Source
 import co.omise.android.models.SourceType
+import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.Token
 import co.omise.android.models.TokenizationMethod
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_TOKEN
@@ -184,5 +188,218 @@ class PaymentCreatorActivityTest {
         scenario.onActivity {
             assertEquals(WindowManager.LayoutParams.FLAG_SECURE, it.window.attributes.flags and WindowManager.LayoutParams.FLAG_SECURE)
         }
+    }
+
+    @Test
+    fun navigateToInternetBankingChooser_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        // Wait for capability to load and navigation to be initialized
+        Thread.sleep(500)
+
+        val allowedBanks = listOf(PaymentMethod("internet_banking_test"))
+        activity?.navigation?.navigateToInternetBankingChooser(allowedBanks)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is InternetBankingChooserFragment)
+    }
+
+    @Test
+    fun navigateToMobileBankingChooser_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        val allowedBanks = listOf(PaymentMethod("mobile_banking_test"))
+        activity?.navigation?.navigateToMobileBankingChooser(allowedBanks)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is MobileBankingChooserFragment)
+    }
+
+    @Test
+    fun navigateToInstallmentChooser_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        val allowedInstalls = listOf(PaymentMethod("installment_test"))
+        activity?.navigation?.navigateToInstallmentChooser(allowedInstalls)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is InstallmentChooserFragment)
+    }
+
+    @Test
+    fun navigateToInstallmentTermChooser_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        val installment = PaymentMethod("installment_bay")
+        activity?.navigation?.navigateToInstallmentTermChooser(installment)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is InstallmentTermChooserFragment)
+    }
+
+    @Test
+    fun navigateToEContextForm_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        val eContext = SupportedEcontext.ConvenienceStore
+        activity?.navigation?.navigateToEContextForm(eContext)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is EContextFormFragment)
+    }
+
+    @Test
+    fun navigateToAtomeForm_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        activity?.navigation?.navigateToAtomeForm()
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is AtomeFormFragment)
+    }
+
+    @Test
+    fun createSourceFinished_returnsResultWithSource() {
+        val source = Source()
+        var activity: PaymentCreatorActivity? = null
+        val scenario = ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent)
+
+        scenario.onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        activity?.navigation?.createSourceFinished(source)
+
+        Thread.sleep(100)
+
+        assertEquals(RESULT_OK, scenario.result.resultCode)
+        assert(scenario.result.resultData.hasExtra(OmiseActivity.EXTRA_SOURCE_OBJECT))
+    }
+
+    @Test
+    fun navigateToTrueMoneyForm_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        activity?.navigation?.navigateToTrueMoneyForm()
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is TrueMoneyFormFragment)
+    }
+
+    @Test
+    fun navigateToFpxEmailForm_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        activity?.navigation?.navigateToFpxEmailForm()
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is FpxEmailFormFragment)
+    }
+
+    @Test
+    fun navigateToFpxBankChooser_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        val banks: List<Bank> = listOf(Bank())
+        val email = "test@example.com"
+        activity?.navigation?.navigateToFpxBankChooser(banks, email)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is FpxBankChooserFragment)
+    }
+
+    @Test
+    fun navigateToGooglePayForm_startsGooglePayActivity() {
+        var activity: PaymentCreatorActivity? = null
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        activity?.navigation?.navigateToGooglePayForm()
+
+        intended(hasComponent(hasClassName(GooglePayActivity::class.java.name)))
+    }
+
+    @Test
+    fun navigateToDuitNowOBWBankChooser_addsFragmentToBackStack() {
+        var activity: PaymentCreatorActivity? = null
+        val capabilityWithDuitNow =
+            Capability.create(
+                allowCreditCard = true,
+                sourceTypes = listOf(SourceType.DuitNowOBW),
+            )
+
+        whenever(mockClient.send(any<Request<Capability>>(), any())).doAnswer { invocation ->
+            val callback = invocation.getArgument<RequestListener<Capability>>(1)
+            callback.onRequestSucceed(capabilityWithDuitNow)
+        }
+
+        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
+            activity = it
+        }
+
+        Thread.sleep(500)
+
+        activity?.navigation?.navigateToDuitNowOBWBankChooser(capabilityWithDuitNow)
+
+        Thread.sleep(100)
+        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
+        assert(fragment is DuitNowOBWBankChooserFragment)
     }
 }

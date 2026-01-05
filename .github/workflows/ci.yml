@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
@@ -43,13 +43,30 @@ jobs:
         api-level: [ 33 ]
     needs: build
     steps:
+      - name: Free Disk Space (Ubuntu)
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: Cleanup lingering processes
+        run: |
+          # Kill any process using the emulator ports to prevent "Connection refused" errors
+          sudo fuser -k 5554/tcp || true
+          adb kill-server || true
+          sudo pkill -9 qemu || true
+          sudo pkill -9 adb || true
+          # Remove any stale lock files that might prevent the emulator from starting
+          rm -rf ~/.android/avd/*.lock || true
+
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # required for SonarCloud
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -61,7 +78,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -80,12 +97,11 @@ jobs:
           echo "TARGET=$TARGET" >> $GITHUB_OUTPUT
 
       - name: AVD cache
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
-            ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
       - name: Create AVD and generate snapshot for caching
@@ -95,9 +111,10 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ steps.determine-target.outputs.TARGET }}
           arch: x86_64
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          disk-size: 6000M
           script: echo "Generated AVD snapshot for caching."
 
       - name: Run unit/instrumented tests
@@ -111,6 +128,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x2340
           disable-animations: true
+          disk-size: 6000M
           profile: pixel_9_pro
           script: |
             adb uninstall co.omise.android.test || true
