@@ -10,10 +10,11 @@
 
     <ImageView
         android:id="@+id/image_item_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/list_item_icon_size"
+        android:layout_height="@dimen/list_item_icon_size"
         android:layout_marginStart="@dimen/medium_margin"
         android:layout_marginLeft="@dimen/medium_margin"
+        android:scaleType="fitCenter"
         tools:src="@drawable/payment_card" />
 
     <LinearLayout
