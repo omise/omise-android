@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.9.0
+* **Update:** Update payment method icons
+
 ## V5.8.0
 * **Added:** Support Passkey authentication flow
 
