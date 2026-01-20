@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## V6.0.0-alpha.3
+
+* **Update:** Update payment method icons.
+* **Support:** Support android 36.
+
 ## V6.0.0-alpha.2
 
 * **Added:** Support Passkey authentication flow in bridging layer.
@@ -10,6 +15,9 @@
 * **Custom Form Creation Removed**: Custom card forms and public card fields are no longer available
 * **Joda-Time Migration**: Migrated from Joda-Time to Java-Time (affects date handling)
 * **Kotlin Version Update**: Updated to Kotlin 1.9.22 from 1.7.10
+
+## V5.9.0
+* **Update:** Update payment method icons
 
 ## V5.8.0
 * **Added:** Support Passkey authentication flow
