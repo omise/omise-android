@@ -65,7 +65,6 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_scb"),
                 PaymentMethod(name = "installment_ttb"),
                 PaymentMethod(name = "installment_uob"),
-
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay"),
@@ -201,7 +200,6 @@ class PaymentChooserFragmentTest {
             )
         verify(fragment.navigation)?.navigateToInstallmentChooser(expectedMethods)
     }
-
 
     @Test
     fun clickBillPaymentTescoLotusPaymentMethod_sendRequestToCreateSource() {

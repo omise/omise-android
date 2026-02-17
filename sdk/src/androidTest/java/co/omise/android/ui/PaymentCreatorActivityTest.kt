@@ -190,7 +190,6 @@ class PaymentCreatorActivityTest {
         }
     }
 
-
     @Test
     fun navigateToMobileBankingChooser_addsFragmentToBackStack() {
         var activity: PaymentCreatorActivity? = null

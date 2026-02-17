@@ -13,7 +13,6 @@ import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.installmentMethods
-
 import co.omise.android.models.mobileBankingMethods
 
 /**

@@ -83,7 +83,6 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
 internal val List<SourceType.Installment>.installmentResources: List<InstallmentResource>
     get() = this.mapNotNull { sourceType -> InstallmentResource.all.find { it.sourceType == sourceType } }
 
-
 internal val List<SourceType.MobileBanking>.mobileBankingResources: List<MobileBankingResource>
     get() = this.mapNotNull { sourceType -> MobileBankingResource.all.find { it.sourceType == sourceType } }
 
@@ -115,7 +114,6 @@ internal sealed class PaymentMethodResource(
         titleRes = R.string.payment_method_installments_title,
         indicatorIconRes = R.drawable.ic_next,
     )
-
 
     object MobileBankings : PaymentMethodResource(
         iconRes = R.drawable.payment_mobile,
@@ -489,7 +487,6 @@ internal data class InstallmentTermResource(
     val installmentTerm: Int,
     @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
 ) : OmiseListItem
-
 
 internal sealed class MobileBankingResource(
     @DrawableRes override val iconRes: Int,
