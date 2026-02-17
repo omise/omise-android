@@ -13,7 +13,7 @@ import co.omise.android.models.Source
 import co.omise.android.models.SourceType
 import co.omise.android.models.SupportedEcontext
 import co.omise.android.models.installmentMethods
-import co.omise.android.models.internetBankingMethods
+
 import co.omise.android.models.mobileBankingMethods
 
 /**
@@ -38,7 +38,7 @@ internal class PaymentChooserFragment : OmiseListFragment<PaymentMethodResource>
         when (item) {
             PaymentMethodResource.CreditCard -> navigation.navigateToCreditCardForm()
             PaymentMethodResource.Installments -> capability.installmentMethods.let(navigation::navigateToInstallmentChooser)
-            PaymentMethodResource.InternetBankings -> capability.internetBankingMethods.let(navigation::navigateToInternetBankingChooser)
+
             PaymentMethodResource.MobileBankings -> capability.mobileBankingMethods.let(navigation::navigateToMobileBankingChooser)
             PaymentMethodResource.ConvenienceStore ->
                 navigation.navigateToEContextForm(

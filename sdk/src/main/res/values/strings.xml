@@ -67,7 +67,7 @@
     <string name="cvv_tooltip_3_digits">3 digit number on the\nback of your card</string>
     <string name="cvv_tooltip_4_digits">4 digit number on the\nfront of your card</string>
     <string name="payment_chooser_title">Payment Methods</string>
-    <string name="internet_banking_chooser_title">Internet Banking</string>
+
     <string name="mobile_banking_chooser_title">Mobile Banking</string>
     <string name="installments_title">Installments</string>
     <string name="installments_amount_lower_than_monthly_limit">Amount is lower than the monthly minimum payment amount</string>
@@ -75,7 +75,7 @@
     <string name="menu_title_close">Close</string>
 
     <string name="payment_method_credit_card_title">Credit Card</string>
-    <string name="payment_method_internet_banking_title">Internet Banking</string>
+
     <string name="payment_method_mobile_banking_title">Mobile Banking</string>
     <string name="payment_method_alipay_title">Alipay Online</string>
     <string name="payment_method_tesco_lotus_title">Lotus\'s Bill Payment</string>
@@ -103,8 +103,7 @@
     <string name="payment_method_mobile_banking_ktb_title">Krungthai NEXT</string>
     <string name="payment_method_ocbc_digital_title">OCBC Digital</string>
 
-    <string name="payment_method_internet_banking_bay_title">Bank of Ayudhya</string>
-    <string name="payment_method_internet_banking_bbl_title">Bangkok Bank</string>
+
     <string name="payment_method_promptpay_title">PromptPay</string>
     <string name="payment_method_paynow_title">PayNow</string>
     <string name="payment_truemoney_title">TrueMoney</string>

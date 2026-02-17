@@ -319,7 +319,6 @@ interface PaymentCreatorNavigation {
 
     fun navigateToCreditCardForm()
 
-    fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>)
 
     fun navigateToMobileBankingChooser(allowedBanks: List<PaymentMethod>)
 
@@ -393,13 +392,6 @@ private class PaymentCreatorNavigationImpl(
         activity.startActivityForResult(intent, requestCode)
     }
 
-    override fun navigateToInternetBankingChooser(allowedBanks: List<PaymentMethod>) {
-        val fragment =
-            InternetBankingChooserFragment.newInstance(allowedBanks).apply {
-                requester = this@PaymentCreatorNavigationImpl.requester
-            }
-        addFragmentToBackStack(fragment)
-    }
 
     override fun navigateToMobileBankingChooser(allowedBanks: List<PaymentMethod>) {
         val fragment =

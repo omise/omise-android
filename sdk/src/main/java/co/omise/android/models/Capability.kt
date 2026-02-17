@@ -83,11 +83,6 @@ val Capability.installmentMethods: List<PaymentMethod>
             ?.filter { (it.backendType as? BackendType.Source)?.sourceType is SourceType.Installment }
             .orEmpty()
 
-val Capability.internetBankingMethods: List<PaymentMethod>
-    get() =
-        this.paymentMethods
-            ?.filter { (it.backendType as? BackendType.Source)?.sourceType is SourceType.InternetBanking }
-            .orEmpty()
 
 val Capability.mobileBankingMethods: List<PaymentMethod>
     get() =
