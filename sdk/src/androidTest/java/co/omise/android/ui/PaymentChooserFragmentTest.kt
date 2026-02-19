@@ -65,8 +65,6 @@ class PaymentChooserFragmentTest {
                 PaymentMethod(name = "installment_scb"),
                 PaymentMethod(name = "installment_ttb"),
                 PaymentMethod(name = "installment_uob"),
-                PaymentMethod(name = "internet_banking_bay"),
-                PaymentMethod(name = "internet_banking_bbl"),
                 PaymentMethod(name = "bill_payment_tesco_lotus"),
                 PaymentMethod(name = "econtext"),
                 PaymentMethod(name = "alipay"),
@@ -128,46 +126,46 @@ class PaymentChooserFragmentTest {
 
         assertListAtIndexHasResource(0, R.string.payment_method_credit_card_title)
         assertListAtIndexHasResource(1, R.string.payment_method_installments_title)
-        assertListAtIndexHasResource(2, R.string.payment_method_internet_banking_title)
-        assertListAtIndexHasResource(3, R.string.payment_method_tesco_lotus_title)
-        assertListAtIndexHasResource(4, R.string.payment_method_convenience_store_title)
-        assertListAtIndexHasResource(5, R.string.payment_method_pay_easy_title)
-        assertListAtIndexHasResource(6, R.string.payment_method_netbank_title)
-        assertListAtIndexHasResource(7, R.string.payment_method_alipay_title)
-        assertListAtIndexHasResource(8, R.string.payment_method_mobile_banking_title)
+
+        assertListAtIndexHasResource(2, R.string.payment_method_tesco_lotus_title)
+        assertListAtIndexHasResource(3, R.string.payment_method_convenience_store_title)
+        assertListAtIndexHasResource(4, R.string.payment_method_pay_easy_title)
+        assertListAtIndexHasResource(5, R.string.payment_method_netbank_title)
+        assertListAtIndexHasResource(6, R.string.payment_method_alipay_title)
+        assertListAtIndexHasResource(7, R.string.payment_method_mobile_banking_title)
 
         onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(14))
 
-        assertListAtIndexHasResource(9, R.string.payment_method_ocbc_digital_title)
-        assertListAtIndexHasResource(10, R.string.payment_method_alipay_cn_title)
-        assertListAtIndexHasResource(11, R.string.payment_method_alipay_hk_title)
-        assertListAtIndexHasResource(12, R.string.payment_method_dana_title)
-        assertListAtIndexHasResource(13, R.string.payment_method_gcash_title)
-        assertListAtIndexHasResource(14, R.string.payment_method_kakaopay_title)
+        assertListAtIndexHasResource(8, R.string.payment_method_ocbc_digital_title)
+        assertListAtIndexHasResource(9, R.string.payment_method_alipay_cn_title)
+        assertListAtIndexHasResource(10, R.string.payment_method_alipay_hk_title)
+        assertListAtIndexHasResource(11, R.string.payment_method_dana_title)
+        assertListAtIndexHasResource(12, R.string.payment_method_gcash_title)
+        assertListAtIndexHasResource(13, R.string.payment_method_kakaopay_title)
 
-        for (i in 11..14) {
+        for (i in 10..13) {
             assertListAtIndexHasResource(i, R.string.payment_method_alipayplus_footnote)
         }
 
         onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(20))
 
-        assertListAtIndexHasResource(15, R.string.payment_method_touch_n_go_title)
-        assertListAtIndexHasResource(16, R.string.payment_method_boots_title)
-        assertListAtIndexHasResource(17, R.string.payment_method_shopeepay_title)
-        assertListAtIndexHasResource(18, R.string.payment_truemoney_title)
-        assertListAtIndexHasResource(19, R.string.payment_method_duitnow_obw_title)
-        assertListAtIndexHasResource(20, R.string.payment_method_duitnow_qr_title)
+        assertListAtIndexHasResource(14, R.string.payment_method_touch_n_go_title)
+        assertListAtIndexHasResource(15, R.string.payment_method_boots_title)
+        assertListAtIndexHasResource(16, R.string.payment_method_shopeepay_title)
+        assertListAtIndexHasResource(17, R.string.payment_truemoney_title)
+        assertListAtIndexHasResource(18, R.string.payment_method_duitnow_obw_title)
+        assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
 
         onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(26))
 
-        assertListAtIndexHasResource(21, R.string.payment_method_maybank_qr_title)
-        assertListAtIndexHasResource(22, R.string.payment_method_rabbit_linepay_title)
-        assertListAtIndexHasResource(23, R.string.payment_method_grabpay_footnote)
-        assertListAtIndexHasResource(24, R.string.payment_method_paypay_title)
-        assertListAtIndexHasResource(25, R.string.payment_method_atome_title)
-        assertListAtIndexHasResource(26, R.string.payment_method_wechat_pay_title)
+        assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
+        assertListAtIndexHasResource(21, R.string.payment_method_rabbit_linepay_title)
+        assertListAtIndexHasResource(22, R.string.payment_method_grabpay_footnote)
+        assertListAtIndexHasResource(23, R.string.payment_method_paypay_title)
+        assertListAtIndexHasResource(24, R.string.payment_method_atome_title)
+        assertListAtIndexHasResource(25, R.string.payment_method_wechat_pay_title)
 
-        onView(withId(R.id.recycler_view)).check(matches(itemCount(27)))
+        onView(withId(R.id.recycler_view)).check(matches(itemCount(26)))
     }
 
     @Ignore("Flaky test, it fails when run on Github Action but pass on local machine.")
@@ -204,20 +202,8 @@ class PaymentChooserFragmentTest {
     }
 
     @Test
-    fun clickInternetBankingPaymentMethod_navigateToInternetBankingChooser() {
-        onView(withListId(R.id.recycler_view).atPosition(2)).perform(click())
-
-        val expectedMethods =
-            listOf(
-                PaymentMethod(name = "internet_banking_bay"),
-                PaymentMethod(name = "internet_banking_bbl"),
-            )
-        verify(fragment.navigation)?.navigateToInternetBankingChooser(expectedMethods)
-    }
-
-    @Test
     fun clickBillPaymentTescoLotusPaymentMethod_sendRequestToCreateSource() {
-        onView(withListId(R.id.recycler_view).atPosition(3)).perform(click())
+        onView(withListId(R.id.recycler_view).atPosition(2)).perform(click())
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())
@@ -225,25 +211,25 @@ class PaymentChooserFragmentTest {
 
     @Test
     fun clickConvenienceStoreMethod_sendRequestToCreateSource() {
-        onView(withListId(R.id.recycler_view).atPosition(4)).perform(click())
+        onView(withListId(R.id.recycler_view).atPosition(3)).perform(click())
         verify(fragment.navigation)?.navigateToEContextForm(SupportedEcontext.ConvenienceStore)
     }
 
     @Test
     fun clickPayEasyMethod_sendRequestToCreateSource() {
-        onView(withListId(R.id.recycler_view).atPosition(5)).perform(click())
+        onView(withListId(R.id.recycler_view).atPosition(4)).perform(click())
         verify(fragment.navigation)?.navigateToEContextForm(SupportedEcontext.PayEasy)
     }
 
     @Test
     fun clickNetBankingMethod_sendRequestToCreateSource() {
-        onView(withListId(R.id.recycler_view).atPosition(6)).perform(click())
+        onView(withListId(R.id.recycler_view).atPosition(5)).perform(click())
         verify(fragment.navigation)?.navigateToEContextForm(SupportedEcontext.Netbanking)
     }
 
     @Test
     fun clickAlipayPaymentMethod_sendRequestToCreateSource() {
-        onView(withListId(R.id.recycler_view).atPosition(7)).perform(click())
+        onView(withListId(R.id.recycler_view).atPosition(6)).perform(click())
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())
@@ -251,8 +237,8 @@ class PaymentChooserFragmentTest {
 
     @Test
     fun clickMobileBankingPaymentMethod_navigateToMobileBankingChooser() {
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(8))
-        onView(withListId(R.id.recycler_view).atPosition(8)).perform(click())
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(7))
+        onView(withListId(R.id.recycler_view).atPosition(7)).perform(click())
 
         val expectedMethods =
             listOf(
@@ -267,8 +253,8 @@ class PaymentChooserFragmentTest {
 
     @Test
     fun clickOcbcDigitalPaymentMethod_sendRequestToCreateSource() {
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(10))
-        onView(withListId(R.id.recycler_view).atPosition(10)).perform(click())
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(9))
+        onView(withListId(R.id.recycler_view).atPosition(9)).perform(click())
 
         onView(withId(R.id.recycler_view)).check(matches(not(isEnabled())))
         verify(mockRequester).request(any(), any())

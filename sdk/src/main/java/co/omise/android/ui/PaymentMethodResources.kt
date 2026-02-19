@@ -27,7 +27,7 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
                     is BackendType.Source ->
                         when ((paymentMethod.backendType as BackendType.Source).sourceType) {
                             is SourceType.Installment -> items.add(PaymentMethodResource.Installments)
-                            is SourceType.InternetBanking -> items.add(PaymentMethodResource.InternetBankings)
+
                             is SourceType.MobileBanking -> items.add(PaymentMethodResource.MobileBankings)
                             is SourceType.Econtext ->
                                 items.addAll(
@@ -83,9 +83,6 @@ internal val Capability.paymentMethodResources: List<PaymentMethodResource>
 internal val List<SourceType.Installment>.installmentResources: List<InstallmentResource>
     get() = this.mapNotNull { sourceType -> InstallmentResource.all.find { it.sourceType == sourceType } }
 
-internal val List<SourceType.InternetBanking>.internetBankingResources: List<InternetBankingResource>
-    get() = this.mapNotNull { sourceType -> InternetBankingResource.all.find { it.sourceType == sourceType } }
-
 internal val List<SourceType.MobileBanking>.mobileBankingResources: List<MobileBankingResource>
     get() = this.mapNotNull { sourceType -> MobileBankingResource.all.find { it.sourceType == sourceType } }
 
@@ -115,12 +112,6 @@ internal sealed class PaymentMethodResource(
     object Installments : PaymentMethodResource(
         iconRes = R.drawable.payment_installment,
         titleRes = R.string.payment_method_installments_title,
-        indicatorIconRes = R.drawable.ic_next,
-    )
-
-    object InternetBankings : PaymentMethodResource(
-        iconRes = R.drawable.payment_banking,
-        titleRes = R.string.payment_method_internet_banking_title,
         indicatorIconRes = R.drawable.ic_next,
     )
 
@@ -496,34 +487,6 @@ internal data class InstallmentTermResource(
     val installmentTerm: Int,
     @DrawableRes override val indicatorIconRes: Int = R.drawable.ic_redirect,
 ) : OmiseListItem
-
-internal sealed class InternetBankingResource(
-    @DrawableRes override val iconRes: Int,
-    override val title: String? = null,
-    @StringRes override val titleRes: Int? = null,
-    @StringRes override val subtitleRes: Int? = null,
-    @DrawableRes override val indicatorIconRes: Int,
-    val sourceType: SourceType,
-) : OmiseListItem {
-    companion object {
-        val all: List<InternetBankingResource>
-            get() = InternetBankingResource::class.nestedClasses.mapNotNull { it.objectInstance as? InternetBankingResource }
-    }
-
-    object Bbl : InternetBankingResource(
-        iconRes = R.drawable.payment_bbl,
-        titleRes = R.string.payment_method_internet_banking_bbl_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.InternetBanking.Bbl,
-    )
-
-    object Bay : InternetBankingResource(
-        iconRes = R.drawable.payment_bay,
-        titleRes = R.string.payment_method_internet_banking_bay_title,
-        indicatorIconRes = R.drawable.ic_redirect,
-        sourceType = SourceType.InternetBanking.Bay,
-    )
-}
 
 internal sealed class MobileBankingResource(
     @DrawableRes override val iconRes: Int,

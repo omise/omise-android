@@ -47,7 +47,7 @@
     <string name="label_phone_number">โทร.</string>
     <string name="installments_title">ผ่อนชำระ</string>
     <string name="installments_amount_lower_than_monthly_limit">ยอดชำระต่อเดือนต่ำกว่าจำนวนขั้นต่ำที่ธนาคารกำหนด</string>
-    <string name="internet_banking_chooser_title">อินเทอร์เน็ตแบงก์กิ้ง</string>
+
     <string name="mobile_banking_chooser_title">โมบายแบงก์กิ้ง</string>
     <string name="payment_chooser_title">ช่องทางชำระเงิน</string>
     <string name="title_convenience_store">ร้านสะดวกซื้อ</string>
@@ -83,10 +83,9 @@
     <string name="payment_method_installment_ttb_title">ธนาคารทีเอ็มบีธนชาต</string>
     <string name="payment_method_installment_uob_title">ธนาคารยูโอบี</string>
     <string name="payment_method_installments_title">ผ่อนชำระ</string>
-    <string name="payment_method_internet_banking_bay_title">ธนาคารกรุงศรีอยุธยา</string>
-    <string name="payment_method_internet_banking_bbl_title">ธนาคารกรุงเทพ</string>
+
     <string name="payment_method_mobile_banking_scb_title">SCB EASY</string>
-    <string name="payment_method_internet_banking_title">อินเทอร์เน็ตแบงก์กิ้ง</string>
+
     <string name="payment_method_mobile_banking_title">โมบายแบงก์กิ้ง</string>
     <string name="payment_method_netbank_title">เน็ตแบงก์</string>
     <string name="payment_method_pay_easy_title">เพย์อีซี</string>

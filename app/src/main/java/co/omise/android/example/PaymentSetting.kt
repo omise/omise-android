@@ -14,8 +14,7 @@ object PaymentSetting {
             listOf(
                     R.string.payment_preference_zero_interest_installments_key,
                     R.string.payment_preference_credit_card_key,
-                    R.string.payment_preference_internet_banking_bay_key,
-                    R.string.payment_preference_internet_banking_bbl_key,
+
                     R.string.payment_preference_mobile_banking_bay_key,
                     R.string.payment_preference_mobile_banking_bbl_key,
                     R.string.payment_preference_mobile_banking_kbank_key,
@@ -82,8 +81,7 @@ object PaymentSetting {
                 .toMap()
                 .map {
                     when (it.key) {
-                        context.getString(R.string.payment_preference_internet_banking_bay_key) -> SourceType.InternetBanking.Bay
-                        context.getString(R.string.payment_preference_internet_banking_bbl_key) -> SourceType.InternetBanking.Bbl
+
                         context.getString(R.string.payment_preference_alipay_key) -> SourceType.Alipay
                         context.getString(R.string.payment_preference_bill_payment_tesco_lotus_key) -> SourceType.BillPaymentTescoLotus
                         context.getString(R.string.payment_preference_mobile_banking_bay_key) -> SourceType.MobileBanking.Bay

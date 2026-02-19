@@ -191,24 +191,6 @@ class PaymentCreatorActivityTest {
     }
 
     @Test
-    fun navigateToInternetBankingChooser_addsFragmentToBackStack() {
-        var activity: PaymentCreatorActivity? = null
-        ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
-            activity = it
-        }
-
-        // Wait for capability to load and navigation to be initialized
-        Thread.sleep(500)
-
-        val allowedBanks = listOf(PaymentMethod("internet_banking_test"))
-        activity?.navigation?.navigateToInternetBankingChooser(allowedBanks)
-
-        Thread.sleep(100)
-        val fragment = activity?.supportFragmentManager?.findFragmentById(R.id.payment_creator_container)
-        assert(fragment is InternetBankingChooserFragment)
-    }
-
-    @Test
     fun navigateToMobileBankingChooser_addsFragmentToBackStack() {
         var activity: PaymentCreatorActivity? = null
         ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {

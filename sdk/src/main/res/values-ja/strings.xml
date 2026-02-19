@@ -47,7 +47,7 @@
     <string name="label_phone_number">電話</string>
     <string name="installments_title">分割払い</string>
     <string name="installments_amount_lower_than_monthly_limit">月々のお支払いが銀行の最低金額以下</string>
-    <string name="internet_banking_chooser_title">インターネットバンク</string>
+
     <string name="mobile_banking_chooser_title">モバイルバンキング</string>
     <string name="payment_chooser_title">決済方法</string>
     <string name="title_convenience_store">コンビニエンスストア</string>
@@ -81,12 +81,11 @@
     <string name="payment_method_installment_ktc_title">クルンタイカード</string>
     <string name="payment_method_installment_scb_title">サイアム・コマーシャル銀行</string>
     <string name="payment_method_installments_title">分割払い</string>
-    <string name="payment_method_internet_banking_bay_title">アユタヤ銀行</string>
-    <string name="payment_method_internet_banking_bbl_title">バンコク銀行</string>
+
     <string name="payment_method_mobile_banking_scb_title">SCB EASY</string>
     <string name="payment_method_installment_ttb_title">TMBタナチャート銀行</string>
     <string name="payment_method_installment_uob_title">ユナイテッド・オーバーシーズ銀行</string>
-    <string name="payment_method_internet_banking_title">インターネットバンク</string>
+
     <string name="payment_method_mobile_banking_title">モバイルバンキング</string>
     <string name="payment_method_netbank_title">ネットバンク</string>
     <string name="payment_method_pay_easy_title">ペイジー</string>
