@@ -64,7 +64,7 @@ data class CardBrand(
             )
 
         @JvmField
-        val UNIONPAY = CardBrand("unionpay", "^62", 16, 19, R.drawable.brand_unionpay)
+        val UNIONPAY = CardBrand("unionpay", "^(62|81)", 16, 19, R.drawable.brand_unionpay)
 
         @JvmField
         val ALL = arrayOf(AMEX, DINERS, JCB, VISA, MASTERCARD, MAESTRO, DISCOVER, UNIONPAY)

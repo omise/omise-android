@@ -31,6 +31,7 @@ class CardNumberTest {
         assertEquals(CardBrand.MASTERCARD, CardNumber.brand("5454545454545454"))
         assertEquals(CardBrand.JCB, CardNumber.brand("3566111111111113"))
         assertEquals(CardBrand.UNIONPAY, CardNumber.brand("6242424242424242426"))
+        assertEquals(CardBrand.UNIONPAY, CardNumber.brand("8142424242424242"))
         assertNull(CardNumber.brand("1234567890123456")) // Unknown brand
     }
 
@@ -42,5 +43,6 @@ class CardNumberTest {
 
         assertTrue(CardNumber.luhn("344242343442423442"))
         assertTrue(CardNumber.luhn("6242424242424242426"))
+        assertTrue(CardNumber.luhn("810055106191988"))
     }
 }
