@@ -20,7 +20,7 @@ import co.omise.android.models.CardBrand
  */
 class CreditCardEditText : OmiseEditText {
     companion object {
-        private const val CARD_NUMBER_WITH_SPACE_LENGTH = 19
+        private const val CARD_NUMBER_WITH_SPACE_LENGTH = 23
         private const val SEPARATOR = " "
     }
 
