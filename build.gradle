@@ -17,7 +17,7 @@ buildscript {
         min_sdk_version = 21
         target_sdk_version = 34
 
-        omise_threeds_sdk_version = '2.5.2.1'
+        netcetera_threeds_sdk_version = '2.6.0.0'
 
         kotlin_version = '1.7.10'
         android_plugin_version = '8.2.2'
@@ -83,6 +83,7 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        maven { url 'https://nexus.extranet.netcetera.biz/nexus/repository/public-repository-maven/' }
         mavenLocal()
     }
 }
