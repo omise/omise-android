@@ -17,7 +17,7 @@ buildscript {
         min_sdk_version = 21
         target_sdk_version = 34
 
-        netcetera_threeds_sdk_version = '2.6.0.0'
+        netcetera_threeds_sdk_version = '2.5.3.0'
 
         kotlin_version = '1.7.10'
         android_plugin_version = '8.2.2'
