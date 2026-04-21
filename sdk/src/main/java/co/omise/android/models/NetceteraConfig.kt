@@ -1,7 +1,7 @@
 package co.omise.android.models
 import co.omise.android.api.RequestBuilder
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.joda.time.DateTime
