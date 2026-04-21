@@ -20,6 +20,7 @@ import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
+import co.omise.android.databinding.ActivityCreditCardBinding
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.parcelable
 import co.omise.android.extensions.setOnAfterTextChangeListener
@@ -37,34 +38,6 @@ import co.omise.android.models.Source
 import co.omise.android.models.Token
 import co.omise.android.models.backendType
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_credit_card.billing_address_container
-import kotlinx.android.synthetic.main.activity_credit_card.button_security_code_tooltip
-import kotlinx.android.synthetic.main.activity_credit_card.button_submit
-import kotlinx.android.synthetic.main.activity_credit_card.edit_card_name
-import kotlinx.android.synthetic.main.activity_credit_card.edit_card_number
-import kotlinx.android.synthetic.main.activity_credit_card.edit_city
-import kotlinx.android.synthetic.main.activity_credit_card.edit_country
-import kotlinx.android.synthetic.main.activity_credit_card.edit_email
-import kotlinx.android.synthetic.main.activity_credit_card.edit_expiry_date
-import kotlinx.android.synthetic.main.activity_credit_card.edit_phone_number
-import kotlinx.android.synthetic.main.activity_credit_card.edit_postal_code
-import kotlinx.android.synthetic.main.activity_credit_card.edit_security_code
-import kotlinx.android.synthetic.main.activity_credit_card.edit_state
-import kotlinx.android.synthetic.main.activity_credit_card.edit_street1
-import kotlinx.android.synthetic.main.activity_credit_card.scrollview
-import kotlinx.android.synthetic.main.activity_credit_card.text_card_name_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_card_number_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_city_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_country_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_email_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_email_title
-import kotlinx.android.synthetic.main.activity_credit_card.text_expiry_date_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_phone_number_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_phone_number_title
-import kotlinx.android.synthetic.main.activity_credit_card.text_postal_code_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_security_code_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_state_error
-import kotlinx.android.synthetic.main.activity_credit_card.text_street1_error
 import org.jetbrains.annotations.TestOnly
 import java.io.IOError
 import java.util.Locale
@@ -76,38 +49,40 @@ class CreditCardActivity : OmiseActivity() {
     private lateinit var pKey: String
     private lateinit var cardHolderData: CardHolderDataList
     private lateinit var client: Client
-    private val cardNumberEdit: CreditCardEditText by lazy { edit_card_number }
-    private val cardNameEdit: CardNameEditText by lazy { edit_card_name }
-    private val expiryDateEdit: ExpiryDateEditText by lazy { edit_expiry_date }
-    private val securityCodeEdit: SecurityCodeEditText by lazy { edit_security_code }
-    private val countryEdit: OmiseEditText by lazy { edit_country }
-    private val street1Edit: OmiseEditText by lazy { edit_street1 }
-    private val cityEdit: OmiseEditText by lazy { edit_city }
-    private val stateEdit: OmiseEditText by lazy { edit_state }
-    private val postalCodeEdit: OmiseEditText by lazy { edit_postal_code }
+    private lateinit var binding: ActivityCreditCardBinding
 
-    private val submitButton: Button by lazy { button_submit }
-    private val scrollView: ScrollView by lazy { scrollview }
-    private val cardNumberErrorText: TextView by lazy { text_card_number_error }
-    private val cardNameErrorText: TextView by lazy { text_card_name_error }
-    private val expiryDateErrorText: TextView by lazy { text_expiry_date_error }
-    private val securityCodeErrorText: TextView by lazy { text_security_code_error }
-    private val countryErrorText: TextView by lazy { text_country_error }
-    private val street1ErrorText: TextView by lazy { text_street1_error }
-    private val cityErrorText: TextView by lazy { text_city_error }
-    private val stateErrorText: TextView by lazy { text_state_error }
-    private val postalCodeErrorText: TextView by lazy { text_postal_code_error }
+    private val cardNumberEdit: CreditCardEditText by lazy { binding.editCardNumber }
+    private val cardNameEdit: CardNameEditText by lazy { binding.editCardName }
+    private val expiryDateEdit: ExpiryDateEditText by lazy { binding.editExpiryDate }
+    private val securityCodeEdit: SecurityCodeEditText by lazy { binding.editSecurityCode }
+    private val countryEdit: OmiseEditText by lazy { binding.editCountry }
+    private val street1Edit: OmiseEditText by lazy { binding.editStreet1 }
+    private val cityEdit: OmiseEditText by lazy { binding.editCity }
+    private val stateEdit: OmiseEditText by lazy { binding.editState }
+    private val postalCodeEdit: OmiseEditText by lazy { binding.editPostalCode }
 
-    private val emailEdit: OmiseEditText by lazy { edit_email }
-    private val emailErrorText by lazy { text_email_error }
-    private val emailTextTitle by lazy { text_email_title }
-    private val phoneNumberEdit: OmiseEditText by lazy { edit_phone_number }
-    private val phoneNumberErrorText by lazy { text_phone_number_error }
-    private val phoneNumberTextTitle by lazy { text_phone_number_title }
+    private val submitButton: Button by lazy { binding.buttonSubmit }
+    private val scrollView: ScrollView by lazy { binding.scrollview }
+    private val cardNumberErrorText: TextView by lazy { binding.textCardNumberError }
+    private val cardNameErrorText: TextView by lazy { binding.textCardNameError }
+    private val expiryDateErrorText: TextView by lazy { binding.textExpiryDateError }
+    private val securityCodeErrorText: TextView by lazy { binding.textSecurityCodeError }
+    private val countryErrorText: TextView by lazy { binding.textCountryError }
+    private val street1ErrorText: TextView by lazy { binding.textStreet1Error }
+    private val cityErrorText: TextView by lazy { binding.textCityError }
+    private val stateErrorText: TextView by lazy { binding.textStateError }
+    private val postalCodeErrorText: TextView by lazy { binding.textPostalCodeError }
 
-    private val securityCodeTooltipButton: ImageButton by lazy { button_security_code_tooltip }
+    private val emailEdit: OmiseEditText by lazy { binding.editEmail }
+    private val emailErrorText by lazy { binding.textEmailError }
+    private val emailTextTitle by lazy { binding.textEmailTitle }
+    private val phoneNumberEdit: OmiseEditText by lazy { binding.editPhoneNumber }
+    private val phoneNumberErrorText by lazy { binding.textPhoneNumberError }
+    private val phoneNumberTextTitle by lazy { binding.textPhoneNumberTitle }
 
-    private val billingAddressContainer: LinearLayout by lazy { billing_address_container }
+    private val securityCodeTooltipButton: ImageButton by lazy { binding.buttonSecurityCodeTooltip }
+
+    private val billingAddressContainer: LinearLayout by lazy { binding.billingAddressContainer }
 
     /**
      * Target countries that supports AVS or the Address Verification System.
@@ -210,7 +185,8 @@ class CreditCardActivity : OmiseActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        setContentView(R.layout.activity_credit_card)
+        binding = ActivityCreditCardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         require(intent.hasExtra(EXTRA_PKEY)) { "Could not find ${::EXTRA_PKEY.name}." }
         pKey = requireNotNull(intent.getStringExtra(EXTRA_PKEY)) { "${::EXTRA_PKEY.name} must not be null." }

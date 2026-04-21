@@ -39,7 +39,7 @@ import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
+import co.omise.android.databinding.ActivityPaymentCreatorBinding
 import org.jetbrains.annotations.TestOnly
 import java.io.IOError
 
@@ -57,7 +57,8 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
     private lateinit var cardHolderDataList: CardHolderDataList
-    private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
+    private lateinit var binding: ActivityPaymentCreatorBinding
+    private val snackbar: Snackbar by lazy { Snackbar.make(binding.paymentCreatorContainer, "", Snackbar.LENGTH_SHORT) }
 
     private lateinit var client: Client
 
@@ -80,7 +81,8 @@ class PaymentCreatorActivity : OmiseActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        setContentView(R.layout.activity_payment_creator)
+        binding = ActivityPaymentCreatorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         progressBar = findViewById(R.id.progressBar)
         errorMessage = findViewById(R.id.errorMessage)

@@ -37,7 +37,7 @@ import co.omise.android.models.Authentication
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
+import co.omise.android.databinding.ActivityAuthorizingPaymentBinding
 import org.jetbrains.annotations.TestOnly
 
 /**
@@ -47,7 +47,8 @@ import org.jetbrains.annotations.TestOnly
  * app by default but the Intent callback needs to be handled by the implementer.
  */
 class AuthorizingPaymentActivity : OmiseActivity() {
-    private val webView: WebView by lazy { authorizing_payment_webview }
+    private lateinit var binding: ActivityAuthorizingPaymentBinding
+    private val webView: WebView by lazy { binding.authorizingPaymentWebview }
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
     private lateinit var threeDSRequestorAppURL: String
@@ -71,7 +72,8 @@ class AuthorizingPaymentActivity : OmiseActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        setContentView(R.layout.activity_authorizing_payment)
+        binding = ActivityAuthorizingPaymentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupActionBarTitle()
         externalActivityLauncher =
             registerForActivityResult(

@@ -38,11 +38,7 @@ import co.omise.android.ui.CreditCardActivity
 import co.omise.android.ui.OmiseActivity
 import co.omise.android.ui.PaymentCreatorActivity
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_checkout.amount_edit
-import kotlinx.android.synthetic.main.activity_checkout.authorize_url_button
-import kotlinx.android.synthetic.main.activity_checkout.choose_payment_method_button
-import kotlinx.android.synthetic.main.activity_checkout.credit_card_button
-import kotlinx.android.synthetic.main.activity_checkout.currency_edit
+import co.omise.android.example.databinding.ActivityCheckoutBinding
 
 inline fun <reified T : Parcelable> Intent.parcelable(key: String?): T? = when {
     // https://stackoverflow.com/questions/72571804/getserializableextra-and-getparcelableextra-are-deprecated-what-is-the-alternat/73543350#73543350
@@ -67,13 +63,15 @@ class CheckoutActivity : AppCompatActivity() {
         private const val CREDIT_CARD_REQUEST_CODE = 0x3D7
     }
 
-    private val amountEdit: EditText by lazy { amount_edit }
-    private val currencyEdit: EditText by lazy { currency_edit }
-    private val choosePaymentMethodButton: Button by lazy { choose_payment_method_button }
-    private val creditCardButton: Button by lazy { credit_card_button }
-    private val authorizeUrlButton: Button by lazy { authorize_url_button }
+    private lateinit var binding: ActivityCheckoutBinding
+
+    private val amountEdit get() = binding.amountEdit
+    private val currencyEdit get() = binding.currencyEdit
+    private val choosePaymentMethodButton get() = binding.choosePaymentMethodButton
+    private val creditCardButton get() = binding.creditCardButton
+    private val authorizeUrlButton get() = binding.authorizeUrlButton
     private val snackbar: Snackbar by lazy {
-        Snackbar.make(findViewById(R.id.content), "", Snackbar.LENGTH_SHORT)
+        Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT)
     }
 
     private lateinit var authorizingPaymentLauncher: ActivityResultLauncher<Intent>
@@ -82,7 +80,8 @@ class CheckoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_checkout)
+        binding = ActivityCheckoutBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.title = getString(R.string.activity_checkout)
         authorizingPaymentLauncher = registerForActivityResult(

@@ -11,9 +11,7 @@ import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
-import kotlinx.android.synthetic.main.fragment_true_money_form.button_submit
-import kotlinx.android.synthetic.main.fragment_true_money_form.edit_phone_number
-import kotlinx.android.synthetic.main.fragment_true_money_form.text_phone_number_error
+import co.omise.android.databinding.FragmentTrueMoneyFormBinding
 
 /**
  * TrueMoneyFormFragment is the UI class for handling TrueMoney payment method.
@@ -21,16 +19,21 @@ import kotlinx.android.synthetic.main.fragment_true_money_form.text_phone_number
 class TrueMoneyFormFragment : OmiseFragment() {
     var requester: PaymentCreatorRequester<Source>? = null
 
-    private val phoneNumberEdit: OmiseEditText by lazy { edit_phone_number }
-    private val phoneNumberErrorText by lazy { text_phone_number_error }
-    private val submitButton: Button by lazy { button_submit }
+    private var _binding: FragmentTrueMoneyFormBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_true_money_form, container, false)
+    private val phoneNumberEdit: OmiseEditText get() = binding.editPhoneNumber
+    private val phoneNumberErrorText get() = binding.textPhoneNumberError
+    private val submitButton: Button get() = binding.buttonSubmit
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentTrueMoneyFormBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(

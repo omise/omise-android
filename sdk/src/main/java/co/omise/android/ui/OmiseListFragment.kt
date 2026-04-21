@@ -16,19 +16,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.omise.android.R
-import kotlinx.android.synthetic.main.fragment_list.no_data_text
-import kotlinx.android.synthetic.main.fragment_list.recycler_view
+import co.omise.android.databinding.FragmentListBinding
 
 /**
  * OmiseListFragment is the base class for all list-based UI classes.
  */
 abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
-
     abstract fun listItems(): List<T>
 
-    protected val noDataText: TextView by lazy { no_data_text }
-    private val recyclerView: RecyclerView by lazy { recycler_view }
+    private var _binding: FragmentListBinding? = null
+    private val binding get() = _binding!!
+
+    protected val noDataText get() = binding.noDataText
+    private val recyclerView get() = binding.recyclerView
 
     private val onClickListener =
         object : OmiseListItemClickListener {
@@ -39,12 +40,14 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
 
     private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), onClickListener) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(
