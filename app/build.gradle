@@ -1,8 +1,11 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
+
+    buildFeatures {
+        viewBinding true
+    }
 
     defaultConfig {
         namespace "co.omise.android.example"
