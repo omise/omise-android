@@ -22,7 +22,7 @@ class PaymentResultActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         // Depending on your application status, handle the result from the payment app as needed
