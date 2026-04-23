@@ -41,7 +41,7 @@ inline fun <reified T : Parcelable> Intent.parcelable(key: String?): T? = when {
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
 
-class CheckoutActivity : AppCompatActivity() {
+class CheckoutActivity : OmiseActivity() {
 
     companion object {
         private const val TAG = "CheckoutActivity"

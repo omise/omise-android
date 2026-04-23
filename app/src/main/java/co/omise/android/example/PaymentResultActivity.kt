@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 
+import co.omise.android.ui.OmiseActivity
+
 /**
  * The example activity to receive the result of the payment.
  */
-class PaymentResultActivity : AppCompatActivity() {
+class PaymentResultActivity : OmiseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment_result)
