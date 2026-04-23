@@ -74,8 +74,7 @@ internal class InstallmentChooserFragment : OmiseListFragment<InstallmentResourc
     }
 
     private fun addNoBanksSupportedMessage() {
-        val noBanksMessageLayOut = view?.findViewById<LinearLayout>(R.id.message_layout)
-        noBanksMessageLayOut?.visibility = View.VISIBLE
+        messageLayout.visibility = View.VISIBLE
     }
 
     override fun onListItemClicked(item: InstallmentResource) {

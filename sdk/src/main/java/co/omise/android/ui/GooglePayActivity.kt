@@ -331,10 +331,11 @@ class GooglePayActivity : OmiseActivity() {
     @VisibleForTesting
     internal inner class CreateTokenRequestListener : RequestListener<Token> {
         override fun onRequestSucceed(model: Token) {
-            val data = Intent()
-            data.putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
-            data.putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
-            data.putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
+            val data = Intent().apply {
+                putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
+                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
+                putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
+            }
 
             setResult(Activity.RESULT_OK, data)
             finish()
