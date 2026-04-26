@@ -156,7 +156,7 @@ class PaymentChooserFragmentTest {
         assertListAtIndexHasResource(18, R.string.payment_method_duitnow_obw_title)
         assertListAtIndexHasResource(19, R.string.payment_method_duitnow_qr_title)
 
-        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(26))
+        onView(withId(R.id.recycler_view)).perform(scrollToPosition<ViewHolder>(25))
 
         assertListAtIndexHasResource(20, R.string.payment_method_maybank_qr_title)
         assertListAtIndexHasResource(21, R.string.payment_method_rabbit_linepay_title)
