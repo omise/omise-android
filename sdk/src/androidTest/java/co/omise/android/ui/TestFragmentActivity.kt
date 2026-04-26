@@ -14,14 +14,16 @@ class TestFragmentActivity : OmiseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.OmiseTheme)
         super.onCreate(savedInstanceState)
-        
-        val frameLayout = FrameLayout(this).apply {
-            id = R.id.payment_creator_container
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
+
+        val frameLayout =
+            FrameLayout(this).apply {
+                id = R.id.payment_creator_container
+                layoutParams =
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+            }
         setContentView(frameLayout)
     }
 

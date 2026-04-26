@@ -43,7 +43,11 @@ class EContextFormFragment : OmiseFragment() {
             Pair(phoneNumberEdit, phoneNumberErrorText),
         )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentEcontextFormBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -53,14 +57,18 @@ class EContextFormFragment : OmiseFragment() {
         _binding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
-        title = when (type) {
-            SupportedEcontext.ConvenienceStore -> getString(R.string.title_convenience_store)
-            SupportedEcontext.PayEasy -> getString(R.string.title_pay_easy)
-            SupportedEcontext.Netbanking -> getString(R.string.title_netbank)
-            null -> getString(R.string.econtext_title)
-        }
+        title =
+            when (type) {
+                SupportedEcontext.ConvenienceStore -> getString(R.string.title_convenience_store)
+                SupportedEcontext.PayEasy -> getString(R.string.title_pay_easy)
+                SupportedEcontext.Netbanking -> getString(R.string.title_netbank)
+                null -> getString(R.string.econtext_title)
+            }
         setHasOptionsMenu(true)
         formInputWithErrorTexts.forEach {
             it.first.setOnFocusChangeListener(::updateErrorText)
@@ -69,7 +77,10 @@ class EContextFormFragment : OmiseFragment() {
         submitButton.setOnClickListener(::submitForm)
     }
 
-    private fun updateErrorText(view: View, hasFocus: Boolean) {
+    private fun updateErrorText(
+        view: View,
+        hasFocus: Boolean,
+    ) {
         val editText = view as OmiseEditText
         val errorText = formInputWithErrorTexts.first { it.first == editText }.second
         if (hasFocus || editText.isValid) {
@@ -77,12 +88,13 @@ class EContextFormFragment : OmiseFragment() {
             errorText.visibility = INVISIBLE
             return
         }
-        errorText.text = when (editText) {
-            fullNameEdit -> getString(R.string.error_invalid_full_name)
-            emailEdit -> getString(R.string.error_invalid_email)
-            phoneNumberEdit -> getString(R.string.error_invalid_phone_number)
-            else -> getString(R.string.error_unknown_without_reason)
-        }
+        errorText.text =
+            when (editText) {
+                fullNameEdit -> getString(R.string.error_invalid_full_name)
+                emailEdit -> getString(R.string.error_invalid_email)
+                phoneNumberEdit -> getString(R.string.error_invalid_phone_number)
+                else -> getString(R.string.error_unknown_without_reason)
+            }
         errorText.visibility = VISIBLE
     }
 
@@ -95,14 +107,16 @@ class EContextFormFragment : OmiseFragment() {
         val fullName = fullNameEdit.text?.toString()?.trim().orEmpty()
         val email = emailEdit.text?.toString()?.trim().orEmpty()
         val phoneNumber = phoneNumberEdit.text?.toString()?.trim().orEmpty()
-        val request = Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.Econtext)
-            .name(fullName).email(email).phoneNumber(phoneNumber).build()
+        val request =
+            Source.CreateSourceRequestBuilder(requester.amount, requester.currency, SourceType.Econtext)
+                .name(fullName).email(email).phoneNumber(phoneNumber).build()
         view?.let { setAllViewsEnabled(it, false) }
         requester.request(request) { view?.let { setAllViewsEnabled(it, true) } }
     }
 
     companion object {
         private const val EXTRA_ECONTEXT_TYPE = "EContextFormFragment.econtextType"
+
         fun newInstance(eContext: SupportedEcontext): EContextFormFragment =
             EContextFormFragment().apply {
                 arguments = Bundle().apply { putParcelable(EXTRA_ECONTEXT_TYPE, eContext) }

@@ -18,6 +18,7 @@ import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
+import co.omise.android.databinding.ActivityPaymentCreatorBinding
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.parcelable
 import co.omise.android.extensions.parcelableNullable
@@ -42,7 +43,6 @@ import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
-import co.omise.android.databinding.ActivityPaymentCreatorBinding
 import org.jetbrains.annotations.TestOnly
 import java.io.IOError
 
@@ -74,7 +74,6 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     @VisibleForTesting
     lateinit var navigation: PaymentCreatorNavigation
-
 
     private lateinit var creditCardLauncher: ActivityResultLauncher<Intent>
     private lateinit var googlePayLauncher: ActivityResultLauncher<Intent>
@@ -113,13 +112,15 @@ class PaymentCreatorActivity : OmiseActivity() {
     }
 
     private fun setupActivityLaunchers() {
-        creditCardLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleCreditCardResult(result)
-        }
+        creditCardLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleCreditCardResult(result)
+            }
 
-        googlePayLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleCreditCardResult(result) // GooglePay returns same format
-        }
+        googlePayLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleCreditCardResult(result) // GooglePay returns same format
+            }
     }
 
     @VisibleForTesting
@@ -129,12 +130,13 @@ class PaymentCreatorActivity : OmiseActivity() {
             val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
             val source = data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
 
-            val intent = Intent().apply {
-                putExtra(EXTRA_TOKEN, token?.id)
-                putExtra(EXTRA_TOKEN_OBJECT, token)
-                putExtra(EXTRA_CARD_OBJECT, token?.card)
-                source?.let { putExtra(EXTRA_SOURCE_OBJECT, it) }
-            }
+            val intent =
+                Intent().apply {
+                    putExtra(EXTRA_TOKEN, token?.id)
+                    putExtra(EXTRA_TOKEN_OBJECT, token)
+                    putExtra(EXTRA_CARD_OBJECT, token?.card)
+                    source?.let { putExtra(EXTRA_SOURCE_OBJECT, it) }
+                }
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -385,11 +387,12 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToCreditCardForm() {
-        val intent = Intent(activity, CreditCardActivity::class.java).apply {
-            putExtra(EXTRA_PKEY, pkey)
-            putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
-            putExtra(EXTRA_CARD_HOLDER_DATA, cardHolderDataList)
-        }
+        val intent =
+            Intent(activity, CreditCardActivity::class.java).apply {
+                putExtra(EXTRA_PKEY, pkey)
+                putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
+                putExtra(EXTRA_CARD_HOLDER_DATA, cardHolderDataList)
+            }
         creditCardLauncher.launch(intent)
     }
 
@@ -474,15 +477,16 @@ private class PaymentCreatorNavigationImpl(
     }
 
     override fun navigateToGooglePayForm() {
-        val intent = Intent(activity, GooglePayActivity::class.java).apply {
-            putExtra(EXTRA_PKEY, pkey)
-            putExtra(EXTRA_AMOUNT, amount)
-            putExtra(EXTRA_CURRENCY, currency)
-            putStringArrayListExtra(EXTRA_CARD_BRANDS, cardBrands)
-            putExtra(EXTRA_GOOGLEPAY_MERCHANT_ID, googlepayMerchantId)
-            putExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, googlepayRequestBillingAddress)
-            putExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
-        }
+        val intent =
+            Intent(activity, GooglePayActivity::class.java).apply {
+                putExtra(EXTRA_PKEY, pkey)
+                putExtra(EXTRA_AMOUNT, amount)
+                putExtra(EXTRA_CURRENCY, currency)
+                putStringArrayListExtra(EXTRA_CARD_BRANDS, cardBrands)
+                putExtra(EXTRA_GOOGLEPAY_MERCHANT_ID, googlepayMerchantId)
+                putExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, googlepayRequestBillingAddress)
+                putExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
+            }
         googlePayLauncher.launch(intent)
     }
 

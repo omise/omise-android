@@ -7,11 +7,11 @@ import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import co.omise.android.R
+import co.omise.android.databinding.FragmentTrueMoneyFormBinding
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
 import co.omise.android.models.SourceType
-import co.omise.android.databinding.FragmentTrueMoneyFormBinding
 
 /**
  * TrueMoneyFormFragment is the UI class for handling TrueMoney payment method.
@@ -26,7 +26,11 @@ class TrueMoneyFormFragment : OmiseFragment() {
     private val phoneNumberErrorText get() = binding.textPhoneNumberError
     private val submitButton: Button get() = binding.buttonSubmit
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentTrueMoneyFormBinding.inflate(inflater, container, false)
         return binding.root
     }

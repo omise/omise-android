@@ -12,6 +12,7 @@ import androidx.annotation.VisibleForTesting
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
+import co.omise.android.databinding.ActivityGooglePayBinding
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.models.APIError
 import co.omise.android.models.Token
@@ -23,7 +24,6 @@ import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
-import co.omise.android.databinding.ActivityGooglePayBinding
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOError
@@ -331,11 +331,12 @@ class GooglePayActivity : OmiseActivity() {
     @VisibleForTesting
     internal inner class CreateTokenRequestListener : RequestListener<Token> {
         override fun onRequestSucceed(model: Token) {
-            val data = Intent().apply {
-                putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
-                putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
-                putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
-            }
+            val data =
+                Intent().apply {
+                    putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
+                    putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
+                }
 
             setResult(Activity.RESULT_OK, data)
             finish()

@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import co.omise.android.R
+import co.omise.android.databinding.FragmentFpxEmailFormBinding
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
-import co.omise.android.databinding.FragmentFpxEmailFormBinding
 
 /**
  * FpxEmailFormFragment is the UI class to show an email form for FPX payments.
@@ -25,7 +25,11 @@ internal class FpxEmailFormFragment : OmiseFragment() {
     private val submitButton: Button get() = binding.buttonSubmit
     private val allowedEmailFormat = "\\A[\\w+\\-.]+@[a-z\\d\\-.]+\\.[a-z]{2,}\\z"
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentFpxEmailFormBinding.inflate(inflater, container, false)
         return binding.root
     }

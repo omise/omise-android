@@ -33,7 +33,11 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
         cardBrand = arguments?.getParcelableCompat(EXTRA_CARD_BRAND)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = DialogSecurityCodeTooltipBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,7 +47,10 @@ class SecurityCodeTooltipDialogFragment : DialogFragment() {
         _binding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         closeButton.setOnClickListener { dismiss() }

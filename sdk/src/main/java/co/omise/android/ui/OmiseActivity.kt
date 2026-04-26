@@ -3,7 +3,6 @@ package co.omise.android.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -58,7 +57,10 @@ abstract class OmiseActivity : AppCompatActivity() {
         handleWindowInsets()
     }
 
-    override fun setContentView(view: View?, params: android.view.ViewGroup.LayoutParams?) {
+    override fun setContentView(
+        view: View?,
+        params: android.view.ViewGroup.LayoutParams?,
+    ) {
         super.setContentView(view, params)
         handleWindowInsets()
     }

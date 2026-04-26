@@ -373,10 +373,10 @@ class AuthorizingPaymentActivityTest {
         assertEquals(
             AuthenticationStatus.FAILED.message,
             (
-                    activityResult.resultData.parcelable(
-                        EXTRA_AUTHORIZING_PAYMENT_RESULT,
-                    ) as? AuthorizingPaymentResult.Failure
-                    )?.throwable?.message,
+                activityResult.resultData.parcelable(
+                    EXTRA_AUTHORIZING_PAYMENT_RESULT,
+                ) as? AuthorizingPaymentResult.Failure
+            )?.throwable?.message,
         )
     }
 

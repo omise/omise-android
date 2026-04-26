@@ -8,11 +8,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import co.omise.android.CardNumber
@@ -348,11 +344,12 @@ class CreditCardActivity : OmiseActivity() {
             request,
             object : RequestListener<Token> {
                 override fun onRequestSucceed(model: Token) {
-                    val data = Intent().apply {
-                        putExtra(EXTRA_TOKEN, model.id)
-                        putExtra(EXTRA_TOKEN_OBJECT, model)
-                        putExtra(EXTRA_CARD_OBJECT, model.card)
-                    }
+                    val data =
+                        Intent().apply {
+                            putExtra(EXTRA_TOKEN, model.id)
+                            putExtra(EXTRA_TOKEN_OBJECT, model)
+                            putExtra(EXTRA_CARD_OBJECT, model.card)
+                        }
                     if (sourceRequest == null) {
                         setResult(Activity.RESULT_OK, data)
                         finish()

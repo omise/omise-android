@@ -8,9 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +21,7 @@ import co.omise.android.databinding.ListItemBinding
  */
 abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
     abstract fun onListItemClicked(item: T)
+
     abstract fun listItems(): List<T>
 
     private var _binding: FragmentListBinding? = null
@@ -42,7 +40,11 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
 
     private val adapter: OmiseListAdapter by lazy { OmiseListAdapter(listItems(), onClickListener) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }

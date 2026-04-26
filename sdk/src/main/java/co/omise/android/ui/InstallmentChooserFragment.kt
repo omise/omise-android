@@ -2,7 +2,6 @@ package co.omise.android.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import co.omise.android.R
 import co.omise.android.extensions.getParcelableArrayCompat
 import co.omise.android.models.BackendType
