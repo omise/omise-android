@@ -57,7 +57,17 @@ class CountryListDialogFragment : DialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.let { window ->
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
+
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.close_menu -> dismiss()
