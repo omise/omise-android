@@ -122,7 +122,8 @@ class PaymentCreatorActivity : OmiseActivity() {
         }
     }
 
-    private fun handleCreditCardResult(result: ActivityResult) {
+    @VisibleForTesting
+    internal fun handleCreditCardResult(result: ActivityResult) {
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
