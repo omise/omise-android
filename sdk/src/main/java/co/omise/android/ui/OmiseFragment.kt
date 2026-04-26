@@ -15,15 +15,28 @@ import androidx.fragment.app.Fragment
  */
 abstract class OmiseFragment : Fragment() {
     var title: String? = null
+        set(value) {
+            field = value
+            if (isResumed) {
+                actionBar?.title = value
+            }
+        }
 
     private val actionBar: ActionBar?
         get() = (activity as? AppCompatActivity)?.supportActionBar
+
+    override fun onResume() {
+        super.onResume()
+        actionBar?.title = title
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         parentFragmentManager.addOnBackStackChangedListener {
-            actionBar?.title = title
+            if (isVisible) {
+                actionBar?.title = title
+            }
         }
     }
 
