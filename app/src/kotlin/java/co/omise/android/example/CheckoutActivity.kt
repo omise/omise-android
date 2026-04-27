@@ -45,7 +45,7 @@ class CheckoutActivity : OmiseActivity() {
 
     companion object {
         private const val TAG = "CheckoutActivity"
-        private const val PUBLIC_KEY = "pkey_675dq3lws9msrmx4m4y"
+        private const val PUBLIC_KEY = "[PUBLIC_KEY]"
         private const val GOOGLEPAY_MERCHANT_ID = "[GOOGLEPAY_MERCHANT_ID]"
         private const val GOOGLEPAY_REQUEST_BILLING_ADDRESS = false
         private const val GOOGLEPAY_REQUEST_PHONE_NUMBER = false
