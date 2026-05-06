@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.omise.android.SDKTest
 import co.omise.android.extensions.getParcelableCompat
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.junit.Test

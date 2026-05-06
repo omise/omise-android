@@ -9,12 +9,16 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.Request
 import co.omise.android.api.RequestListener
+import co.omise.android.databinding.ActivityPaymentCreatorBinding
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.extensions.parcelable
 import co.omise.android.extensions.parcelableNullable
@@ -39,7 +43,6 @@ import co.omise.android.ui.OmiseActivity.Companion.EXTRA_IS_SECURE
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_PKEY
 import co.omise.android.ui.OmiseActivity.Companion.EXTRA_SOURCE_OBJECT
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_payment_creator.payment_creator_container
 import org.jetbrains.annotations.TestOnly
 import java.io.IOError
 
@@ -57,7 +60,8 @@ class PaymentCreatorActivity : OmiseActivity() {
     private var googlepayRequestBillingAddress: Boolean = false
     private var googlepayRequestPhoneNumber: Boolean = false
     private lateinit var cardHolderDataList: CardHolderDataList
-    private val snackbar: Snackbar by lazy { Snackbar.make(payment_creator_container, "", Snackbar.LENGTH_SHORT) }
+    private lateinit var binding: ActivityPaymentCreatorBinding
+    private val snackbar: Snackbar by lazy { Snackbar.make(binding.paymentCreatorContainer, "", Snackbar.LENGTH_SHORT) }
 
     private lateinit var client: Client
 
@@ -71,8 +75,8 @@ class PaymentCreatorActivity : OmiseActivity() {
     @VisibleForTesting
     lateinit var navigation: PaymentCreatorNavigation
 
-    private lateinit var progressBar: ProgressBar
-    private lateinit var errorMessage: TextView
+    private lateinit var creditCardLauncher: ActivityResultLauncher<Intent>
+    private lateinit var googlePayLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,15 +84,17 @@ class PaymentCreatorActivity : OmiseActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        setContentView(R.layout.activity_payment_creator)
+        binding = ActivityPaymentCreatorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        progressBar = findViewById(R.id.progressBar)
-        errorMessage = findViewById(R.id.errorMessage)
         // Initially hide the ProgressBar and error message
-        progressBar.visibility = ProgressBar.GONE
-        errorMessage.visibility = TextView.GONE
+        binding.progressBar.visibility = ProgressBar.GONE
+        binding.errorMessage.visibility = TextView.GONE
 
         title = getString(R.string.payment_chooser_title)
+
+        setupActivityLaunchers()
+
         val onBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -103,6 +109,37 @@ class PaymentCreatorActivity : OmiseActivity() {
         initialize()
 
         loadCapability()
+    }
+
+    private fun setupActivityLaunchers() {
+        creditCardLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleCreditCardResult(result)
+            }
+
+        googlePayLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                handleCreditCardResult(result) // GooglePay returns same format
+            }
+    }
+
+    @VisibleForTesting
+    internal fun handleCreditCardResult(result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
+            val source = data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
+
+            val intent =
+                Intent().apply {
+                    putExtra(EXTRA_TOKEN, token?.id)
+                    putExtra(EXTRA_TOKEN_OBJECT, token)
+                    putExtra(EXTRA_CARD_OBJECT, token?.card)
+                    source?.let { putExtra(EXTRA_SOURCE_OBJECT, it) }
+                }
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
     }
 
     // Set the menu button to close the view by the user
@@ -126,9 +163,9 @@ class PaymentCreatorActivity : OmiseActivity() {
 
     private fun loadCapability() {
         // Start loading
-        progressBar.visibility = ProgressBar.VISIBLE
+        binding.progressBar.visibility = ProgressBar.VISIBLE
         // Hide error message
-        errorMessage.visibility = TextView.GONE
+        binding.errorMessage.visibility = TextView.GONE
         // Get capability
         val capabilityRequest = Capability.GetCapabilitiesRequestBuilder().build()
         client.send(
@@ -140,14 +177,14 @@ class PaymentCreatorActivity : OmiseActivity() {
                     // as new button will come from the next view
                     invalidateOptionsMenu()
                     // Hide loading
-                    progressBar.visibility = ProgressBar.GONE
+                    binding.progressBar.visibility = ProgressBar.GONE
                 }
 
                 override fun onRequestFailed(throwable: Throwable) {
-                    progressBar.visibility = ProgressBar.GONE
+                    binding.progressBar.visibility = ProgressBar.GONE
                     // Show the error message
-                    errorMessage.text = getString(R.string.error_loading_payment_methods)
-                    errorMessage.visibility = TextView.VISIBLE
+                    binding.errorMessage.text = getString(R.string.error_loading_payment_methods)
+                    binding.errorMessage.visibility = TextView.VISIBLE
                 }
             },
         )
@@ -171,7 +208,8 @@ class PaymentCreatorActivity : OmiseActivity() {
                 googlepayMerchantId,
                 googlepayRequestBillingAddress,
                 googlepayRequestPhoneNumber,
-                REQUEST_CREDIT_CARD,
+                creditCardLauncher,
+                googlePayLauncher,
                 requester,
                 newCapability,
                 cardHolderDataList,
@@ -255,40 +293,6 @@ class PaymentCreatorActivity : OmiseActivity() {
         return capability
     }
 
-    // TODO: find a way to unit test ActivityResult launcher in order to be able to move from deprecated onActivityResult
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CREDIT_CARD_WITH_SOURCE && resultCode == Activity.RESULT_OK) {
-            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
-            val source = data?.parcelable<Source>(EXTRA_SOURCE_OBJECT)
-            val intent =
-                Intent().apply {
-                    putExtra(EXTRA_TOKEN, token?.id)
-                    putExtra(EXTRA_TOKEN_OBJECT, token)
-                    putExtra(EXTRA_CARD_OBJECT, token?.card)
-                    putExtra(EXTRA_SOURCE_OBJECT, source)
-                }
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
-
-        if (requestCode == REQUEST_CREDIT_CARD && resultCode == Activity.RESULT_OK) {
-            val token = data?.parcelable<Token>(EXTRA_TOKEN_OBJECT)
-            val intent =
-                Intent().apply {
-                    putExtra(EXTRA_TOKEN, token?.id)
-                    putExtra(EXTRA_TOKEN_OBJECT, token)
-                    putExtra(EXTRA_CARD_OBJECT, token?.card)
-                }
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
-    }
-
     private fun initialize() {
         listOf(EXTRA_PKEY, EXTRA_AMOUNT, EXTRA_CURRENCY).forEach {
             require(intent.hasExtra(it)) { "Could not found $it." }
@@ -354,7 +358,8 @@ private class PaymentCreatorNavigationImpl(
     private var googlepayMerchantId: String,
     private var googlepayRequestBillingAddress: Boolean,
     private var googlepayRequestPhoneNumber: Boolean,
-    private val requestCode: Int,
+    private val creditCardLauncher: ActivityResultLauncher<Intent>,
+    private val googlePayLauncher: ActivityResultLauncher<Intent>,
     private val requester: PaymentCreatorRequester<Source>,
     private val capability: Capability,
     private val cardHolderDataList: CardHolderDataList,
@@ -388,7 +393,7 @@ private class PaymentCreatorNavigationImpl(
                 putExtra(EXTRA_IS_SECURE, activity.intent.getBooleanExtra(EXTRA_IS_SECURE, true))
                 putExtra(EXTRA_CARD_HOLDER_DATA, cardHolderDataList)
             }
-        activity.startActivityForResult(intent, requestCode)
+        creditCardLauncher.launch(intent)
     }
 
     override fun navigateToMobileBankingChooser(allowedBanks: List<PaymentMethod>) {
@@ -482,7 +487,7 @@ private class PaymentCreatorNavigationImpl(
                 putExtra(EXTRA_GOOGLEPAY_REQUEST_BILLING_ADDRESS, googlepayRequestBillingAddress)
                 putExtra(EXTRA_GOOGLEPAY_REQUEST_PHONE_NUMBER, googlepayRequestPhoneNumber)
             }
-        activity.startActivityForResult(intent, requestCode)
+        googlePayLauncher.launch(intent)
     }
 
     override fun navigateToDuitNowOBWBankChooser(capability: Capability) {

@@ -1,13 +1,11 @@
 package co.omise.android.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import co.omise.android.R
+import co.omise.android.databinding.ListCountryItemBinding
 import co.omise.android.models.CountryInfo
 
 internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
@@ -16,8 +14,8 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
         parent: ViewGroup,
         viewType: Int,
     ): CountryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_country_item, parent, false)
-        return CountryViewHolder(view, onClick)
+        val binding = ListCountryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CountryViewHolder(binding, onClick)
     }
 
     override fun onBindViewHolder(
@@ -28,12 +26,11 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
         holder.bind(country)
     }
 
-    class CountryViewHolder(itemView: View, val onClick: (CountryInfo) -> Unit) : ViewHolder(itemView) {
+    class CountryViewHolder(val binding: ListCountryItemBinding, val onClick: (CountryInfo) -> Unit) : ViewHolder(binding.root) {
         private var currentCountry: CountryInfo? = null
-        private val titleTextView: TextView = itemView.findViewById(R.id.text_item_title)
 
         init {
-            itemView.setOnClickListener {
+            binding.root.setOnClickListener {
                 currentCountry?.let {
                     onClick(it)
                 }
@@ -42,7 +39,7 @@ internal class CountryListAdapter(private val onClick: (CountryInfo) -> Unit) :
 
         fun bind(country: CountryInfo) {
             currentCountry = country
-            titleTextView.text = country.name
+            binding.textItemTitle.text = country.name
         }
     }
 }

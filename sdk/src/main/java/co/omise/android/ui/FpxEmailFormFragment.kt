@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import co.omise.android.R
+import co.omise.android.databinding.FragmentFpxEmailFormBinding
 import co.omise.android.extensions.setOnAfterTextChangeListener
 import co.omise.android.extensions.setOnClickListener
 import co.omise.android.models.Source
-import kotlinx.android.synthetic.main.fragment_fpx_email_form.button_submit
-import kotlinx.android.synthetic.main.fragment_fpx_email_form.edit_email
 
 /**
  * FpxEmailFormFragment is the UI class to show an email form for FPX payments.
@@ -19,16 +18,25 @@ internal class FpxEmailFormFragment : OmiseFragment() {
     var navigation: PaymentCreatorNavigation? = null
     var requester: PaymentCreatorRequester<Source>? = null
 
-    private val emailEdit: OmiseEditText by lazy { edit_email }
-    private val submitButton: Button by lazy { button_submit }
+    private var _binding: FragmentFpxEmailFormBinding? = null
+    private val binding get() = _binding!!
+
+    private val emailEdit: OmiseEditText get() = binding.editEmail
+    private val submitButton: Button get() = binding.buttonSubmit
     private val allowedEmailFormat = "\\A[\\w+\\-.]+@[a-z\\d\\-.]+\\.[a-z]{2,}\\z"
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_fpx_email_form, container, false)
+    ): View {
+        _binding = FragmentFpxEmailFormBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(

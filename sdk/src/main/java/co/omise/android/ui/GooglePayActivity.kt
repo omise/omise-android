@@ -12,6 +12,7 @@ import androidx.annotation.VisibleForTesting
 import co.omise.android.R
 import co.omise.android.api.Client
 import co.omise.android.api.RequestListener
+import co.omise.android.databinding.ActivityGooglePayBinding
 import co.omise.android.extensions.getMessageFromResources
 import co.omise.android.models.APIError
 import co.omise.android.models.Token
@@ -23,7 +24,6 @@ import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
-import kotlinx.android.synthetic.main.activity_google_pay.googlePayButton
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOError
@@ -31,6 +31,7 @@ import java.io.IOError
 class GooglePayActivity : OmiseActivity() {
     private lateinit var pKey: String
     private lateinit var googlePay: GooglePay
+    private lateinit var binding: ActivityGooglePayBinding
 
     @VisibleForTesting
     internal lateinit var paymentsClient: PaymentsClient
@@ -55,7 +56,8 @@ class GooglePayActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_google_pay)
+        binding = ActivityGooglePayBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
@@ -81,7 +83,7 @@ class GooglePayActivity : OmiseActivity() {
 
         possiblyShowGooglePayButton()
 
-        googlePayButton.setOnClickListener { requestPayment() }
+        binding.googlePayButton.setOnClickListener { requestPayment() }
     }
 
     private fun initialize() {
@@ -154,7 +156,7 @@ class GooglePayActivity : OmiseActivity() {
     @VisibleForTesting
     internal fun setGooglePayAvailable(available: Boolean) {
         if (available) {
-            googlePayButton.visibility = View.VISIBLE
+            binding.googlePayButton.visibility = View.VISIBLE
         } else {
             Toast.makeText(
                 this,
@@ -168,7 +170,7 @@ class GooglePayActivity : OmiseActivity() {
     @VisibleForTesting
     internal fun requestPayment() {
         // Disables the button to prevent multiple clicks.
-        googlePayButton.isClickable = false
+        binding.googlePayButton.isClickable = false
 
         val paymentDataRequestJson = googlePay.getPaymentDataRequest()
         if (paymentDataRequestJson == null) {
@@ -225,7 +227,7 @@ class GooglePayActivity : OmiseActivity() {
                 }
 
                 // Re-enables the Google Pay payment button.
-                googlePayButton.isClickable = true
+                binding.googlePayButton.isClickable = true
             }
         }
     }
@@ -295,7 +297,7 @@ class GooglePayActivity : OmiseActivity() {
                     billingPhoneNumber = billingPhoneNumber,
                 )
 
-            googlePayButton.isClickable = false
+            binding.googlePayButton.isClickable = false
 
             val request =
                 Token.CreateTokenRequestBuilder(tokenization = tokenParam).build()
@@ -329,10 +331,12 @@ class GooglePayActivity : OmiseActivity() {
     @VisibleForTesting
     internal inner class CreateTokenRequestListener : RequestListener<Token> {
         override fun onRequestSucceed(model: Token) {
-            val data = Intent()
-            data.putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
-            data.putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
-            data.putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
+            val data =
+                Intent().apply {
+                    putExtra(OmiseActivity.EXTRA_TOKEN, model.id)
+                    putExtra(OmiseActivity.EXTRA_TOKEN_OBJECT, model)
+                    putExtra(OmiseActivity.EXTRA_CARD_OBJECT, model.card)
+                }
 
             setResult(Activity.RESULT_OK, data)
             finish()

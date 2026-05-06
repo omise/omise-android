@@ -3,7 +3,6 @@ package co.omise.android.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -52,24 +51,23 @@ abstract class OmiseActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
-    override fun setContentView(layoutResID: Int) {
-        super.setContentView(layoutResID)
-        setupInsetsHandling()
+    // Override the View version for View Binding support
+    override fun setContentView(view: View?) {
+        super.setContentView(view)
+        handleWindowInsets()
     }
 
-    /**
-     * Sets up insets handling after the content view is available
-     */
-    private fun setupInsetsHandling() {
-        val decorView = window.decorView
-        decorView.viewTreeObserver.addOnGlobalLayoutListener(
-            object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    decorView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    handleWindowInsets()
-                }
-            },
-        )
+    override fun setContentView(
+        view: View?,
+        params: android.view.ViewGroup.LayoutParams?,
+    ) {
+        super.setContentView(view, params)
+        handleWindowInsets()
+    }
+
+    override fun setContentView(layoutResID: Int) {
+        super.setContentView(layoutResID)
+        handleWindowInsets()
     }
 
     /**
@@ -77,24 +75,21 @@ abstract class OmiseActivity : AppCompatActivity() {
      * Child activities can override this method for custom inset handling.
      */
     protected open fun handleWindowInsets() {
-        val decorView = window.decorView
-        val rootView = decorView.findViewById<View>(android.R.id.content)
+        val rootView = findViewById<View>(android.R.id.content) ?: return
 
-        ViewCompat.setOnApplyWindowInsetsListener(decorView) { _, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-            if (systemBars.top > 0 || systemBars.bottom > 0 || systemBars.left > 0 || systemBars.right > 0) {
-                rootView?.setPadding(
-                    systemBars.left,
-                    systemBars.top,
-                    systemBars.right,
-                    systemBars.bottom,
-                )
-            }
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom,
+            )
             insets
         }
         // Force immediate application of insets
-        ViewCompat.requestApplyInsets(decorView)
+        ViewCompat.requestApplyInsets(rootView)
     }
 
     @VisibleForTesting

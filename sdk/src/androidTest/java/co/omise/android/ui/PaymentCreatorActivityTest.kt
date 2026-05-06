@@ -167,10 +167,10 @@ class PaymentCreatorActivityTest {
             }
         val scenario =
             ActivityScenario.launchActivityForResult<PaymentCreatorActivity>(intent).onActivity {
-                it.performActivityResult(100, RESULT_OK, creditCardIntent)
+                it.handleCreditCardResult(androidx.activity.result.ActivityResult(Activity.RESULT_OK, creditCardIntent))
             }
 
-        assertEquals(RESULT_OK, scenario.result.resultCode)
+        assertEquals(Activity.RESULT_OK, scenario.result.resultCode)
     }
 
     @Test

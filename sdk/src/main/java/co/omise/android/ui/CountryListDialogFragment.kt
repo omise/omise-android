@@ -10,9 +10,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import co.omise.android.R
+import co.omise.android.databinding.DialogCountryListBinding
 import co.omise.android.models.CountryInfo
-import kotlinx.android.synthetic.main.dialog_country_list.country_list
-import kotlinx.android.synthetic.main.dialog_country_list.toolbar_country_list
 import java.text.Collator
 
 /**
@@ -26,8 +25,11 @@ class CountryListDialogFragment : DialogFragment() {
         fun onCountrySelected(country: CountryInfo)
     }
 
-    private val listView: RecyclerView by lazy { country_list }
-    private val toolbar: Toolbar by lazy { toolbar_country_list }
+    private var _binding: DialogCountryListBinding? = null
+    private val binding get() = _binding!!
+
+    private val listView: RecyclerView get() = binding.countryList
+    private val toolbar: Toolbar get() = binding.toolbarCountryList
 
     var listener: CountryListDialogListener? = null
 
@@ -39,8 +41,14 @@ class CountryListDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.dialog_country_list, container)
+    ): View {
+        _binding = DialogCountryListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(
@@ -49,7 +57,17 @@ class CountryListDialogFragment : DialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.let { window ->
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
+
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.close_menu -> dismiss()

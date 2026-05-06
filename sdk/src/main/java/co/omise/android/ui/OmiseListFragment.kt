@@ -8,16 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.omise.android.R
-import kotlinx.android.synthetic.main.fragment_list.no_data_text
-import kotlinx.android.synthetic.main.fragment_list.recycler_view
+import co.omise.android.databinding.FragmentListBinding
+import co.omise.android.databinding.ListItemBinding
 
 /**
  * OmiseListFragment is the base class for all list-based UI classes.
@@ -27,8 +24,12 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
 
     abstract fun listItems(): List<T>
 
-    protected val noDataText: TextView by lazy { no_data_text }
-    private val recyclerView: RecyclerView by lazy { recycler_view }
+    private var _binding: FragmentListBinding? = null
+    private val binding get() = _binding!!
+
+    protected val noDataText get() = binding.noDataText
+    protected val messageLayout get() = binding.messageLayout
+    private val recyclerView get() = binding.recyclerView
 
     private val onClickListener =
         object : OmiseListItemClickListener {
@@ -43,8 +44,14 @@ abstract class OmiseListFragment<T : OmiseListItem> : OmiseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+    ): View {
+        _binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(
@@ -78,9 +85,8 @@ class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListIte
         parent: ViewGroup,
         viewType: Int,
     ): OmiseItemViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-        return OmiseItemViewHolder(itemView, listener)
+        val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OmiseItemViewHolder(binding, listener)
     }
 
     override fun getItemCount(): Int = list.size
@@ -94,14 +100,14 @@ class OmiseListAdapter(val list: List<OmiseListItem>, val listener: OmiseListIte
     }
 }
 
-class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListener?) :
-    RecyclerView.ViewHolder(view) {
+class OmiseItemViewHolder(val binding: ListItemBinding, val listener: OmiseListItemClickListener?) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(item: OmiseListItem) {
-        val listItemView = view.findViewById<LinearLayout>(R.id.list_item_view)
-        val optionImage = view.findViewById<ImageView>(R.id.image_item_icon)
-        val nameText = view.findViewById<TextView>(R.id.text_item_title)
-        val subtitleText = view.findViewById<TextView>(R.id.subtext_item_title)
-        val typeImage = view.findViewById<ImageView>(R.id.image_indicator_icon)
+        val listItemView = binding.listItemView
+        val optionImage = binding.imageItemIcon
+        val nameText = binding.textItemTitle
+        val subtitleText = binding.subtextItemTitle
+        val typeImage = binding.imageIndicatorIcon
 
         if (item.iconRes != null) {
             optionImage.setImageResource(item.iconRes!!)
@@ -110,8 +116,8 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
             optionImage.visibility = View.GONE
         }
 
-        nameText.text = item.titleRes?.let { view.context.getString(it) } ?: item.title
-        subtitleText.text = item.subtitleRes?.let { view.context.getString(it) } ?: item.subtitle
+        nameText.text = item.titleRes?.let { itemView.context.getString(it) } ?: item.title
+        subtitleText.text = item.subtitleRes?.let { itemView.context.getString(it) } ?: item.subtitle
 
         if (item.enabled == true) {
             item.indicatorIconRes?.let { typeImage.setImageResource(it) }
@@ -129,7 +135,7 @@ class OmiseItemViewHolder(val view: View, val listener: OmiseListItemClickListen
             subtitleText.visibility = View.GONE
         }
 
-        view.setOnClickListener { listener?.onClick(item) }
+        itemView.setOnClickListener { listener?.onClick(item) }
     }
 }
 
@@ -177,7 +183,8 @@ private class OmiseItemDecoration(val context: Context) : RecyclerView.ItemDecor
 
             val params = view.layoutParams as RecyclerView.LayoutParams
 
-            val titleText = view.findViewById<TextView>(R.id.text_item_title)
+            val binding = ListItemBinding.bind(view)
+            val titleText = binding.textItemTitle
             val left = titleText.left
             val right = parent.width
             val top = view.bottom + params.bottomMargin

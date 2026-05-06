@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 android {
+    namespace 'co.omise.testsupport'
 
     defaultConfig {
-        namespace 'co.omise.testsupport'
         minSdkVersion min_sdk_version
         targetSdk target_sdk_version
         compileSdk compile_sdk_version

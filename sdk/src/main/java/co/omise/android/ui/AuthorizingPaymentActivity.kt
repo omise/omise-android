@@ -32,12 +32,12 @@ import co.omise.android.OmiseException
 import co.omise.android.R
 import co.omise.android.config.UiCustomization
 import co.omise.android.config.UiCustomizationType
+import co.omise.android.databinding.ActivityAuthorizingPaymentBinding
 import co.omise.android.extensions.parcelable
 import co.omise.android.models.Authentication
 import co.omise.android.ui.AuthorizingPaymentResult.Failure
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS1Completed
 import co.omise.android.ui.AuthorizingPaymentResult.ThreeDS2Completed
-import kotlinx.android.synthetic.main.activity_authorizing_payment.authorizing_payment_webview
 import org.jetbrains.annotations.TestOnly
 
 /**
@@ -47,7 +47,7 @@ import org.jetbrains.annotations.TestOnly
  * app by default but the Intent callback needs to be handled by the implementer.
  */
 class AuthorizingPaymentActivity : OmiseActivity() {
-    private val webView: WebView by lazy { authorizing_payment_webview }
+    private lateinit var binding: ActivityAuthorizingPaymentBinding
     private val verifier: AuthorizingPaymentURLVerifier by lazy { AuthorizingPaymentURLVerifier(intent) }
     private val uiCustomization: UiCustomization by lazy { intent.parcelable(EXTRA_UI_CUSTOMIZATION) ?: UiCustomization.default }
     private lateinit var threeDSRequestorAppURL: String
@@ -67,11 +67,15 @@ class AuthorizingPaymentActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enable View Binding
+        binding = ActivityAuthorizingPaymentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         if (intent.getBooleanExtra(OmiseActivity.EXTRA_IS_SECURE, true)) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
 
-        setContentView(R.layout.activity_authorizing_payment)
         setupActionBarTitle()
         externalActivityLauncher =
             registerForActivityResult(
@@ -141,8 +145,8 @@ class AuthorizingPaymentActivity : OmiseActivity() {
     // onPageStarted callback which should not have an impact on the logic.
     // More info at https://github.com/delight-im/Android-AdvancedWebView/issues/279
     @TestOnly
-    fun setTestWebView(): WebViewClient {
-        val client =
+    fun setTestWebView() {
+        binding.authorizingPaymentWebview.webViewClient =
             object : WebViewClient() {
                 override fun onPageStarted(
                     view: WebView?,
@@ -158,30 +162,30 @@ class AuthorizingPaymentActivity : OmiseActivity() {
                     }
                 }
             }
-        webView.webViewClient = client
-        return client
     }
 
     private fun setupWebViewClient() {
-        webView.webViewClient =
+        binding.authorizingPaymentWebview.webViewClient =
             object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(
                     view: WebView,
                     request: WebResourceRequest,
                 ): Boolean {
                     val uri = request.url
-                    return if (verifier.verifyURL(uri)) {
-                        finishActivityWithSuccessful(uri.toString())
-                        true
-                    } else if (verifier.verifyExternalURL(uri)) {
-                        openDeepLink(uri)
-                        true
-                    } else {
-                        false
+                    return when {
+                        verifier.verifyURL(uri) -> {
+                            finishActivityWithSuccessful(uri.toString())
+                            true
+                        }
+                        verifier.verifyExternalURL(uri) -> {
+                            openDeepLink(uri)
+                            true
+                        }
+                        else -> false
                     }
                 }
             }
-        webView.webChromeClient =
+        binding.authorizingPaymentWebview.webChromeClient =
             object : WebChromeClient() {
                 override fun onJsAlert(
                     view: WebView?,
@@ -206,7 +210,7 @@ class AuthorizingPaymentActivity : OmiseActivity() {
                     AlertDialog.Builder(this@AuthorizingPaymentActivity)
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok) { _, _ -> result?.confirm() }
-                        .setNegativeButton(android.R.string.cancel) { _, _ -> result?.confirm() }
+                        .setNegativeButton(android.R.string.cancel) { _, _ -> result?.cancel() }
                         .setOnCancelListener { result?.cancel() }
                         .show()
                     return true
@@ -329,29 +333,27 @@ class AuthorizingPaymentActivity : OmiseActivity() {
     }
 
     override fun onDestroy() {
-        // Cleanup WebView
-        webView.clearCache(true)
-        webView.clearHistory()
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.removeAllCookies(null)
-        cookieManager.flush()
-
+        binding.authorizingPaymentWebview.clearCache(true)
+        binding.authorizingPaymentWebview.clearHistory()
+        CookieManager.getInstance().apply {
+            removeAllCookies(null)
+            flush()
+        }
         super.onDestroy()
     }
 
     private fun setupWebView() {
         isWebViewSetup = true
         setupWebViewClient()
-        with(webView.settings) {
+        with(binding.authorizingPaymentWebview.settings) {
             javaScriptEnabled = true
             domStorageEnabled = true
             databaseEnabled = true
         }
-
         runOnUiThread {
             if (verifier.isReady) {
-                webView.visibility = View.VISIBLE
-                webView.loadUrl(verifier.authorizedURLString)
+                binding.authorizingPaymentWebview.visibility = View.VISIBLE
+                binding.authorizingPaymentWebview.loadUrl(verifier.authorizedURLString)
             }
         }
     }
@@ -369,10 +371,7 @@ class AuthorizingPaymentActivity : OmiseActivity() {
     private fun finishActivityWithSuccessful(status: TransactionStatus) {
         val resultIntent =
             Intent().apply {
-                putExtra(
-                    EXTRA_AUTHORIZING_PAYMENT_RESULT,
-                    ThreeDS2Completed(status),
-                )
+                putExtra(EXTRA_AUTHORIZING_PAYMENT_RESULT, ThreeDS2Completed(status))
             }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

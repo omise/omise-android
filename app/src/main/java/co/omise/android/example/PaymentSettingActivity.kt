@@ -1,9 +1,9 @@
 package co.omise.android.example
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import co.omise.android.ui.OmiseActivity
 
-class PaymentSettingActivity : AppCompatActivity() {
+class PaymentSettingActivity : OmiseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

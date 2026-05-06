@@ -218,7 +218,7 @@ class AuthorizingPaymentActivityTest {
 
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-        checkWebViewUrl(authorizeAcsUrl)
+            .check(matches(withUrl(authorizeAcsUrl)))
     }
 
     @Test
@@ -234,7 +234,7 @@ class AuthorizingPaymentActivityTest {
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-        checkWebViewUrl(authorizeAcsUrl)
+            .check(matches(withUrl(authorizeAcsUrl)))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
     }
@@ -252,7 +252,7 @@ class AuthorizingPaymentActivityTest {
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-        checkWebViewUrl(authorizeAcsUrl)
+            .check(matches(withUrl(authorizeAcsUrl)))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
     }
 
@@ -269,7 +269,7 @@ class AuthorizingPaymentActivityTest {
         error.postValue(testException)
         onView(withId(R.id.authorizing_payment_webview))
             .check(matches(isDisplayed()))
-        checkWebViewUrl(authorizeAcsUrl)
+            .check(matches(withUrl(authorizeAcsUrl)))
         onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
     }
 
@@ -283,14 +283,9 @@ class AuthorizingPaymentActivityTest {
             }
         val scenario = ActivityScenario.launchActivityForResult<AuthorizingPaymentActivity>(intent)
 
-        scenario.onActivity { activity ->
-            val client = activity.setTestWebView()
-            client.onPageStarted(
-                activity.findViewById(R.id.authorizing_payment_webview),
-                returnUrl,
-                null,
-            )
-        }
+        scenario.onActivity { activity -> activity.setTestWebView() }
+
+        onView(withId(R.id.authorizing_payment_webview)).perform(loadUrl(returnUrl))
 
         val activityResult = scenario.result
         // Due to issue BadParcelableException: ClassNotFoundException when unmarshalling.
@@ -580,22 +575,5 @@ class AuthorizingPaymentActivityTest {
         // Closing the transaction will also hide the progress view. So we don't need to call hideProgress() here.
         verify(progressView, never()).showProgress()
         verify(progressView, never()).hideProgress()
-    }
-
-    private fun checkWebViewUrl(url: String) {
-        // Retry checking the URL as WebView loadUrl is asynchronous
-        val maxAttempts = 20
-        var lastError: Throwable? = null
-        for (i in 0 until maxAttempts) {
-            try {
-                onView(withId(R.id.authorizing_payment_webview))
-                    .check(matches(withUrl(url)))
-                return
-            } catch (e: Throwable) {
-                lastError = e
-                Thread.sleep(250)
-            }
-        }
-        throw lastError ?: AssertionError("Timeout waiting for WebView url: $url")
     }
 }

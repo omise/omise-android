@@ -1,6 +1,6 @@
 package co.omise.android.models
 
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.joda.time.DateTime
 
 @Parcelize
