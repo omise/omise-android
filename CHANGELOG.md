@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## V5.10.0
+* **Fix:** Fix 16kb page size compatibility
+
 ## V5.9.0
 * **Update:** Update payment method icons
 
