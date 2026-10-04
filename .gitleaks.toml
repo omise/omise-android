@@ -1,0 +1,22 @@
+title = "Omise Android Gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "non-production-omise-host"
+description = "Non-production Omise host"
+regex = '''(?:https?://)?((?:\b[a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]*omise[a-zA-Z0-9-]*\.co)'''
+secretGroup = 1
+
+  [[rules.allowlists]]
+  description = "Official Omise hosts"
+  regexes = [
+    '''^([A-Za-z0-9-]+\.)*omise\.co$''',
+  ]
+
+  [[allowlists]]
+  description = "Ignored generated and build artifacts across all modules"
+  paths = [
+    '''(^|/)(build|generated|[.]gradle|[.]kotlin)(/|$)''',
+  ]

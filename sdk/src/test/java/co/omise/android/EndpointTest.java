@@ -16,6 +16,12 @@ public class EndpointTest extends OmiseTest {
     }
 
     @Test
+    public void testProductionUrls() {
+        assertEquals("https://api.omise.co/", Endpoint.API.buildUrl().build().toString());
+        assertEquals("https://vault.omise.co/", Endpoint.VAULT.buildUrl().build().toString());
+    }
+
+    @Test
     public void testByHost() {
         for (Endpoint endpoint : Endpoint.getAllEndpoints()) {
             assertEquals(endpoint, Endpoint.getAllEndpointsByHost().get(endpoint.host()));
